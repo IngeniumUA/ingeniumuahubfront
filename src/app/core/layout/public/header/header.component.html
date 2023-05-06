@@ -1,5 +1,5 @@
 <nav>
-  <div id="ingenium-section">
+  <div id="ingenium-section" (click)="toHome()">
     <div id="ingenium-logo-section">
       <img id="ingenium-schild" src="assets/Ingenium-schild.png" alt=":o">
     </div>
@@ -7,7 +7,26 @@
     <a id="ingenium-fti" class="ingenium-text">Ingenieurs</a>
     <a id="ingenium-ua" class="ingenium-text">UAntwerpen</a>
   </div>
-  <div id="dropdown-menu-section">
+
+  <div id="dropdown-menu-section" *ngIf="this.isMobile">
     <div>---</div>
   </div>
+
+  <div *ngIf="!this.isMobile">
+    <a>Info</a>
+  </div>
+  <div *ngIf="!this.isMobile">
+    <a>Events</a>
+  </div>
+  <div *ngIf="!this.isMobile">
+    <a>Shop</a>
+  </div>
+  <div *ngIf="!this.isMobile">
+    <a>Cloud</a>
+  </div>
+  <div *ngIf="!this.isMobile">
+    <a>Login</a>
+  </div>
+
+
 </nav>

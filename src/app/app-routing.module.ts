@@ -8,6 +8,7 @@ import {NotfoundpageComponent} from "./features/notfoundpage/notfoundpage.compon
 const routes: Routes = [
   // Public pages
   {path: '', component: HomepageComponent },
+  {path: 'home', component: HomepageComponent }, // For routing to homepage (makes it easier)
 
   /*
   {
