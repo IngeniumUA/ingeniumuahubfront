@@ -1,4 +1,4 @@
-FROM node:16.16.0 as build
+FROM node:16.14.0 as build
 
 WORKDIR /source
 
@@ -9,7 +9,7 @@ RUN npm ci
 
 # Copy the rest of the files into the container and build
 COPY . .
-RUN npm run build -prod
+RUN npm run build --prod
 
 FROM nginx:alpine
 COPY --from=build /source/dist/ingeniumuahubfront /usr/share/nginx/html
