@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {map, Observable} from 'rxjs';
 
 interface RecSysItem {
   id: string;
@@ -12,6 +12,28 @@ interface RecSysItem {
   name: string;
   description: string;
   image_url: string;
+}
+
+interface RecSysUser {
+  id: string;
+  studeert: boolean;
+  studeertUA: boolean;
+  studeertFTI: boolean;
+  studeertFaculteit: boolean;
+
+  ingeniumLid: boolean;
+  ingeniumGedoopt: boolean;
+  ingeniumOntgroend: boolean;
+
+  uitgaan: boolean;
+
+  interesseFeest: boolean;
+  interesseSport: boolean;
+  interesseRelations: boolean;
+  interesseEducation: boolean;
+  interesseClubTraditie: boolean;
+
+  username: string;
 }
 
 @Injectable({
@@ -33,6 +55,10 @@ class RecSysService {
       },
       (err) => console.log(err)
     );
+  }
+
+  public postGetUser(formdata: object): Observable<any> {
+    return this.httpClient.post<any>(this.baseUrl + "user", formdata);
   }
 
   public postInteraction(formdata: object) {
@@ -112,16 +138,34 @@ export class RecsysComponent implements OnInit {
     const userData: {[key:string]: any} = this.recsysForm.get('user')!.value;
     Object.keys(userData).forEach(key => formData.append(key, this.checkEmpty(userData[key])))
 
-    // All interactionData
-    const interactionData: {[key:string]: any} = this.recsysForm.get('interactions')!.value;
-    let index: number = 0;
-    Object.keys(interactionData).forEach(key => {
-      if (this.items.length <= index) {
-        return;}
-      formData.append("interaction"+index.toString(), interactionData[key])
+    const user$: Observable<RecSysUser> = this.recsysService.postGetUser(formData);
 
-      index = index + 1;
-    })
+    /*
+    user$.subscribe(
+      (res) => console.log(res),
+      (err) => console.log(err))
+      */
+
+    user$.pipe(
+      map(
+        (res) => {
+        // All interactionData
+        const interactionData: {[key:string]: any} = this.recsysForm.get('interactions')!.value;
+        let index: number = 0;
+        Object.keys(interactionData).forEach(key => {
+          const formData = new FormData();
+          if (this.items.length <= index) {
+            return;}
+          formData.append('user', res.id);
+          formData.append('item', (this.items[index].id).toString());
+          formData.append('interaction_type', interactionData[key]);
+
+          this.recsysService.postInteraction(formData);
+
+          index = index + 1;
+        })
+      })
+    )
 
     //this.formDataService.postFormData(formData);
 
