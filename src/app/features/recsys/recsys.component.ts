@@ -149,7 +149,10 @@ export class RecsysComponent implements OnInit {
     user$.pipe(
       map(
         (res) => {
-        // All interactionData
+
+          console.log(res);
+
+          // All interactionData
         const interactionData: {[key:string]: any} = this.recsysForm.get('interactions')!.value;
         let index: number = 0;
         Object.keys(interactionData).forEach(key => {
@@ -165,7 +168,7 @@ export class RecsysComponent implements OnInit {
           index = index + 1;
         })
       })
-    )
+    ).subscribe()
 
     //this.formDataService.postFormData(formData);
 
