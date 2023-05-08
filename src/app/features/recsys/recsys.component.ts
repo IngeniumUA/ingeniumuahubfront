@@ -173,7 +173,7 @@ export class RecsysComponent implements OnInit {
     //this.formDataService.postFormData(formData);
 
     // Routing to homepage
-    //this.router.navigate([""]); // Redirect to homescreen
+    this.router.navigate([""]); // Redirect to homescreen
   }
 
   checkEmpty(s: string) {
