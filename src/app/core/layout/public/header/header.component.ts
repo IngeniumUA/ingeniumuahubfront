@@ -8,11 +8,10 @@ import {Router} from "@angular/router";
   selector: 'app-layout-header', // HTML tag for importing ( see app.component.html )
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  standalone: true,
+  standalone: true, // Allows it to be imported outside of routing
   imports: [
     NgIf
   ],
-  // Allows it to be imported outside of routing
 })
 export class HeaderComponent implements OnInit {
   isMobile: boolean = true;

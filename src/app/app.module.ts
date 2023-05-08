@@ -7,18 +7,26 @@ import { HomepageComponent } from './features/homepage/homepage.component';
 import { AppRoutingModule } from "./app-routing.module";
 import { HttpClientModule } from "@angular/common/http";
 import { NotfoundpageComponent } from './features/notfoundpage/notfoundpage.component';
+import { RecsysComponent } from './features/recsys/recsys.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatRadioModule} from "@angular/material/radio";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
-    NotfoundpageComponent
+    NotfoundpageComponent,
+    RecsysComponent
   ],
   imports: [
     BrowserModule,
     HeaderComponent,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    MatRadioModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

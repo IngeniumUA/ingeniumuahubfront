@@ -1,0 +1,179 @@
+<form [formGroup]="recsysForm" (ngSubmit)="onSubmit()" id="recsysform-form">
+  <div class="recsysform-card-wrapper active">
+    <div id="welcome-section" class="recsysform-card">
+      <h1>Hey! Super tof dat je de pol wilt 'testen' voor ons :)</h1>
+      <p>Eventjes een nuttige kanttekening:<br>
+        Niets van de data die je ingeeft wordtaan je persoon gekoppeld.<br>
+        Met deze form trachten we user-profielen na te bootsen die onze website zouden kunnen bezoeken.</p>
+      <button mat-raised-button color="primary" (click)="next()" type="button">Volgende</button>
+    </div>
+  </div>
+
+  <div class="recsysform-card-wrapper" formGroupName="user">
+    <div id="interesses-section" class="recsysform-card">
+      <h1>Eerst en vooral, je interesses!</h1>
+
+      <label id="interesseSport">Ingenium Sport</label>
+      <mat-radio-group name="interesseSport" aria-labelledby="interesseSport" formControlName="interesseSport">
+        <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+      </mat-radio-group>
+
+      <label id="interesseFeest">Ingenium TDs</label>
+      <mat-radio-group name="interesseFeest" aria-labelledby="interesseFeest" formControlName="interesseFeest">
+        <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+      </mat-radio-group>
+
+      <label id="interesseEducation">Education (Ingenium cloud bv)</label>
+      <mat-radio-group name="interesseEducation" aria-labelledby="interesseEducation" formControlName="interesseEducation">
+        <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+      </mat-radio-group>
+
+      <label id="interesseRelations">Relations (EoT, pitchavonden, ..)</label>
+      <mat-radio-group name="interesseRelations" aria-labelledby="interesseRelations" formControlName="interesseRelations">
+        <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+      </mat-radio-group>
+
+      <label id="interesseClubTraditie">Clubtraditie (Cantus, doop, ..)</label>
+      <mat-radio-group name="interesseClubTraditie" aria-labelledby="interesseClubTraditie" formControlName="interesseClubTraditie">
+        <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+      </mat-radio-group>
+
+      <div class="buttons">
+        <button mat-raised-button color="primary" (click)="previous()" type="button">Vorige</button>
+        <button *ngIf="this.showNext" mat-raised-button color="primary" (click)="next()" type="button">Volgende</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="recsysform-card-wrapper" formGroupName="user">
+    <div id="studies-section" class="recsysform-card">
+      <h1>Je studies...</h1>
+
+      <label id="studeert">Studeer je?</label>
+      <mat-radio-group name="studeert" aria-labelledby="studeert" formControlName="studeert">
+        <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+      </mat-radio-group>
+
+      <ng-container *ngIf="this.studeert">
+        <label id="bool_uantwerpen">Studeer je aan de UAntwerpen?</label>
+        <mat-radio-group name="studeertUA" aria-labelledby="bool_uantwerpen" formControlName="studeertUA">
+          <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+          <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+
+      <ng-container *ngIf="this.studeert && this.studeertUA">
+        <label id="bool_fti">Ben je van de Faculteit Industriële Wetenschappen?</label>
+        <mat-radio-group name="studeertFTI" aria-labelledby="bool_fti" formControlName="studeertFTI">
+          <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+          <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+
+      <ng-container *ngIf="this.studeert && this.studeertUA && this.studeertFTI">
+        <label id="bool_faculteit">Laatste vraagje hier! Welke faculteit is de beste? (aan welke studeer je)</label>
+        <mat-radio-group aria-labelledby="bool_fti" formControlName="studeertFaculteit" id="studeertFaculteit-radio">
+          <mat-radio-button value="ei">Elektronica-ICT</mat-radio-button>
+          <mat-radio-button value="bk">Bouwkunde</mat-radio-button>
+          <mat-radio-button value="ch">Chemie</mat-radio-button>
+          <mat-radio-button value="em">Elektromechanica</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+
+      <div class="buttons">
+        <button mat-raised-button color="primary" (click)="previous()" type="button">Vorige</button>
+        <button *ngIf="this.showNext" mat-raised-button color="primary" (click)="next()" type="button">Volgende</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let item of this.items; let i=index;" class="recsysform-card-wrapper" formGroupName="interactions">
+    <div class="recsysform-card">
+      <div class="recsysform-item-info">
+        <h1>{{ item.name }}</h1>
+        <p>{{ item.description }}</p>
+      </div>
+
+      <div class="recsys-item-image-card">
+        <img class="recsys-item-image" src="{{ item.image_url }}" alt="Een foto, bek dicht">
+      </div>
+
+      <mat-radio-group formControlName="interaction{{ i.toString() }}" class="interactionOptions">
+        <mat-radio-button value="1">Interesse -10</mat-radio-button>
+        <mat-radio-button value="2">Goh, ni voor mij</mat-radio-button>
+        <mat-radio-button value="3">"Geïnteresseerd" :)</mat-radio-button>
+        <mat-radio-button value="4">Kei tof!</mat-radio-button>
+        <mat-radio-button value="5">Ik heb al een ticket</mat-radio-button>
+      </mat-radio-group>
+
+      <div class="buttons">
+        <button mat-raised-button color="primary" (click)="previous()" type="button">Vorige</button>
+        <button mat-raised-button color="primary" (click)="next()" type="button">Volgende</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="recsysform-card-wrapper" formGroupName="user">
+    <div id="lid-section" class="recsysform-card">
+      <h1>Ben je ...</h1>
+
+      <label id="bool_lid">Lid van Ingenium?</label>
+      <mat-radio-group name="ingeniumLid" aria-labelledby="bool_lid" formControlName="ingeniumLid">
+        <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+        <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+      </mat-radio-group>
+
+      <ng-container *ngIf="this.ingeniumLid">
+        <label id="bool_gedoopt_ingenium">Gedoopt bij Ingenium?</label>
+        <mat-radio-group name="ingeniumGedoopt" aria-labelledby="bool_gedoopt_ingenium" formControlName="ingeniumGedoopt">
+          <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+          <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+
+      <ng-container *ngIf="this.ingeniumLid && this.ingeniumGedoopt">
+        <label id="bool_ontgroend_ingenium">Ook ontgroend?</label>
+        <mat-radio-group name="ingeniumOntgroend" aria-labelledby="bool_ontgroend_ingenium" formControlName="ingeniumOntgroend">
+          <mat-radio-button (change)="radioChange($event)" value="true">Yes!</mat-radio-button>
+          <mat-radio-button (change)="radioChange($event)" value="false">Nowp!</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+
+      <div class="buttons">
+        <button mat-raised-button color="primary" (click)="previous()" type="button">Vorige</button>
+        <button *ngIf="this.showNext" mat-raised-button color="primary" (click)="next()" type="button">Volgende</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="recsysform-card-wrapper" formGroupName="user">
+    <div id="uitgaansleven-section" class="recsysform-card">
+      <h1>Nu, uitgaansleven!</h1>
+      <label id="uitgaan">Als je uitgaat in Antwerpen, welke regio?</label>
+      <mat-radio-group aria-labelledby="uitgaan" formControlName="uitgaan" id="uitgaan-radio">
+        <mat-radio-button value="stad">Niets beter dan 't stad</mat-radio-button>
+        <mat-radio-button value="wilrijk">Wilrijk = Chillrijk</mat-radio-button>
+        <mat-radio-button value="beide">Beide</mat-radio-button>
+        <mat-radio-button value="beide">Uitgaan? Bah!</mat-radio-button>
+      </mat-radio-group>
+
+      <div class="buttons">
+        <button mat-raised-button color="primary" (click)="previous()" type="button">Vorige</button>
+        <button mat-raised-button color="primary" (click)="next()" type="button">Volgende</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="recsysform-card-wrapper" formGroupName="user">
+    <div id="submit-section" class="recsysform-card">
+      <h1>Helemaal klaar!</h1>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!recsysForm.valid">Submit</button>
+    </div>
+  </div>
+</form>
