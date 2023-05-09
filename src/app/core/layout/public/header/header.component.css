@@ -1,6 +1,6 @@
 nav {
   background-color: var(--mainblue);
-  height: 10vh;
+  height: 15vh;
   width: 100%;
 
   display: flex;
@@ -9,8 +9,7 @@ nav {
 }
 
 #ingenium-section {
-  height: 10vh;
-  width: clamp(10rem, 20vw, 20rem);
+  height: 100%;
   box-sizing: border-box;
 
   padding: 1vh;
@@ -25,11 +24,10 @@ nav {
 #ingenium-logo-section {
   grid-area: 1 / 1 / 4 / 2;
   margin-right: 0.5rem;
-  height: 100%;
 }
 .ingenium-text {
   color: white;
-  font-size: clamp(0.1rem, 3.5vh, 1rem);
+  font-size: clamp(0rem, 3.5vh, 2rem);
 }
 #ingenium-ingenium { grid-area: 1 / 2 / 2 / 3; }
 #ingenium-fti { grid-area: 2 / 2 / 3 / 3; }
@@ -39,12 +37,6 @@ nav {
   height: 100%;
   float: right;
 }
-
-#ingenium-section:hover
-{
-  cursor: pointer;
-}
-
 
 /* Mobile */
 #dropdown-menu-section {

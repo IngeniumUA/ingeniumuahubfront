@@ -27,8 +27,4 @@ export class HeaderComponent implements OnInit {
         this.isMobile = !state.matches;
       });
   }
-
-  toHome() {
-    this.router.navigate(['/home']);
-  }
 }
