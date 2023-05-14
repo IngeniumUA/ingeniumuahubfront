@@ -13,6 +13,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatButtonModule} from "@angular/material/button";
 import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
 import { AccountComponent } from './features/user/account.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { AccountComponent } from './features/user/account.component';
     HeaderComponent,
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     ReactiveFormsModule,
     MatRadioModule,
     MatButtonModule

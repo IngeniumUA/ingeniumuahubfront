@@ -9,24 +9,37 @@
   </div>
 
   <div id="dropdown-menu-section" *ngIf="this.isMobile">
-    <div>---</div>
+    <button id="navbar-menu-button">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10vh" zoomAndPan="magnify" viewBox="0 0 768 767.999994" height="10vh" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><clipPath id="0e11c6575b"><path d="M 136.132812 186.441406 L 631.882812 186.441406 L 631.882812 516.441406 L 136.132812 516.441406 Z M 136.132812 186.441406 " clip-rule="nonzero"/></clipPath></defs><g clip-path="url(#0e11c6575b)"><path fill="#ffffff" d="M 136.296875 516.441406 L 631.722656 516.441406 L 631.722656 461.441406 L 136.296875 461.441406 Z M 136.296875 378.941406 L 631.722656 378.941406 L 631.722656 323.941406 L 136.296875 323.941406 Z M 136.296875 186.441406 L 136.296875 241.441406 L 631.722656 241.441406 L 631.722656 186.441406 Z M 136.296875 186.441406 " fill-opacity="1" fill-rule="nonzero"/></g></svg>
+    </button>
   </div>
 
-  <div *ngIf="!this.isMobile">
-    <a>Info</a>
+  <ng-container *ngIf="!this.isMobile">
+  <div class="navbar-dropdown-section">
+    <button class="navbar-dropdown-button">Events</button>
   </div>
-  <div *ngIf="!this.isMobile">
-    <a>Events</a>
+  <div class="navbar-dropdown-section">
+    <button class="navbar-dropdown-button">Info</button>
   </div>
-  <div *ngIf="!this.isMobile">
-    <a>Shop</a>
+  <div class="navbar-dropdown-section">
+    <button class="navbar-dropdown-button">Shop</button>
   </div>
-  <div *ngIf="!this.isMobile">
-    <a>Cloud</a>
+  <div class="navbar-dropdown-section">
+    <button class="navbar-dropdown-button">Cloud</button>
   </div>
-  <div *ngIf="!this.isMobile">
-    <a>Login</a>
+  <div class="navbar-dropdown-section" id="navbar-login-account-section">
+    <ng-container *ngIf="this.isAuth">
+      <a class="navbar-login-account">Login</a>
+    </ng-container>
+    <ng-container *ngIf="!this.isAuth">
+      <a class="navbar-login-account">Account</a>
+    </ng-container>
   </div>
+
+  <div id="navbar-lidkaart-section">
+    <a id="navbar-lidkaart">Lidkaart</a>
+  </div>
+  </ng-container>
 
 
 </nav>

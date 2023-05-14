@@ -15,7 +15,7 @@ nav {
   padding: 1vh;
 
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1.5fr;
   grid-template-rows: 1fr 1fr 1fr;
   grid-column-gap: 0;
   grid-row-gap: 0;
@@ -47,4 +47,73 @@ nav {
   justify-content: right;
 }
 
+#dropdown-menu-section {
+  flex-grow: 1;
+
+  display: flex;
+  justify-content:flex-end;
+}
+
+#navbar-menu-button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+
 /* Desktop */
+.navbar-dropdown-section {
+  flex-basis: 10%;
+}
+
+.navbar-dropdown-button {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+
+  color: white;
+  font-size: clamp(0rem, 3vh, 2rem);
+}
+
+#navbar-login-account-section {
+  flex-grow: 1;
+
+  display: flex;
+  justify-content:flex-end;
+}
+
+.navbar-login-account {
+  text-decoration: none;
+  color: white;
+  font-size: clamp(0rem, 5vh, 3rem);
+}
+
+#navbar-lidkaart-section {
+  flex-grow: 1;
+
+  padding: 1rem;
+
+  display: flex;
+  justify-content:flex-end;
+}
+
+#navbar-lidkaart {
+  background-color: white;
+
+  font-size: clamp(0rem, 5vh, 3rem);
+  font-weight: bolder;
+
+  text-decoration: none;
+  color:  var(--mainblue);
+  border: 5px solid white;
+  border-radius: 25px;
+
+  padding: 0.1rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
