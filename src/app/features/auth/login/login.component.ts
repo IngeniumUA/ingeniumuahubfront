@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import {AccountService} from "../../../core/services/account.service";
+import {AuthService} from "../../../core/services/user/auth/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private accountService: AccountService) { }
+              private accountService: AuthService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({

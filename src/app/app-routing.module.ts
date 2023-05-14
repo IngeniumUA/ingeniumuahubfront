@@ -4,13 +4,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import {HomepageComponent} from "./features/homepage/homepage.component";
 import {NotfoundpageComponent} from "./features/notfoundpage/notfoundpage.component";
 import {RecsysComponent} from "./features/recsys/recsys.component";
+import {AccountComponent} from "./features/user/account.component";
 
 const routes: Routes = [
   // Public pages
   {path: '', component: HomepageComponent },
   {path: 'home', component: HomepageComponent }, // For routing to homepage (makes it easier)
 
-  {path: 'account', loadChildren: () => import('src/app/features/account/account.model').then(x => x.AccountModule)},
+  {path: 'auth', loadChildren: () => import('src/app/features/auth/auth.model').then(x => x.AuthModule)},
+  {path: 'user', component: AccountComponent},
   /*
   {
   path: 'user',

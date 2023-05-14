@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {HubUser} from "./shared/models/user";
-import {AccountService} from "./core/services/account.service";
+import {HubAuthData} from "./shared/models/user";
+import {AuthService} from "./core/services/user/auth/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -10,9 +10,9 @@ import {AccountService} from "./core/services/account.service";
 export class AppComponent {
   title = 'ingeniumuahubfront';
 
-  user?: HubUser | null;
+  user?: HubAuthData | null;
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AuthService) {
     this.accountService.user.subscribe(x => this.user = x);
   }
 

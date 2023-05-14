@@ -1,0 +1,22 @@
+<div>
+  Account details hierzo
+</div>
+<form>
+  Form hierzo
+</form>
+
+<div>
+  <h2>Authentication</h2>
+  <ul>
+    <li>ID: {{ this.userauth?.id }}</li>
+    <li>Access Token: {{ this.userauth?.access }}</li>
+    <li>Refresh Token: {{ this.userauth?.refresh }}</li>
+  </ul>
+
+  <button (click)="RefreshAuth()">Refresh Accesstoken</button>
+</div>
+
+<div>
+  <h2>Logout</h2>
+  <button (click)="Logout()">Log out of account</button>
+</div>

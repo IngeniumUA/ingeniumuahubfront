@@ -12,6 +12,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatButtonModule} from "@angular/material/button";
 import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
+import { AccountComponent } from './features/user/account.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
     HomepageComponent,
     NotfoundpageComponent,
     RecsysComponent,
+    AccountComponent,
   ],
   imports: [
     BrowserModule,
