@@ -16,7 +16,7 @@
 
   <ng-container *ngIf="!this.isMobile">
   <div class="navbar-dropdown-section">
-    <button class="navbar-dropdown-button">Events</button>
+    <button class="navbar-dropdown-button" (click)="EventClick()">Events</button>
   </div>
   <div class="navbar-dropdown-section">
     <button class="navbar-dropdown-button">Info</button>
@@ -29,7 +29,7 @@
   </div>
   <div class="navbar-dropdown-section" id="navbar-login-account-section">
     <ng-container *ngIf="this.isAuth">
-      <a class="navbar-login-account">Login</a>
+      <a class="navbar-login-account" [routerLink]="['/auth/login']">Login</a>
     </ng-container>
     <ng-container *ngIf="!this.isAuth">
       <a class="navbar-login-account">Account</a>

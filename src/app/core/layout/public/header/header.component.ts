@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 import {NgIf} from "@angular/common";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../../services/user/auth/auth.service";
 
 
@@ -12,6 +12,7 @@ import {AuthService} from "../../../services/user/auth/auth.service";
   standalone: true, // Allows it to be imported outside of routing
   imports: [
     NgIf,
+    RouterLink,
   ],
 })
 export class HeaderComponent implements OnInit {
@@ -33,6 +34,9 @@ export class HeaderComponent implements OnInit {
     if (this.authService.user) {
       this.isAuth = true;
     }
+  }
 
+  EventClick() {
+    this.router.navigate(['event/']);
   }
 }

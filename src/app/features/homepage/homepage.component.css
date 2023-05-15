@@ -1,0 +1,12 @@
+#hero-image-section {
+  margin: 0;
+  overflow: hidden;
+
+  height: 85vh;
+  width: 100vw;
+}
+
+#hero-image {
+  width: 100%;
+  object-fit: contain
+}

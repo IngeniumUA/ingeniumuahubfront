@@ -7,18 +7,22 @@ import {RecsysComponent} from "./features/recsys/recsys.component";
 import {AccountComponent} from "./features/user/account.component";
 
 const routes: Routes = [
-  // Public pages
+  // Homepage
   {path: '', component: HomepageComponent },
   {path: 'home', component: HomepageComponent }, // For routing to homepage (makes it easier)
 
+  // Authentication pages
   {path: 'auth', loadChildren: () => import('src/app/features/auth/auth.model').then(x => x.AuthModule)},
+  // Public event related pages
+  {path: 'event', loadChildren: () => import('src/app/features/events/event.model').then(x => x.EventModule)},
+  // User specific pages
   {path: 'user', component: AccountComponent},
-  /*
-  {
-  path: 'user',
-  loadChildren: () =>
-    import('...).then((m) => m.UserModule}, https://devooti.com/responsive-navbar-with-angular/
-  */
+
+  //** Employee **//
+
+  //** Webmaster **//
+
+  //** Manager **//
 
   // Temporary Recsysform
   {path: 'recsysform', component: RecsysComponent },
