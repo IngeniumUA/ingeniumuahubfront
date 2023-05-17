@@ -12,7 +12,7 @@ export class JWTInterceptor implements HttpInterceptor {
     // add auth header with access if user is logged in and request is to api
     const isApiUrl = true // TODO request.url.startsWith('')
 
-    if (isApiUrl) {
+    if (isApiUrl && this.authService.userValue) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.authService.accessToken}`
@@ -41,7 +41,7 @@ export class JWTInterceptor implements HttpInterceptor {
       this.isRefreshing = true;}
 
     //Check if user is logged in ( if we should attempt to refresh)
-    if (!this.authService.user) {
+    if (!this.authService.userValue) {
       return next.handle(request);
     }
 

@@ -16,6 +16,7 @@ import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 import { AccountComponent } from './features/user/account.component';
+import { EventpreviewComponent } from './shared/components/items/event/eventpreview/eventpreview.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { AccountComponent } from './features/user/account.component';
     NotfoundpageComponent,
     RecsysComponent,
     AccountComponent,
+    EventpreviewComponent,
   ],
   imports: [
     BrowserModule,
