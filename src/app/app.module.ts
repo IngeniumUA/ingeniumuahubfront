@@ -7,7 +7,7 @@ import { HomepageComponent } from './features/homepage/homepage.component';
 import { AppRoutingModule } from "./app-routing.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { NotfoundpageComponent } from './features/notfoundpage/notfoundpage.component';
-import { RecsysComponent } from './features/recsys/recsys.component';
+import { RecSysFormComponent } from './features/recsys/rec-sys-form.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatButtonModule} from "@angular/material/button";
@@ -17,16 +17,20 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 import { AccountComponent } from './features/user/account.component';
 import { EventpreviewComponent } from './shared/components/items/event/eventpreview/eventpreview.component';
+import {RecSysComponent} from "./shared/components/items/recsys/recsys/rec-sys.component";
+import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomepageComponent,
-    NotfoundpageComponent,
-    RecsysComponent,
-    AccountComponent,
-    EventpreviewComponent,
-  ],
+    declarations: [
+        AppComponent,
+        HomepageComponent,
+        NotfoundpageComponent,
+        RecSysFormComponent,
+        AccountComponent,
+        EventpreviewComponent,
+        RecSysComponent,
+        EventdatePipe,
+    ],
   imports: [
     BrowserModule,
     HeaderComponent,

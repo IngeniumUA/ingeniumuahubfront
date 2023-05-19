@@ -6,8 +6,9 @@ export class EventPreview {
   start_date!: string;
   end_date!: string;
   location!: string;  // TODO Location Object, package maybe?
-  background_image!: string;
+  image_landscape!: string;
+  image_square!: string;
   button_text!: string;
-  main_color!: "#FFFFFF"
+  main_color!: "000000000";
   text_color!: "#000000"
 }

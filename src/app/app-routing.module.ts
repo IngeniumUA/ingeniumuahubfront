@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import {HomepageComponent} from "./features/homepage/homepage.component";
 import {NotfoundpageComponent} from "./features/notfoundpage/notfoundpage.component";
-import {RecsysComponent} from "./features/recsys/recsys.component";
+import {RecSysFormComponent} from "./features/recsys/rec-sys-form.component";
 import {AccountComponent} from "./features/user/account.component";
 
 const routes: Routes = [
@@ -25,7 +25,7 @@ const routes: Routes = [
   //** Manager **//
 
   // Temporary Recsysform
-  {path: 'recsysform', component: RecsysComponent },
+  {path: 'recsysform', component: RecSysFormComponent },
 
   // Not found as last
   {path: '**', component: NotfoundpageComponent}

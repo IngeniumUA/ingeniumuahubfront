@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RecsysComponent } from './recsys.component';
+import { RecSysComponent } from './rec-sys.component';
 
 describe('RecsysComponent', () => {
-  let component: RecsysComponent;
-  let fixture: ComponentFixture<RecsysComponent>;
+  let component: RecSysComponent;
+  let fixture: ComponentFixture<RecSysComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RecsysComponent ]
+      declarations: [ RecSysComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RecsysComponent);
+    fixture = TestBed.createComponent(RecSysComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

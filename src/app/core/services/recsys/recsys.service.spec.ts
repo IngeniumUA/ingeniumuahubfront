@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RecsysService } from './recsys.service';
+import { RecSysService } from './rec-sys.service';
 
 describe('RecsysService', () => {
-  let service: RecsysService;
+  let service: RecSysService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RecsysService);
+    service = TestBed.inject(RecSysService);
   });
 
   it('should be created', () => {

@@ -1,12 +1,17 @@
-#hero-image-section {
+#hero-section {
   margin: 0;
   overflow: hidden;
 
-  height: 85vh;
-  width: 100vw;
+  background-color: var(--mainblue);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #hero-image {
-  width: 100%;
-  object-fit: contain
+  height: 100%;
+
+  object-fit: contain;
+  overflow: hidden;
 }

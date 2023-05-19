@@ -70,11 +70,11 @@ class RecSysService {
 }
 
 @Component({
-  selector: 'app-recsys',
-  templateUrl: './recsys.component.html',
-  styleUrls: ['./recsys.component.css']
+  selector: 'app-recsys-form',
+  templateUrl: './rec-sys-form.component.html',
+  styleUrls: ['./rec-sys-form.component.css']
 })
-export class RecsysComponent implements OnInit {
+export class RecSysFormComponent implements OnInit {
 
   // Variables
   studeert: boolean = false;

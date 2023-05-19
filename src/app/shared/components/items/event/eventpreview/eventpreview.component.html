@@ -1,37 +1,17 @@
-<div id="eventpreview-card">
-  <div id="eventpreview-image-section">
-    <img src="assets/PopUpZofc.jpg" id="eventpreview-image" alt="image">
+<div *ngIf="isMobile" id="eventpreview-card" [ngStyle]="{'background': primaryColor90}">
+  <div id="eventpreview-image-section" [ngStyle]="{'background': primaryColorFull}">
+    <img src="{{ this.eventPreview.image_square }}" id="eventpreview-image" alt="image">
   </div>
-  <div id="eventpreview-date-section" class="eventpreview-info-section">
-    <a class="eventpreview-info">Tomorrow</a>
+  <div id="eventpreview-date-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
+    <a class="eventpreview-info">{{ this.eventPreview.start_date | eventdate }}</a>
   </div>
-  <div id="eventpreview-name-section" class="eventpreview-info-section">
-    <a class="eventpreview-info" id="eventpreview-info-name">Pop Up Z</a>
+  <div id="eventpreview-name-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
+    <a class="eventpreview-info" id="eventpreview-info-name">{{ this.eventPreview.item.name}}</a>
   </div>
-  <div id="eventpreview-location-section" class="eventpreview-info-section">
-    <a class="eventpreview-info">Campus Groenenborger</a>
+  <div id="eventpreview-location-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
+    <a class="eventpreview-info">{{ this.eventPreview.location }}</a>
   </div>
-  <div id="eventpreview-button-section" class="eventpreview-info-section">
-    <button id="eventpreview-button" (click)="RedirectToEvent()">Shop Food&Drinks</button>
-  </div>
-</div>
-
-<!--
-<div *ngIf="this.eventPreview" id="eventpreview-card">
-  <div id="eventpreview-image-section">
-    <img src="{{ this.eventPreview.background_image }}" id="eventpreview-image" alt="image">
-  </div>
-  <div id="eventpreview-date-section" class="eventpreview-info-section">
-    <a>{{ this.eventPreview.start_date }}</a>
-  </div>
-  <div id="eventpreview-name-section" class="eventpreview-info-section">
-    <a>{{ this.eventPreview.item.name}}</a>
-  </div>
-  <div id="eventpreview-location-section" class="eventpreview-info-section">
-    <a>{{ this.eventPreview.location }}</a>
-  </div>
-  <div id="eventpreview-button-section" class="eventpreview-info-section">
-    <button (click)="RedirectToEvent()">{{ this.eventPreview.button_text}}</button>
+  <div id="eventpreview-button-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
+    <button id="eventpreview-button" (click)="RedirectToEvent()"  [ngStyle]="{'color': primaryColorFull}">{{ this.eventPreview.button_text}}</button>
   </div>
 </div>
--->
