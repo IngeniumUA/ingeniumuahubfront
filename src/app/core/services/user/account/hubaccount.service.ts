@@ -11,6 +11,6 @@ export class HubaccountService {
   constructor(private httpClient: HttpClient) { }
 
   public getAccount(): Observable<HubAccountData> {
-    return this.httpClient.get("http://127.0.0.1:8000/api/user/account") // TODO
+    return this.httpClient.get("https://ingeniumuahub.ew.r.appspot.com/api/user/account")
   }
 }
