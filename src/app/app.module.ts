@@ -7,7 +7,7 @@ import { HomepageComponent } from './features/public/homepage/homepage.component
 import { AppRoutingModule } from "./app-routing.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { NotfoundpageComponent } from './features/notfoundpage/notfoundpage.component';
-import { RecSysFormComponent } from './features/recsys/rec-sys-form.component';
+import { RecSysFormComponent } from './features/recsysform/rec-sys-form.component';
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatButtonModule} from "@angular/material/button";

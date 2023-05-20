@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import {HomepageComponent} from "./features/public/homepage/homepage.component";
 import {NotfoundpageComponent} from "./features/notfoundpage/notfoundpage.component";
-import {RecSysFormComponent} from "./features/recsys/rec-sys-form.component";
+import {RecSysFormComponent} from "./features/recsysform/rec-sys-form.component";
 import {AccountComponent} from "./features/public/user/account.component";
 import {PublicRoutingComponent} from "./features/public/public-routing/public-routing.component";
 
