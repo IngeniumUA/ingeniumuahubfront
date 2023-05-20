@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {HubAccountData, HubAuthData} from "../../shared/models/user";
-import {AuthService} from "../../core/services/user/auth/auth.service";
-import {HubaccountService} from "../../core/services/user/account/hubaccount.service";
+import {HubAccountData, HubAuthData} from "../../../shared/models/user";
+import {AuthService} from "../../../core/services/user/auth/auth.service";
+import {HubaccountService} from "../../../core/services/user/account/hubaccount.service";
 
 @Component({
   selector: 'app-user',
