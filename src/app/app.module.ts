@@ -33,19 +33,22 @@ import { PublicRoutingComponent } from './features/public/public-routing/public-
         EventdatePipe,
         PublicRoutingComponent,
     ],
-  imports: [
-    BrowserModule,
-    HeaderComponent,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    MatRadioModule,
-    MatButtonModule
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
-  ],
-  bootstrap: [AppComponent]
+    imports: [
+        BrowserModule,
+        HeaderComponent,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        MatRadioModule,
+        MatButtonModule
+    ],
+    providers: [
+        {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
+    ],
+    exports: [
+        EventdatePipe
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

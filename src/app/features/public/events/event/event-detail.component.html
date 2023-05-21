@@ -1,1 +1,47 @@
-<p>event works!</p>
+<div *ngIf="this.eventDetail" id="inias-hoe-fix-ik-dit" [ngStyle]="{'background': this.primaryColor90 }">
+  <div id="event-detail-card">
+    <!-- Small message on top of the card -->
+    <div [ngStyle]="{'background': this.primaryColor90 }">
+      <a id="event-detail-poweredbyingeniumuahub">Powered By IngeniumUAHub</a>
+    </div>
+
+    <!-- Image -->
+    <div id="event-detail-image-card">
+      <img id="event-detail-image" src="{{ this.eventDetail.image_square }}" alt="Foto hier :(">
+    </div>
+
+    <!-- Eventdetails -->
+    <div [ngStyle]="{'color': this.primaryColorFull }" id="event-detail-title" class="event-detail-info-section">{{ this.eventDetail.item.name }}</div>
+    <div class="event-detail-info-section">
+      <div class="svg-logo-card">
+        <img src="assets/date.svg" alt=":(" class="svg-logo">
+      </div>
+      <div class="event-detail-info">{{ this.eventDetail.start_date }}</div>
+    </div>
+    <div class="event-detail-info-section">
+      <div class="svg-logo-card">
+        <img src="assets/location.svg" alt=":(" class="svg-logo">
+      </div>
+      <div class="event-detail-info">{{ this.eventDetail.location }}</div>
+    </div>
+
+    <!-- Products section TODO Place this in separate component-->
+    <div id="products-bar">
+      <div class="product-type">
+        <a>Tickets</a>
+      </div>
+      <div class="product-type">
+        <a>Products</a>
+      </div>
+    </div>
+    <ul>
+      <li>Ticket 1</li>
+      <li>Ticket 2</li>
+    </ul>
+
+    <!-- Description -->
+    <div id="event-detail-description">
+      <a>{{ this.eventDetail.description }}</a>
+    </div>
+  </div>
+</div>

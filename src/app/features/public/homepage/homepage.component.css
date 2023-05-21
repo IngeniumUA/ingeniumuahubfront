@@ -2,16 +2,13 @@
   margin: 0;
   overflow: hidden;
 
-  background-color: var(--mainblue);
+  height: 80vh;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  background-color: var(--mainblue);
 }
 
 #hero-image {
   height: 100%;
-
   object-fit: contain;
   overflow: hidden;
 }

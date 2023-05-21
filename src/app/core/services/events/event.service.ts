@@ -9,7 +9,7 @@ export class EventService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getEventPreview(eventId: string): Observable<any> {
-    return this.httpClient.get("https://ingeniumuahub.ew.r.appspot.com/api/items/event/d31ad8ef-c5b2-490d-bada-0def1c4065a5");
+  public getEvent(eventId: string): Observable<any> {
+    return this.httpClient.get("https://ingeniumuahub.ew.r.appspot.com/api/items/event/" + eventId);
   }
 }

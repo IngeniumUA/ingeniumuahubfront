@@ -1,0 +1,81 @@
+#inias-hoe-fix-ik-dit {
+  padding: 4vw;
+}
+
+#event-detail-card {
+  background-color: white;
+}
+
+#event-detail-poweredbyingeniumuahub {
+  color: white;
+}
+
+#event-detail-image-card {
+  width: 92vw;
+}
+
+#event-detail-image {
+  width: 100%;
+}
+
+.event-detail-info-section {
+  font-size: clamp(0rem, 2.5vh, 2rem);
+  font-weight: bold;
+
+  padding: 0.5rem 1rem;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.event-detail-info {
+  padding-left: 0.5rem;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#event-detail-title {
+  font-size: clamp(0rem, 4vh, 3rem);
+  font-weight: bolder;
+
+  padding: 1rem;
+}
+
+#event-detail-description {
+  font-size: clamp(0rem, 2vh, 2rem);
+  padding: 1rem;
+
+  border-top: solid lightgray 2px;
+}
+
+.svg-logo-card {
+  max-height: clamp(0rem, 4vh, 3rem);
+  max-width: clamp(0rem, 4vh, 3rem);
+
+  padding: 0.5rem;
+  background-color: lightgray;
+  border-radius: 10px;
+}
+
+.svg-logo {
+  height: 100%;
+}
+
+#products-bar {
+  margin-top: 1rem;
+
+  border-top: solid lightgray 2px;
+  border-bottom: solid lightgray 2px;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.product-type {
+  padding: 1rem;
+
+  font-size: clamp(0rem, 2.5vh, 2rem);
+  font-weight: bold;
+}

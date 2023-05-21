@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {EventPreview} from "../../../../models/items/events";
+import {EventPreviewModel} from "../../../../models/items/events";
 import {Router} from "@angular/router";
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 
@@ -9,7 +9,7 @@ import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
   styleUrls: ['./eventpreview.component.css']
 })
 export class EventpreviewComponent implements OnInit {
-  @Input() eventPreview!: EventPreview
+  @Input() eventPreview!: EventPreviewModel
 
   constructor(private router: Router,
               private breakpointObserver: BreakpointObserver,) {
