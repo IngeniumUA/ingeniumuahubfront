@@ -20,6 +20,7 @@ import { EventpreviewComponent } from './shared/components/items/event/eventprev
 import {RecSysComponent} from "./shared/components/items/recsys/recsys/rec-sys.component";
 import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
 import { PublicRoutingComponent } from './features/public/public-routing/public-routing.component';
+import { FooterComponent } from './core/layout/public/footer/footer.component';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,7 @@ import { PublicRoutingComponent } from './features/public/public-routing/public-
         RecSysComponent,
         EventdatePipe,
         PublicRoutingComponent,
+        FooterComponent,
     ],
     imports: [
         BrowserModule,

@@ -14,13 +14,13 @@
     <div [ngStyle]="{'color': this.primaryColorFull }" id="event-detail-title" class="event-detail-info-section">{{ this.eventDetail.item.name }}</div>
     <div class="event-detail-info-section">
       <div class="svg-logo-card">
-        <img src="assets/date.svg" alt=":(" class="svg-logo">
+        <img src="assets/svg/date.svg" alt=":(" class="svg-logo">
       </div>
       <div class="event-detail-info">{{ this.eventDetail.start_date }}</div>
     </div>
     <div class="event-detail-info-section">
       <div class="svg-logo-card">
-        <img src="assets/location.svg" alt=":(" class="svg-logo">
+        <img src="assets/svg/location.svg" alt=":(" class="svg-logo">
       </div>
       <div class="event-detail-info">{{ this.eventDetail.location }}</div>
     </div>
@@ -41,7 +41,7 @@
 
     <!-- Description -->
     <div id="event-detail-description">
-      <a>{{ this.eventDetail.description }}</a>
+      <p>{{ this.eventDetail.description }}</p>
     </div>
   </div>
 </div>
