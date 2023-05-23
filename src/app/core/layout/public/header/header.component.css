@@ -109,7 +109,7 @@ nav {
   text-align: center;
 
   padding: 1rem;
-  padding-top: 2rem;
+  padding-top: clamp(0.2rem, 4vh, 2rem);
 }
 
 .navbar-login-account {
