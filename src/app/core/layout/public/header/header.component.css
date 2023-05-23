@@ -1,74 +1,63 @@
 nav {
-  background-color: var(--mainblue);
+  position: relative;
+  z-index: 10;
+}
+
+.navbar {
+  box-sizing: border-box;
+  margin: 0;
+
+  overflow: hidden;
   height: 15vh;
-  width: 100vw;
+  width: 100%;
+
+  background-color: var(--mainblue);
 
   display: flex;
   flex-direction: row;
-  align-items: center;
 }
 
-#ingenium-section {
-  height: 100%;
-  box-sizing: border-box;
+.navbar-transparent {
+  animation: fadeOutSlightly 0s ease 0.4s normal forwards;
+}
 
-  padding: 1vh;
+/* Ingenium Logo Section */
+#nav-logo-section {
+  height: 15vh;
 
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
+  grid-template-columns: 12vh 4fr;
   grid-template-rows: 1fr 1fr 1fr;
-  grid-column-gap: 0;
-  grid-row-gap: 0;
 }
-
-#ingenium-logo-section {
+#logo-section {
   grid-area: 1 / 1 / 4 / 2;
-  margin-right: 0.5rem;
 }
-.ingenium-text {
+#logotekst-ingenium {
+  grid-area: 1 / 2 / 2 / 3;
+}
+#logotekst-ingenieurs {
+  grid-area: 2 / 2 / 3 / 3;
+}
+#logotekst-uantwerpen {
+  grid-area: 3 / 2 / 4 / 3;
+}
+.logotekst {
   color: white;
   font-size: clamp(0rem, 3.5vh, 2rem);
+  opacity: 1;
 }
-#ingenium-ingenium { grid-area: 1 / 2 / 2 / 3; }
-#ingenium-fti { grid-area: 2 / 2 / 3 / 3; }
-#ingenium-ua { grid-area: 3 / 2 / 4 / 3; }
-
 #ingenium-schild {
   height: 100%;
+}
+
+/* Menu button*/
+#menubutton-section {
+  flex-grow: 1;
+}
+
+#menu-button {
   float: right;
-}
 
-/* Mobile */
-#dropdown-menu-section {
-  flex-grow: 1;
-
-  margin: 0.5rem;
-
-  justify-content: right;
-}
-
-#dropdown-menu-section {
-  flex-grow: 1;
-
-  display: flex;
-  justify-content:flex-end;
-}
-
-#navbar-menu-button {
-  background-color: transparent;
-  background-repeat: no-repeat;
-  border: none;
-  cursor: pointer;
-  overflow: hidden;
-  outline: none;
-}
-
-/* Desktop */
-.navbar-dropdown-section {
-  flex-basis: 10%;
-}
-
-.navbar-dropdown-button {
   background-color: transparent;
   background-repeat: no-repeat;
   border: none;
@@ -80,29 +69,62 @@ nav {
   font-size: clamp(0rem, 3vh, 2rem);
 }
 
-#navbar-login-account-section {
-  flex-grow: 1;
+/* Navbar vertical */
+#navbar-vertical-background {
+  position: fixed;
+  z-index: -1;
+
+  top: 0;
+  min-height: 85vh;
+  width: 100%;
+  background-color: var(--mainblue);
+  opacity: 0.9;
+
+  animation: slideDownIntoView 0.4s ease-in 0s 1 normal;
+}
+
+#navbar-vertical {
+  position: fixed;
+  z-index: 1;
+
+  top: 0;
+  min-height: 85vh;
+  width: 100%;
 
   display: flex;
-  justify-content:flex-end;
+  flex-direction: column;
+
+  animation: slideDownIntoView 0.4s ease-in 0s 1 normal forwards;
+}
+
+/* Navbar sections */
+.nav-section {
+  width: 100%;
+
+  box-sizing: border-box;
+  padding: 0.5rem;
+}
+
+.nav-section-box {
+  text-align: center;
+
+  padding: 1rem;
+  padding-top: 2rem;
 }
 
 .navbar-login-account {
-  text-decoration: none;
+  text-decoration: underline;
   color: white;
   font-size: clamp(0rem, 5vh, 3rem);
 }
 
-#navbar-lidkaart-section {
+.lidkaart-section {
   flex-grow: 1;
-
-  padding: 1rem;
-
-  display: flex;
-  justify-content:flex-end;
 }
 
-#navbar-lidkaart {
+.lidkaart {
+  float: top;
+
   background-color: white;
 
   font-size: clamp(0rem, 5vh, 3rem);
@@ -116,4 +138,37 @@ nav {
   padding: 0.1rem;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
+}
+
+/* Hover */
+#logo-section:hover {
+  cursor: pointer;
+}
+
+/* Animations */
+@keyframes fadeOutSlightly {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.1;
+  }
+}
+
+@keyframes slideDownIntoView {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIntoView {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }

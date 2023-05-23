@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
-import {NgIf} from "@angular/common";
-import {Router, RouterLink} from "@angular/router";
+import {NgClass, NgIf, NgTemplateOutlet} from "@angular/common";
+import {NavigationStart, Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../../services/user/auth/auth.service";
 
 
@@ -13,15 +13,23 @@ import {AuthService} from "../../../services/user/auth/auth.service";
   imports: [
     NgIf,
     RouterLink,
+    NgTemplateOutlet,
+    NgClass,
   ],
 })
 export class HeaderComponent implements OnInit {
   isMobile: boolean = true;
+  isNavdropdown: boolean = false;
   isAuth: boolean = false;
 
   constructor(private router: Router,
               private breakpointObserver: BreakpointObserver,
               private authService: AuthService) {
+    router.events.forEach((event) => {
+      if(event instanceof NavigationStart) {
+      }
+      this.isNavdropdown = false;
+    });
   }
 
   ngOnInit() {
@@ -34,6 +42,14 @@ export class HeaderComponent implements OnInit {
     if (this.authService.user) {
       this.isAuth = true;
     }
+  }
+
+  ToggleNavDropdown(): void {
+    this.isNavdropdown = ! this.isNavdropdown;
+  }
+
+  Home(): void {
+    this.router.navigate(['home']);
   }
 
   EventClick() {
