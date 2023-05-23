@@ -17,10 +17,11 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 import { AccountComponent } from './features/public/user/account.component';
 import { EventpreviewComponent } from './shared/components/items/event/eventpreview/eventpreview.component';
-import {RecSysComponent} from "./shared/components/items/recsys/recsys/rec-sys.component";
+import { RecSysComponent } from "./shared/components/items/recsys/recsys/rec-sys.component";
 import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
-import { PublicRoutingComponent } from './features/public/public-routing/public-routing.component';
+import { PublicRoutingComponent } from './features/public/public-routing.component';
 import { FooterComponent } from './core/layout/public/footer/footer.component';
+import { CloudComponent } from './features/public/cloud/cloud.component';
 
 @NgModule({
     declarations: [
@@ -28,19 +29,25 @@ import { FooterComponent } from './core/layout/public/footer/footer.component';
         HomepageComponent,
         NotfoundpageComponent,
         RecSysFormComponent,
-        AccountComponent,
+
         EventpreviewComponent,
         RecSysComponent,
-        EventdatePipe,
+
         PublicRoutingComponent,
-        FooterComponent,
+        CloudComponent,
+
+        AccountComponent,
+        EventdatePipe,
     ],
     imports: [
         BrowserModule,
         HeaderComponent,
+        FooterComponent,
+
         AppRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule,
+
         ReactiveFormsModule,
         MatRadioModule,
         MatButtonModule

@@ -108,8 +108,7 @@ nav {
 .nav-section-box {
   text-align: center;
 
-  padding: 1rem;
-  padding-top: clamp(0.2rem, 4vh, 2rem);
+  padding: clamp(0.2rem, 4vh, 2rem) 1rem 1rem;
 }
 
 .navbar-login-account {
@@ -135,9 +134,7 @@ nav {
   border: 5px solid white;
   border-radius: 25px;
 
-  padding: 0.1rem;
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
+  padding: 0.1rem 0.5rem;
 }
 
 /* Hover */
