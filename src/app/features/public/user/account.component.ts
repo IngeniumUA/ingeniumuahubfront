@@ -10,7 +10,7 @@ import {HubaccountService} from "../../../core/services/user/account/hubaccount.
 })
 export class AccountComponent implements OnInit {
 
-  constructor(private authService: AuthService,
+  constructor(protected authService: AuthService,
               private accountService: HubaccountService) {
   }
 

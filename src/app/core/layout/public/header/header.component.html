@@ -14,11 +14,11 @@
   <div class="nav-section nav-section-box"><a class="logotekst" [routerLink]="['/shop']">Shop</a></div>
   <div class="nav-section nav-section-box"><a class="logotekst" [routerLink]="['/cloud']">Cloud</a></div>
 
-  <ng-container *ngIf="this.isAuth">
+  <ng-container *ngIf="!this.isAuth">
     <a class="nav-section nav-section-box navbar-login-account" [routerLink]="['/auth/login']">Login</a>
   </ng-container>
-  <ng-container *ngIf="!this.isAuth">
-    <a class="nav-section nav-section-box navbar-login-account">Account</a>
+  <ng-container *ngIf="this.isAuth">
+    <a class="nav-section nav-section-box navbar-login-account" [routerLink]="['/user']">Account</a>
   </ng-container>
 
   <div class="nav-section nav-section-box lidkaart-section">

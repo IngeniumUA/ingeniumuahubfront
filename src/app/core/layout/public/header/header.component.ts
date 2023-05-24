@@ -33,15 +33,18 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.authService.userValue) {
+      this.isAuth = true;
+      console.log(this.authService)
+    }
+
     this.breakpointObserver  // Breakpoint Observable for responsiveness
       .observe(['(min-width: 850px)'])
       .subscribe((state: BreakpointState) => {
         this.isMobile = !state.matches;
       });
 
-    if (this.authService.user) {
-      this.isAuth = true;
-    }
+
   }
 
   ToggleNavDropdown(): void {

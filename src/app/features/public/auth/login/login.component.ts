@@ -18,9 +18,13 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private accountService: AuthService) { }
+              private authService: AuthService) { }
 
   ngOnInit() {
+    if (this.authService.userValue) {
+      this.router.navigate(['home'])
+    }
+
     this.form = this.formBuilder.group({
       email: ['', Validators.email],
       password: ['', Validators.required]
@@ -35,7 +39,7 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {return;}
 
     this.loading = true;
-    this.accountService.login(this.form.controls['email'].value, this.form.controls['password'].value).pipe(
+    this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).pipe(
       first()).subscribe({
         next: () => {
           // get return url from query parameters ( so, ?next='' in the url), else default to home page
