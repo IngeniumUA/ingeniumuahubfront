@@ -3,6 +3,7 @@ import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 import {NgClass, NgIf, NgTemplateOutlet} from "@angular/common";
 import {NavigationStart, Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../../services/user/auth/auth.service";
+import {distinctUntilChanged} from "rxjs/operators";
 
 
 @Component({
@@ -37,14 +38,17 @@ export class HeaderComponent implements OnInit {
       this.isAuth = true;
       console.log(this.authService)
     }
+    if (this.authService.user.
+      pipe(distinctUntilChanged())
+      .subscribe((data) => {
+          this.isAuth = data != null;
+        }))
 
     this.breakpointObserver  // Breakpoint Observable for responsiveness
       .observe(['(min-width: 850px)'])
       .subscribe((state: BreakpointState) => {
         this.isMobile = !state.matches;
       });
-
-
   }
 
   ToggleNavDropdown(): void {
