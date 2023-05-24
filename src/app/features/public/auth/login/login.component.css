@@ -1,0 +1,120 @@
+h1 {
+  text-align: center;
+}
+
+.login-wrapper {
+  min-height: 85vh;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-width {
+  box-sizing: border-box;
+
+  margin: 0.7vh;
+
+  height: 2rem;
+  width: 18rem;
+}
+
+.login-other {
+  border-radius: 5px;
+  border: solid var(--mainblue) 2px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.login-other a {
+  margin-left: 0.2rem;
+  color: var(--mainblue);
+}
+.login-other img {
+  height: 100%;
+}
+
+
+/* Formfields */
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.custom-field {
+  box-sizing: border-box;
+
+  position: relative;
+  font-size: 14px;
+  border-top: 20px solid transparent;
+  margin-bottom: 5px;
+  display: inline-block;
+  --field-padding: 12px;
+}
+
+.custom-field input {
+  box-sizing: border-box;
+
+  border: none;
+  appearance: none;
+  padding: var(--field-padding);
+  border-radius: 3px;
+  width: 250px;
+  outline: none;
+  font-size: 14px;
+}
+
+.custom-field .placeholder {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: var(--field-padding);
+  width: calc(100%);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  top: 22px;
+  line-height: 100%;
+  transform: translateY(-50%);
+  color: var(--ingenium-grey);
+  transition:
+    top 0.3s ease,
+    color 0.3s ease,
+    font-size 0.3s ease;
+}
+
+.custom-field input.dirty + .placeholder,
+.custom-field input:focus + .placeholder,
+.custom-field input:not(:placeholder-shown) + .placeholder {
+  top: -10px;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--mainblue);
+}
+
+
+/* Button */
+.login-button {
+  margin-top: 4vh;
+  border-radius: 5px;
+
+  background-color: var(--mainblue);
+  border: none;
+
+  font-weight: bold;
+  color: white;
+}
+
+#login-or {
+  box-sizing: border-box;
+  padding: 0;
+  text-align: center;
+
+  color: gray;
+
+  border-bottom: solid gray 1px;
+}

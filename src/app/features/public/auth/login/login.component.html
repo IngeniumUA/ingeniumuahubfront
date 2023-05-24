@@ -1,21 +1,38 @@
-<div class="card">
-  <h4 class="card-header">Login</h4>
-  <div class="card-body">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
-      </div>
-      <div>
-        <button [disabled]="loading" class="btn btn-primary">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-          Login
-        </button>
-      </div>
-    </form>
+<div class="login-wrapper">
+
+  <h1>Sign in to<br>IngeniumUAHub</h1>
+
+  <div class="login-width login-other">
+    <img src="assets/svg/google-icon.svg" alt=":'(">
+    <a>Continue with google</a>
   </div>
+  <div class="login-width login-other">
+    <img src="assets/svg/icons8-facebook.svg" alt=":'(">
+    <a>Continue with Facebook</a>
+  </div>
+
+  <p id="login-or" class="login-width">or</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label class="custom-field three">
+      <input type="text" formControlName="email" placeholder=" " [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+      <span class="placeholder">Email</span>
+      <span class="border"></span>
+    </label>
+
+    <label class="custom-field three">
+      <input type="password" formControlName="password" placeholder="&nbsp;" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
+      <span class="placeholder">Password</span>
+      <span class="border"></span>
+    </label>
+
+    <button [disabled]="loading" class="login-width login-button">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+      Login
+    </button>
+  </form>
+
+  <p><a>Reset password (ha, dumdum)</a></p>
+  <p>No account? <a [routerLink]="['/auth/register']">Create one</a></p>
+
 </div>
