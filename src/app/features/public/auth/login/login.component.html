@@ -14,25 +14,25 @@
   <p id="login-or" class="login-width">or</p>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label class="custom-field three">
+    <label class="custom-field">
       <input type="text" formControlName="email" placeholder=" " [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
       <span class="placeholder">Email</span>
       <span class="border"></span>
     </label>
 
-    <label class="custom-field three">
+    <label class="custom-field">
       <input type="password" formControlName="password" placeholder="&nbsp;" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
       <span class="placeholder">Password</span>
       <span class="border"></span>
     </label>
 
-    <button [disabled]="loading" class="login-width login-button">
-      <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+    <button [disabled]="this.loading" class="login-width login-button">
+      <span *ngIf="this.loading" class="spinner-border spinner-border-sm me-1"></span>
       Login
     </button>
   </form>
 
-  <p><a>Reset password (ha, dumdum)</a></p>
+  <p><a [routerLink]="['/auth/reset']">Reset password</a> (dumdum)</p>
   <p>No account? <a [routerLink]="['/auth/register']">Create one</a></p>
 
 </div>

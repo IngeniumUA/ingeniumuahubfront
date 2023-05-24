@@ -1,6 +1,12 @@
 h1 {
   text-align: center;
 }
+a {
+  text-decoration: none;
+}
+a:link {
+  color: var(--ingenium-blue);
+}
 
 .login-wrapper {
   min-height: 85vh;
@@ -11,18 +17,19 @@ h1 {
   align-items: center;
 }
 
+/* Base style */
 .login-width {
   box-sizing: border-box;
 
   margin: 0.7vh;
 
-  height: 2rem;
+  height: 2.5rem;
   width: 18rem;
 }
 
+/* Login via Google or Facebook boxes */
 .login-other {
   border-radius: 5px;
-  border: solid var(--mainblue) 2px;
 
   display: flex;
   flex-direction: row;
@@ -37,6 +44,17 @@ h1 {
   height: 100%;
 }
 
+/* 'Or */
+#login-or {
+  box-sizing: border-box;
+  padding: 0;
+  width: 16rem;
+
+  color: gray;
+  border-bottom: solid gray 1px;
+
+  text-align: center;
+}
 
 /* Formfields */
 form {
@@ -54,6 +72,8 @@ form {
   margin-bottom: 5px;
   display: inline-block;
   --field-padding: 12px;
+
+  border-bottom: solid var(--mainblue) 2px;
 }
 
 .custom-field input {
@@ -109,12 +129,6 @@ form {
   color: white;
 }
 
-#login-or {
-  box-sizing: border-box;
-  padding: 0;
-  text-align: center;
-
-  color: gray;
-
-  border-bottom: solid gray 1px;
+.login-button:active {
+  background-color: var(--ingenium-blue);
 }
