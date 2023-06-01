@@ -47,12 +47,14 @@ export class JWTInterceptor implements HttpInterceptor {
 
     // Else, attempt to refresh
     return this.authService.refreshAccessToken().pipe(
-      // .pipe() means request is finished, if successfull, set refreshing to False and continue to next request
+      // .pipe() means request is finished, two cases can occur:
+
+      // Case 1) if successful, set refreshing to False and continue to next request
       switchMap(() => {
         this.isRefreshing = false;
         return next.handle(request);
       }),
-      // Else, if error, check error
+      // Case 2) If error, check error
       catchError((error) => {
         this.isRefreshing = false;
 
