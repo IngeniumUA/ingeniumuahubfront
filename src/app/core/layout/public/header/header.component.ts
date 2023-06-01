@@ -36,7 +36,6 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     if (this.authService.userValue) {
       this.isAuth = true;
-      console.log(this.authService)
     }
     if (this.authService.user.
       pipe(distinctUntilChanged())

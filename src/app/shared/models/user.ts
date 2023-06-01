@@ -1,7 +1,11 @@
-export class HubAuthData {
+export interface HubAuthData {
   id?: string;
   access?: string;
   refresh?: string;
+}
+
+export interface HubAuthGroups {
+  groups: number[];
 }
 
 export class HubAccountData {

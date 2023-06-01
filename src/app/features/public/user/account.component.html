@@ -17,6 +17,15 @@
 </div>
 
 <div>
+  <h2>Authorization</h2>
+  <ng-container *ngIf="this.userRoles">
+    Userroles:
+    {{ this.userRoles.groups }}
+  </ng-container>
+  <button (click)="GetRoles()">Get userroles</button>
+</div>
+
+<div>
   <h2>Logout</h2>
   <button (click)="Logout()">Log out of account</button>
 </div>
