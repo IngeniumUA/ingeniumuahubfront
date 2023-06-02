@@ -38,6 +38,10 @@ const routes: Routes = [
   //** Webmaster **//
 
   //** Manager **//
+  { path: 'man',
+    loadChildren: () => import('src/app/features/manager/manager.module').then(x => x.ManagerModule),
+    canActivate: [authGuard]
+  },
 
   // Temporary Recsysform
   {path: 'recsysform', component: RecSysFormComponent },
