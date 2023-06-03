@@ -1,11 +1,19 @@
-<div>
+<section>
   Account details hierzo
-</div>
-<form>
-  Form hierzo
-</form>
 
-<div>
+  <form>
+    Form hierzo
+  </form>
+</section>
+
+<section>
+  <h2>Routing</h2>
+  <a [routerLink]="['/man']">Manager Homepage</a>
+  <a [routerLink]="['/web']">Webmaster Homepage</a>
+  <a [routerLink]="['/staff']">Staff Homepage</a>
+</section>
+
+<section>
   <h2>Authentication</h2>
   <ul>
     <li>ID: {{ this.userauth?.id }}</li>
@@ -14,18 +22,18 @@
   </ul>
 
   <button (click)="RefreshAuth()">Refresh Accesstoken</button>
-</div>
+</section>
 
-<div>
+<section>
   <h2>Authorization</h2>
   <ng-container *ngIf="this.userRoles">
     Userroles:
     {{ this.userRoles.groups }}
   </ng-container>
   <button (click)="GetRoles()">Get userroles</button>
-</div>
+</section>
 
-<div>
+<section>
   <h2>Logout</h2>
   <button (click)="Logout()">Log out of account</button>
-</div>
+</section>
