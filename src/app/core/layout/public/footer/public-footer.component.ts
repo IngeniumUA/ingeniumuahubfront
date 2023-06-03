@@ -5,14 +5,14 @@ import {NgClass} from "@angular/common";
 
 @Component({
   standalone: true, // Allows it to be imported outside of routing
-  selector: 'app-layout-footer',
-  templateUrl: './footer.component.html',
+  selector: 'app-layout-public-footer',
+  templateUrl: './public-footer.component.html',
   imports: [
     NgClass
   ],
-  styleUrls: ['./footer.component.css']
+  styleUrls: ['./public-footer.component.css']
 })
-export class FooterComponent implements OnInit {
+export class PublicFooterComponent implements OnInit {
   isMobile: boolean = true;
 
   constructor(private router: Router,

@@ -7,9 +7,9 @@ import {distinctUntilChanged} from "rxjs/operators";
 
 
 @Component({
-  selector: 'app-layout-header', // HTML tag for importing ( see app.component.html )
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
+  selector: 'app-layout-public-header', // HTML tag for importing ( see app.component.html )
+  templateUrl: './public-header.component.html',
+  styleUrls: ['./public-header.component.css'],
   standalone: true, // Allows it to be imported outside of routing
   imports: [
     NgIf,
@@ -18,7 +18,7 @@ import {distinctUntilChanged} from "rxjs/operators";
     NgClass,
   ],
 })
-export class HeaderComponent implements OnInit {
+export class PublicHeaderComponent implements OnInit {
   isMobile: boolean = true;
   isNavdropdown: boolean = false;
   isAuth: boolean = false;
@@ -27,9 +27,9 @@ export class HeaderComponent implements OnInit {
               private breakpointObserver: BreakpointObserver,
               private authService: AuthService) {
     router.events.forEach((event) => {
-      if(event instanceof NavigationStart) {
+      if (event instanceof NavigationStart) {
+        this.isNavdropdown = false;
       }
-      this.isNavdropdown = false;
     });
   }
 

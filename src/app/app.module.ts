@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './core/layout/public/header/header.component';
+import { PublicHeaderComponent } from './core/layout/public/header/public-header.component';
 import { HomepageComponent } from './features/public/homepage/homepage.component';
 import { AppRoutingModule } from "./app-routing.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
@@ -20,7 +20,7 @@ import { EventpreviewComponent } from './shared/components/items/event/eventprev
 import { RecSysComponent } from "./shared/components/items/recsys/recsys/rec-sys.component";
 import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
 import { PublicRoutingComponent } from './features/public/public-routing.component';
-import { FooterComponent } from './core/layout/public/footer/footer.component';
+import { PublicFooterComponent } from './core/layout/public/footer/public-footer.component';
 import { CloudComponent } from './features/public/cloud/cloud.component';
 
 @NgModule({
@@ -41,8 +41,8 @@ import { CloudComponent } from './features/public/cloud/cloud.component';
     ],
     imports: [
         BrowserModule,
-        HeaderComponent,
-        FooterComponent,
+        PublicHeaderComponent,
+        PublicFooterComponent,
 
         AppRoutingModule,
         HttpClientModule,

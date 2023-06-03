@@ -1,0 +1,18 @@
+<div *ngIf="this.isSidenav" class="sidenav">
+  <section>
+    <a [routerLink]="['/man']" class="section-title">Manager</a>
+    <a class="section-link">Users</a>
+    <a class="section-link">Items</a>
+  </section>
+
+  <section>
+    <a [routerLink]="['/web']" class="section-title">Webmaster</a>
+    <a class="section-link">Users</a>
+    <a class="section-link">Events</a>
+  </section>
+
+  <section>
+    <a [routerLink]="['/staff']" class="section-title">Staff</a>
+    <a class="section-link">Events</a>
+  </section>
+</div>

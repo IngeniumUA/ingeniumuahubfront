@@ -18,7 +18,7 @@ nav {
 }
 
 .navbar-transparent {
-  animation: fadeOutSlightly 0s ease 0.4s normal forwards;
+  animation: fadeOutSlightly 0s ease 0.2s normal forwards;
 }
 
 /* Ingenium Logo Section */
@@ -80,7 +80,7 @@ nav {
   background-color: var(--mainblue);
   opacity: 0.9;
 
-  animation: slideDownIntoView 0.4s ease-in 0s 1 normal;
+  animation: slideDownIntoView 0.2s ease-in 0s 1 normal;
 }
 
 #navbar-vertical {
@@ -94,7 +94,7 @@ nav {
   display: flex;
   flex-direction: column;
 
-  animation: slideDownIntoView 0.4s ease-in 0s 1 normal forwards;
+  animation: slideDownIntoView 0.2s ease-in 0s 1 normal forwards;
 }
 
 /* Navbar sections */

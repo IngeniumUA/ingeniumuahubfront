@@ -35,7 +35,16 @@ const routes: Routes = [
   ]},
   //** Employee **//
 
+  { path: 'staff',
+    loadChildren: () => import('src/app/features/staff/staff.module').then(x => x.StaffModule),
+    canActivate: [authGuard]
+  },
+
   //** Webmaster **//
+  { path: 'web',
+    loadChildren: () => import('src/app/features/webmaster/webmaster.module').then(x => x.WebmasterModule),
+    canActivate: [authGuard]
+  },
 
   //** Manager **//
   { path: 'man',

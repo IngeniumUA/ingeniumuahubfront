@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-manager',
-  templateUrl: './manager.component.html',
-  styleUrls: ['./manager.component.css']
+  selector: 'app-webmaster',
+  templateUrl: './webmaster.component.html',
+  styleUrls: ['./webmaster.component.css']
 })
-export class ManagerComponent {
+export class WebmasterComponent {
   constructor() { }
   isSideNav: boolean = true;
 

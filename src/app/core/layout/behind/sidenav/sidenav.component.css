@@ -1,0 +1,50 @@
+.sidenav {
+  background-color: var(--mainblue);
+  height: 100%;
+  width: 40vw;
+  max-width: 15rem;
+
+  display: flex;
+  flex-direction: column;
+
+  animation: slideIntoView 0.1s ease-in 0s 1 normal forwards;
+}
+
+.sidenav section {
+  box-sizing: border-box;
+  padding-left: clamp(0.1rem, 2vh, 1rem);
+  padding-bottom: 1.5rem;
+
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav section .section-title, .sidenav section .section-link {
+  padding: 0.5rem;
+}
+
+.sidenav section .section-title {
+  margin: 0;
+
+  text-decoration: underline;
+  font-weight: bold;
+  color: white;
+}
+
+.sidenav section .section-link {
+  padding-left: clamp(0.1rem, 2vh, 1rem);
+
+  color: white;
+}
+
+/* Animations */
+@keyframes slideIntoView {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
