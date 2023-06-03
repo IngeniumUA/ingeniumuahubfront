@@ -93,6 +93,7 @@ nav {
 
   display: flex;
   flex-direction: column;
+  justify-content: stretch;
 
   animation: slideDownIntoView 0.2s ease-in 0s 1 normal forwards;
 }
@@ -108,7 +109,7 @@ nav {
 .nav-section-box {
   text-align: center;
 
-  padding: clamp(0.2rem, 4vh, 2rem) 1rem 1rem;
+  padding: clamp(0rem, 3vh, 2rem) 1rem 1rem;
 }
 
 .navbar-login-account {
