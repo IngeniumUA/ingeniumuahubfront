@@ -41,7 +41,7 @@ export class AccountComponent implements OnInit {
   }
 
   GetRoles(): void {
-    this.httpClient.get<any>("http://127.0.0.1:8000/api/user/roles").subscribe(
+    this.httpClient.get<any>("https://ingeniumuahub.ew.r.appspot.com/api/user/roles").subscribe(
       (data) => {
         this.userRoles = data;
       }
