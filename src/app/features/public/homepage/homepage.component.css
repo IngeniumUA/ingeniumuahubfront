@@ -39,15 +39,11 @@ body {
 #hero-section section p {
   box-sizing: border-box;
   width: 100%;
+  margin: 0;
+  padding-left: clamp(0.5rem, 3vw, 2rem);
 
   color: white;
   font-weight: bold;
-
   font-size: clamp(0rem, 7vw, 3rem);
   line-height: clamp(0rem, 7vw, 3rem);
-
-  margin: 2vh;
-  padding: 0;
-  padding-left: clamp(0.5rem, 3vw, 2rem);
-  word-wrap: normal;
 }
