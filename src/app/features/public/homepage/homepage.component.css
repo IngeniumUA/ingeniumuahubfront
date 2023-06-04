@@ -1,14 +1,48 @@
-#hero-section {
-  margin: 0;
-  overflow: hidden;
-
-  height: 80vh;
-
+body {
   background-color: var(--mainblue);
 }
 
-#hero-image {
+#hero-section {
+  height: 80vh;
+  width: 100%;
+  margin-bottom: -4px;
+  padding: 0;
+
+  background-color: var(--mainblue);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+}
+
+#hero-section div {
+  position: absolute;
+  z-index: 2;
+  height: 80%;
+  width: 100%;
+
+  margin: 0;
+
+  background-color: #0a1f44;
+  opacity: 0.7;
+}
+
+#hero-section section {
+  position: absolute;
   height: 100%;
-  object-fit: contain;
-  overflow: hidden;
+  width: 100%;
+  z-index: 3;
+
+  margin-top: 45vh;
+}
+
+#hero-section section p {
+  color: white;
+  font-weight: bold;
+
+  font-size: clamp(0rem, 5vh, 3rem);
+  line-height: clamp(0rem, 5vh, 3rem);
+
+  padding: 0;
+  padding-left: 0.5rem;
 }

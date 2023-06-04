@@ -1,5 +1,12 @@
 #eventpreview-card {
-  padding: 8vh 5vw;
+  width: 100%;
+  box-sizing: border-box;
+
+  margin: 0;
+  padding-top: clamp(1rem, 8vh, 10rem);
+  padding-bottom: clamp(1rem, 8vh, 10rem);
+  padding-left: 5vw;
+  padding-right: 5vw;
 
   display: flex;
   flex-direction: column;

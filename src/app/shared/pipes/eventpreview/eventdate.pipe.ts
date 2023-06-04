@@ -5,9 +5,7 @@ import {DatePipe} from "@angular/common";
   name: 'eventdate'
 })
 export class EventdatePipe extends DatePipe implements PipeTransform {
-
   override transform(value: any, ...args: unknown[]): any {
     return super.transform(value)
   }
-
 }

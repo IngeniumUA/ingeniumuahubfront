@@ -3,7 +3,7 @@
     <img src="{{ this.eventPreview.image_square }}" id="eventpreview-image" alt="image">
   </div>
   <div id="eventpreview-date-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
-    <a class="eventpreview-info">{{ this.eventPreview.start_date | eventdate }}</a>
+    <a class="eventpreview-info">{{ this.eventPreview.start_date | date }}</a>
   </div>
   <div id="eventpreview-name-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
     <a class="eventpreview-info" id="eventpreview-info-name">{{ this.eventPreview.item.name}}</a>
