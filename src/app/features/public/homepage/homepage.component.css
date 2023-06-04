@@ -33,16 +33,20 @@ body {
   width: 100%;
   z-index: 3;
 
-  margin-top: 40vh;
+  margin-top: 48vh;
 }
 
 #hero-section section p {
+  box-sizing: border-box;
+  width: 100%;
+
   color: white;
   font-weight: bold;
 
   font-size: clamp(0rem, 6vh, 5rem);
   line-height: clamp(0rem, 6vh, 5rem);
 
+  margin: 2vh;
   padding: 0;
   padding-left: clamp(0.5rem, 3vw, 2rem);
   word-wrap: normal;
