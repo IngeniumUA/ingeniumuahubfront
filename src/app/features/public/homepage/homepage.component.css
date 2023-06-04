@@ -16,14 +16,14 @@ body {
 }
 
 #hero-section div {
-  position: absolute;
+  position: relative;
   z-index: 2;
-  height: 80%;
+  height: 100%;
   width: 100%;
 
   margin: 0;
 
-  background-color: #0a1f44;
+  background-color: var(--mainblue);
   opacity: 0.7;
 }
 
@@ -33,16 +33,17 @@ body {
   width: 100%;
   z-index: 3;
 
-  margin-top: 45vh;
+  margin-top: 40vh;
 }
 
 #hero-section section p {
   color: white;
   font-weight: bold;
 
-  font-size: clamp(0rem, 5vh, 3rem);
-  line-height: clamp(0rem, 5vh, 3rem);
+  font-size: clamp(0rem, 6vh, 5rem);
+  line-height: clamp(0rem, 6vh, 5rem);
 
   padding: 0;
-  padding-left: 0.5rem;
+  padding-left: clamp(0.5rem, 3vw, 2rem);
+  word-wrap: normal;
 }
