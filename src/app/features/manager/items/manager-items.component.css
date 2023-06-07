@@ -1,0 +1,10 @@
+:host {
+  flex-grow: 1;
+}
+
+section {
+  margin-left: 1rem;
+  margin-right: 1rem;
+
+  border-bottom: solid var(--mainblue) 8px;
+}

@@ -1,0 +1,27 @@
+<div class="item-top">
+  <div>Search field hier</div>
+  <div>Alle operations die je kan doen ook hier ergens</div>
+</div>
+<div class="item-table">
+  <p class="item-table-header" id="item-table-header-selector">Select</p>
+  <p class="item-table-header" id="item-table-header-index">Index</p>
+  <p class="item-table-header" id="item-table-header-id">ID</p>
+  <p class="item-table-header" id="item-table-header-name">Name</p>
+  <p class="item-table-header" id="item-table-header-date_created">Created</p>
+  <p class="item-table-header" id="item-table-header-is_active">Status</p>
+  <p class="item-table-header" id="item-table-header-more"></p>
+
+  <ng-container *ngFor="let item of this.items$ | async; index as i">
+    <p class="item-table-item">[ ]</p>
+    <p class="item-table-item">{{ i }}</p>
+    <p [routerLink]="[item.id]" class="item-table-item item-table-id">{{ item.id }}</p>
+    <p class="item-table-item">{{ item.name }}</p>
+    <p class="item-table-item">{{ item.date_created }}</p>
+    <p class="item-table-item">{{ item.is_active }}</p>
+    <p class="item-table-item">...</p>
+  </ng-container>
+</div>
+<div class="item-bottom">
+  <div>Items per page selector hier</div>
+  <div>Next and prev page hier</div>
+</div>
