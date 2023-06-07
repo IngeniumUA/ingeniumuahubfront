@@ -73,9 +73,16 @@
   flex-direction: row;
 }
 
-.product-type {
+#products-bar p {
+  margin: 0;
   padding: 1rem;
 
+  color: gray;
   font-size: clamp(0rem, 2.5vh, 2rem);
   font-weight: bold;
+}
+
+#products-bar p:hover {
+  color: var(--ingenium-blue);
+  cursor: pointer;
 }
