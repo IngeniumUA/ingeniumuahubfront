@@ -8,8 +8,8 @@ export interface EventPreviewModel {
   image_landscape: string;
   image_square: string;
   button_text: string;
-  main_color: "000000000";
-  text_color: "#000000"
+  main_color: string;
+  text_color: string;
 }
 
 export interface EventModelInterface {
