@@ -11,17 +11,24 @@
   <p class="item-table-header" id="item-table-header-is_active">Status</p>
   <p class="item-table-header" id="item-table-header-more"></p>
 
-  <ng-container *ngFor="let item of this.items$ | async; index as i">
-    <p class="item-table-item">[ ]</p>
-    <p class="item-table-item">{{ i }}</p>
-    <p [routerLink]="[item.id]" class="item-table-item item-table-id">{{ item.id }}</p>
-    <p class="item-table-item">{{ item.name }}</p>
-    <p class="item-table-item">{{ item.date_created }}</p>
-    <p class="item-table-item">{{ item.is_active }}</p>
-    <p class="item-table-item">...</p>
+  <ng-container *ngIf="(this.items$ | async) as items; else loading">
+    <ng-container *ngFor="let item of items; index as i;">
+      <p class="item-table-item">[ ]</p>
+      <p class="item-table-item">{{ i }}</p>
+      <p [routerLink]="[item.id]" class="item-table-item item-table-id">{{ item.id }}</p>
+      <p [routerLink]="[item.id]" class="item-table-item item-table-name">{{ item.name }}</p>
+      <p class="item-table-item">{{ item.date_created }}</p>
+      <p class="item-table-item">{{ item.is_active }}</p>
+      <p class="item-table-item">...</p>
+    </ng-container>
   </ng-container>
+
 </div>
 <div class="item-bottom">
   <div>Items per page selector hier</div>
   <div>Next and prev page hier</div>
 </div>
+
+<ng-template #loading>
+  Loading stuff...
+</ng-template>

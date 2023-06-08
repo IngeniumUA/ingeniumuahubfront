@@ -1,0 +1,7 @@
+<ng-container *ngIf="(item$ | async) as item; else loading">
+  {{ item.name }}
+</ng-container>
+
+<ng-template #loading>
+  Loading stuff...
+</ng-template>

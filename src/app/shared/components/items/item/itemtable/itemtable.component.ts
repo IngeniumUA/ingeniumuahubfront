@@ -1,13 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, NgFor} from "@angular/common";
-import {Observable, of} from "rxjs";
+import {AsyncPipe, NgFor, NgIf} from "@angular/common";
+import {Observable} from "rxjs";
 import {Item} from "../../../../models/items/item";
 import {RouterLink} from "@angular/router";
+import {ItemService} from "../../../../../core/services/items/item.service";
 
-const getItems$: Observable<Item[]> = of([
-  { id: "j8P9sz3", date_created: "nu", name: "Hoppety", is_active: true },
-  { id: "iJhgDe5", date_created: "straks", name: "Hippety", is_active: false },
-]);
 
 @Component({
   selector: 'app-itemtable',
@@ -16,14 +13,17 @@ const getItems$: Observable<Item[]> = of([
   imports: [
     AsyncPipe,
     NgFor,
-    RouterLink
+    RouterLink,
+    NgIf
   ],
   standalone: true
 })
 export class ItemtableComponent implements OnInit {
+  constructor(private itemService: ItemService) {
+  }
   items$!: Observable<Item[]>;
   ngOnInit(): void {
-    this.items$ = getItems$;
+    this.items$ = this.itemService.getItems();
   }
 
 }
