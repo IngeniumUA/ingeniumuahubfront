@@ -33,6 +33,8 @@ nav p {
   position: fixed;
   top: 90vh;
   width: 100%;
+
+  z-index: 10;
 }
 
 

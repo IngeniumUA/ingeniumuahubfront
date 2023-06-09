@@ -17,7 +17,7 @@ import {Observable} from "rxjs";
     standalone: true
 })
 export class AccountNavbarComponent {
-  @Input() alignedBottom: boolean = true;
+  @Input() mobileOnly: boolean = true;
 
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
 

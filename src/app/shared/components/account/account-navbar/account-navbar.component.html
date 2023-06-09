@@ -1,4 +1,4 @@
-<nav [ngClass]="{'nav-mobile': this.isMobile$ | async}">
+<nav *ngIf="(mobileOnly && (this.isMobile$ | async)) || (!mobileOnly)" [ngClass]="{'nav-mobile': this.isMobile$ | async}">
   <div class="account-nav-section">
     <div class="icon-wrapper">
       <a [routerLink]="['/home']">
