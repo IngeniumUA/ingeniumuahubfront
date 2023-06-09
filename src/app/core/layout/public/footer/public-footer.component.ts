@@ -1,29 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from "@angular/router";
-import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
-import {NgClass} from "@angular/common";
+import {AsyncPipe, NgClass} from "@angular/common";
+import {LayoutService} from "../../../services/layout/layout.service";
+import {Observable} from "rxjs";
 
 @Component({
   standalone: true, // Allows it to be imported outside of routing
   selector: 'app-layout-public-footer',
   templateUrl: './public-footer.component.html',
   imports: [
-    NgClass
+    NgClass,
+    AsyncPipe
   ],
   styleUrls: ['./public-footer.component.css']
 })
-export class PublicFooterComponent implements OnInit {
-  isMobile: boolean = true;
+export class PublicFooterComponent {
+  isMobile$: Observable<boolean> = this.layoutService.isMobile;
 
   constructor(private router: Router,
-              private breakpointObserver: BreakpointObserver) {
-  }
-
-  ngOnInit() {
-    this.breakpointObserver  // Breakpoint Observable for responsiveness
-      .observe(['(min-width: 850px)'])
-      .subscribe((state: BreakpointState) => {
-        this.isMobile = !state.matches;
-      });
+              private layoutService: LayoutService) {
   }
 }

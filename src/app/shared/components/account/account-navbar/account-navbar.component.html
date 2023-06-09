@@ -1,9 +1,9 @@
-<nav [ngClass]="{'nav-dark': this.alignedBottom}">
+<nav [ngClass]="{'nav-mobile': this.isMobile$ | async}">
   <div class="account-nav-section">
     <div class="icon-wrapper">
       <a [routerLink]="['/home']">
-        <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/HomeIcon.svg" alt="=:'(">
-        <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/HomeIcon.svg" alt="=:'(">
+        <img *ngIf="!(this.isMobile$ | async)" src="../../../../../assets/svg/account-navbar/blue/HomeIcon.svg" alt="=:'(">
+        <img *ngIf="this.isMobile$ | async" src="../../../../../assets/svg/account-navbar/white/HomeIcon.svg" alt="=:'(">
       </a>
     </div>
     <p>Home</p>
@@ -11,8 +11,8 @@
   <div class="account-nav-section">
       <div class="icon-wrapper">
         <a [routerLink]="['/cloud']">
-          <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/CloudIconWide.svg" alt="=:'(">
-          <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/CloudIconWide.svg" alt="=:'(">
+          <img *ngIf="!(this.isMobile$ | async)" src="../../../../../assets/svg/account-navbar/blue/CloudIconWide.svg" alt="=:'(">
+          <img *ngIf="this.isMobile$ | async" src="../../../../../assets/svg/account-navbar/white/CloudIconWide.svg" alt="=:'(">
         </a>
       </div>
       <p>Cloud</p>
@@ -20,8 +20,8 @@
   <div class="account-nav-section">
     <div class="icon-wrapper">
       <a [routerLink]="['purchases']">
-        <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/ShoppingCartIcon.svg" alt="=:'(">
-        <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/ShoppingCartIcon.svg" alt="=:'(">
+        <img *ngIf="!(this.isMobile$ | async)" src="../../../../../assets/svg/account-navbar/blue/ShoppingCartIcon.svg" alt="=:'(">
+        <img *ngIf="this.isMobile$ | async" src="../../../../../assets/svg/account-navbar/white/ShoppingCartIcon.svg" alt="=:'(">
       </a>
     </div>
     <p>Purchases</p>
@@ -29,8 +29,8 @@
   <div class="account-nav-section">
       <div class="icon-wrapper">
         <a [routerLink]="['/account']">
-          <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/AccountIcon.svg" alt="=:'(">
-          <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/AccountIcon.svg" alt="=:'(">
+          <img *ngIf="!(this.isMobile$ | async)" src="../../../../../assets/svg/account-navbar/blue/AccountIcon.svg" alt="=:'(">
+          <img *ngIf="this.isMobile$ | async" src="../../../../../assets/svg/account-navbar/white/AccountIcon.svg" alt="=:'(">
         </a>
       </div>
       <p>Account</p>

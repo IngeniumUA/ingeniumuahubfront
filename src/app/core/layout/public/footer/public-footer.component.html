@@ -1,14 +1,14 @@
-<footer [ngClass]="{'footer-mobile': this.isMobile}">
-  <div class="footer-section" [ngClass]="{'footer-mobile-section': this.isMobile}">
+<footer [ngClass]="{'footer-mobile': this.isMobile$ | async }">
+  <div class="footer-section" [ngClass]="{'footer-mobile-section': this.isMobile$ | async }">
     <p id="footer-mobile-ingeniumua" class="footer-title">IngeniumUAHub</p>
   </div>
 
-  <div class="footer-section" [ngClass]="{'footer-mobile-section': this.isMobile}">
+  <div class="footer-section" [ngClass]="{'footer-mobile-section': this.isMobile$ | async }">
     <p class="footer-title">Developed by:</p>
     <p id="footer-developer-list">Paljas 1 + Paljas 2 + Paljas 3 + ... Paljas n + ...</p>
   </div>
 
-  <div class="footer-section" [ngClass]="{'footer-mobile-section': this.isMobile}">
+  <div class="footer-section" [ngClass]="{'footer-mobile-section': this.isMobile$ | async }">
     <p class="footer-title">Connect with us!</p>
     <ul id="footer-social-icons">
       <li><a href="https://www.linkedin.com/company/ingeniumua/"><img class="svg-logo" src="assets/svg/icons8-linkedin.svg" alt=":("></a></li>
