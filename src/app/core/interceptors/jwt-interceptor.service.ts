@@ -3,10 +3,12 @@ import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse}
 import {catchError, Observable, switchMap, throwError} from 'rxjs';
 
 import {AuthService} from "../services/user/auth/auth.service";
+import {Router} from "@angular/router";
 @Injectable()
 export class JWTInterceptor implements HttpInterceptor {
   private isRefreshing: boolean = false;
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add auth header with access if user is logged in and request is to api
@@ -30,12 +32,19 @@ export class JWTInterceptor implements HttpInterceptor {
           return this.handleUnAuthorisedError(request, next);
         }
 
+        // Check if error is 403 (forbidden)
+        if (error instanceof HttpErrorResponse &&
+          !request.url.includes('auth/login') &&
+          error.status === 403) {
+          // If forbidden is found, route to home
+          this.router.navigate(['/home'])
+        }
+
         // Else continuing throwing error
         return throwError(() => error);
       })
     );
   }
-
   private handleUnAuthorisedError(request: HttpRequest<any>, next: HttpHandler) {
     if (!this.isRefreshing) {
       this.isRefreshing = true;}
