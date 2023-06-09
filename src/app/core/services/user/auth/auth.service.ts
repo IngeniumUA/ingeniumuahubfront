@@ -10,8 +10,8 @@ import {HubAuthData} from "../../../../shared/models/user";
   providedIn: 'root'
 })
 export class AuthService {
-  // baseUrl: string = "http://127.0.0.1:8000/";
-  baseUrl: string = "https://ingeniumuahub.ew.r.appspot.com/";
+  baseUrl: string = "http://127.0.0.1:8000/";
+  // baseUrl: string = "https://ingeniumuahub.ew.r.appspot.com/";
   private userSubject: BehaviorSubject<HubAuthData | null>;  // Onthoudt de user, observables subscriben naar dit subject
   public user: Observable<HubAuthData | null>;
   constructor(private router: Router,

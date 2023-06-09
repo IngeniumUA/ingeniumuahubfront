@@ -46,8 +46,14 @@ export class JWTInterceptor implements HttpInterceptor {
     );
   }
   private handleUnAuthorisedError(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;}
+    console.log("handleUnAuthorised")
+
+    // If we're already refreshing, don't do anything
+    if (this.isRefreshing) {
+      return next.handle(request)
+    } else {
+      this.isRefreshing = true;
+    }
 
     //Check if user is logged in ( if we should attempt to refresh)
     if (!this.authService.userValue) {
@@ -66,6 +72,10 @@ export class JWTInterceptor implements HttpInterceptor {
       // Case 2) If error, check error
       catchError((error) => {
         this.isRefreshing = false;
+
+        if (error.status == '401') {  // 401 means unauthenticated
+          this.authService.logout();
+        }
 
         if (error.status == '403') {  // 403 means Forbidden
           this.authService.logout();

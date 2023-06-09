@@ -7,10 +7,11 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class HubaccountService {
-
+  baseUrl: string = "http://127.0.0.1:8000/";
+  // baseUrl: string = "https://ingeniumuahub.ew.r.appspot.com/";
   constructor(private httpClient: HttpClient) { }
 
   public getAccount(): Observable<HubAccountData> {
-    return this.httpClient.get<HubAccountData>("https://ingeniumuahub.ew.r.appspot.com/api/user/account")
+    return this.httpClient.get<HubAccountData>(this.baseUrl + "api/user/account")
   }
 }
