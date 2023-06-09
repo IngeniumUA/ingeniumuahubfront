@@ -1,25 +1,37 @@
-<nav>
+<nav [ngClass]="{'nav-dark': this.alignedBottom}">
   <div class="account-nav-section">
     <div class="icon-wrapper">
-      <a [routerLink]="['/home']"><img src="../../../../../assets/svg/account-navbar/blue/HomeIcon.svg" alt="=:'("></a>
+      <a [routerLink]="['/home']">
+        <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/HomeIcon.svg" alt="=:'(">
+        <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/HomeIcon.svg" alt="=:'(">
+      </a>
     </div>
     <p>Home</p>
   </div>
   <div class="account-nav-section">
       <div class="icon-wrapper">
-        <a [routerLink]="['/cloud']"><img src="../../../../../assets/svg/account-navbar/blue/CloudIconWide.svg" alt="=:'("></a>
+        <a [routerLink]="['/cloud']">
+          <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/CloudIconWide.svg" alt="=:'(">
+          <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/CloudIconWide.svg" alt="=:'(">
+        </a>
       </div>
       <p>Cloud</p>
   </div>
   <div class="account-nav-section">
     <div class="icon-wrapper">
-      <a [routerLink]="['purchases']"><img src="../../../../../assets/svg/account-navbar/blue/ShoppingCartIcon.svg" alt="=:'("></a>
+      <a [routerLink]="['purchases']">
+        <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/ShoppingCartIcon.svg" alt="=:'(">
+        <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/ShoppingCartIcon.svg" alt="=:'(">
+      </a>
     </div>
     <p>Purchases</p>
   </div>
   <div class="account-nav-section">
       <div class="icon-wrapper">
-        <a [routerLink]="['/account']"><img src="../../../../../assets/svg/account-navbar/blue/AccountIcon.svg" alt="=:'("></a>
+        <a [routerLink]="['/account']">
+          <img *ngIf="!this.alignedBottom" src="../../../../../assets/svg/account-navbar/blue/AccountIcon.svg" alt="=:'(">
+          <img *ngIf="this.alignedBottom" src="../../../../../assets/svg/account-navbar/white/AccountIcon.svg" alt="=:'(">
+        </a>
       </div>
       <p>Account</p>
   </div>

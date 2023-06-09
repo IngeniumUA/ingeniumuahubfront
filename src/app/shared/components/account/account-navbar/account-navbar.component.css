@@ -1,16 +1,15 @@
 nav {
-  width: 100%;
   height: 10vh;
-
-  background-color: var(--ingenium-grey);
 
   display: flex;
   flex-direction: row;
+
+  background-color: var(--ingenium-grey);
+  color: var(--ingenium-blue)
 }
 
 nav .account-nav-section {
   flex: 1 1 0px; /* Px is niet redundant (voor IE) */
-  border: solid darkgrey 2px;
 
   display: flex;
   flex-direction: column;
@@ -24,8 +23,18 @@ nav p {
   padding: 0;
 
   font-weight: bold;
-  color: var(--ingenium-blue)
 }
+
+/* Colorswitch classes */
+.nav-dark {
+  background-color: var(--mainblue);
+  color: white;
+
+  position: fixed;
+  top: 90vh;
+  width: 100%;
+}
+
 
 /* Icon */
 nav .icon-wrapper {
