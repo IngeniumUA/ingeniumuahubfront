@@ -1,0 +1,8 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+section {
+  margin: 5vw;
+}

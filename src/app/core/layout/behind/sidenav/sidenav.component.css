@@ -39,6 +39,10 @@
   color: white;
 }
 
+#account-section {
+  margin-top: auto;
+}
+
 /* Animations */
 @keyframes slideIntoView {
   from {

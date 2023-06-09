@@ -15,7 +15,6 @@ import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
 
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
-import { AccountComponent } from './features/public/user/account.component';
 import { EventpreviewComponent } from './shared/components/items/event/eventpreview/eventpreview.component';
 import { RecSysComponent } from "./shared/components/items/recsys/recsys/rec-sys.component";
 import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
@@ -38,7 +37,6 @@ import { CloudComponent } from './features/public/cloud/cloud.component';
         PublicRoutingComponent,
         CloudComponent,
 
-        AccountComponent,
         EventdatePipe,
         GroupnamePipe,
     ],

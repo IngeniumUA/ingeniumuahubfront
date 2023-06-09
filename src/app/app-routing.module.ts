@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import {HomepageComponent} from "./features/public/homepage/homepage.component";
 import {NotfoundpageComponent} from "./features/notfoundpage/notfoundpage.component";
 import {RecSysFormComponent} from "./features/recsysform/rec-sys-form.component";
-import {AccountComponent} from "./features/public/user/account.component";
 import {PublicRoutingComponent} from "./features/public/public-routing.component";
 import {CloudComponent} from "./features/public/cloud/cloud.component";
 import {authGuard} from "./core/guards/auth/auth.guard";
@@ -21,8 +20,6 @@ const routes: Routes = [
     {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
     // Public event related pages
     {path: 'event', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
-    // User specific pages
-    {path: 'user', component: AccountComponent, canActivate: [authGuard]},
 
     // Shop
     {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
@@ -32,6 +29,11 @@ const routes: Routes = [
 
     // Cloud
     {path: 'cloud', component: CloudComponent, canActivate: [authGuard]},
+
+    // User specific pages
+    {path: 'account',
+      loadChildren: () => import('src/app/features/public/account/account.module').then(x => x.AccountModule),
+      canActivate: [authGuard]},
   ]},
   //** Employee **//
 

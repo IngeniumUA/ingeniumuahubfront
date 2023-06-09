@@ -11,6 +11,6 @@ export class HubaccountService {
   constructor(private httpClient: HttpClient) { }
 
   public getAccount(): Observable<HubAccountData> {
-    return this.httpClient.get("https://ingeniumuahub.ew.r.appspot.com/api/user/account")
+    return this.httpClient.get<HubAccountData>("https://ingeniumuahub.ew.r.appspot.com/api/user/account")
   }
 }
