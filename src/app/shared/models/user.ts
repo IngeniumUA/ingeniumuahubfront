@@ -1,5 +1,4 @@
 export interface HubAuthData {
-  id: string;
   access: string;
   refresh: string;
 }

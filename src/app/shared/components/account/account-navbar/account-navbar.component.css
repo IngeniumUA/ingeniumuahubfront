@@ -9,22 +9,28 @@ nav {
 }
 
 nav .account-nav-section {
+  flex: 1 1 0px; /* Px is niet redundant (voor IE) */
   border: solid darkgrey 2px;
 
-  flex: 1 1 0px; /* Px is niet redundant (voor IE) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Text */
 nav p {
   margin: 0;
   padding: 0;
+
+  font-weight: bold;
   color: var(--ingenium-blue)
 }
 
 /* Icon */
 nav .icon-wrapper {
   height: 60%;
-  width: 100%;
+  width: auto;
   overflow: hidden;
 }
 nav img {

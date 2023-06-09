@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse} from '@angular/common/http';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse
+} from '@angular/common/http';
 import {catchError, Observable, switchMap, throwError} from 'rxjs';
 
 import {AuthService} from "../services/user/auth/auth.service";
@@ -14,7 +20,7 @@ export class JWTInterceptor implements HttpInterceptor {
     // add auth header with access if user is logged in and request is to api
     const isApiUrl = true // TODO request.url.startsWith('')
 
-    if (isApiUrl && this.authService.userValue) {
+    if (isApiUrl && this.authService.isLoggedIn() && !request.url.includes('auth/refresh')) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.authService.accessToken}`
@@ -46,27 +52,31 @@ export class JWTInterceptor implements HttpInterceptor {
     );
   }
   private handleUnAuthorisedError(request: HttpRequest<any>, next: HttpHandler) {
-    console.log("handleUnAuthorised")
-
-    // If we're already refreshing, don't do anything
+    // 1) If already refreshing, handle next
     if (this.isRefreshing) {
-      return next.handle(request)
-    } else {
-      this.isRefreshing = true;
+      return next.handle(request);
     }
+    this.isRefreshing = true; // Not refreshing yet, set bool to true
 
-    //Check if user is logged in ( if we should attempt to refresh)
-    if (!this.authService.userValue) {
+
+    // 2) Check if user is logged in (if we have a refreshtoken to attempt a refresh with)
+    if (!this.authService.isLoggedIn()) {
       return next.handle(request);
     }
 
-    // Else, attempt to refresh
+    // 3) Else, attempt to refresh
     return this.authService.refreshAccessToken().pipe(
       // .pipe() means request is finished, two cases can occur:
 
-      // Case 1) if successful, set refreshing to False and continue to next request
+      // Case 1) If Refresh successful, set refreshing to False and continue to next request ( usually redo )
       switchMap(() => {
         this.isRefreshing = false;
+
+        request = request.clone({
+          setHeaders: {
+            Authorization: `Bearer ${this.authService.accessToken}`
+          }
+        })
         return next.handle(request);
       }),
       // Case 2) If error, check error
@@ -77,13 +87,9 @@ export class JWTInterceptor implements HttpInterceptor {
           this.authService.logout();
         }
 
-        if (error.status == '403') {  // 403 means Forbidden
-          this.authService.logout();
-        }
-
         // Continue throwing error
         return throwError(() => error);
     })
-    )
+    );
   }
 }

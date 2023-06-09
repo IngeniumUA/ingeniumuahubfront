@@ -5,13 +5,12 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {HubAuthData} from "../../../../shared/models/user";
+import {apiEnviroment} from "../../../../../enviroments";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl: string = "http://127.0.0.1:8000/";
-  // baseUrl: string = "https://ingeniumuahub.ew.r.appspot.com/";
   private userSubject: BehaviorSubject<HubAuthData | null>;  // Onthoudt de user, observables subscriben naar dit subject
   public user: Observable<HubAuthData | null>;
   constructor(private router: Router,
@@ -24,12 +23,16 @@ export class AuthService {
     return this.userSubject.value;
   }
 
+  public isLoggedIn(): boolean {
+    return this.userValue != null
+  }
+
   public get accessToken() {
     return this.userSubject.value?.access;
   }
 
   login(email: string, password: string) {
-    return this.httpClient.post<HubAuthData>(this.baseUrl + 'api/user/auth/login', { email, password}).pipe(
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'api/user/auth/login', { email, password}).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
@@ -43,7 +46,7 @@ export class AuthService {
   public refreshAccessToken() {
     const refresh = this.userValue?.refresh;
 
-    return this.httpClient.post<HubAuthData>(this.baseUrl + 'api/user/auth/refresh', { refresh }).pipe(
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'api/user/auth/refresh', { refresh }).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
@@ -56,7 +59,7 @@ export class AuthService {
 
   logout() {
     const refresh = this.userValue?.refresh;
-    this.httpClient.post<any>(this.baseUrl + 'api/user/auth/logout', { refresh })
+    this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/user/auth/logout', { refresh })
 
     localStorage.removeItem('user');
     this.userSubject.next(null); // Set observable to null

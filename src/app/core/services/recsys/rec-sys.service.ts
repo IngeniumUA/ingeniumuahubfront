@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {apiEnviroment} from "../../../../enviroments";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,6 @@ export class RecSysService {
 
 
   public getEventPreview(): Observable<any> {
-    return this.httpClient.get("https://ingeniumuahub.ew.r.appspot.com/api/items/recsys/itempreview");
+    return this.httpClient.get( apiEnviroment.apiUrl + "api/items/recsys/itempreview");
   }
 }
