@@ -30,8 +30,11 @@ nav p {
   background-color: var(--mainblue);
   color: white;
 
+  float: none;
+  overflow: hidden;
+
   position: fixed;
-  top: 90vh;
+  top: 90%;
   width: 100%;
 
   z-index: 10;
