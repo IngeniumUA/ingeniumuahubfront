@@ -11,6 +11,9 @@ nav {
 nav .account-nav-section {
   flex: 1 1 0px; /* Px is niet redundant (voor IE) */
 
+  width: 25%;
+  height: 10vh;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
