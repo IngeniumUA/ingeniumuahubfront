@@ -1,43 +1,73 @@
-<div *ngIf="this.eventDetail" id="inias-hoe-fix-ik-dit" [ngStyle]="{'background': this.primaryColor90 }">
-  <div id="event-detail-card">
+<div *ngIf="(this.event$ | async) as event else loading; "
+     id="hoe-fix-ik-dit"
+     [ngStyle]="{'background': this.primaryColor90 }">
+  <br> <!-- Somehow werkt de background bovenaan ni zonder deze br, niet verwijderen -->
+
+
+  <div class="event-detail-card">
     <!-- Small message on top of the card -->
-    <div [ngStyle]="{'background': this.primaryColor90 }">
+    <section [ngStyle]="{'background': this.primaryColor90 }">
       <a id="event-detail-poweredbyingeniumuahub">Powered By IngeniumUAHub</a>
-    </div>
+    </section>
 
+    <ng-container *ngIf="(this.isMobile$ | async)"> <!-- Mobile Version -->
     <!-- Image -->
-    <div id="event-detail-image-card">
-      <img id="event-detail-image" src="{{ this.eventDetail.image_square }}" alt="Foto hier :(">
-    </div>
+    <section class="event-detail-image-card">
+      <img src="{{ event.image_square }}" alt="Foto hier :(">
+    </section>
+    </ng-container>
 
-    <!-- Eventdetails -->
-    <div [ngStyle]="{'color': this.primaryColorFull }" id="event-detail-title" class="event-detail-info-section">{{ this.eventDetail.item.name }}</div>
-    <div class="event-detail-info-section">
-      <div class="svg-logo-card">
-        <img src="assets/svg/date.svg" alt=":(" class="svg-logo">
-      </div>
-      <div class="event-detail-info">{{ this.eventDetail.start_date }}</div>
-    </div>
-    <div class="event-detail-info-section">
-      <div class="svg-logo-card">
-        <img src="assets/svg/location.svg" alt=":(" class="svg-logo">
-      </div>
-      <div class="event-detail-info">{{ this.eventDetail.location }}</div>
-    </div>
+    <ng-container *ngIf="!(this.isMobile$ | async)"> <!-- Desktop Version -->
+    <!-- Image -->
+    <section class="event-detail-image-card">
+      <img src="{{ event.image_landscape }}" alt="Foto hier :(">
+    </section>
+    </ng-container>
+
+      <!-- Eventdetails -->
+      <section [ngStyle]="{'color': this.primaryColorFull }" class="event-detail-info-section">
+        <h2>{{ event.item.name }}</h2>
+      </section>
+
+      <section class="event-detail-info-section">
+        <div class="svg-logo-card">
+          <img src="assets/svg/date.svg" alt=":(" class="svg-logo">
+        </div>
+        <div class="event-detail-info">{{ event.start_date }}</div>
+      </section>
+      <section class="event-detail-info-section">
+        <div class="svg-logo-card">
+          <img src="assets/svg/location.svg" alt=":(" class="svg-logo">
+        </div>
+        <div class="event-detail-info">{{ event.location }}</div>
+      </section>
 
     <!-- Products section TODO Place this in separate component-->
-    <div id="products-bar">
-      <p>Tickets</p>
-      <p>Products</p>
-    </div>
+    <section id="products-bar">
+      <h3>Tickets</h3>
+      <h3>Products</h3>
+    </section>
     <ul>
       <li>Ticket 1</li>
       <li>Ticket 2</li>
     </ul>
 
     <!-- Description -->
-    <div id="event-detail-description">
-      <p>{{ this.eventDetail.description }}</p>
-    </div>
+    <section id="event-detail-description">
+      <p>{{ event.description }}</p>
+    </section>
   </div>
+
+  <br> <!-- Somehow werkt de background onderaan ni zonder deze br, niet verwijderen -->
 </div>
+
+<ng-template #loading>
+  <div class="event-detail-card">
+
+  </div>
+  Loading ...
+</ng-template>
+
+<ng-template #mobile>
+
+</ng-template>

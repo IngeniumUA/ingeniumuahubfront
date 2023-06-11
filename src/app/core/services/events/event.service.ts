@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {EventItemI} from "../../../shared/models/items/events";
+import {apiEnviroment} from "../../../../enviroments";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ export class EventService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getEvent(eventId: string): Observable<any> {
-    return this.httpClient.get("https://ingeniumuahub.ew.r.appspot.com/api/items/event/" + eventId);
+  public getEvent(eventId: string): Observable<EventItemI> {
+    return this.httpClient.get<EventItemI>(apiEnviroment.apiUrl + "api/items/event/" + eventId)
   }
 }

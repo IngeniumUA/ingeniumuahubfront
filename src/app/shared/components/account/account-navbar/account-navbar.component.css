@@ -36,8 +36,7 @@ nav p {
   float: none;
   overflow: hidden;
 
-  position: fixed;
-  top: 90%;
+  position: relative;
   width: 100%;
 
   z-index: 10;

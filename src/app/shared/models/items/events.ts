@@ -12,7 +12,7 @@ export interface EventPreviewModel {
   text_color: string;
 }
 
-export interface EventModelInterface {
+export interface EventItemI {
 
   item: Item;
   start_date: string;

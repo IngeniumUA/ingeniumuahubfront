@@ -1,23 +1,46 @@
-#inias-hoe-fix-ik-dit {
-  padding: 4vw;
+#hoe-fix-ik-dit {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+
 }
 
-#event-detail-card {
+.event-detail-card {
+  box-sizing: border-box;
+
   background-color: white;
+  min-width: 60vw;
+  min-height: 80vh;
+
+  margin: 4vh;
+  margin-left: 2vw;
+  margin-right: 2vw;
+}
+
+section {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin: 0;
 }
 
 #event-detail-poweredbyingeniumuahub {
   color: white;
 }
 
-#event-detail-image-card {
-  width: 92vw;
-}
+/* Image */
+.event-detail-image-card {
+  box-sizing: border-box;
 
-#event-detail-image {
   width: 100%;
+  height: auto;
+}
+.event-detail-image-card img {
+  width: 100%;
+  height: auto;
 }
 
+/* Info */
 .event-detail-info-section {
   font-size: clamp(0rem, 2.5vh, 2rem);
   font-weight: bold;
@@ -36,11 +59,13 @@
   align-items: center;
 }
 
-#event-detail-title {
-  font-size: clamp(0rem, 4vh, 3rem);
+h2 {
+  font-size: clamp(0rem, 5vh, 3.5rem);
+  line-height: clamp(0rem, 5vh, 3.5rem);
   font-weight: bolder;
 
-  padding: 1rem;
+  margin: 0;
+  padding-right: 0.5rem;
 }
 
 #event-detail-description {
@@ -50,6 +75,7 @@
   border-top: solid lightgray 2px;
 }
 
+/* SVG */
 .svg-logo-card {
   max-height: clamp(0rem, 4vh, 3rem);
   max-width: clamp(0rem, 4vh, 3rem);
@@ -58,11 +84,11 @@
   background-color: lightgray;
   border-radius: 10px;
 }
-
 .svg-logo {
   height: 100%;
 }
 
+/* Products */
 #products-bar {
   margin-top: 1rem;
 
@@ -73,16 +99,17 @@
   flex-direction: row;
 }
 
-#products-bar p {
+h3 {
   margin: 0;
   padding: 1rem;
 
-  color: gray;
-  font-size: clamp(0rem, 2.5vh, 2rem);
+  font-size: clamp(0rem, 4vh, 3.5rem);
+  line-height: clamp(0rem, 4vh, 3.5rem);
   font-weight: bold;
+  color: gray;
 }
 
-#products-bar p:hover {
+h3:hover {
   color: var(--ingenium-blue);
   cursor: pointer;
 }
