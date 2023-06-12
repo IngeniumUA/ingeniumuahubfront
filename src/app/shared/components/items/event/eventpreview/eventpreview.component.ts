@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {AsyncPipe, DatePipe, NgIf, NgStyle} from "@angular/common";
 import {LayoutService} from "../../../../../core/services/layout/layout.service";
 import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-eventpreview',
@@ -19,11 +20,18 @@ import {Observable} from "rxjs";
 })
 export class EventpreviewComponent implements OnInit {
   @Input() event!: EventItemI
+  @Input() checkMobile: boolean = true;
 
   constructor(private router: Router,
               private layoutService: LayoutService,) {
   }
-  isMobile: Observable<boolean> = this.layoutService.isMobile;
+  render: Observable<boolean> = this.layoutService.isMobile.
+  pipe(
+    map((isMobile) => {
+      if (this.checkMobile) {
+        return isMobile}
+      return true
+  }));
   primaryColor90!: string;
   primaryColorFull!: string;
   ngOnInit() {

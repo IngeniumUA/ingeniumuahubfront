@@ -1,4 +1,4 @@
-<div *ngIf="(this.isMobile | async)" id="event-card" [ngStyle]="{'background': this.primaryColor90}">
+<div *ngIf="(this.render | async)" id="event-card" [ngStyle]="{'background': this.primaryColor90}">
   <div id="event-image-section" [ngStyle]="{'background': this.primaryColorFull}">
     <img src="{{ this.event.image_square }}" id="event-image" alt="image">
   </div>

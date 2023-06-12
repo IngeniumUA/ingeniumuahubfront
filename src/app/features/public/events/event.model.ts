@@ -6,6 +6,7 @@ import { EventRoutingModule } from "./event-routing.module";
 import {EventsComponent} from "./events/events.component";
 import {EventDetailComponent} from "./event/event-detail.component";
 import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
+import {EventpreviewComponent} from "../../../shared/components/items/event/eventpreview/eventpreview.component";
 
 @NgModule({
     imports: [
@@ -13,6 +14,7 @@ import {ProductComponent} from "../../../shared/components/items/products/produc
         ReactiveFormsModule,
         EventRoutingModule,
         ProductComponent,
+        EventpreviewComponent,
     ],
   declarations: [
     EventsComponent,
