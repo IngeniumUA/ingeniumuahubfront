@@ -1,0 +1,52 @@
+:host {
+  margin: 0;
+
+  display: flex;
+  flex-direction: row;
+
+  justify-content: flex-end;
+}
+
+h4 {
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
+
+  text-align: left;
+}
+p {
+  margin: 0;
+  padding-right: 0.5rem;
+}
+
+button {
+  box-sizing: border-box;
+  height: 100%;
+  width: auto;
+
+  border: none;
+  border-radius: 5px;
+
+  color: white;
+}
+
+input {
+  position: relative;
+  bottom: 5px;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+
+  border: none;
+  border-bottom: solid 2px;
+
+  text-align: right;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.product-count {
+  width: 5vw;
+}

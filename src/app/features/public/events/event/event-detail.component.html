@@ -33,7 +33,7 @@
       <div class="svg-logo-card">
         <img src="assets/svg/date.svg" alt=":(" class="svg-logo">
       </div>
-      <div class="event-detail-info">{{ event.start_date }}</div>
+      <div class="event-detail-info">{{ event.start_date | date:'E' }} {{ event.start_date | date }} om {{ event.start_date | date:'hh:mm' }}</div>
     </section>
     <section class="event-detail-info-section">
       <div class="svg-logo-card">
@@ -50,11 +50,11 @@
           {{ productName }}</h3>
       </ng-container>
     </section>
-    <ul>
+    <section id="products-section">
       <ng-container *ngFor="let product of (this.categorieData$ | async)">
-        <app-product [product]="product"></app-product>
+        <app-product [product]="product" [primaryColorFull]="this.primaryColorFull"></app-product>
       </ng-container>
-    </ul>
+    </section>
 
     <!-- Description -->
     <section id="event-detail-description">

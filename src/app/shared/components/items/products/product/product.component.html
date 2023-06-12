@@ -1,3 +1,12 @@
-<div>
-  {{ product.name }}
-</div>
+<h4>{{ product.name }}</h4>
+<ng-container *ngIf="this.product.price_eu > 0">
+  <p>€ {{ this.product.price_eu}}</p>
+</ng-container>
+<button (click)="TryIncreaseCount()" [ngStyle]="{'background-color': this.primaryColorFull }">-</button>
+<form>
+  <input
+    id=""
+    class="product-count" type="number" value="0"
+    [ngStyle]="{'border-bottom-color': this.primaryColorFull}">
+</form>
+<button (click)="TryDecreaseCount()" [ngStyle]="{'background-color': this.primaryColorFull }">+</button>
