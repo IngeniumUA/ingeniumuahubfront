@@ -19,37 +19,41 @@
 
     <ng-container *ngIf="!(this.isMobile$ | async)"> <!-- Desktop Version -->
     <!-- Image -->
-    <section class="event-detail-image-card">
+    <section class="event-detail-image-card image-50">
       <img src="{{ event.image_landscape }}" alt="Foto hier :(">
     </section>
     </ng-container>
 
-      <!-- Eventdetails -->
-      <section [ngStyle]="{'color': this.primaryColorFull }" class="event-detail-info-section">
-        <h2>{{ event.item.name }}</h2>
-      </section>
+    <!-- Eventdetails -->
+    <section [ngStyle]="{'color': this.primaryColorFull }" class="event-detail-info-section">
+      <h2>{{ event.item.name }}</h2>
+    </section>
 
-      <section class="event-detail-info-section">
-        <div class="svg-logo-card">
-          <img src="assets/svg/date.svg" alt=":(" class="svg-logo">
-        </div>
-        <div class="event-detail-info">{{ event.start_date }}</div>
-      </section>
-      <section class="event-detail-info-section">
-        <div class="svg-logo-card">
-          <img src="assets/svg/location.svg" alt=":(" class="svg-logo">
-        </div>
-        <div class="event-detail-info">{{ event.location }}</div>
-      </section>
+    <section class="event-detail-info-section">
+      <div class="svg-logo-card">
+        <img src="assets/svg/date.svg" alt=":(" class="svg-logo">
+      </div>
+      <div class="event-detail-info">{{ event.start_date }}</div>
+    </section>
+    <section class="event-detail-info-section">
+      <div class="svg-logo-card">
+        <img src="assets/svg/location.svg" alt=":(" class="svg-logo">
+      </div>
+      <div class="event-detail-info">{{ event.location }}</div>
+    </section>
 
     <!-- Products section TODO Place this in separate component-->
     <section id="products-bar">
-      <h3>Tickets</h3>
-      <h3>Products</h3>
+      <ng-container *ngFor="let productName of (this.categorieNames$ | async); index as i">
+        <h3 (click)="this.SetCategorie(i)"
+            [ngStyle]="(this.currentCategorie$ | async) === i ? {'color': this.primaryColorFull} : {'color': 'grey'}">
+          {{ productName }}</h3>
+      </ng-container>
     </section>
     <ul>
-      <li>Ticket 1</li>
-      <li>Ticket 2</li>
+      <ng-container *ngFor="let product of (this.categorieData$ | async)">
+        <app-product [product]="product"></app-product>
+      </ng-container>
     </ul>
 
     <!-- Description -->
@@ -66,8 +70,4 @@
 
   </div>
   Loading ...
-</ng-template>
-
-<ng-template #mobile>
-
 </ng-template>

@@ -24,6 +24,7 @@ import { PublicRoutingComponent } from './features/public/public-routing.compone
 import { PublicFooterComponent } from './core/layout/public/footer/public-footer.component';
 import { CloudComponent } from './features/public/cloud/cloud.component';
 import {AccountNavbarComponent} from "./shared/components/account/account-navbar/account-navbar.component";
+import {ProductComponent} from "./shared/components/items/products/product/product.component";
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import {AccountNavbarComponent} from "./shared/components/account/account-navbar
         ReactiveFormsModule,
         MatRadioModule,
         MatButtonModule,
-        AccountNavbarComponent
+        AccountNavbarComponent,
+        ProductComponent,
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
