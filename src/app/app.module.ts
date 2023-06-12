@@ -33,7 +33,6 @@ import {ProductComponent} from "./shared/components/items/products/product/produ
         NotfoundpageComponent,
         RecSysFormComponent,
 
-        EventpreviewComponent,
         RecSysComponent,
 
         PublicRoutingComponent,
@@ -56,6 +55,7 @@ import {ProductComponent} from "./shared/components/items/products/product/produ
         MatButtonModule,
         AccountNavbarComponent,
         ProductComponent,
+        EventpreviewComponent,
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},

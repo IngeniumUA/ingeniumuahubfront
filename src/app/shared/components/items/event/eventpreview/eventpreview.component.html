@@ -1,17 +1,17 @@
-<div *ngIf="isMobile" id="eventpreview-card" [ngStyle]="{'background': primaryColor90}">
-  <div id="eventpreview-image-section" [ngStyle]="{'background': primaryColorFull}">
-    <img src="{{ this.eventPreview.image_square }}" id="eventpreview-image" alt="image">
+<div *ngIf="(this.isMobile | async)" id="event-card" [ngStyle]="{'background': this.primaryColor90}">
+  <div id="event-image-section" [ngStyle]="{'background': this.primaryColorFull}">
+    <img src="{{ this.event.image_square }}" id="event-image" alt="image">
   </div>
-  <div id="eventpreview-date-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
-    <a class="eventpreview-info">{{ this.eventPreview.start_date | date }}</a>
+  <div id="event-date-section" class="event-info-section" [ngStyle]="{'background': this.primaryColorFull}">
+    <a class="event-info">{{ this.event.start_date | date }}</a>
   </div>
-  <div id="eventpreview-name-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
-    <a class="eventpreview-info" id="eventpreview-info-name">{{ this.eventPreview.item.name}}</a>
+  <div id="event-name-section" class="event-info-section" [ngStyle]="{'background': this.primaryColorFull}">
+    <a class="event-info" id="event-info-name">{{ this.event.item.name}}</a>
   </div>
-  <div id="eventpreview-location-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
-    <a class="eventpreview-info">{{ this.eventPreview.location }}</a>
+  <div id="event-location-section" class="event-info-section" [ngStyle]="{'background': this.primaryColorFull}">
+    <a class="event-info">{{ this.event.location }}</a>
   </div>
-  <div id="eventpreview-button-section" class="eventpreview-info-section" [ngStyle]="{'background': primaryColorFull}">
-    <button id="eventpreview-button" (click)="RedirectToEvent()"  [ngStyle]="{'color': primaryColorFull}">{{ this.eventPreview.button_text}}</button>
+  <div id="event-button-section" class="event-info-section" [ngStyle]="{'background': this.primaryColorFull}">
+    <button id="event-button" (click)="this.RedirectToEvent()"  [ngStyle]="{'color': this.primaryColorFull}">{{ this.event.button_text}}</button>
   </div>
 </div>

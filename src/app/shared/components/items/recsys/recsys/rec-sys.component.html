@@ -1,1 +1,3 @@
-<app-eventpreview *ngIf="eventPreview" [eventPreview]="this.eventPreview"></app-eventpreview>
+<ng-container *ngIf="(this.event$ | async) as event">
+  <app-eventpreview [event]="event"></app-eventpreview>
+</ng-container>

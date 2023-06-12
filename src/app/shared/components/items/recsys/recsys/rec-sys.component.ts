@@ -1,21 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {RecSysService} from "../../../../../core/services/recsys/rec-sys.service";
-import {EventPreviewModel} from "../../../../models/items/events";
+import {EventItemI} from "../../../../models/items/events";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-recsys',
   templateUrl: './rec-sys.component.html',
   styleUrls: ['./rec-sys.component.css']
 })
-export class RecSysComponent implements OnInit {
+export class RecSysComponent {
   constructor(private recsysService: RecSysService) {
   }
 
-  eventPreview?: EventPreviewModel;
-
-  ngOnInit(): void {
-    this.recsysService.getEventPreview().
-    subscribe((data) => {
-      this.eventPreview = data;})
-  }
+  event$: Observable<EventItemI> = this.recsysService.getEventPreview();
 }

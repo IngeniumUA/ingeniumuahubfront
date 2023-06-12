@@ -1,39 +1,42 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {EventPreviewModel} from "../../../../models/items/events";
+import {EventItemI} from "../../../../models/items/events";
 import {Router} from "@angular/router";
-import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
+import {AsyncPipe, DatePipe, NgIf, NgStyle} from "@angular/common";
+import {LayoutService} from "../../../../../core/services/layout/layout.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-eventpreview',
   templateUrl: './eventpreview.component.html',
-  styleUrls: ['./eventpreview.component.css']
+  styleUrls: ['./eventpreview.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgStyle,
+    DatePipe,
+    AsyncPipe,
+  ]
 })
 export class EventpreviewComponent implements OnInit {
-  @Input() eventPreview!: EventPreviewModel
+  @Input() event!: EventItemI
 
   constructor(private router: Router,
-              private breakpointObserver: BreakpointObserver,) {
+              private layoutService: LayoutService,) {
   }
-  isMobile: boolean = true;
+  isMobile: Observable<boolean> = this.layoutService.isMobile;
   primaryColor90!: string;
   primaryColorFull!: string;
   ngOnInit() {
-    this.breakpointObserver  // Breakpoint Observable for responsiveness
-      .observe(['(min-width: 850px)'])
-      .subscribe((state: BreakpointState) => {
-        this.isMobile = !state.matches;
-      });
-
     const primaryBackground = "rgba("
-      + this.eventPreview.main_color.substring(0, 3) + ", "
-      + this.eventPreview.main_color.substring(3, 6) + ", "
-      + this.eventPreview.main_color.substring(6, 9)
+      + this.event.main_color.substring(0, 3) + ", "
+      + this.event.main_color.substring(3, 6) + ", "
+      + this.event.main_color.substring(6, 9)
 
     this.primaryColor90 = primaryBackground + ", 0.9)";
     this.primaryColorFull = primaryBackground + ")";
   }
 
   public RedirectToEvent(): void {
-    this.router.navigate(['event/' + this.eventPreview.item.id]);
+    this.router.navigate(['event/' + this.event.item.id]);
   }
 }
