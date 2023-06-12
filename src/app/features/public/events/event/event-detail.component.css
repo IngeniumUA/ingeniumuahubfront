@@ -103,8 +103,8 @@ h3 {
   margin: 0;
   padding: 1rem;
 
-  font-size: clamp(0rem, 4vh, 2rem);
-  line-height: clamp(0rem, 4vh, 2rem);
+  font-size: 90%;
+  line-height: 90%;
   font-weight: bold;
   color: gray;
 }
