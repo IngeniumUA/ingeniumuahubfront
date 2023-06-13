@@ -1,4 +1,6 @@
 <p>events works!</p>
-<div *ngFor="let event of (this.events$ | async)">
-<app-eventpreview [checkMobile]="false" [event]="event"></app-eventpreview>
-</div>
+<section>
+  <div *ngFor="let event of (this.events$ | async)">
+  <app-eventpreview [checkMobile]="false" [event]="event"></app-eventpreview>
+  </div>
+</section>
