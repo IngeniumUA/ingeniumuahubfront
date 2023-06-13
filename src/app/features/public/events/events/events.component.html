@@ -1,5 +1,4 @@
-<p>events works!</p>
-<section>
+<section [ngClass]="{'mobile': (this.isMobile$ | async)}">
   <div *ngFor="let event of (this.events$ | async)">
   <app-eventpreview [checkMobile]="false" [event]="event"></app-eventpreview>
   </div>

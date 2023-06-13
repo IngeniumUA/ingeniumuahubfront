@@ -2,3 +2,8 @@ section {
   display: flex;
   flex-direction: row;
 }
+
+.mobile {
+  display: flex;
+  flex-direction: column;
+}
