@@ -12,19 +12,19 @@ const TESTgetCategorieNames$: string[] = [
   "Dummy"
 ]
 const TESTgetTicketData$: ProductDataI[] = [
-  {'name': 'Ticketjeuh', 'max_count': 0, 'price_eu': 3.0},
-  {'name': 'Ticketja', 'max_count': 0, 'price_eu': 1.0},
-  {'name': 'Ticketnee', 'max_count': 0, 'price_eu': 0.0}
+  {'name': 'Ticketjeuh', 'max_count': 5, 'price_eu': 3.0},
+  {'name': 'Ticketja', 'max_count': 2, 'price_eu': 1.0},
+  {'name': 'Ticketnee', 'max_count': 1, 'price_eu': 0.0}
 ]
 const TESTgetProductData$: ProductDataI[] = [
-  {'name': 'Productjeuh', 'max_count': 0, 'price_eu': 0.0},
-  {'name': 'Productja', 'max_count': 0, 'price_eu': 420.0},
-  {'name': 'Productnee', 'max_count': 0, 'price_eu': 0.0}
+  {'name': 'Productjeuh', 'max_count': 5, 'price_eu': 0.0},
+  {'name': 'Productja', 'max_count': 2, 'price_eu': 420.0},
+  {'name': 'Productnee', 'max_count': 1, 'price_eu': 0.0}
 ]
 const TESTgetDummyData$: ProductDataI[] = [
-  {'name': 'Dummyjeuh', 'max_count': 0, 'price_eu': 0.0},
-  {'name': 'Dummyja', 'max_count': 0, 'price_eu': 0.0},
-  {'name': 'Dummynee', 'max_count': 0, 'price_eu': 69.0}
+  {'name': 'Dummyjeuh', 'max_count': 5, 'price_eu': 0.0},
+  {'name': 'Dummyja', 'max_count': 2, 'price_eu': 0.0},
+  {'name': 'Dummynee', 'max_count': 1, 'price_eu': 69.0}
 ]
 
 @Component({
@@ -99,4 +99,6 @@ export class EventDetailComponent implements OnInit {
     }
 
   }
+
+
 }
