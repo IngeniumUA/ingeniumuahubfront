@@ -41,7 +41,12 @@ input {
   border: none;
   text-align: center;
 
-  text-decoration: underline 2px grey;
+  text-decoration-thickness: 2px;
+  -webkit-text-decoration-thickness: 2px;
+  text-decoration-line: underline;
+  -webkit-text-decoration-line: underline;
+  text-decoration-color: gray;
+  -webkit-text-decoration-color: gray;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
