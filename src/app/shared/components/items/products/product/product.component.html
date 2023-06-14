@@ -14,7 +14,7 @@
     formControlName="count"
     class="product-count" type="number" value="0"
     [ngStyle]="{'text-decoration': ((this.productForm.controls.count.value ?? 0) > 0) ? 'underline 2px solid ' + this.primaryColorFull : 'underline 2px solid gray',
-                '-webkit-text-decoration:': ((this.productForm.controls.count.value ?? 0) > 0) ? 'underline 2px solid ' + this.primaryColorFull : 'underline 2px solid gray'}">
+                '-webkit-text-decoration-color:': ((this.productForm.controls.count.value ?? 0) > 0) ? this.primaryColorFull.toString() : 'gray'}">
 </form>
 
 <button (click)="TryIncreaseCount()"

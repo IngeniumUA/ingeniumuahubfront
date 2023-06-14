@@ -40,6 +40,10 @@ input {
 
   border: none;
   text-align: center;
+
+  -webkit-text-decoration-thickness: 2px;
+  -webkit-text-decoration-line: underline;
+  -webkit-text-decoration-color: gray;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
