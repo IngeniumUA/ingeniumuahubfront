@@ -43,7 +43,7 @@ input {
 
   -webkit-text-decoration-thickness: 2px;
   -webkit-text-decoration-line: underline;
-  -webkit-text-decoration-color: gray;
+  -webkit-text-decoration-style: solid;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
