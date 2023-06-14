@@ -25,6 +25,31 @@ export class ProductComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {
   }
   ngOnInit() {
+    // Set max validator dynamically because it depends on product interface (which needs to be loaded)
+    this.productForm.get('count')?.addValidators(Validators.max(this.product.max_count));
+
+    // Form input correction
+    this.InputCorrection()
+  }
+
+  InputCorrection() {
+    // Get count field and detect valuechange, then subscribe to every change
+    this.productForm.get('count')?.valueChanges.subscribe((value: number | null) => {
+        value = value ?? 0; // If null, set to 0
+
+        if (value < 0) { // Set to 0 if value is negative
+          this.productForm.patchValue({
+            count: 0
+          })
+        }
+
+        if (this.product.max_count < value) { // Set to max_count if value is higher
+          this.productForm.patchValue({
+            count: this.product.max_count
+          })
+        }
+      }
+    )
   }
 
   TryIncreaseCount(): void {
