@@ -1,0 +1,23 @@
+#products-section {
+  padding: 1rem;
+}
+
+#categories-bar {
+  margin-top: 1rem;
+
+  border-top: solid lightgray 2px;
+  border-bottom: solid lightgray 2px;
+
+  display: flex;
+  flex-direction: row;
+}
+
+h3 {
+  margin: 0;
+  padding: 1rem;
+
+  font-size: 90%;
+  line-height: 90%;
+  font-weight: bold;
+  color: gray;
+}

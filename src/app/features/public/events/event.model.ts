@@ -7,6 +7,7 @@ import {EventsComponent} from "./events/events.component";
 import {EventDetailComponent} from "./event/event-detail.component";
 import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
 import {EventpreviewComponent} from "../../../shared/components/items/event/eventpreview/eventpreview.component";
+import {ProducttableComponent} from "../../../shared/components/items/products/producttable/producttable.component";
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import {EventpreviewComponent} from "../../../shared/components/items/event/even
         EventRoutingModule,
         ProductComponent,
         EventpreviewComponent,
+        ProducttableComponent,
     ],
   declarations: [
     EventsComponent,

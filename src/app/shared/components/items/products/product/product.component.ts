@@ -17,8 +17,9 @@ import {Subject, takeUntil} from "rxjs";
 })
 export class ProductComponent implements OnInit, OnDestroy {
   @Input() product!: ProductDataI;
+  @Input() onInitValue: number = 0;
   @Input() primaryColorFull: string = "#0a1f44";
-  @Output() countEventEmitter: EventEmitter<number> = new EventEmitter<number>();
+  @Output() countEvent: EventEmitter<number> = new EventEmitter<number>();
 
   productForm = this.formBuilder.group({
     count: [0, Validators.min(0)]
@@ -28,6 +29,11 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // Set max validator dynamically because it depends on product interface (which needs to be loaded)
     this.productForm.get('count')?.addValidators(Validators.max(this.product.max_count));
+
+    // Set initial value (which is saved in parent component
+    this.productForm.patchValue({
+      count: this.onInitValue
+    })
 
     // Form input correction
     this.ValueChangePipeline();
@@ -40,7 +46,7 @@ export class ProductComponent implements OnInit, OnDestroy {
       .subscribe((value: number | null) => {
         value = value ?? 0; // If null, set to 0
 
-        this.countEventEmitter.emit(value); // Emit Value
+        this.countEvent.emit(value); // Emit Value
 
         if (value < 0) { // Set to 0 if value is negative
           this.productForm.patchValue({
