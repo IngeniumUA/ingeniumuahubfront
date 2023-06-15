@@ -7,8 +7,8 @@
 </section>
 <section id="products-section">
   <ng-container *ngFor="let product of (this.categorieData$ | async); index as i">
-    <app-product [onInitValue]="this.GetCurrentProductCount(i)" [product]="product" [primaryColorFull]="this.primaryColorFull"
-                 (countEvent)="this.SetProductCount(i, $event)"></app-product>
+    <app-product [onInitValue]="this.GetCurrentProductCount(product)" [product]="product" [primaryColorFull]="this.primaryColorFull"
+                 (countEvent)="this.SetProductCount(product, $event)"></app-product>
   </ng-container>
 </section>
 

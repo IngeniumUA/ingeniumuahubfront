@@ -1,54 +1,61 @@
 import { Injectable } from '@angular/core';
 import {ProductDataI} from "../../../../shared/models/items/products";
 
+class ProductDictionary {
+  items: {[key: string]: any} = {};
+  constructor() {
+    this.items = {};
+  }
+  public has(key: string) {
+    return key in this.items;
+  }
+  public set(key: string, value: number) {
+    this.items[key] = value;
+  }
+  public get(key: string) {
+    return this.items[key];
+  }
+
+  public add(key: string, value: number) {
+    if (this.has(key)) {
+      this.items[key] += value
+    } else {
+      this.set(key, value);
+    }
+    console.log(this.items)
+  }
+  public delete(key: string) {
+    if( this.has(key) ){
+      delete this.items[key]
+      return true;
+    }
+    return false;
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  productAndCount: Array<[ProductDataI, number]> = [];
+  productDict: ProductDictionary = new ProductDictionary();
   constructor() { }
 
-  private get productArray() {
-    return this.productAndCount.map(pair => {
-      return pair.at(0)
-    })
-  }
-
-  public setProduct(product: ProductDataI, count: number) {
-    const productIndex = this.productArray.indexOf(product);
-    if (productIndex < 0) {
-      this.productAndCount.push([product, count]);
-      return;
-    }
-    this.productAndCount[productIndex][1] = count;
+  public setProduct(product: ProductDataI, count: number): void {
+    this.productDict.set(product.name, count)
   }
   public addProduct(product: ProductDataI, count: number): void {
-    const productIndex = this.productArray.indexOf(product);
-    if (productIndex < 0) {
-      this.productAndCount.push([product, count]);
-      return;
-    }
-    this.productAndCount[productIndex][1] += count;
+    this.productDict.add(product.name, count);
   }
-
   public subtractProduct(product: ProductDataI, count: number): void {
-    const productIndex = this.productArray.indexOf(product);
-    if (productIndex < 0) {
-      this.productAndCount.push([product, count]);
-      return;
-    }
-    this.productAndCount[productIndex][1] -= count;
+    this.productDict.add(product.name, -count)
   }
-
   public removeProduct(product: ProductDataI): void {
-    const productIndex = this.productArray.indexOf(product);
-    if (productIndex < 0) {
-      return;
-    }
-    this.productAndCount.splice(productIndex, 1);
+    this.productDict.delete(product.name);
   }
-
-  public getProducts(): Array<[ProductDataI, number]> {
-    return this.productAndCount
+  public getProductCount(product: ProductDataI): number {
+    return this.productDict.get(product.name);
+  }
+  public getProducts() {
+    // TODO
   }
 }

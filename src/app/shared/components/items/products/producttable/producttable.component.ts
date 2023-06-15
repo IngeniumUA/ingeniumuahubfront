@@ -68,19 +68,14 @@ export class ProducttableComponent implements OnInit {
       this.categorieData$ = of(TESTgetDummyData$)
     }
   }
-
-  productCount: number[][] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-  GetCurrentProductCount(productIndex: number): number {
-    return this.productCount.at(this.currentCategorie$.value)?.at(productIndex) ?? 0
+  GetCurrentProductCount(product: ProductDataI): number {
+    return this.cartService.getProductCount(product);
   }
-  SetProductCount(productIndex: number, productCount: number) {
-    this.productCount[this.currentCategorie$.value][productIndex] = productCount
+  SetProductCount(product: ProductDataI, productCount: number) {
+    this.cartService.setProduct(product, productCount);
   }
-
 
   RouteToCheckout(): void {
-
-
     this.router.navigate(['/shop/checkout'])
   }
 }
