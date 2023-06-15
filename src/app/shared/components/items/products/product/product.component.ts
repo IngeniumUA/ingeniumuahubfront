@@ -75,10 +75,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   StyleInput() {
     if ((this.productForm.controls.count.value ?? 0) > 0) {
       return {'text-decoration' :'underline 2px solid ' + this.primaryColorFull,
-        '-webkit-text-decoration-color': this.primaryColorFull}
+        '-webkit-text-decoration-color': this.primaryColorFull,
+        '-webkit-text-decoration-thickness': '3px'}
     }
     return {'text-decoration' :'underline 2px solid gray',
-      '-webkit-text-decoration-color': 'gray'}
+      '-webkit-text-decoration-color': 'gray',
+      '-webkit-text-decoration-thickness': '3px'}
   }
 
   private ngUnsubscribe = new Subject<void>();

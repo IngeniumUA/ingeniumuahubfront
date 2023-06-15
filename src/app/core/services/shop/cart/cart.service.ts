@@ -34,8 +34,6 @@ export class CartService {
     const cartSection: CartSection = this.getOrCreateSection(source);
     cartSection.setProductCount(group, product, count);
     this.setSection(cartSection);
-
-    console.log(JSON.stringify(this.cartSections[0]))
   }
 
   public getProductCount(source: string, group: IProductGroupInfo, product: IProductItem): number {

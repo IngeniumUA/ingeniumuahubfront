@@ -6,7 +6,7 @@
 <button (click)="TryDecreaseCount()"
         [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) <= 0) ? 'gray' : this.primaryColorFull}"
         [disabled]="(this.productForm.controls.count.value ?? 0) <= 0">
-  -</button>
+  <div>-</div></button>
 
 <form [formGroup]="productForm">
   <input
@@ -18,4 +18,4 @@
 
 <button (click)="TryIncreaseCount()"
         [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
-        [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
+        [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count"><div>+</div></button>

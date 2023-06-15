@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {CartService} from "../../../../../core/services/shop/cart/cart.service";
 import {NgForOf} from "@angular/common";
 import {CartSection} from "../../../../models/items/products/cart";
@@ -12,15 +12,10 @@ import {CartSection} from "../../../../models/items/products/cart";
   ],
   standalone: true
 })
-export class ShoppingcartListComponent implements OnInit {
+export class ShoppingcartListComponent {
   cartSections: CartSection[] = this.cartService.cartSections;
 
   constructor(private cartService: CartService) {
 
-  }
-
-  ngOnInit() {
-    console.log("BEKIJK DIT NE KEER")
-    console.log(JSON.stringify(this.cartSections))
   }
 }

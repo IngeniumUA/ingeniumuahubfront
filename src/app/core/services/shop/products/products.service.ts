@@ -34,7 +34,6 @@ export class ProductsService {
   constructor() { }
 
   getProducts(itemID: string): Observable<IProductGroup[]> {
-    console.log(itemID)
     if (itemID === "e5b60c84-4b52-4b26-b3aa-124da4275726") {
       return of(TESTpopUpZ)
     } else if (itemID === "01719cdb-433f-4875-97c4-85fa09155553") {
