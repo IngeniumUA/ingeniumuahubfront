@@ -1,31 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ProductDataI} from "../../../../models/items/products";
-import {BehaviorSubject, Observable, of} from "rxjs";
-import {AsyncPipe, NgForOf, NgStyle} from "@angular/common";
+import {IProductGroup, IProductGroupInfo, IProductItem} from "../../../../models/items/products/products";
+import {BehaviorSubject, Observable} from "rxjs";
+import {AsyncPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {ProductComponent} from "../product/product.component";
 import {Router} from "@angular/router";
 import {CartService} from "../../../../../core/services/shop/cart/cart.service";
-
-const TESTgetCategorieNames$: string[] = [
-  "Tickets",
-  "Products",
-  "Dummy"
-]
-const TESTgetTicketData$: ProductDataI[] = [
-  {'name': 'Ticketjeuh', 'max_count': 5, 'price_eu': 3.0},
-  {'name': 'Ticketja', 'max_count': 2, 'price_eu': 1.0},
-  {'name': 'Ticketnee', 'max_count': 1, 'price_eu': 0.0}
-]
-const TESTgetProductData$: ProductDataI[] = [
-  {'name': 'Productjeuh', 'max_count': 5, 'price_eu': 0.0},
-  {'name': 'Productja', 'max_count': 2, 'price_eu': 420.0},
-  {'name': 'Productnee', 'max_count': 1, 'price_eu': 0.0}
-]
-const TESTgetDummyData$: ProductDataI[] = [
-  {'name': 'Dummyjeuh', 'max_count': 5, 'price_eu': 0.0},
-  {'name': 'Dummyja', 'max_count': 2, 'price_eu': 0.0},
-  {'name': 'Dummynee', 'max_count': 1, 'price_eu': 69.0}
-]
+import {ProductsService} from "../../../../../core/services/shop/products/products.service";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-producttable',
@@ -35,44 +16,47 @@ const TESTgetDummyData$: ProductDataI[] = [
     NgStyle,
     NgForOf,
     AsyncPipe,
-    ProductComponent
+    ProductComponent,
+    NgIf
   ],
   standalone: true
 })
 export class ProducttableComponent implements OnInit {
   @Input() eventID!: string;
   @Input() primaryColorFull!: string;
-  categorieNames$?: Observable<string[]>;
-  currentCategorie$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-
-  categorieData$?: Observable<ProductDataI[]>;
+  productGroups$!: Observable<IProductGroup[]>;
+  currentProductGroupIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  products$!: Observable<IProductItem[]>;
 
   constructor(private router: Router,
+              private productService: ProductsService,
               private cartService: CartService) {
   }
 
   ngOnInit() {
     // On init select first categorie
-    this.categorieNames$ = of(TESTgetCategorieNames$)
-    this.SetCategorie(0);
+
+    this.productGroups$ = this.productService.getProducts(this.eventID);
+    this.SetProductGroup(0)
   }
 
-  SetCategorie(index: number): void {
-    this.currentCategorie$.next(index);
+  SetProductGroup(index: number): void {
+    this.products$ = this.productGroups$.pipe(map((productGroups) => {
+      return productGroups[this.currentProductGroupIndex$.value].products
+    }))
+    this.currentProductGroupIndex$.next(index)
+  }
+  currentGroup$(): Observable<IProductGroupInfo> {
+    return this.productGroups$.pipe(map((productGroups) => {
+      return productGroups[this.currentProductGroupIndex$.value].groupinfo
+    }))
+  }
 
-    if (index === 0) {
-      this.categorieData$ = of(TESTgetTicketData$)
-    } else if (index === 1) {
-      this.categorieData$ = of(TESTgetProductData$)
-    } else {
-      this.categorieData$ = of(TESTgetDummyData$)
-    }
+  GetCurrentProductCount(groupinfo: IProductGroupInfo, product: IProductItem): number {
+    return this.cartService.getProductCount(this.eventID, groupinfo, product)
   }
-  GetCurrentProductCount(product: ProductDataI): number {
-    return this.cartService.getProductCount(product);
-  }
-  SetProductCount(product: ProductDataI, productCount: number) {
-    this.cartService.setProduct(product, productCount);
+  SetProductCount(groupinfo: IProductGroupInfo, product: IProductItem, count: number) {
+    this.cartService.setProductCount(this.eventID, groupinfo, product, count);
   }
 
   RouteToCheckout(): void {

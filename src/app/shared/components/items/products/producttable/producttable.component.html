@@ -1,14 +1,14 @@
 <section id="categories-bar">
-  <ng-container *ngFor="let productName of (this.categorieNames$ | async); index as i">
-    <h3 (click)="this.SetCategorie(i)"
-        [ngStyle]="(this.currentCategorie$ | async) === i ? {'color': this.primaryColorFull} : {'color': 'grey'}">
-      {{ productName }}</h3>
+  <ng-container *ngFor="let product of (this.productGroups$ | async); index as i">
+    <h3 (click)="this.SetProductGroup(i)"
+        [ngStyle]="(this.currentProductGroupIndex$ | async) === i ? {'color': this.primaryColorFull} : {'color': 'grey'}">
+      {{ product.groupinfo.name }}</h3>
   </ng-container>
 </section>
-<section id="products-section">
-  <ng-container *ngFor="let product of (this.categorieData$ | async); index as i">
-    <app-product [onInitValue]="this.GetCurrentProductCount(product)" [product]="product" [primaryColorFull]="this.primaryColorFull"
-                 (countEvent)="this.SetProductCount(product, $event)"></app-product>
+<section id="products-section" *ngIf="(this.currentGroup$() | async) as group">
+  <ng-container *ngFor="let product of (this.products$ | async); index as i">
+    <app-product [onInitValue]="this.GetCurrentProductCount(group, product)" [product]="product" [primaryColorFull]="this.primaryColorFull"
+                 (countEvent)="this.SetProductCount(group, product, $event)"></app-product>
   </ng-container>
 </section>
 

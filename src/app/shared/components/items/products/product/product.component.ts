@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {ProductDataI} from "../../../../models/items/products";
+import {IProductItem} from "../../../../models/items/products/products";
 import {NgIf, NgStyle} from "@angular/common";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Subject, takeUntil} from "rxjs";
@@ -16,7 +16,7 @@ import {Subject, takeUntil} from "rxjs";
   ]
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  @Input() product!: ProductDataI;
+  @Input() product!: IProductItem;
   @Input() onInitValue: number = 0;
   @Input() primaryColorFull: string = "#0a1f44";
   @Output() countEvent: EventEmitter<number> = new EventEmitter<number>();

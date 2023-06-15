@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ShopHomeComponent } from './shop/shop-home.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import {ShopRoutingModule} from "./shop-routing.module";
+import {
+  ShoppingcartListComponent
+} from "../../../shared/components/items/products/shoppingcart-list/shoppingcart-list.component";
 
 
 @NgModule({
@@ -13,6 +16,7 @@ import {ShopRoutingModule} from "./shop-routing.module";
   imports: [
     CommonModule,
     ShopRoutingModule,
+    ShoppingcartListComponent,
   ]
 })
 export class ShopModule { }
