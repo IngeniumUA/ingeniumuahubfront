@@ -116,19 +116,6 @@ form {
   color: var(--mainblue);
 }
 
-
-/* Button */
-.login-button {
+button {
   margin-top: 4vh;
-  border-radius: 5px;
-
-  background-color: var(--mainblue);
-  border: none;
-
-  font-weight: bold;
-  color: white;
-}
-
-.login-button:active {
-  background-color: var(--ingenium-blue);
 }

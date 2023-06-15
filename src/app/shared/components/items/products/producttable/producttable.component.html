@@ -11,3 +11,7 @@
                  (countEvent)="this.SetProductCount(i, $event)"></app-product>
   </ng-container>
 </section>
+
+<section id="button-section">
+  <button class="hub-bigbutton" (click)="RouteToCheckout()" [ngStyle]="{'background-color': this.primaryColorFull}">Order</button>
+</section>

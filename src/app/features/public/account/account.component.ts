@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-user',
-  templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css']
+  template: '<app-account-navbar></app-account-navbar>\n' +
+            '<router-outlet></router-outlet>'
 })
 export class AccountComponent {
 

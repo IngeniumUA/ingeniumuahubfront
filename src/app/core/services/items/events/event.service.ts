@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {EventItemI} from "../../../shared/models/items/events";
-import {apiEnviroment} from "../../../../enviroments";
+import {EventItemI} from "../../../../shared/models/items/events";
+import {apiEnviroment} from "../../../../../enviroments";
 
 @Injectable({
   providedIn: 'root'

@@ -9,3 +9,18 @@
 body {
   margin: 0;
   font-family: D-DIN, sans-serif;}
+
+.hub-bigbutton {
+  border-radius: 5px;
+
+  background-color: var(--mainblue);
+  border: none;
+
+  font-weight: bold;
+  color: white;
+}
+
+.hub-bigbutton:active, hub-bigbutton:disabled {
+  background-color: var(--ingenium-grey);
+  transition: background-color 0.1s ease-in;
+}

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {Observable} from "rxjs";
 import {EventItemI} from "../../../../shared/models/items/events";
-import {EventService} from "../../../../core/services/events/event.service";
+import {EventService} from "../../../../core/services/items/events/event.service";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
 
 @Component({

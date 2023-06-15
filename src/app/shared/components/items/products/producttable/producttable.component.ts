@@ -3,6 +3,8 @@ import {ProductDataI} from "../../../../models/items/products";
 import {BehaviorSubject, Observable, of} from "rxjs";
 import {AsyncPipe, NgForOf, NgStyle} from "@angular/common";
 import {ProductComponent} from "../product/product.component";
+import {Router} from "@angular/router";
+import {CartService} from "../../../../../core/services/shop/cart/cart.service";
 
 const TESTgetCategorieNames$: string[] = [
   "Tickets",
@@ -45,8 +47,11 @@ export class ProducttableComponent implements OnInit {
 
   categorieData$?: Observable<ProductDataI[]>;
 
-  ngOnInit() {
+  constructor(private router: Router,
+              private cartService: CartService) {
+  }
 
+  ngOnInit() {
     // On init select first categorie
     this.categorieNames$ = of(TESTgetCategorieNames$)
     this.SetCategorie(0);
@@ -72,4 +77,10 @@ export class ProducttableComponent implements OnInit {
     this.productCount[this.currentCategorie$.value][productIndex] = productCount
   }
 
+
+  RouteToCheckout(): void {
+
+
+    this.router.navigate(['/shop/checkout'])
+  }
 }

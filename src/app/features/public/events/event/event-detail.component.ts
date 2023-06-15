@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {EventItemI} from "../../../../shared/models/items/events";
-import {EventService} from "../../../../core/services/events/event.service";
+import {EventService} from "../../../../core/services/items/events/event.service";
 import {Observable, tap} from "rxjs";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
 
