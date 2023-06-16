@@ -22,7 +22,10 @@ p {
 }
 
 button {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   box-sizing: border-box;
   height: 1.5rem;
   width: 1.5rem;

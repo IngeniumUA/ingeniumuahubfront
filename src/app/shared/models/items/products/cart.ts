@@ -95,6 +95,7 @@ export class CartSection {
     transactions.splice(transactionIndex, 1)
 
     // Transaction was found, so update value
+    // TODO Check if transaction was the only one, if so delete group (also do this for section somehow?)
     this._cartGroups[groupIndex].transactions = transactions
   }
 }
