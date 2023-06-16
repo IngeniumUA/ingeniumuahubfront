@@ -28,7 +28,8 @@ button {
 
   box-sizing: border-box;
   height: 1.5rem;
-  width: 1.5rem;
+  width: 0.5rem;
+  -webkit-column-width: 0.5rem;
 
   border: none;
   border-radius: 10px;
