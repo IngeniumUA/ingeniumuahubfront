@@ -22,21 +22,18 @@ p {
 }
 
 button {
+  display: inline-block;
   box-sizing: border-box;
-  height: 1.8rem;
-  width: 1.8rem;
+  height: 1.5rem;
+  width: 1.5rem;
 
   border: none;
   border-radius: 10px;
 
-  font-size: 1.7rem;
+  font-size: 1.3rem;
+  line-height: 1.3rem;
 
   color: white;
-}
-
-button div {
-  position: relative;
-  bottom: 3px;
 }
 
 input {
@@ -47,6 +44,8 @@ input {
 
   border: none;
   text-align: center;
+  font-size: 1rem;
+  line-height: 1rem;
 
   -webkit-text-decoration-thickness: 2px;
   -webkit-text-decoration-line: underline;
@@ -58,6 +57,6 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-.product-count {
+#product-count-form {
   width: 1.5rem;
 }
