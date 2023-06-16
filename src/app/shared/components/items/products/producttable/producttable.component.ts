@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {CartService} from "../../../../../core/services/shop/cart/cart.service";
 import {ProductsService} from "../../../../../core/services/shop/products/products.service";
 import {map} from "rxjs/operators";
+import {IItem} from "../../../../models/items/IItem";
 
 @Component({
   selector: 'app-producttable',
@@ -22,7 +23,7 @@ import {map} from "rxjs/operators";
   standalone: true
 })
 export class ProducttableComponent implements OnInit {
-  @Input() eventID!: string;
+  @Input() item!: IItem;
   @Input() primaryColorFull!: string;
   productGroups$!: Observable<IProductGroup[]>;
   currentProductGroupIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -36,7 +37,7 @@ export class ProducttableComponent implements OnInit {
   ngOnInit() {
     // On init select first categorie
 
-    this.productGroups$ = this.productService.getProducts(this.eventID);
+    this.productGroups$ = this.productService.getProducts(this.item.id);
     this.SetProductGroup(0)
   }
 
@@ -53,10 +54,10 @@ export class ProducttableComponent implements OnInit {
   }
 
   GetCurrentProductCount(groupinfo: IProductGroupInfo, product: IProductItem): number {
-    return this.cartService.getProductCount(this.eventID, groupinfo, product)
+    return this.cartService.getProductCount(this.item, groupinfo, product)
   }
   SetProductCount(groupinfo: IProductGroupInfo, product: IProductItem, count: number) {
-    this.cartService.setProductCount(this.eventID, groupinfo, product, count);
+    this.cartService.setProductCount(this.item, groupinfo, product, count);
   }
 
   RouteToCheckout(): void {

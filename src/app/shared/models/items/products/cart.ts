@@ -1,7 +1,8 @@
 import {IProductGroupInfo, IProductItem} from "./products";
+import {IItem} from "../IItem";
 
 export class CartSection {
-  private _source_uuid: string;
+  private _source_item: IItem;
   private _cartGroups: ICartGroup[];
 
 
@@ -50,17 +51,16 @@ export class CartSection {
     return transaction[1]!;
   }
 
-  constructor(source_uuid: string) {
+  constructor(source_uuid: IItem) {
     this._cartGroups = [];
-    this._source_uuid = source_uuid
+    this._source_item = source_uuid
   }
 
-  get source_uuid(): string {
-    return this._source_uuid;
+  get source_item(): IItem {
+    return this._source_item;
   }
-
-  set source_uuid(value: string) {
-    this._source_uuid = value;
+  set source_item(value: IItem) {
+    this._source_item = value;
   }
 
   get cartGroups(): ICartGroup[] {

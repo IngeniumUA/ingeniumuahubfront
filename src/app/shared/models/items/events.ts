@@ -1,7 +1,7 @@
-import {Item} from "./item";
+import {IItem} from "./IItem";
 export interface EventItemI {
 
-  item: Item;
+  item: IItem;
   start_date: string;
   end_date: string;
   location: string;  // TODO Location Object, package maybe?

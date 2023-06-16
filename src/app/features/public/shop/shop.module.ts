@@ -5,7 +5,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import {ShopRoutingModule} from "./shop-routing.module";
 import {
   ShoppingcartListComponent
-} from "../../../shared/components/items/products/shoppingcart-list/shoppingcart-list.component";
+} from "../../../shared/components/items/shopping-cart/shoppingcart-list/shoppingcart-list.component";
 
 
 @NgModule({

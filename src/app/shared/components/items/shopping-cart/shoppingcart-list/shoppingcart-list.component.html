@@ -1,0 +1,13 @@
+<section id="header-section">
+  <h1>Shoppingcart:</h1>
+</section>
+
+<section class="shoppingcart-card" *ngFor="let cartSection of this.cartSections">
+  <h2>{{ cartSection.source_item.name }}</h2>
+  <section *ngFor="let cartGroup of cartSection.cartGroups">
+    <h3>{{ cartGroup.productsGroup.name }}</h3>
+    <div *ngFor="let productTransaction of cartGroup.transactions">
+      {{ productTransaction[0].name }} {{ productTransaction[0].name }}: {{ productTransaction[1] }}
+    </div>
+  </section>
+</section>

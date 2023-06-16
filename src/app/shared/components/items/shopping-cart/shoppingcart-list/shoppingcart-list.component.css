@@ -1,0 +1,8 @@
+#header-section {
+  background-color: var(--mainblue);
+  color: white;
+}
+section {
+  background-color: white;
+  border: solid 2px var(--mainblue);
+}
