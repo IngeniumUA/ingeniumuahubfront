@@ -19,6 +19,7 @@ h5 {
 p {
   margin: 0;
   padding-right: 0.5rem;
+  text-wrap: none;
 }
 
 button {
@@ -56,6 +57,11 @@ input {
   -webkit-text-decoration-line: underline;
   -webkit-text-decoration-style: solid;
 }
+input div {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
