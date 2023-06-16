@@ -1,8 +1,8 @@
-<section id="header-section">
+<section class="blue-section" id="header-section">
   <h1>Cart</h1><div><img src="assets/svg/account-navbar/white/ShoppingCartIcon.svg" alt=":("></div>
 </section>
 
-<section class="shoppingcart-card" *ngFor="let cartSection of this.cartSections">
+<section class="blue-border" *ngFor="let cartSection of this.cartSections">
   <h2>{{ cartSection.source_item.name }}</h2>
   <section class="cartgroup" *ngFor="let cartGroup of cartSection.cartGroups">
     <h3>{{ cartGroup.productsGroup.name }}</h3>
@@ -13,4 +13,10 @@
       <!--<app-cart-product [product]="productTransaction"></app-cart-product>-->
     </div>
   </section>
+</section>
+
+<section class="blue-border blue-section summary-section">
+  <div id="summary-div">
+    <p>€1000 betalen, KUT</p><button class="hub-bigbutton">Betaal</button>
+  </div>
 </section>

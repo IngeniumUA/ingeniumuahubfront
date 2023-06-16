@@ -1,6 +1,45 @@
+section {
+  background-color: white;
+}
+
+.blue-section {
+  background-color: var(--mainblue);
+}
+
+.blue-border {
+  border: solid 2px var(--mainblue);
+}
+
+/* */
+.cartgroup, h2 {
+  margin-left: 0.5rem;
+  margin-right: 0.1rem;
+}
+
+
+/* Summary */
+#summary-div {
+  margin: 0.5rem;
+  background-color: white;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#summary-div button {
+  height: 100%;
+
+  margin-left: 2vw;
+  margin-right: 2vw;
+}
+
+
 /* Header */
 #header-section {
-  background-color: var(--mainblue);
   color: white;
   display: flex;
   flex-direction: row;
@@ -15,12 +54,4 @@
 #header-section img {
   height: 100%;
   width: 100%;
-}
-
-section {
-  background-color: white;
-}
-
-.shoppingcart-card {
-  border: solid 2px var(--mainblue);
 }
