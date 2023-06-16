@@ -1,13 +1,16 @@
 <section id="header-section">
-  <h1>Shoppingcart:</h1>
+  <h1>Cart</h1><div><img src="assets/svg/account-navbar/white/ShoppingCartIcon.svg" alt=":("></div>
 </section>
 
 <section class="shoppingcart-card" *ngFor="let cartSection of this.cartSections">
   <h2>{{ cartSection.source_item.name }}</h2>
-  <section *ngFor="let cartGroup of cartSection.cartGroups">
+  <section class="cartgroup" *ngFor="let cartGroup of cartSection.cartGroups">
     <h3>{{ cartGroup.productsGroup.name }}</h3>
     <div *ngFor="let productTransaction of cartGroup.transactions">
-      {{ productTransaction[0].name }} {{ productTransaction[0].name }}: {{ productTransaction[1] }}
+      <app-product [onInitValue]="productTransaction[1]"
+                   [product]="productTransaction[0]"
+                   (countEvent)="this.SetProductCount(cartSection.source_item, cartGroup.productsGroup, productTransaction[0], $event)"></app-product>
+      <!--<app-cart-product [product]="productTransaction"></app-cart-product>-->
     </div>
   </section>
 </section>

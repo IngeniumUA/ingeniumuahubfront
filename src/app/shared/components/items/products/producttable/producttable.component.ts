@@ -24,7 +24,7 @@ import {IItem} from "../../../../models/items/IItem";
 })
 export class ProducttableComponent implements OnInit {
   @Input() item!: IItem;
-  @Input() primaryColorFull!: string;
+  @Input() primaryColorFull: string = "var(--mainblue)";
   productGroups$!: Observable<IProductGroup[]>;
   currentProductGroupIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   products$!: Observable<IProductItem[]>;

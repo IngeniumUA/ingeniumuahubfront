@@ -2,15 +2,44 @@ import {IProductGroupInfo, IProductItem} from "./products";
 import {IItem} from "../IItem";
 
 export class CartSection {
+  /* ----- Boilerplate code ----- */
   private _source_item: IItem;
   private _cartGroups: ICartGroup[];
 
+  constructor(source_uuid: IItem) {
+    this._cartGroups = [];
+    this._source_item = source_uuid
+  }
+  get source_item(): IItem {
+    return this._source_item;
+  }
+  set source_item(value: IItem) {
+    this._source_item = value;
+  }
 
+  get cartGroups(): ICartGroup[] {
+    return this._cartGroups;
+  }
+
+  set cartGroups(value: ICartGroup[]) {
+    this._cartGroups = value;
+  }
+
+
+  /* ----- Private methods ----- */
   private getGroupIndex(group: IProductGroupInfo): number {
     const boolMap = this._cartGroups.map((value) => {return value.productsGroup === group})
     return boolMap.indexOf(true)
   }
+
+  private hasGroup(group: IProductGroupInfo): boolean {
+    const boolMap = this._cartGroups.map((value) => {return value.productsGroup === group})
+    return boolMap.includes(true)
+  }
+
+  /* ----- Public methods ----- */
   public setProductCount(group: IProductGroupInfo, product: IProductItem, count: number): void {
+    console.log("Set!" + count.toString())
     const groupIndex = this.getGroupIndex(group);
 
     if (groupIndex < 0) {
@@ -45,30 +74,28 @@ export class CartSection {
     const transactionIndex = transactions.map((value) => {
       return value.at(0) === product
     }).indexOf(true);
+    if (transactionIndex < 0) return 0
 
     // Transaction was found, so update value
     const transaction: [IProductItem, number] = transactions.at(transactionIndex)!;
     return transaction[1]!;
   }
 
-  constructor(source_uuid: IItem) {
-    this._cartGroups = [];
-    this._source_item = source_uuid
-  }
+  public deleteProduct(group: IProductGroupInfo, product: IProductItem) {
+    const groupIndex = this.getGroupIndex(group);
+    if (groupIndex < 0) return
 
-  get source_item(): IItem {
-    return this._source_item;
-  }
-  set source_item(value: IItem) {
-    this._source_item = value;
-  }
+    // Groupindex was found so look up transactions
+    const transactions: [IProductItem, number][] = this._cartGroups.at(groupIndex)!.transactions
+    const transactionIndex = transactions.map((value) => {
+      return value.at(0) === product
+    }).indexOf(true);
+    if (transactionIndex < 0) return
 
-  get cartGroups(): ICartGroup[] {
-    return this._cartGroups;
-  }
+    transactions.splice(transactionIndex, 1)
 
-  set cartGroups(value: ICartGroup[]) {
-    this._cartGroups = value;
+    // Transaction was found, so update value
+    this._cartGroups[groupIndex].transactions = transactions
   }
 }
 

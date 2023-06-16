@@ -1,8 +1,26 @@
+/* Header */
 #header-section {
   background-color: var(--mainblue);
   color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 }
+#header-section div {
+  max-height: 2rem;
+  max-width: 2rem;
+  margin-right: 1rem;
+}
+#header-section img {
+  height: 100%;
+  width: 100%;
+}
+
 section {
   background-color: white;
+}
+
+.shoppingcart-card {
   border: solid 2px var(--mainblue);
 }
