@@ -3,12 +3,10 @@
   <p>€ {{ this.product.price_eu}}</p>
 </ng-container>
 
-<div class="button-wrapper">
 <button (click)="TryDecreaseCount()"
         [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) <= 0) ? 'gray' : this.primaryColorFull}"
         [disabled]="(this.productForm.controls.count.value ?? 0) <= 0">
-  <div>-</div></button>
-</div>
+  -</button>
 
 <form [formGroup]="productForm">
   <input
@@ -18,8 +16,7 @@
     [ngStyle]="StyleInput()">
 </form>
 
-<div class="button-wrapper">
 <button (click)="TryIncreaseCount()"
         [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
-        [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count"><div>+</div></button>
-</div>
+        [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
+
