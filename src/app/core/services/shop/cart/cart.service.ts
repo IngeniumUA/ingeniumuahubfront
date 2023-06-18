@@ -34,6 +34,13 @@ export class CartService {
     this.data[sectionIndex] = cartSection
   }
 
+  private removeSection(cartSection: CartSection): void {
+    const boolMap = this.data.map((lhs) => {
+      return lhs.source_item === cartSection.source_item;})
+    const sectionIndex = boolMap.indexOf(true)
+    this.cartSections.splice(sectionIndex, 1)
+  }
+
   // Public --------------------------------
   public get cartSections(): CartSection[] {return this.data}
 
@@ -53,6 +60,11 @@ export class CartService {
 
     const cartSection: CartSection = this.getOrCreateSection(source); // Will never be created because of guard above
     cartSection.deleteProduct(group, product);
-    this.setSection(cartSection);
+
+    if (cartSection.isEmpty()) {
+      this.removeSection(cartSection);
+    } else  {
+      this.setSection(cartSection);
+    }
   }
 }

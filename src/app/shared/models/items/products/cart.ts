@@ -38,6 +38,10 @@ export class CartSection {
   }
 
   /* ----- Public methods ----- */
+  public isEmpty(): boolean {
+    return this._cartGroups.length < 1
+  }
+
   public setProductCount(group: IProductGroupInfo, product: IProductItem, count: number): void {
     console.log("Set!" + count.toString())
     const groupIndex = this.getGroupIndex(group);
@@ -95,7 +99,12 @@ export class CartSection {
     transactions.splice(transactionIndex, 1)
 
     // Transaction was found, so update value
-    // TODO Check if transaction was the only one, if so delete group (also do this for section somehow?)
+    if (transactions.length < 1) {
+      this._cartGroups.splice(groupIndex, 1)
+     return;
+    }
+
+    // Else update transactions
     this._cartGroups[groupIndex].transactions = transactions
   }
 }
