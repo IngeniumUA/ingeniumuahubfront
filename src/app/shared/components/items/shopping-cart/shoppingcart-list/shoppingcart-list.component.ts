@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {CartService} from "../../../../../core/services/shop/cart/cart.service";
 import {NgForOf} from "@angular/common";
-import {CartSection} from "../../../../models/items/products/cart";
+import {ITransaction} from "../../../../models/items/products/cart";
 import {CartProductComponent} from "../cart-product/cart-product.component";
 import {ProductComponent} from "../../products/product/product.component";
 import {IProductGroupInfo, IProductItem} from "../../../../models/items/products/products";
@@ -19,7 +19,7 @@ import {IItem} from "../../../../models/items/IItem";
   standalone: true
 })
 export class ShoppingcartListComponent {
-  cartSections: CartSection[] = this.cartService.cartSections;
+  transactions: ITransaction[] = this.cartService.getTransactions();
 
   constructor(private cartService: CartService) {
 
