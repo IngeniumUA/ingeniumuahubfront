@@ -83,7 +83,7 @@ nav {
   flex-direction: column;
   justify-content: stretch;
 
-  background-color: rgba(10, 31, 68, 0.9);
+  background-color: var(--mainblue-90);
   animation: slideDownIntoView 0.2s ease-in 0s 1 normal forwards;
 }
 

@@ -1,5 +1,6 @@
 :root {
-  --mainblue: #0a1f44;
+  --mainblue: rgb(10, 31, 68);
+  --mainblue-90: rgba(10, 31, 68, 0.9);
 
   --ingenium-blue: #1f2980;
   --ingenium-grey: #d4dbe9;
