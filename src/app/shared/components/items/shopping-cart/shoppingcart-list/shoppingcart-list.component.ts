@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {CartService} from "../../../../../core/services/shop/cart/cart.service";
 import {NgForOf} from "@angular/common";
 import {ITransaction} from "../../../../models/items/products/cart";
-import {CartProductComponent} from "../cart-product/cart-product.component";
 import {ProductComponent} from "../../products/product/product.component";
 import {IProductGroupInfo, IProductItem} from "../../../../models/items/products/products";
 import {IItem} from "../../../../models/items/IItem";
@@ -13,8 +12,7 @@ import {IItem} from "../../../../models/items/IItem";
   styleUrls: ['./shoppingcart-list.component.css'],
   imports: [
     NgForOf,
-    CartProductComponent,
-    ProductComponent
+    ProductComponent,
   ],
   standalone: true
 })
@@ -22,9 +20,11 @@ export class ShoppingcartListComponent {
   transactions: ITransaction[] = this.cartService.getTransactions();
 
   constructor(private cartService: CartService) {
-
   }
-  SetProductCount(item: IItem, groupinfo: IProductGroupInfo, product: IProductItem, count: number) {
-    this.cartService.setProductCount(item, groupinfo, product, count);
+
+  SetProductCount(source: IItem, groupinfo: IProductGroupInfo, product: IProductItem, count: number): void {
+    this.cartService.setProductCount(source, groupinfo, product, count);
+
+    if (count < 1) this.transactions = this.cartService.getTransactions();
   }
 }
