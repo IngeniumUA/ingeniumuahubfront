@@ -24,6 +24,7 @@ import { PublicRoutingComponent } from './features/public/public-routing.compone
 import { PublicFooterComponent } from './core/layout/public/footer/public-footer.component';
 import { CloudComponent } from './features/public/cloud/cloud.component';
 import {AccountNavbarComponent} from "./shared/components/account/account-navbar/account-navbar.component";
+import {RegisterComponent} from "./shared/components/auth/register/register.component";
 
 @NgModule({
     declarations: [
@@ -40,21 +41,22 @@ import {AccountNavbarComponent} from "./shared/components/account/account-navbar
         EventdatePipe,
         GroupnamePipe,
     ],
-    imports: [
-        BrowserModule,
-        PublicHeaderComponent,
-        PublicFooterComponent,
+  imports: [
+    BrowserModule,
+    PublicHeaderComponent,
+    PublicFooterComponent,
 
-        AppRoutingModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
 
-        ReactiveFormsModule,
-        MatRadioModule,
-        MatButtonModule,
-        AccountNavbarComponent,
-        EventpreviewComponent,
-    ],
+    ReactiveFormsModule,
+    MatRadioModule,
+    MatButtonModule,
+    AccountNavbarComponent,
+    EventpreviewComponent,
+    RegisterComponent,
+  ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
     ],

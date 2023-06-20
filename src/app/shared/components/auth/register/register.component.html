@@ -1,0 +1,27 @@
+<div class="register-wrapper">
+
+  <h1>Register to<br>IngeniumUAHub</h1>
+
+  <div class="register-width register-other">
+    <img src="assets/svg/google-icon.svg" alt=":'(">
+    <a>Continue with google</a>
+  </div>
+  <div class="register-width register-other">
+    <img src="assets/svg/icons8-facebook.svg" alt=":'(">
+    <a>Continue with Facebook</a>
+  </div>
+
+  <p id="register-or" class="register-width">or</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label class="custom-field">
+      <input type="text" formControlName="email" placeholder=" " [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+      <span class="placeholder">Email</span>
+      <span class="border"></span>
+    </label>
+
+  </form>
+
+  <p>Already registered? <a [routerLink]="['/auth/login']">Login</a></p>
+
+</div>

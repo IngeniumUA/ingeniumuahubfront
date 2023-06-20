@@ -1,0 +1,128 @@
+:host {
+  max-width: 100%;
+}
+
+h1 {
+  text-align: center;
+}
+a {
+  text-decoration: none;
+}
+a:link {
+  color: var(--ingenium-blue);
+}
+
+.register-wrapper {
+  min-height: 75vh;
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  border-radius: 25px;
+  background-color: white;
+}
+
+/* Base style */
+.register-width {
+  box-sizing: border-box;
+
+  margin: 0.7vh;
+
+  height: 2.5rem;
+  min-width: 16rem;
+}
+
+/* register via Google or Facebook boxes */
+.register-other {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.register-other a {
+  margin-left: 0.2rem;
+  color: var(--mainblue);
+}
+.register-other img {
+  height: 100%;
+}
+
+/* 'Or */
+#register-or {
+  box-sizing: border-box;
+  padding: 0;
+  width: 16rem;
+
+  color: gray;
+  border-bottom: solid gray 1px;
+
+  text-align: center;
+}
+
+/* Formfields */
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.custom-field {
+  box-sizing: border-box;
+
+  position: relative;
+  font-size: 14px;
+  border-top: 20px solid transparent;
+  margin-bottom: 5px;
+  display: inline-block;
+  --field-padding: 12px;
+
+  border-bottom: solid var(--mainblue) 2px;
+}
+
+.custom-field input {
+  box-sizing: border-box;
+
+  border: none;
+  appearance: none;
+  padding: var(--field-padding);
+  border-radius: 3px;
+  width: 250px;
+  outline: none;
+  font-size: 14px;
+}
+
+/* Placeholder magic */
+.custom-field .placeholder {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: var(--field-padding);
+  width: calc(100%);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  top: 22px;
+  line-height: 100%;
+  transform: translateY(-50%);
+  color: var(--ingenium-grey);
+  transition:
+    top 0.3s ease,
+    color 0.3s ease,
+    font-size 0.3s ease;
+}
+
+.custom-field input.dirty + .placeholder,
+.custom-field input:focus + .placeholder,
+.custom-field input:not(:placeholder-shown) + .placeholder {
+  top: -10px;
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--mainblue);
+}

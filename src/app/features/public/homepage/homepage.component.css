@@ -1,7 +1,26 @@
+/* Main */
 body {
   background-color: var(--mainblue);
 }
 
+/* Sections */
+section {
+  width: 100%;
+
+  background-color: var(--mainblue);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin: 0;
+
+}
+
+.section-center-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* Hero */
 #hero-section {
   height: 80vh;
   width: 100%;
@@ -15,7 +34,7 @@ body {
   display: inline-block;
 }
 
-#hero-section div {
+.blue-fade {
   position: relative;
   z-index: 2;
   height: 100%;
@@ -27,14 +46,14 @@ body {
   opacity: 0.7;
 }
 
-#hero-section section {
+#hero-text {
   bottom: 10vh;
 
   position: absolute;
   z-index: 3;
 }
 
-#hero-section section p {
+#hero-text p {
   box-sizing: border-box;
   width: 100%;
   margin: 0;

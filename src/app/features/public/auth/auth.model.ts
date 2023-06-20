@@ -5,18 +5,20 @@ import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './auth-routing.module';
 
 import { LoginComponent } from "./login/login.component";
-import {RegisterComponent} from "./register/register/register.component";
+import {RegisterPageComponent} from "./register/register/register-page.component";
 import {AuthResetpwComponent} from "./resetpw/auth-resetpw.component";
+import {RegisterComponent} from "../../../shared/components/auth/register/register.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AuthRoutingModule,
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        AuthRoutingModule,
+        RegisterComponent,
+    ],
   declarations: [
     LoginComponent,
-    RegisterComponent,
+    RegisterPageComponent,
     AuthResetpwComponent,
   ]
 })

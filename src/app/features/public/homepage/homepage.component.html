@@ -1,9 +1,14 @@
-<div id="hero-section" style="background-image: url('assets/static-images/GalabalAchtergrond2CroppedUpscaledReduced.webp')">
-  <section>
+<section id="hero-section" style="background-image: url('assets/static-images/GalabalAchtergrond2CroppedUpscaledReduced.webp')">
+  <div id="hero-text">
     <p>Faculteitsvereniging</p>
     <p>Toegepaste</p>
     <p>Ingenieurs wetenschappen</p>
-  </section>
-  <div></div>
-</div>
+  </div>
+  <div class="blue-fade"></div>
+</section>
+
+<section class="section-center-content" *ngIf="!this.isLoggedIn">
+  <app-register></app-register>
+</section>
+
 <app-recsys></app-recsys>
