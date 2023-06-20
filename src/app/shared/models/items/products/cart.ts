@@ -1,8 +1,9 @@
-import {IProductItem} from "./products";
+import {IProductGroupInfo, IProductItem} from "./products";
+import {IItem} from "../IItem";
 
 export interface ITransaction {
-  sourceItemName: string
-  productGroupName: string
+  source_item: IItem
+  product_group_info: IProductGroupInfo
   product: IProductItem
   count: number
 }

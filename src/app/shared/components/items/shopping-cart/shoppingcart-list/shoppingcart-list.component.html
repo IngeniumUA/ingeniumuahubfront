@@ -3,7 +3,7 @@
 </section>
 
 <section class="blue-border" *ngFor="let transaction of this.transactions">
-  {{ transaction.sourceItemName }} {{ transaction.productGroupName }} {{ transaction.product.name }} {{transaction.count}}
+  {{ transaction.source_item.name }} {{ transaction.product_group_info.name }} {{ transaction.product.name }} {{transaction.count}}
 </section>
 
 <section class="blue-border blue-section summary-section">
