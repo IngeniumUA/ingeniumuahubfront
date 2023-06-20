@@ -68,7 +68,6 @@ export class CartService {
 
   // Private Abstraction str <=> Interface methods
   private abstractToTransaction(abstract: IAbstractTransaction): ITransaction {
-
     return {
       source_item: this.getSource(abstract.sourceItemName),
       product_group_info: this.getGroup(abstract.sourceItemName, abstract.productGroupName),
@@ -76,7 +75,6 @@ export class CartService {
       count: abstract.count
     }
   }
-
   getSource(source_name: string): IItem {
     const boolArray: boolean[] = this.sourceArray.map((value) => {return value.name === source_name})
     const sourceIndex: number = boolArray.indexOf(true)
@@ -118,6 +116,7 @@ export class CartService {
     const transIndices: number[] = []
     boolMap.forEach((value) => {
       if (value) transIndices.push(index)
+      index += 1
     })
 
     return transIndices.map((transactionIndex) => {
