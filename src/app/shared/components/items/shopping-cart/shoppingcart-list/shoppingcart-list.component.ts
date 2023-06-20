@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
 import {CartService} from "../../../../../core/services/shop/cart/cart.service";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {ITransaction} from "../../../../models/items/products/cart";
 import {ProductComponent} from "../../products/product/product.component";
 import {IProductGroupInfo, IProductItem} from "../../../../models/items/products/products";
 import {IItem} from "../../../../models/items/IItem";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-shoppingcart-list',
@@ -13,6 +14,8 @@ import {IItem} from "../../../../models/items/IItem";
   imports: [
     NgForOf,
     ProductComponent,
+    NgIf,
+    RouterLink,
   ],
   standalone: true
 })

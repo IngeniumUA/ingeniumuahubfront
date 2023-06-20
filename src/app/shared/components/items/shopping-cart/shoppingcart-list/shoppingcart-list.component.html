@@ -3,6 +3,10 @@
 </section>
 
 <!-- Transaction sections  -->
+<section class="blue-border transaction emptycart" *ngIf="this.transactions.length < 1">
+  Shoppingcart is empty! Maybe you're looking for <a [routerLink]="['/event']"> Events </a> or <a [routerLink]="['/shop']"> Shop </a>?
+</section>
+
 <section class="blue-border transaction" *ngFor="let transaction of this.transactions">
   <h3>{{ this.transaction.source_item.name }}</h3>
   <p>{{ this.transaction.product_group_info.name }}</p>
