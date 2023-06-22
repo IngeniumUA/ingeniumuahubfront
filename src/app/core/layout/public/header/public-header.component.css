@@ -96,22 +96,36 @@ nav {
 }
 
 .nav-section-box {
-  text-align: center;
+  box-sizing: border-box;
+  width: 80%;
 
+  margin-left: 10%;
+  margin-right: 10%;
   padding: clamp(0rem, 3vh, 2rem) 1rem 1rem;
+
+  border-bottom: solid 0.5px var(--ingenium-grey-75);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.navbar-login-account {
-  text-decoration: underline;
+.nav-section-box a {
   color: white;
+  text-decoration: none;
   font-size: clamp(0rem, 5vh, 3rem);
+  font-weight: 1;
 }
 
 .lidkaart-section {
+  border: none;
   flex-grow: 1;
+  justify-content: center;
+  align-self: center;
 }
 
-.lidkaart {
+.lidkaart-section a {
   float: top;
 
   background-color: white;
@@ -124,7 +138,7 @@ nav {
   border: 5px solid white;
   border-radius: 25px;
 
-  padding: 0.1rem 0.5rem;
+  padding: 0.1rem 1rem;
 }
 
 /* Hover */

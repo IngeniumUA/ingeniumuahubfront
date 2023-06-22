@@ -11,7 +11,6 @@ section {
   padding-top: 1rem;
   padding-bottom: 1rem;
   margin: 0;
-
 }
 
 .section-center-content {
@@ -43,7 +42,7 @@ section {
   margin: 0;
 
   background-color: var(--mainblue);
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 #hero-text {
@@ -61,6 +60,6 @@ section {
 
   color: white;
   font-weight: bold;
-  font-size: clamp(0rem, 7vw, 3rem);
-  line-height: clamp(0rem, 7vw, 3rem);
+  font-size: clamp(0rem, 10vw, 4rem);
+  line-height: clamp(0rem, 10vw, 4rem);
 }

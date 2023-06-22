@@ -7,16 +7,20 @@
     <ng-template [ngTemplateOutlet]="NavbarMobileTemplate" ></ng-template>
   </div>
 
-  <div class="nav-section nav-section-box"><a class="logotekst" [routerLink]="['/info']">Info</a></div>
-  <div class="nav-section nav-section-box"><a class="logotekst" [routerLink]="['/event']">Events</a></div>
-  <div class="nav-section nav-section-box"><a class="logotekst" [routerLink]="['/shop']">Shop</a></div>
-  <div class="nav-section nav-section-box"><a class="logotekst" [routerLink]="['/cloud']">Cloud</a></div>
+  <div class="nav-section nav-section-box"><a [routerLink]="['/info']">Info</a></div>
+  <div class="nav-section nav-section-box"><a [routerLink]="['/event']">Events</a></div>
+  <div class="nav-section nav-section-box"><a [routerLink]="['/shop']">Shop</a></div>
+  <div class="nav-section nav-section-box"><a [routerLink]="['/cloud']">Cloud</a></div>
 
   <ng-container *ngIf="!this.isAuth">
-    <a class="nav-section nav-section-box navbar-login-account" [routerLink]="['/auth/login']">Login</a>
+    <div class="nav-section nav-section-box navbar-login-account">
+      <a class="navbar-login-account" [routerLink]="['/auth/login']">Login</a>
+    </div>
   </ng-container>
   <ng-container *ngIf="this.isAuth">
-    <a class="nav-section nav-section-box navbar-login-account" [routerLink]="['/account']">Account</a>
+    <div class="nav-section nav-section-box navbar-login-account">
+      <a class="navbar-login-account" [routerLink]="['/account']">Account</a>
+    </div>
   </ng-container>
 
   <div class="nav-section nav-section-box lidkaart-section">
