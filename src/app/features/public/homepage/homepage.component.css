@@ -48,6 +48,8 @@ section {
 #hero-text {
   position: absolute;
   z-index: 3;
+
+  bottom: 2rem;
 }
 
 #hero-text p {
