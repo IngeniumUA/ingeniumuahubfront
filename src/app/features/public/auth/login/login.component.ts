@@ -36,7 +36,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     // Check if valid guardclause
-    if (this.form.invalid) {return;}
+    if (this.form.invalid) {
+      console.log("Foutje")
+      return;
+    }
 
     this.loading = true;
     this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).pipe(
@@ -47,6 +50,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl(returnUrl);
         },
         error: error => {
+          this.loading = false;
           console.log(error);
         }
     })

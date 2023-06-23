@@ -63,6 +63,10 @@ form {
   justify-content: center;
 }
 
+.is-invalid {
+  color: red;
+}
+
 .custom-field {
   box-sizing: border-box;
 

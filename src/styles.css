@@ -22,7 +22,7 @@ body {
   color: white;
 }
 
-.hub-bigbutton:active, hub-bigbutton:disabled {
+.hub-bigbutton:disabled {
   background-color: var(--ingenium-grey);
-  transition: background-color 0.1s ease-in;
+  /*transition: background-color 0.1s ease-in;*/
 }

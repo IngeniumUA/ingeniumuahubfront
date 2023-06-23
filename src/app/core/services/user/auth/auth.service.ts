@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {HubAuthData} from "../../../../shared/models/user";
@@ -39,6 +39,10 @@ export class AuthService {
 
         this.userSubject.next(user); // Set user observable to user?
         return user;
+      }),
+      catchError((error) => {
+        console.log(error)
+        return throwError(() => error);
       })
     )
   }
