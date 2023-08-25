@@ -9,6 +9,10 @@ import {CloudComponent} from "./features/public/cloud/cloud.component";
 import {authGuard} from "./core/guards/auth/auth.guard";
 
 const routes: Routes = [
+  {
+    path: '',
+    component: HomepageComponent,
+  },
   {path: '',
   component: PublicRoutingComponent,
   children: [

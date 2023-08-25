@@ -1,6 +1,8 @@
 :root {
-  --mainblue: rgb(10, 31, 68);
-  --mainblue-90: rgba(10, 31, 68, 0.9);
+  --mainblue: rgb(0, 5, 61); /*rgb(10, 31, 68);*/
+  --mainblue-90: rgba(0, 5, 61, 0.9); /*rgba(10, 31, 68, 0.9);*/
+
+  --secondblue: #1f2980;
 
   --ingenium-blue: #1f2980;
   --ingenium-grey: #d4dbe9;
