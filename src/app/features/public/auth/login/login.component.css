@@ -1,125 +1,48 @@
-h1 {
-  text-align: center;
-}
-a {
-  text-decoration: none;
-}
-a:link {
-  color: var(--ingenium-blue);
-}
-
-.login-wrapper {
-  min-height: 85vh;
-  width: 100%;
+.login-page {
+  margin-top: 15vh;
+  min-height: 80vh;
 
   display: flex;
   flex-direction: column;
+
   align-items: center;
+  gap: 1rem;
 }
 
-/* Base style */
-.login-width {
-  box-sizing: border-box;
-
-  margin: 0.7vh;
-
-  height: 2.5rem;
-  width: 18rem;
+.login-page .login-page-section {
+  width: 16.625rem;
+  height: 2.375rem;
 }
 
-/* Login via Google or Facebook boxes */
-.login-other {
+.login-page .login-section-border {
+  border: solid var(--mainblue) 1px;
   border-radius: 5px;
 
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
-.login-other a {
-  margin-left: 0.2rem;
+
+.login-section-border h2, .login-section-border h3 {
   color: var(--mainblue);
-}
-.login-other img {
-  height: 100%;
-}
-
-/* 'Or */
-#login-or {
-  box-sizing: border-box;
-  padding: 0;
-  width: 16rem;
-
-  color: gray;
-  border-bottom: solid gray 1px;
-
   text-align: center;
 }
 
-/* Formfields */
-form {
+.login-page .floating-text {
+  text-align: center;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
-.is-invalid {
-  color: red;
-}
+form {
+  display: flex;
+  flex-direction: column;
 
-.custom-field {
-  box-sizing: border-box;
-
-  position: relative;
-  font-size: 14px;
-  border-top: 20px solid transparent;
-  margin-bottom: 5px;
-  display: inline-block;
-  --field-padding: 12px;
-
-  border-bottom: solid var(--mainblue) 2px;
-}
-
-.custom-field input {
-  box-sizing: border-box;
-
-  border: none;
-  appearance: none;
-  padding: var(--field-padding);
-  border-radius: 3px;
-  width: 250px;
-  outline: none;
-  font-size: 14px;
-}
-
-.custom-field .placeholder {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: var(--field-padding);
-  width: calc(100%);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  top: 22px;
-  line-height: 100%;
-  transform: translateY(-50%);
-  color: var(--ingenium-grey);
-  transition:
-    top 0.3s ease,
-    color 0.3s ease,
-    font-size 0.3s ease;
-}
-
-.custom-field input.dirty + .placeholder,
-.custom-field input:focus + .placeholder,
-.custom-field input:not(:placeholder-shown) + .placeholder {
-  top: -10px;
-  font-size: 10px;
-  font-weight: bold;
-  color: var(--mainblue);
-}
-
-button {
-  margin-top: 4vh;
+  align-items: center;
+  gap: 0.8rem;
 }

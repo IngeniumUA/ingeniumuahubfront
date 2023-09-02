@@ -87,6 +87,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/assets/fonts/font-file.css",
               "src/styles.css"
             ],
             "scripts": []

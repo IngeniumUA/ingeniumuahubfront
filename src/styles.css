@@ -12,19 +12,77 @@
 
 body {
   margin: 0;
-  font-family: D-DIN, sans-serif;}
+  font-family: D-DIN, sans-serif;
+  }
 
-.hub-bigbutton {
-  border-radius: 5px;
-
-  background-color: var(--mainblue);
-  border: none;
-
+/* ---------- */
+/* Headers */
+/* ---------- */
+h2 {
+  line-height: 1.5rem;
+  font-size: 1.5rem;  /* 24px */
   font-weight: bold;
-  color: white;
+
+  margin: 0;
 }
 
-.hub-bigbutton:disabled {
-  background-color: var(--ingenium-grey);
-  /*transition: background-color 0.1s ease-in;*/
+h3 {
+  line-height: 1.3rem;
+  font-size: 1.3rem;  /* 20px */
+  font-weight: lighter;
+  font-family: D-DIN Condensed, sans-serif;
+
+  margin: 0;
+}
+
+a {
+  color: var(--secondblue)
+}
+
+/* Button */
+.hubbutton-blue {
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--mainblue);
+  border-radius: 5px;
+  border: none;
+
+  color: var(--ingenium-grey);
+  transition: color 0.5s ease-out;
+}
+
+.hubbutton-blue:hover {
+  color: white;
+  cursor: pointer;
+}
+
+/* Formfield */
+.hubformfield-white {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  position: relative;
+  display: inline-block;
+
+  border: solid var(--mainblue) 1px;
+  border-radius: 5px;
+}
+
+.hubformfield-white input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  padding-left: 16px;
+
+  border: none;
+  appearance: none;
+  background-color: transparent;
+
+  line-height: 1.3rem;
+  font-size: 1.3rem;  /* 20px */
+  font-weight: lighter;
+  font-family: D-DIN Condensed, sans-serif;
 }

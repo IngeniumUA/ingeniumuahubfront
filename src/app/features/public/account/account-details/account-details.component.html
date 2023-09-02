@@ -16,8 +16,8 @@
 <section>
   <h2>Authentication</h2>
   <ul>
-    <li><p>Access Token: {{ this.userauth?.access }}</p></li>
-    <li><p>Refresh Token: {{ this.userauth?.refresh }}</p></li>
+    <li><p>Access Token: {{ this.userauth?.access_token }}</p></li>
+    <li><p>Refresh Token: {{ this.userauth?.refresh_token }}</p></li>
   </ul>
 
   <button (click)="RefreshAuth()">Refresh Accesstoken</button>

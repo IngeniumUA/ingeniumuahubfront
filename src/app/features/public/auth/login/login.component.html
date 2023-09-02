@@ -1,38 +1,59 @@
-<div class="login-wrapper">
-
-  <h1>Sign in to<br>IngeniumUAHub</h1>
-
-  <div class="login-width login-other">
-    <img src="assets/svg/google-icon.svg" alt=":'(">
-    <a>Continue with google</a>
-  </div>
-  <div class="login-width login-other">
-    <img src="assets/svg/icons8-facebook.svg" alt=":'(">
-    <a>Continue with Facebook</a>
+<section class="login-page">
+  <div class="login-page-section">
+    <h2>Log in to IngeniumUA</h2>
   </div>
 
-  <p id="login-or" class="login-width">or</p>
+  <div class="login-page-section login-section-border">
+    <svg version="1.1" id="Layer_1" x="0px" y="0px" width="30px" height="30px" viewBox="10 5 50 50" style="enable-background:new 0 0 170.1 56.7;" xmlns="http://www.w3.org/2000/svg">
+      <defs></defs>
+      <style type="text/css">
+        .st0{fill:#EA2C38;}
+        .st1{fill:#FFFFFF;}
+      </style>
+      <g>
+        <g>
+          <path class="st0" d="M50.9,49.3H12.6c-1.2,0-2.1-1-2.1-2.1V9c0-1.2,1-2.1,2.1-2.1h38.3C52,6.8,53,7.8,53,9v38.3
+			C53,48.4,52,49.3,50.9,49.3z"></path>
+          <path class="st1" d="M37.7,29.3c0.2,5.1-1.9,8.9-6.6,8.9c-3.6,0-7.3-2.7-7.3-8.1V15.6h-6v14.8c0,5.6,3.7,11.3,12.4,11.3
+			c8.4,0,11.7-6,11.8-11c6.1,0.9,8.9-3.6,8.1-6.7c-1.1,1.2-2.8,2.3-8.1,0.8v-9.2h-4.3v7.7c-8.4-2.7-10.4,4.9-10.4,4.9
+			S31.3,26.1,37.7,29.3"></path>
+        </g>
+      </g>
+    </svg>
+    <h3>Continue with UAntwerpen</h3>
+  </div>
+
+  <div class="login-page-section login-section-border">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-10 -5 45 45" width="30px" height="30px"><defs><path id="A" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></defs><clipPath id="B"><use xlink:href="#A"/></clipPath><g transform="matrix(.727273 0 0 .727273 -.954545 -1.45455)"><path d="M0 37V11l17 13z" clip-path="url(#B)" fill="#fbbc05"/><path d="M0 11l17 13 7-6.1L48 14V0H0z" clip-path="url(#B)" fill="#ea4335"/><path d="M0 37l30-23 7.9 1L48 0v48H0z" clip-path="url(#B)" fill="#34a853"/><path d="M48 48L17 24l-4-3 35-10z" clip-path="url(#B)" fill="#4285f4"/></g></svg>
+    <h3>Continue with Google</h3>
+  </div>
+
+  <div class="login-page-section floating-text">
+    <span>or</span>
+  </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label class="custom-field">
-      <input type="text" formControlName="email" placeholder=" " [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
-      <span class="placeholder">Email</span>
-      <span class="border"></span>
-    </label>
+    <div class="login-page-section">
+      <label class="hubformfield-white">
+        <input type="text" formControlName="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+      </label>
+    </div>
 
-    <label class="custom-field">
-      <input type="password" formControlName="password" placeholder="&nbsp;" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
-      <span class="placeholder">Password</span>
-      <span class="border"></span>
-    </label>
+    <div class="login-page-section">
+      <label class="hubformfield-white">
+        <input type="password" formControlName="password" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
+      </label>
+    </div>
 
-    <button [disabled]="this.loading" class="login-width hub-bigbutton">
-      <span *ngIf="this.loading" class="spinner-border spinner-border-sm me-1"></span>
-      Login
-    </button>
+    <div class="login-page-section">
+      <button class="hubbutton-blue"><h3>Log In</h3></button>
+    </div>
   </form>
 
-  <p><a [routerLink]="['/auth/reset']">Reset password</a> (dumdum)</p>
-  <p>No account? <a [routerLink]="['/auth/register']">Create one</a></p>
-
-</div>
+  <div class="login-page-section floating-text">
+    <span>
+      No account? <a [routerLink]="['/auth/register']">Create one</a> <br>
+      <a [routerLink]="['/auth/reset']">Reset Password</a>
+    </span>
+  </div>
+</section>

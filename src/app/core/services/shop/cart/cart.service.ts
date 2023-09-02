@@ -4,8 +4,8 @@ import {IItem} from "../../../../shared/models/items/IItem";
 import {ITransaction} from "../../../../shared/models/items/products/cart";
 
 interface IAbstractTransaction {
-  sourceItemName: string
-  productGroupName: string
+  sourceItemName: string  // TODO Change to source item_id
+  product_group_name: string
   product: IProductItem
   count: number
 }
@@ -26,8 +26,8 @@ export class CartService {
       if (lhs.sourceItemName < rhs.sourceItemName) return -1
       if (lhs.sourceItemName > rhs.sourceItemName) return 1
 
-      if (lhs.productGroupName < rhs.productGroupName) return -1
-      if (lhs.productGroupName > rhs.productGroupName) return 1
+      if (lhs.product_group_name < rhs.product_group_name) return -1
+      if (lhs.product_group_name > rhs.product_group_name) return 1
 
       return 0
     })
@@ -37,7 +37,7 @@ export class CartService {
       const sourceEquality = value.sourceItemName === source.name
       if (group === undefined) return sourceEquality
 
-      const groupEquality = value.productGroupName === group.name
+      const groupEquality = value.product_group_name === group.name
       if (product === undefined) return sourceEquality && groupEquality
 
       return sourceEquality && groupEquality && (value.product.name === product.name)
@@ -46,7 +46,7 @@ export class CartService {
   }
   private getTransactionIndex(source: IItem, group: IProductGroupInfo, product: IProductItem): number {
     const boolMap = this.transactionArray.map(value => {
-      return value.sourceItemName === source.name && value.productGroupName === group.name && value.product === product
+      return value.sourceItemName === source.name && value.product_group_name === group.name && value.product === product
     })
     return boolMap.indexOf(true);
   }
@@ -70,7 +70,7 @@ export class CartService {
   private abstractToTransaction(abstract: IAbstractTransaction): ITransaction {
     return {
       source_item: this.getSource(abstract.sourceItemName),
-      product_group_info: this.getGroup(abstract.sourceItemName, abstract.productGroupName),
+      product_group_info: this.getGroup(abstract.sourceItemName, abstract.product_group_name),
       product: abstract.product,
       count: abstract.count
     }
@@ -99,27 +99,27 @@ export class CartService {
   }
 
   // Public --------------------------------
-  public getTransactions(source?: IItem, group?: IProductGroupInfo, product?: IProductItem): ITransaction[] {
+  public getCurrentTransactions(source?: IItem, group?: IProductGroupInfo, product?: IProductItem): ITransaction[] {
     const boolMap = this.transactionArray.map((value) => {
       if (source === undefined) return true
 
       const sourceEquality = value.sourceItemName === source.name
       if (group === undefined) return sourceEquality
 
-      const groupEquality = value.productGroupName === group.name
+      const groupEquality = value.product_group_name === group.name
       if (product === undefined) return sourceEquality && groupEquality
 
       return sourceEquality && groupEquality && (value.product.name === product.name)
     })
 
     let index = 0;
-    const transIndices: number[] = []
+    const transactionIndices: number[] = []
     boolMap.forEach((value) => {
-      if (value) transIndices.push(index)
+      if (value) transactionIndices.push(index)
       index += 1
     })
 
-    return transIndices.map((transactionIndex) => {
+    return transactionIndices.map((transactionIndex) => {
       return this.abstractToTransaction(this.transactionArray.at(transactionIndex)!)
     })
   }
@@ -144,7 +144,7 @@ export class CartService {
 
     const transaction: IAbstractTransaction = {
       sourceItemName: source.name,
-      productGroupName: group.name,
+      product_group_name: group.name,
       product: product,
       count: count
     }

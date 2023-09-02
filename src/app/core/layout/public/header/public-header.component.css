@@ -1,62 +1,36 @@
+/* Navbar */
 nav {
-  position: relative;
-  z-index: 110;
-}
-
-.navbar {
-  box-sizing: border-box;
-  margin: 0;
-
-  overflow: hidden;
-  height: 15vh;
+  position: absolute;
+  top: 0;
+  height: 10vh;
   width: 100%;
-
-  background-color: var(--mainblue);
 
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
-
-.navbar-transparent {
-  animation: fadeOutSlightly 0s ease 0.2s normal forwards;
+nav .schild-wrap {
+  width: 8vh;
 }
-
-/* Ingenium Logo Section */
-#nav-logo-section {
-  height: 15vh;
-
-  display: grid;
-  grid-template-columns: 12vh 4fr;
-  grid-template-rows: 1fr 1fr 1fr;
-}
-#logo-section {
-  grid-area: 1 / 1 / 4 / 2;
-}
-#logotekst-ingenium {
-  grid-area: 1 / 2 / 2 / 3;
-}
-#logotekst-ingenieurs {
-  grid-area: 2 / 2 / 3 / 3;
-}
-#logotekst-uantwerpen {
-  grid-area: 3 / 2 / 4 / 3;
-}
-.logotekst {
-  color: white;
-  font-size: clamp(0rem, 3.5vh, 2rem);
-  font-weight: bold;
-  opacity: 1;
-}
-#ingenium-schild {
+nav img {
+  width: 100%;
   height: 100%;
+}
+nav p {
+  color: white;
+  font-weight: bolder;
+  font-size: 1.5rem;
+
+  margin-bottom: 2rem;
 }
 
 /* Menu button*/
-#menubutton-section {
+.navbutton-wrap {
   flex-grow: 1;
+  justify-self: flex-end;
 }
 
-#menu-button {
+.menu-button {
   float: right;
 
   background-color: transparent;
@@ -70,90 +44,86 @@ nav {
   font-size: clamp(0rem, 3vh, 2rem);
 }
 
-/* Navbar vertical */
-#navbar-vertical {
+/* Expanded navbar */
+.expanded-navbar {
   position: fixed;
+  top: 0;
   z-index: 100;
 
-  top: 0;
-  min-height: 85vh;
   width: 100%;
+  height: 100%;
+
+  background-color: rgba(212, 219, 233, 0.95);
 
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
 
-  background-color: var(--mainblue-90);
-  animation: slideDownIntoView 0.2s ease-in 0s 1 normal forwards;
+  animation: fadeIntoView 0.1s ease-in 0s 1 normal forwards;
+  /*animation: slideDownIntoView 0.1s ease-in 0s 1 normal forwards;*/
 }
 
-/* Navbar sections */
-.nav-section {
-  width: 100%;
-
-  box-sizing: border-box;
-  padding: 0.5rem;
+.navbar-text-section {
+  padding: 0;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  text-align: left;
+  border-bottom: solid rgba(0, 5, 61, 0.75) 1px;
 }
 
-.nav-section-box {
-  box-sizing: border-box;
-  width: 80%;
+.navbar-text-section h2 {
+  color: var(--mainblue);
+  margin: 1rem;
+  font-weight: bolder;
+}
 
-  margin-left: 10%;
-  margin-right: 10%;
-  padding: clamp(0rem, 3vh, 2rem) 1rem 1rem;
-
-  border-bottom: solid 0.5px var(--ingenium-grey-75);
+.navbar-login-section {
+  padding: 0;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  text-align: left;
 
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+
+  align-content: center;
 }
 
-.nav-section-box a {
-  color: white;
-  text-decoration: none;
-  font-size: clamp(0rem, 5vh, 3rem);
-  font-weight: 1;
+.navbar-login-section h3 {
+  color: var(--mainblue);
+  text-align: center;
+
+  padding: 0;
+  margin-left: 0.8rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.lidkaart-section {
-  border: none;
+.navbar-login-section .lid-button {
+  border: solid 2px var(--mainblue);
+  color: var(--mainblue);
+  font-weight: bold;
+
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  margin: 1rem;
+  margin-right: 0.8rem;
+  margin-left: 0.5rem;
+}
+
+.connect {
+  position: absolute;
+  bottom: 0.2rem;
+
+  color: var(--mainblue);
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+
+  display: flex;
   flex-grow: 1;
-  justify-content: center;
-  align-self: center;
-}
-
-.lidkaart-section a {
-  float: top;
-
-  background-color: white;
-
-  font-size: clamp(0rem, 5vh, 3rem);
-  font-weight: bolder;
-
-  text-decoration: none;
-  color:  var(--mainblue);
-  border: 5px solid white;
-  border-radius: 25px;
-
-  padding: 0.1rem 1rem;
-}
-
-/* Hover */
-#logo-section:hover {
-  cursor: pointer;
-}
-
-/* Animations */
-@keyframes fadeOutSlightly {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0.1;
-  }
+  flex-direction: row;
+  align-items: center;
 }
 
 @keyframes slideDownIntoView {
@@ -164,12 +134,11 @@ nav {
     transform: translateY(0);
   }
 }
-
-@keyframes slideIntoView {
+@keyframes fadeIntoView {
   from {
-    transform: translateX(-100%);
+    opacity: 0;
   }
   to {
-    transform: translateX(0);
+    opacity: 1;
   }
 }
