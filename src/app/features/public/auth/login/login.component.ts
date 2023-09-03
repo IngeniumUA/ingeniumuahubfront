@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
     })
 
     this.socialAuthService.authState.subscribe((user) => {
+      console.log(user);
       this.authService.google_login(user.idToken).pipe(
         first()).subscribe({
         next: () => {
