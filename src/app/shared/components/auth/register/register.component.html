@@ -1,27 +1,56 @@
-<div class="register-wrapper">
-
-  <h1>Register to<br>IngeniumUAHub</h1>
-
-  <div class="register-width register-other">
-    <img src="assets/svg/google-icon.svg" alt=":'(">
-    <a>Continue with google</a>
-  </div>
-  <div class="register-width register-other">
-    <img src="assets/svg/icons8-facebook.svg" alt=":'(">
-    <a>Continue with Facebook</a>
+<script src="https://accounts.google.com/gsi/client?hl=fr" async defer></script>
+<section class="register-page">
+  <div class="register-page-section">
+    <h2>Log in to IngeniumUA</h2>
   </div>
 
-  <p id="register-or" class="register-width">or</p>
+  <div class="register-page-section register-section-border">
+    <svg version="1.1" id="Layer_1" x="0px" y="0px" width="30px" height="30px" viewBox="10 5 50 50" style="enable-background:new 0 0 170.1 56.7;" xmlns="http://www.w3.org/2000/svg">
+      <defs></defs>
+      <style type="text/css">
+        .st0{fill:#EA2C38;}
+        .st1{fill:#FFFFFF;}
+      </style>
+      <g>
+        <g>
+          <path class="st0" d="M50.9,49.3H12.6c-1.2,0-2.1-1-2.1-2.1V9c0-1.2,1-2.1,2.1-2.1h38.3C52,6.8,53,7.8,53,9v38.3
+			C53,48.4,52,49.3,50.9,49.3z"></path>
+          <path class="st1" d="M37.7,29.3c0.2,5.1-1.9,8.9-6.6,8.9c-3.6,0-7.3-2.7-7.3-8.1V15.6h-6v14.8c0,5.6,3.7,11.3,12.4,11.3
+			c8.4,0,11.7-6,11.8-11c6.1,0.9,8.9-3.6,8.1-6.7c-1.1,1.2-2.8,2.3-8.1,0.8v-9.2h-4.3v7.7c-8.4-2.7-10.4,4.9-10.4,4.9
+			S31.3,26.1,37.7,29.3"></path>
+        </g>
+      </g>
+    </svg>
+    <h3>Continue with UAntwerpen</h3>
+  </div>
+
+  <div class="register-page-section register-section-border">
+    <asl-google-signin-button
+      type='standard' size='medium'
+      width="266px" theme="outline"
+      text='continue_with' shape="rectangular">
+    </asl-google-signin-button>
+  </div>
+
+  <div class="register-page-section floating-text">
+    <span>or</span>
+  </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label class="custom-field">
-      <input type="text" formControlName="email" placeholder=" " [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
-      <span class="placeholder">Email</span>
-      <span class="border"></span>
-    </label>
+    <div class="register-page-section">
+      <label class="hubformfield-white">
+        <input type="text" formControlName="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+      </label>
+    </div>
 
+    <div class="register-page-section">
+      <button class="hubbutton-blue"><h3>Register</h3></button>
+    </div>
   </form>
 
-  <p>Already registered? <a [routerLink]="['/auth/login']">Login</a></p>
-
-</div>
+  <div class="register-page-section floating-text">
+    <span>
+      Already have an account? <a [routerLink]="['/auth/login']">Log in</a> <br>
+    </span>
+  </div>
+</section>

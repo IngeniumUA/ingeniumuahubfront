@@ -20,7 +20,7 @@ import {RouterLink} from "@angular/router";
   standalone: true
 })
 export class ShoppingcartListComponent {
-  transactions: ITransaction[] = this.cartService.getTransactions();
+  transactions: ITransaction[] = this.cartService.getCurrentTransactions();
 
   constructor(private cartService: CartService) {
   }
@@ -28,6 +28,6 @@ export class ShoppingcartListComponent {
   SetProductCount(source: IItem, groupinfo: IProductGroupInfo, product: IProductItem, count: number): void {
     this.cartService.setProductCount(source, groupinfo, product, count);
 
-    if (count < 1) this.transactions = this.cartService.getTransactions();
+    if (count < 1) this.transactions = this.cartService.getCurrentTransactions();
   }
 }

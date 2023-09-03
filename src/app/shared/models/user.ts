@@ -1,6 +1,7 @@
 export interface HubAuthData {
-  access: string;
-  refresh: string;
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
 }
 
 export interface HubAuthGroups {

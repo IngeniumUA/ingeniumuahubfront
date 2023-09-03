@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import {AuthService} from "../../../../core/services/user/auth/auth.service";
+import {SocialAuthService} from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,9 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private socialAuthService: SocialAuthService,
+              ) { }
 
   ngOnInit() {
     if (this.authService.userValue) {
@@ -29,6 +32,22 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.email],
       password: ['', Validators.required]
     })
+
+    this.socialAuthService.authState.subscribe((user) => {
+      this.authService.google_login(user.idToken).pipe(
+        first()).subscribe({
+        next: () => {
+          // get return url from query parameters ( so, ?next='' in the url), else default to home page
+          const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+          this.router.navigateByUrl(returnUrl);
+        },
+        error: error => {
+          this.loading = false;
+          console.log(error);
+        }
+      })
+    }
+    )
   }
 
   // convenience getter for easy access to form fields

@@ -10,7 +10,6 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./account-details.component.css']
 })
 export class AccountDetailsComponent implements OnInit {
-
   constructor(protected authService: AuthService,
               private accountService: HubaccountService,
               private httpClient: HttpClient) {

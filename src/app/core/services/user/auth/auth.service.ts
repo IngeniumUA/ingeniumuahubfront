@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -28,11 +28,42 @@ export class AuthService {
   }
 
   public get accessToken() {
-    return this.userSubject.value?.access;
+    return this.userSubject.value?.access_token;
   }
 
+  public refreshAccessToken() {
+    const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: "bearer" };
+
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/refresh', body)
+      .pipe(
+      map(user => {
+        // store user and jwttoken TODO Move to cookiestorage
+        localStorage.setItem('user', JSON.stringify(user));
+
+        this.userSubject.next(user); // Set user observable to user?
+        return user;
+      })
+    )
+  };
+
+  logout() {
+    const refresh = this.userValue?.refresh_token;
+    this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/user/auth/logout', { refresh })
+
+    localStorage.removeItem('user');
+    this.userSubject.next(null); // Set observable to null
+    this.router.navigate(['home']);
+  }
+
+  // ----------
+  // Login methods
+  // ----------
   login(email: string, password: string) {
-    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'api/user/auth/login', { email, password}).pipe(
+    let formdata = new FormData()
+    formdata.append("username", email)
+    formdata.append("password", password)
+
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/token', formdata).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
@@ -47,26 +78,19 @@ export class AuthService {
     )
   }
 
-  public refreshAccessToken() {
-    const refresh = this.userValue?.refresh;
-
-    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'api/user/auth/refresh', { refresh }).pipe(
+  public google_login(google_auth_token: string) {
+    return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl + "auth/google_login?token=" + google_auth_token).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
 
         this.userSubject.next(user); // Set user observable to user?
         return user;
+      }),
+      catchError((error) => {
+        console.log(error)
+        return throwError(() => error);
       })
     )
-  };
-
-  logout() {
-    const refresh = this.userValue?.refresh;
-    this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/user/auth/logout', { refresh })
-
-    localStorage.removeItem('user');
-    this.userSubject.next(null); // Set observable to null
-    this.router.navigate(['home']);
   }
 }
