@@ -25,6 +25,7 @@ import { PublicFooterComponent } from './core/layout/public/footer/public-footer
 import { CloudComponent } from './features/public/cloud/cloud.component';
 import {AccountNavbarComponent} from "./shared/components/account/account-navbar/account-navbar.component";
 import {RegisterComponent} from "./shared/components/auth/register/register.component";
+import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@abacritt/angularx-social-login";
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import {RegisterComponent} from "./shared/components/auth/register/register.comp
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    SocialLoginModule,
 
     ReactiveFormsModule,
     MatRadioModule,
@@ -59,6 +61,20 @@ import {RegisterComponent} from "./shared/components/auth/register/register.comp
   ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
+        {provide: 'SocialAuthServiceConfig',
+        useValue: {
+          autoLogin: false,
+          providers: [
+            {
+              id: GoogleLoginProvider.PROVIDER_ID,
+              provider: new GoogleLoginProvider('955811433543-a10u2jjmsatmruf7p8cf2d005higk2k5.apps.googleusercontent.com')
+            }
+          ],
+          onError: ({err}: { err: any }) => {
+            console.error(err);
+          }
+        } as unknown as SocialAuthServiceConfig,
+      }
     ],
     exports: [
         EventdatePipe

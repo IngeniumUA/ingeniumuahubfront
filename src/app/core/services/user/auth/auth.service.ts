@@ -31,26 +31,6 @@ export class AuthService {
     return this.userSubject.value?.access_token;
   }
 
-  login(email: string, password: string) {
-    let formdata = new FormData()
-    formdata.append("username", email)
-    formdata.append("password", password)
-
-    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/token', formdata).pipe(
-      map(user => {
-        // store user and jwttoken TODO Move to cookiestorage
-        localStorage.setItem('user', JSON.stringify(user));
-
-        this.userSubject.next(user); // Set user observable to user?
-        return user;
-      }),
-      catchError((error) => {
-        console.log(error)
-        return throwError(() => error);
-      })
-    )
-  }
-
   public refreshAccessToken() {
     const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: "bearer" };
 
@@ -73,5 +53,45 @@ export class AuthService {
     localStorage.removeItem('user');
     this.userSubject.next(null); // Set observable to null
     this.router.navigate(['home']);
+  }
+
+  // ----------
+  // Login methods
+  // ----------
+  login(email: string, password: string) {
+    let formdata = new FormData()
+    formdata.append("username", email)
+    formdata.append("password", password)
+
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/token', formdata).pipe(
+      map(user => {
+        // store user and jwttoken TODO Move to cookiestorage
+        localStorage.setItem('user', JSON.stringify(user));
+
+        this.userSubject.next(user); // Set user observable to user?
+        return user;
+      }),
+      catchError((error) => {
+        console.log(error)
+        return throwError(() => error);
+      })
+    )
+  }
+
+  public google_login(google_auth_token: string) {
+    console.log(google_auth_token)
+    return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl + "auth/google_login?token=" + google_auth_token).pipe(
+      map(user => {
+        // store user and jwttoken TODO Move to cookiestorage
+        localStorage.setItem('user', JSON.stringify(user));
+
+        this.userSubject.next(user); // Set user observable to user?
+        return user;
+      }),
+      catchError((error) => {
+        console.log(error)
+        return throwError(() => error);
+      })
+    ).subscribe()
   }
 }

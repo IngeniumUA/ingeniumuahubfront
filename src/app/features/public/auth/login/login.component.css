@@ -25,6 +25,10 @@
   gap: 0.5rem;
 }
 
+.login-page .login-section-border:hover {
+  cursor: pointer;
+}
+
 .login-section-border h2, .login-section-border h3 {
   color: var(--mainblue);
   text-align: center;

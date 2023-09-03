@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import {AuthService} from "../../../../core/services/user/auth/auth.service";
+import {GoogleLoginProvider, SocialAuthService} from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,9 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private socialAuthService: SocialAuthService,
+              ) { }
 
   ngOnInit() {
     if (this.authService.userValue) {
@@ -28,6 +31,10 @@ export class LoginComponent implements OnInit {
     this.form = this.formBuilder.group({
       email: ['', Validators.email],
       password: ['', Validators.required]
+    })
+
+    this.socialAuthService.authState.subscribe((user) => {
+      this.authService.google_login(user.idToken)
     })
   }
 
