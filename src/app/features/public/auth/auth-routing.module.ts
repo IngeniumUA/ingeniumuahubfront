@@ -3,13 +3,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 import {LoginComponent} from "./login/login.component";
 import {RegisterPageComponent} from "./register/register/register-page.component";
-import {AuthResetpwComponent} from "./resetpw/auth-resetpw.component";
+import {ResetpwComponent} from "./resetpw/resetpw.component";
+import {SetpwComponent} from "./setpw/setpw.component";
 
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterPageComponent},
-  {path: 'reset', component: AuthResetpwComponent},
+  {path: 'reset', component: ResetpwComponent},
+  {path: 'set/:uuid/:pw_settoken', component: SetpwComponent},
 ];
 
 @NgModule({

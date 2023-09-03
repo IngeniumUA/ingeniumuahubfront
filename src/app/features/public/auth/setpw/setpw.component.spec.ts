@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuthResetpwComponent } from './auth-resetpw.component';
+import { SetpwComponent } from './setpw.component';
 
-describe('AuthResetpwComponent', () => {
-  let component: AuthResetpwComponent;
-  let fixture: ComponentFixture<AuthResetpwComponent>;
+describe('SetpwComponent', () => {
+  let component: SetpwComponent;
+  let fixture: ComponentFixture<SetpwComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthResetpwComponent ]
+      declarations: [ SetpwComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AuthResetpwComponent);
+    fixture = TestBed.createComponent(SetpwComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

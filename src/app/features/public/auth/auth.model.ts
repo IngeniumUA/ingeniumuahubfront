@@ -6,7 +6,7 @@ import { AuthRoutingModule } from './auth-routing.module';
 
 import { LoginComponent } from "./login/login.component";
 import {RegisterPageComponent} from "./register/register/register-page.component";
-import {AuthResetpwComponent} from "./resetpw/auth-resetpw.component";
+import {ResetpwComponent} from "./resetpw/resetpw.component";
 import {RegisterComponent} from "../../../shared/components/auth/register/register.component";
 import {GoogleSigninButtonModule} from "@abacritt/angularx-social-login";
 
@@ -21,7 +21,7 @@ import {GoogleSigninButtonModule} from "@abacritt/angularx-social-login";
   declarations: [
     LoginComponent,
     RegisterPageComponent,
-    AuthResetpwComponent,
+    ResetpwComponent,
   ]
 })
 export class AuthModule { }
