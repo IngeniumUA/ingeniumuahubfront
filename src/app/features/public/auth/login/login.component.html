@@ -1,3 +1,4 @@
+<script src="https://accounts.google.com/gsi/client?hl=fr" async defer></script>
 <section class="login-page">
   <div class="login-page-section">
     <h2>Log in to IngeniumUA</h2>
@@ -24,8 +25,11 @@
   </div>
 
   <div class="login-page-section login-section-border">
-    <asl-google-signin-button type='icon' size='medium'></asl-google-signin-button>
-    <h3>Continue with Google</h3>
+    <asl-google-signin-button
+      type='standard' size='medium'
+      width="266px" theme="outline"
+      text='continue_with' shape="rectangular">
+    </asl-google-signin-button>
   </div>
 
   <div class="login-page-section floating-text">

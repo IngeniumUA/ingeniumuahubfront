@@ -79,7 +79,6 @@ export class AuthService {
   }
 
   public google_login(google_auth_token: string) {
-    console.log(google_auth_token)
     return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl + "auth/google_login?token=" + google_auth_token).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
@@ -92,6 +91,6 @@ export class AuthService {
         console.log(error)
         return throwError(() => error);
       })
-    ).subscribe()
+    )
   }
 }
