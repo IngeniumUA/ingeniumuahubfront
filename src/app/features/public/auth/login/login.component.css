@@ -1,5 +1,6 @@
 .login-page {
   margin-top: 15vh;
+  margin-bottom: 10vh;
   min-height: 80vh;
 
   display: flex;
@@ -32,6 +33,7 @@
 .login-section-border h2, .login-section-border h3 {
   color: var(--mainblue);
   text-align: center;
+  text-wrap: none;
 }
 
 .login-page .floating-text {
