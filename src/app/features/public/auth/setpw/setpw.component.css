@@ -1,4 +1,4 @@
-.register-page {
+.setpw-page {
   margin-top: 15vh;
   min-height: 80vh;
 
@@ -9,12 +9,12 @@
   gap: 1rem;
 }
 
-.register-page .register-page-section {
+.setpw-page .setpw-page-section {
   width: 16.625rem;
   height: 2.375rem;
 }
 
-.register-page .register-section-border {
+.setpw-page .setpw-section-border {
   border: solid var(--mainblue) 1px;
   border-radius: 5px;
 
@@ -25,22 +25,13 @@
   gap: 0.5rem;
 }
 
-.register-page .register-section-border:hover {
+.setpw-page .setpw-section-border:hover {
   cursor: pointer;
 }
 
-.register-section-border h2, .register-section-border h3 {
+.setpw-section-border h2, .setpw-section-border h3 {
   color: var(--mainblue);
   text-align: center;
-}
-
-.register-page .floating-text {
-  text-align: center;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 form {
@@ -50,3 +41,4 @@ form {
   align-items: center;
   gap: 0.8rem;
 }
+

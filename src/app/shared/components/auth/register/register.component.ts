@@ -3,6 +3,8 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgClass} from "@angular/common";
 import {AuthService} from "../../../../core/services/user/auth/auth.service";
+import {RegisterService} from "../../../../core/services/user/register/register.service";
+import {GoogleSigninButtonModule} from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-register',
@@ -11,7 +13,8 @@ import {AuthService} from "../../../../core/services/user/auth/auth.service";
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    GoogleSigninButtonModule
   ],
   standalone: true
 })
@@ -23,7 +26,9 @@ export class RegisterComponent {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private registerService: RegisterService,
+  ) { }
 
   ngOnInit() {
     if (this.authService.userValue) {
@@ -43,7 +48,6 @@ export class RegisterComponent {
     if (this.form.invalid) {return;}
 
     this.loading = true;
-    // TODO register
-    console.log("Robbe moet dees nog implementeren xoxo")
+    this.registerService.register(this.form.controls['email'].value).subscribe();
   }
 }

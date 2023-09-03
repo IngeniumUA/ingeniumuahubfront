@@ -26,6 +26,7 @@ import { CloudComponent } from './features/public/cloud/cloud.component';
 import {AccountNavbarComponent} from "./shared/components/account/account-navbar/account-navbar.component";
 import {RegisterComponent} from "./shared/components/auth/register/register.component";
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@abacritt/angularx-social-login";
+import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@
 
         EventdatePipe,
         GroupnamePipe,
+        SetpwComponent,
     ],
   imports: [
     BrowserModule,
