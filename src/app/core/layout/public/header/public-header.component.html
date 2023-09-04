@@ -9,7 +9,9 @@
       </div>
       <div class="navbutton-wrap" (click)="ToggleNavDropdown()">
         <button class="menu-button">
-          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10vh" zoomAndPan="magnify" viewBox="0 0 768 767.999994" height="10vh" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><clipPath id="0e11c6575b"><path d="M 136.132812 186.441406 L 631.882812 186.441406 L 631.882812 516.441406 L 136.132812 516.441406 Z M 136.132812 186.441406 " clip-rule="nonzero"/></clipPath></defs><g clip-path="url(#0e11c6575b)"><path fill="#00053d" d="M 136.296875 516.441406 L 631.722656 516.441406 L 631.722656 461.441406 L 136.296875 461.441406 Z M 136.296875 378.941406 L 631.722656 378.941406 L 631.722656 323.941406 L 136.296875 323.941406 Z M 136.296875 186.441406 L 136.296875 241.441406 L 631.722656 241.441406 L 631.722656 186.441406 Z M 136.296875 186.441406 " fill-opacity="1" fill-rule="nonzero"/></g></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="8vh" viewBox="0 0 50 50">
+            <path fill="rgb(0, 5, 61)" d="M 2 9 L 2 11 L 48 11 L 48 9 L 2 9 z M 2 24 L 2 26 L 48 26 L 48 24 L 2 24 z M 2 39 L 2 41 L 48 41 L 48 39 L 2 39 z"></path>
+          </svg>
         </button>
       </div>
     </nav>
@@ -61,8 +63,19 @@
     </p>
   </div>
   <div class="navbutton-wrap">
-    <button class="menu-button" (click)="ToggleNavDropdown()">
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10vh" zoomAndPan="magnify" viewBox="0 0 768 767.999994" height="10vh" preserveAspectRatio="xMidYMid meet" version="1.0"><defs><clipPath id="0e11c6575b"><path d="M 136.132812 186.441406 L 631.882812 186.441406 L 631.882812 516.441406 L 136.132812 516.441406 Z M 136.132812 186.441406 " clip-rule="nonzero"/></clipPath></defs><g clip-path="url(#0e11c6575b)"><path fill="#ffffff" d="M 136.296875 516.441406 L 631.722656 516.441406 L 631.722656 461.441406 L 136.296875 461.441406 Z M 136.296875 378.941406 L 631.722656 378.941406 L 631.722656 323.941406 L 136.296875 323.941406 Z M 136.296875 186.441406 L 136.296875 241.441406 L 631.722656 241.441406 L 631.722656 186.441406 Z M 136.296875 186.441406 " fill-opacity="1" fill-rule="nonzero"/></g></svg>
-    </button>
+    <ng-container *ngIf="this.light_theme">
+      <button class="menu-button" (click)="ToggleNavDropdown()">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="8vh" viewBox="0 0 50 50">
+          <path fill="var(--mainblue)" d="M 2 9 L 2 11 L 48 11 L 48 9 L 2 9 z M 2 24 L 2 26 L 48 26 L 48 24 L 2 24 z M 2 39 L 2 41 L 48 41 L 48 39 L 2 39 z"></path>
+        </svg>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="!this.light_theme">
+      <button class="menu-button" (click)="ToggleNavDropdown()">
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="8vh" viewBox="0 0 50 50">
+          <path fill="#FFFFFF" d="M 2 9 L 2 11 L 48 11 L 48 9 L 2 9 z M 2 24 L 2 26 L 48 26 L 48 24 L 2 24 z M 2 39 L 2 41 L 48 41 L 48 39 L 2 39 z"></path>
+        </svg>
+      </button>
+    </ng-container>
   </div>
 </nav>
