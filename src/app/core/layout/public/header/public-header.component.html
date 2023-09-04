@@ -29,10 +29,10 @@
     </div>
 
     <div class="navbar-login-section">
-      <ng-container *ngIf="this.isAuth"><h3><a [routerLink]="['account']">Account</a></h3></ng-container>
-      <ng-container *ngIf="! this.isAuth"><h3><a [routerLink]="['../auth/login']">Log In</a></h3></ng-container>
+      <ng-container *ngIf="this.isAuth"><h3><a [routerLink]="['/account']">Account</a></h3></ng-container>
+      <ng-container *ngIf="! this.isAuth"><h3><a [routerLink]="['/auth/login']">Log In</a></h3></ng-container>
       <h3 style="font-weight: lighter;">of</h3>
-      <div class="lid-button"><a [routerLink]="['../info/lid']">WORDT LID</a></div>
+      <div class="lid-button"><a [routerLink]="['/info/lid']">WORDT LID</a></div>
     </div>
 
     <div class="connect">
