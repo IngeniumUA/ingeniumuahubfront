@@ -1,11 +1,11 @@
 <ng-container *ngIf="isNavdropdown">
   <div class="expanded-navbar">
     <nav style="position: static">
-      <div class="schild-wrap">
+      <div class="schild-wrap" (click)="Home()">
         <img src="assets/Ingenium-schild.png">
       </div>
       <div>
-        <p style="color: var(--mainblue)">IngeniumUA</p>
+        <p [ngClass]="this.light_theme ? 'var(--mainblue)': 'white'" (click)="Home()">IngeniumUA</p>
       </div>
       <div class="navbutton-wrap" (click)="ToggleNavDropdown()">
         <button class="menu-button">
@@ -27,10 +27,10 @@
     </div>
 
     <div class="navbar-login-section">
-      <ng-container *ngIf="this.isAuth"><h3>Account</h3></ng-container>
-      <ng-container *ngIf="! this.isAuth"><h3>Log In</h3></ng-container>
+      <ng-container *ngIf="this.isAuth"><h3><a [routerLink]="['account']">Account</a></h3></ng-container>
+      <ng-container *ngIf="! this.isAuth"><h3><a [routerLink]="['../auth/login']">Log In</a></h3></ng-container>
       <h3 style="font-weight: lighter;">of</h3>
-      <div class="lid-button">WORDT LID</div>
+      <div class="lid-button"><a [routerLink]="['../info/lid']">WORDT LID</a></div>
     </div>
 
     <div class="connect">
@@ -45,11 +45,17 @@
 </ng-container>
 
 
-<nav>
-  <div class="schild-wrap">
+<nav
+  [ngClass]="{
+  'nav-pos-absolute': !this.background,
+  'nav-light': this.background && this.light_theme && !this.isNavdropdown,
+  'nav-dark': this.background && !this.light_theme && !this.isNavdropdown,
+  }"
+>
+  <div class="schild-wrap" (click)="Home()">
     <img src="assets/Ingenium-schild.png">
   </div>
-  <div>
+  <div (click)="Home()">
     <p>
       IngeniumUA
     </p>
