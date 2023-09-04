@@ -4,8 +4,8 @@
       <div class="schild-wrap" (click)="Home()">
         <img src="assets/Ingenium-schild.png">
       </div>
-      <div>
-        <p [ngClass]="this.light_theme ? 'var(--mainblue)': 'white'" (click)="Home()">IngeniumUA</p>
+      <div (click)="Home()">
+        <p>IngeniumUA</p>
       </div>
       <div class="navbutton-wrap" (click)="ToggleNavDropdown()">
         <button class="menu-button">
@@ -58,7 +58,7 @@
     <img src="assets/Ingenium-schild.png">
   </div>
   <div (click)="Home()">
-    <p>
+    <p [ngStyle]="{'color': this.light_theme ? 'var(--mainblue)': 'white'}">
       IngeniumUA
     </p>
   </div>

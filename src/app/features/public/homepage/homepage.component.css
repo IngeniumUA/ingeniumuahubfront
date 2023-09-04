@@ -115,6 +115,11 @@ section {
   box-sizing: border-box;
 }
 
+.homepage-card a {
+  color: white;
+  text-decoration: none;
+}
+
 .homepage-card .lid-button {
   border: solid 2px white;
   color: white;
