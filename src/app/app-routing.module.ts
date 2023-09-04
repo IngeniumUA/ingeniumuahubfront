@@ -9,17 +9,12 @@ import {CloudComponent} from "./features/public/cloud/cloud.component";
 import {authGuard} from "./core/guards/auth/auth.guard";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: HomepageComponent,
-  },
+  // Homepages
+  {path: '', component: HomepageComponent,},
+  {path: 'home', component: HomepageComponent}, // For routing to homepage (makes it easier)
   {path: '',
   component: PublicRoutingComponent,
   children: [
-    // Homepage
-    {path: '', component: HomepageComponent },
-    {path: 'home', component: HomepageComponent }, // For routing to homepage (makes it easier)
-
     // Authentication pages
     {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
     // Public event related pages

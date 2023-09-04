@@ -1,7 +1,23 @@
 /* Navbar */
-nav {
+.nav-pos-absolute {
   position: absolute;
   top: 0;
+  background: none;
+}
+.nav-light {
+  background-color: white;
+  color: var(--mainblue);
+}
+.nav-dark {
+  background-color: var(--mainblue);
+  color: white;
+}
+
+nav p {
+  color: white;
+}
+
+nav {
   height: 10vh;
   width: 100%;
 
@@ -17,7 +33,6 @@ nav img {
   height: 100%;
 }
 nav p {
-  color: white;
   font-weight: bolder;
   font-size: 1.5rem;
 
@@ -53,7 +68,7 @@ nav p {
   width: 100%;
   height: 100%;
 
-  background-color: rgba(212, 219, 233, 0.95);
+  background-color: rgba(212, 219, 233, 0.98);
 
   display: flex;
   flex-direction: column;
@@ -62,10 +77,20 @@ nav p {
   /*animation: slideDownIntoView 0.1s ease-in 0s 1 normal forwards;*/
 }
 
+.expanded-navbar a {
+  color: var(--mainblue);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.expanded-navbar p {
+  color: var(--mainblue);
+}
+
 .navbar-text-section {
   padding: 0;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
   text-align: left;
   border-bottom: solid rgba(0, 5, 61, 0.75) 1px;
 }
@@ -84,7 +109,6 @@ nav p {
 
   display: flex;
   flex-direction: row;
-
   align-content: center;
 }
 
@@ -92,8 +116,11 @@ nav p {
   color: var(--mainblue);
   text-align: center;
 
+  flex-grow: 1;
+
   padding: 0;
-  margin-left: 0.8rem;
+  margin-left: 0.7rem;
+  margin-right: 0.8rem;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
@@ -108,7 +135,7 @@ nav p {
   padding-right: 1rem;
 
   margin: 1rem;
-  margin-right: 0.8rem;
+  margin-right: 1rem;
   margin-left: 0.5rem;
 }
 
@@ -122,6 +149,7 @@ nav p {
 
   display: flex;
   flex-grow: 1;
+  gap: 0.2rem;
   flex-direction: row;
   align-items: center;
 }

@@ -7,6 +7,7 @@
   --ingenium-blue: #1f2980;
   --ingenium-grey: #d4dbe9;
   --ingenium-grey-75: rgba(212, 219, 233, 0.75);
+  --ingenium-grey-9: rgba(212, 219, 233, 0.9);
   --ingenium-purple: #4d2b88;
 }
 
@@ -27,8 +28,8 @@ h2 {
 }
 
 h3 {
-  line-height: 1.3rem;
-  font-size: 1.3rem;  /* 20px */
+  line-height: 1.2rem;
+  font-size: 1.2rem;  /* 20px */
   font-weight: lighter;
   font-family: D-DIN Condensed, sans-serif;
 
@@ -81,8 +82,8 @@ a {
   appearance: none;
   background-color: transparent;
 
-  line-height: 1.3rem;
-  font-size: 1.3rem;  /* 20px */
+  line-height: 1.1rem;
+  font-size: 1.1rem;  /* 20px */
   font-weight: lighter;
   font-family: D-DIN Condensed, sans-serif;
 }
