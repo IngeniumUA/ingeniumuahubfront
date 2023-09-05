@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;
+  form_error: string | null = null;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -22,7 +23,6 @@ export class LoginComponent implements OnInit {
               private authService: AuthService,
               private socialAuthService: SocialAuthService,
               ) { }
-
   ngOnInit() {
     if (this.authService.userValue) {
       this.router.navigate(['home'])
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
         },
         error: error => {
           this.loading = false;
-          console.log(error);
+          this.handleFormError(error);
         }
       })
     }
@@ -56,7 +56,8 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      console.log("Foutje")
+      const error: Error = Error("Wrong email or password");
+      this.handleFormError(error);
       return;
     }
 
@@ -70,8 +71,18 @@ export class LoginComponent implements OnInit {
         },
         error: error => {
           this.loading = false;
-          console.log(error);
+          this.handleFormError(error);
         }
     })
+  }
+
+  loginUAntwerp() {
+    const error: Error = Error("Da zou mooi zijn ofni");
+    this.handleFormError(error);
+    return;
+  }
+
+  handleFormError(err: Error) {
+    this.form_error = err.message;
   }
 }

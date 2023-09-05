@@ -115,7 +115,6 @@ nav p {
 .navbar-login-section h3 {
   color: var(--mainblue);
   text-align: center;
-
   flex-grow: 1;
 
   padding: 0;
@@ -131,8 +130,8 @@ nav p {
   font-weight: bold;
 
   padding: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
 
   margin: 1rem;
   margin-right: 1rem;

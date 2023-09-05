@@ -40,6 +40,10 @@ a {
   color: var(--secondblue)
 }
 
+span {
+  color: var(--mainblue)
+}
+
 /* Button */
 .hubbutton-blue {
   width: 100%;
@@ -86,4 +90,10 @@ a {
   font-size: 1.1rem;  /* 20px */
   font-weight: lighter;
   font-family: D-DIN Condensed, sans-serif;
+}
+
+.error-message {
+  color: #FF5000;
+  font-weight: bold;
+  font-family: D-DIN Condensed, D-DIN, sans-serif;
 }
