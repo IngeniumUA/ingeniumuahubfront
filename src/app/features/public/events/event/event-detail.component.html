@@ -1,30 +1,57 @@
+<app-layout-public-header [light_theme]="true"></app-layout-public-header>
+
+<section class="event-banner">
+  <img src="assets/images/PitchDEME.png">
+</section>
+
+<section class="categorie-section" [ngStyle]="{'background-color': this.primaryColorFull}">
+  <div class="categorie-button"
+       [ngStyle]="{'background-color': this.primaryColorFull}">
+    <h4>Tickets</h4></div>
+  <div class="categorie-button"><h4>Extra's</h4></div>
+</section>
+
+<section class="title-info-section">
+  <h3>Deme Middagpitch</h3>
+</section>
+
+<section class="product-section">
+
+</section>
+
+<section class="order-section">
+  <button class="hubbutton-blue">
+    <h3>Log In</h3>
+  </button>
+</section>
+
+<!--
 <div *ngIf="(this.event$ | async) as event else loading; "
      id="hoe-fix-ik-dit"
      [ngStyle]="{'background': this.primaryColor90 }">
-  <br> <!-- Somehow werkt de background bovenaan ni zonder deze br, niet verwijderen -->
-
+  <br> !-- Somehow werkt de background bovenaan ni zonder deze br, niet verwijderen --
 
   <div class="event-detail-card">
-    <!-- Small message on top of the card -->
+    !-- Small message on top of the card --
     <section [ngStyle]="{'background': this.primaryColor90 }">
       <a id="event-detail-poweredbyingeniumuahub">Powered By IngeniumUAHub</a>
     </section>
 
-    <ng-container *ngIf="(this.isMobile$ | async)"> <!-- Mobile Version -->
-    <!-- Image -->
+    <ng-container *ngIf="(this.isMobile$ | async)"> !-- Mobile Version --
+    !-- Image --
     <section class="event-detail-image-card">
       <img src="{{ event.image_square }}" alt="Foto hier :(">
     </section>
     </ng-container>
 
-    <ng-container *ngIf="!(this.isMobile$ | async)"> <!-- Desktop Version -->
-    <!-- Image -->
+    <ng-container *ngIf="!(this.isMobile$ | async)"> !-- Desktop Version --
+    !-- Image --
     <section class="event-detail-image-card image-50">
       <img src="{{ event.image_landscape }}" alt="Foto hier :(">
     </section>
     </ng-container>
 
-    <!-- Eventdetails -->
+    !-- Eventdetails --
     <section [ngStyle]="{'color': this.primaryColorFull }" class="event-detail-info-section">
       <h2>{{ event.item.name }}</h2>
     </section>
@@ -42,16 +69,16 @@
       <div class="event-detail-info">{{ event.location }}</div>
     </section>
 
-    <!-- Products section TODO Place this in separate component-->
+    !-- Products section TODO Place this in separate component--
     <app-producttable [primaryColorFull]="this.primaryColorFull" [item]="event.item"></app-producttable>
 
-    <!-- Description -->
+    !-- Description --
     <section id="event-detail-description">
       <p>{{ event.description }}</p>
     </section>
   </div>
 
-  <br> <!-- Somehow werkt de background onderaan ni zonder deze br, niet verwijderen -->
+  <br> !-- Somehow werkt de background onderaan ni zonder deze br, niet verwijderen --
 </div>
 
 <ng-template #loading>
@@ -60,3 +87,4 @@
   </div>
   Loading ...
 </ng-template>
+-->

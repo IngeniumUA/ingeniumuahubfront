@@ -21,7 +21,7 @@ export class EventDetailComponent implements OnInit {
   // Event Info and Deco
   event$?: Observable<EventItemI>;
   primaryColor90!: string;
-  primaryColorFull!: string;
+  primaryColorFull: string = "#4fbe37";
   ngOnInit() {
     // Fetch ID
     const id: string | null = this.route.snapshot.paramMap.get('id');
