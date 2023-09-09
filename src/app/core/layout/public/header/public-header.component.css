@@ -39,6 +39,10 @@ nav p {
   margin-bottom: 2rem;
 }
 
+nav .schild-wrap:hover, nav p:hover {
+  cursor: pointer;
+}
+
 /* Menu button*/
 .navbutton-wrap {
   flex-grow: 1;

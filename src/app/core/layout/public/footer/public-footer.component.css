@@ -45,6 +45,9 @@ footer p {
 .footer-schild img {
   box-sizing: border-box;
   width: 100%;
+  height: 100%;
+
+  object-fit: contain;
 }
 
 /* Creators */
