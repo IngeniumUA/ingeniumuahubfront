@@ -1,3 +1,4 @@
+<app-layout-public-header [light_theme]="true"></app-layout-public-header>
 <section [ngClass]="{'mobile': (this.isMobile$ | async)}">
   <div *ngFor="let event of (this.events$ | async)">
   <app-eventpreview [checkMobile]="false" [event]="event"></app-eventpreview>

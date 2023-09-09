@@ -7,6 +7,7 @@ import {RecSysFormComponent} from "./features/recsysform/rec-sys-form.component"
 import {PublicRoutingComponent} from "./features/public/public-routing.component";
 import {CloudComponent} from "./features/public/cloud/cloud.component";
 import {authGuard} from "./core/guards/auth/auth.guard";
+import {EventsComponent} from "./features/public/events/events/events.component";
 
 const routes: Routes = [
   // Homepages
@@ -19,6 +20,7 @@ const routes: Routes = [
     {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
     // Public event related pages
     {path: 'event', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
+    {path: 'events', component: EventsComponent },
 
     // Shop
     {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
