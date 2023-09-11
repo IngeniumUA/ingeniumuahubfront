@@ -1,5 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {IProductGroup, IProductGroupInfo, IProductItem} from "../../../../models/items/products/products";
+import {
+  IProductCategorie,
+  IProductGroup,
+  IProductItem
+} from "../../../../models/items/products/products";
 import {BehaviorSubject, Observable} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {ProductComponent} from "../product/product.component";
@@ -25,9 +29,9 @@ import {IItem} from "../../../../models/items/IItem";
 export class ProducttableComponent implements OnInit {
   @Input() item!: IItem;
   @Input() primaryColorFull: string = "var(--mainblue)";
-  productGroups$!: Observable<IProductGroup[]>;
-  currentProductGroupIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  products$!: Observable<IProductItem[]>;
+  productCategories$!: Observable<IProductCategorie[]>;
+  currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  currentProductGroups!: Observable<IProductGroup[]>;
 
   constructor(private router: Router,
               private productService: ProductsService,
@@ -36,28 +40,27 @@ export class ProducttableComponent implements OnInit {
 
   ngOnInit() {
     // On init select first categorie
-
-    this.productGroups$ = this.productService.getProducts(this.item.id);
-    this.SetProductGroup(0)
+    this.productCategories$ = this.productService.getProducts(this.item.id);
+    this.SetProductCategorie(0)
   }
 
-  SetProductGroup(index: number): void {
-    this.products$ = this.productGroups$.pipe(map((productGroups) => {
-      return productGroups[this.currentProductGroupIndex$.value].products
+  SetProductCategorie(index: number): void {
+    this.currentProductGroups = this.productCategories$.pipe(map((productGroups) => {
+      return productGroups[this.currentProductCategorieIndex$.value].product_groups
     }))
-    this.currentProductGroupIndex$.next(index)
+    this.currentProductCategorieIndex$.next(index)
   }
-  currentGroup$(): Observable<IProductGroupInfo> {
-    return this.productGroups$.pipe(map((productGroups) => {
-      return productGroups[this.currentProductGroupIndex$.value].groupinfo
+  currentCategorie$(): Observable<string> {
+    return this.productCategories$.pipe(map((productGroups) => {
+      return productGroups[this.currentProductCategorieIndex$.value].categorie_name
     }))
   }
 
-  GetCurrentProductCount(groupinfo: IProductGroupInfo, product: IProductItem): number {
-    return this.cartService.getProductCount(this.item, groupinfo, product)
+  GetCurrentProductCount(categorie_name: string, product: IProductItem): number {
+    return this.cartService.getProductCount(this.item, categorie_name, product)
   }
-  SetProductCount(groupinfo: IProductGroupInfo, product: IProductItem, count: number) {
-    this.cartService.setProductCount(this.item, groupinfo, product, count);
+  SetProductCount(categorie_name: string, product: IProductItem, count: number) {
+    this.cartService.setProductCount(this.item, categorie_name, product, count);
   }
 
   RouteToCheckout(): void {

@@ -8,22 +8,35 @@
   <div class="categorie-button"
        [ngStyle]="{'background-color': this.primaryColorFull}">
     <h4>Tickets</h4></div>
-  <div class="categorie-button"><h4>Extra's</h4></div>
+  <div class="categorie-button">
+    <h4>Extra's</h4>
+  </div>
 </section>
 
+<ng-container *ngIf="(this.event$ | async) as event else loading; ">
 <section class="title-info-section">
-  <h3>Deme Middagpitch</h3>
+  <h3>{{ event.item.name }}</h3>
+  <p>{{ event.start_date | date:'E' }} {{ event.start_date | date: 'd' }} om {{ event.start_date | date:'hh:mm' }}</p>
 </section>
 
 <section class="product-section">
-
+  <app-producttable [primaryColorFull]="this.primaryColorFull" [item]="event.item"></app-producttable>
 </section>
+</ng-container>
 
 <section class="order-section">
   <button class="hubbutton-blue">
-    <h3>Log In</h3>
+    <h3>Checkout!</h3>
   </button>
 </section>
+
+
+
+<ng-template #loading>
+  Loading ...
+</ng-template>
+
+
 
 <!--
 <div *ngIf="(this.event$ | async) as event else loading; "
@@ -69,7 +82,7 @@
       <div class="event-detail-info">{{ event.location }}</div>
     </section>
 
-    !-- Products section TODO Place this in separate component--
+    !-- Products section
     <app-producttable [primaryColorFull]="this.primaryColorFull" [item]="event.item"></app-producttable>
 
     !-- Description --

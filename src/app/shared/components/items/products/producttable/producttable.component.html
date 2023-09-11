@@ -1,17 +1,18 @@
 <section id="categories-bar">
-  <ng-container *ngFor="let product of (this.productGroups$ | async); index as i">
-    <h3 (click)="this.SetProductGroup(i)"
-        [ngStyle]="(this.currentProductGroupIndex$ | async) === i ? {'color': this.primaryColorFull} : {'color': 'grey'}">
-      {{ product.groupinfo.name }}</h3>
+  <ng-container *ngFor="let product_categorie of (this.productCategories$ | async); index as i">
+    <h3 (click)="this.SetProductCategorie(i)"
+        [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'color': this.primaryColorFull} : {'color': 'grey'}">
+      {{ product_categorie.categorie_name }}</h3>
   </ng-container>
 </section>
-<section id="products-section" *ngIf="(this.currentGroup$() | async) as group">
-  <ng-container *ngFor="let product of (this.products$ | async); index as i">
-    <app-product [onInitValue]="this.GetCurrentProductCount(group, product)" [product]="product" [primaryColorFull]="this.primaryColorFull"
-                 (countEvent)="this.SetProductCount(group, product, $event)"></app-product>
-  </ng-container>
-</section>
+<section id="products-section" *ngIf="(this.currentCategorie$() | async) as categorie">
+  <ng-container *ngFor="let product_group of (this.currentProductGroups | async); index as i">
 
-<section id="button-section">
-  <button class="hub-bigbutton" (click)="RouteToCheckout()" [ngStyle]="{'background-color': this.primaryColorFull}">Order</button>
+    {{ product_group.group_name }}
+    <ng-container *ngFor="let product of this.product_group.products">
+      <app-product [onInitValue]="this.GetCurrentProductCount(categorie, product)" [product]="product" [primaryColorFull]="this.primaryColorFull"
+                   (countEvent)="this.SetProductCount(categorie, product, $event)"></app-product>
+    </ng-container>
+
+  </ng-container>
 </section>

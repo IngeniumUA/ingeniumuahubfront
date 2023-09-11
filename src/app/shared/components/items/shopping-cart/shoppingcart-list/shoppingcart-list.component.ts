@@ -3,7 +3,7 @@ import {CartService} from "../../../../../core/services/shop/cart/cart.service";
 import {NgForOf, NgIf} from "@angular/common";
 import {ITransaction} from "../../../../models/items/products/cart";
 import {ProductComponent} from "../../products/product/product.component";
-import {IProductGroupInfo, IProductItem} from "../../../../models/items/products/products";
+import {IProductItem} from "../../../../models/items/products/products";
 import {IItem} from "../../../../models/items/IItem";
 import {RouterLink} from "@angular/router";
 
@@ -25,7 +25,7 @@ export class ShoppingcartListComponent {
   constructor(private cartService: CartService) {
   }
 
-  SetProductCount(source: IItem, groupinfo: IProductGroupInfo, product: IProductItem, count: number): void {
+  SetProductCount(source: IItem, groupinfo: string, product: IProductItem, count: number): void {
     this.cartService.setProductCount(source, groupinfo, product, count);
 
     if (count < 1) this.transactions = this.cartService.getCurrentTransactions();

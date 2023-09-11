@@ -36,10 +36,28 @@ img {
   color: #0a1f44;
   font-weight: bolder;
 
-  padding-top: 5px;
+  padding-top: 2.5px;
 }
 /* Title info */
+.title-info-section {
+  box-sizing: border-box;
 
+  display: flex;
+  flex-direction: row;
+
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.title-info-section p {
+  margin: 0;
+  flex-grow: 1;
+
+  text-align: right;
+  font-weight: bolder;
+
+  color: var(--mainblue);
+}
 /* Products */
 
 /* Order button */

@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {EventItemI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
 import {Observable, tap} from "rxjs";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
+import {IProductCategorie} from "../../../../shared/models/items/products/products";
 
 
 @Component({
@@ -21,7 +22,8 @@ export class EventDetailComponent implements OnInit {
   // Event Info and Deco
   event$?: Observable<EventItemI>;
   primaryColor90!: string;
-  primaryColorFull: string = "#4fbe37";
+  primaryColorFull!: string;
+
   ngOnInit() {
     // Fetch ID
     const id: string | null = this.route.snapshot.paramMap.get('id');

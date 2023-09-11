@@ -1,10 +1,11 @@
-export interface IProductGroup {
-  groupinfo: IProductGroupInfo
-  products: IProductItem[];
+export interface IProductCategorie {
+  categorie_name: string,
+  product_groups: IProductGroup[],
 }
 
-export interface IProductGroupInfo {
-  name: string;
+export interface IProductGroup {
+  group_name: string,
+  products: IProductItem[];
 }
 
 export interface IProductItem {
