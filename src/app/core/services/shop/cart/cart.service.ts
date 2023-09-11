@@ -99,6 +99,10 @@ export class CartService {
   }
 
   // Public --------------------------------
+  public getUsedItems(): IItem[] {
+    return this.sourceArray
+  }
+
   public getCurrentTransactions(source?: IItem, group?: string, product?: IProductItem): ITransaction[] {
     const boolMap = this.transactionArray.map((value) => {
       if (source === undefined) return true
