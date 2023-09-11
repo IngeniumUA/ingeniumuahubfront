@@ -20,8 +20,36 @@ const TESTpitch = [
     categorie_name: "Tickets",
     product_groups: [
       {
-        group_name: "Food & Drinks",
-        products: [{'name': "FTI", 'max_count': 1, 'price_eu': 0.0}]
+        group_name: "Leden:",
+        products: [{'name': "FTI", 'max_count': 1, 'price_eu': 8.0}]
+      }
+    ]
+  },
+  {
+    categorie_name: "Food & Drinks",
+    product_groups: [
+      {
+        group_name: "Drinks",
+        products: [
+          {'name': "Cola", 'max_count': 5, 'price_eu': 2.0},
+          {'name': "Fanta", 'max_count': 5, 'price_eu': 2.0},
+        ]
+      },
+      {
+        group_name: "Food",
+        products: [
+          {'name': "Broodje Kaas", 'max_count': 5, 'price_eu': 2.5},
+          {'name': "Broodje Hesp & Kaas", 'max_count': 5, 'price_eu': 3.0},
+        ]
+      },
+    ]
+  },
+  {
+    categorie_name: "Extra's",
+    product_groups: [
+      {
+        group_name: "Hey :)",
+        products: [{'name': "Boop", 'max_count': 1, 'price_eu': 0.0}]
       }
     ]
   },

@@ -7,7 +7,7 @@ import {authGuard} from "../../../core/guards/auth/auth.guard";
 
 const routes: Routes = [
   {path: '', component: ShopHomeComponent },
-  {path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] }
+  {path: 'checkout', component: CheckoutComponent } // , canActivate: [authGuard]
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

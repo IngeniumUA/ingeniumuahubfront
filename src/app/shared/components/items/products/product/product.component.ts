@@ -18,7 +18,8 @@ import {Subject, takeUntil} from "rxjs";
 export class ProductComponent implements OnInit, OnDestroy {
   @Input() product!: IProductItem;
   @Input() onInitValue: number = 0;
-  @Input() primaryColorFull: string = "#0a1f44";
+  @Input() primaryColorFull!: string;
+  @Input() primaryColorHalf!: string;
   @Output() countEvent: EventEmitter<number> = new EventEmitter<number>();
 
   productForm = this.formBuilder.group({
