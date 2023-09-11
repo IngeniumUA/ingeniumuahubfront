@@ -51,13 +51,16 @@ button {
 
 /* Input */
 input {
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+
+  /*
   width: 100%;
-
-  margin-left: 0.2rem;
-  margin-right: 0.2rem;
-
   min-width: 26px;
   min-height: 26px;
+  */
+  height: 1.5rem;
+  min-width: 1.2rem;
 
   border: none;
   text-align: center;
