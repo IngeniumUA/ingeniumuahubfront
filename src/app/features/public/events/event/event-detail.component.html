@@ -1,62 +1,45 @@
-<div *ngIf="(this.event$ | async) as event else loading; "
-     id="hoe-fix-ik-dit"
-     [ngStyle]="{'background': this.primaryColor90 }">
-  <br> <!-- Somehow werkt de background bovenaan ni zonder deze br, niet verwijderen -->
+<app-layout-public-header [light_theme]="true"></app-layout-public-header>
 
+<section class="event-banner">
+  <img src="assets/images/PitchDEME.png">
+</section>
 
-  <div class="event-detail-card">
-    <!-- Small message on top of the card -->
-    <section [ngStyle]="{'background': this.primaryColor90 }">
-      <a id="event-detail-poweredbyingeniumuahub">Powered By IngeniumUAHub</a>
-    </section>
-
-    <ng-container *ngIf="(this.isMobile$ | async)"> <!-- Mobile Version -->
-    <!-- Image -->
-    <section class="event-detail-image-card">
-      <img src="{{ event.image_square }}" alt="Foto hier :(">
-    </section>
-    </ng-container>
-
-    <ng-container *ngIf="!(this.isMobile$ | async)"> <!-- Desktop Version -->
-    <!-- Image -->
-    <section class="event-detail-image-card image-50">
-      <img src="{{ event.image_landscape }}" alt="Foto hier :(">
-    </section>
-    </ng-container>
-
-    <!-- Eventdetails -->
-    <section [ngStyle]="{'color': this.primaryColorFull }" class="event-detail-info-section">
-      <h2>{{ event.item.name }}</h2>
-    </section>
-
-    <section class="event-detail-info-section">
-      <div class="svg-logo-card">
-        <img src="assets/svg/date.svg" alt=":(" class="svg-logo">
-      </div>
-      <div class="event-detail-info">{{ event.start_date | date:'E' }} {{ event.start_date | date }} om {{ event.start_date | date:'hh:mm' }}</div>
-    </section>
-    <section class="event-detail-info-section">
-      <div class="svg-logo-card">
-        <img src="assets/svg/location.svg" alt=":(" class="svg-logo">
-      </div>
-      <div class="event-detail-info">{{ event.location }}</div>
-    </section>
-
-    <!-- Products section TODO Place this in separate component-->
-    <app-producttable [primaryColorFull]="this.primaryColorFull" [item]="event.item"></app-producttable>
-
-    <!-- Description -->
-    <section id="event-detail-description">
-      <p>{{ event.description }}</p>
-    </section>
+<section class="categorie-section" [ngStyle]="{'background-color': this.primaryColorFull}">
+  <div class="categorie-button"
+       *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
+       (click)="this.SetProductCategorie(i)"
+       [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': this.primaryColorFull}"
+  >
+    <h4>{{ product_categorie.categorie_name }}</h4>
   </div>
+</section>
 
-  <br> <!-- Somehow werkt de background onderaan ni zonder deze br, niet verwijderen -->
-</div>
+<ng-container *ngIf="(this.event$ | async) as event else loading; ">
+<section class="title-info-section">
+  <h3>{{ event.item.name }}</h3>
+  <p>{{ event.start_date | date:'E' }} {{ event.start_date | date: 'd' }} om {{ event.start_date | date:'hh:mm' }}</p>
+</section>
+
+<section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie">
+  <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
+    <h3>{{ product_group.group_name }}</h3>
+    <div class="products">
+      <ng-container *ngFor="let product of this.product_group.products">
+      <app-product [onInitValue]="this.GetCurrentProductCount(event.item, current_categorie, product)" [product]="product"
+                   [primaryColorFull]="this.primaryColorFull" [primaryColorHalf]="this.primaryColorHalf"
+                   (countEvent)="this.SetProductCount(event.item, current_categorie, product, $event)"></app-product>
+      </ng-container>
+    </div>
+  </div>
+</section>
+</ng-container>
+
+<section class="order-section">
+  <button class="hubbutton-blue" [routerLink]="['/shop/checkout']">
+    <h3>Checkout!</h3>
+  </button>
+</section>
 
 <ng-template #loading>
-  <div class="event-detail-card">
-
-  </div>
   Loading ...
 </ng-template>

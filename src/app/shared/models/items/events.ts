@@ -1,6 +1,5 @@
 import {IItem} from "./IItem";
 export interface EventItemI {
-
   item: IItem;
   start_date: string;
   end_date: string;

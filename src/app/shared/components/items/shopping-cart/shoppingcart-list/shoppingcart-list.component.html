@@ -1,22 +1,25 @@
-<section class="blue-section" id="header-section">
-  <h1>Cart</h1><div><img src="assets/svg/account-navbar/white/ShoppingCartIcon.svg" alt=":("></div>
+<!-- Transaction sections  -->
+<section>
+  <h1>Mijn winkelmandje</h1>
 </section>
 
-<!-- Transaction sections  -->
 <section class="blue-border transaction emptycart" *ngIf="this.transactions.length < 1">
   Shoppingcart is empty! Maybe you're looking for <a [routerLink]="['/event']"> Events </a> or <a [routerLink]="['/shop']"> Shop </a>?
 </section>
 
-<section class="blue-border transaction" *ngFor="let transaction of this.transactions">
-  <h3>{{ this.transaction.source_item.name }}</h3>
-  <p>{{ this.transaction.product_group_info.name }}</p>
-  <app-product [onInitValue]="this.transaction.count" [product]="this.transaction.product"
-               (countEvent)="this.SetProductCount(transaction.source_item, transaction.product_group_info, transaction.product, $event)"></app-product>
+<section class="transaction" *ngFor="let item of this.items; index as i">
+  <h3>{{ item.name }}</h3>
+  <ng-container *ngFor="let transaction of this.transactions[i]">
+    <app-product [onInitValue]="this.transaction.count" [product]="this.transaction.product"
+                 [primaryColorFull]="'var(--mainblue)'"
+                 (countEvent)="this.SetProductCount(transaction.source_item, transaction.categorie_name, transaction.product, $event)"></app-product>
+  </ng-container>
+  <p>Back to <a [routerLink]="['/event/' + item.id ]">event</a></p>
 </section>
 
 <!-- Bottom summary -->
-<section class="blue-border blue-section summary-section">
-  <div id="summary-div">
-    <p>€1000 betalen, KUT</p><button class="hub-bigbutton">Betaal</button>
+<section class="summary-section" *ngIf="this.transactions.length > 0">
+  <div>
+    <button class="hubbutton-blue"><h3 [routerLink]="['/shop/pay']">Order</h3></button>
   </div>
 </section>

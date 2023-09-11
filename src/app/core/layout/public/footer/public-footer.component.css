@@ -45,10 +45,14 @@ footer p {
 .footer-schild img {
   box-sizing: border-box;
   width: 100%;
+  height: 100%;
+
+  object-fit: contain;
 }
 
 /* Creators */
 .footer-creators {
+  margin-top: 1.5rem;
   grid-area: 2 / 1 / 3 / 3;
   border-top: solid white 1px;
 }

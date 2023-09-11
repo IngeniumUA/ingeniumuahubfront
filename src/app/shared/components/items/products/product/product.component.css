@@ -1,4 +1,4 @@
-:host {
+div {
   margin: 0;
 
   display: flex;
@@ -6,7 +6,10 @@
   align-items: center;
   justify-content: flex-end;
 
+  border-radius: 8px;
   min-height: 2rem;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
 }
 
 h5 {
@@ -50,8 +53,11 @@ button {
 input {
   width: 100%;
 
-  padding-left: 0.2rem;
-  padding-right: 0.2rem;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+
+  min-width: 26px;
+  min-height: 26px;
 
   border: none;
   text-align: center;
