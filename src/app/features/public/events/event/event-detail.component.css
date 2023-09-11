@@ -1,6 +1,12 @@
+section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 /* Event Image */
 .event-banner {
   width: 100%;
+  margin: 0;
 }
 img {
   height: auto;
@@ -10,6 +16,7 @@ img {
 /* Categorie bar */
 .categorie-section {
   position: relative;
+  margin-top: 0;
   top: -10px;
 
   width: 100%;
@@ -81,6 +88,7 @@ img {
 
 .product-group .products {
   padding-left: 5px;
+  padding-bottom: 0.5rem;
 
   display: flex;
   flex-direction: column;

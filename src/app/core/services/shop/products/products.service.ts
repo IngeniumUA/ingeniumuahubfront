@@ -31,7 +31,7 @@ const TESTpitch = [
       {
         group_name: "Drinks",
         products: [
-          {'name': "Cola", 'max_count': 5, 'price_eu': 2.0},
+          {'name': "Cola", 'max_count': 15, 'price_eu': 2.0},
           {'name': "Fanta", 'max_count': 5, 'price_eu': 2.0},
         ]
       },
