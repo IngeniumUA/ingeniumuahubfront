@@ -16,16 +16,14 @@
   </div>
 </section>
 
-<section class="info-card-section" style="flex-direction: column; align-items: center">
+<section class="info-card-section recsys-section">
   <h1>Volgende Events</h1>
   <div class="upcoming-events">
-    <div class="homepage-event-card" style="background: #c2024d">
-      <div class="image-wrapper"><img src="assets/images/PopUpZSquare.png"></div>
-      <h3>Pop-up Z</h3>
-      <h3>2 Oktober</h3>
-    </div>
+    <ng-container *ngFor="let recsys_item of (this.homePageRec$ | async)">
+      <app-rec-sys-item-preview [recsysItem]="recsys_item"></app-rec-sys-item-preview>
+    </ng-container>
   </div>
-  <h3>Alles weergeven -></h3>
+  <h3 [routerLink]="['/event']">Alles weergeven -></h3>
 </section>
 
 <section class="info-card-section">

@@ -6,7 +6,6 @@ import { EventRoutingModule } from "./event-routing.module";
 import {EventsComponent} from "./events/events.component";
 import {EventDetailComponent} from "./event/event-detail.component";
 import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
-import {EventpreviewComponent} from "../../../shared/components/items/event/eventpreview/eventpreview.component";
 import {PublicHeaderComponent} from "../../../core/layout/public/header/public-header.component";
 
 @NgModule({
@@ -15,7 +14,6 @@ import {PublicHeaderComponent} from "../../../core/layout/public/header/public-h
         ReactiveFormsModule,
         EventRoutingModule,
         ProductComponent,
-        EventpreviewComponent,
         PublicHeaderComponent,
     ],
   declarations: [

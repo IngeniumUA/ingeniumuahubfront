@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, of} from "rxjs";
-import {IProductCategorie, IProductGroup} from "../../../../shared/models/items/products/products";
+import {IProductCategorie} from "../../../../shared/models/items/products/products";
 
 /*
 const TESTpopUpZ: IProductGroup[] = [

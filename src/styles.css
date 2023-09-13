@@ -28,12 +28,14 @@ h2 {
 }
 
 h3 {
+  margin: 0;
+
   line-height: 1.2rem;
   font-size: 1.2rem;  /* 20px */
   font-weight: lighter;
   font-family: D-DIN Condensed, sans-serif;
 
-  margin: 0;
+  color: white;
 }
 
 a {

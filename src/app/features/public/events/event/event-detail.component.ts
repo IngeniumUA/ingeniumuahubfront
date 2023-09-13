@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {EventItemI} from "../../../../shared/models/items/events";
+import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
 import {BehaviorSubject, Observable, tap} from "rxjs";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
@@ -26,7 +26,7 @@ export class EventDetailComponent implements OnInit {
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
   // Event Info and Deco
-  event$?: Observable<EventItemI>;
+  event$?: Observable<EventItemDetailI>;
   productCategories$!: Observable<IProductCategorie[]>;
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentProductGroups!: Observable<IProductGroup[]>;
@@ -53,11 +53,11 @@ export class EventDetailComponent implements OnInit {
 
   SetEvent(id: string): void {
     this.event$ = this.eventService.getEvent(id).pipe(
-      tap((event: EventItemI) => {
+      tap((event: EventItemDetailI) => {
         const primaryBackground = "rgba("
-          + event.main_color.substring(0, 3) + ", "
-          + event.main_color.substring(3, 6) + ", "
-          + event.main_color.substring(6, 9)
+          + event.color.substring(0, 3) + ", "
+          + event.color.substring(3, 6) + ", "
+          + event.color.substring(6, 9)
 
         this.primaryColorHalf = primaryBackground + ", 0.5)";
         this.primaryColorFull = primaryBackground + ")";
