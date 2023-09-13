@@ -14,7 +14,7 @@
                  [primaryColorFull]="'var(--mainblue)'"
                  (countEvent)="this.SetProductCount(transaction.source_item, transaction.categorie_name, transaction.product, $event)"></app-product>
   </ng-container>
-  <p>Back to <a [routerLink]="['/event/' + item.id ]">event</a></p>
+  <p>Back to <a [routerLink]="['/event/' + item.uuid ]">event</a></p>
 </section>
 
 <!-- Bottom summary -->

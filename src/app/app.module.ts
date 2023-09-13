@@ -15,8 +15,6 @@ import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
 
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
-import { EventpreviewComponent } from './shared/components/items/event/eventpreview/eventpreview.component';
-import { RecSysComponent } from "./shared/components/items/recsys/recsys/rec-sys.component";
 import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
 import {GroupnamePipe} from "./shared/pipes/account/groupname.pipe";
 
@@ -27,6 +25,8 @@ import {AccountNavbarComponent} from "./shared/components/account/account-navbar
 import {RegisterComponent} from "./shared/components/auth/register/register.component";
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@abacritt/angularx-social-login";
 import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
+import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
+import { ColordbrgbaPipe } from './shared/pipes/item/colorpipe.pipe';
 
 @NgModule({
     declarations: [
@@ -34,8 +34,6 @@ import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
         HomepageComponent,
         NotfoundpageComponent,
         RecSysFormComponent,
-
-        RecSysComponent,
 
         PublicRoutingComponent,
         CloudComponent,
@@ -58,8 +56,8 @@ import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
     MatRadioModule,
     MatButtonModule,
     AccountNavbarComponent,
-    EventpreviewComponent,
     RegisterComponent,
+    RecSysItemPreviewComponent,
   ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
@@ -78,9 +76,9 @@ import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
         } as unknown as SocialAuthServiceConfig,
       }
     ],
-    exports: [
-        EventdatePipe
-    ],
+  exports: [
+    EventdatePipe,
+  ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

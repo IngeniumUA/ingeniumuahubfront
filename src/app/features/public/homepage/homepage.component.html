@@ -8,6 +8,8 @@
     <h3>Faculteitsvereniging</h3>
   </div>
 </section>
+
+<!-- Leading infocard -->
 <section class="info-card-section">
   <div class="homepage-card">
     <div class="lid-button" [routerLink]="['/info/lid']">WORDT LID</div>
@@ -16,18 +18,18 @@
   </div>
 </section>
 
-<section class="info-card-section" style="flex-direction: column; align-items: center">
+<!-- Upcoming events -->
+<section class="info-card-section recsys-section">
   <h1>Volgende Events</h1>
   <div class="upcoming-events">
-    <div class="homepage-event-card" style="background: #c2024d">
-      <div class="image-wrapper"><img src="assets/images/PopUpZSquare.png"></div>
-      <h3>Pop-up Z</h3>
-      <h3>2 Oktober</h3>
-    </div>
+    <ng-container *ngFor="let recsys_item of (this.homePageRec$ | async)">
+      <app-rec-sys-item-preview [recsysItem]="recsys_item"></app-rec-sys-item-preview>
+    </ng-container>
   </div>
-  <h3>Alles weergeven -></h3>
+  <h2 [routerLink]="['/event']">Alles weergeven -></h2>
 </section>
 
+<!-- Recommendatie TODO: 1 recommendatie voor alle soorten items -->
 <section class="info-card-section">
   <div class="homepage-card" style="background-color: var(--ingenium-grey)">
     <p style="color: var(--mainblue)">"Nog een tekstje, deze keer bijvoorbeeld over de goodiebags en lidkaarten"</p>
@@ -35,8 +37,9 @@
   </div>
 </section>
 
-<section class="info-card-section" style="flex-direction: column; align-items: center; padding-bottom: 0">
-  <h3>Met dank aan onze sponsoren:</h3>
+<!-- Sponsorbalkje -->
+<section class="partnerbalk-section" style="flex-direction: column; align-items: center; padding-bottom: 0">
+  <h2>Met dank aan onze sponsoren:</h2>
   <div class="partnerbalk">
     <div class="partnerlogo-wrapper"><img src="assets/images/UmicoreLogo.png"></div>
     <div class="partnerlogo-wrapper"><img src="assets/images/SparklinkLogo.png"></div>

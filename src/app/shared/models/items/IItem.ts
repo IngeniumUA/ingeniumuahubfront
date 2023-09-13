@@ -1,6 +1,6 @@
 export interface IItem {
-  id: string;
+  uuid: string;
   date_created: string;
   name: string;
-  is_active: boolean;
+  description: string;
 }

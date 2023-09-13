@@ -9,6 +9,7 @@ export interface IProductGroup {
 }
 
 export interface IProductItem {
+  // TODO id: number
   name: string;
   price_eu: number; // TODO Currency field?
   max_count: number;

@@ -1,6 +1,16 @@
-<app-layout-public-header [light_theme]="true"></app-layout-public-header>
+<app-layout-public-header></app-layout-public-header>
+<section>
+    <h1>Aanbevolen</h1>
+    <div class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
+      <ng-container *ngFor="let event of (this.events$ | async)">
+        <app-rec-sys-item-preview [recsysItem]="event"></app-rec-sys-item-preview>
+      </ng-container>
+    </div>
+  </section>
+
 <section [ngClass]="{'mobile': (this.isMobile$ | async)}">
-  <div *ngFor="let event of (this.events$ | async)">
-  <app-eventpreview [checkMobile]="false" [event]="event"></app-eventpreview>
+  <h1>Toekomstig</h1>
+  <div class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
+    Todo
   </div>
 </section>

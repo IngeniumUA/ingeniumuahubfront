@@ -6,18 +6,22 @@ import { EventRoutingModule } from "./event-routing.module";
 import {EventsComponent} from "./events/events.component";
 import {EventDetailComponent} from "./event/event-detail.component";
 import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
-import {EventpreviewComponent} from "../../../shared/components/items/event/eventpreview/eventpreview.component";
 import {PublicHeaderComponent} from "../../../core/layout/public/header/public-header.component";
+import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
+import {
+  RecSysItemPreviewComponent
+} from "../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        EventRoutingModule,
-        ProductComponent,
-        EventpreviewComponent,
-        PublicHeaderComponent,
-    ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    EventRoutingModule,
+    ProductComponent,
+    PublicHeaderComponent,
+    ColordbrgbaPipe,
+    RecSysItemPreviewComponent,
+  ],
   declarations: [
     EventsComponent,
     EventDetailComponent,
