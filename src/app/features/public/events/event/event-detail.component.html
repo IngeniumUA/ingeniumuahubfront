@@ -1,20 +1,20 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
 
+<ng-container *ngIf="(this.event$ | async) as event else loading; ">
 <section class="event-banner">
-  <img src="assets/images/PitchDEME.png" alt="Image not working :(">
+  <img src='{{event.image_landscape}}' alt="Image not working :(">
 </section>
 
-<section class="categorie-section" [ngStyle]="{'background-color': this.primaryColorFull}">
+<section class="categorie-section" [ngStyle]="{'background-color': (event.color | colordbrgba: 1) }">
   <div class="categorie-button"
        *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
        (click)="this.SetProductCategorie(i)"
-       [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': this.primaryColorFull}"
+       [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': (event.color | colordbrgba: 1)}"
   >
     <h4>{{ product_categorie.categorie_name }}</h4>
   </div>
 </section>
 
-<ng-container *ngIf="(this.event$ | async) as event else loading; ">
 <section class="title-info-section">
   <h3>{{ event.item.name }}</h3>
   <p>{{ event.start_date | date:'E' }} {{ event.start_date | date: 'd' }} om {{ event.start_date | date:'hh:mm' }}</p>
@@ -26,7 +26,7 @@
     <div class="products">
       <ng-container *ngFor="let product of this.product_group.products">
       <app-product [onInitValue]="this.GetCurrentProductCount(event.item, current_categorie, product)" [product]="product"
-                   [primaryColorFull]="this.primaryColorFull" [primaryColorHalf]="this.primaryColorHalf"
+                   [primaryColorFull]="(event.color | colordbrgba: 1)" [primaryColorHalf]="(event.color | colordbrgba: 0.5)"
                    (countEvent)="this.SetProductCount(event.item, current_categorie, product, $event)"></app-product>
       </ng-container>
     </div>

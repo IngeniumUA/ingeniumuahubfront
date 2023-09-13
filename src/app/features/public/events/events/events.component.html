@@ -1,5 +1,6 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
 <section [ngClass]="{'mobile': (this.isMobile$ | async)}">
-  <div *ngFor="let event of (this.events$ | async)">
-  </div>
+  <ng-container *ngFor="let event of (this.events$ | async)">
+
+  </ng-container>
 </section>

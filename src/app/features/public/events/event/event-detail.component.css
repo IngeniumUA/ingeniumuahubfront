@@ -73,6 +73,11 @@ img {
 
   color: var(--mainblue);
 }
+
+.title-info-section h3 {
+  color: var(--mainblue);
+  font-weight: bolder;
+}
 /* Products */
 .product-group {
   padding-left: 10px;
@@ -115,6 +120,7 @@ img {
 
 .order-section .hubbutton-blue {
   min-width: 6rem;
+  max-width: 8rem;
   height: 2rem;
   color: white;
 }

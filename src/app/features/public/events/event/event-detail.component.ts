@@ -31,9 +31,6 @@ export class EventDetailComponent implements OnInit {
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentProductGroups!: Observable<IProductGroup[]>;
 
-  primaryColorHalf!: string;
-  primaryColorFull!: string;
-
   ngOnInit() {
     // Fetch ID
     const id: string | null = this.route.snapshot.paramMap.get('id');
@@ -52,17 +49,7 @@ export class EventDetailComponent implements OnInit {
   }
 
   SetEvent(id: string): void {
-    this.event$ = this.eventService.getEvent(id).pipe(
-      tap((event: EventItemDetailI) => {
-        const primaryBackground = "rgba("
-          + event.color.substring(0, 3) + ", "
-          + event.color.substring(3, 6) + ", "
-          + event.color.substring(6, 9)
-
-        this.primaryColorHalf = primaryBackground + ", 0.5)";
-        this.primaryColorFull = primaryBackground + ")";
-      })
-    );
+    this.event$ = this.eventService.getEvent(id)
   }
 
   SetProductCategorie(index: number): void {

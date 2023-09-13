@@ -7,6 +7,7 @@ import {EventsComponent} from "./events/events.component";
 import {EventDetailComponent} from "./event/event-detail.component";
 import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
 import {PublicHeaderComponent} from "../../../core/layout/public/header/public-header.component";
+import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import {PublicHeaderComponent} from "../../../core/layout/public/header/public-h
         EventRoutingModule,
         ProductComponent,
         PublicHeaderComponent,
+        ColordbrgbaPipe,
     ],
   declarations: [
     EventsComponent,

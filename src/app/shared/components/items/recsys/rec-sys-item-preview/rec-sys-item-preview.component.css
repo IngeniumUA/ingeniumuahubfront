@@ -4,11 +4,6 @@
 
   max-height: 22.5rem;
 
-
-  margin-top: clamp(0rem, 2vw, 1rem);
-  margin-left: 20px;
-  margin-right: 20px;
-
   border-radius: 25px;
 
   display: flex;
@@ -17,11 +12,16 @@
   padding-bottom: 1rem;
 }
 
-.card h3 {
+.card h3, .card h2 {
   box-sizing: border-box;
   width: 100%;
   text-align: left;
-  padding-left: 1rem; padding-right: 1rem;
+}
+
+.card h3 {
+  text-align: right;
+  font-size: 15px;
+  line-height: 15px;
 }
 
 .image-wrapper {
