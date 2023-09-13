@@ -1,6 +1,19 @@
 section {
+  box-sizing: border-box;
+  padding: 0.5rem;
+
+  background-color: var(--mainblue);
+
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+}
+
+section h1 {
+  padding-bottom: 1rem;
+}
+
+.event-list {
+  display: flex;
 }
 
 .mobile {

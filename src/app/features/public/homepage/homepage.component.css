@@ -111,8 +111,9 @@ section {
 
 .image-wrapper {
   box-sizing: border-box;
-  padding-left: 1rem; padding-right: 1rem;
+  padding-left: 1rem; padding-right: 1rem; padding-bottom: 1rem;
   width: 100%;
+  overflow: hidden;
 }
 
 .homepage-card img {

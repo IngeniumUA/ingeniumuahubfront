@@ -4,6 +4,7 @@ import {from, Observable, of} from "rxjs";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {IItem} from "../../../../shared/models/items/IItem";
 import {apiEnviroment} from "../../../../../enviroments";
+import {RecSysPreviewI} from "../../../../shared/models/items/recsys_interfaces";
 
 
 const TESTevent = {
@@ -29,8 +30,8 @@ export class EventService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getEvents(): Observable<EventItemDetailI[]> {
-    return this.httpClient.get<EventItemDetailI[]>(apiEnviroment.apiUrl + "event")
+  public getEventsList(): Observable<RecSysPreviewI[]> {
+    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "event/list")
   }
 
   public getEvent(eventId: string): Observable<EventItemDetailI> {

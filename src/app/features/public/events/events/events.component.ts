@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
+import {RecSysPreviewI} from "../../../../shared/models/items/recsys_interfaces";
 
 @Component({
   selector: 'app-events',
@@ -10,7 +11,7 @@ import {LayoutService} from "../../../../core/services/layout/layout.service";
   styleUrls: ['./events.component.css']
 })
 export class EventsComponent {
-  events$: Observable<EventItemDetailI[]> = this.eventService.getEvents();
+  events$: Observable<RecSysPreviewI[]> = this.eventService.getEventsList();
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
   constructor(private eventService: EventService,
               private layoutService: LayoutService) {
