@@ -1,7 +1,7 @@
 <div class="card"
      [routerLink]="[this.recsysItem.follow_through_link]"
      [ngStyle]="{background: (this.recsysItem.color | colordbrgba: 1 )}">
-  <div class="image-wrapper"><img src='{{ this.recsysItem.image_square }}'></div>
+  <div class="image-wrapper"><img src='{{ this.recsysItem.image_square }}' alt="Square Banner image"></div>
   <h3>{{ this.recsysItem.name }}</h3>
   <h3>{{ this.recsysItem.date | date }}</h3>
 </div>
