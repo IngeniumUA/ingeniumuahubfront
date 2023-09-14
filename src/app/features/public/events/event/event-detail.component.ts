@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
-import {BehaviorSubject, Observable, tap} from "rxjs";
+import {BehaviorSubject, Observable, shareReplay, tap} from "rxjs";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
 import {IProductCategorie, IProductGroup, IProductItem} from "../../../../shared/models/items/products/products";
 import {ProductsService} from "../../../../core/services/shop/products/products.service";
@@ -44,7 +44,7 @@ export class EventDetailComponent implements OnInit {
     this.SetEvent(id);
 
     // Setup producttable
-    this.productCategories$ = this.productService.getProducts(id);
+    this.productCategories$ = this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
     this.SetProductCategorie(0)
   }
 
