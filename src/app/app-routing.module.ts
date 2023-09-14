@@ -8,6 +8,7 @@ import {PublicRoutingComponent} from "./features/public/public-routing.component
 import {CloudComponent} from "./features/public/cloud/cloud.component";
 import {authGuard} from "./core/guards/auth/auth.guard";
 import {EventsComponent} from "./features/public/events/events/events.component";
+import {staffGuard} from "./core/guards/staff.guard";
 
 const routes: Routes = [
   // Homepages
@@ -40,19 +41,19 @@ const routes: Routes = [
 
   { path: 'staff',
     loadChildren: () => import('src/app/features/staff/staff.module').then(x => x.StaffModule),
-    canActivate: [authGuard]
+    canActivate: [staffGuard]
   },
 
   //** Webmaster **//
   { path: 'web',
     loadChildren: () => import('src/app/features/webmaster/webmaster.module').then(x => x.WebmasterModule),
-    canActivate: [authGuard]
+    canActivate: [staffGuard]
   },
 
   //** Manager **//
   { path: 'man',
     loadChildren: () => import('src/app/features/manager/manager.module').then(x => x.ManagerModule),
-    canActivate: [authGuard]
+    canActivate: [staffGuard]
   },
 
   // Temporary Recsysform
