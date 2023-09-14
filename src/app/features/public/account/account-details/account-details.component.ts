@@ -3,6 +3,8 @@ import {HubAccountData, HubAuthData, HubAuthGroups} from "../../../../shared/mod
 import {AuthService} from "../../../../core/services/user/auth/auth.service";
 import {HubaccountService} from "../../../../core/services/user/account/hubaccount.service";
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {RolesService, UserRolesI} from "../../../../core/services/user/roles.service";
 
 @Component({
   selector: 'app-user',
@@ -12,23 +14,20 @@ import {HttpClient} from "@angular/common/http";
 export class AccountDetailsComponent implements OnInit {
   constructor(protected authService: AuthService,
               private accountService: HubaccountService,
+              private rolesService: RolesService,
               private httpClient: HttpClient) {
   }
 
-  account?: HubAccountData;
+  account: Observable<HubAccountData> = this.accountService.getAccount();
   userauth?: HubAuthData;
 
-  userRoles?: HubAuthGroups;
+  roles$: Observable<UserRolesI> = this.rolesService.getRoles();
 
   ngOnInit(): void {
-    this.accountService.getAccount().
-    subscribe((data) => {
-      this.account = data;})
-
-  this.authService.user.subscribe((data) => {
-    if (data) {
-      this.userauth = data;}
-  })
+    this.authService.user.subscribe((data) => {
+      if (data) {
+        this.userauth = data;}
+    })
   }
 
   RefreshAuth(): void {
@@ -37,13 +36,5 @@ export class AccountDetailsComponent implements OnInit {
 
   Logout(): void {
     this.authService.logout();
-  }
-
-  GetRoles(): void {
-    this.httpClient.get<any>("https://ingeniumuahub.ew.r.appspot.com/api/user/roles").subscribe(
-      (data) => {
-        this.userRoles = data;
-      }
-    );
   }
 }

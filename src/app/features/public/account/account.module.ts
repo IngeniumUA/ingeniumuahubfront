@@ -4,18 +4,22 @@ import { CommonModule } from '@angular/common';
 import {AccountDetailsComponent} from "./account-details/account-details.component";
 import {AccountRoutingModule} from "./account-routing.module";
 import { AccountComponent } from './account.component';
-import {AccountNavbarComponent} from "../../../shared/components/account/account-navbar/account-navbar.component";
+import {PublicHeaderComponent} from "../../../core/layout/public/header/public-header.component";
+import { CardDetailComponent } from './card/card-detail.component';
+import {CardComponent} from "../../../shared/components/account/card/card.component";
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     AccountRoutingModule,
-    AccountNavbarComponent,
+    PublicHeaderComponent,
+    CardComponent,
   ],
   declarations: [
     AccountDetailsComponent,
     AccountComponent,
+    CardDetailComponent,
   ]
 })
 export class AccountModule { }

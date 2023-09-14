@@ -1,38 +1,40 @@
 <section>
-  Account details hierzo
-
-  <form>
-    Form hierzo
-  </form>
+  <h2>Mijn Ingenium Profiel</h2>
+  <app-card></app-card>
 </section>
 
 <section>
-  <h2>Routing</h2>
+  <h3 class="h-left">Routing</h3>
     <p><a [routerLink]="['/man']">Manager Homepage</a></p>
     <p><a [routerLink]="['/web']">Webmaster Homepage</a></p>
     <p><a [routerLink]="['/staff']">Staff Homepage</a></p>
 </section>
 
 <section>
-  <h2>Authentication</h2>
-  <ul>
-    <li><p>Access Token: {{ this.userauth?.access_token }}</p></li>
-    <li><p>Refresh Token: {{ this.userauth?.refresh_token }}</p></li>
-  </ul>
+  <h3 class="h-left">Authorization</h3>
+  <div *ngIf="(this.roles$ | async) as roles">
+    <p>Staff: {{ roles.is_staff }}</p>
+    <p>Manager: {{ roles.is_manager }}</p>
+  </div>
+</section>
+
+<section class="account-section">
+  <h3 class="h-left">Mijn gegevens</h3>
+
+  <form>
+    <p>Form hierzo</p>
+  </form>
+</section>
+
+<section class="auth-section">
+  <h3 class="h-left">Authentication</h3>
+  <p>Access Token: {{ this.userauth?.access_token }}</p>
+  <p>Refresh Token: {{ this.userauth?.refresh_token }}</p>
 
   <button (click)="RefreshAuth()">Refresh Accesstoken</button>
 </section>
 
-<section>
-  <h2>Authorization</h2>
-  <ng-container *ngIf="this.userRoles">
-    Userroles:
-    {{ this.userRoles.groups }}
-  </ng-container>
-  <button (click)="GetRoles()">Get userroles</button>
-</section>
-
-<section>
+<section class="logout-section">
   <h2>Logout</h2>
-  <button (click)="Logout()">Log out of account</button>
+  <button class="hubbutton-white" (click)="Logout()">Log out of account</button>
 </section>

@@ -21,12 +21,11 @@ import {GroupnamePipe} from "./shared/pipes/account/groupname.pipe";
 import { PublicRoutingComponent } from './features/public/public-routing.component';
 import { PublicFooterComponent } from './core/layout/public/footer/public-footer.component';
 import { CloudComponent } from './features/public/cloud/cloud.component';
-import {AccountNavbarComponent} from "./shared/components/account/account-navbar/account-navbar.component";
 import {RegisterComponent} from "./shared/components/auth/register/register.component";
 import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@abacritt/angularx-social-login";
 import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
 import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
-import { ColordbrgbaPipe } from './shared/pipes/item/colorpipe.pipe';
+import { CardComponent } from './shared/components/account/card/card.component';
 
 @NgModule({
     declarations: [
@@ -51,11 +50,11 @@ import { ColordbrgbaPipe } from './shared/pipes/item/colorpipe.pipe';
     HttpClientModule,
     BrowserAnimationsModule,
     SocialLoginModule,
+    CardComponent,
 
     ReactiveFormsModule,
     MatRadioModule,
     MatButtonModule,
-    AccountNavbarComponent,
     RegisterComponent,
     RecSysItemPreviewComponent,
   ],

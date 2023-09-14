@@ -19,11 +19,32 @@ export class RolesService {
               private httpClient: HttpClient) {
   }
 
-  public get isStaff(): Observable<boolean> {
+  savedRoles: UserRolesI = {is_staff: false, is_manager: false}
+  lastUpdated: Date | null = null
+
+  public setRoles(roles: UserRolesI) {
+    this.savedRoles = roles;
+    this.lastUpdated = new Date()
+  }
+
+  public getRoles(): Observable<UserRolesI> {
+    if (!(this.lastUpdated === null)) {
+
+    }
     return this.httpClient.get<UserRolesI>(apiEnviroment.apiUrl + "roles")
+  }
+
+  public get isStaff(): Observable<boolean> {
+    if (this.lastUpdated != null) {
+      if ((new Date().getMinutes() - this.lastUpdated.getMinutes()) < 5) {
+        return of(this.savedRoles.is_staff)
+      }
+    }
+
+    return this.getRoles()
       .pipe(
         map((value) => {
-          if (value === null) {return false}
+          this.setRoles(value)
           return value.is_staff
     }))
   }
