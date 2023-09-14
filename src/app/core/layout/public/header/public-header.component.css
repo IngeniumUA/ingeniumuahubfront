@@ -157,6 +157,10 @@ nav .schild-wrap:hover, nav p:hover {
   align-items: center;
 }
 
+.connect h3 {
+  color: var(--mainblue);
+}
+
 @keyframes slideDownIntoView {
   from {
     transform: translateY(-100%);
