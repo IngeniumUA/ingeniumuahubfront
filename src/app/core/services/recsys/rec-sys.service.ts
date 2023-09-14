@@ -14,8 +14,4 @@ export class RecSysService {
   public getHomepageSlide(count: number): Observable<RecSysPreviewI[]> {
     return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "rec/homepage?count=" + count.toString())
   }
-
-  public getEventPreview(): Observable<any> {
-    return this.httpClient.get( apiEnviroment.apiUrl + "api/items/recsys/itempreview");
-  }
 }

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable, of} from "rxjs";
 import {IProductCategorie} from "../../../../shared/models/items/products/products";
+import {HttpClient} from "@angular/common/http";
+import {apiEnviroment} from "../../../../../enviroments";
 
 /*
 const TESTpopUpZ: IProductGroup[] = [
@@ -66,15 +68,9 @@ const TESTding = [
 })
 export class ProductsService {
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
   getProducts(itemID: string): Observable<IProductCategorie[]> {
-    if (itemID === "e5b60c84-4b52-4b26-b3aa-124da4275726") {
-      // return of(TESTpopUpZ)
-    }
-    if (itemID === "01719cdb-433f-4875-97c4-85fa09155553") {
-      // return of(TESTpitch)
-    }
-    return of(TESTpitch)
+    return this.httpClient.get<IProductCategorie[]>(apiEnviroment.apiUrl + "products/" + itemID)
   }
 }

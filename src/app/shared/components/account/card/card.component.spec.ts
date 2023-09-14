@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccountNavbarComponent } from './account-navbar.component';
+import { CardComponent } from './card.component';
 
-describe('AccountNavbarComponent', () => {
-  let component: AccountNavbarComponent;
-  let fixture: ComponentFixture<AccountNavbarComponent>;
+describe('CardComponent', () => {
+  let component: CardComponent;
+  let fixture: ComponentFixture<CardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountNavbarComponent ]
+      declarations: [ CardComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AccountNavbarComponent);
+    fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -52,7 +52,8 @@ export class CartService {
   }
 
   private addIfMissing(source: IItem, group: string): void {
-    if (!this.sourceArray.includes(source)) {
+    // Match on item.uuid instead of item because .includes doesn't catch it otherwise
+    if (!this.sourceArray.map((item) => item.uuid).includes(source.uuid)) {
       this.sourceArray.push(source);
       this.groupArray.push([group]);
       return

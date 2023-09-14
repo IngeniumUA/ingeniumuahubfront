@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, Observable, of, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {HubAuthData} from "../../../../shared/models/user";
 import {apiEnviroment} from "../../../../../enviroments";
+import {RolesService} from "../roles.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class AuthService {
   private userSubject: BehaviorSubject<HubAuthData | null>;  // Onthoudt de user, observables subscriben naar dit subject
   public user: Observable<HubAuthData | null>;
   constructor(private router: Router,
-              private httpClient: HttpClient) {
+              private httpClient: HttpClient,
+              private rolesService: RolesService) {
     this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
     this.user = this.userSubject.asObservable();
   }
