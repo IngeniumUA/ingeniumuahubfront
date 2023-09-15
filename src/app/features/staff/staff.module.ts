@@ -4,6 +4,10 @@ import { StaffComponent } from './staff.component';
 import {BehindheaderComponent} from "../../core/layout/behind/behindheader/behindheader.component";
 import {SidenavComponent} from "../../core/layout/behind/sidenav/sidenav.component";
 import {StaffRoutingModule} from "./staff-routing.module";
+import { StaffEventListComponent } from './events/staff-event-list/staff-event-list.component';
+import { StaffEventDetailComponent } from './events/staff-event-detail/staff-event-detail.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-edit.component';
 
 
 
@@ -12,10 +16,15 @@ import {StaffRoutingModule} from "./staff-routing.module";
     CommonModule,
     StaffRoutingModule,
     BehindheaderComponent,
-    SidenavComponent
+    SidenavComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    StaffEventEditComponent
   ],
   declarations: [
-    StaffComponent
+    StaffComponent,
+    StaffEventListComponent,
+    StaffEventDetailComponent
   ],
 })
 export class StaffModule { }

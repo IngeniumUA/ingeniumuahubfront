@@ -1,60 +1,55 @@
-nav {
-  box-sizing: border-box;
-  margin: 0;
-
-  overflow: hidden;
-  height: 15vh;
-  width: 100%;
-
+/* Navbar */
+.nav-pos-absolute {
+  position: absolute;
+  top: 0;
+  background: none;
+}
+.nav-light {
+  background-color: white;
+  color: var(--mainblue);
+}
+.nav-dark {
   background-color: var(--mainblue);
+  color: white;
+}
+
+nav p {
+  color: white;
+}
+
+nav {
+  height: 10vh;
+  width: 100%;
 
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
-
-/* Navbar sections */
-.nav-section {
+nav .schild-wrap {
+  width: 8vh;
+}
+nav img {
   width: 100%;
-
-  box-sizing: border-box;
-  padding: 0.5rem;
-}
-
-/* Ingenium Logo Section */
-#nav-logo-section {
-  height: 15vh;
-
-  display: grid;
-  grid-template-columns: 12vh 4fr;
-  grid-template-rows: 1fr 1fr 1fr;
-}
-#logo-section {
-  grid-area: 1 / 1 / 4 / 2;
-}
-#logotekst-ingenium {
-  grid-area: 1 / 2 / 2 / 3;
-}
-#logotekst-ingenieurs {
-  grid-area: 2 / 2 / 3 / 3;
-}
-#logotekst-uantwerpen {
-  grid-area: 3 / 2 / 4 / 3;
-}
-.logotekst {
-  color: white;
-  font-size: clamp(0rem, 3.5vh, 2rem);
-  opacity: 1;
-}
-#ingenium-schild {
   height: 100%;
+}
+nav p {
+  font-weight: bolder;
+  font-size: 1.5rem;
+
+  margin-bottom: 2rem;
+}
+
+nav .schild-wrap:hover, nav p:hover {
+  cursor: pointer;
 }
 
 /* Menu button*/
-#menubutton-section {
+.navbutton-wrap {
   flex-grow: 1;
+  justify-self: flex-end;
 }
 
-#menu-button {
+.menu-button {
   float: right;
 
   background-color: transparent;
@@ -66,9 +61,4 @@ nav {
 
   color: white;
   font-size: clamp(0rem, 3vh, 2rem);
-}
-
-/* Hover */
-#logo-section:hover {
-  cursor: pointer;
 }
