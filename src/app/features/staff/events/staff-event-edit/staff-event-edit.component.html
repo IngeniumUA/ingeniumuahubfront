@@ -1,0 +1,37 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label class="hubformfield-white">
+    <input type="text" formControlName="name" placeholder="Name"
+           [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+  </label>
+  <label class="hubformfield-white">
+    <input type="text" formControlName="description" placeholder="description"
+           [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"/>
+  </label>
+  <label class="hubformfield-white">
+    <input type="datetime-local" formControlName="start_date" placeholder="start_date"
+           [ngClass]="{ 'is-invalid': submitted && f['start_date'].errors }"/>
+  </label>
+  <label class="hubformfield-white">
+    <input type="datetime-local" formControlName="end_date" placeholder="end_date"
+           [ngClass]="{ 'is-invalid': submitted && f['end_date'].errors }"/>
+  </label>
+  <label class="hubformfield-white">
+    <input type="text" formControlName="location" placeholder="location"
+           [ngClass]="{ 'is-invalid': submitted && f['location'].errors }"/>
+  </label>
+  <label class="hubformfield-white">
+    <input type="text" formControlName="follow_through_link" placeholder="follow_through_link"
+           [ngClass]="{ 'is-invalid': submitted && f['follow_through_link'].errors }"/>
+  </label>
+  <label class="hubformfield-white">
+    <input type="number" formControlName="color" placeholder="color"
+           [ngClass]="{ 'is-invalid': submitted && f['color'].errors }"/>
+  </label>
+  image_landscape
+  image_square
+  <!--
+  <div *ngIf="this.form_error != null">
+    <span class="error-message">{{ this.form_error }}</span>
+  </div>
+  -->
+</form>

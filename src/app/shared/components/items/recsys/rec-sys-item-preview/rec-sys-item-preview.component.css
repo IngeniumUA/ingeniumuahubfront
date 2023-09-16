@@ -11,6 +11,10 @@
   padding-bottom: 1rem;
 }
 
+.card:hover {
+  cursor: pointer;
+}
+
 .card h3, .card h2 {
   box-sizing: border-box;
   width: 100%;
@@ -41,3 +45,12 @@
   color: white;
   text-decoration: none;
 }
+
+.image-landscape {
+  padding-top: 10%;
+  padding-bottom: 10%;
+}
+ h1 {
+   padding-top: 5%;
+   padding-bottom: 15%;
+ }

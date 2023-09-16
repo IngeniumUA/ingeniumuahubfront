@@ -5,6 +5,7 @@ section {
   padding: 1rem;
   padding-top: 2rem;
   background-color: var(--mainblue);
+  border-bottom: solid 1px var(--ingenium-grey);
 
   display: flex;
   flex-direction: column;
@@ -15,9 +16,38 @@ section p {
 }
 
 /* Lidkaart */
+.gold-button {
+  height: 1.75rem;
+  width: 12rem;
+
+  border-radius: 5px;
+  border: none;
+  background: linear-gradient(#CB841C, #FFE76C);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.gold-button h4 {
+  padding: 0;
+  color: var(--mainblue);
+}
 
 /* Account */
-.h-left {
+h2, h3 {
+  width: 100%;
+  text-align: left;
+}
+
+/* Specific */
+.routing-section a {
+  color: white;
+}
+.routing-section p {
+  margin: 10px;
   width: 100%;
   text-align: left;
 }

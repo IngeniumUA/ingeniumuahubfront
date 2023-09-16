@@ -34,6 +34,10 @@ export class EventService {
     return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "event/list")
   }
 
+  public getEvents(): Observable<EventItemDetailI[]> {
+    return this.httpClient.get<EventItemDetailI[]>(apiEnviroment.apiUrl + "staff/event")
+  }
+
   public getEvent(eventId: string): Observable<EventItemDetailI> {
     // return of(TESTevent)
     return this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "event/" + eventId)

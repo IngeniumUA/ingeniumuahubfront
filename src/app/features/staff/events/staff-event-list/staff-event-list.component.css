@@ -1,0 +1,10 @@
+.event-table-card {
+  display: flex;
+  flex-direction: row;
+}
+#image-wrap {
+  height: 3rem;
+}
+.event-table-card img {
+  height: 100%;
+}

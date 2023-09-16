@@ -4,6 +4,10 @@ h1 {
   color: var(--mainblue)
 }
 
+section {
+  padding-bottom: 1rem;
+}
+
 /* */
 .transaction {
   margin-left: 1rem;

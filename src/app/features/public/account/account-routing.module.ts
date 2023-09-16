@@ -3,6 +3,7 @@ import { RouterModule, Routes} from "@angular/router";
 import {AccountDetailsComponent} from "./account-details/account-details.component";
 import {AccountComponent} from "./account.component";
 import {CardDetailComponent} from "./card/card-detail.component";
+import {AccountTransactionsComponent} from "./account-transactions/account-transactions.component";
 
 const routes: Routes = [
   {path: '',
@@ -10,8 +11,8 @@ const routes: Routes = [
     children: [
       {path: '', component: AccountDetailsComponent },
       {path: 'details', component: AccountDetailsComponent},
-      {path: 'card', component: CardDetailComponent}
-      //{path: 'purchases'},
+      {path: 'card', component: CardDetailComponent},
+      {path: 'transactions', component: AccountTransactionsComponent}
     ]
   },
 ];

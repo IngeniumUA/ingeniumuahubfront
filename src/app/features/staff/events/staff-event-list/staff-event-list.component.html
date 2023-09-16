@@ -1,0 +1,8 @@
+<section>
+  <ng-container *ngFor="let event of (this.events$ | async)">
+    <div class="event-table-card">
+      <div id="image-wrap"><img src="{{ event.image_landscape }}" [routerLink]="[event.item.uuid]"></div>
+      <p>{{ event.item.name }}</p>
+    </div>
+  </ng-container>
+</section>
