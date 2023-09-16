@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {RecSysPreviewI} from "../../../../models/items/recsys_interfaces";
-import {DatePipe, NgStyle} from "@angular/common";
+import {DatePipe, NgClass, NgIf, NgStyle} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {ColordbrgbaPipe} from "../../../../pipes/item/colorpipe.pipe";
 
@@ -13,9 +13,18 @@ import {ColordbrgbaPipe} from "../../../../pipes/item/colorpipe.pipe";
     DatePipe,
     NgStyle,
     RouterLink,
-    ColordbrgbaPipe
+    ColordbrgbaPipe,
+    NgIf,
+    NgClass
   ]
 })
-export class RecSysItemPreviewComponent {
+export class RecSysItemPreviewComponent implements OnInit {
     @Input() recsysItem!: RecSysPreviewI;
+    isLandscape!: boolean;
+    image!: string;
+
+    ngOnInit() {
+      this.isLandscape = this.recsysItem.image_square === null
+      this.image = this.isLandscape ? this.recsysItem.image_landscape: this.recsysItem.image_square
+    }
 }

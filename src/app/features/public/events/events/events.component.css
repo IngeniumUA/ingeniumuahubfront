@@ -13,7 +13,10 @@ section h1 {
 }
 
 .event-list {
+  padding: 1rem;
+
   display: flex;
+  gap: 2rem;
 }
 
 .mobile {
