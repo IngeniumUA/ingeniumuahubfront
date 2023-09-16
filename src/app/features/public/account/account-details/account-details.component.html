@@ -1,37 +1,50 @@
 <section>
-  <h2>Mijn Ingenium Profiel</h2>
+  <h3 style="{'color': var(--ingenium-grey)}">Mijn Ingenium Profiel</h3>
   <app-card></app-card>
+  <button class="gold-button" [routerLink]="['transactions']">
+    <h4>Aankopen</h4>
+    <svg width="10%" height="60%" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1.41317,0,0,1.41317,-420.754,-420.754)">
+        <use xlink:href="#_Image1" x="284" y="287" width="169px" height="163px"/>
+    </g>
+      <defs>
+        <image id="_Image1" width="169px" height="163px" xlink:href="data:image/png;base64,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"/>
+    </defs>
+    </svg>
+  </button>
+</section>
+
+<ng-container  *ngIf="(this.roles$ | async) as roles">
+<section class="routing-section" *ngIf="roles.is_staff">
+  <h3>Routing</h3>
+  <p><a [routerLink]="['/man']">Manager Homepage</a></p>
+  <p><a [routerLink]="['/web']">Webmaster Homepage</a></p>
+  <p><a [routerLink]="['/staff']">Staff Homepage</a></p>
 </section>
 
 <section>
-  <h3 class="h-left">Routing</h3>
-    <p><a [routerLink]="['/man']">Manager Homepage</a></p>
-    <p><a [routerLink]="['/web']">Webmaster Homepage</a></p>
-    <p><a [routerLink]="['/staff']">Staff Homepage</a></p>
-</section>
-
-<section>
-  <h3 class="h-left">Authorization</h3>
-  <div *ngIf="(this.roles$ | async) as roles">
+  <h3>Authorization</h3>
+  <div>
     <p>Staff: {{ roles.is_staff }}</p>
     <p>Manager: {{ roles.is_manager }}</p>
   </div>
 </section>
 
-<section class="account-section">
-  <h3 class="h-left">Mijn gegevens</h3>
-
-  <form>
-    <p>Form hierzo</p>
-  </form>
-</section>
-
-<section class="auth-section">
-  <h3 class="h-left">Authentication</h3>
+<section class="auth-section" *ngIf="roles.is_manager">
+  <h3>Authentication</h3>
   <p>Access Token: {{ this.userauth?.access_token }}</p>
   <p>Refresh Token: {{ this.userauth?.refresh_token }}</p>
 
   <button (click)="RefreshAuth()">Refresh Accesstoken</button>
+</section>
+</ng-container>
+
+<section class="account-section">
+  <h3>Mijn gegevens</h3>
+
+  <form>
+    <p>Form hierzo</p>
+  </form>
 </section>
 
 <section class="logout-section">
