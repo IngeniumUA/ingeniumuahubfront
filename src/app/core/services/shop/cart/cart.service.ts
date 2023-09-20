@@ -104,6 +104,10 @@ export class CartService {
     return this.sourceArray
   }
 
+  public hasTransactions(): boolean {
+    return this.transactionArray.length > 0
+  }
+
   public getCurrentTransactions(source?: IItem, group?: string, product?: IProductItem): ITransaction[] {
     const boolMap = this.transactionArray.map((value) => {
       if (source === undefined) return true

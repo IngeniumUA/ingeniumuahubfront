@@ -8,6 +8,9 @@ import {
 } from "../../../shared/components/items/shopping-cart/shoppingcart-list/shoppingcart-list.component";
 import {PublicHeaderComponent} from "../../../core/layout/public/header/public-header.component";
 import { PayComponent } from './pay/pay.component';
+import {NgxStripeModule} from "ngx-stripe";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatFormFieldModule} from "@angular/material/form-field";
 
 
 @NgModule({
@@ -16,11 +19,14 @@ import { PayComponent } from './pay/pay.component';
     CheckoutComponent,
     PayComponent,
   ],
-    imports: [
-        CommonModule,
-        ShopRoutingModule,
-        ShoppingcartListComponent,
-        PublicHeaderComponent,
-    ]
+  imports: [
+    CommonModule,
+    NgxStripeModule.forRoot("pk_live_nJtVFe7oRy6CCy9EEK8OKeFu"),
+    ShopRoutingModule,
+    ShoppingcartListComponent,
+    PublicHeaderComponent,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+  ]
 })
 export class ShopModule { }
