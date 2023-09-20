@@ -9,6 +9,10 @@ const routes: Routes = [
   {path: '', component: InfoComponent },
   {path: 'lid', component: InfoLidComponent},
   {path: 'praesidium', component: PraesidiumInfoComponent}
+  // {path: 'contributors', component: },
+  // {path: 'relations', component: },
+  // {path: 'dopen', component: },
+  // {path: 'cantus', component: },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -65,7 +65,9 @@
     </div>
 
     <div class="login-page-section">
-      <button class="hubbutton-blue" [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
+      <button class="hubbutton-blue"
+              [disabled]="this.loading"
+              [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
         <h3 *ngIf="!this.loading">Log In</h3>
         <h3 *ngIf="this.loading">Logging in ...</h3>
       </button>
