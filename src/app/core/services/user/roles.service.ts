@@ -1,15 +1,11 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable, of, shareReplay} from "rxjs";
-import {HubAuthData} from "../../../shared/models/user";
+import {HubAuthData, HubUserRolesI} from "../../../shared/models/user";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {apiEnviroment} from "../../../../enviroments";
 
-export interface UserRolesI {
-  is_manager: boolean
-  is_staff: boolean
-}
 
 @Injectable({
   providedIn: 'root'
@@ -19,19 +15,19 @@ export class RolesService {
               private httpClient: HttpClient) {
   }
 
-  savedRoles: UserRolesI = {is_staff: false, is_manager: false}
+  savedRoles: HubUserRolesI = {is_staff: false, is_manager: false, is_lid: false}
   lastUpdated: Date | null = null
 
-  public setRoles(roles: UserRolesI) {
+  public setRoles(roles: HubUserRolesI) {
     this.savedRoles = roles;
     this.lastUpdated = new Date()
   }
 
-  public getRoles(): Observable<UserRolesI> {
+  public getRoles(): Observable<HubUserRolesI> {
     if (!(this.lastUpdated === null)) {
 
     }
-    return this.httpClient.get<UserRolesI>(apiEnviroment.apiUrl + "roles").pipe(shareReplay())
+    return this.httpClient.get<HubUserRolesI>(apiEnviroment.apiUrl + "user/account/roles").pipe(shareReplay())
   }
 
   public get isStaff(): Observable<boolean> {
@@ -41,6 +37,15 @@ export class RolesService {
           this.setRoles(value)
           return value.is_staff
     }))
+  }
+
+  public get isLid(): Observable<boolean> {
+    return this.getRoles()
+      .pipe(
+        map((value) => {
+          this.setRoles(value)
+          return value.is_lid
+        }))
   }
 
   public get isWebmaster(): Observable<boolean> {

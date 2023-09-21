@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, of} from "rxjs";
-import {HubAccountData} from "../../../../shared/models/user";
+import {HubAccountData, HubUserPersonalDetailsI} from "../../../../shared/models/user";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "../../../../../enviroments";
 
@@ -15,7 +15,10 @@ export class HubaccountService {
   constructor(private httpClient: HttpClient) { }
 
   public getAccount(): Observable<HubAccountData> {
-    return of(TESTAccount)
-    // return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + "user/account")
+    return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + "user/account")
+  }
+
+  public updateAccountDetails(details: HubUserPersonalDetailsI): Observable<HubAccountData> {
+    return this.httpClient.post<HubAccountData>(apiEnviroment.apiUrl + "user/account", details)
   }
 }

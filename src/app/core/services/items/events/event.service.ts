@@ -31,7 +31,7 @@ export class EventService {
   constructor(private httpClient: HttpClient) { }
 
   public getEventsList(): Observable<RecSysPreviewI[]> {
-    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "event/list")
+    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "item/event/list")
   }
 
   public getEvents(): Observable<EventItemDetailI[]> {
@@ -40,6 +40,6 @@ export class EventService {
 
   public getEvent(eventId: string): Observable<EventItemDetailI> {
     // return of(TESTevent)
-    return this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "event/" + eventId)
+    return this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "item/event/" + eventId)
   }
 }

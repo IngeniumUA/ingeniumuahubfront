@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
-import {BehaviorSubject, Observable, shareReplay, tap} from "rxjs";
+import {BehaviorSubject, Observable, of, shareReplay, tap} from "rxjs";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
 import {IProductCategorie, IProductGroup, IProductItem} from "../../../../shared/models/items/products/products";
 import {ProductsService} from "../../../../core/services/shop/products/products.service";
@@ -58,8 +58,11 @@ export class EventDetailComponent implements OnInit {
     }))
     this.currentProductCategorieIndex$.next(index)
   }
-  currentCategorie$(): Observable<string> {
+  currentCategorie$(): Observable<string | null> {
     return this.productCategories$.pipe(map((productGroups) => {
+      if (productGroups.length == 0) {
+        return null
+      }
       return productGroups[this.currentProductCategorieIndex$.value].categorie_name
     }))
   }
@@ -69,5 +72,8 @@ export class EventDetailComponent implements OnInit {
   }
   SetProductCount(item: IItem, categorie_name: string, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, categorie_name, product, count);
+    this.isCartEmpty = this.cartService.hasTransactions()
   }
+
+  isCartEmpty: boolean = this.cartService.hasTransactions()
 }

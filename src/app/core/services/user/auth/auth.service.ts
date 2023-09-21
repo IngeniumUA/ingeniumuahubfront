@@ -49,8 +49,9 @@ export class AuthService {
   };
 
   logout() {
-    const refresh = this.userValue?.refresh_token;
-    this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/user/auth/logout', { refresh })
+    const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: "bearer" };
+
+    this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/auth/logout', body )
 
     localStorage.removeItem('user');
     this.userSubject.next(null); // Set observable to null
@@ -81,7 +82,7 @@ export class AuthService {
   }
 
   public google_login(google_auth_token: string) {
-    return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl + "auth/google_login?token=" + google_auth_token).pipe(
+    return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl + "auth/google?token=" + google_auth_token).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));

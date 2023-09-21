@@ -8,15 +8,17 @@ import {PublicHeaderComponent} from "../../../core/layout/public/header/public-h
 import { CardDetailComponent } from './card/card-detail.component';
 import {CardComponent} from "../../../shared/components/account/card/card.component";
 import { AccountTransactionsComponent } from './account-transactions/account-transactions.component';
+import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AccountRoutingModule,
-    PublicHeaderComponent,
-    CardComponent,
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        AccountRoutingModule,
+        PublicHeaderComponent,
+        CardComponent,
+        UnderConstructionComponent,
+    ],
   declarations: [
     AccountDetailsComponent,
     AccountComponent,
