@@ -5,6 +5,7 @@ import {PublicHeaderComponent} from "../../../core/layout/public/header/public-h
 import { InfoLidComponent } from './lid-info/info-lid.component';
 import {InfoRoutingModule} from "./info-routing.module";
 import { PraesidiumInfoComponent } from './praesidium-info/praesidium-info.component';
+import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
 
 
 
@@ -17,7 +18,8 @@ import { PraesidiumInfoComponent } from './praesidium-info/praesidium-info.compo
     imports: [
         CommonModule,
         PublicHeaderComponent,
-        InfoRoutingModule
+        InfoRoutingModule,
+        UnderConstructionComponent
     ]
 })
 export class InfoModule { }
