@@ -11,6 +11,7 @@ import { PayComponent } from './pay/pay.component';
 import {NgxStripeModule} from "ngx-stripe";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
     PublicHeaderComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
+    UnderConstructionComponent,
   ]
 })
 export class ShopModule { }

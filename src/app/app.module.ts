@@ -26,6 +26,7 @@ import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@
 import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
 import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import { CardComponent } from './shared/components/account/card/card.component';
+import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,8 @@ import { CardComponent } from './shared/components/account/card/card.component';
     BrowserModule,
     PublicHeaderComponent,
     PublicFooterComponent,
+
+    UnderConstructionComponent,
 
     AppRoutingModule,
     HttpClientModule,
