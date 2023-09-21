@@ -1,6 +1,7 @@
+<ng-container *ngIf="this.account | async as account">
 <section>
   <h3 style="{'color': var(--ingenium-grey)}">Mijn Ingenium Profiel</h3>
-  <app-card></app-card>
+  <app-card [card]="account.card_details" [on_account_page]="true" [is_lid]="this.account.roles.is_lid"></app-card>
   <button class="gold-button" [routerLink]="['transactions']">
     <h4>Aankopen</h4>
     <svg width="10%" height="60%" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
@@ -14,30 +15,29 @@
   </button>
 </section>
 
-<ng-container  *ngIf="(this.roles$ | async) as roles">
-<section class="routing-section" *ngIf="roles.is_staff">
+<section class="routing-section" *ngIf="account.roles.is_staff">
   <h3>Routing</h3>
   <p><a [routerLink]="['/man']">Manager Homepage</a></p>
   <p><a [routerLink]="['/web']">Webmaster Homepage</a></p>
   <p><a [routerLink]="['/staff']">Staff Homepage</a></p>
 </section>
 
-<section>
+<section *ngIf="account.roles.is_staff">
   <h3>Authorization</h3>
   <div>
-    <p>Staff: {{ roles.is_staff }}</p>
-    <p>Manager: {{ roles.is_manager }}</p>
+    <p>Staff: {{ account.roles.is_staff }}</p>
+    <p>Manager: {{ account.roles.is_manager }}</p>
   </div>
 </section>
 
-<section class="auth-section" *ngIf="roles.is_manager">
+<section class="auth-section" *ngIf="account.roles.is_manager">
   <h3>Authentication</h3>
   <p>Access Token: {{ this.userauth?.access_token }}</p>
   <p>Refresh Token: {{ this.userauth?.refresh_token }}</p>
 
   <button (click)="RefreshAuth()">Refresh Accesstoken</button>
 </section>
-</ng-container>
+
 
 <section class="account-section">
   <h3>Mijn gegevens</h3>
@@ -51,3 +51,4 @@
   <h2>Logout</h2>
   <button class="hubbutton-white" (click)="Logout()">Log out of account</button>
 </section>
+</ng-container>

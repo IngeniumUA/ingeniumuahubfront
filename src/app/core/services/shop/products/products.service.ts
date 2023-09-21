@@ -71,6 +71,11 @@ export class ProductsService {
   constructor(private httpClient: HttpClient) { }
 
   getProducts(itemID: string): Observable<IProductCategorie[]> {
-    return this.httpClient.get<IProductCategorie[]>(apiEnviroment.apiUrl + "products/" + itemID)
+    return this.httpClient.get<IProductCategorie[]>(apiEnviroment.apiUrl + "interact/product/" + itemID)
+  }
+
+  getProductWithCart(itemId: string): Observable<IProductCategorie[]> {
+    // TODO return this.httpClient.post<IProductCategorie[]>(apiEnviroment.apiUrl + "interact/product/" + itemID)
+    return of([])
   }
 }
