@@ -32,13 +32,17 @@
     </div>
   </div>
 </section>
-</ng-container>
 
 <section class="order-section">
-  <button class="hubbutton-blue" [routerLink]="['/shop/checkout']">
+  <button [disabled]="this.isCartEmpty" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
     <h3>Checkout!</h3>
   </button>
 </section>
+
+<section class="description-section">
+  <p>{{ event.item.description }}</p>
+</section>
+</ng-container>
 
 <ng-template #loading>
   Loading ...
