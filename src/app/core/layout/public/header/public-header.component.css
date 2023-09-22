@@ -5,16 +5,16 @@
   background: none;
 }
 .nav-light {
-  background-color: white;
+  background-color: var(--mainwhite);
   color: var(--mainblue);
 }
 .nav-dark {
   background-color: var(--mainblue);
-  color: white;
+  color: var(--mainwhite);
 }
 
 nav p {
-  color: white;
+  color: var(--mainwhite);
 }
 
 nav {
@@ -59,7 +59,7 @@ nav .schild-wrap:hover, nav p:hover {
   overflow: hidden;
   outline: none;
 
-  color: white;
+  color: var(--mainwhite);
   font-size: clamp(0rem, 3vh, 2rem);
 }
 

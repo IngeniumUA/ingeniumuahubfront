@@ -42,22 +42,15 @@
 }
 
 .card a {
-  color: white;
+  color: var(--mainwhite);
   text-decoration: none;
 }
 
 .image-landscape {
-  width: 100%;
-  height: 100%;
   padding-top: 10%;
   padding-bottom: 10%;
-
-  min-width: 18rem;
 }
  h1 {
    padding-top: 5%;
    padding-bottom: 15%;
-   padding-left: 1rem;
-   padding-right: 1rem;
-   word-wrap: break-word;
  }

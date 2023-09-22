@@ -12,7 +12,7 @@ section {
   align-items: center;
 }
 section p {
-  color: white;
+  color: var(--mainwhite);
 }
 
 /* Lidkaart */
@@ -44,7 +44,7 @@ h2, h3 {
 
 /* Specific */
 .routing-section a {
-  color: white;
+  color: var(--mainwhite);
 }
 .routing-section p {
   margin: 10px;
@@ -59,7 +59,7 @@ h2, h3 {
 
 .auth-section p {
   width: 100%;
-  color: white;
+  color: var(--mainwhite);
   word-wrap: break-word;
 }
 

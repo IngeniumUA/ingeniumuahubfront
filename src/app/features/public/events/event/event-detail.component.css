@@ -122,7 +122,7 @@ img {
   min-width: 6rem;
   max-width: 8rem;
   height: 2rem;
-  color: white;
+  color: var(--mainwhite);
 }
 
 .description-section {

@@ -6,6 +6,7 @@ import { InfoLidComponent } from './lid-info/info-lid.component';
 import {InfoRoutingModule} from "./info-routing.module";
 import { PraesidiumInfoComponent } from './praesidium-info/praesidium-info.component';
 import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
+import { StartweekComponent } from './startweek/startweek.component';
 
 
 
@@ -14,6 +15,7 @@ import {UnderConstructionComponent} from "../../../shared/components/under-const
     InfoComponent,
     InfoLidComponent,
     PraesidiumInfoComponent,
+    StartweekComponent,
   ],
     imports: [
         CommonModule,

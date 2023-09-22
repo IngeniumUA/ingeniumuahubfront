@@ -23,7 +23,7 @@ section {
   margin-bottom: 0.5rem;
   border-radius: 8px;
 
-  color: white;
+  color: var(--mainwhite);
   background-color: var(--mainblue);
 }
 

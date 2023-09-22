@@ -15,7 +15,7 @@
   padding-left: clamp(0.1rem, 2vh, 1rem);
   padding-bottom: 1.5rem;
 
-  color: white;
+  color: var(--mainwhite);
 
   display: flex;
   flex-direction: column;
@@ -30,13 +30,13 @@
 
   text-decoration: underline;
   font-weight: bold;
-  color: white;
+  color: var(--mainwhite);
 }
 
 .sidenav section .section-link {
   padding-left: clamp(0.1rem, 2vh, 1rem);
 
-  color: white;
+  color: var(--mainwhite);
 }
 
 #account-section {
