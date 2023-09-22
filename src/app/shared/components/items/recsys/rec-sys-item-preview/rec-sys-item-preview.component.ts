@@ -24,7 +24,7 @@ export class RecSysItemPreviewComponent implements OnInit {
     image!: string;
 
     ngOnInit() {
-      this.isLandscape = this.recsysItem.image_square === null || this.recsysItem.image_square === ''
+      this.isLandscape = this.recsysItem.image_square === null
       this.image = this.isLandscape ? this.recsysItem.image_landscape: this.recsysItem.image_square
     }
 }

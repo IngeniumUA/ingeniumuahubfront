@@ -43,7 +43,7 @@ section {
 }
 
 #hero-section h1 {
-  color: white;
+  color: var(--mainwhite);
 
   padding-bottom: 0;
   margin-bottom: 0;
@@ -54,7 +54,7 @@ section {
   margin-top: 0;
   padding-top: 0;
 
-  color: white;
+  color: var(--mainwhite);
   font-weight: normal;
   font-size: small;
 }
@@ -80,11 +80,11 @@ section {
 }
 
 .info-card-section h1 {
-  color: white;
+  color: var(--mainwhite);
   margin-bottom: 0;
 }
 .info-card-section h3 {
-  color: white;
+  color: var(--mainwhite);
   margin-top: 0;
 }
 
@@ -106,7 +106,7 @@ section {
 .homepage-card p {
   padding-left: 1rem;
   padding-right: 1rem;
-  color: white;
+  color: var(--mainwhite);
   font-weight: lighter;
 }
 
@@ -123,21 +123,21 @@ section {
 }
 
 .homepage-card a {
-  color: white;
+  color: var(--mainwhite);
   text-decoration: none;
 }
 
 .homepage-card .lid-button {
   border: solid 2px white;
-  color: white;
+  color: var(--mainwhite);
   font-weight: bold;
   padding: 0.5rem;
   padding-right: 2rem;
   padding-left: 2rem;
 
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-top: 1rem;
+  margin: 1rem auto;
+  text-align: center;
+  max-width: 6rem;
 }
 
 /* Event card */
@@ -159,7 +159,7 @@ section {
 }
 
 .homepage-event-card h3 {
-  color: white;
+  color: var(--mainwhite);
 }
 
 /* Parnetbalk */
@@ -226,3 +226,80 @@ section {
 .recsys-section .upcoming-events::-webkit-scrollbar{
   display: none; /* For webkit */
 }
+
+@media only screen and (min-width: 768px) {
+
+  #hero-section div {
+    bottom: 150px;
+    left: 10px;
+    padding: 1rem;
+    max-width: 50%;
+  }
+
+  #hero-section h1 { 
+    font-size: xxx-large;
+    line-height: 1.2;
+    padding-bottom: .5rem;
+  } 
+  #hero-section h3 { 
+    font-size: x-large;
+  } 
+  
+  .info-card-section {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1.5rem;
+    padding-bottom: 2rem;
+  
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #praesidium-card {
+    max-width: 100%;
+    width: 100%;
+    max-height: 30rem;
+
+    padding-bottom: 0;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+  }
+
+  #praesidium-card .image-wrapper {
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 15px 0px 0px 15px;
+    flex: 1;
+  }
+
+  #praesidium-card .image-wrapper img {
+    min-height: 100%;
+  }
+
+  #praesidium-card .info-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 0;
+    flex: 1;
+  }
+
+  #praesidium-card .info-container p {
+    font-size: x-large;
+    flex: 1;
+    width: 50%;
+  }
+
+  #praesidium-card .info-container .lid-button {
+    flex: 1;
+  }
+}
+

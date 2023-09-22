@@ -10,6 +10,7 @@ import {authGuard} from "./core/guards/auth/auth.guard";
 import {EventsComponent} from "./features/public/events/events/events.component";
 import {staffGuard} from "./core/guards/staff.guard";
 
+
 const routes: Routes = [
   // Homepages
   {path: '', component: HomepageComponent,},

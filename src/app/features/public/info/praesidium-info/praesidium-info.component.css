@@ -1,0 +1,108 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+}
+.main #goodiebagPic {
+    width: 100%;
+    z-index: -1;
+}
+
+.infosection {
+    background-color: var(--mainblue);
+    color: var(--mainwhite);
+    margin: 1rem;
+    margin-top: -2rem;
+    padding: 1.5rem;
+    border-radius: 25px;
+}
+
+.infosection .info {
+    border-left: 2px white solid;
+    padding: 1rem;
+}
+
+.infosection .info p {
+    font-weight: lighter;
+    line-height: 1.5;
+}
+
+.infosection .info .highlight {
+    background-color: var(--ingenium-grey);
+    border-radius: 15px;
+    color: var(--mainblue);
+    margin: 1.5rem 0;
+    margin-left: -1.5rem;
+    width: 100%;
+}
+
+.infosection .info .praesidium {
+    margin-bottom: 1rem;
+}
+
+.infosection .info .categorie {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.infosection .info .categorie .praesidium-lid:last-child {
+    margin-bottom: 0;
+}
+
+.infosection .info .praesidium-lid {
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap: 1rem;
+    padding: .2rem;
+    align-items: center;
+    font-size: 4vw;
+    width: 110%;
+}
+
+.infosection .info .categorie h3 {
+    text-decoration: underline;
+}
+
+
+.infosection .info .praesidium-lid img {
+    border-radius: 15px;
+    width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+    .main #goodiebagPic {
+        margin: 0 auto;
+    }
+
+    .infosection {
+        margin: 1rem 1rem;
+        padding: 4rem;
+        padding-left: 5rem;
+        margin-top: -0.3rem;
+    }
+
+    .infosection .info {
+        padding: 2rem;
+    }
+
+    .infosection .info .highlight {
+        margin: 1rem;
+        margin-left: -4rem;
+        width: 70%;
+    }
+
+    .infosection .info .praesidium-lid {
+        grid-template-columns: .6fr 1.4fr;
+    }
+
+    .infosection .info .praesidium-lid img {
+        width: 80%;
+        margin: 1rem;
+    }
+    .infosection .info .praesidium-lid h4 {
+        font-size: 3vw;
+    }
+}
+

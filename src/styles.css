@@ -1,6 +1,7 @@
 :root {
   --mainblue: rgb(0, 5, 61); /*rgb(10, 31, 68);*/
   --mainblue-90: rgba(0, 5, 61, 0.9); /*rgba(10, 31, 68, 0.9);*/
+  --mainwhite: #efefef;
 
   --secondblue: #1f2980;
 
@@ -21,7 +22,7 @@ body {
 /* ---------- */
 h1 {
   margin: 0;
-  color: white;
+  color: var(--mainwhite);
 
   line-height: 2.25rem;
   font-size: 2.25rem;
@@ -35,7 +36,7 @@ h2 {
   font-size: 1.5rem;  /* 24px */
   font-weight: bold;
 
-  color: white;
+  color: var(--mainwhite);
   margin: 0;
 }
 
@@ -47,7 +48,7 @@ h3 {
   font-weight: lighter;
   font-family: D-DIN Condensed, sans-serif;
 
-  color: white;
+  color: var(--mainwhite);
 }
 
 h4 {
@@ -73,12 +74,12 @@ span {
   border-radius: 5px;
   border: none;
 
-  color: white;
+  color: var(--mainwhite);
   transition: color 0.5s ease-out;
 }
 
 .hubbutton-blue:hover {
-  color: white;
+  color: var(--mainwhite);
   cursor: pointer;
 }
 
@@ -86,7 +87,7 @@ span {
   width: 100%;
   height: 100%;
 
-  background-color: white;
+  background-color: var(--mainwhite);
   border-radius: 5px;
   border: none;
 
@@ -128,4 +129,8 @@ span {
   color: #FF5000;
   font-weight: bold;
   font-family: D-DIN Condensed, D-DIN, sans-serif;
+}
+
+.clickable {
+  cursor: pointer;
 }
