@@ -83,7 +83,9 @@ export class JWTInterceptor implements HttpInterceptor {
       catchError((error) => {
         this.isRefreshing = false;
 
-        if (error.status == '401') {  // 401 means unauthenticated
+        // 401 means unauthenticated
+        // 404 means not found ( if user was deleted for example )
+        if (error.status == '401' || error.status == '404') {
           this.authService.logout();
         }
 
