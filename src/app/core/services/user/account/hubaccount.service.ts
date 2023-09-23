@@ -15,10 +15,10 @@ export class HubaccountService {
   constructor(private httpClient: HttpClient) { }
 
   public getAccount(): Observable<HubAccountData> {
-    return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + "user/account")
+    return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + "user/account/")
   }
 
   public updateAccountDetails(details: HubUserPersonalDetailsI): Observable<HubAccountData> {
-    return this.httpClient.post<HubAccountData>(apiEnviroment.apiUrl + "user/account", details)
+    return this.httpClient.post<HubAccountData>(apiEnviroment.apiUrl + "user/account/", details)
   }
 }
