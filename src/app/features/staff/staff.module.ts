@@ -8,6 +8,7 @@ import { StaffEventListComponent } from './events/staff-event-list/staff-event-l
 import { StaffEventDetailComponent } from './events/staff-event-detail/staff-event-detail.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-edit.component';
+import { FunctionsComponent } from './functions/functions.component';
 
 
 
@@ -24,7 +25,8 @@ import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-e
   declarations: [
     StaffComponent,
     StaffEventListComponent,
-    StaffEventDetailComponent
+    StaffEventDetailComponent,
+    FunctionsComponent
   ],
 })
 export class StaffModule { }

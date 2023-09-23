@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../../core/services/user/auth/auth.service";
-import {HubaccountService} from "../../../../core/services/user/account/hubaccount.service";
+import {AccountService} from "../../../../core/services/user/account/account.service";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {RolesService} from "../../../../core/services/user/roles.service";
@@ -13,7 +13,7 @@ import {HubAccountData, HubAuthData, HubUserRolesI} from "../../../../shared/mod
 })
 export class AccountDetailsComponent implements OnInit {
   constructor(protected authService: AuthService,
-              private accountService: HubaccountService,
+              private accountService: AccountService,
               private rolesService: RolesService,
               private httpClient: HttpClient) {
   }
