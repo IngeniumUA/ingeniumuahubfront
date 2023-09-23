@@ -27,6 +27,7 @@ import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
 import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import { CardComponent } from './shared/components/account/card/card.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
+import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
 
 @NgModule({
     declarations: [
@@ -41,6 +42,7 @@ import { UnderConstructionComponent } from './shared/components/under-constructi
         EventdatePipe,
         GroupnamePipe,
         SetpwComponent,
+        CardRedirectComponent,
     ],
   imports: [
     BrowserModule,

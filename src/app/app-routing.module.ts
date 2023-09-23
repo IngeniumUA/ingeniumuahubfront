@@ -9,6 +9,7 @@ import {CloudComponent} from "./features/public/cloud/cloud.component";
 import {authGuard} from "./core/guards/auth/auth.guard";
 import {EventsComponent} from "./features/public/events/events/events.component";
 import {staffGuard} from "./core/guards/staff.guard";
+import {CardRedirectComponent} from "./features/public/card-redirect/card-redirect.component";
 
 
 const routes: Routes = [
@@ -32,6 +33,9 @@ const routes: Routes = [
 
     // Cloud
     {path: 'cloud', component: CloudComponent, canActivate: [authGuard]},
+
+    // Cardredirect
+    {path: 'card/:id', component: CardRedirectComponent, canActivate: [authGuard]},
 
     // User specific pages
     {path: 'account',

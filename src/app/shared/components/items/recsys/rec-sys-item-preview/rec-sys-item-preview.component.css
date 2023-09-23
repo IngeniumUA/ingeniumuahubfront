@@ -33,6 +33,9 @@
   box-sizing: border-box;
   padding: 1rem;
   padding-bottom: unset;
+
+  min-height: 14rem;
+  min-width: 18rem;
   width: 100%;
 }
 
