@@ -1,0 +1,8 @@
+<div id="sumup-card"></div>
+<div [formGroup]="paymentElementForm">
+  <ng-container *ngIf="elementsOptions?.clientSecret as clientSecret">
+    <ngx-stripe-payment [clientSecret]="clientSecret">
+    </ngx-stripe-payment>
+  </ng-container>
+  <button (click)="stripePay()">PAY</button>
+</div>

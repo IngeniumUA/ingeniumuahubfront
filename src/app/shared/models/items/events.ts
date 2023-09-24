@@ -1,6 +1,5 @@
 import {IItem} from "./IItem";
-export interface EventItemDetailI {
-  item: IItem;
+export interface EventItemDetailI {  item: IItem;
   start_date: string;
   end_date: string;
   location: string;  // TODO Location Object, package maybe?
@@ -8,4 +7,5 @@ export interface EventItemDetailI {
   color: string;
   image_landscape: string;
   image_square: string;
+
 }

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {IProductItem} from "../../../../shared/models/items/products/products";
+import {IProductItem, ProductMetaI} from "../../../../shared/models/items/products/products";
 import {IItem} from "../../../../shared/models/items/IItem";
 import {ITransaction} from "../../../../shared/models/items/products/cart";
 
 interface IAbstractTransaction {
   sourceItemName: string  // TODO Change to source item_id
-  product_group_name: string
+  product_meta: ProductMetaI
   product: IProductItem
   count: number
 }
@@ -26,44 +26,31 @@ export class CartService {
       if (lhs.sourceItemName < rhs.sourceItemName) return -1
       if (lhs.sourceItemName > rhs.sourceItemName) return 1
 
-      if (lhs.product_group_name < rhs.product_group_name) return -1
-      if (lhs.product_group_name > rhs.product_group_name) return 1
-
       return 0
     })
   }
-  private transactionsIncludes(source: IItem, group?: string, product?: IProductItem): boolean {
+  private transactionsIncludes(source: IItem, product?: IProductItem): boolean {
     const boolMap = this.transactionArray.map((value) => {
       const sourceEquality = value.sourceItemName === source.name
-      if (group === undefined) return sourceEquality
 
-      const groupEquality = value.product_group_name === group
-      if (product === undefined) return sourceEquality && groupEquality
+      if (product === undefined) return sourceEquality
 
-      return sourceEquality && groupEquality && (value.product.name === product.name)
+      return sourceEquality && (value.product.name === product.name) // TODO Product meta
     })
     return boolMap.includes(true);
   }
-  private getTransactionIndex(source: IItem, group: string, product: IProductItem): number {
+  private getTransactionIndex(source: IItem, product: IProductItem): number {
     const boolMap = this.transactionArray.map(value => {
-      return value.sourceItemName === source.name && value.product_group_name === group && value.product === product
+      return value.sourceItemName === source.name && value.product === product
     })
     return boolMap.indexOf(true);
   }
 
-  private addIfMissing(source: IItem, group: string): void {
+  private addIfMissing(source: IItem): void {
     // Match on item.uuid instead of item because .includes doesn't catch it otherwise
     if (!this.sourceArray.map((item) => item.uuid).includes(source.uuid)) {
       this.sourceArray.push(source);
-      this.groupArray.push([group]);
       return
-    }
-
-    const sourceIndex = this.getSourceIndex(source)
-    const groupArray: string[] = this.groupArray.at(sourceIndex)!
-    if (!groupArray.includes(group)) {
-      groupArray.push(group)
-      this.groupArray[sourceIndex] = groupArray
     }
   }
 
@@ -71,7 +58,6 @@ export class CartService {
   private abstractToTransaction(abstract: IAbstractTransaction): ITransaction {
     return {
       source_item: this.getSource(abstract.sourceItemName),
-      categorie_name: this.getGroup(abstract.sourceItemName, abstract.product_group_name),
       product: abstract.product,
       count: abstract.count
     }
@@ -80,15 +66,6 @@ export class CartService {
     const boolArray: boolean[] = this.sourceArray.map((value) => {return value.name === source_name})
     const sourceIndex: number = boolArray.indexOf(true)
     return this.sourceArray.at(sourceIndex)!
-  }
-  getGroup(source_name: string, group_name: string): string {
-    const boolArray: boolean[] = this.sourceArray.map((value) => {return value.name === source_name})
-    const sourceIndex: number = boolArray.indexOf(true)
-
-    const groupArray: string[] = this.groupArray.at(sourceIndex)!
-    const boolMap: boolean[] = groupArray.map((value) => {return value === group_name})
-
-    return groupArray.at(boolMap.indexOf(true))!
   }
 
   private getSourceIndex(source: IItem): number {
@@ -108,17 +85,15 @@ export class CartService {
     return this.transactionArray.length > 0
   }
 
-  public getCurrentTransactions(source?: IItem, group?: string, product?: IProductItem): ITransaction[] {
+  public getCurrentTransactions(source?: IItem, product?: IProductItem): ITransaction[] {
     const boolMap = this.transactionArray.map((value) => {
       if (source === undefined) return true
 
       const sourceEquality = value.sourceItemName === source.name
-      if (group === undefined) return sourceEquality
 
-      const groupEquality = value.product_group_name === group
-      if (product === undefined) return sourceEquality && groupEquality
+      if (product === undefined) return sourceEquality
 
-      return sourceEquality && groupEquality && (value.product.name === product.name)
+      return sourceEquality && (value.product.name === product.name)
     })
 
     let index = 0;
@@ -133,38 +108,38 @@ export class CartService {
     })
   }
 
-  public getProductCount(source: IItem, group: string, product: IProductItem): number {
-    if (!this.transactionsIncludes(source, group, product)) {return 0}
+  public getProductCount(source: IItem, product: IProductItem): number {
+    if (!this.transactionsIncludes(source, product)) {return 0}
 
-    const transactionIndex = this.getTransactionIndex(source, group, product);
+    const transactionIndex = this.getTransactionIndex(source, product);
     return this.transactionArray.at(transactionIndex)!.count
   }
-  public setProductCount(source: IItem, group: string, product: IProductItem, count: number): void {
-    if (count < 1) {this.removeProduct(source, group, product); return}
+  public setProductCount(source: IItem, product: IProductItem, count: number): void {
+    if (count < 1) {this.removeProduct(source, product); return}
 
     // Adding Source and Group to seperate arrays if not already included
-    this.addIfMissing(source, group)
+    this.addIfMissing(source)
 
-    if (this.transactionsIncludes(source, group, product)) {
-      const transactionIndex = this.getTransactionIndex(source, group, product)
+    if (this.transactionsIncludes(source, product)) {
+      const transactionIndex = this.getTransactionIndex(source, product)
       this.transactionArray[transactionIndex].count = count
       return;
     }
 
     const transaction: IAbstractTransaction = {
       sourceItemName: source.name,
-      product_group_name: group,
+      product_meta: product.product_meta,
       product: product,
       count: count
     }
     this.transactionArray.push(transaction)
     this.sort()
   }
-  public removeProduct(source: IItem, group: string, product: IProductItem): void {
-    const transactionIndex = this.getTransactionIndex(source, group, product)
+  public removeProduct(source: IItem, product: IProductItem): void {
+    const transactionIndex = this.getTransactionIndex(source, product)
     this.transactionArray.splice(transactionIndex, 1)
 
-    if (this.transactionsIncludes(source, group)) {
+    if (this.transactionsIncludes(source)) {
       return
     }
     // TODO Remove group

@@ -83,6 +83,10 @@ span {
   cursor: pointer;
 }
 
+.hubbutton-blue:disabled {
+  background-color: var(--ingenium-grey)
+}
+
 .hubbutton-white {
   width: 100%;
   height: 100%;

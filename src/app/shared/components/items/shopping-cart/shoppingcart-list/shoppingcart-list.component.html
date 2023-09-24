@@ -12,7 +12,7 @@
   <ng-container *ngFor="let transaction of this.transactions[i]">
     <app-product [onInitValue]="this.transaction.count" [product]="this.transaction.product"
                  [primaryColorFull]="'var(--mainblue)'"
-                 (countEvent)="this.SetProductCount(transaction.source_item, transaction.categorie_name, transaction.product, $event)"></app-product>
+                 (countEvent)="this.SetProductCount(transaction.source_item, transaction.product, $event)"></app-product>
   </ng-container>
   <p>Back to <a [routerLink]="['/event/' + item.uuid ]">event</a></p>
 </section>

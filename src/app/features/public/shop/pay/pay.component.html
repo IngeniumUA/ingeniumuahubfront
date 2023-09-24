@@ -1,10 +1,10 @@
 <app-layout-public-header></app-layout-public-header>
-<div id="sumup-card"></div>
 
-<div [formGroup]="paymentElementForm">
-  <ng-container *ngIf="elementsOptions?.clientSecret as clientSecret">
-    <ngx-stripe-payment [clientSecret]="clientSecret">
-    </ngx-stripe-payment>
-  </ng-container>
-  <button (click)="stripePay()">PAY</button>
-</div>
+<ng-container *ngIf="this.devPayment">
+  <button (click)="this.doDevPayment()"><h4>Allé deugeniet, voor ene keer dan</h4></button>
+</ng-container>
+
+<ng-container *ngIf="this.stripePayment">
+  <app-stripe-payment [checkoutId]="this.checkoutId"></app-stripe-payment>
+</ng-container>
+

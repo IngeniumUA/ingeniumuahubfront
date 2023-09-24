@@ -12,6 +12,13 @@ import {NgxStripeModule} from "ngx-stripe";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
+import {
+    RecSysItemPreviewComponent
+} from "../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component";
+import { ShopDetailComponent } from './shop-detail/shop-detail.component';
+import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
+import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
+import { StripePaymentComponent } from './pay/stripe-payment/stripe-payment.component';
 
 
 @NgModule({
@@ -19,6 +26,8 @@ import {UnderConstructionComponent} from "../../../shared/components/under-const
     ShopHomeComponent,
     CheckoutComponent,
     PayComponent,
+    ShopDetailComponent,
+    StripePaymentComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +38,9 @@ import {UnderConstructionComponent} from "../../../shared/components/under-const
     ReactiveFormsModule,
     MatFormFieldModule,
     UnderConstructionComponent,
+    RecSysItemPreviewComponent,
+    ProductComponent,
+    ColordbrgbaPipe,
   ]
 })
 export class ShopModule { }
