@@ -19,6 +19,10 @@
     padding: 1rem;
 }
 
+section {
+    margin-bottom: 2rem;
+}
+
 .infosection .info p {
     font-weight: lighter;
     line-height: 1.5;
@@ -34,19 +38,6 @@
     width: 105%;
 }
 
-.infosection .info .praesidium {
-    margin-bottom: 1rem;
-}
-
-.infosection .info .categorie {
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.infosection .info .categorie .praesidium-lid:last-child {
-    margin-bottom: 0;
-}
-
 .infosection .info-button {
     border: solid 2px var(--mainwhite);
     color: var(--mainwhite);
@@ -58,10 +49,6 @@
     margin: 1rem auto;
     text-align: center;
     max-width: 6rem;
-}
-
-.praesidium .image-wrapper img {
-    max-width: 100%;
 }
 
 .highlight > .info-button {
@@ -77,10 +64,32 @@
     max-width: 100%;
 }
 
+.contactdata {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    grid-template-rows: repeat(6, 1fr);
+    align-items: center;
+}
+
+.contact .highlight h2 {
+    color: var(--mainblue);
+
+}
+
+.contactdata svg:first-of-type {
+    grid-row: 1/4;
+}
+
+svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+svg path {
+    width: 100%;
+}
+
 @media only screen and (min-width: 768px) {
-    .main #goodiebagPic {
-        margin: 0 auto;
-    }
 
     .infosection {
         margin: 1rem 8rem;
@@ -98,16 +107,13 @@
         width: 70%;
     }
 
-    .infosection .info .praesidium-lid {
-        grid-template-columns: .6fr 1.4fr;
+    .contactdata {
+        grid-template-columns: .2fr 1.8fr;
     }
 
-    .infosection .info .praesidium-lid img {
-        width: 80%;
-        margin: 1rem;
-    }
-    .infosection .info .praesidium-lid h4 {
-        font-size: 3vw;
+    svg {
+        width: 2.5rem;
+        height: 2.5rem;
     }
 }
 
