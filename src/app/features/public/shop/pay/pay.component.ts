@@ -8,6 +8,9 @@ import {
   StripeElementsOptions,
 } from '@stripe/stripe-js';
 import {FormBuilder} from "@angular/forms";
+import {HttpClient} from "@angular/common/http";
+import {apiEnviroment} from "../../../../../enviroments";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-pay',
@@ -16,69 +19,45 @@ import {FormBuilder} from "@angular/forms";
 })
 export class PayComponent implements OnInit {
   constructor(
+    private httpClient: HttpClient,
     private formBuilder: FormBuilder,
+    private router: Router,
     private paymentService: PaymentService,
-    private stripeService: StripeService,
     private renderer2: Renderer2,
     @Inject(DOCUMENT) private _document: any,
   ) {
   }
 
   checkoutId!: CheckoutIdI;
+  stripePayment: boolean = false
+  devPayment: boolean = false
 
   ngOnInit() {
     this.paymentService.getCheckoutID().subscribe((value) => {
       this.checkoutId = value;
 
-      if (this.checkoutId.payment_providor === 'stripe') {
-        this.setupStripe()
+      if (this.checkoutId.payment_providor === 'dev') {
+        this.setupDev()
+      }
+      else if (this.checkoutId.payment_providor === 'stripe') {
+        this.stripePayment = true
       } else if (this.checkoutId.payment_providor === 'sumup') {
         this.loadSumupSource();
       }
     })
   }
 
-  /* STRIPE */
-  setupStripe() {
-    this.elementsOptions.clientSecret = this.checkoutId.checkout_id
+  /* DEV */
+  setupDev() {
+    this.devPayment = true;
+
   }
-  elementsOptions: StripeElementsOptions = {
-    locale: 'en'
-  };
 
-  @ViewChild(StripePaymentElementComponent)
-  paymentElement!: StripePaymentElementComponent;
-  paying: boolean = false
-  paymentElementForm = this.formBuilder.group({});
-
-  stripePay() {
-    if (this.paymentElementForm.valid) {
-      this.paying = true;
-      this.stripeService.confirmPayment({
-        elements: this.paymentElement.elements,
-        redirect: 'if_required',
-        confirmParams: {
-          return_url: 'https://ingeniumua.be/account'
-        }
-      }).subscribe((result) => {
-        this.paying = false;
-        console.log('Result', result);
-        if (result.error) {
-          // Show error to your customer (e.g., insufficient funds)
-          alert({ success: false, error: result.error.message });
-        } else {
-          // The payment has been processed!
-          if (result.paymentIntent.status === 'succeeded') {
-            // Show a success message to your customer
-            alert({ success: true });
-          }
-        }
-      });
-    } else {
-      console.log(this.paymentElementForm);
-    }
+  doDevPayment() {
+    this.httpClient.get(apiEnviroment.apiUrl + "webhook/payment/dev/" + this.checkoutId.checkout_id).subscribe()
+    this.router.navigateByUrl('/account/transactions')
+    return
   }
-  /* Stripe finish */
 
 
 
@@ -88,23 +67,7 @@ export class PayComponent implements OnInit {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  /* SUMUP */
   loadSumupSource() {
     const scriptElement = this.renderer2.createElement('script');
     scriptElement.onload = this.mountSumupCard.bind(this);

@@ -1,5 +1,5 @@
 :root {
-  --mainblue: rgb(0, 5, 61); /*rgb(10, 31, 68);*/
+  --mainblue: rgb(0, 5, 61); /*  */
   --mainblue-90: rgba(0, 5, 61, 0.9); /*rgba(10, 31, 68, 0.9);*/
   --mainwhite: #ffffff;
 
@@ -81,6 +81,10 @@ span {
 .hubbutton-blue:hover {
   color: var(--mainwhite);
   cursor: pointer;
+}
+
+.hubbutton-blue:disabled {
+  background-color: var(--ingenium-grey)
 }
 
 .hubbutton-white {
