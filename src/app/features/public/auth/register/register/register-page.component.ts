@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../../../core/services/user/auth/auth.service";
 import {SocialAuthService} from "@abacritt/angularx-social-login";
 import {first} from "rxjs/operators";
+import {RegisterService} from "../../../../../core/services/user/register/register.service";
 
 @Component({
   selector: 'app-register-page',
@@ -15,7 +16,8 @@ export class RegisterPageComponent {
   loading = false;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(private registerService: RegisterService,
+              private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
               private authService: AuthService,
@@ -50,15 +52,30 @@ export class RegisterPageComponent {
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
+  form_error: string | null = null;
 
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      console.log("Foutje")
+      const error: Error = Error("Invalid email");
+      this.handleFormError(error);
       return;
     }
 
     this.loading = true;
+    this.registerService.register(this.form.controls['email'].value).pipe(
+      first()).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/auth/await_email')
+      },
+      error: (error: Error) => {
+        this.loading = false;
+        this.handleFormError(error);
+      }
+    })
+  }
 
+  handleFormError(err: Error) {
+    this.form_error = err.message;
   }
 }

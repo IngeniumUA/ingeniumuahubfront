@@ -1,2 +1,9 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
-<app-under-construction></app-under-construction>
+<section>
+  <h1>Shop:</h1>
+  <div class="item-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
+    <ng-container *ngFor="let shopitem of (this.shopitems$ | async)">
+      <app-rec-sys-item-preview [recsysItem]="shopitem"></app-rec-sys-item-preview>
+    </ng-container>
+  </div>
+</section>

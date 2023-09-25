@@ -5,6 +5,8 @@ import {AsyncPipe, NgClass, NgIf} from "@angular/common";
 import {RolesService} from "../../../../core/services/user/roles.service";
 import {Observable} from "rxjs";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AccountService} from "../../../../core/services/user/account/account.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-card',
@@ -26,7 +28,8 @@ export class CardComponent {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private accountService: AccountService) {
   }
 
   public cardClicked() {
@@ -42,11 +45,40 @@ export class CardComponent {
 
 
   submitted: boolean = false
+  loading: boolean = false;
+  form_error: string | null = null;
   form = this.formBuilder.group({
     uuid: ['', Validators.required]
   })
-  get f() { return this.form.controls; }
-  public onSubmit() {
-    this.submitted = true;
+
+  get f() {
+    return this.form.controls;
   }
-}
+
+  public onSubmit() {
+    // Check if valid guardclause
+    if (this.form.invalid) {
+      const error: Error = Error("Invalid UUID");
+      this.handleFormError(error);
+      return;
+    }
+
+    this.loading = true;
+    this.accountService.linkCard(this.form.controls['uuid'].value!).pipe(
+      first()).subscribe({
+      next: () => {
+        // Emit via output instead of reloading page
+        window.location.reload();
+      },
+      error: error => {
+        this.loading = false;
+        this.handleFormError(error);
+      }
+    })
+  }
+
+  handleFormError(err: Error) {
+    this.form_error = err.message;
+  }
+
+  }

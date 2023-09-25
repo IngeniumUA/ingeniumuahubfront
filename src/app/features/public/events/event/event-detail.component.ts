@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
 import {BehaviorSubject, Observable, of, shareReplay, tap} from "rxjs";
@@ -18,6 +18,7 @@ import {CartService} from "../../../../core/services/shop/cart/cart.service";
 })
 export class EventDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private layoutService: LayoutService,
               private eventService: EventService,
               private cartService: CartService,
@@ -25,6 +26,7 @@ export class EventDetailComponent implements OnInit {
   }
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
+  isCartEmpty: boolean = this.cartService.hasTransactions()
   // Event Info and Deco
   event$?: Observable<EventItemDetailI>;
   productCategories$!: Observable<IProductCategorie[]>;
@@ -37,14 +39,15 @@ export class EventDetailComponent implements OnInit {
 
     // If ID is null
     if (id === null) {
-      return // TODO insert not found?
+      this.router.navigateByUrl('/events')
+      return
     }
 
     // Setup event observable and color observables
     this.SetEvent(id);
 
     // Setup producttable
-    this.productCategories$ = this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
+    this.productCategories$ = of([]) // this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
     this.SetProductCategorie(0)
   }
 
@@ -68,12 +71,10 @@ export class EventDetailComponent implements OnInit {
   }
 
   GetCurrentProductCount(item: IItem, categorie_name: string, product: IProductItem): number {
-    return this.cartService.getProductCount(item, categorie_name, product)
+    return this.cartService.getProductCount(item, product)
   }
   SetProductCount(item: IItem, categorie_name: string, product: IProductItem, count: number) {
-    this.cartService.setProductCount(item, categorie_name, product, count);
+    this.cartService.setProductCount(item, product, count);
     this.isCartEmpty = this.cartService.hasTransactions()
   }
-
-  isCartEmpty: boolean = this.cartService.hasTransactions()
 }

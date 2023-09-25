@@ -1,4 +1,4 @@
-<div class="lidkaart-card" (click)="this.cardClicked()">
+<div class="lidkaart-card">
   <ng-container *ngIf="this.card as card else nocard">
     <div class="lidkaart-wrapper">
       <img src="{{ card.card_image }}" alt="card">
@@ -15,6 +15,7 @@
           <input type="text" formControlName="uuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" [ngClass]="{ 'is-invalid': submitted && f['uuid'].errors }"/>
         </label>
       <h4>Of scan de achterkant<br>van je lidkaart!</h4>
+      <h4 (click)="this.onSubmit()">Submit</h4>
     </form>
   </ng-container>
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, of} from "rxjs";
-import {IProductCategorie} from "../../../../shared/models/items/products/products";
+import {IProductCategorie, IProductItem} from "../../../../shared/models/items/products/products";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "../../../../../enviroments";
 
@@ -70,8 +70,8 @@ export class ProductsService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getProducts(itemID: string): Observable<IProductCategorie[]> {
-    return this.httpClient.get<IProductCategorie[]>(apiEnviroment.apiUrl + "interact/product/" + itemID)
+  getProducts(itemID: string): Observable<IProductItem[]> {
+    return this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + "interact/product/" + itemID)
   }
 
   getProductWithCart(itemId: string): Observable<IProductCategorie[]> {

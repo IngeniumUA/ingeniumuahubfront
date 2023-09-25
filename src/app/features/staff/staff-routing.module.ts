@@ -3,6 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {StaffComponent} from "./staff.component";
 import {StaffEventListComponent} from "./events/staff-event-list/staff-event-list.component";
 import {StaffEventDetailComponent} from "./events/staff-event-detail/staff-event-detail.component";
+import {FunctionsComponent} from "./functions/functions.component";
 
 
 const routes: Routes = [
@@ -10,7 +11,8 @@ const routes: Routes = [
     component: StaffComponent,
     children: [
       {path: "event", component: StaffEventListComponent},
-      {path: "event/:id", component: StaffEventDetailComponent}
+      {path: "event/:id", component: StaffEventDetailComponent},
+      {path: 'functions', component: FunctionsComponent}
     ]
   },
 ];

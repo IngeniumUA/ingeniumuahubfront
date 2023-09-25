@@ -28,6 +28,9 @@ import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec
 import { CardComponent } from './shared/components/account/card/card.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
 import { ContactComponent } from './features/public/contact/contact.component';
+import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
+import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
+
 
 @NgModule({
     declarations: [
@@ -43,6 +46,8 @@ import { ContactComponent } from './features/public/contact/contact.component';
         GroupnamePipe,
         SetpwComponent,
         ContactComponent,
+        CardRedirectComponent,
+        AwaitpasswordLinkComponent,
     ],
   imports: [
     BrowserModule,
@@ -80,9 +85,9 @@ import { ContactComponent } from './features/public/contact/contact.component';
         } as unknown as SocialAuthServiceConfig,
       }
     ],
-  exports: [
-    EventdatePipe,
-  ],
+    exports: [
+        EventdatePipe,
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

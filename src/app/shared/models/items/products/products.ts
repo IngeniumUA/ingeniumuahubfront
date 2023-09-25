@@ -8,9 +8,15 @@ export interface IProductGroup {
   products: IProductItem[];
 }
 
+export interface ProductMetaI {
+  group: string;
+  categorie: string;
+}
+
 export interface IProductItem {
-  // TODO id: number
+  id: number;
   name: string;
-  price_eu: number; // TODO Currency field?
+  price_eu: number;
   max_count: number;
+  product_meta: ProductMetaI;
 }

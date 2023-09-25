@@ -27,6 +27,7 @@
   <div>
     <p>Staff: {{ account.roles.is_staff }}</p>
     <p>Manager: {{ account.roles.is_manager }}</p>
+    <p>Lid: {{ account.roles.is_lid }}</p>
   </div>
 </section>
 
@@ -42,13 +43,17 @@
 <section class="account-section">
   <h3>Mijn gegevens</h3>
 
+  <!--
   <form>
     <p>Form hierzo</p>
   </form>
+  -->
 </section>
+
+</ng-container>
 
 <section class="logout-section">
   <h2>Logout</h2>
   <button class="hubbutton-white" (click)="Logout()">Log out of account</button>
 </section>
-</ng-container>
+

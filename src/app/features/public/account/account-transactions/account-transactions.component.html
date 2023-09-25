@@ -1,1 +1,6 @@
-<app-under-construction></app-under-construction>
+<section>
+  <ng-container *ngFor="let transaction of (this.transactions$ | async)">
+    <app-transaction-display [transaction]="transaction"></app-transaction-display>
+  </ng-container>
+
+</section>

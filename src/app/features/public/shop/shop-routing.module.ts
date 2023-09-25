@@ -4,12 +4,14 @@ import {ShopHomeComponent} from "./shop/shop-home.component";
 import {CheckoutComponent} from "./checkout/checkout.component";
 import {authGuard} from "../../../core/guards/auth/auth.guard";
 import {PayComponent} from "./pay/pay.component";
+import {ShopDetailComponent} from "./shop-detail/shop-detail.component";
 
 
 const routes: Routes = [
   {path: '', component: ShopHomeComponent },
   {path: 'checkout', component: CheckoutComponent },
-  {path: 'pay', component: PayComponent} // TODO canActivate: [authGuard]
+  {path: 'pay', component: PayComponent, canActivate: [authGuard]},
+  {path: ':id', component: ShopDetailComponent}
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

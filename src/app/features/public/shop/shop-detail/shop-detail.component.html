@@ -1,0 +1,34 @@
+<app-layout-public-header></app-layout-public-header>
+
+<ng-container *ngIf="(this.shopItem$ | async) as shop else loading; ">
+  <section class="shop-banner">
+    <img src='{{shop.image_landscape}}' alt="Image not working :(">
+  </section>
+
+  <section class="title-info-section">
+    <h3>{{ shop.item.name }}</h3>
+  </section>
+
+  <section>
+    <ng-container *ngFor="let product of (this.products$ | async)">
+      <app-product [onInitValue]="this.GetCurrentProductCount(shop.item, product)" [product]="product"
+                   [primaryColorFull]="(shop.color | colordbrgba: 1)" [primaryColorHalf]="(shop.color | colordbrgba: 0.5)"
+                   (countEvent)="this.SetProductCount(shop.item, product, $event)"></app-product>
+    </ng-container>
+  </section>
+
+  <section class="order-section">
+    <button class="hubbutton-blue"
+            (click)="this.ToCheckout()">
+      <h3>Checkout!</h3>
+    </button>
+  </section>
+
+  <section class="description-section">
+    <p>{{ shop.item.description }}</p>
+  </section>
+</ng-container>
+
+<ng-template #loading>
+  Loading ...
+</ng-template>

@@ -39,8 +39,8 @@ export class ShoppingcartListComponent implements OnInit {
     this.CalcBudget()
   }
 
-  SetProductCount(source: IItem, groupinfo: string, product: IProductItem, count: number): void {
-    this.cartService.setProductCount(source, groupinfo, product, count);
+  SetProductCount(source: IItem, product: IProductItem, count: number): void {
+    this.cartService.setProductCount(source, product, count);
     if (count < 1) this.SetTransactions();
   }
 
