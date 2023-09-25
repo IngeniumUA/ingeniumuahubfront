@@ -57,7 +57,7 @@ export class RegisterPageComponent {
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      const error: Error = Error("Invalid email");
+      const error: Error = Error("Probeer een andere!");
       this.handleFormError(error);
       return;
     }
