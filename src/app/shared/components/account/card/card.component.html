@@ -1,4 +1,4 @@
-<div class="lidkaart-card" (click)="this.cardClicked()">
+<div class="lidkaart-card">
   <ng-container *ngIf="this.card as card else nocard">
     <div class="lidkaart-wrapper">
       <img src="{{ card.card_image }}" alt="card">
