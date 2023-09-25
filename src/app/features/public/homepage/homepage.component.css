@@ -59,20 +59,13 @@ section {
   font-size: small;
 }
 
-
-
-
-
-
-
-
-
 /* Homepage cards */
 .info-card-section {
   box-sizing: border-box;
   width: 100%;
   padding: 1.5rem;
   padding-bottom: 2rem;
+  gap: 1rem;
 
   display: flex;
   flex-wrap: wrap;
@@ -91,7 +84,6 @@ section {
 .homepage-card {
   min-width: 14rem;
   max-width: 20rem;
-  max-height: 22.5rem;
 
   margin-top: clamp(0rem, 2vw, 1rem);
   border-radius: 25px;
@@ -108,6 +100,11 @@ section {
   padding-right: 1rem;
   color: var(--mainwhite);
   font-weight: lighter;
+  display: none;
+}
+
+.homepage-card p:first-of-type {
+  order: 1;
 }
 
 .image-wrapper {
@@ -125,6 +122,10 @@ section {
 .homepage-card a {
   color: var(--mainwhite);
   text-decoration: none;
+}
+
+.homepage-card p:first-of-type {
+  display: block;
 }
 
 .homepage-card .lid-button {
@@ -162,6 +163,44 @@ section {
   color: var(--mainwhite);
 }
 
+.info-card-section .homepage-card.news {
+  background-color: var(--ingenium-grey);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  align-items: start;
+}
+
+.info-card-section .homepage-card.news > * {
+  color: var(--mainblue);
+}
+
+.info-card-section .homepage-card.news:nth-child(odd) {
+  background-color: var(--secondblue);
+}
+
+.info-card-section .homepage-card.news:nth-child(odd) > * {
+  color: var(--mainwhite);
+}
+
+.info-card-section .homepage-card.news p {
+  color: var(--mainblue);
+  text-decoration: underline;
+  padding: 0;
+}
+
+.info-card-section .homepage-card.news p::after {
+  display: inline-block;
+  content: "→";
+  text-decoration: none;
+  padding-left: .3rem;
+}
+
+
+.info-card-section .homepage-card.news .image-wrapper {
+  order: 3;
+  padding: 0;
+}
+
 /* Parnetbalk */
 .partnerbalk-section h2 {
   margin-left: 0.5rem;
@@ -170,17 +209,26 @@ section {
 }
 
 .partnerbalk {
-  width: 100%;
+  max-width: 100%;
   background-color: var(--ingenium-grey);
   display: flex;
   flex-direction: row;
+  padding: 0 .5rem;
+  overflow-y: scroll;
 
-  overflow: hidden;
+  -ms-overflow-style: none;
+  /* for Internet Explorer, Edge */
+  scrollbar-width: none;
+  /* for Firefox */
+}
+
+.partnerbalk::-webkit-scrollbar {
+  display: none;
+  /* for Chrome, Safari, and Opera */
 }
 
 .partnerlogo-wrapper {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem .5rem;
   height: 5rem;
 }
 
@@ -244,13 +292,15 @@ section {
   #hero-section h3 { 
     font-size: x-large;
   } 
+
+  .homepage-card p {
+    display: block;
+  }
   
   .info-card-section {
     box-sizing: border-box;
     width: 100%;
-    padding: 1.5rem;
-    padding-bottom: 2rem;
-  
+    padding: 1.5rem;  
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -295,7 +345,7 @@ section {
   #praesidium-card .info-container p {
     font-size: x-large;
     flex: 1;
-    width: 50%;
+    width: 85%;
   }
 
   #praesidium-card .info-container .lid-button {

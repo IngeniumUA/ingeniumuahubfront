@@ -27,6 +27,7 @@ import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
 import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import { CardComponent } from './shared/components/account/card/card.component';
 import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
+import { ContactComponent } from './features/public/contact/contact.component';
 import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
 import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
 
@@ -44,6 +45,7 @@ import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword
         EventdatePipe,
         GroupnamePipe,
         SetpwComponent,
+        ContactComponent,
         CardRedirectComponent,
         AwaitpasswordLinkComponent,
     ],
