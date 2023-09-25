@@ -96,4 +96,12 @@ export class AuthService {
       })
     )
   }
+
+  sendPasswordEmail(email: string) {
+    return this.httpClient.post<any>(apiEnviroment.apiUrl + "user/password/send/{email}", {email: email})
+  }
+
+  signUp(email: string) {
+    return this.httpClient.post<any>(apiEnviroment.apiUrl + "user/signup/mail", {email: email})
+  }
 }

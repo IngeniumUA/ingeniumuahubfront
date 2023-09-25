@@ -17,7 +17,6 @@ export class CartService {
   transactionArray: IAbstractTransaction[] = [];
 
   sourceArray: IItem[] = [];
-  groupArray: string[][] = [];
 
   // Private --------------------------------
   // Transaction methods
@@ -148,5 +147,10 @@ export class CartService {
       return;
     }
     // TODO Remove source
+  }
+
+  public clear() {
+    this.transactionArray = []
+    this.sourceArray = []
   }
 }

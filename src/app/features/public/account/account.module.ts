@@ -9,16 +9,21 @@ import { CardDetailComponent } from './card/card-detail.component';
 import {CardComponent} from "../../../shared/components/account/card/card.component";
 import { AccountTransactionsComponent } from './account-transactions/account-transactions.component';
 import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
+import {AppModule} from "../../../app.module";
+import {
+  TransactionDisplayComponent
+} from "../../../shared/components/account/transaction-display/transaction-display.component";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        AccountRoutingModule,
-        PublicHeaderComponent,
-        CardComponent,
-        UnderConstructionComponent,
-    ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AccountRoutingModule,
+    PublicHeaderComponent,
+    CardComponent,
+    UnderConstructionComponent,
+    TransactionDisplayComponent,
+  ],
   declarations: [
     AccountDetailsComponent,
     AccountComponent,

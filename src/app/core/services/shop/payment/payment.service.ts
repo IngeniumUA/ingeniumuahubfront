@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CartService} from "../cart/cart.service";
-import {Observable, of} from "rxjs";
+import {Observable, of, tap} from "rxjs";
 import {apiEnviroment} from "../../../../../enviroments";
 
 export interface CheckoutIdI {
@@ -24,6 +24,8 @@ export class PaymentService {
     })
 
     // return of({checkout_id:'pi_3NsBZYBSXssFMR3b2Cn7rhc1_secret_iLgROlVAsYtMNpcHJYvBiCvDm', payment_providor:'dev'})
-    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + "interact/checkout", api_transactions)
+    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + "interact/checkout", api_transactions).pipe(
+      tap(_ => this.cartService.clear())
+    )
   }
 }
