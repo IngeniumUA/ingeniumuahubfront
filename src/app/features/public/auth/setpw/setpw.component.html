@@ -1,6 +1,7 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
 <section class="setpw-page">
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <h3 class="info-text">Vul het password in dat je wilt gebruiken!</h3>
   <div class="setpw-page-section">
     <label class="hubformfield-white">
       <input type="password" formControlName="password" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"/>
@@ -8,7 +9,8 @@
   </div>
 
   <div class="setpw-page-section">
-    <button class="hubbutton-blue"><h3>Log In</h3></button>
+    <button class="hubbutton-blue"><h3>Set Password</h3></button>
   </div>
+  <h3 class="info-text">Hierna zal je moeten inloggen!</h3>
 </form>
 </section>

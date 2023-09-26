@@ -1,0 +1,47 @@
+.setpw-page {
+  margin-top: 15vh;
+  min-height: 80vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  gap: 1rem;
+}
+
+.setpw-page .setpw-page-section {
+  width: 16.625rem;
+  height: 2.375rem;
+}
+
+.setpw-page .setpw-section-border {
+  border: solid var(--mainblue) 1px;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.setpw-page .setpw-section-border:hover {
+  cursor: pointer;
+}
+
+.setpw-section-border h2, .setpw-section-border h3 {
+  color: var(--mainblue);
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.info-text {
+  color: var(--mainblue);
+}

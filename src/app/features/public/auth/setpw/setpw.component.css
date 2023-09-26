@@ -42,3 +42,6 @@ form {
   gap: 0.8rem;
 }
 
+.info-text {
+  color: var(--mainblue);
+}
