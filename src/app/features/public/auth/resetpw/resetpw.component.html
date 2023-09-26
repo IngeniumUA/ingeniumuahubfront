@@ -1,6 +1,16 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
-<section>
-  <h1>Je mail is onderweg!</h1>
-  <h4>Niet ontvangen?</h4>
-  <h4 (click)="this.SendPasswordReset()">Stuur een nieuwe</h4>
+<section class="resetpw-page">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h3 class="info-text">Vul het email address in!</h3>
+    <div class="resetpw-page-section">
+      <label class="hubformfield-white">
+        <input type="email" formControlName="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+      </label>
+    </div>
+
+    <div class="resetpw-page-section">
+      <button class="hubbutton-blue"><h3>Send email</h3></button>
+    </div>
+    <h3 class="info-text">Hierna moet je de link volgend in de mail die je krijgt!</h3>
+  </form>
 </section>

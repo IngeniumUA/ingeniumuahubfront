@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
 import {PasswordService} from "../../../../core/services/user/password/password.service";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-setpw',
@@ -22,6 +23,8 @@ export class SetpwComponent implements OnInit{
   ) { }
   uuid!: string;
   pw_settoken!: string;
+  form_error: string | null = null;
+
   ngOnInit() {
     this.form = this.formBuilder.group({
       password: ['', Validators.required]
@@ -29,7 +32,7 @@ export class SetpwComponent implements OnInit{
     const uuid = this.route.snapshot.paramMap.get('uuid')
     const pw_settoken = this.route.snapshot.paramMap.get('pw_settoken')
     if (!uuid || !pw_settoken){
-      this.router.navigateByUrl('');
+      this.router.navigateByUrl('home');
       return
     }
     else {
@@ -53,14 +56,23 @@ export class SetpwComponent implements OnInit{
     this.passwordService.setPassword(this.uuid, this.pw_settoken, this.form.controls['password'].value).pipe(
       first()).subscribe({
       next: () => {
-        // get return url from query parameters ( so, ?next='' in the url), else default to home page
-        const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-        this.router.navigateByUrl(returnUrl);
+        // Send to login on complete
+        this.router.navigateByUrl('/auth/login');
       },
       error: (error: any) => {
         this.loading = false;
-        console.log(error);
+        this.handleFormError(error)
       }
     })
+  }
+
+  handleFormError(err: Error) {
+    if (!(err instanceof HttpErrorResponse)) {
+      this.form_error = err.message;
+      return;
+    } else {
+      this.form_error = "Ongeldige resetlink, probeer opnieuw!";
+      return
+    }
   }
 }

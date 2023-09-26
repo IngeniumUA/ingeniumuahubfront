@@ -12,4 +12,8 @@ export class PasswordService {
   public setPassword(uuid: string, pw_settoken: string, plain_password: string): any {
     return this.httpClient.post<any>(apiEnviroment.apiUrl + "user/password/set/" + uuid + "/" + pw_settoken, {plain_password: plain_password})
   }
+
+  public sendPasswordEmail(email: string) {
+    return this.httpClient.post<any>(apiEnviroment.apiUrl + "user/password/reset", {email: email})
+  }
 }

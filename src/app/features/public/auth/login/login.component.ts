@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 
 import {AuthService} from "../../../../core/services/user/auth/auth.service";
 import {SocialAuthService} from "@abacritt/angularx-social-login";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -56,7 +57,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      const error: Error = Error("Wrong email or password");
+      const error: Error = Error("Ongeldige email or password");
       this.handleFormError(error);
       return;
     }
@@ -83,6 +84,15 @@ export class LoginComponent implements OnInit {
   }
 
   handleFormError(err: Error) {
-    this.form_error = err.message;
+    if (!(err instanceof HttpErrorResponse)) {
+      this.form_error = err.message;
+      return;
+    } else {
+      if (err.status == 401) {
+        this.form_error = "Ongeldige email en password combinatie";
+        return
+      }
+    }
+    this.form_error = "Er ging iets fout!";
   }
 }
