@@ -61,6 +61,9 @@ export class LoginComponent implements OnInit {
       this.handleFormError(error);
       return;
     }
+    if (this.loading) {
+      return
+    }
 
     this.loading = true;
     this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).pipe(

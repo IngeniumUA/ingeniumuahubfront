@@ -61,9 +61,24 @@ export class RegisterPageComponent {
       this.handleFormError(error);
       return;
     }
+    if (this.loading) {
+      return;
+    }
+    const email: string = this.form.controls['email'].value
+    if (email.includes("ad.ua.ac.be")) {
+      const error: Error = Error("UAntwerpen mailadressen werken niet!");
+      this.handleFormError(error);
+      return;
+    }
+    if (email.includes("uantwerpen")) {
+      const error: Error = Error("UAntwerpen mailadressen werken niet!");
+      this.handleFormError(error);
+      return;
+    }
+
 
     this.loading = true;
-    this.registerService.register(this.form.controls['email'].value).pipe(
+    this.registerService.register(email).pipe(
       first()).subscribe({
       next: () => {
         this.router.navigateByUrl('/home')

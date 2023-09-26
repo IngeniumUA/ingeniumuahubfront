@@ -30,6 +30,7 @@ import { UnderConstructionComponent } from './shared/components/under-constructi
 import { ContactComponent } from './features/public/contact/contact.component';
 import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
 import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
+import { AccountDetailsComponent } from './shared/components/account/account-details/account-details.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword
         ContactComponent,
         CardRedirectComponent,
         AwaitpasswordLinkComponent,
+        AccountDetailsComponent,
     ],
   imports: [
     BrowserModule,
