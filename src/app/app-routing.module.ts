@@ -10,6 +10,8 @@ import {authGuard} from "./core/guards/auth/auth.guard";
 import {EventsComponent} from "./features/public/events/events/events.component";
 import {staffGuard} from "./core/guards/staff.guard";
 import {CardRedirectComponent} from "./features/public/card-redirect/card-redirect.component";
+import {InfoComponent} from "./features/public/info/info/info.component";
+import {PraesidiumInfoComponent} from "./features/public/info/praesidium-info/praesidium-info.component";
 
 
 const routes: Routes = [
@@ -21,6 +23,7 @@ const routes: Routes = [
   children: [
     // Authentication pages
     {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
+
     // Public event related pages
     {path: 'event', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
     {path: 'events', component: EventsComponent },
@@ -30,6 +33,8 @@ const routes: Routes = [
 
     // Info
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
+    {path: 'over-ons', component: InfoComponent},
+    {path: 'praesidium', component: PraesidiumInfoComponent},
 
     // Cloud
     {path: 'cloud', component: CloudComponent, canActivate: [authGuard]},
