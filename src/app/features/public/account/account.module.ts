@@ -13,6 +13,7 @@ import {AppModule} from "../../../app.module";
 import {
   TransactionDisplayComponent
 } from "../../../shared/components/account/transaction-display/transaction-display.component";
+import {AccountInfo} from "../../../shared/components/account/account-details/account-info.component";
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import {
     CardComponent,
     UnderConstructionComponent,
     TransactionDisplayComponent,
+    AccountInfo,
   ],
   declarations: [
     AccountDetailsComponent,

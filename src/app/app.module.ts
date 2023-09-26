@@ -30,7 +30,6 @@ import { UnderConstructionComponent } from './shared/components/under-constructi
 import { ContactComponent } from './features/public/contact/contact.component';
 import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
 import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
-import { AccountDetailsComponent } from './shared/components/account/account-details/account-details.component';
 
 
 @NgModule({
@@ -48,8 +47,7 @@ import { AccountDetailsComponent } from './shared/components/account/account-det
         SetpwComponent,
         ContactComponent,
         CardRedirectComponent,
-        AwaitpasswordLinkComponent,
-        AccountDetailsComponent,
+        AwaitpasswordLinkComponent
     ],
   imports: [
     BrowserModule,
@@ -87,9 +85,9 @@ import { AccountDetailsComponent } from './shared/components/account/account-det
         } as unknown as SocialAuthServiceConfig,
       }
     ],
-    exports: [
-        EventdatePipe,
-    ],
+  exports: [
+    EventdatePipe,
+  ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

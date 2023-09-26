@@ -1,4 +1,5 @@
 import {HubCardI} from "./card";
+import {Validators} from "@angular/forms";
 
 export interface HubAuthData {
   access_token: string;
@@ -13,9 +14,15 @@ export interface HubUserRolesI {
 }
 
 export interface HubUserPersonalDetailsI {
-  first_name: string,
-  last_name: string,
-  address: string,
+  voornaam: string
+  achternaam: string
+  telefoonnummer: string
+  gemeente: string
+  adres: string
+  huisnummer: string
+  sport_interesse: string
+  doop_interesse: string
+  afstudeerrichting: string
 }
 
 export interface HubAccountData {
