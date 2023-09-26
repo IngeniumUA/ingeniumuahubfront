@@ -1,0 +1,46 @@
+section {
+  padding: 1rem;
+
+  border-radius: 15px;
+
+  background-color: var(--mainwhite);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  max-width: 40rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+form h3 {
+  color: var(--mainblue)
+}
+
+.account-info-field-wrapper {
+  height: 2.5rem;
+  width: 100%;
+}
+
+input {
+  color: var(--mainblue)
+}
+
+.account-info-field-wrapper h3 {
+  color: var(--mainblue)
+}
+
+.hubbutton-blue h3 {
+  color: var(--mainwhite)
+}
+
+.account-button-wrapper {
+  margin-top: 3rem;
+  width: 20rem;
+}

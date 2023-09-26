@@ -1,0 +1,77 @@
+<section>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h3>Vul je informatie in!</h3>
+    <div class="account-info-field-wrapper">
+      <label class="hubformfield-blue">
+        <input type="text" formControlName="voornaam" placeholder="Voornaam" [ngClass]="{ 'is-invalid': submitted && f['voornaam'].errors }"/>
+      </label>
+    </div>
+    <div class="account-info-field-wrapper">
+      <label class="hubformfield-blue">
+        <input type="text" formControlName="achternaam" placeholder="Achternaam" [ngClass]="{ 'is-invalid': submitted && f['achternaam'].errors }"/>
+      </label>
+    </div>
+    <div class="account-info-field-wrapper">
+      <label class="hubformfield-blue">
+        <input type="text" formControlName="telefoonnummer" placeholder="Telefoonnummer" [ngClass]="{ 'is-invalid': submitted && f['telefoonnummer'].errors }"/>
+      </label>
+    </div>
+    <div class="account-info-field-wrapper">
+      <label class="hubformfield-blue">
+        <input type="text" formControlName="gemeente" placeholder="Gemeente" [ngClass]="{ 'is-invalid': submitted && f['gemeente'].errors }"/>
+      </label>
+    </div>
+    <div class="account-info-field-wrapper">
+      <label class="hubformfield-blue">
+        <input type="text" formControlName="adres" placeholder="Adres" [ngClass]="{ 'is-invalid': submitted && f['adres'].errors }"/>
+      </label>
+    </div>
+    <div class="account-info-field-wrapper">
+      <label class="hubformfield-blue">
+        <input type="text" formControlName="huisnummer" placeholder="Huisnummer" [ngClass]="{ 'is-invalid': submitted && f['huisnummer'].errors }"/>
+      </label>
+    </div>
+
+    <div class="account-info-field-wrapper">
+      <h3>Geïnteresseerd in sport?</h3>
+      <mat-radio-group formControlName="sport_interesse" aria-label="Select an option">
+        <mat-radio-button value=true>Graag!</mat-radio-button>
+        <mat-radio-button value=false>Nee</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="account-info-field-wrapper">
+      <h3>Wil je meer info rond dopen?</h3>
+      <mat-radio-group formControlName="doop_interesse" aria-label="Select an option">
+        <mat-radio-button value=true>Graag!</mat-radio-button>
+        <mat-radio-button value=false>Nee</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="account-info-field-wrapper">
+      <h3>Asftudeerrichting</h3>
+      <mat-radio-group formControlName="afstudeerrichting" aria-label="Select an option">
+        <mat-radio-button value="bouwkunde">Bouwkunde</mat-radio-button>
+        <mat-radio-button value="elektromechanica">Elektromechanica</mat-radio-button>
+        <mat-radio-button value="elektronica_ict">Elektronica-ICT</mat-radio-button>
+        <mat-radio-button value="chemie">Chemie</mat-radio-button>
+        <mat-radio-button value="biochemie">Biochemie</mat-radio-button>
+        <mat-radio-button value="uantwerpen">UAntwerpen</mat-radio-button>
+        <mat-radio-button value="other">Other</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <div class="account-button-wrapper">
+      <button class="hubbutton-blue"
+              [disabled]="this.loading"
+              [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
+        <h3 *ngIf="!this.loading">Submit</h3>
+        <h3 *ngIf="this.loading">Working ...</h3>
+      </button>
+      <div *ngIf="this.form_error != null">
+        <span class="error-message">{{ this.form_error }}</span>
+      </div>
+    </div>
+
+  </form>
+</section>

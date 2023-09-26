@@ -100,6 +100,7 @@ span {
 }
 
 /* Formfield */
+/* WHITE */
 .hubformfield-white {
   width: 100%;
   height: 100%;
@@ -113,6 +114,36 @@ span {
 }
 
 .hubformfield-white input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  padding-left: 16px;
+
+  border: none;
+  appearance: none;
+  background-color: transparent;
+
+  line-height: 1.1rem;
+  font-size: 1.1rem;  /* 20px */
+  font-weight: lighter;
+  font-family: D-DIN Condensed, sans-serif;
+}
+
+/* BLUE */
+.hubformfield-blue {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  position: relative;
+  display: inline-block;
+
+  border: solid var(--mainwhite) 1px;
+  border-radius: 5px;
+}
+
+.hubformfield-blue input {
   width: 100%;
   height: 100%;
   box-sizing: border-box;

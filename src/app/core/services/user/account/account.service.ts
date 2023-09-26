@@ -27,9 +27,18 @@ export class AccountService {
     return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + "user/account/")
   }
 
-  public updateAccountDetails(details: HubUserPersonalDetailsI): Observable<HubAccountData> {
-    return this.httpClient.post<HubAccountData>(apiEnviroment.apiUrl + "user/account/", details)
+  // Extra Account Details
+  public getAccountDetails(details: HubUserPersonalDetailsI): Observable<HubUserPersonalDetailsI> {
+    return this.httpClient.post<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + "user/account/personal", details)
   }
+  public createAccountDetails(details: HubUserPersonalDetailsI): Observable<HubUserPersonalDetailsI> {
+    return this.httpClient.post<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + "user/account/personal", details)
+  }
+  public updatePersonalDetails(details: HubUserPersonalDetailsI): Observable<HubUserPersonalDetailsI> {
+    return this.httpClient.post<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + "user/account/personal", details)
+  }
+
+  // -----
 
   public linkCard(card_uuid: string): Observable<HubCardI> {
     return this.httpClient.post<HubCardI>(apiEnviroment.apiUrl + "item/card/link/" + card_uuid, {})
