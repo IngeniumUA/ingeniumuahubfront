@@ -66,7 +66,7 @@ export class RegisterPageComponent {
     this.registerService.register(this.form.controls['email'].value).pipe(
       first()).subscribe({
       next: () => {
-        this.router.navigateByUrl('/auth/await_email')
+        this.router.navigateByUrl('/home')
       },
       error: (error: Error) => {
         this.loading = false;
