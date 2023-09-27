@@ -29,7 +29,7 @@ export class EventDetailComponent implements OnInit {
   isCartEmpty: boolean = this.cartService.hasTransactions()
   // Event Info and Deco
   event$!: Observable<EventItemDetailI>;
-  userError$!: Observable<any>;
+  eventError$!: Observable<any>;
 
   productCategories$!: Observable<IProductCategorie[]>;
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -55,7 +55,7 @@ export class EventDetailComponent implements OnInit {
 
   SetEvent(id: string): void {
     this.event$ = this.eventService.getEvent(id).pipe()
-    this.userError$ = this.event$.pipe(
+    this.eventError$ = this.event$.pipe(
       ignoreElements(),
       catchError((err) => {
         this.router.navigateByUrl('/home')

@@ -4,7 +4,7 @@ import {LayoutService} from "../../../../core/services/layout/layout.service";
 import {EventService} from "../../../../core/services/items/events/event.service";
 import {CartService} from "../../../../core/services/shop/cart/cart.service";
 import {ProductsService} from "../../../../core/services/shop/products/products.service";
-import {Observable, of, shareReplay} from "rxjs";
+import {catchError, ignoreElements, Observable, of, shareReplay} from "rxjs";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {ShopService} from "../../../../core/services/items/shop.service";
 import {ShopItemDetailI} from "../../../../shared/models/items/shopitem";
@@ -31,6 +31,7 @@ export class ShopDetailComponent implements OnInit {
   isCartFilled: boolean = this.cartService.hasTransactions()
   // Event Info and Deco
   shopItem$?: Observable<ShopItemDetailI>;
+  shopError$!: Observable<any>;
   products$: Observable<IProductItem[]> = of([])
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class ShopDetailComponent implements OnInit {
 
     // If ID is null
     if (id === null) {
-      this.router.navigateByUrl('/events')
+      this.router.navigateByUrl('/shop')
       return
     }
 
@@ -49,6 +50,12 @@ export class ShopDetailComponent implements OnInit {
 
   public Setup(id: string) {
     this.shopItem$ = this.shopService.getShopItem(id);
+    this.shopError$ = this.shopItem$.pipe(
+      ignoreElements(),
+      catchError((err) => {
+        this.router.navigateByUrl('/home')
+        return of(err);
+      }))
     this.products$ = this.productService.getProducts(id).pipe(shareReplay());
   }
 

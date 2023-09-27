@@ -1,6 +1,6 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
 
-<ng-container *ngIf="{event: this.event$ | async, error: userError$ | async} as data; ">
+<ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
   <ng-container *ngIf="data.event as event; else loading">
 <section class="event-banner">
   <img src='{{event.image_landscape}}' alt="Image not working :(">
