@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
-import {BehaviorSubject, Observable, of, shareReplay, tap} from "rxjs";
+import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay, tap} from "rxjs";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
 import {IProductCategorie, IProductGroup, IProductItem} from "../../../../shared/models/items/products/products";
 import {ProductsService} from "../../../../core/services/shop/products/products.service";
@@ -28,7 +28,9 @@ export class EventDetailComponent implements OnInit {
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
   isCartEmpty: boolean = this.cartService.hasTransactions()
   // Event Info and Deco
-  event$?: Observable<EventItemDetailI>;
+  event$!: Observable<EventItemDetailI>;
+  userError$!: Observable<any>;
+
   productCategories$!: Observable<IProductCategorie[]>;
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentProductGroups!: Observable<IProductGroup[]>;
@@ -52,7 +54,13 @@ export class EventDetailComponent implements OnInit {
   }
 
   SetEvent(id: string): void {
-    this.event$ = this.eventService.getEvent(id)
+    this.event$ = this.eventService.getEvent(id).pipe()
+    this.userError$ = this.event$.pipe(
+      ignoreElements(),
+      catchError((err) => {
+        this.router.navigateByUrl('/home')
+        return of(err);
+      }))
   }
 
   SetProductCategorie(index: number): void {
