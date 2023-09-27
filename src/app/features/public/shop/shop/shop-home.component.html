@@ -1,9 +1,15 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
 <section>
   <h1>Shop:</h1>
-  <div class="item-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    <ng-container *ngFor="let shopitem of (this.shopitems$ | async)">
-      <app-rec-sys-item-preview [recsysItem]="shopitem"></app-rec-sys-item-preview>
-    </ng-container>
-  </div>
+
+  <!--  <div class="item-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">-->
+  <!--    <ng-container *ngFor="let shopitem of (this.shopitems$ | async)">-->
+  <!--      <app-rec-sys-item-preview [recsysItem]="shopitem"></app-rec-sys-item-preview>-->
+  <!--    </ng-container>-->
+  <!--  </div>-->
 </section>
+<!--Added a warn class to disable the shop until it is available-->
+
+<div class="warn">
+  <h2> De online verkoop van Lidkaarten is beschikbaar vanaf de start van ons POP-UP Z event! </h2>
+</div>
