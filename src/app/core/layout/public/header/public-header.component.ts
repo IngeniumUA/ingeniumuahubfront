@@ -9,7 +9,7 @@ import {distinctUntilChanged} from "rxjs/operators";
 @Component({
   selector: 'app-layout-public-header', // HTML tag for importing ( see app.component.html )
   templateUrl: './public-header.component.html',
-  styleUrls: ['./public-header.component.css'],
+  styleUrls: ['./public-header.component.scss'],
   standalone: true, // Allows it to be imported outside of routing
   imports: [
     NgIf,

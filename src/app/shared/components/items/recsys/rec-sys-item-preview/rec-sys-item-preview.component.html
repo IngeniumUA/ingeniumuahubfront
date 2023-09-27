@@ -1,16 +1,9 @@
-<div class="card"
-     [routerLink]="[this.recsysItem.follow_through_link]"
-     [ngStyle]="{background: (this.recsysItem.color | colordbrgba: 1 )}">
-  <div class="image-wrapper" [ngClass]="{'image-landscape': this.isLandscape}">
-    <img src='{{ this.image }}' alt="Square Banner image">
-  </div>
-  <ng-container *ngIf="!this.isLandscape; else h1name">
-    <h2>{{ this.recsysItem.name }}</h2>
-  </ng-container>
-
-  <h3>{{ this.recsysItem.date | date }}</h3>
-</div>
-
-<ng-template #h1name>
-  <h1>{{ this.recsysItem.name }}</h1>
-</ng-template>
+<a [routerLink]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
+  <article class="event-card" [style]="{background: (this.recsysItem.color | colordbrgba: 1 )}">
+    <div class="image"><img src="{{ this.image }}"></div>
+    <div class="content">
+      <h3>{{ this.recsysItem.name }}</h3>
+      <span class="date">{{ this.recsysItem.date | date }}</span>
+    </div>
+  </article>
+</a>
