@@ -3,11 +3,14 @@
   position: absolute;
   top: 0;
   background: none;
+  z-index: 90;
 }
+
 .nav-light {
   background-color: var(--mainwhite);
   color: var(--mainblue);
 }
+
 .nav-dark {
   background-color: var(--mainblue);
   color: var(--mainwhite);
@@ -18,49 +21,87 @@ nav p {
 }
 
 nav {
+  @apply p-6 w-full flex flex-row items-center;
   height: 10vh;
-  width: 100%;
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-nav .schild-wrap {
-  width: 8vh;
-}
-nav img {
-  width: 100%;
-  height: 100%;
-}
-nav p {
-  font-weight: bolder;
-  font-size: 1.5rem;
+  .logo {
+    @apply flex items-center;
 
-  margin-bottom: 2rem;
+    .schild {
+      max-width: 8vh;
+    }
+
+    img {
+      @apply w-full h-full;
+    }
+
+    span {
+      color: var(--mainblue);
+    }
+  }
+
+  p {
+    font-weight: bolder;
+    font-size: 1.5rem;
+
+    margin-bottom: 2rem;
+  }
+
+  .links {
+    @apply hidden md:flex flex-1 justify-end items-center;
+
+    ul {
+      @apply inline-flex;
+
+      li {
+        @apply text-lg border-b-2 border-transparent transition-all;
+
+        &:hover {
+          @apply border-blue-950;
+        }
+
+        a {
+          @apply text-blue-900 block px-6 py-3 outline-transparent focus:outline focus:outline-blue-950 rounded;
+        }
+      }
+    }
+
+    .buttons {
+      @apply ml-4;
+    }
+  }
+
+  .menu-button {
+    @apply flex-1 flex justify-end text-blue-950;
+  }
+
+  &.nav-dark, &.nav-pos-absolute {
+    .links {
+      ul {
+        li {
+          &:hover {
+            @apply border-white;
+          }
+
+          a {
+            @apply text-white focus:outline-white;
+          }
+        }
+      }
+    }
+
+    #nav-auth-button {
+      @apply focus:outline-white;
+    }
+
+    .menu-button {
+      @apply text-white;
+    }
+  }
 }
 
 nav .schild-wrap:hover, nav p:hover {
   cursor: pointer;
-}
-
-/* Menu button*/
-.navbutton-wrap {
-  flex-grow: 1;
-  justify-self: flex-end;
-}
-
-.menu-button {
-  float: right;
-
-  background-color: transparent;
-  background-repeat: no-repeat;
-  border: none;
-  cursor: pointer;
-  overflow: hidden;
-  outline: none;
-
-  color: var(--mainwhite);
-  font-size: clamp(0rem, 3vh, 2rem);
 }
 
 /* Expanded navbar */
@@ -140,6 +181,11 @@ nav .schild-wrap:hover, nav p:hover {
   margin: 1rem;
   margin-right: 1rem;
   margin-left: 0.5rem;
+}
+
+.navbar-login-section .lid-button:hover {
+  color: var(--mainwhite);
+  background-color: var(--mainblue);
 }
 
 .connect {
