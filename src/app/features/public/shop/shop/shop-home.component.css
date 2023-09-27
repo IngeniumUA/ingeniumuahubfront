@@ -8,6 +8,14 @@ section {
   flex-direction: column;
 }
 
+.warn {
+  height: 63vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--mainblue);
+}
+
 section h1 {
   padding-bottom: 1rem;
 }

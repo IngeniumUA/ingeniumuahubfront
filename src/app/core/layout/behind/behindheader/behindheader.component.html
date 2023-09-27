@@ -8,11 +8,7 @@
   <div class="schild-wrap" (click)="Home()">
     <img src="assets/Ingenium-schild.png">
   </div>
-  <div (click)="Home()">
-    <p [ngStyle]="{'color': this.light_theme ? 'var(--mainblue)': 'white'}">
-      IngeniumUA
-    </p>
-  </div>
+  <a routerLink="/" [style]="{'color': this.light_theme ? 'var(--mainblue)': 'white'}">IngeniumUA</a>
   <div class="navbutton-wrap">
     <ng-container *ngIf="this.light_theme">
       <button class="menu-button" (click)="ToggleSideNav()">

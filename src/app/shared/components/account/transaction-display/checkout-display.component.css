@@ -1,0 +1,8 @@
+transaction-card {
+  background-color: var(--mainwhite);
+}
+
+.transaction-info {
+  display: flex;
+  flex-direction: row;
+}

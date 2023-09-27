@@ -1,53 +1,88 @@
-<app-layout-public-header [background]="false" [light_theme]="false"></app-layout-public-header>
-<section id="hero-section"
-         style="background-image:
+<app-layout-public-header [background]="false" [light_theme]="false" />
+
+<section id="hero-section" style="background-image:
          linear-gradient(to bottom, rgba(0, 5, 61, 0.6), rgba(0, 5, 61, 0.6) 80%, rgba(0, 5, 61, 1)),
          url('assets/static-images/GalabalAchtergrond2CroppedUpscaledReducedEdited.webp')">
   <div>
-    <h1>Toegepaste Ingenieurs&shy; Wetenschappen</h1>
-    <h3>Faculteitsvereniging</h3>
+    <h1>
+      Toegepaste Ingenieurs&shy; Wetenschappen<br>
+      <small>Faculteitsvereniging</small>
+    </h1>
   </div>
 </section>
 
 <!-- Leading infocard -->
 <section class="info-card-section">
-  <div class="homepage-card" id="praesidium-card">
-    <div class="info-container">
-      <div class="lid-button clickable" [routerLink]="['/shop']">WORDT LID</div>
-      <p>Sinds 2018 is Ingenium de officiële studentenvereniging van de faculteit Toegepaste
-        Ingenieurswetenschappen aan de Universiteit Antwerpen.</p>
+  <div class="intro-card">
+    <div class="intro-card__image">
+      <img src="assets/images/ToffeIngeniumFoto.jpg" alt="" aria-hidden="true">
     </div>
-    <div [routerLink]="['/info/praesidium']" class="image-wrapper clickable"><img src="assets/images/ToffeIngeniumFoto.jpg"></div>
+    <div class="intro-card__content">
+      <p>
+        Sinds 2018 is Ingenium de officiële studentenvereniging van de faculteit Toegepaste Ingenieurswetenschappen aan
+        de Universiteit Antwerpen.
+      </p>
+      <div class="mt-4">
+        <a class="button button-outline-white button-lg uppercase" [routerLink]="['/shop']">
+          Word lid
+          <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- Upcoming events -->
 <section class="info-card-section recsys-section">
-  <h1>Volgende Events</h1>
-  <div class="upcoming-events">
+  <h1>Volgende events</h1>
+  <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
     <ng-container *ngFor="let recsys_item of (this.homePageRec$ | async)">
-      <app-rec-sys-item-preview [recsysItem]="recsys_item"></app-rec-sys-item-preview>
+      <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" />
     </ng-container>
   </div>
-  <h2 class="clickable" [routerLink]="['/event']">Alles weergeven -></h2>
+
+  <a class="button button-outline-white button-lg uppercase" [routerLink]="['/event']">
+    Alle events
+    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </a>
 </section>
 
 <!-- Recommendatie TODO: 1 recommendatie voor alle soorten items -->
 <section class="info-card-section">
-  <div class="homepage-card news">
-    <h3>Kom jouw lidkaar en/of goodiebag halen op campus groenenborger!</h3>
-    <p>Meer info</p>
-    <div [routerLink]="['/info/startweek']" class="image-wrapper"><img src="assets/images/GoodiebagFoto.jpg"></div>
-  </div>
-  <div class="homepage-card news">
-    <h3>Dit was het epische gala 2023!</h3>
-    <p>Meer info</p>
-    <div [routerLink]="['/info/startweek']" class="image-wrapper"><img src="assets/images/galabal.png"></div>
-  </div>
-  <div class="homepage-card news">
-    <h3>PRAESIDIUM 2023-2024</h3>
-    <p>Meer info</p>
-    <div [routerLink]="['/info/praesidium']" class="image-wrapper"><img src="assets/images/ToffeIngeniumFoto.jpg"></div>
+  <div class="container">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <article class="homepage-card news">
+        <div class="content">
+          <div class="title-wrapper">
+            <h3>Kom uw lidkaart/goodiebag halen op campus Groenenborger!</h3>
+          </div>
+          <a href="#">Meer info</a>
+        </div>
+        <a [routerLink]="['/info/startweek']" class="image-wrapper"><img src="assets/images/GoodiebagFoto.jpg"></a>
+      </article>
+      <article class="homepage-card news">
+        <div class="content">
+          <div class="title-wrapper">
+            <h3>Dit was het epische gala 2023!</h3>
+          </div>
+          <a href="#">Meer info</a>
+        </div>
+        <a [routerLink]="['/info/startweek']" class="image-wrapper"><img src="assets/images/galabal.jpg"></a>
+      </article>
+      <article class="homepage-card news">
+        <div class="content">
+          <div class="title-wrapper">
+            <h3>Praesidium 2023-2024</h3>
+          </div>
+          <a href="#">Meer info</a>
+        </div>
+        <a [routerLink]="['/info/praesidium']" class="image-wrapper"><img src="assets/images/ToffeIngeniumFoto.jpg"></a>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -61,4 +96,5 @@
   </div>
   -->
 </section>
-<app-layout-public-footer></app-layout-public-footer>
+
+<app-layout-public-footer />
