@@ -4,6 +4,7 @@
     <p>€ {{ this.product.price_eu}}</p>
   </ng-container>
 
+  <ng-container *ngIf="this.product.max_count != 0; else notAvailable">
   <button (click)="TryDecreaseCount()"
           [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) <= 0) ? 'gray' : this.primaryColorFull}"
           [disabled]="(this.productForm.controls.count.value ?? 0) <= 0">
@@ -20,4 +21,9 @@
   <button (click)="TryIncreaseCount()"
           [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
           [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
+  </ng-container>
 </div>
+
+<ng-template #notAvailable>
+  <p>Niet beschikbaar!</p>
+</ng-template>

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TransactionDisplayComponent } from './transaction-display.component';
+import { CheckoutDisplayComponent } from './checkout-display.component';
 
 describe('TransactionDisplayComponent', () => {
-  let component: TransactionDisplayComponent;
-  let fixture: ComponentFixture<TransactionDisplayComponent>;
+  let component: CheckoutDisplayComponent;
+  let fixture: ComponentFixture<CheckoutDisplayComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TransactionDisplayComponent ]
+      declarations: [ CheckoutDisplayComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TransactionDisplayComponent);
+    fixture = TestBed.createComponent(CheckoutDisplayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
