@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {from, Observable, of} from "rxjs";
+import {from, Observable, of, shareReplay} from "rxjs";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {IItem} from "../../../../shared/models/items/IItem";
 import {apiEnviroment} from "../../../../../enviroments";
@@ -40,6 +40,6 @@ export class EventService {
 
   public getEvent(eventId: string): Observable<EventItemDetailI> {
     // return of(TESTevent)
-    return this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "item/event/" + eventId)
+    return this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "item/event/" + eventId).pipe(shareReplay())
   }
 }

@@ -1,6 +1,7 @@
 <app-layout-public-header></app-layout-public-header>
 
-<ng-container *ngIf="(this.shopItem$ | async) as shop else loading; ">
+<ng-container *ngIf="{shopItem: this.shopItem$ | async, error: this.shopError$ | async} as data; ">
+  <ng-container *ngIf="data.shopItem as shop; else loading">
   <section class="shop-banner">
     <img src='{{shop.image_landscape}}' alt="Image not working :(">
   </section>
@@ -27,6 +28,7 @@
   <section class="description-section">
     <p>{{ shop.item.description }}</p>
   </section>
+</ng-container>
 </ng-container>
 
 <ng-template #loading>

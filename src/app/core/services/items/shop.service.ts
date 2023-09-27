@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, shareReplay} from "rxjs";
 import {RecSysPreviewI} from "../../../shared/models/items/recsys_interfaces";
 import {apiEnviroment} from "../../../../enviroments";
 import {EventItemDetailI} from "../../../shared/models/items/events";
@@ -18,6 +18,6 @@ export class ShopService {
   }
 
   public getShopItem(itemId: string): Observable<ShopItemDetailI> {
-    return this.httpClient.get<ShopItemDetailI>(apiEnviroment.apiUrl + "item/shop/" + itemId)
+    return this.httpClient.get<ShopItemDetailI>(apiEnviroment.apiUrl + "item/shop/" + itemId).pipe(shareReplay())
   }
 }
