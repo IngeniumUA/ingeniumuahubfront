@@ -1,0 +1,16 @@
+section {
+  padding: 1rem;
+  background-color: var(--mainblue);
+}
+
+section h1 {
+
+}
+
+section p {
+  color: var(--mainwhite);
+}
+section a {
+  color: var(--mainwhite);
+  text-decoration: none;
+}

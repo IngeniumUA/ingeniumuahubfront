@@ -11,8 +11,8 @@ import { AccountTransactionsComponent } from './account-transactions/account-tra
 import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
 import {AppModule} from "../../../app.module";
 import {
-  TransactionDisplayComponent
-} from "../../../shared/components/account/transaction-display/transaction-display.component";
+  CheckoutDisplayComponent
+} from "../../../shared/components/account/transaction-display/checkout-display.component";
 import {AccountInfo} from "../../../shared/components/account/account-details/account-info.component";
 
 @NgModule({
@@ -23,7 +23,7 @@ import {AccountInfo} from "../../../shared/components/account/account-details/ac
     PublicHeaderComponent,
     CardComponent,
     UnderConstructionComponent,
-    TransactionDisplayComponent,
+    CheckoutDisplayComponent,
     AccountInfo,
   ],
   declarations: [

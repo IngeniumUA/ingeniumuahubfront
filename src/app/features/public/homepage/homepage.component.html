@@ -36,10 +36,10 @@
 
 <!-- Upcoming events -->
 <section class="info-card-section recsys-section">
-  <h1>Volgende Events</h1>
-  <div class="upcoming-events">
+  <h1>Volgende events</h1>
+  <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
     <ng-container *ngFor="let recsys_item of (this.homePageRec$ | async)">
-      <app-rec-sys-item-preview [recsysItem]="recsys_item"></app-rec-sys-item-preview>
+      <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" />
     </ng-container>
   </div>
 
@@ -54,7 +54,7 @@
 <!-- Recommendatie TODO: 1 recommendatie voor alle soorten items -->
 <section class="info-card-section">
   <div class="container">
-    <div class="grid grid-cols-1 md:grid-cols-3 justify-items-center gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <article class="homepage-card news">
         <div class="content">
           <div class="title-wrapper">

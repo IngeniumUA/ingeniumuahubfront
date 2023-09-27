@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "../../../../../enviroments";
 import {HubCardI} from "../../../../shared/models/card";
 import {IProductItem} from "../../../../shared/models/items/products/products";
+import {CheckoutI} from "../../../../shared/components/items/interactions/checkout";
 
 const TESTAccount = {
   email: "een.mail@domain.root"
@@ -44,7 +45,7 @@ export class AccountService {
     return this.httpClient.post<HubCardI>(apiEnviroment.apiUrl + "item/card/link/" + card_uuid, {})
   }
 
-  public getTransactions(): Observable<TransactionI[]> {
-    return this.httpClient.get<TransactionI[]>(apiEnviroment.apiUrl + "user/account/transactions")
+  public getTransactions(): Observable<CheckoutI[]> {
+    return this.httpClient.get<CheckoutI[]>(apiEnviroment.apiUrl + "user/account/transactions")
   }
 }
