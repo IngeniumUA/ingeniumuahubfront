@@ -37,18 +37,23 @@
 <!-- Upcoming events -->
 <section class="info-card-section recsys-section">
   <h1>Volgende events</h1>
-  <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
-    <ng-container *ngFor="let recsys_item of (this.homePageRec$ | async)">
-      <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" />
-    </ng-container>
-  </div>
 
-  <a class="button button-outline-white button-lg uppercase" [routerLink]="['/event']">
-    Alle events
-    <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
-    </svg>
-  </a>
+  <ng-container *ngIf="(this.homePageRec$ | async) as eventsRec; else noEventsAvailable">
+    <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
+      <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" *ngFor="let recsys_item of eventsRec" />
+    </div>
+
+    <a class="button button-outline-white button-lg uppercase" [routerLink]="['/event']">
+      Alle events
+      <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </a>
+  </ng-container>
+
+  <ng-template #noEventsAvailable>
+    <p class="text-white text-lg w-full">Er zijn geen beschikbare events.</p>
+  </ng-template>
 </section>
 
 <!-- Recommendatie TODO: 1 recommendatie voor alle soorten items -->
