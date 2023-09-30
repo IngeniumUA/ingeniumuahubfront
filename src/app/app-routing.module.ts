@@ -13,6 +13,7 @@ import {CardRedirectComponent} from "./features/public/card-redirect/card-redire
 import {InfoComponent} from "./features/public/info/info/info.component";
 import {PraesidiumInfoComponent} from "./features/public/info/praesidium-info/praesidium-info.component";
 import { CreditsComponent } from 'src/app/features/public/credits/credits.component';
+import { PopupzComponent } from './features/public/popupz/popupz.component';
 
 
 const routes: Routes = [
@@ -31,6 +32,9 @@ const routes: Routes = [
 
     // Shop
     {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
+
+    // POP-UP Z
+    { path: 'popupz', component: PopupzComponent },
 
     // Info
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},

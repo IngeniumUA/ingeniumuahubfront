@@ -5,6 +5,14 @@
     @apply px-6 py-3;
   }
 
+  &.button-sm {
+    @apply text-sm px-3 py-1.5;
+  }
+
+  &.button-inline {
+    @apply inline;
+  }
+
   &.button-primary {
     @apply border-blue-900 text-white bg-blue-900 focus:outline focus:outline-blue-950 focus:outline-offset-2;
 
@@ -24,4 +32,5 @@
   svg {
     @apply ml-3 -mr-1 -mt-0.5 h-5 w-5;
   }
+
 }

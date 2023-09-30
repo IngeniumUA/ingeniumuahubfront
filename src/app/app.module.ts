@@ -31,6 +31,7 @@ import { ContactComponent } from './features/public/contact/contact.component';
 import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
 import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
 import { CreditsComponent } from './features/public/credits/credits.component';
+import { PopupzComponent } from './features/public/popupz/popupz.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { CreditsComponent } from './features/public/credits/credits.component';
         ContactComponent,
         CardRedirectComponent,
         AwaitpasswordLinkComponent,
-        CreditsComponent
+        CreditsComponent,
+        PopupzComponent
     ],
   imports: [
     BrowserModule,
