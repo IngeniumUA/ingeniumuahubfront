@@ -6,9 +6,9 @@ import {LayoutService} from "../../../../core/services/layout/layout.service";
 import {ShopService} from "../../../../core/services/items/shop.service";
 
 @Component({
-  selector: 'app-shop',
+  selector: 'app-page',
   templateUrl: './shop-home.component.html',
-  styleUrls: ['./shop-home.component.css']
+  styleUrls: ['./shop-home.component.scss']
 })
 export class ShopHomeComponent {
   shopitems$: Observable<RecSysPreviewI[]> = this.shopService.getShopitemsList();

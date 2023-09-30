@@ -6,7 +6,7 @@ import {LayoutService} from "../../../../core/services/layout/layout.service";
 import {RecSysPreviewI} from "../../../../shared/models/items/recsys_interfaces";
 
 @Component({
-  selector: 'app-events',
+  selector: 'app-page',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.css']
 })

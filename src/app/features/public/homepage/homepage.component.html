@@ -1,15 +1,16 @@
-<app-layout-public-header [background]="false" [light_theme]="false" />
-
-<section id="hero-section" style="background-image:
+<div id="hero-section" style="background-image:
          linear-gradient(to bottom, rgba(0, 5, 61, 0.6), rgba(0, 5, 61, 0.6) 80%, rgba(0, 5, 61, 1)),
          url('assets/static-images/GalabalAchtergrond2CroppedUpscaledReducedEdited.webp')">
+
+  <app-layout-public-header [background]="false" [light_theme]="false" />
+
   <div>
     <h1>
       Toegepaste Ingenieurs&shy; Wetenschappen<br>
       <small>Faculteitsvereniging</small>
     </h1>
   </div>
-</section>
+</div>
 
 <!-- Leading infocard -->
 <section class="info-card-section">
@@ -92,14 +93,14 @@
 </section>
 
 <!-- Sponsorbalkje -->
-<section class="partnerbalk-section" style="flex-direction: column; align-items: center; padding-bottom: 0">
-  <h2>Met dank aan onze sponsoren:</h2>
-  <!--
-  <div class="partnerbalk">
-    <div class="partnerlogo-wrapper"><img src="assets/images/UmicoreLogo.png"></div>
-    <div class="partnerlogo-wrapper"><img src="assets/images/SparklinkLogo.png"></div>
+<!--<section class="partner-section">
+  <div class="slider">
+    <div class="slide-track">
+      <div class="slide" *ngFor="let img of sponsors">
+        <img [src]="img" alt="" />
+      </div>
+    </div>
   </div>
-  -->
-</section>
+</section>-->
 
 <app-layout-public-footer />

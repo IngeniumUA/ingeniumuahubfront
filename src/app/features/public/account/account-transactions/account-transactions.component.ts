@@ -6,7 +6,7 @@ import {CheckoutI} from "../../../../shared/components/items/interactions/checko
 @Component({
   selector: 'app-account-transactions',
   templateUrl: './account-transactions.component.html',
-  styleUrls: ['./account-transactions.component.css']
+  styleUrls: ['./account-transactions.component.scss']
 })
 export class AccountTransactionsComponent {
   constructor(private accountService: AccountService) {

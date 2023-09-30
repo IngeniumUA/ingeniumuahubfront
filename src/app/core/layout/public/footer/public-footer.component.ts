@@ -12,7 +12,7 @@ import {Observable} from "rxjs";
     NgClass,
     AsyncPipe
   ],
-  styleUrls: ['./public-footer.component.css']
+  styleUrls: ['./public-footer.component.scss']
 })
 export class PublicFooterComponent {
   isMobile$: Observable<boolean> = this.layoutService.isMobile;

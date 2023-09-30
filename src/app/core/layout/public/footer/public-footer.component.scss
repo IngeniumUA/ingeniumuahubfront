@@ -1,0 +1,31 @@
+footer {
+  @apply bg-blue-950 p-6 text-white;
+
+  .footer-content {
+    @apply flex flex-row items-center;
+
+    address {
+      @apply flex-1 not-italic text-sm;
+
+      span {
+        @apply text-inherit text-xl;
+      }
+    }
+
+    .footer-schild {
+      @apply h-full hidden sm:block;
+    }
+  }
+
+  .footer-copyright {
+    @apply mt-4 text-xs;
+  }
+
+  img {
+    @apply max-h-32;
+  }
+
+  a {
+    @apply text-inherit underline hover:no-underline;
+  }
+}

@@ -12,6 +12,7 @@ import {staffGuard} from "./core/guards/staff.guard";
 import {CardRedirectComponent} from "./features/public/card-redirect/card-redirect.component";
 import {InfoComponent} from "./features/public/info/info/info.component";
 import {PraesidiumInfoComponent} from "./features/public/info/praesidium-info/praesidium-info.component";
+import { CreditsComponent } from 'src/app/features/public/credits/credits.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,7 @@ const routes: Routes = [
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
     {path: 'over-ons', component: InfoComponent},
     {path: 'praesidium', component: PraesidiumInfoComponent},
+    { path: 'credits', component: CreditsComponent },
 
     // Cloud
     {path: 'cloud', component: CloudComponent, canActivate: [authGuard]},
@@ -67,10 +69,10 @@ const routes: Routes = [
   },
 
   // Temporary Recsysform
-  {path: 'recsysform', component: RecSysFormComponent },
+  { path: 'recsysform', component: RecSysFormComponent },
 
   // Not found as last
-  {path: '**', component: NotfoundpageComponent}
+  { path: '**', component: NotfoundpageComponent }
 ];
 
 @NgModule({

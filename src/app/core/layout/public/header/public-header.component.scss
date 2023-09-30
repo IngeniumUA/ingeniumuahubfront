@@ -21,8 +21,11 @@ nav p {
 }
 
 nav {
-  @apply p-6 w-full flex flex-row items-center;
-  height: 10vh;
+  @apply w-full border-b border-gray-100;
+
+  .nav-content {
+    @apply px-6 py-4 flex flex-row items-center;
+  }
 
   .logo {
     @apply flex items-center;
@@ -76,6 +79,8 @@ nav {
   }
 
   &.nav-dark, &.nav-pos-absolute {
+    @apply border-transparent;
+
     .links {
       ul {
         li {
@@ -106,26 +111,18 @@ nav .schild-wrap:hover, nav p:hover {
 
 /* Expanded navbar */
 .expanded-navbar {
-  position: fixed;
-  top: 0;
+  @apply flex md:hidden flex-col fixed top-0 w-full h-full;
+
   z-index: 100;
-
-  width: 100%;
-  height: 100%;
-
   background-color: rgba(212, 219, 233, 0.98);
-
-  display: flex;
-  flex-direction: column;
-
   animation: fadeIntoView 0.1s ease-in 0s 1 normal forwards;
   /*animation: slideDownIntoView 0.1s ease-in 0s 1 normal forwards;*/
-}
 
-.expanded-navbar a {
-  color: var(--mainblue);
-  font-weight: bold;
-  text-decoration: none;
+  .navbar-text-section {
+    a {
+      @apply text-blue-950 font-bold;
+    }
+  }
 }
 
 .expanded-navbar p {
@@ -152,21 +149,7 @@ nav .schild-wrap:hover, nav p:hover {
   margin-right: 1.5rem;
   text-align: left;
 
-  display: flex;
-  flex-direction: row;
-  align-content: center;
-}
-
-.navbar-login-section h3 {
-  color: var(--mainblue);
-  text-align: center;
-  flex-grow: 1;
-
-  padding: 0;
-  margin-left: 0.7rem;
-  margin-right: 0.8rem;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  @apply grid grid-cols-3 text-center items-center mt-2;
 }
 
 .navbar-login-section .lid-button {
