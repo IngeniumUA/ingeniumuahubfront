@@ -1,53 +1,13 @@
 <div class="main">
-  <div class="header pl-4"><h1>We zijn bezig aan je bestelling!</h1></div>
+  <div class="header pl-4"><h1>We zijn bezig</h1></div>
   <div class="header"></div>
   <img src="./assets/Ingenium-schild.png" alt="Ingenium Schild">
   <div class="header pr-2"><h1>Kom maar ophalen</h1></div>
   <div class="progress pl-2">
-    <p class="number">1</p>
-    <p class="number">100</p>
-    <p class="number">33</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">44</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
+    <p class="number" *ngFor="let order of orders[0]">{{ order }}</p>
   </div>
   <div class="done pr-2">
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
-    <p class="number">100</p>
+    <p class="number" *ngFor="let order of orders[1]">{{ order }}</p>
   </div>
   <h1>Smakelijk!</h1>
 </div>

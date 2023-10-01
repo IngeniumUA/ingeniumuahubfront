@@ -10,6 +10,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-edit.component';
 import { FunctionsComponent } from './functions/functions.component';
 import { DrinkOrdersComponent } from './popupz/drink-orders/drink-orders.component';
+import { FoodOrdersComponent } from './popupz/food-orders/food-orders.component';
 
 
 
@@ -28,7 +29,8 @@ import { DrinkOrdersComponent } from './popupz/drink-orders/drink-orders.compone
     StaffEventListComponent,
     StaffEventDetailComponent,
     FunctionsComponent,
-    DrinkOrdersComponent
+    DrinkOrdersComponent,
+    FoodOrdersComponent
   ],
 })
 export class StaffModule { }

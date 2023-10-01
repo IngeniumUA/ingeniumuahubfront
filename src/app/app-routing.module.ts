@@ -17,6 +17,7 @@ import { PopupzComponent } from './features/public/popupz/popupz.component';
 import {PopupzorderComponent} from "./features/public/popupz/popupzorder/popupzorder.component";
 import {PopupzorderStaffComponent} from "./features/public/popupz/popupzorder-staff/popupzorder-staff.component";
 import { DrinkOrdersComponent } from './features/staff/popupz/drink-orders/drink-orders.component';
+import { FoodOrdersComponent } from './features/staff/popupz/food-orders/food-orders.component';
 
 
 const routes: Routes = [
@@ -38,11 +39,6 @@ const routes: Routes = [
 
     // POP-UP Z
     { path: 'popupz', component: PopupzComponent },
-    { path: 'popupzorder', component: PopupzorderComponent },
-    { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
-
-    { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [authGuard] },
-
 
     // Info
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
@@ -61,6 +57,17 @@ const routes: Routes = [
       loadChildren: () => import('src/app/features/public/account/account.module').then(x => x.AccountModule),
       canActivate: [authGuard]},
   ]},
+
+  { path: '',
+    children: [
+      { path: 'popupzorder', component: PopupzorderComponent },
+      { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
+
+      { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [authGuard] },
+      { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [authGuard] },
+    ]
+  },
+
   //** Employee **//
 
   { path: 'staff',
