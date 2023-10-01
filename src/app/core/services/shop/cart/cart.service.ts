@@ -18,6 +18,16 @@ export class CartService {
 
   sourceArray: IItem[] = [];
 
+  // Initialization --------------------------------
+  constructor() {
+    if (window.localStorage.getItem('sources') !== null) {
+      this.sourceArray = JSON.parse(window.localStorage.getItem('sources') as string);
+    }
+    if (window.localStorage.getItem('transactions') !== null) {
+      this.transactionArray = JSON.parse(window.localStorage.getItem('transactions') as string);
+    }
+  }
+
   // Private --------------------------------
   // Transaction methods
   private sort(): void {
@@ -49,6 +59,7 @@ export class CartService {
     // Match on item.uuid instead of item because .includes doesn't catch it otherwise
     if (!this.sourceArray.map((item) => item.uuid).includes(source.uuid)) {
       this.sourceArray.push(source);
+      this.updateLocalStorage();
       return
     }
   }
@@ -61,6 +72,7 @@ export class CartService {
       count: abstract.count
     }
   }
+
   getSource(source_name: string): IItem {
     const boolArray: boolean[] = this.sourceArray.map((value) => {return value.name === source_name})
     const sourceIndex: number = boolArray.indexOf(true)
@@ -77,11 +89,11 @@ export class CartService {
 
   // Public --------------------------------
   public getUsedItems(): IItem[] {
-    return this.sourceArray
+    return this.sourceArray;
   }
 
   public hasTransactions(): boolean {
-    return this.transactionArray.length > 0
+    return this.transactionArray.length > 0;
   }
 
   public getCurrentTransactions(source?: IItem, product?: IProductItem): ITransaction[] {
@@ -93,18 +105,18 @@ export class CartService {
       if (product === undefined) return sourceEquality
 
       return sourceEquality && (value.product.name === product.name)
-    })
+    });
 
     let index = 0;
-    const transactionIndices: number[] = []
+    const transactionIndices: number[] = [];
     boolMap.forEach((value) => {
       if (value) transactionIndices.push(index)
       index += 1
-    })
+    });
 
     return transactionIndices.map((transactionIndex) => {
       return this.abstractToTransaction(this.transactionArray.at(transactionIndex)!)
-    })
+    });
   }
 
   public getProductCount(source: IItem, product: IProductItem): number {
@@ -113,15 +125,20 @@ export class CartService {
     const transactionIndex = this.getTransactionIndex(source, product);
     return this.transactionArray.at(transactionIndex)!.count
   }
+
   public setProductCount(source: IItem, product: IProductItem, count: number): void {
-    if (count < 1) {this.removeProduct(source, product); return}
+    if (count < 1) {
+      this.removeProduct(source, product);
+      return;
+    }
 
     // Adding Source and Group to seperate arrays if not already included
     this.addIfMissing(source)
 
     if (this.transactionsIncludes(source, product)) {
       const transactionIndex = this.getTransactionIndex(source, product)
-      this.transactionArray[transactionIndex].count = count
+      this.transactionArray[transactionIndex].count = count;
+      this.updateLocalStorage();
       return;
     }
 
@@ -131,12 +148,15 @@ export class CartService {
       product: product,
       count: count
     }
-    this.transactionArray.push(transaction)
-    this.sort()
+    this.transactionArray.push(transaction);
+    this.sort();
+    this.updateLocalStorage();
   }
+
   public removeProduct(source: IItem, product: IProductItem): void {
-    const transactionIndex = this.getTransactionIndex(source, product)
-    this.transactionArray.splice(transactionIndex, 1)
+    const transactionIndex = this.getTransactionIndex(source, product);
+    this.transactionArray.splice(transactionIndex, 1);
+    this.updateLocalStorage();
 
     if (this.transactionsIncludes(source)) {
       return
@@ -149,8 +169,18 @@ export class CartService {
     // TODO Remove source
   }
 
+  public getProductsCount(): number {
+    return this.transactionArray.reduce((acc, transaction) => acc + transaction.count, 0);
+  }
+
+  public updateLocalStorage(): void {
+    window.localStorage.setItem('sources', JSON.stringify(this.sourceArray));
+    window.localStorage.setItem('transactions', JSON.stringify(this.transactionArray));
+  }
+
   public clear() {
-    this.transactionArray = []
-    this.sourceArray = []
+    this.transactionArray = [];
+    this.sourceArray = [];
+    this.updateLocalStorage();
   }
 }

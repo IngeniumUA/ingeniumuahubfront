@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, of } from 'rxjs';
 import { CartService } from 'src/app/core/services/shop/cart/cart.service';
 import { EventItemDetailI } from 'src/app/shared/models/items/events';
@@ -14,12 +15,14 @@ import { apiEnviroment } from 'src/enviroments';
 })
 export class PopupzComponent {
   category: 'food' | 'drinks' | 'snacks' = 'food';
+  totalProducts: number = 0;
   products$: Observable<IProductItem[]> = of([]);
   event: EventItemDetailI = {} as EventItemDetailI;
 
-  constructor(private httpClient: HttpClient, private cartService: CartService) {}
+  constructor(private httpClient: HttpClient, private cartService: CartService, private toastr: ToastrService) {}
 
   ngOnInit() {
+    this.updateProductTotal();
     this.getProducts();
     this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "popup/event").subscribe((item) => {
       this.event = item;
@@ -36,6 +39,19 @@ export class PopupzComponent {
   }
 
   addProduct(product: IProductItem): void {
-    this.cartService.setProductCount(this.event.item, product, 1);
+    try {
+      this.cartService.setProductCount(this.event.item, product, 1);
+      this.toastr.success(product.name, 'Product toegevoegd aan winkelmandje');
+    } catch (e) {
+      console.error(e);
+      this.toastr.error('Bestel aan de kassa als je problemen blijft ondervinden', 'Oei! Er is iets misgegaan.');
+    }
+
+    // Absolutly disgusting, but it's neccesary to update the total count because the cart is not observable
+    this.updateProductTotal();
+  }
+
+  updateProductTotal(): void {
+    this.totalProducts = this.cartService.getProductsCount();
   }
 }

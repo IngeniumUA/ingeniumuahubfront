@@ -24,31 +24,32 @@ export class ShoppingcartListComponent implements OnInit {
   items: IItem[] = [];
   budget: number = 0;
 
-  constructor(private cartService: CartService) {
-  }
+  constructor(private cartService: CartService) {}
 
   ngOnInit() {
-    this.SetTransactions()
+    this.SetTransactions();
   }
 
   SetTransactions() {
     this.items = this.cartService.getUsedItems();
+    this.transactions = [];
     this.items.map((value) => {
-      this.transactions.push(this.cartService.getCurrentTransactions(value))
-    })
-    this.CalcBudget()
+      this.transactions.push(this.cartService.getCurrentTransactions(value));
+    });
+    this.CalcBudget();
   }
 
   SetProductCount(source: IItem, product: IProductItem, count: number): void {
     this.cartService.setProductCount(source, product, count);
-    if (count < 1) this.SetTransactions();
+    this.SetTransactions();
   }
 
   CalcBudget() {
-    this.budget = this.transactions
-      .flat()
-      .map(value => {return value.product.price_eu * value.count})
-      .reduce((sum, current) => sum + current, 0)
+    let budget = 0;
+    this.transactions.flat().map((value) => {
+      budget += value.product.price_eu * value.count;
+    });
+    this.budget = budget;
   }
 
 }

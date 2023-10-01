@@ -34,6 +34,7 @@ import { CreditsComponent } from './features/public/credits/credits.component';
 import { PopupzComponent } from './features/public/popupz/popupz.component';
 import { PopupzorderComponent } from './features/public/popupz/popupzorder/popupzorder.component';
 import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -75,6 +76,9 @@ import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-
     MatButtonModule,
     RegisterComponent,
     RecSysItemPreviewComponent,
+
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},

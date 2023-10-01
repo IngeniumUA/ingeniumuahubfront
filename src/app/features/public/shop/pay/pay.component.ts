@@ -38,8 +38,7 @@ export class PayComponent implements OnInit {
 
       if (this.checkoutId.payment_providor === 'dev') {
         this.setupDev()
-      }
-      else if (this.checkoutId.payment_providor === 'stripe') {
+      } else if (this.checkoutId.payment_providor === 'stripe') {
         this.stripePayment = true
       } else if (this.checkoutId.payment_providor === 'sumup') {
         this.loadSumupSource();
@@ -58,14 +57,6 @@ export class PayComponent implements OnInit {
     this.router.navigateByUrl('/account/transactions')
     return
   }
-
-
-
-
-
-
-
-
 
   /* SUMUP */
   loadSumupSource() {
