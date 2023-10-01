@@ -42,18 +42,13 @@ h1 {
     margin: 0;
 }
 
-div {
-    padding: 0 1rem;
+p.number {
+    min-width: 3rem;
+    @apply rounded-xl font-bold text-xl text-white m-1 p-2 inline-block text-center;
 }
 
-p.number {
-    display: inline-block;
-    padding: 1em;
-    margin: .2em;
-    color: white;
-    border-radius: 15px;
-    font-size: larger;
-    font-weight: bold;
+.progress p {
+  @apply inline-block;
 }
 
 .progress p.number {
