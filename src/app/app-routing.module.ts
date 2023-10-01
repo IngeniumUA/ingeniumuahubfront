@@ -63,8 +63,8 @@ const routes: Routes = [
       { path: 'popupzorder', component: PopupzorderComponent },
       { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
 
-      { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [authGuard] },
-      { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [authGuard] },
+      // { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [staffGuard] },
+      { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [staffGuard] },
     ]
   },
 

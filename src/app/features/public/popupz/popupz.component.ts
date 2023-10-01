@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, of } from 'rxjs';
+import {Observable, of, shareReplay} from 'rxjs';
 import { CartService } from 'src/app/core/services/shop/cart/cart.service';
 import { EventItemDetailI } from 'src/app/shared/models/items/events';
 import { IItem } from 'src/app/shared/models/items/IItem';
@@ -24,7 +24,7 @@ export class PopupzComponent {
   ngOnInit() {
     this.updateProductTotal();
     this.getProducts();
-    this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "popup/event").subscribe((item) => {
+    this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "popup/event").pipe(shareReplay()).subscribe((item) => {
       this.event = item;
     });
   }
