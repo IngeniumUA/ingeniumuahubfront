@@ -1,3 +1,22 @@
+<ng-container *ngIf="(this.popUpZOrders$ | async) as popupzOrders">
+<section>
+  <h1>PopUpZ order</h1>
+  <section class="popupz-orders">
+  <div class="popupz-order-box"
+    *ngFor="let order of popupzOrders"
+       [ngStyle]="{'background-color': order.status ? 'green': 'red' }">
+    <span>{{ order.order_no }}</span>
+    <ng-container *ngIf="order.status">
+      <p>Kom maar halen!</p>
+    </ng-container>
+    <ng-container *ngIf="!order.status">
+      <p>Event wachten..</p>
+    </ng-container>
+  </div>
+  </section>
+</section>
+</ng-container>
+
 <section class="h-full">
   <h1>Transactions</h1>
   <p>Hier zie je je voltooide transacties.<br><a [routerLink]="['/account']">Terug naar account</a></p>
