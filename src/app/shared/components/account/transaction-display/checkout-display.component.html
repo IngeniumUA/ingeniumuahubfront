@@ -1,3 +1,9 @@
-<div class="transaction-card">
-  {{ this.checkout.amount }}
+<div class="transaction-card text-white">
+  Totaal: &euro; {{ this.checkout.amount }}
+
+  <ul>
+    <li *ngFor="let transaction of this.checkout.transactions">
+      {{ transaction.product.name }}
+    </li>
+  </ul>
 </div>

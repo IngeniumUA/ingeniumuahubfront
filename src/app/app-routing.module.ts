@@ -16,6 +16,7 @@ import { CreditsComponent } from 'src/app/features/public/credits/credits.compon
 import { PopupzComponent } from './features/public/popupz/popupz.component';
 import {PopupzorderComponent} from "./features/public/popupz/popupzorder/popupzorder.component";
 import {PopupzorderStaffComponent} from "./features/public/popupz/popupzorder-staff/popupzorder-staff.component";
+import { DrinkOrdersComponent } from './features/staff/popupz/drink-orders/drink-orders.component';
 
 
 const routes: Routes = [
@@ -37,8 +38,10 @@ const routes: Routes = [
 
     // POP-UP Z
     { path: 'popupz', component: PopupzComponent },
-    {path: 'popupzorder', component: PopupzorderComponent},
-    {path: 'popupzorderstaff', component: PopupzorderStaffComponent},
+    { path: 'popupzorder', component: PopupzorderComponent },
+    { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
+
+    { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [authGuard] },
 
 
     // Info

@@ -44,14 +44,20 @@ export class CartService {
 
       if (product === undefined) return sourceEquality
 
-      return sourceEquality && (value.product.name === product.name) // TODO Product meta
+      return sourceEquality && (value.product.name === product.name) && (value.product_meta.popupz_opties === product.product_meta.popupz_opties)
     })
+
     return boolMap.includes(true);
   }
   private getTransactionIndex(source: IItem, product: IProductItem): number {
     const boolMap = this.transactionArray.map(value => {
-      return value.sourceItemName === source.name && value.product === product
+      return value.sourceItemName === source.name &&
+        value.product.name === product.name &&
+        value.product_meta.popupz_opties === product.product_meta.popupz_opties;
     })
+
+    console.log(boolMap);
+
     return boolMap.indexOf(true);
   }
 
@@ -120,7 +126,7 @@ export class CartService {
   }
 
   public getProductCount(source: IItem, product: IProductItem): number {
-    if (!this.transactionsIncludes(source, product)) {return 0}
+    if (!this.transactionsIncludes(source, product)) return 0;
 
     const transactionIndex = this.getTransactionIndex(source, product);
     return this.transactionArray.at(transactionIndex)!.count
@@ -133,10 +139,10 @@ export class CartService {
     }
 
     // Adding Source and Group to seperate arrays if not already included
-    this.addIfMissing(source)
+    this.addIfMissing(source);
 
     if (this.transactionsIncludes(source, product)) {
-      const transactionIndex = this.getTransactionIndex(source, product)
+      const transactionIndex = this.getTransactionIndex(source, product);
       this.transactionArray[transactionIndex].count = count;
       this.updateLocalStorage();
       return;

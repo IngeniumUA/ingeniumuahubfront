@@ -39,8 +39,18 @@ export class PopupzComponent {
   }
 
   addProduct(product: IProductItem): void {
+    // Check if product has an option
+    if (product.product_meta.popupz_opties) {
+      // Get the option using HTML name
+      const option = document.querySelector(`input[name="${product.product_blueprint_id}_saus"]:checked`);
+      if (option) {
+        product.product_meta.popupz_opties = option.getAttribute("value") || "geen";
+      }
+    }
+
     try {
-      this.cartService.setProductCount(this.event.item, product, 1);
+
+      this.cartService.setProductCount(this.event.item, product, this.cartService.getProductCount(this.event.item, product) + 1);
       this.toastr.success(product.name, 'Product toegevoegd aan winkelmandje');
     } catch (e) {
       console.error(e);

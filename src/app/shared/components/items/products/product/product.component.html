@@ -1,7 +1,10 @@
 <div [style]="{'background-color': this.primaryColorHalf}">
-  <h5>{{ product.name }}</h5>
+  <h5>
+    {{ product.name }}
+    <span *ngIf="product.product_meta.popupz_opties" class="mt-1 block text-xs text-gray-500">Optie: {{ product.product_meta.popupz_opties }}</span>
+  </h5>
   <ng-container *ngIf="this.product.price_eu > 0">
-    <p>&euro; {{ this.product.price_eu}}</p>
+    <p>&euro; {{ product.price_eu }}</p>
   </ng-container>
 
   <ng-container *ngIf="this.product.max_count != 0; else notAvailable">

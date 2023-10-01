@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<section class="transaction" *ngFor="let item of this.items; index as i">
+<section class="transaction space-y-2" *ngFor="let item of this.items; index as i">
   <h3>{{ item.name }}</h3>
   <ng-container *ngFor="let transaction of this.transactions[i]">
     <app-product [onInitValue]="this.transaction.count" [product]="this.transaction.product"
