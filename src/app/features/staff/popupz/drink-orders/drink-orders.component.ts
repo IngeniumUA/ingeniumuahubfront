@@ -23,7 +23,11 @@ export class DrinkOrdersComponent {
       });
   }
 
-  public removeOrder(product: any): void {
-    // TODO: remove order
+  public removeOrder(order: any, index: number): void {
+    // Remove item from database
+    this.httpService.post(apiEnviroment.apiUrl + "popup/cache/delete/" + order.order_no, null).subscribe();
+
+    // Remove item from orders
+    this.orders.splice(index, 1);
   }
 }
