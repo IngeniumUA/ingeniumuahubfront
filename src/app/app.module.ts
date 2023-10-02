@@ -30,6 +30,11 @@ import { UnderConstructionComponent } from './shared/components/under-constructi
 import { ContactComponent } from './features/public/contact/contact.component';
 import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
 import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
+import { CreditsComponent } from './features/public/credits/credits.component';
+import { PopupzComponent } from './features/public/popupz/popupz.component';
+import { PopupzorderComponent } from './features/public/popupz/popupzorder/popupzorder.component';
+import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -47,7 +52,11 @@ import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword
         SetpwComponent,
         ContactComponent,
         CardRedirectComponent,
-        AwaitpasswordLinkComponent
+        AwaitpasswordLinkComponent,
+        CreditsComponent,
+        PopupzComponent,
+        PopupzorderComponent,
+        PopupzorderStaffComponent
     ],
   imports: [
     BrowserModule,
@@ -67,6 +76,9 @@ import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword
     MatButtonModule,
     RegisterComponent,
     RecSysItemPreviewComponent,
+
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},

@@ -83,9 +83,9 @@ export class JWTInterceptor implements HttpInterceptor {
       catchError((error) => {
         this.isRefreshing = false;
 
-        if (error.status == '401') {  // 401 means unauthenticated
-          this.authService.logout();
-        }
+        // TODO Maybe match on a couple status codes instead of all errors?
+        // if (error.status == '401') {  // 401 means unauthenticated
+        this.authService.logout();
 
         // Continue throwing error
         return throwError(() => error);

@@ -1,7 +1,7 @@
 <app-layout-public-header></app-layout-public-header>
 
 <ng-container *ngIf="this.devPayment">
-  <button (click)="this.doDevPayment()"><h4>Allé deugeniet, voor ene keer dan</h4></button>
+  <button (click)="this.doDevPayment()" class="button button-primary">Betalen (development)</button>
 </ng-container>
 
 <ng-container *ngIf="this.stripePayment">

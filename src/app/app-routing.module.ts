@@ -12,6 +12,12 @@ import {staffGuard} from "./core/guards/staff.guard";
 import {CardRedirectComponent} from "./features/public/card-redirect/card-redirect.component";
 import {InfoComponent} from "./features/public/info/info/info.component";
 import {PraesidiumInfoComponent} from "./features/public/info/praesidium-info/praesidium-info.component";
+import { CreditsComponent } from 'src/app/features/public/credits/credits.component';
+import { PopupzComponent } from './features/public/popupz/popupz.component';
+import {PopupzorderComponent} from "./features/public/popupz/popupzorder/popupzorder.component";
+import {PopupzorderStaffComponent} from "./features/public/popupz/popupzorder-staff/popupzorder-staff.component";
+import { DrinkOrdersComponent } from './features/staff/popupz/drink-orders/drink-orders.component';
+import { FoodOrdersComponent } from './features/staff/popupz/food-orders/food-orders.component';
 
 
 const routes: Routes = [
@@ -31,10 +37,14 @@ const routes: Routes = [
     // Shop
     {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
 
+    // POP-UP Z
+    { path: 'popupz', component: PopupzComponent },
+
     // Info
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
     {path: 'over-ons', component: InfoComponent},
     {path: 'praesidium', component: PraesidiumInfoComponent},
+    { path: 'credits', component: CreditsComponent },
 
     // Cloud
     {path: 'cloud', component: CloudComponent, canActivate: [authGuard]},
@@ -47,6 +57,17 @@ const routes: Routes = [
       loadChildren: () => import('src/app/features/public/account/account.module').then(x => x.AccountModule),
       canActivate: [authGuard]},
   ]},
+
+  { path: '',
+    children: [
+      { path: 'popupzorder', component: PopupzorderComponent },
+      { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
+
+      // { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [staffGuard] },
+      { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [staffGuard] },
+    ]
+  },
+
   //** Employee **//
 
   { path: 'staff',
@@ -67,10 +88,10 @@ const routes: Routes = [
   },
 
   // Temporary Recsysform
-  {path: 'recsysform', component: RecSysFormComponent },
+  { path: 'recsysform', component: RecSysFormComponent },
 
   // Not found as last
-  {path: '**', component: NotfoundpageComponent}
+  { path: '**', component: NotfoundpageComponent }
 ];
 
 @NgModule({

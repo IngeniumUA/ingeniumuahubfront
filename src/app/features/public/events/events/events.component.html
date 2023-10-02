@@ -1,10 +1,9 @@
 <app-layout-public-header></app-layout-public-header>
+
 <section>
   <h1>Aanbevolen</h1>
   <div class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    <ng-container *ngFor="let event of (this.events$ | async)">
-      <app-rec-sys-item-preview [recsysItem]="event"></app-rec-sys-item-preview>
-    </ng-container>
+    <app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of (this.events$ | async)" />
   </div>
 </section>
 

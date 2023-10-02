@@ -1,14 +1,29 @@
+<ng-container *ngIf="(this.popUpZOrders$ | async) as popupzOrders">
 <section>
-  <h1>Transactions</h1>
-  <p>Hier zie je je voltooide transacties.<br>
-    <a [routerLink]="['/account']">Terug naar account</a>
-  </p>
-</section>
-
-<section>
-  <ng-container *ngIf="(this.checkouts$ | async) as checkouts">
-    <ng-container *ngFor="let checkout of checkouts">
-      <app-checkout-display [checkout]="checkout"></app-checkout-display>
+  <h1>PopUpZ order</h1>
+  <section class="popupz-orders">
+  <div class="popupz-order-box"
+    *ngFor="let order of popupzOrders"
+       [ngStyle]="{'background-color': order.status ? 'green': 'red' }">
+    <span>{{ order.order_no }}</span>
+    <ng-container *ngIf="order.status">
+      <p>Kom maar halen!</p>
     </ng-container>
-  </ng-container>
+    <ng-container *ngIf="!order.status">
+      <p>Even wachten..</p>
+    </ng-container>
+  </div>
+  </section>
+</section>
+</ng-container>
+
+<section class="h-full">
+  <h1>Transactions</h1>
+  <p>Hier zie je je voltooide transacties.<br><a [routerLink]="['/account']">Terug naar account</a></p>
+
+  <div *ngIf="(this.checkouts$ | async) as checkouts">
+    <article *ngFor="let checkout of checkouts">
+      <app-checkout-display [checkout]="checkout" />
+    </article>
+  </div>
 </section>

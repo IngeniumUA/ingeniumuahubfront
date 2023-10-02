@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'ngx-toastr/toastr';
+
 @import "button";
 @import "cards";
+@import "alert";
 
 :root {
   --mainblue: rgb(0, 5, 61); /*  */
@@ -19,10 +22,22 @@
   --ingenium-purple: #4d2b88;
 }
 
+html, body, app-root {
+  @apply w-full overflow-x-hidden h-full block;
+}
+
+app-public-routing {
+  @apply flex flex-col h-full overflow-x-hidden;
+}
+
+app-page {
+  @apply flex-1;
+}
+
 body {
   margin: 0;
   font-family: D-DIN, sans-serif;
-  }
+}
 
 /* ---------- */
 /* Headers */

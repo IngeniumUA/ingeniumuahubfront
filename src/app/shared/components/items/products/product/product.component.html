@@ -1,26 +1,29 @@
 <div [style]="{'background-color': this.primaryColorHalf}">
-  <h5>{{ product.name }}</h5>
+  <h5>
+    {{ product.name }}
+    <span *ngIf="product.product_meta.popupz_opties" class="mt-1 block text-xs text-gray-500">Optie: {{ product.product_meta.popupz_opties }}</span>
+  </h5>
   <ng-container *ngIf="this.product.price_eu > 0">
-    <p>€ {{ this.product.price_eu}}</p>
+    <p>&euro; {{ product.price_eu }}</p>
   </ng-container>
 
   <ng-container *ngIf="this.product.max_count != 0; else notAvailable">
-  <button (click)="TryDecreaseCount()"
-          [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) <= 0) ? 'gray' : this.primaryColorFull}"
-          [disabled]="(this.productForm.controls.count.value ?? 0) <= 0">
-    -</button>
+    <button (click)="TryDecreaseCount()"
+            [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) <= 0) ? 'gray' : this.primaryColorFull}"
+            [disabled]="(this.productForm.controls.count.value ?? 0) <= 0">
+      -</button>
 
-  <form [formGroup]="productForm">
-    <input
-      id="product-count-form"
-      formControlName="count"
-      type="number" value="0"
-      [ngStyle]="StyleInput()">
-  </form>
+    <form [formGroup]="productForm">
+      <input
+        id="product-count-form"
+        formControlName="count"
+        type="number" value="0"
+        [ngStyle]="StyleInput()">
+    </form>
 
-  <button (click)="TryIncreaseCount()"
-          [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
-          [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
+    <button (click)="TryIncreaseCount()"
+            [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
+            [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
   </ng-container>
 </div>
 

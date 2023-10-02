@@ -47,7 +47,8 @@ export class SetpwComponent implements OnInit{
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      console.log("Foutje")
+      const error: Error = Error("Ongeldig Password");
+      this.handleFormError(error);
       return;
     }
 

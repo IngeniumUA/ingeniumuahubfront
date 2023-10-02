@@ -1,0 +1,48 @@
+section {
+  padding: 1rem;
+  background-color: var(--mainblue);
+}
+
+section h1 {
+
+}
+
+section p {
+  color: var(--mainwhite);
+}
+section a {
+  color: var(--mainwhite);
+  text-decoration: none;
+}
+
+.popupz-orders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.popupz-order-box {
+  width: 7rem;
+  height: 7rem;
+
+  border-radius: 15px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.popupz-order-box span {
+  color: var(--mainwhite);
+  font-weight: bolder;
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+.popupz-order-box p {
+  padding: 0.2rem;
+  margin: 0;
+  text-align: center;
+}

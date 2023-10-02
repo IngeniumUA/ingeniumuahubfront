@@ -7,7 +7,7 @@ import {RolesService} from "../../../../core/services/user/roles.service";
 import {HubAccountData, HubAuthData, HubUserRolesI} from "../../../../shared/models/user";
 
 @Component({
-  selector: 'app-user',
+  selector: 'app-page',
   templateUrl: './account-details.component.html',
   styleUrls: ['./account-details.component.css']
 })

@@ -5,11 +5,27 @@
     @apply px-6 py-3;
   }
 
+  &.button-sm {
+    @apply text-sm px-3 py-1.5;
+  }
+
+  &.button-inline {
+    @apply inline;
+  }
+
   &.button-primary {
     @apply border-blue-900 text-white bg-blue-900 focus:outline focus:outline-blue-950 focus:outline-offset-2;
 
     &:hover {
       @apply border-blue-950 bg-blue-950;
+    }
+  }
+
+  &.button-danger {
+    @apply border-red-900 text-white bg-red-900 focus:outline focus:outline-red-950 focus:outline-offset-2;
+
+    &:hover {
+      @apply border-red-950 bg-red-950;
     }
   }
 
@@ -23,5 +39,14 @@
 
   svg {
     @apply ml-3 -mr-1 -mt-0.5 h-5 w-5;
+  }
+
+}
+
+.button-group {
+  @apply flex flex-row;
+
+  .button {
+    @apply first:rounded-r-none last:rounded-l-none;
   }
 }

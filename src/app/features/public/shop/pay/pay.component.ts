@@ -11,6 +11,7 @@ import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "../../../../../enviroments";
 import {Router} from "@angular/router";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-pay',
@@ -33,18 +34,24 @@ export class PayComponent implements OnInit {
   devPayment: boolean = false
 
   ngOnInit() {
-    this.paymentService.getCheckoutID().subscribe((value) => {
+    this.paymentService.getCheckoutID().pipe(first()).subscribe({
+      next: (value) => {
       this.checkoutId = value;
 
       if (this.checkoutId.payment_providor === 'dev') {
         this.setupDev()
-      }
-      else if (this.checkoutId.payment_providor === 'stripe') {
+      } else if (this.checkoutId.payment_providor === 'kassa') {
+        this.setupDev()
+      } else if (this.checkoutId.payment_providor === 'stripe') {
         this.stripePayment = true
       } else if (this.checkoutId.payment_providor === 'sumup') {
         this.loadSumupSource();
       }
-    })
+    },
+    error: error => {
+        this.router.navigateByUrl('/shop/checkout')
+    }}
+    )
   }
 
   /* DEV */
@@ -58,14 +65,6 @@ export class PayComponent implements OnInit {
     this.router.navigateByUrl('/account/transactions')
     return
   }
-
-
-
-
-
-
-
-
 
   /* SUMUP */
   loadSumupSource() {

@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "@abacritt/angularx-social-login": "^2.0.0",
-    "@angular/animations": "^15.2.0",
+    "@angular/animations": "^15.2.9",
     "@angular/cdk": "^15.0.0",
     "@angular/common": "^15.2.9",
     "@angular/compiler": "^15.2.0",
@@ -23,6 +23,7 @@
     "@angular/router": "^15.2.0",
     "@stripe/stripe-js": "^1.54.2",
     "ngx-stripe": "^15.7.1",
+    "ngx-toastr": "^16.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -31,6 +32,7 @@
     "@angular-devkit/build-angular": "^15.2.8",
     "@angular/cli": "~15.2.8",
     "@angular/compiler-cli": "^15.2.0",
+    "@tailwindcss/forms": "^0.5.6",
     "@types/jasmine": "~4.3.0",
     "autoprefixer": "^10.4.16",
     "jasmine-core": "~4.5.0",

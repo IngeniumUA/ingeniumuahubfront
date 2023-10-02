@@ -1,0 +1,19 @@
+.alert {
+  @apply p-4;
+
+  &.alert-warning {
+    @apply bg-yellow-50;
+
+    a {
+      @apply font-medium underline text-yellow-700 hover:text-yellow-600;
+    }
+
+    &.alert-border {
+      @apply border-yellow-400;
+    }
+  }
+
+  &.alert-border {
+    @apply border-l-4;
+  }
+}

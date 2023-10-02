@@ -17,6 +17,12 @@ export class HomepageComponent implements OnInit {
   isAuth: boolean = false;
   homePageRec$: Observable<RecSysPreviewI[]> = of([])
 
+  sponsors: string[] = [
+    'assets/images/sponsors/umicore-logo-2017.svg',
+    'assets/images/sponsors/SparklinkLogo.png',
+    'assets/images/sponsors/Vorsselmans_logo.png'
+  ]
+
   ngOnInit() {
     if (this.authService.userValue) {
       this.isAuth = true;

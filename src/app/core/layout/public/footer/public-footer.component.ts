@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AsyncPipe, NgClass} from "@angular/common";
 import {LayoutService} from "../../../services/layout/layout.service";
 import {Observable} from "rxjs";
@@ -10,9 +10,10 @@ import {Observable} from "rxjs";
   templateUrl: './public-footer.component.html',
   imports: [
     NgClass,
-    AsyncPipe
+    AsyncPipe,
+    RouterLink
   ],
-  styleUrls: ['./public-footer.component.css']
+  styleUrls: ['./public-footer.component.scss']
 })
 export class PublicFooterComponent {
   isMobile$: Observable<boolean> = this.layoutService.isMobile;

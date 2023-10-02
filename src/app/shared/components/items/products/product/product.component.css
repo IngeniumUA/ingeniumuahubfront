@@ -54,13 +54,8 @@ input {
   margin-left: 0.3rem;
   margin-right: 0.3rem;
 
-  /*
-  width: 100%;
-  min-width: 26px;
-  min-height: 26px;
-  */
   height: 1.5rem;
-  min-width: 1.2rem;
+  min-width: 4rem;
 
   padding: 0;
 

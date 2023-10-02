@@ -11,10 +11,12 @@ export interface IProductGroup {
 export interface ProductMetaI {
   group: string;
   categorie: string;
+  popupz_opties: string;
 }
 
 export interface IProductItem {
   id: number;
+  product_blueprint_id: number;
   name: string;
   price_eu: number;
   max_count: number;

@@ -12,5 +12,9 @@
     <button class="hubbutton-blue"><h3>Set Password</h3></button>
   </div>
   <h3 class="info-text">Hierna zal je moeten inloggen!</h3>
+
+  <div *ngIf="this.form_error != null">
+    <span class="error-message">{{ this.form_error }}</span>
+  </div>
 </form>
 </section>

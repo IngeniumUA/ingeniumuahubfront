@@ -1,0 +1,17 @@
+<div class="mx-auto container p-4">
+  <h1 class="text-blue-900 mb-4">Bestellingen</h1>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <article *ngFor="let order of orders; let i = index" class="p-4 rounded border border-blue-900">
+      <span class="text-xl font-bold">#{{ order.order_no }}</span>
+      <ul class="list-disc list-inside space-y-1 my-2">
+        <li *ngFor="let transaction of order.transactions">
+          {{ transaction.count }}x {{ transaction.product.name }} <span class="font-semibold" *ngIf="transaction.product.product_meta.popupz_opties">&mdash; {{ transaction.product.product_meta.popupz_opties }}</span>
+        </li>
+      </ul>
+      <div class="button-group">
+        <button type="button" class="button button-primary button-sm w-full button-inline" (click)="toggleOrderFinished(order, i)">Markeer {{ order.status ? 'niet klaar' : 'klaar' }}</button>
+        <button type="button" class="button button-danger button-sm w-full button-inline" (click)="removeOrder(order, i)">Markeer afgehaald</button>
+      </div>
+    </article>
+  </div>
+</div>
