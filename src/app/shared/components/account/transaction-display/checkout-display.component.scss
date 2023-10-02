@@ -1,5 +1,5 @@
-transaction-card {
-  background-color: var(--mainwhite);
+.transaction-card {
+  @apply bg-white rounded text-gray-900 p-4;
 }
 
 .transaction-info {

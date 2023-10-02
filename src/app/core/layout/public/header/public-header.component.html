@@ -1,6 +1,6 @@
 <ng-container *ngIf="isNavdropdown">
   <div class="expanded-navbar">
-    <nav style="position: static">
+    <nav class="flex flex-row px-6 py-4 items-center">
       <a class="logo" [routerLink]="['/']">
         <div class="schild"><img src="assets/Ingenium-schild.png" alt="" aria-hidden="true"></div>
         <span class="text-3xl font-bold">Ingenium</span>
@@ -29,15 +29,21 @@
     <div class="navbar-text-section">
       <h2><a [routerLink]="['/cloud']">Cloud</a></h2>
     </div>
+    <div class="navbar-text-section" *ngIf="this.isAuth">
+      <h2><a [routerLink]="['/account']">Account</a></h2>
+    </div>
+    <div class="navbar-text-section" *ngIf="!this.isAuth">
+      <h2><a [routerLink]="['/auth/login']">Aanmelden</a></h2>
+    </div>
 
-    <div class="navbar-login-section">
+    <!--<div class="navbar-login-section">
       <div class="w-full">
         <a *ngIf="this.isAuth" [routerLink]="['/account']">Account</a>
         <a *ngIf="!this.isAuth" [routerLink]="['/auth/login']">Log In</a>
       </div>
       <span style="font-weight: lighter;">of</span>
-      <!--<div class="w-full"><a class="button button-primary text-center" [routerLink]="['/info/lid']">Word lid</a></div>-->
-    </div>
+      <div class="w-full"><a class="button button-primary text-center" [routerLink]="['/info/lid']">Word lid</a></div>
+    </div>-->
 
     <div class="connect">
       <h3>Connect with us!</h3>

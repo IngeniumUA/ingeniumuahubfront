@@ -1,6 +1,6 @@
 <ng-container *ngIf="(this.popUpZOrders$ | async) as popupzOrders">
 <section>
-  <h1>PopUpZ order</h1>
+  <h1>Pop-Up Z bestellingen</h1>
   <section class="popupz-orders">
   <div class="popupz-order-box"
     *ngFor="let order of popupzOrders"
@@ -18,10 +18,10 @@
 </ng-container>
 
 <section class="h-full">
-  <h1>Transactions</h1>
-  <p>Hier zie je je voltooide transacties.<br><a [routerLink]="['/account']">Terug naar account</a></p>
+  <h1>Transacties</h1>
+  <p>Hier zie je jouw voltooide transacties.</p>
 
-  <div *ngIf="(this.checkouts$ | async) as checkouts">
+  <div *ngIf="(this.checkouts$ | async) as checkouts" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4">
     <article *ngFor="let checkout of checkouts">
       <app-checkout-display [checkout]="checkout" />
     </article>
