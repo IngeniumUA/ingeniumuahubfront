@@ -56,8 +56,6 @@ export class CartService {
         value.product_meta.popupz_opties === product.product_meta.popupz_opties;
     })
 
-    console.log(boolMap);
-
     return boolMap.indexOf(true);
   }
 
