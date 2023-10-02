@@ -62,9 +62,3 @@ h2, h3 {
   color: var(--mainwhite);
   word-wrap: break-word;
 }
-
-/* Logout */
-.logout-section button {
-  width: 5rem;
-  height: 2.5rem;
-}
