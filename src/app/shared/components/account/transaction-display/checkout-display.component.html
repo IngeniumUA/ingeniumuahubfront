@@ -1,9 +1,9 @@
 <div class="transaction-card text-white">
-  Totaal: &euro; {{ this.checkout.amount }}
-
-  <ul>
+  <ul class="list-disc list-inside">
     <li *ngFor="let transaction of this.checkout.transactions">
-      {{ transaction.product.name }}
+      {{ transaction.count }}x {{ transaction.product.name }} &mdash; &euro; {{ transaction.amount }}
     </li>
   </ul>
+
+  <span class="mt-2 block font-bold">Totaal: &euro; {{ this.checkout.amount }}</span>
 </div>
