@@ -18,53 +18,59 @@
 
   <main>
     <ul role="list" class="">
-      <li class=" justify-between gap-x-6 py-5" *ngFor="let product of (products$ | async)">
-        <div class="flex flex-col min-w-0 gap-x-4">
-          <div class="flex min-w-0 gap-x-4">
-            <p class="text-gray-900 font-semibold font-sm leading-6">{{ product.name }} &#45; &euro; {{ product.price_eu }}</p>
-          </div>
+      <ng-container *ngIf="(products$ | async) as products">
+        <li class=" justify-between gap-x-6 py-5" *ngFor="let product of products">
+          <div class="flex flex-col min-w-0 gap-x-4">
+            <div class="flex min-w-0 gap-x-4">
+              <p class="text-gray-900 font-semibold font-sm leading-6">{{ product.name }} &#45; &euro; {{ product.price_eu }}</p>
+            </div>
 
-          <div class="mt-4 space-y-4" *ngIf="product.product_meta.popupz_opties">
-            <div class="flex items-center">
-              <input [id]="product.product_blueprint_id + '_geen_saus'" value="geen" [name]="product.product_blueprint_id + '_saus'" type="radio" checked class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-              <label [for]="product.product_blueprint_id + '_geen_saus'" class="ml-3 block text-sm font-medium text-gray-700">
-                Geen saus
-              </label>
+            <div class="mt-4 space-y-4" *ngIf="product.product_meta.popupz_opties">
+              <div class="flex items-center">
+                <input [id]="product.product_blueprint_id + '_geen_saus'" value="geen" [name]="product.product_blueprint_id + '_saus'" type="radio" checked class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                <label [for]="product.product_blueprint_id + '_geen_saus'" class="ml-3 block text-sm font-medium text-gray-700">
+                  Geen saus
+                </label>
+              </div>
+              <div class="flex items-center">
+                <input [id]="product.product_blueprint_id + '_look'" value="look" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                <label [for]="product.product_blueprint_id + '_look'" class="ml-3 block text-sm font-medium text-gray-700">
+                  Look
+                </label>
+              </div>
+              <div class="flex items-center">
+                <input [id]="product.product_blueprint_id + '_mayonaise'" value="mayonaise" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                <label [for]="product.product_blueprint_id + '_mayonaise'" class="ml-3 block text-sm font-medium text-gray-700">
+                  Mayonaise
+                </label>
+              </div>
+              <div class="flex items-center">
+                <input [id]="product.product_blueprint_id + '_mammoet'" value="mammoet" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                <label [for]="product.product_blueprint_id + '_mammoet'" class="ml-3 block text-sm font-medium text-gray-700">
+                  Mammoet
+                </label>
+              </div>
+              <div class="flex items-center">
+                <input [id]="product.product_blueprint_id + '_andalouse'" value="andalouse" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                <label [for]="product.product_blueprint_id + '_andalouse'" class="ml-3 block text-sm font-medium text-gray-700">
+                  Andalouse
+                </label>
+              </div>
+              <div class="flex items-center">
+                <input [id]="product.product_blueprint_id + '_ketchup'" value="ketchup" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                <label [for]="product.product_blueprint_id + '_ketchup'" class="ml-3 block text-sm font-medium text-gray-700">
+                  Ketchup
+                </label>
+              </div>
             </div>
-            <div class="flex items-center">
-              <input [id]="product.product_blueprint_id + '_look'" value="look" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-              <label [for]="product.product_blueprint_id + '_look'" class="ml-3 block text-sm font-medium text-gray-700">
-                Look
-              </label>
-            </div>
-            <div class="flex items-center">
-              <input [id]="product.product_blueprint_id + '_mayonaise'" value="mayonaise" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-              <label [for]="product.product_blueprint_id + '_mayonaise'" class="ml-3 block text-sm font-medium text-gray-700">
-                Mayonaise
-              </label>
-            </div>
-            <div class="flex items-center">
-              <input [id]="product.product_blueprint_id + '_mammoet'" value="mammoet" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-              <label [for]="product.product_blueprint_id + '_mammoet'" class="ml-3 block text-sm font-medium text-gray-700">
-                Mammoet
-              </label>
-            </div>
-            <div class="flex items-center">
-              <input [id]="product.product_blueprint_id + '_andalouse'" value="andalouse" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-              <label [for]="product.product_blueprint_id + '_andalouse'" class="ml-3 block text-sm font-medium text-gray-700">
-                Andalouse
-              </label>
-            </div>
-            <div class="flex items-center">
-              <input [id]="product.product_blueprint_id + '_ketchup'" value="ketchup" [name]="product.product_blueprint_id + '_saus'" type="radio" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-              <label [for]="product.product_blueprint_id + '_ketchup'" class="ml-3 block text-sm font-medium text-gray-700">
-                Ketchup
-              </label>
-            </div>
+            <button type="button" (click)="addProduct(product)" class="button button-primary button-inline button-sm mt-2">Toevoegen</button>
           </div>
-          <button type="button" (click)="addProduct(product)" class="button button-primary button-inline button-sm mt-2">Toevoegen</button>
-        </div>
-      </li>
+        </li>
+
+        <li class="justify-between" *ngIf="products.length < 1">
+          <span>Online bestellen staat even uit, gebruik de kassa.</span>
+        </li>
+      </ng-container>
     </ul>
 
     <!-- Checkout button -->
