@@ -19,6 +19,11 @@ export class FoodOrdersComponent {
       )
       .subscribe((data) => {
         this.orders = data;
+
+        // if query has ?kitchen=true, remove any orders where the status is true
+        if (window.location.search.includes("kitchen=true")) {
+          this.orders = this.orders.filter((order: any) => order.status == false);
+        }
       });
   }
 
