@@ -8,6 +8,7 @@ import { PraesidiumInfoComponent } from './praesidium-info/praesidium-info.compo
 import {UnderConstructionComponent} from "../../../shared/components/under-construction/under-construction.component";
 import { StartweekComponent } from './startweek/startweek.component';
 import { RelationsComponent } from './relations/relations.component';
+import { ClubliedComponent } from './clublied/clublied.component';
 
 
 
@@ -18,6 +19,7 @@ import { RelationsComponent } from './relations/relations.component';
     PraesidiumInfoComponent,
     StartweekComponent,
     RelationsComponent,
+    ClubliedComponent,
   ],
     imports: [
         CommonModule,
