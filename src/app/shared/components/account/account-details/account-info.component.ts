@@ -44,13 +44,13 @@ export class AccountInfo implements OnInit {
   }
 
   @Input() input_model!: HubUserPersonalDetailsI
+  @Input() success_message: string | null = null;
   @Output() accountEvent = new EventEmitter<string>();
 
 
   loading = false;
   submitted = false;
   form_error: string | null = null;
-  form_success: string | null = null;
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
@@ -59,10 +59,12 @@ export class AccountInfo implements OnInit {
   handleFormError(err: Error) {
     if (!(err instanceof HttpErrorResponse)) {
       this.form_error = err.message;
+      this.success_message = null;
       return;
     } else {
       if (err.status == 401) {
         this.form_error = err.message;
+        this.success_message = null;
         return
       }
     }
@@ -98,8 +100,8 @@ export class AccountInfo implements OnInit {
       next: () => {
         // If successfull, we want to send a message to
         this.accountEvent.emit("submitted")
-        this.form_success = "Updated!"
-        console.log(this.form_success)
+        //this.form_success = "Updated!"
+        // console.log(this.form_success)
       },
       error: error => {
         this.loading = false;

@@ -50,6 +50,7 @@
   <app-account-info
     (accountEvent)="this.SetupAccount($event)"
     [input_model]="account.personal_details"
+    [success_message]="this.form_success"
   ></app-account-info>
 </section>
 

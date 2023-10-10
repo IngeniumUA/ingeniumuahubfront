@@ -23,6 +23,8 @@ export class AccountDetailsComponent implements OnInit {
 
   roles$: Observable<HubUserRolesI> = this.rolesService.getRoles();
 
+  form_success: string | null = null;
+
   ngOnInit(): void {
     this.authService.user.subscribe((data) => {
       if (data) {
@@ -36,6 +38,7 @@ export class AccountDetailsComponent implements OnInit {
 
     // When called from child component the accountEvent will have content
     if (accountEvent === "submitted") {
+      this.form_success = "Success!"
       // Success message is displayed in child component
       // Maybe we can add code here later
       // But there is no usecase (yet)
