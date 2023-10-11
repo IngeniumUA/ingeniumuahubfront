@@ -45,7 +45,8 @@
 
 .infosection .info .categorie {
     width: 100%;
-    margin-top: 1rem;
+    margin-top: 3rem;
+    /*margin-bottom: 2rem;*/
 }
 
 .infosection .info .categorie .praesidium-lid:last-child {
@@ -91,7 +92,7 @@
     .infosection .info .highlight {
         margin: 1rem;
         margin-left: -4rem;
-        width: 70%;
+        width: 60%;
     }
 
     .infosection .info .praesidium-lid {
@@ -103,7 +104,7 @@
         margin: 1rem;
     }
     .infosection .info .praesidium-lid h4 {
-        font-size: 3vw;
+        font-size: 2vw;
     }
 }
 
