@@ -1,27 +1,32 @@
+
+
 .main {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     flex-direction: column;
+
+  background-color: var(--ingenium-grey);
 }
 
 .main #goodiebagPic {
     width: 100%;
-    z-index: -1;
 }
 
 .infosection {
+    z-index: 1;
+
     background-color: var(--mainblue);
     color: var(--mainwhite);
     margin: 1rem;
-    margin-top: -2rem;
+    margin-top: -1rem;
     padding: 1.5rem;
     border-radius: 25px;
 }
 
 .infosection .info {
-    border-left: 2px white solid;
+    border-left: 4px var(--ingenium-grey) solid;
     padding: 1rem;
 }
 
@@ -45,8 +50,8 @@
 
 .infosection .info .categorie {
     width: 100%;
-    margin-top: 3rem;
-    /*margin-bottom: 2rem;*/
+    margin-top: 0.5rem;
+    margin-bottom: 3rem;
 }
 
 .infosection .info .categorie .praesidium-lid:last-child {
