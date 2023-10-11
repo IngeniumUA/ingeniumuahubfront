@@ -7,7 +7,5 @@ import {DOCUMENT} from "@angular/common";
   styleUrls: ['./startweek.component.css']
 })
 export class StartweekComponent {
-  constructor(@Inject(DOCUMENT) private document: Document, private renderer: Renderer2) {
-    this.document.body.style.backgroundColor = "#BDBEC0";
-  }
+
 }

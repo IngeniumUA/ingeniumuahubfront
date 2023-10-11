@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.account | async as account">
+<ng-container *ngIf="this.account$ | async as account">
 <section>
   <h3 style="{'color': var(--ingenium-grey)}">Mijn Ingenium Profiel</h3>
   <app-card [card]="account.card_details" [on_account_page]="true" [is_lid]="this.account.roles.is_lid"></app-card>
@@ -13,6 +13,11 @@
     </defs>
     </svg>
   </button>
+</section>
+
+<section *ngIf="account.roles.is_lid || account.roles.is_manager">
+  <h3 class="mb-2">Promocode Cursusdienst:</h3>
+  <h3>GB10%INGE</h3>
 </section>
 
 <section class="routing-section" *ngIf="account.roles.is_staff">
@@ -42,13 +47,18 @@
 
 <section class="account-section">
   <h3>Mijn gegevens</h3>
-  <app-account-info [input_model]="account.personal_details"></app-account-info>
+  <app-account-info
+    (accountEvent)="this.SetupAccount($event)"
+    [input_model]="account.personal_details"
+    [success_message]="this.form_success"
+  ></app-account-info>
 </section>
 
 </ng-container>
 
 <section class="logout-section">
   <h2 class="mb-2">Afmelden</h2>
-  <div class="w-full"><button class="button button-outline-white" (click)="Logout()">Afmelden</button></div>
+  <div class="w-full">
+    <button class="button button-outline-white" (click)="Logout()">Afmelden</button>
+  </div>
 </section>
-

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
 import {NgClass, NgIf, NgStyle} from "@angular/common";
@@ -44,6 +44,8 @@ export class AccountInfo implements OnInit {
   }
 
   @Input() input_model!: HubUserPersonalDetailsI
+  @Input() success_message: string | null = null;
+  @Output() accountEvent = new EventEmitter<string>();
 
 
   loading = false;
@@ -57,10 +59,12 @@ export class AccountInfo implements OnInit {
   handleFormError(err: Error) {
     if (!(err instanceof HttpErrorResponse)) {
       this.form_error = err.message;
+      this.success_message = null;
       return;
     } else {
       if (err.status == 401) {
         this.form_error = err.message;
+        this.success_message = null;
         return
       }
     }
@@ -94,8 +98,10 @@ export class AccountInfo implements OnInit {
     this.accountService.updatePersonalDetails(personalDetails).pipe(
       first()).subscribe({
       next: () => {
-        // get return url from query parameters ( so, ?next='' in the url), else default to home page
-        window.location.reload();
+        // If successfull, we want to send a message to
+        this.accountEvent.emit("submitted")
+        //this.form_success = "Updated!"
+        // console.log(this.form_success)
       },
       error: error => {
         this.loading = false;

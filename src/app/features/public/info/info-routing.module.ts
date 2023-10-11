@@ -6,6 +6,8 @@ import { PraesidiumInfoComponent } from "./praesidium-info/praesidium-info.compo
 import { ClubliedComponent } from './clublied/clublied.component';
 import { StartweekComponent } from "./startweek/startweek.component";
 import { RelationsComponent } from "./relations/relations.component";
+import {ContactComponent} from "./contact/contact.component";
+import {CreditsComponent} from "../credits/credits.component";
 
 
 
@@ -15,7 +17,8 @@ const routes: Routes = [
   { path: 'praesidium', component: PraesidiumInfoComponent },
   { path: 'clublied', component: ClubliedComponent },
   { path: 'startweek', component: StartweekComponent },
-  // {path: 'contributors', component: },
+  { path: 'contact', component: ContactComponent },
+  { path: 'credits', component: CreditsComponent },
   { path: 'relations', component: RelationsComponent },
   // {path: 'dopen', component: },
   // {path: 'cantus', component: },

@@ -88,13 +88,24 @@ export class LoginComponent implements OnInit {
 
   handleFormError(err: Error) {
     if (!(err instanceof HttpErrorResponse)) {
+      // If it is no HTTP error then the error has to be a form error
       this.form_error = err.message;
       return;
     } else {
+      // HTTP error could be a couple of things
+
+      // 401_INVALID_CREDENTIALS is thrown in most of the cases
       if (err.status == 401) {
         this.form_error = "Ongeldige email en password combinatie";
-        return
+        return;
       }
+
+      // 500_INTERNAL_SERVER_ERROR should never happen.
+      if (err.status == 500) {
+        this.form_error = "Interne fout! Probeer het later opnieuw.";
+        return;
+      }
+
     }
     this.form_error = "Er ging iets fout!";
   }

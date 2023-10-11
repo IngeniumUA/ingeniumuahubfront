@@ -48,3 +48,8 @@ input {
   min-width: 50%;
   max-width: 80%;
 }
+
+.success-message, .error-message {
+  display: block;
+  text-align: center;
+}

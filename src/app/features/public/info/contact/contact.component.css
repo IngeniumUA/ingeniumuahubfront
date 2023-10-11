@@ -1,0 +1,15 @@
+.contact-section {
+  margin-bottom: 4rem;
+}
+
+ul {
+  list-style: conic-gradient(var(--mainblue));
+}
+
+li {
+  margin-left: 1.1rem;
+}
+ h4 {
+   color: var(--mainblue);
+   font-weight: bold;
+ }
