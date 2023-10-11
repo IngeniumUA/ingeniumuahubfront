@@ -4,3 +4,13 @@ section {
 
   overflow: hidden;
 }
+
+h1 {
+  box-sizing: border-box;
+  margin: 1rem;
+
+  width: 100%;
+  text-align: center;
+
+  color: var(--ingenium-blue);
+}
