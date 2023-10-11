@@ -18,6 +18,7 @@ import {PopupzorderComponent} from "./features/public/popupz/popupzorder/popupzo
 import {PopupzorderStaffComponent} from "./features/public/popupz/popupzorder-staff/popupzorder-staff.component";
 import { DrinkOrdersComponent } from './features/staff/popupz/drink-orders/drink-orders.component';
 import { FoodOrdersComponent } from './features/staff/popupz/food-orders/food-orders.component';
+import {ContactComponent} from "./features/public/info/contact/contact.component";
 
 
 const routes: Routes = [
@@ -44,6 +45,7 @@ const routes: Routes = [
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
     {path: 'over-ons', component: InfoComponent},
     {path: 'praesidium', component: PraesidiumInfoComponent},
+    {path: 'contact', component: ContactComponent},
     { path: 'credits', component: CreditsComponent },
 
     // Cloud
