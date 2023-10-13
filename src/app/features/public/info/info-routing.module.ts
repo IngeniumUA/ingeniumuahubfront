@@ -14,13 +14,13 @@ import {CreditsComponent} from "../credits/credits.component";
 const routes: Routes = [
   { path: '', component: InfoComponent },
   { path: 'lid', component: InfoLidComponent },
-  { path: 'praesidium', component: PraesidiumInfoComponent },
+  { path: 'praesidium/:year', component: PraesidiumInfoComponent },
   { path: 'clublied', component: ClubliedComponent },
   { path: 'startweek', component: StartweekComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'credits', component: CreditsComponent },
   { path: 'relations', component: RelationsComponent },
-  // {path: 'dopen', component: },
+  // {path: 'doop', component: },
   // {path: 'cantus', component: },
 ];
 @NgModule({

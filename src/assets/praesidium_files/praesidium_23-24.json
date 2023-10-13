@@ -1,0 +1,290 @@
+[
+  {
+    "groupName": "Praesidium",
+    "groupDescription": "Ontmoet het praesidium 2023-2024!",
+    "categories": [
+      {
+        "categorieName": "Hoog Praesidium",
+        "categorieDescription": "Het Bestuur van de VZW",
+        "praesidia": [
+          {
+            "name": "Wout Saenen",
+            "functie": "Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSaenen.png"
+          },
+          {
+            "name": "Jorre Beyltiens",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JorreBeyltiens.jpg"
+          },
+          {
+            "name": "Wannes Brusselmans",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WannesBrusselmans.jpg"
+          },
+          {
+            "name": "Yorben Joosen",
+            "functie": "Quaestor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YorbenJoossen.png"
+          }
+        ]
+      },
+      {
+        "categorieName": "Cantor",
+        "categorieDescription": "De cantor zit naast de Praeses bij een cantus en zorgt voor een tof verloop!",
+        "praesidia": [
+          {
+            "name": "Bryan Vanhoudt",
+            "functie": "Cantor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BryanVanhoudt.jpg"
+          }
+        ],
+        "button": {
+          "text": "Wat is een cantus",
+          "url": "/info/cantus"
+        }
+      },
+      {
+        "categorieName": "Business Relations",
+        "categorieDescription": "Onze Business Relations onderhouden het contact met onze partnerbedrijven.\nWil je als bedrijf graag eens polsen hoe een partnership met ons er uit zou zien?\nOns team staat voor je klaar!",
+        "praesidia": [
+          {
+            "name": "Jonathan Fonteyn",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonathanFonteyn.jpg"
+          },
+          {
+            "name": "Michiel Vercauteren",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MichielVercauteren.jpg"
+          },
+          {
+            "name": "Marie Struyf",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MarieStruyf.jpg"
+          }
+        ],
+        "button": {
+          "text": "Contact",
+          "url": "/info/contact"
+        }
+      },
+      {
+        "categorieName": "Event",
+        "categorieDescription": "De Event functie organiseert en voert reclame voor grote evenementen en activiteiten.\nDenk maar aan het Pop-Up Z middagfestival of het Galabal Der Antwerpse Ingenieurs",
+        "praesidia": [
+          {
+            "name": "Vincent Jacobs",
+            "functie": "Event",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/VincentJacobs.jpg"
+          },
+          {
+            "name": "Robbe De Helt",
+            "functie": "Event",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RobbeDeHelt.jpg"
+          }
+        ]
+      },
+      {
+        "categorieName": "Doopteam",
+        "categorieDescription": "Het doopteam zorgt voor een veilige doop en daaropvolgend een goede opleiding van schachten tot waardevolle IngeniumUA leden.",
+        "praesidia": [
+          {
+            "name": "Yarno Geurs",
+            "functie": "Schachtentemmer",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YarnoGeurs.jpg"
+          },
+          {
+            "name": "Nico Verstappen",
+            "functie": "Zedenmeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NicoVerstappen.jpg"
+          }
+        ],
+        "button": {
+          "text": "Doop Informatie",
+          "url": "/info/doop"
+        }
+      },
+      {
+        "categorieName": "Webmaster",
+        "categorieDescription": "De Webmaster is verantwoordelijk voor het onderhouden en configureren van technische aspecten van de vereniging.\nWebsite configuratie, onderhoudt van apparaten, ..",
+        "praesidia": [
+          {
+            "name": "Wout De Smit",
+            "functie": "Webmaster",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSmit.jpg"
+          }
+        ]
+      },
+      {
+        "categorieName": "Public Relations",
+        "categorieDescription": "De Public Relations verzorgt publieke kanalen van IngeniumUA.\nHij/zij beheert onder andere de Facebook, Instagram en LinkedIn pagina's.",
+        "praesidia": [
+          {
+            "name": "Fleur De Smedt",
+            "functie": "Public Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonathanFonteyn.jpg"
+          }
+        ],
+        "button": {
+          "text": "Contact",
+          "url": "/info/contact"
+        }
+      },
+      {
+        "categorieName": "Mentor",
+        "categorieDescription": "TODO",
+        "praesidia": [
+          {
+            "name": "Jarne Arnouts",
+            "functie": "Mentor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.jpg"
+          }
+        ]
+      },
+      {
+        "categorieName": "Ab-actis & Scriptor",
+        "categorieDescription": "TODO",
+        "praesidia": [
+          {
+            "name": "Renzo Craeymeersch",
+            "functie": "Public Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonathanFonteyn.jpg"
+          }
+        ]
+      },
+      {
+        "categorieName": "Feest",
+        "categorieDescription": "Het feest-team organiseert de T.D.'s doorheen het academiejaar.",
+        "praesidia": [
+          {
+            "name": "Liesbeth Poppe",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LiesbethPoppe.jpg"
+          },
+          {
+            "name": "Cyrianne Mintiens",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/CyrianneMintiens.jpg"
+          }
+        ]
+      },
+      {
+        "categorieName": "Sport",
+        "categorieDescription": "TODO",
+        "praesidia": [
+          {
+            "name": "Jonas Verburgh",
+            "functie": "Sport",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonasVerburgh.jpg"
+          },
+          {
+            "name": "Hadis Bas",
+            "functie": "Sport",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/HadisBas.jpg"
+          }
+        ],
+        "button": {
+          "text": "Sport Info",
+          "url": "/info/sport"
+        }
+      },
+      {
+        "categorieName": "Peters",
+        "categorieDescription": "TODO",
+        "praesidia": [
+          {
+            "name": "Bjorn Lahey",
+            "functie": "Peter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BjornLahey.jpg"
+          },
+          {
+            "name": "Thor Claessens",
+            "functie": "Biermeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.jpg"
+          }
+        ]
+      },
+      {
+        "categorieName": "Media",
+        "categorieDescription": "TODO",
+        "praesidia": [
+          {
+            "name": "Michael Schoenmakers",
+            "functie": "Media",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MichaelSchoenmakers.jpg"
+          },
+          {
+            "name": "Elien De Vrij",
+            "functie": "Media",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ElienDeVrijBijnaGoed.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Education",
+    "groupDescription": "Het Ingenium Education-team!",
+    "categories": [
+      {
+        "categorieName": "Mentor",
+        "categorieDescription": "TODO",
+        "praesidia": [
+          {
+            "name": "Jarne Arnouts",
+            "functie": "Mentor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.jpg"
+          }
+        ]
+      },
+      {
+        "categorieName": "Education",
+        "categorieDescription": "Onze verschillende education leden zijn elks verantwoordelijk voor een richting.\nHeb je vragen over eender welk studiegerelateerd onderwerp?\nStuur ze een berichtje!",
+        "praesidia": [
+          {
+            "name": "Chloë Ortmanns",
+            "functie": "Education Elektronica ICT",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ChloeOrtmanns.png"
+          },
+          {
+            "name": "San Seppion",
+            "functie": "Education Elektromechanica",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanSeppion.jpg"
+          },
+          {
+            "name": "Robbe Gevers",
+            "functie": "Chemie",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RobbeGevers.jpg"
+          }
+        ],
+        "button": {
+          "text": "Cloud",
+          "url": "/cloud"
+        }
+      }
+    ]
+  },
+  {
+    "groupName": "Ski-team",
+    "groupDescription": "Het Ingenium Ski-team!",
+    "categories": [
+      {
+        "categorieName": "Ski's",
+        "categorieDescription": "De ski's organiseren onze zotte jaarlijkse skireis!",
+        "praesidia": [
+          {
+            "name": "Siebe De Winter",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeDeWinter.jpg"
+          },
+          {
+            "name": "Yarno Geurs",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YarnoGeurs.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]
