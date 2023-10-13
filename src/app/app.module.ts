@@ -30,7 +30,7 @@ import { UnderConstructionComponent } from './shared/components/under-constructi
 import { ContactComponent } from './features/public/info/contact/contact.component';
 import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
 import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
-import { CreditsComponent } from './features/public/credits/credits.component';
+import { CreditsComponent } from './features/public/info/credits/credits.component';
 import { PopupzComponent } from './features/public/popupz/popupz.component';
 import { PopupzorderComponent } from './features/public/popupz/popupzorder/popupzorder.component';
 import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';

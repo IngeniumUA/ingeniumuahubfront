@@ -12,7 +12,7 @@ import {staffGuard} from "./core/guards/staff.guard";
 import {CardRedirectComponent} from "./features/public/card-redirect/card-redirect.component";
 import {InfoComponent} from "./features/public/info/info/info.component";
 import {PraesidiumInfoComponent} from "./features/public/info/praesidium-info/praesidium-info.component";
-import { CreditsComponent } from 'src/app/features/public/credits/credits.component';
+import { CreditsComponent } from 'src/app/features/public/info/credits/credits.component';
 import { PopupzComponent } from './features/public/popupz/popupz.component';
 import {PopupzorderComponent} from "./features/public/popupz/popupzorder/popupzorder.component";
 import {PopupzorderStaffComponent} from "./features/public/popupz/popupzorder-staff/popupzorder-staff.component";
