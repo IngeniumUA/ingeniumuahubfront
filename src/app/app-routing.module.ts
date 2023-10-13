@@ -42,9 +42,6 @@ const routes: Routes = [
     // Shop
     {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
 
-    // POP-UP Z
-    { path: 'popupz', component: PopupzComponent },
-
     // Info
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
     {path: 'over-ons', component: InfoComponent},
@@ -64,8 +61,11 @@ const routes: Routes = [
       canActivate: [authGuard]},
   ]},
 
+  // POP-UP Z
+    /*
   { path: '',
     children: [
+      { path: 'popupz', component: PopupzComponent },
       { path: 'popupzorder', component: PopupzorderComponent },
       { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
 
@@ -73,6 +73,7 @@ const routes: Routes = [
       { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [staffGuard] },
     ]
   },
+  */
 
   //** Employee **//
 
