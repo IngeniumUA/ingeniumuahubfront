@@ -9,6 +9,9 @@ import {UnderConstructionComponent} from "../../../shared/components/under-const
 import { StartweekComponent } from './startweek/startweek.component';
 import { RelationsComponent } from './relations/relations.component';
 import { ClubliedComponent } from './clublied/clublied.component';
+import { DoopInfoComponent } from './doop-info/doop-info.component';
+import { CantusInfoComponent } from './cantus-info/cantus-info.component';
+import { EducationInfoComponent } from './education-info/education-info.component';
 
 
 
@@ -20,6 +23,9 @@ import { ClubliedComponent } from './clublied/clublied.component';
     StartweekComponent,
     RelationsComponent,
     ClubliedComponent,
+    DoopInfoComponent,
+    CantusInfoComponent,
+    EducationInfoComponent,
   ],
     imports: [
         CommonModule,
