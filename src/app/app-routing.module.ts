@@ -19,6 +19,8 @@ import {PopupzorderStaffComponent} from "./features/public/popupz/popupzorder-st
 import { DrinkOrdersComponent } from './features/staff/popupz/drink-orders/drink-orders.component';
 import { FoodOrdersComponent } from './features/staff/popupz/food-orders/food-orders.component';
 import {ContactComponent} from "./features/public/info/contact/contact.component";
+import {LoginComponent} from "./features/public/auth/login/login.component";
+import {RegisterComponent} from "./shared/components/auth/register/register.component";
 
 
 const routes: Routes = [
@@ -30,6 +32,8 @@ const routes: Routes = [
   children: [
     // Authentication pages
     {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
+    {path: 'login', component: LoginComponent},
+    {path: 'register', component: RegisterComponent},
 
     // Public event related pages
     {path: 'event', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
