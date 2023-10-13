@@ -35,6 +35,7 @@ import { PopupzComponent } from './features/public/popupz/popupz.component';
 import { PopupzorderComponent } from './features/public/popupz/popupzorder/popupzorder.component';
 import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
 import { ToastrModule } from 'ngx-toastr';
+import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { ToastrModule } from 'ngx-toastr';
     PublicFooterComponent,
 
     UnderConstructionComponent,
+    PartnerBalkComponent,
 
     AppRoutingModule,
     HttpClientModule,
