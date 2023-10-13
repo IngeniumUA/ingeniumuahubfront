@@ -1,6 +1,6 @@
-<app-layout-public-header [background]="true" [light_theme]="true"></app-layout-public-header>
+<app-layout-public-header [background]="false" [light_theme]="false"></app-layout-public-header>
 <section class="main">
-    <img id="goodiebagPic" src="assets/images/wiezijnwij.png" alt="goodiebag">
+    <img id="goodiebagPic" src="assets/images/GroepsfotoOpeningsdag.webp" alt="goodiebag">
 
     <section class="infosection">
         <div class="info" *ngIf="praesidium$ | async as praesidiumGroups">
@@ -8,6 +8,7 @@
                    *ngFor="let praesidiumGroup of praesidiumGroups"
           >
             <h2>{{ praesidiumGroup.groupName }}</h2>
+            <h3>{{ praesidiumGroup.groupDescription }}</h3>
             <div class="categorie"
                  *ngFor="let praesidiumCategorie of praesidiumGroup.categories"
             >
@@ -18,7 +19,7 @@
               <div class="praesidium-lid highlight"
                    *ngFor="let persoon of praesidiumCategorie.praesidia"
               >
-                <img src='{{ persoon.image' alt='{{ persoon.name }}'>
+                <img src='{{ persoon.image }}' alt='{{ persoon.name }}'>
                 <h4>{{ persoon.name }} - {{ persoon.functie }}</h4>
               </div>
               <ng-container *ngIf="praesidiumCategorie.button as button">

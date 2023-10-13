@@ -7,7 +7,7 @@
     width: 100%;
     flex-direction: column;
 
-  background-color: var(--ingenium-grey);
+  background-color: #505050;
 }
 
 .main #goodiebagPic {
@@ -87,7 +87,7 @@
         margin: 1rem 8rem;
         padding: 4rem;
         padding-left: 5rem;
-        margin-top: -0.3rem;
+        margin-top: -5rem;
     }
 
     .infosection .info {

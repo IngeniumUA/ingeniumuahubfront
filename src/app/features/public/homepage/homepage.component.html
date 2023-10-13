@@ -16,7 +16,7 @@
 <section class="info-card-section">
   <div class="intro-card">
     <div class="intro-card__image">
-      <img src="assets/images/ToffeIngeniumFoto.jpg" alt="" aria-hidden="true">
+      <img src="assets/images/GroepsfotoOpeningsdag.webp" alt="" aria-hidden="true">
     </div>
     <div class="intro-card__content">
       <p>
@@ -86,21 +86,15 @@
           </div>
           <a href="#">Meer info</a>
         </div>
-        <a [routerLink]="['/info/praesidium']" class="image-wrapper"><img src="assets/images/ToffeIngeniumFoto.jpg"></a>
+        <a [routerLink]="['/info/praesidium']" class="image-wrapper"><img src="assets/images/wiezijnwij.png"></a>
       </article>
     </div>
   </div>
 </section>
 
 <!-- Sponsorbalkje -->
-<!--<section class="partner-section">
-  <div class="slider">
-    <div class="slide-track">
-      <div class="slide" *ngFor="let img of sponsors">
-        <img [src]="img" alt="" />
-      </div>
-    </div>
-  </div>
-</section>-->
+<section class="partner-section">
+  <app-partner-balk></app-partner-balk>
+</section>
 
 <app-layout-public-footer />
