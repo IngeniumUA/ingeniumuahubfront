@@ -24,33 +24,36 @@ export class LoginComponent implements OnInit {
               private authService: AuthService,
               private socialAuthService: SocialAuthService,
               ) { }
+  loginHint: string | null = null
   ngOnInit() {
     if (this.authService.userValue) {
       this.router.navigate(['home'])
     }
 
+    // Setting up form
     this.form = this.formBuilder.group({
       email: ['', Validators.email],
       password: ['', Validators.required]
     })
 
-    this.socialAuthService.authState.subscribe((user) => {
-      this.authService.google_login(user.idToken).pipe(
-        first()).subscribe({
-        next: () => {
-          // get return url from query parameters ( so, ?next='' in the url), else default to home page
-          const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-          this.router.navigateByUrl(returnUrl);
-        },
-        error: error => {
-          this.loading = false;
-          this.handleFormError(error);
-        }
-      })
-    }
-    )
+    // Setting up Google auth
+    this.SetupGoogleAuth()
+
+    // Typehint
+    this.SetupLoginHint()
   }
 
+  SetupLoginHint() {
+    const returnUrl: string = this.route.snapshot.queryParams['next'] || null;
+    if (returnUrl === null) {
+      return
+    }
+    if (returnUrl.includes('cloud')) {
+      this.loginHint = "De cloud is gratis!\nJe moet enkel even inloggen om er gebruik van te maken."
+    }
+  }
+
+  /* EMAIL + PW AUTH */
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
 
@@ -80,12 +83,6 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  loginUAntwerp() {
-    const error: Error = Error("Da zou mooi zijn ofni");
-    this.handleFormError(error);
-    return;
-  }
-
   handleFormError(err: Error) {
     if (!(err instanceof HttpErrorResponse)) {
       // If it is no HTTP error then the error has to be a form error
@@ -108,5 +105,31 @@ export class LoginComponent implements OnInit {
 
     }
     this.form_error = "Er ging iets fout!";
+  }
+
+  /* Google Authentication */
+  SetupGoogleAuth() {
+    this.socialAuthService.authState.subscribe((user) => {
+          this.authService.google_login(user.idToken).pipe(
+              first()).subscribe({
+            next: () => {
+              // get return url from query parameters ( so, ?next='' in the url), else default to home page
+              const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+              this.router.navigateByUrl(returnUrl);
+            },
+            error: error => {
+              this.loading = false;
+              this.handleFormError(error);
+            }
+          })
+        }
+    )
+  }
+
+  /* UAntwerpen Authentication */
+  loginUAntwerp() {
+    const error: Error = Error("Da zou mooi zijn ofni");
+    this.handleFormError(error);
+    return;
   }
 }

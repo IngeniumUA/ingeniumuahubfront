@@ -65,4 +65,10 @@
       <a [routerLink]="['/auth/reset']">Reset Password</a>
     </span>
   </div>
+
+  <div class="login-page-section floating-text" *ngIf="loginHint != null" style="margin-top: 2rem;">
+    <span class="success-message">
+      {{ loginHint }}
+    </span>
+  </div>
 </section>
