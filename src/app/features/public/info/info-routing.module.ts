@@ -11,6 +11,7 @@ import {CreditsComponent} from "./credits/credits.component";
 import {EducationInfoComponent} from "./education-info/education-info.component";
 import {DoopInfoComponent} from "./doop-info/doop-info.component";
 import {CantusInfoComponent} from "./cantus-info/cantus-info.component";
+import {SportInfoComponent} from "./sport-info/sport-info.component";
 
 
 
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'education', component: EducationInfoComponent},
   { path: 'doop', component: DoopInfoComponent},
   { path: 'cantus', component: CantusInfoComponent},
+  { path: 'sport', component: SportInfoComponent },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

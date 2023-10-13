@@ -12,6 +12,7 @@ import { ClubliedComponent } from './clublied/clublied.component';
 import { DoopInfoComponent } from './doop-info/doop-info.component';
 import { CantusInfoComponent } from './cantus-info/cantus-info.component';
 import { EducationInfoComponent } from './education-info/education-info.component';
+import { SportInfoComponent } from './sport-info/sport-info.component';
 
 
 
@@ -26,6 +27,7 @@ import { EducationInfoComponent } from './education-info/education-info.componen
     DoopInfoComponent,
     CantusInfoComponent,
     EducationInfoComponent,
+    SportInfoComponent,
   ],
     imports: [
         CommonModule,
