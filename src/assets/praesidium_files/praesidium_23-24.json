@@ -133,7 +133,7 @@
       },
       {
         "categorieName": "Mentor",
-        "categorieDescription": "TODO",
+        "categorieDescription": "Aan het hoofd van het education team staat de Mentor.\nOnder zijn taken valt het organiseren van de boekenverkoop, het organiseren van studie-gerelateerde evenementen en het onderhouden van de Ingenium cloud.",
         "praesidia": [
           {
             "name": "Jarne Arnouts",
@@ -144,7 +144,7 @@
       },
       {
         "categorieName": "Ab-actis & Scriptor",
-        "categorieDescription": "TODO",
+        "categorieDescription": "De Ab-actis & scriptor is de auteur van de club.\nHij/zij ontwerpt onder andere de ledenmail en de crick.Als Ab-actis is hij/zij ook verantwoordelijk voor de agenda en vergaderingsverslagen.",
         "praesidia": [
           {
             "name": "Renzo Craeymeersch",
@@ -171,7 +171,7 @@
       },
       {
         "categorieName": "Sport",
-        "categorieDescription": "TODO",
+        "categorieDescription": "De sport functies onderhouden contact met het sportcommisariaat.\nZe coordineren sportmanifestaties waaraan Ingenium deelneemt, stellen ploegen samen en organiseren sportieve evenementen.",
         "praesidia": [
           {
             "name": "Jonas Verburgh",
@@ -191,7 +191,7 @@
       },
       {
         "categorieName": "Peters",
-        "categorieDescription": "TODO",
+        "categorieDescription": "Een Peter is een Praesidiumlid die zijn laatste jaar als Praesidium volbrengt.\nHij/zij danken we op deze manier voor hun bijdrage aan de club in vorige jaren.",
         "praesidia": [
           {
             "name": "Bjorn Lahey",
@@ -207,7 +207,7 @@
       },
       {
         "categorieName": "Media",
-        "categorieDescription": "TODO",
+        "categorieDescription": "De taak van Media omvat het algemeen ontwerp van mediamateriaal dat wordt gebruikt door IngeniumUA.",
         "praesidia": [
           {
             "name": "Michael Schoenmakers",
@@ -227,17 +227,6 @@
     "groupName": "Education",
     "groupDescription": "Het Ingenium Education-team!",
     "categories": [
-      {
-        "categorieName": "Mentor",
-        "categorieDescription": "TODO",
-        "praesidia": [
-          {
-            "name": "Jarne Arnouts",
-            "functie": "Mentor",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.jpg"
-          }
-        ]
-      },
       {
         "categorieName": "Education",
         "categorieDescription": "Onze verschillende education leden zijn elks verantwoordelijk voor een richting.\nHeb je vragen over eender welk studiegerelateerd onderwerp?\nStuur ze een berichtje!",
