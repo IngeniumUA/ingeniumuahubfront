@@ -204,7 +204,13 @@
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.jpg"
           }
         ]
-      },
+      }
+    ]
+  },
+  {
+    "groupName": "Support",
+    "groupDescription": "Onze support! Deze personen dragen geen praesidiumlint maar werken desalniettemin super hard voor de club.",
+    "categories": [
       {
         "categorieName": "Media",
         "categorieDescription": "De taak van Media omvat het algemeen ontwerp van mediamateriaal dat wordt gebruikt door IngeniumUA.",
@@ -227,6 +233,17 @@
     "groupName": "Education",
     "groupDescription": "Het Ingenium Education-team!",
     "categories": [
+      {
+        "categorieName": "Mentor",
+        "categorieDescription": "Aan het hoofd van het education team staat de Mentor.\nOnder zijn taken valt het organiseren van de boekenverkoop, het organiseren van studie-gerelateerde evenementen en het onderhouden van de Ingenium cloud.",
+        "praesidia": [
+          {
+            "name": "Jarne Arnouts",
+            "functie": "Mentor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.jpg"
+          }
+        ]
+      },
       {
         "categorieName": "Education",
         "categorieDescription": "Onze verschillende education leden zijn elks verantwoordelijk voor een richting.\nHeb je vragen over eender welk studiegerelateerd onderwerp?\nStuur ze een berichtje!",
