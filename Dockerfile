@@ -9,6 +9,8 @@ RUN npm ci
 
 # Copy the rest of the files into the container and build
 COPY . .
+
+RUN echo "$_API_URL" >> src/environment.json
 RUN npm run build --prod
 
 FROM nginx:alpine
