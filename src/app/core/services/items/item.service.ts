@@ -11,15 +11,15 @@ export class ItemService {
   constructor(private httpClient: HttpClient) { }
 
   public getItems(): Observable<IItem[]> {
-    return this.httpClient.get<IItem[]>(apiEnviroment.apiUrl + "api/items/item/")
+    return this.httpClient.get<IItem[]>(apiEnviroment.apiEnv + "api/items/item/")
   };
   public getItem(itemId: string): Observable<IItem> {
-    return this.httpClient.get<IItem>(apiEnviroment.apiUrl + "api/items/item/" + itemId);
+    return this.httpClient.get<IItem>(apiEnviroment.apiEnv + "api/items/item/" + itemId);
   };
   public deleteItem(itemId: string): void {
-    this.httpClient.delete(apiEnviroment.apiUrl + "api/items/item/" + itemId);
+    this.httpClient.delete(apiEnviroment.apiEnv + "api/items/item/" + itemId);
   };
   public createItem(itemData: IItem): void {
-    this.httpClient.post(apiEnviroment.apiUrl + "api/items/item/", itemData);
+    this.httpClient.post(apiEnviroment.apiEnv + "api/items/item/", itemData);
   };
 }

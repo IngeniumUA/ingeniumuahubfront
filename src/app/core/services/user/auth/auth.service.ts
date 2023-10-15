@@ -36,7 +36,7 @@ export class AuthService {
   public refreshAccessToken() {
     const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: "bearer" };
 
-    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl.apiUrl + 'auth/refresh', body)
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiEnv['apiUrl'] + 'auth/refresh', body)
       .pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
@@ -51,7 +51,7 @@ export class AuthService {
   logout() {
     const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: "bearer" };
 
-    this.httpClient.post<any>(apiEnviroment.apiUrl.apiUrl + 'api/auth/logout', body )
+    this.httpClient.post<any>(apiEnviroment.apiEnv['apiUrl'] + 'api/auth/logout', body )
 
     localStorage.removeItem('user');
     this.userSubject.next(null); // Set observable to null
@@ -66,7 +66,7 @@ export class AuthService {
     formdata.append("username", email)
     formdata.append("password", password)
 
-    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl.apiUrl + 'auth/token', formdata).pipe(
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiEnv['apiUrl'] + 'auth/token', formdata).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
@@ -82,7 +82,7 @@ export class AuthService {
   }
 
   public google_login(google_auth_token: string) {
-    return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl.apiUrl + "auth/google?token=" + google_auth_token).pipe(
+    return this.httpClient.get<HubAuthData>(apiEnviroment.apiEnv['apiUrl'] + "auth/google?token=" + google_auth_token).pipe(
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
@@ -98,6 +98,6 @@ export class AuthService {
   }
 
   signUp(email: string) {
-    return this.httpClient.post<any>(apiEnviroment.apiUrl.apiUrl + "user/signup/mail", {email: email})
+    return this.httpClient.post<any>(apiEnviroment.apiEnv['apiUrl'] + "user/signup/mail", {email: email})
   }
 }

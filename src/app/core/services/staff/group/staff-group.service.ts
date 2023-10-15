@@ -13,6 +13,6 @@ export class StaffGroupService {
   }
 
   public GetGroupsList(): Observable<HubGroupI[]> {
-    return this.httpClient.get<HubGroupI[]>(apiEnviroment.apiUrl + "staff/group")
+    return this.httpClient.get<HubGroupI[]>(apiEnviroment.apiEnv['apiUrl'] + "staff/group")
   }
 }

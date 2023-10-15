@@ -61,7 +61,7 @@ export class PayComponent implements OnInit {
   }
 
   doDevPayment() {
-    this.httpClient.get(apiEnviroment.apiUrl + "webhook/payment/dev/" + this.checkoutId.checkout_id).subscribe()
+    this.httpClient.get(apiEnviroment.apiEnv['apiUrl'] + "webhook/payment/dev/" + this.checkoutId.checkout_id).subscribe()
     this.router.navigateByUrl('/account/transactions')
     return
   }

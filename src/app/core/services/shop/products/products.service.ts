@@ -71,7 +71,7 @@ export class ProductsService {
   constructor(private httpClient: HttpClient) { }
 
   getProducts(itemID: string): Observable<IProductItem[]> {
-    return this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + "interact/product/" + itemID)
+    return this.httpClient.get<IProductItem[]>(apiEnviroment.apiEnv['apiUrl'] + "interact/product/" + itemID)
   }
 
   getProductWithCart(itemId: string): Observable<IProductCategorie[]> {

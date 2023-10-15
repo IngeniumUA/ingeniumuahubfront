@@ -14,10 +14,10 @@ export class ShopService {
   constructor(private httpClient: HttpClient) { }
 
   public getShopitemsList(): Observable<RecSysPreviewI[]> {
-    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl.apiUrl + "item/shop/list")
+    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiEnv + "item/shop/list")
   }
 
   public getShopItem(itemId: string): Observable<ShopItemDetailI> {
-    return this.httpClient.get<ShopItemDetailI>(apiEnviroment.apiUrl.apiUrl + "item/shop/" + itemId).pipe(shareReplay())
+    return this.httpClient.get<ShopItemDetailI>(apiEnviroment.apiEnv + "item/shop/" + itemId).pipe(shareReplay())
   }
 }

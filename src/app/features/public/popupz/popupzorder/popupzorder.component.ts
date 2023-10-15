@@ -16,7 +16,7 @@ export class PopupzorderComponent {
   ngOnInit() {
     interval(5000)
       .pipe(
-          mergeMap(() => this.httpService.get<any[]>(apiEnviroment.apiUrl + "popup/cache/order_progress"))
+          mergeMap(() => this.httpService.get<any[]>(apiEnviroment.apiEnv['apiUrl'] + "popup/cache/order_progress"))
       )
       .subscribe((data) => {
         this.orders = data;

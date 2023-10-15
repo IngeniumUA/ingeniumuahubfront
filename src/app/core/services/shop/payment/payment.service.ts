@@ -24,7 +24,7 @@ export class PaymentService {
     })
 
     // return of({checkout_id:'pi_3NsBZYBSXssFMR3b2Cn7rhc1_secret_iLgROlVAsYtMNpcHJYvBiCvDm', payment_providor:'dev'})
-    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + "interact/checkout", api_transactions).pipe(
+    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiEnv['apiUrl'] + "interact/checkout", api_transactions).pipe(
       tap(_ => this.cartService.clear())
     )
   }

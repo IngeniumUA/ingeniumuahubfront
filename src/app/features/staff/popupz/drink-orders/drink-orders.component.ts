@@ -16,7 +16,7 @@ export class DrinkOrdersComponent {
   ngOnInit() {
     interval(5000)
       .pipe(
-          mergeMap(() => this.httpService.get<any>(apiEnviroment.apiUrl + "popup/cache/drinks_snacks_dashboard"))
+          mergeMap(() => this.httpService.get<any>(apiEnviroment.apiEnv['apiUrl'] + "popup/cache/drinks_snacks_dashboard"))
       )
       .subscribe((data) => {
         this.orders = data;
@@ -25,7 +25,7 @@ export class DrinkOrdersComponent {
 
   public removeOrder(order: any, index: number): void {
     // Remove item from database
-    this.httpService.post(apiEnviroment.apiUrl + "popup/cache/delete/" + order.order_no, null).subscribe();
+    this.httpService.post(apiEnviroment.apiEnv['apiUrl'] + "popup/cache/delete/" + order.order_no, null).subscribe();
 
     // Remove item from orders
     this.orders.splice(index, 1);

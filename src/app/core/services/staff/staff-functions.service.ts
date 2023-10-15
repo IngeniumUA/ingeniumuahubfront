@@ -17,7 +17,7 @@ export class StaffFunctionsService {
   constructor(private httpClient: HttpClient) { }
 
   public register_new_account(email: string, lid_type: string, lidkaart_nr: string | null): Observable<AssignLidPayload> {
-    return this.httpClient.post<AssignLidPayload>(apiEnviroment.apiUrl + "staff/functions/assign_lid_to_account",
+    return this.httpClient.post<AssignLidPayload>(apiEnviroment.apiEnv['apiUrl'] + "staff/functions/assign_lid_to_account",
       { email: email, card_type: lid_type, card_nr: lidkaart_nr } )
   }
 
