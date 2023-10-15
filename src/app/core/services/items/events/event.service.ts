@@ -33,15 +33,15 @@ export class EventService {
   public getEventsList(): Observable<RecSysPreviewI[]> {
     // Specifically fetches events for use as a preview
     // IE Homepage or events page
-    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiEnv + "item/event/list")
+    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "item/event/list")
   }
 
   public getEvents(): Observable<EventItemDetailI[]> {
-    return this.httpClient.get<EventItemDetailI[]>(apiEnviroment.apiEnv + "staff/event")
+    return this.httpClient.get<EventItemDetailI[]>(apiEnviroment.apiUrl + "staff/event")
   }
 
   public getEvent(eventId: string): Observable<EventItemDetailI> {
     // return of(TESTevent)
-    return this.httpClient.get<EventItemDetailI>(apiEnviroment.apiEnv + "item/event/" + eventId).pipe(shareReplay())
+    return this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "item/event/" + eventId).pipe(shareReplay())
   }
 }

@@ -13,7 +13,7 @@ export class ManagerHomeComponent {
   }
 
   public failSafe() {
-    this.httpClient.get(apiEnviroment.apiEnv['apiUrl'] + "staff/functions/failsafe").subscribe()
+    this.httpClient.get(apiEnviroment.apiUrl + "staff/functions/failsafe").subscribe()
   }
 
 }

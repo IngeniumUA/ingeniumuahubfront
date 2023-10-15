@@ -12,6 +12,6 @@ export class RecSysService {
   constructor(private httpClient: HttpClient) { }
 
   public getHomepageSlide(count: number): Observable<RecSysPreviewI[]> {
-    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiEnv['apiUrl'] + "rec/homepage?count=" + count.toString())
+    return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "rec/homepage?count=" + count.toString())
   }
 }

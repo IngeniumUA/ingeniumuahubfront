@@ -22,5 +22,5 @@ export class AccountTransactionsComponent {
 
   checkouts$: Observable<CheckoutI[]> = this.accountService.getTransactions()
 
-  popUpZOrders$: Observable<Order[]> = this.httpClient.get<Order[]>(apiEnviroment.apiEnv['apiUrl'] + "popup/cache/user")
+  popUpZOrders$: Observable<Order[]> = this.httpClient.get<Order[]>(apiEnviroment.apiUrl + "popup/cache/user")
 }

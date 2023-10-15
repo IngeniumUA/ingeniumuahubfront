@@ -10,6 +10,6 @@ export class RegisterService {
   constructor(private httpClient: HttpClient) { }
 
   public register(email: string): any {
-    return this.httpClient.post<any>(apiEnviroment.apiEnv['apiUrl'] + "user/signup/mail", {email: email})
+    return this.httpClient.post<any>(apiEnviroment.apiUrl + "user/signup/mail", {email: email})
   }
 }
