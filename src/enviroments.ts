@@ -1,4 +1,4 @@
-import * as apiEnv from "src/enviroment.prod.json";
+// import * as apiEnv from "src/enviroment.prod.json";
 
 export const apiEnviroment = {
   apiEnv: {"apiUrl": "https://hub.ingeniumua.be/api/v1/"}
