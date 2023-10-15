@@ -3,9 +3,15 @@
 <section>
   <h1>Aanbevolen</h1>
   <div class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    <app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of (this.events$ | async)" />
+    <ng-container *ngIf="this.events$ | async as events else no_events">
+      <app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of events" />
+    </ng-container>
   </div>
 </section>
+
+<ng-template #no_events>
+  <h2>Geen evenementen om weer te geven</h2>
+</ng-template>
 
 <!--
 <section [ngClass]="{'mobile': (this.isMobile$ | async)}">
