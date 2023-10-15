@@ -2,7 +2,9 @@ steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - build
-      - --build-arg=_API_URL=$_API_URL
+      - '--build-arg'
+      - _API_URL=$_API_URL
+      - '--no-cache'
       - '-t'
       - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
       - .
