@@ -1,4 +1,4 @@
-import * as apiEnv from "src/enviroment.json"
+import * as apiEnv from "src/enviroment.prod.json"
 
 export const apiEnviroment = {
   apiUrl: apiEnv.apiUrl
