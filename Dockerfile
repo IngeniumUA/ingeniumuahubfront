@@ -1,5 +1,5 @@
 FROM node:16.14.0 as build
-
+ARG _API_URL
 WORKDIR /source
 
 # Copy the package lock file into the container
