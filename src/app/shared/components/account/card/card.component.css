@@ -2,7 +2,7 @@
   background-color: var(--ingenium-grey);
   min-width: clamp(12rem, 20vh, 18rem);
   max-width: 20rem;
-  min-height: 8rem;
+  min-height: 10rem;
 
 
   margin-top: 1rem;
@@ -27,7 +27,7 @@
   min-width: 12rem;
   min-height: 7rem;
 
-  border: solid gray 2px;
+  border: solid rgb(128, 128, 128) 2px;
   border-radius: 15px;
   background-color: var(--ingenium-grey);
 

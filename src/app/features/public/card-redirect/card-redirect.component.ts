@@ -3,6 +3,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {AccountService} from "../../../core/services/user/account/account.service";
 import {CardService} from "../../../core/services/user/card.service";
 import {first} from "rxjs/operators";
+import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {HubCardI} from "../../../shared/models/card";
 
 @Component({
   selector: 'app-card-redirect',
@@ -28,27 +30,39 @@ export class CardRedirectComponent implements OnInit {
     this.cardService.post_card_uuid(card_uuid!).pipe(
       first()).subscribe({
 
-      next: () => {
+      next: (response: HubCardI) => {
         // User was added to lid
-        this.cardService.link_card(card_uuid!).pipe(
-          first()).subscribe({
-          next: () => {
-            this.router.navigateByUrl('/account')
-            return
-          },
-          error: (error: any) => {
-            this.router.navigateByUrl('/account')
-            return
-          }
-        })
+        const notification = this.HandleSuccesResponse(response);
+        this.router.navigateByUrl('/account' + "?card_notification=s_"+notification)
+        return
       },
       error: (error: any) => {
-        this.router.navigateByUrl('/account')
+        const notification = this.HandleErrorResponse(error)
+        this.router.navigateByUrl('/account' + "?card_notification=f_"+notification)
         return
       }
     })
 
-
     this.router.navigateByUrl('/account/card')
+  }
+
+  HandleSuccesResponse(response: HubCardI): string {
+    return "Kaart gelinkt!"
+  }
+
+  HandleErrorResponse(response: any): string {
+    if (response instanceof HttpErrorResponse) {
+      const status_code = response.status;
+      if (status_code == 406) {
+        return response.error['detail']['Error']
+      } else if (status_code == 404) {
+        return "Ongeldige kaart!"
+      } else if (status_code == 500) {
+        return response.error['detail']['Error']
+      }
+      return "Ongekende Server Error!"
+    }
+    // If the response is not a HTTPResponse we throw unknown error
+    return "Ongekende Error!"
   }
 }

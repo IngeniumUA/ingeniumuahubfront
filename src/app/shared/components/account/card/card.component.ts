@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Route, Router, RouterLink} from "@angular/router";
 import {HubCardI} from "../../../models/card";
 import {AsyncPipe, NgClass, NgIf} from "@angular/common";
@@ -21,7 +21,7 @@ import {first} from "rxjs/operators";
   ],
   standalone: true
 })
-export class CardComponent {
+export class CardComponent implements OnInit {
   @Input() card: HubCardI | null = null
   @Input() is_lid: boolean = false
   @Input() on_account_page: boolean = false
@@ -30,6 +30,20 @@ export class CardComponent {
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private accountService: AccountService) {
+  }
+
+  success_notification: string | null = null
+  failed_notification: string | null = null
+
+  ngOnInit() {
+    const notification: string | null = this.route.snapshot.queryParams['card_notification'] || null;
+    if (notification != null) {
+      if (notification.startsWith('s')) {
+        this.success_notification = notification.slice(2)
+      } else if (notification.startsWith('f')) {
+        this.failed_notification = notification.slice(2)
+      }
+    }
   }
 
   public cardClicked() {

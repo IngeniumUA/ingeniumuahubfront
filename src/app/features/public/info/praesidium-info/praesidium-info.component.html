@@ -1,209 +1,32 @@
 <app-layout-public-header [background]="true" [light_theme]="true"></app-layout-public-header>
 <section class="main">
-    <img id="goodiebagPic" src="assets/images/wiezijnwij.png" alt="goodiebag">
+    <img id="goodiebagPic" src="assets/images/GroepsfotoOpeningsdag.webp" alt="goodiebag">
 
     <section class="infosection">
-        <div class="info">
-          <h2>Ontmoet het praesidium 2023-2024!</h2>
-          <section class="praesidium">
-            <!-- HP -->
-            <div class="categorie">
-              <h3>Hoog Praesidium</h3>
-              <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSaenen.png" alt="Wout Saenen">
-                  <h4>Wout Saenen - Praeses</h4>
-              </div>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JorreBeyltiens.jpg" alt="Jorre Beyltiens">
-                <h4>Jorre Beyltiens - Vice-Praeses</h4>
-              </div>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WannesBrusselmans.jpg" alt="Wannes Brusselmans">
-                <h4>Wannes Brusselmans - Vice-Praeses</h4>
-              </div>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YorbenJoossen.png" alt="Yorben Joossen">
-                <h4>Yorben Joossen - Quaestor</h4>
-              </div>
-            </div>
+        <div class="info" *ngIf="praesidium$ | async as praesidiumGroups">
+          <section class="praesidium"
+                   *ngFor="let praesidiumGroup of praesidiumGroups"
+          >
+            <h2>{{ praesidiumGroup.groupName }}</h2>
+            <h3>{{ praesidiumGroup.groupDescription }}</h3>
+            <div class="categorie"
+                 *ngFor="let praesidiumCategorie of praesidiumGroup.categories"
+            >
 
-              <!-- Cantor -->
-              <div class="categorie">
-                <h3>Cantor</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BryanVanhoudt.jpg" alt="Bryan Vanhoudt">
-                  <h4>Bryan Vanhoudt - Ere-Cantor</h4>
-                </div>
-              </div>
+              <h3>{{ praesidiumCategorie.categorieName }}</h3>
+              <p>{{ praesidiumCategorie.categorieDescription }}</p>
 
-              <!-- Business Relations -->
-              <div class="categorie">
-                <h3>Business Relations</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonathanFonteyn.jpg" alt="Jonathan Fonteyn">
-                  <h4>Jonathan Fonteyn - Business Relations</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MichielVercauteren.jpg" alt="Michiel Vercauteren">
-                  <h4>Michiel Vercauteren - Business Relations</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MarieStruyf.jpg" alt="Marie Struyf">
-                  <h4>Marie Struyf - Business Relations</h4>
-                </div>
+              <div class="praesidium-lid highlight"
+                   *ngFor="let persoon of praesidiumCategorie.praesidia"
+              >
+                <img src='{{ persoon.image }}' alt='{{ persoon.name }}'>
+                <h4>{{ persoon.name }} - {{ persoon.functie }}</h4>
               </div>
-
-              <!-- Event -->
-              <div class="categorie">
-                <h3>Event</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/VincentJacobs.jpg" alt="Vincent Jacobs">
-                  <h4>Vincent Jacobs - Event</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RobbeDeHelt.jpg" alt="Robbe De Helt">
-                  <h4>Robbe De Helt - Event</h4>
-                </div>
-              </div>
-
-              <!-- Doopteam -->
-              <div class="categorie">
-                <h3>Doopteam</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YarnoGeurs.jpg" alt="Yarno Geurs">
-                  <h4>Yarno Geurs - Schachtentemmer</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NicoVerstappen.jpg" alt="Nico Verstappen">
-                  <h4>Nico Verstappen - Zedenmeester</h4>
-                </div>
-              </div>
-
-              <!-- Webmaster -->
-              <div class="categorie">
-                <h3>Webmaster</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSmit.jpg" alt="Wout De Smit">
-                  <h4>Wout De Smit - Webmaster</h4>
-                </div>
-              </div>
-
-              <!-- PR -->
-              <div class="categorie">
-                <h3>Public Relations</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/FleurDeSmedt.jpg" alt="Fleur De Smedt">
-                  <h4>Fleur De Smedt - Public Relations</h4>
-                </div>
-              </div>
-
-              <!-- Ab-Actis Scriptor -->
-              <div class="categorie">
-                <h3>Ab-Actis & Scriptor</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RenzoCraeymeersch.jpg" alt="Renzo Craeymeersch">
-                  <h4>Renzo Craeymeersch - Ab-Actis & Scriptor</h4>
-                </div>
-              </div>
-
-              <!-- Feest -->
-              <div class="categorie">
-                <h3>Feest</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LiesbethPoppe.jpg" alt="Liesbeth Poppe">
-                  <h4>Liesbeth Poppe - Feest</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/CyrianneMintiens.jpg" alt="Cyrianne Mintiens">
-                  <h4>Cyrianne Mintiens - Feest</h4>
-                </div>
-              </div>
-
-              <!-- Sport -->
-              <div class="categorie">
-                <h3>Sport</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonasVerburgh.jpg" alt="Jonas Verburgh">
-                  <h4>Jonas Verburgh - Sport</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/HadisBas.jpg" alt="Hadis Bas">
-                  <h4>Hadis Bas - Sport</h4>
-                </div>
-              </div>
-
-              <!-- Peters -->
-              <div class="categorie">
-                <h3>Peters</h3>
-                <div class="praesidium-lid highlight">
-                    <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BjornLahey.jpg" alt="Bjorn Lahey">
-                    <h4>Bjorn Lahey - Peter</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.jpg" alt="Thor Claessens">
-                  <h4>Thor Claessens - Biermeester</h4>
-                </div>
-              </div>
-
-              <!-- Media -->
-              <div class="categorie">
-                <h3>Media</h3>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MichaelSchoenmakers.jpg" alt="Michael Schoenmakers">
-                  <h4>Michael Schoenmakers - Media</h4>
-                </div>
-                <div class="praesidium-lid highlight">
-                  <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ElienDeVrijBijnaGoed.png" alt="Elien De Vrij">
-                  <h4>Elien De Vrij - Media</h4>
-                </div>
-              </div>
-            </section>
-
-          <h2>Education Team</h2>
-          <section class="praesidium">
-            <p>Het Education team verzorgt de boekenverkoop en de cloud!</p>
-
-            <div class="categorie">
-              <h3>Mentor</h3>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.jpg" alt="Jarne Arnouts">
-                <h4>Jarne Arnouts - Mentor</h4>
-              </div>
-            </div>
-
-            <div class="categorie">
-              <h3>Education</h3>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ChloeOrtmanns.png" alt="Chloe Ortmanns">
-                <h4>Chloe Ortmanns - Education EICT</h4>
-              </div>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanSeppion.jpg" alt="San Seppion">
-                <h4>San Seppion - Education Elektromechanica</h4>
-              </div>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RobbeGevers.jpg" alt="Robbe Gevers">
-                <h4>Robbe Gevers - Education Chemie</h4>
-              </div>
-              <div class="praesidium-lid highlight">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YarnoGeurs.jpg" alt="Yarno Geurs">
-                <h4>Yarno Geurs - Education Bouwkunde</h4>
-              </div>
+              <ng-container *ngIf="praesidiumCategorie.button as button">
+                <a [routerLink]="[ button.url ]" class="button button-outline-white -mt-6 mb-6">{{ button.text }}</a>
+              </ng-container>
             </div>
           </section>
-
-        <h2>Ski-Team</h2>
-        <section class="praesidium">
-          <p>Wat wat is een Ingenium academiejaar zonder die zotte Ingenium skireis?</p>
-          <div class="categorie">
-            <h3>Ski!</h3>
-            <div class="praesidium-lid highlight">
-              <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeDeWinter.jpg" alt="Fleur De Smedt">
-              <h4>Siebe De Winter - Ski</h4>
-            </div>
-          </div>
-        </section>
-
         </div>
     </section>
 </section>

@@ -1,5 +1,5 @@
 FROM node:16.14.0 as build
-
+ARG _API_URL
 WORKDIR /source
 
 # Copy the package lock file into the container
@@ -9,6 +9,8 @@ RUN npm ci
 
 # Copy the rest of the files into the container and build
 COPY . .
+
+RUN echo "$_API_URL" >> src/enviroment.prod.json
 RUN npm run build --prod
 
 FROM nginx:alpine

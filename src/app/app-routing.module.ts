@@ -12,13 +12,15 @@ import {staffGuard} from "./core/guards/staff.guard";
 import {CardRedirectComponent} from "./features/public/card-redirect/card-redirect.component";
 import {InfoComponent} from "./features/public/info/info/info.component";
 import {PraesidiumInfoComponent} from "./features/public/info/praesidium-info/praesidium-info.component";
-import { CreditsComponent } from 'src/app/features/public/credits/credits.component';
+import { CreditsComponent } from 'src/app/features/public/info/credits/credits.component';
 import { PopupzComponent } from './features/public/popupz/popupz.component';
 import {PopupzorderComponent} from "./features/public/popupz/popupzorder/popupzorder.component";
 import {PopupzorderStaffComponent} from "./features/public/popupz/popupzorder-staff/popupzorder-staff.component";
 import { DrinkOrdersComponent } from './features/staff/popupz/drink-orders/drink-orders.component';
 import { FoodOrdersComponent } from './features/staff/popupz/food-orders/food-orders.component';
 import {ContactComponent} from "./features/public/info/contact/contact.component";
+import {LoginComponent} from "./features/public/auth/login/login.component";
+import {RegisterComponent} from "./shared/components/auth/register/register.component";
 
 
 const routes: Routes = [
@@ -30,6 +32,8 @@ const routes: Routes = [
   children: [
     // Authentication pages
     {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
+    {path: 'login', component: LoginComponent},
+    {path: 'register', component: RegisterComponent},
 
     // Public event related pages
     {path: 'event', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
@@ -37,9 +41,6 @@ const routes: Routes = [
 
     // Shop
     {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
-
-    // POP-UP Z
-    { path: 'popupz', component: PopupzComponent },
 
     // Info
     {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
@@ -60,8 +61,11 @@ const routes: Routes = [
       canActivate: [authGuard]},
   ]},
 
+  // POP-UP Z
+    /*
   { path: '',
     children: [
+      { path: 'popupz', component: PopupzComponent },
       { path: 'popupzorder', component: PopupzorderComponent },
       { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
 
@@ -69,6 +73,7 @@ const routes: Routes = [
       { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [staffGuard] },
     ]
   },
+  */
 
   //** Employee **//
 

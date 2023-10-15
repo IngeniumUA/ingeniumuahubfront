@@ -31,6 +31,8 @@ export class EventService {
   constructor(private httpClient: HttpClient) { }
 
   public getEventsList(): Observable<RecSysPreviewI[]> {
+    // Specifically fetches events for use as a preview
+    // IE Homepage or events page
     return this.httpClient.get<RecSysPreviewI[]>(apiEnviroment.apiUrl + "item/event/list")
   }
 
