@@ -11,19 +11,21 @@ import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-e
 import { FunctionsComponent } from './functions/functions.component';
 import { DrinkOrdersComponent } from './popupz/drink-orders/drink-orders.component';
 import { FoodOrdersComponent } from './popupz/food-orders/food-orders.component';
+import {PublicHeaderComponent} from "../../core/layout/public/header/public-header.component";
 
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    StaffRoutingModule,
-    BehindheaderComponent,
-    SidenavComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    StaffEventEditComponent
-  ],
+    imports: [
+        CommonModule,
+        StaffRoutingModule,
+        BehindheaderComponent,
+        SidenavComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        StaffEventEditComponent,
+        PublicHeaderComponent
+    ],
   declarations: [
     StaffComponent,
     StaffEventListComponent,

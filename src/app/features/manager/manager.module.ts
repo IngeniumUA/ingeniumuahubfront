@@ -6,14 +6,16 @@ import {ManagerRoutingModule} from "./manager-routing.module";
 
 import { SidenavComponent} from "../../core/layout/behind/sidenav/sidenav.component";
 import {BehindheaderComponent} from "../../core/layout/behind/behindheader/behindheader.component";
+import {PublicHeaderComponent} from "../../core/layout/public/header/public-header.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ManagerRoutingModule,
-    SidenavComponent,
-    BehindheaderComponent,
-  ],
+    imports: [
+        CommonModule,
+        ManagerRoutingModule,
+        SidenavComponent,
+        BehindheaderComponent,
+        PublicHeaderComponent,
+    ],
   declarations: [
     ManagerHomeComponent,
     ManagerComponent,

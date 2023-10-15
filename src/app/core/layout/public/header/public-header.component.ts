@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {BreakpointObserver, BreakpointState} from "@angular/cdk/layout";
 import {NgClass, NgIf, NgStyle, NgTemplateOutlet} from "@angular/common";
 import {NavigationStart, Router, RouterLink} from "@angular/router";
@@ -26,6 +26,10 @@ export class PublicHeaderComponent implements OnInit {
 
   @Input() light_theme: boolean = false;  // 'dark' or 'light'
   @Input() background: boolean = true;  // If background is shown ( and vh is required )
+
+  @Input() internalToggle: boolean = true // If toggling the navbar should use this navbar or outsource it
+  @Output() isToggleEmitter = new EventEmitter<boolean>();
+  isToggle: boolean = true
 
   constructor(private router: Router,
               private breakpointObserver: BreakpointObserver,
@@ -55,7 +59,12 @@ export class PublicHeaderComponent implements OnInit {
   }
 
   ToggleNavDropdown(): void {
-    this.isNavdropdown = ! this.isNavdropdown;
+    if (this.internalToggle) {
+      this.isNavdropdown = ! this.isNavdropdown;
+    } else {
+      this.isToggle = !this.isToggle;
+      this.isToggleEmitter.emit(this.isToggle)
+    }
   }
 
   Home(): void {

@@ -3,12 +3,13 @@
     <a [routerLink]="['/man']" class="section-title">Manager</a>
     <a class="section-link">Logs</a>
     <a class="section-link">Users</a>
-    <a [routerLink]="['items']" class="section-link">Items</a>
+    <a [routerLink]="['/man/items']" class="section-link">Items</a>
   </section>
 
   <section *ngIf="this.isWebmaster$ | async">
     <a [routerLink]="['/web']" class="section-title">Webmaster</a>
-    <a class="section-link">Users</a>
+    <a [routerLink]="['/web/user']" class="section-link">Users</a>
+    <a [routerLink]="['/web/group']" class="section-link">Groups</a>
     <a class="section-link">Events</a>
   </section>
 

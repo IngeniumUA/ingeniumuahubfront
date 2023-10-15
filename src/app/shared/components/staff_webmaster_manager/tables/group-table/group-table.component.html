@@ -1,0 +1,12 @@
+<h2>Group Table</h2>
+<p>Id en Naam</p>
+<ng-container *ngIf="(groups$ | async) as groups else loading">
+  <div *ngFor="let group of groups">
+    {{ group.id }}
+    {{ group.name }}
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  Loading
+</ng-template>

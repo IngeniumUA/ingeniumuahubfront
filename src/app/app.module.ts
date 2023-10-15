@@ -36,6 +36,8 @@ import { PopupzorderComponent } from './features/public/popupz/popupzorder/popup
 import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
 import { ToastrModule } from 'ngx-toastr';
 import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
+import { GroupTableComponent } from './shared/components/staff_webmaster_manager/tables/group-table/group-table.component';
+import { UserTableComponent } from './shared/components/staff_webmaster_manager/tables/user-table/user-table.component';
 
 
 @NgModule({
@@ -57,7 +59,8 @@ import { PartnerBalkComponent } from './shared/components/partners/partner-balk/
         CreditsComponent,
         PopupzComponent,
         PopupzorderComponent,
-        PopupzorderStaffComponent
+        PopupzorderStaffComponent,
+
     ],
   imports: [
     BrowserModule,
@@ -72,6 +75,9 @@ import { PartnerBalkComponent } from './shared/components/partners/partner-balk/
     BrowserAnimationsModule,
     SocialLoginModule,
     CardComponent,
+
+    UserTableComponent,
+    GroupTableComponent,
 
     ReactiveFormsModule,
     MatRadioModule,

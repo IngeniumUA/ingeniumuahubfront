@@ -1,5 +1,5 @@
-<app-behindheader (isToggle)="ToggleSideNav()"></app-behindheader>
+<app-layout-public-header [internalToggle]="false" (isToggleEmitter)="ToggleSideNav()"></app-layout-public-header>
 <div id="body">
   <app-sidenav [isSidenav]="this.isSideNav"></app-sidenav>
-  <router-outlet></router-outlet>
+  <div id="webmaster-body"><router-outlet></router-outlet></div>
 </div>
