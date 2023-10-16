@@ -1,0 +1,222 @@
+[
+  {
+    "groupName": "Praesidium",
+    "categories": [
+      {
+        "categorieName": "Hoog Praesidium",
+        "praesidia": [
+          {
+            "name": "Cedric Beck",
+            "functie": "Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/CedricBeck.webp"
+          },
+          {
+            "name": "Nicolas Grupping",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NicolasGrupping.webp"
+          },
+          {
+            "name": "Joost Swinnen",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JoostSwinnen.webp"
+          },
+          {
+            "name": "Wouter Reijgersberg",
+            "functie": "Quaestor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WouterReijgersberg.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Cantor",
+        "praesidia": [
+          {
+            "name": "Tim Kalfus",
+            "functie": "Cantor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/TimKalfus.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Business Relations",
+        "praesidia": [
+          {
+            "name": "Sander Michels",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanderMichels.webp"
+          },
+          {
+            "name": "Gilles Pleysier",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/GillesPleysier.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Public Relations",
+        "praesidia": [
+          {
+            "name": "Thomas Dewaele",
+            "functie": "Public Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThomasDewaele.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Event",
+        "praesidia": [
+          {
+            "name": "Siebe Verfaillie",
+            "functie": "Event",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeVerfaillie.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Doopteam",
+        "praesidia": [
+          {
+            "name": "Bryan Vanhoudt",
+            "functie": "Schachtentemmer",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BryanVanhoudt.webp"
+          },
+          {
+            "name": "Wout Saenen",
+            "functie": "Zedenmeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSaenen.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Webmaster",
+        "praesidia": [
+          {
+            "name": "Yorben Joosen",
+            "functie": "Webmaster",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YorbenJoossen.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Mentoren",
+        "praesidia": [
+          {
+            "name": "Bryan Vanhoudt",
+            "functie": "Mentor Bouwkunde",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BryanVanhoudt.webp"
+          },
+          {
+            "name": "Sari Verlinden",
+            "functie": "Mentor Chemie",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SariVerlinden.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Ab-actis & Scriptor",
+        "praesidia": [
+          {
+            "name": "Jullie Adriaenssen",
+            "functie": "Ab-actis & Scriptor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JullieAdriaenssen.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Feest",
+        "praesidia": [
+          {
+            "name": "Jaro Siebens",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JaroSiebens.webp"
+          },
+          {
+            "name": "Thor Claessens",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "S.O.C.",
+        "praesidia": [
+          {
+            "name": "Sam Quick",
+            "functie": "S.O.C.",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SamQuick.webp"
+          },
+          {
+            "name": "Lies Hornikx",
+            "functie": "S.O.C.",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LiesHornikx.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Media",
+        "praesidia": [
+          {
+            "name": "Anne Marie De Laet",
+            "functie": "Media",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/VincentJacobs.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Peter en Meter",
+        "praesidia": [
+          {
+            "name": "Simon Hanssens",
+            "functie": "Peter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SimonHanssens.webp"
+          },
+          {
+            "name": "Lauranne Goorden",
+            "functie": "Meter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LauranneGoorden.webp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Education",
+    "categories": [
+      {
+        "categorieName": "Education",
+        "praesidia": [
+          {
+            "name": "Bjorn Lahey",
+            "functie": "Education Elektromechanica",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BjornLahey.webp"
+          },
+          {
+            "name": "Bas Calders",
+            "functie": "Education Elektronica ICT",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BasCalders.webp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Ski-team",
+    "categories": [
+      {
+        "categorieName": "Ski's",
+        "praesidia": [
+          {
+            "name": "Bjorn Lahey",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BjornLahey.webp"
+          },
+          {
+            "name": "Thor Claessens",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.webp"
+          }
+        ]
+      }
+    ]
+  }
+]
