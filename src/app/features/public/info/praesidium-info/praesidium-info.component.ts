@@ -102,7 +102,23 @@ export class PraesidiumInfoComponent implements OnInit {
 
     if (year == '23-24') {
       this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
-    } else {
+    }
+    else if (year == '22-23') {
+      this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
+      }
+    else if (year == '21-22') {
+      this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
+    }
+    else if (year == '20-21') {
+      this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
+    }
+    else if (year == '19-20') {
+      this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
+    }
+    else if (year == '18-19') {
+      this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
+    }
+    else {
       // If no years match we redirect to current year
       this.NavigateCurrentYear()
       return
