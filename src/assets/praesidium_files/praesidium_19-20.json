@@ -176,14 +176,9 @@
         "categorieName": "Ski's",
         "praesidia": [
           {
-            "name": "Bjorn Lahey",
+            "name": "Siebe Verfaillie",
             "functie": "Ski",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BjornLahey.webp"
-          },
-          {
-            "name": "Thor Claessens",
-            "functie": "Ski",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.webp"
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeVerfaillie.webp"
           }
         ]
       }
