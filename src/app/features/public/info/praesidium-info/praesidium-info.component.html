@@ -3,6 +3,14 @@
     <img id="goodiebagPic" src="assets/images/GroepsfotoOpeningsdag.webp" alt="goodiebag">
 
     <section class="infosection">
+        <mat-form-field>
+          <select matNativeControl required [formControl]="yearControl">
+            <option *ngFor="let year of validYears.reverse()" [value]="year" style="color: var(--mainblue)">
+              {{ year }}
+            </option>
+          </select>
+        </mat-form-field>
+
         <div class="info" *ngIf="praesidium$ | async as praesidiumGroups">
           <section class="praesidium"
                    *ngFor="let praesidiumGroup of praesidiumGroups"
