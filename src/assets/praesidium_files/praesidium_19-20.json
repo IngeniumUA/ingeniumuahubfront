@@ -1,0 +1,187 @@
+[
+  {
+    "groupName": "Praesidium",
+    "categories": [
+      {
+        "categorieName": "Hoog Praesidium",
+        "praesidia": [
+          {
+            "name": "Siebe Verfaillie",
+            "functie": "Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeVerfaillie.webp"
+          },
+          {
+            "name": "Sander Michels",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanderMichels.webp"
+          },
+          {
+            "name": "Jeroen Bruurs",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JeroenBruurs.webp"
+          },
+          {
+            "name": "Steven Leemans",
+            "functie": "Quaestor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/StevenLeemans.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Cantor",
+        "praesidia": [
+          {
+            "name": "Lauranne Goorden",
+            "functie": "Cantor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LauranneGoorden.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Business Relations",
+        "praesidia": [
+          {
+            "name": "Wouter Reijgersberg",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WouterReijgersberg.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Public Relations",
+        "praesidia": [
+          {
+            "name": "Nicolas Grupping",
+            "functie": "Public Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NicolasGrupping.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Doopteam",
+        "praesidia": [
+          {
+            "name": "Gilles Pleysier",
+            "functie": "Schachtentemmer",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/GillesPleysier.webp"
+          },
+          {
+            "name": "Joost Swinnen",
+            "functie": "Zedenmeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JoostSwinnen.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Webmaster",
+        "praesidia": [
+          {
+            "name": "Bas Calders",
+            "functie": "Webmaster",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BasCalders.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Mentoren",
+        "praesidia": [
+          {
+            "name": "Tim Kalfus",
+            "functie": "Mentor Elektromechanica",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/TimKalfus.webp"
+          },
+          {
+            "name": "Bas Calders",
+            "functie": "Mentor Elektronica ICT",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BasCalders.webp"
+          },
+          {
+            "name": "Cedric Beck",
+            "functie": "Mentor Bouwkunde",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/CedricBeck.webp"
+          },
+          {
+            "name": "Jaro Siebens",
+            "functie": "Mentor Chemie",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JaroSiebens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Ab-actis & Scriptor",
+        "praesidia": [
+          {
+            "name": "Bryan Vanhoudt",
+            "functie": "Ab-actis & Scriptor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BryanVanhoudt.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Feest",
+        "praesidia": [
+          {
+            "name": "Simon Hanssens",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SimonHanssens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "S.O.C.",
+        "praesidia": [
+          {
+            "name": "Sam Quick",
+            "functie": "S.O.C.",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SamQuick.webp"
+          },
+          {
+            "name": "Thor Claessens",
+            "functie": "S.O.C.",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Media",
+        "praesidia": [
+          {
+            "name": "Bas Calders",
+            "functie": "Media",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BasCalders.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Peters",
+        "praesidia": [
+          {
+            "name": "Bram de Leege",
+            "functie": "Peter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BramdeLeege.webp"
+          },
+          {
+            "name": "Bram Smeets",
+            "functie": "Biermeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BramSmeets.webp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Ski-team",
+    "categories": [
+      {
+        "categorieName": "Ski's",
+        "praesidia": [
+          {
+            "name": "Siebe Verfaillie",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeVerfaillie.webp"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,17 @@
+section {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+  gap: 1rem;
+}
+
+.partner-box {
+  width: auto;
+  height: 5rem;
+
+  position: relative;
+}
+

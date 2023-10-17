@@ -13,6 +13,12 @@ import { DoopInfoComponent } from './doop-info/doop-info.component';
 import { CantusInfoComponent } from './cantus-info/cantus-info.component';
 import { EducationInfoComponent } from './education-info/education-info.component';
 import { SportInfoComponent } from './sport-info/sport-info.component';
+import {MatInputModule} from "@angular/material/input";
+import {MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { PartnersInfoComponent } from './partners/partners-info.component';
+import {PartnerDumpComponent} from "../../../shared/components/partners/partner-dump/partner-dump.component";
 
 
 
@@ -28,12 +34,19 @@ import { SportInfoComponent } from './sport-info/sport-info.component';
     CantusInfoComponent,
     EducationInfoComponent,
     SportInfoComponent,
+    PartnersInfoComponent,
   ],
-    imports: [
-        CommonModule,
-        PublicHeaderComponent,
-        InfoRoutingModule,
-        UnderConstructionComponent
-    ]
+  imports: [
+    CommonModule,
+    PublicHeaderComponent,
+    InfoRoutingModule,
+    UnderConstructionComponent,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    PartnerDumpComponent
+  ]
 })
 export class InfoModule { }

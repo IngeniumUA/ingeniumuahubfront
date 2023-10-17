@@ -1,0 +1,197 @@
+[
+  {
+    "groupName": "Praesidium",
+    "categories": [
+      {
+        "categorieName": "Hoog Praesidium",
+        "praesidia": [
+          {
+            "name": "Arne Chantrain",
+            "functie": "Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ArneChantrain.webp"
+          },
+          {
+            "name": "Gilles Pleysier",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/GillesPleysier.webp"
+          },
+          {
+            "name": "Antoine Hancké",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/AntoineHancke.webp"
+          },
+          {
+            "name": "Berk Ayaz",
+            "functie": "Quaestor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BerkAyaz.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Cantor",
+        "praesidia": [
+          {
+            "name": "Ben De Vliegere",
+            "functie": "Cantor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BenDeVliegere.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Business Relations",
+        "praesidia": [
+          {
+            "name": "Bram de Leege",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BramdeLeege.webp"
+          },
+          {
+            "name": "Bram Smeets",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BramSmeets.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Public Relations",
+        "praesidia": [
+          {
+            "name": "Jeroen Bruurs",
+            "functie": "Public Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JeroenBruurs.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Doopteam",
+        "praesidia": [
+          {
+            "name": "Berre Verboven",
+            "functie": "Schachtenmeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BerreVerboven.webp"
+          },
+          {
+            "name": "Daniel Smetankin",
+            "functie": "Schachtenmeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/DanielSmetankin.webp"
+          },
+          {
+            "name": "Jeroen Beugnies",
+            "functie": "Zedenmeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JeroenBeugnies.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Webmaster",
+        "praesidia": [
+          {
+            "name": "Wouter Reijgersberg",
+            "functie": "Webmaster",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WouterReijgersberg.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Mentoren",
+        "praesidia": [
+          {
+            "name": "Sander Michels",
+            "functie": "Mentor Bouwkunde",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanderMichels.webp"
+          },
+          {
+            "name": "Lauranne Goorden",
+            "functie": "Mentor Bouwkunde",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LauranneGoorden.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Ab-actis",
+        "praesidia": [
+          {
+            "name": "Mats Bruynen",
+            "functie": "Ab-actis & Scriptor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MatsBruynen.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Scriptor",
+        "praesidia": [
+          {
+            "name": "Steven Leemans",
+            "functie": "Ab-actis & Scriptor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/StevenLeemans.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Feest",
+        "praesidia": [
+          {
+            "name": "Eric Oganesian",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/EricOganesian.webp"
+          },
+          {
+            "name": "Siebe Verfaillie",
+            "functie": "Dux-Festi",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeVerfaillie.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Sport",
+        "praesidia": [
+          {
+            "name": "Oskar Seuntjens",
+            "functie": "Sport",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/OskarSeuntjens.webp"
+          },
+          {
+            "name": "Jaan Mennes",
+            "functie": "Sport",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JaanMennes.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Cultuur",
+        "praesidia": [
+          {
+            "name": "Sam Quick",
+            "functie": "Cultuur",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SamQuick.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Media",
+        "praesidia": [
+          {
+            "name": "Jonas Verheyen",
+            "functie": "Media",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonasVerheyen.webp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Ski-team",
+    "categories": [
+      {
+        "categorieName": "Ski's",
+        "praesidia": [
+          {
+            "name": "Bram de Leege",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BramdeLeege.webp"
+          }
+        ]
+      }
+    ]
+  }
+]

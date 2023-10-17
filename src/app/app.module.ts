@@ -38,6 +38,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
 import { GroupTableComponent } from './shared/components/staff_webmaster_manager/tables/group-table/group-table.component';
 import { UserTableComponent } from './shared/components/staff_webmaster_manager/tables/user-table/user-table.component';
+import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
 
 
 @NgModule({
@@ -60,7 +61,6 @@ import { UserTableComponent } from './shared/components/staff_webmaster_manager/
         PopupzComponent,
         PopupzorderComponent,
         PopupzorderStaffComponent,
-
     ],
   imports: [
     BrowserModule,
@@ -69,6 +69,7 @@ import { UserTableComponent } from './shared/components/staff_webmaster_manager/
 
     UnderConstructionComponent,
     PartnerBalkComponent,
+    PartnerDumpComponent,
 
     AppRoutingModule,
     HttpClientModule,

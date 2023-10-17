@@ -1,47 +1,8 @@
-import {Component, Inject, OnInit, Renderer2} from '@angular/core';
-import {DOCUMENT} from "@angular/common";
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import { readAndParseJson} from "@angular/cli/src/utilities/json-file";
-import {assert} from "@angular/compiler-cli/linker";
-import {Observable, of} from "rxjs";
+import {Observable, of, Subject, takeUntil} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-
-enum FunctieEnum {
-  praeses = 'Praeses',
-  vicePraeses = 'Vice-Praeses',
-  quaestor = 'Quaestor',
-  cantor = 'Cantor',
-
-  businessRelations = 'Business Relations',
-  event = 'Event',
-
-  temmer = 'Schachtentemmer',
-  zeden = 'Zedenmeester',
-
-  webmaster = 'Webmaster',
-
-  publicRelations = 'Public Relations',
-
-  abactis = 'Ab-Actis',
-  scriptor = 'Scriptor',
-
-  feest = 'Feest',
-
-  sport = 'Sport',
-  soc = 'SOC',
-
-  peter = 'Peter',
-  biermeester = 'Biermeester',
-
-  media = 'Media',
-
-  mentor = 'Mentor',
-  education = 'Education',
-  edu_eict = 'Education EICT',
-  edu_bouwkunde = 'Education Bouwkunde',
-  edu_chemie = 'Education Chemie',
-  edu_em = 'Education Elektromechanica'
-}
+import {FormControl, FormGroup} from "@angular/forms";
 
 interface PraesidiumButtonI {
   text: string
@@ -71,13 +32,16 @@ interface PraesidiumGroupI {
   templateUrl: './praesidium-info.component.html',
   styleUrls: ['./praesidium-info.component.css']
 })
-export class PraesidiumInfoComponent implements OnInit {
+export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private route: ActivatedRoute,
               private httpClient: HttpClient) {
   }
-
+  yearControl = new FormControl<string>('');
+  yearForm!: FormGroup;
+  validYears: string[] = ['18-19', '19-20', '20-21', '21-22', '22-23', '23-24'];
   praesidium$: Observable<PraesidiumGroupI[]> = of([])
+
   ngOnInit() {
     // Fetch ID
     const year: string | null = this.route.snapshot.paramMap.get('year');
@@ -88,24 +52,48 @@ export class PraesidiumInfoComponent implements OnInit {
       return
     }
 
+    // Setup form
+    this.yearControl.patchValue(year);
+
+    // Event for form changeing
+    this.yearControl.valueChanges.pipe(
+      takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
+      )
+      .subscribe(selectedValue => {
+        if (selectedValue === null) {
+          this.NavigateCurrentYear()
+        } else {
+          // Changes the url
+          this.router.navigateByUrl('/info/praesidium/' + selectedValue).then(() => {})
+          this.SetupYear(selectedValue)
+          return
+        }
+      }
+    )
     // Setupfunction
     this.SetupYear(year)
   }
 
   NavigateCurrentYear() {
-    this.router.navigateByUrl('/info/praesidium/23-24')
+    this.router.navigateByUrl('/info/praesidium/23-24').then(() => {})
     return
   }
 
   SetupYear(year: string) {
     const filePath: string = '/assets/praesidium_files/praesidium_' + year + '.json'
 
-    if (year == '23-24') {
+    if (this.validYears.includes(year)) {
       this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
     } else {
       // If no years match we redirect to current year
       this.NavigateCurrentYear()
       return
     }
+  }
+
+  private ngUnsubscribe = new Subject<void>();
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
