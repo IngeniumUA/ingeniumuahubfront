@@ -21,6 +21,7 @@ import { FoodOrdersComponent } from './features/staff/popupz/food-orders/food-or
 import {ContactComponent} from "./features/public/info/contact/contact.component";
 import {LoginComponent} from "./features/public/auth/login/login.component";
 import {RegisterComponent} from "./shared/components/auth/register/register.component";
+import {PartnersInfoComponent} from "./features/public/info/partners/partners-info.component";
 
 
 const routes: Routes = [
@@ -47,7 +48,8 @@ const routes: Routes = [
     {path: 'over-ons', component: InfoComponent},
     {path: 'praesidium', component: PraesidiumInfoComponent},
     {path: 'contact', component: ContactComponent},
-    { path: 'credits', component: CreditsComponent },
+    {path: 'partners', component: PartnersInfoComponent},
+    {path: 'credits', component: CreditsComponent},
 
     // Cloud
     {path: 'cloud', component: CloudComponent, canActivate: [authGuard]},
