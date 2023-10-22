@@ -9,7 +9,7 @@ import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {ShopService} from "../../../../core/services/items/shop.service";
 import {ShopItemDetailI} from "../../../../shared/models/items/shopitem";
 import {IProductItem} from "../../../../shared/models/items/products/products";
-import {IItem} from "../../../../shared/models/items/IItem";
+import {ItemI} from "../../../../shared/models/items/ItemI";
 
 @Component({
   selector: 'app-shop-detail',
@@ -59,10 +59,10 @@ export class ShopDetailComponent implements OnInit {
     this.products$ = this.productService.getProducts(id).pipe(shareReplay());
   }
 
-  GetCurrentProductCount(item: IItem, product: IProductItem): number {
+  GetCurrentProductCount(item: ItemI, product: IProductItem): number {
     return this.cartService.getProductCount(item, product)
   }
-  SetProductCount(item: IItem, product: IProductItem, count: number) {
+  SetProductCount(item: ItemI, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
     this.isCartFilled = this.cartService.hasTransactions()
   }

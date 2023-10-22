@@ -4,7 +4,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {ITransaction} from "../../../../models/items/products/cart";
 import {ProductComponent} from "../../products/product/product.component";
 import {IProductItem} from "../../../../models/items/products/products";
-import {IItem} from "../../../../models/items/IItem";
+import {ItemI} from "../../../../models/items/ItemI";
 import {RouterLink} from "@angular/router";
 
 @Component({
@@ -21,7 +21,7 @@ import {RouterLink} from "@angular/router";
 })
 export class ShoppingcartListComponent implements OnInit {
   transactions: ITransaction[][] = [];
-  items: IItem[] = [];
+  items: ItemI[] = [];
   budget: number = 0;
 
   constructor(private cartService: CartService) {}
@@ -39,7 +39,7 @@ export class ShoppingcartListComponent implements OnInit {
     this.CalcBudget();
   }
 
-  SetProductCount(source: IItem, product: IProductItem, count: number): void {
+  SetProductCount(source: ItemI, product: IProductItem, count: number): void {
     this.cartService.setProductCount(source, product, count);
     this.SetTransactions();
   }

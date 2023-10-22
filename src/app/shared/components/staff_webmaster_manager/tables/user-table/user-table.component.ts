@@ -16,5 +16,7 @@ import {AsyncPipe, NgIf} from "@angular/common";
 })
 export class UserTableComponent {
 
+  displayedColumns = ["uuid"]
+
   userTable$: Observable<any[]> = of([])
 }

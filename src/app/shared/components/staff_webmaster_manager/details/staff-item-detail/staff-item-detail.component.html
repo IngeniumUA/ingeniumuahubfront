@@ -1,0 +1,28 @@
+<h1>Itemdetail</h1>
+<section *ngIf="this.item.item as itemModel">
+  <h2>Core Item</h2>
+  <p>
+    {{ itemModel.uuid }} <br>
+    {{ itemModel.name }} <br>
+    {{ itemModel.description }} <br>
+    {{ itemModel.available }} <br>
+    {{ itemModel.disabled }} <br>
+    {{ itemModel.modified_at }} <br>
+    {{ itemModel.created_at }} <br>
+  </p>
+</section>
+
+<section *ngIf="this.item.event_item as eventItem">
+  <h2>Event Item</h2>
+  <app-display-mixin-detail [displayMixin]="eventItem.display_mixin"></app-display-mixin-detail>
+</section>
+
+<section *ngIf="this.item.shop_item as shopItem">
+  <h2>Shop Item</h2>
+  <app-display-mixin-detail [displayMixin]="shopItem.display_mixin"></app-display-mixin-detail>
+</section>
+
+<section *ngIf="this.item.promo_item as promoItem">
+  <h2>Promo Item</h2>
+  <app-display-mixin-detail [displayMixin]="promoItem.display_mixin"></app-display-mixin-detail>
+</section>
