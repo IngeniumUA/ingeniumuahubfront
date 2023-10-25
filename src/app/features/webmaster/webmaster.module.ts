@@ -14,6 +14,14 @@ import {PublicHeaderComponent} from "../../core/layout/public/header/public-head
 import {
     UserTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/user-table/user-table.component";
+import { ItemDashboardComponent } from './item/item-dashboard/item-dashboard.component';
+import {
+    ItemTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/item-table/item-table.component";
+import { ItemDetailDashboardComponent } from './item/item-detail-dashboard/item-detail-dashboard.component';
+import {
+  StaffItemDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component";
 
 
 
@@ -23,15 +31,19 @@ import {
     UsersListComponent,
     UserDetailComponent,
     GroupListComponent,
+    ItemDashboardComponent,
+    ItemDetailDashboardComponent,
   ],
-    imports: [
-        CommonModule,
-        WebmasterRoutingModule,
-        BehindheaderComponent,
-        SidenavComponent,
-        GroupTableComponent,
-        PublicHeaderComponent,
-        UserTableComponent,
-    ]
+  imports: [
+    CommonModule,
+    WebmasterRoutingModule,
+    BehindheaderComponent,
+    SidenavComponent,
+    GroupTableComponent,
+    PublicHeaderComponent,
+    UserTableComponent,
+    ItemTableComponent,
+    StaffItemDetailComponent,
+  ]
 })
 export class WebmasterModule { }

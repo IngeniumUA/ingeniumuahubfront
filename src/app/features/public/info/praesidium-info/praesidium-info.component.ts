@@ -39,7 +39,7 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   }
   yearControl = new FormControl<string>('');
   yearForm!: FormGroup;
-  validYears: string[] = ['18-19', '19-20', '20-21', '21-22', '22-23', '23-24'];
+  validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19'];
   praesidium$: Observable<PraesidiumGroupI[]> = of([])
 
   ngOnInit() {

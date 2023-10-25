@@ -7,7 +7,7 @@ import {LayoutService} from "../../../../core/services/layout/layout.service";
 import {IProductCategorie, IProductGroup, IProductItem} from "../../../../shared/models/items/products/products";
 import {ProductsService} from "../../../../core/services/shop/products/products.service";
 import {map} from "rxjs/operators";
-import {IItem} from "../../../../shared/models/items/IItem";
+import {ItemI} from "../../../../shared/models/items/ItemI";
 import {CartService} from "../../../../core/services/shop/cart/cart.service";
 
 
@@ -78,10 +78,10 @@ export class EventDetailComponent implements OnInit {
     }))
   }
 
-  GetCurrentProductCount(item: IItem, categorie_name: string, product: IProductItem): number {
+  GetCurrentProductCount(item: ItemI, categorie_name: string, product: IProductItem): number {
     return this.cartService.getProductCount(item, product)
   }
-  SetProductCount(item: IItem, categorie_name: string, product: IProductItem, count: number) {
+  SetProductCount(item: ItemI, categorie_name: string, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
     this.isCartEmpty = this.cartService.hasTransactions()
   }
