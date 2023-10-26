@@ -1,8 +1,15 @@
 <h3>Display mixin</h3>
-<p>
-  Color: {{ displayMixin.color }} <br>
-  Link: {{ displayMixin.follow_through_link }} <br>
-  Landscape: {{ displayMixin.image_landscape }} <br>
-  Square: {{ displayMixin.image_square }} <br>
-  Preview Description: {{ displayMixin.preview_description }} <br>
-</p>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div *ngFor="let formField of formFields">
+    <h4>{{ formField.name }}</h4>
+    <label class="hubformfield-white">
+      <input type="text" formControlName='{{ formField.selector }}'/>
+    </label>
+  </div>
+  <h4>Update deze details</h4>
+  <button class="button button-primary w-full button-inline"
+          [disabled]="this.loading"
+          [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
+    <span class="text-white">{{ this.loading ? "Updating ..." : "Update!" }}</span>
+  </button>
+</form>
