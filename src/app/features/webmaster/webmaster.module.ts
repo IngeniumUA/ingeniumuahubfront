@@ -22,6 +22,9 @@ import { ItemDetailDashboardComponent } from './item/item-detail-dashboard/item-
 import {
   StaffItemDetailComponent
 } from "../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component";
+import {
+    StaffUserDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component";
 
 
 
@@ -34,16 +37,17 @@ import {
     ItemDashboardComponent,
     ItemDetailDashboardComponent,
   ],
-  imports: [
-    CommonModule,
-    WebmasterRoutingModule,
-    BehindheaderComponent,
-    SidenavComponent,
-    GroupTableComponent,
-    PublicHeaderComponent,
-    UserTableComponent,
-    ItemTableComponent,
-    StaffItemDetailComponent,
-  ]
+    imports: [
+        CommonModule,
+        WebmasterRoutingModule,
+        BehindheaderComponent,
+        SidenavComponent,
+        GroupTableComponent,
+        PublicHeaderComponent,
+        UserTableComponent,
+        ItemTableComponent,
+        StaffItemDetailComponent,
+        StaffUserDetailComponent,
+    ]
 })
 export class WebmasterModule { }

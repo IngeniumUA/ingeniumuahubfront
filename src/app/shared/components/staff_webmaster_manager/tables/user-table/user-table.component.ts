@@ -4,6 +4,7 @@ import {async, Observable, of} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {StaffUserService} from "../../../../../core/services/staff/staff-user-service";
 import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-user-table',
@@ -12,7 +13,8 @@ import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
   imports: [
     MatTableModule,
     AsyncPipe,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   standalone: true
 })

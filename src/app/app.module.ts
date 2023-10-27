@@ -42,6 +42,7 @@ import { PartnerDumpComponent } from './shared/components/partners/partner-dump/
 import { ItemTableComponent } from './shared/components/staff_webmaster_manager/tables/item-table/item-table.component';
 import { StaffItemDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
 import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster_manager/details/display-mixin-detail/display-mixin-detail.component';
+import { StaffUserDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
 
 
 @NgModule({
@@ -64,8 +65,6 @@ import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster
         PopupzComponent,
         PopupzorderComponent,
         PopupzorderStaffComponent,
-
-
     ],
   imports: [
     BrowserModule,
@@ -86,6 +85,7 @@ import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster
     GroupTableComponent,
     ItemTableComponent,
     StaffItemDetailComponent,
+    StaffUserDetailComponent,
     DisplayMixinDetailComponent,
 
     ReactiveFormsModule,
