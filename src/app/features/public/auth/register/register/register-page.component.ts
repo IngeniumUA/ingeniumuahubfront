@@ -5,6 +5,7 @@ import {AuthService} from "../../../../../core/services/user/auth/auth.service";
 import {SocialAuthService} from "@abacritt/angularx-social-login";
 import {first} from "rxjs/operators";
 import {RegisterService} from "../../../../../core/services/user/register/register.service";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-register-page',
@@ -43,7 +44,7 @@ export class RegisterPageComponent {
           },
           error: error => {
             this.loading = false;
-            console.log(error);
+            this.handleRegisterError(error)
           }
         })
       }
@@ -58,7 +59,7 @@ export class RegisterPageComponent {
     // Check if valid guardclause
     if (this.form.invalid) {
       const error: Error = Error("Probeer een andere!");
-      this.handleFormError(error);
+      this.handleRegisterError(error);
       return;
     }
     if (this.loading) {
@@ -67,12 +68,12 @@ export class RegisterPageComponent {
     const email: string = this.form.controls['email'].value
     if (email.includes("ad.ua.ac.be")) {
       const error: Error = Error("UAntwerpen mailadressen werken niet!");
-      this.handleFormError(error);
+      this.handleRegisterError(error);
       return;
     }
     if (email.includes("uantwerpen")) {
       const error: Error = Error("UAntwerpen mailadressen werken niet!");
-      this.handleFormError(error);
+      this.handleRegisterError(error);
       return;
     }
 
@@ -85,12 +86,19 @@ export class RegisterPageComponent {
       },
       error: (error: Error) => {
         this.loading = false;
-        this.handleFormError(error);
+        this.handleRegisterError(error);
       }
     })
   }
 
-  handleFormError(err: Error) {
-    this.form_error = err.message;
+  handleRegisterError(err: Error) {
+    if (err instanceof HttpErrorResponse) {
+      if (err.status == 406) {
+        this.form_error = "Kan geen nieuw account aanmaken met die email"
+        return
+      }
+    } else {
+      this.form_error = err.message;
+    }
   }
 }
