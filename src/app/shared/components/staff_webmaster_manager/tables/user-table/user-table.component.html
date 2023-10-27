@@ -1,9 +1,48 @@
-<h2>Group Table</h2>
-<ng-container *ngIf="(this.userTable$ | async) as userTable">
+<h2>User Table</h2>
+<ng-container *ngIf="(this.userData$ | async) as userTable">
 <table mat-table [dataSource]="userTable" class="mat-elevation-z8">
+
   <ng-container matColumnDef="uuid">
     <th mat-header-cell *matHeaderCellDef>UUID</th>
     <td mat-cell *matCellDef="let user"> {{ user.uuid }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="prefered_mail">
+    <th mat-header-cell *matHeaderCellDef>Primary mail</th>
+    <td mat-cell *matCellDef="let user">
+      <ng-container *ngIf="user.prefered_email == 0">
+        Unverified
+      </ng-container>
+      <ng-container *ngIf="user.prefered_email == 1">
+        {{ user.email }}
+      </ng-container>
+      <ng-container *ngIf="user.prefered_email == 2">
+        {{ user.google_email }}
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="lid">
+    <th mat-header-cell *matHeaderCellDef>Lid Status</th>
+    <td mat-cell *matCellDef="let user">
+      <!-- In a refactor we should add the option to display a steunend lid as well -->
+        {{ user.roles.is_lid }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="is_staff">
+    <th mat-header-cell *matHeaderCellDef>Is Staff</th>
+    <td mat-cell *matCellDef="let user"> {{ user.roles.is_staff }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="is_manager">
+    <th mat-header-cell *matHeaderCellDef>Manager</th>
+    <td mat-cell *matCellDef="let user"> {{ user.is_manager }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="modified_at">
+    <th mat-header-cell *matHeaderCellDef>Last Edited</th>
+    <td mat-cell *matCellDef="let user"> {{ user.modified_at }} </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
