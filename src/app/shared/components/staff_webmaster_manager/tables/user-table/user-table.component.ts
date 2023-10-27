@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MatTableModule} from "@angular/material/table";
 import {async, Observable, of} from "rxjs";
-import {AsyncPipe, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
 import {StaffUserService} from "../../../../../core/services/staff/staff-user-service";
 import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
 import {RouterLink} from "@angular/router";
@@ -14,7 +14,8 @@ import {RouterLink} from "@angular/router";
     MatTableModule,
     AsyncPipe,
     NgIf,
-    RouterLink
+    RouterLink,
+    DatePipe
   ],
   standalone: true
 })
