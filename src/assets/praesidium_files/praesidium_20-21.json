@@ -41,9 +41,9 @@
         "categorieName": "Business Relations",
         "praesidia": [
           {
-            "name": "Sander Michels",
+            "name": "Simon Hanssens",
             "functie": "Business Relations",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanderMichels.webp"
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SimonHanssens.webp"
           },
           {
             "name": "Gilles Pleysier",
@@ -166,9 +166,9 @@
         "categorieName": "Peter en Meter",
         "praesidia": [
           {
-            "name": "Simon Hanssens",
+            "name": "Sander Michels",
             "functie": "Peter",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SimonHanssens.webp"
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanderMichels.webp"
           },
           {
             "name": "Lauranne Goorden",
