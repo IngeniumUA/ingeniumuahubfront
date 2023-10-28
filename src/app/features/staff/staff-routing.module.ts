@@ -4,6 +4,7 @@ import {StaffComponent} from "./staff.component";
 import {StaffEventListComponent} from "./events/staff-event-list/staff-event-list.component";
 import {StaffEventDetailComponent} from "./events/staff-event-detail/staff-event-detail.component";
 import {FunctionsComponent} from "./functions/functions.component";
+import {StaffUsefullQR} from "./payment-code/staff-usefull-q-r.component";
 
 
 const routes: Routes = [
@@ -12,7 +13,8 @@ const routes: Routes = [
     children: [
       {path: "event", component: StaffEventListComponent},
       {path: "event/:id", component: StaffEventDetailComponent},
-      {path: 'functions', component: FunctionsComponent}
+      {path: 'functions', component: FunctionsComponent},
+      {path: "qr", component: StaffUsefullQR}
     ]
   },
 ];
