@@ -43,6 +43,7 @@ import { ItemTableComponent } from './shared/components/staff_webmaster_manager/
 import { StaffItemDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
 import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster_manager/details/display-mixin-detail/display-mixin-detail.component';
 import { StaffUserDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
+import { CardTableComponent } from './shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
 
 
 @NgModule({
@@ -64,7 +65,7 @@ import { StaffUserDetailComponent } from './shared/components/staff_webmaster_ma
         CreditsComponent,
         PopupzComponent,
         PopupzorderComponent,
-        PopupzorderStaffComponent,
+        PopupzorderStaffComponent
     ],
   imports: [
     BrowserModule,
@@ -84,6 +85,7 @@ import { StaffUserDetailComponent } from './shared/components/staff_webmaster_ma
     UserTableComponent,
     GroupTableComponent,
     ItemTableComponent,
+    CardTableComponent,
     StaffItemDetailComponent,
     StaffUserDetailComponent,
     DisplayMixinDetailComponent,
