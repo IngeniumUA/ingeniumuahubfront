@@ -33,10 +33,6 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     'card_nr', 'user_id', 'linked_date', 'last_edited', 'card_item'
   ];
 
-  resultsLength = 0;
-  isLoadingResults = true;
-  isRateLimitReached = false;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   cards$: Observable<StaffCardDetailI[]> = of([])
