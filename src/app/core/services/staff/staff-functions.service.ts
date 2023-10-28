@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {apiEnviroment} from "../../../../enviroments";
+import {apiEnviroment} from "../../../../environments/environment";
 
 export interface AssignLidPayload {
   email: string

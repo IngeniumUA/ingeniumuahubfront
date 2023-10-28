@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { interval, mergeMap } from 'rxjs';
-import { apiEnviroment } from 'src/enviroments';
+import { apiEnviroment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-food-orders',

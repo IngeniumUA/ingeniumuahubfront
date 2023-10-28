@@ -5,7 +5,7 @@ import {BehaviorSubject, catchError, Observable, of, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {HubAuthData} from "../../../../shared/models/user";
-import {apiEnviroment} from "../../../../../enviroments";
+import {apiEnviroment} from "../../../../../environments/environment";
 import {RolesService} from "../roles.service";
 
 @Injectable({

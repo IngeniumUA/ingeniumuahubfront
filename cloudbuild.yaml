@@ -3,7 +3,7 @@ steps:
     args:
       - build
       - '--build-arg'
-      - _API_URL=$_API_URL
+      - _API_ARG=$_API_ARG
       - '--no-cache'
       - '-t'
       - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
