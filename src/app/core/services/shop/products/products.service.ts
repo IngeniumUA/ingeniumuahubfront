@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable, of} from "rxjs";
 import {IProductCategorie, IProductItem} from "../../../../shared/models/items/products/products";
 import {HttpClient} from "@angular/common/http";
-import {apiEnviroment} from "../../../../../enviroments";
+import {apiEnviroment} from "../../../../../environments/environment";
 
 /*
 const TESTpopUpZ: IProductGroup[] = [

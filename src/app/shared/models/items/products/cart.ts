@@ -1,8 +1,8 @@
 import {IProductItem} from "./products";
-import {IItem} from "../IItem";
+import {ItemI} from "../ItemI";
 
 export interface ITransaction {
-  source_item: IItem
+  source_item: ItemI
   product: IProductItem
   count: number
 }

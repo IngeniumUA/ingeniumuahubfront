@@ -97,6 +97,12 @@ export class LoginComponent implements OnInit {
         return;
       }
 
+      // 404_NOT_FOUND is thrown bij niet gevonden email
+      if (err.status == 404) {
+        this.form_error = "Ongeldige email en password combinatie";
+        return;
+      }
+
       // 500_INTERNAL_SERVER_ERROR should never happen.
       if (err.status == 500) {
         this.form_error = "Interne fout! Probeer het later opnieuw.";

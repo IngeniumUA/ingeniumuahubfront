@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, NgFor, NgIf} from "@angular/common";
 import {Observable} from "rxjs";
-import {IItem} from "../../../../models/items/IItem";
+import {ItemI} from "../../../../models/items/ItemI";
 import {RouterLink} from "@angular/router";
 import {ItemService} from "../../../../../core/services/items/item.service";
 
@@ -21,7 +21,7 @@ import {ItemService} from "../../../../../core/services/items/item.service";
 export class ItemtableComponent implements OnInit {
   constructor(private itemService: ItemService) {
   }
-  items$!: Observable<IItem[]>;
+  items$!: Observable<ItemI[]>;
   ngOnInit(): void {
     this.items$ = this.itemService.getItems();
   }

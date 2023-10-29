@@ -4,9 +4,9 @@ import { ToastrService } from 'ngx-toastr';
 import {Observable, of, shareReplay} from 'rxjs';
 import { CartService } from 'src/app/core/services/shop/cart/cart.service';
 import { EventItemDetailI } from 'src/app/shared/models/items/events';
-import { IItem } from 'src/app/shared/models/items/IItem';
+import { ItemI } from 'src/app/shared/models/items/ItemI';
 import { IProductItem } from 'src/app/shared/models/items/products/products';
-import { apiEnviroment } from 'src/enviroments';
+import { apiEnviroment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-page',

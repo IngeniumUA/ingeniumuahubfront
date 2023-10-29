@@ -5,7 +5,7 @@
     <section class="infosection">
         <mat-form-field>
           <select matNativeControl required [formControl]="yearControl">
-            <option *ngFor="let year of validYears.reverse()" [value]="year" style="color: var(--mainblue)">
+            <option *ngFor="let year of validYears" [value]="year" style="color: var(--mainblue)">
               {{ year }}
             </option>
           </select>

@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {from, Observable, of, shareReplay} from "rxjs";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
-import {IItem} from "../../../../shared/models/items/IItem";
-import {apiEnviroment} from "../../../../../enviroments";
+import {ItemI} from "../../../../shared/models/items/ItemI";
+import {apiEnviroment} from "../../../../../environments/environment";
 import {RecSysPreviewI} from "../../../../shared/models/items/recsys_interfaces";
 
 

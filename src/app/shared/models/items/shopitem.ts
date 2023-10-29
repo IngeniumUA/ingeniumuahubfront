@@ -1,7 +1,7 @@
-import {IItem} from "./IItem";
+import {ItemI} from "./ItemI";
 
 export interface ShopItemDetailI {
-  item: IItem;
+  item: ItemI;
   follow_through_link: string;
   color: string;
   image_landscape: string;

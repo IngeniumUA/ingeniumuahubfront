@@ -14,6 +14,21 @@ import {PublicHeaderComponent} from "../../core/layout/public/header/public-head
 import {
     UserTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/user-table/user-table.component";
+import { ItemDashboardComponent } from './item/item-dashboard/item-dashboard.component';
+import {
+    ItemTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/item-table/item-table.component";
+import { ItemDetailDashboardComponent } from './item/item-detail-dashboard/item-detail-dashboard.component';
+import {
+  StaffItemDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component";
+import {
+    StaffUserDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component";
+import { CardDashboardComponent } from './item/card-dashboard/card-dashboard.component';
+import {
+  CardTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component";
 
 
 
@@ -23,15 +38,22 @@ import {
     UsersListComponent,
     UserDetailComponent,
     GroupListComponent,
+    ItemDashboardComponent,
+    ItemDetailDashboardComponent,
+    CardDashboardComponent,
   ],
-    imports: [
-        CommonModule,
-        WebmasterRoutingModule,
-        BehindheaderComponent,
-        SidenavComponent,
-        GroupTableComponent,
-        PublicHeaderComponent,
-        UserTableComponent,
-    ]
+  imports: [
+    CommonModule,
+    WebmasterRoutingModule,
+    BehindheaderComponent,
+    SidenavComponent,
+    GroupTableComponent,
+    PublicHeaderComponent,
+    UserTableComponent,
+    ItemTableComponent,
+    StaffItemDetailComponent,
+    StaffUserDetailComponent,
+    CardTableComponent,
+  ]
 })
 export class WebmasterModule { }

@@ -13,14 +13,14 @@
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSaenen.webp"
           },
           {
-            "name": "Jorre Beyltiens",
-            "functie": "Vice-praeses",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JorreBeyltiens.webp"
-          },
-          {
             "name": "Wannes Brusselmans",
             "functie": "Vice-praeses",
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WannesBrusselmans.webp"
+          },
+          {
+            "name": "Jorre Beyltiens",
+            "functie": "Vice-praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JorreBeyltiens.webp"
           },
           {
             "name": "Yorben Joosen",
