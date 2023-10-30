@@ -1,5 +1,5 @@
 FROM node:16.14.0 as build
-ARG _API_URL
+ARG _API_ARG
 WORKDIR /source
 
 # Copy the package lock file into the container
@@ -10,8 +10,8 @@ RUN npm ci
 # Copy the rest of the files into the container and build
 COPY . .
 
-RUN echo "$_API_URL" >> src/enviroment.prod.json
-RUN npm run build --prod
+ENV configuration=$_API_ARG
+RUN npm run build
 
 FROM nginx:alpine
 COPY --from=build /source/dist/ingeniumuahubfront /usr/share/nginx/html

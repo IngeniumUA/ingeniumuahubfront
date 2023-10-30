@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {apiEnviroment} from "../../../../enviroments";
+import {apiEnviroment} from "../../../../environments/environment";
 import {RecSysPreviewI} from "../../../shared/models/items/recsys_interfaces";
 
 @Injectable({

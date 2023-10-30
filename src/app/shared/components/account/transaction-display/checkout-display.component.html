@@ -1,4 +1,6 @@
 <div class="transaction-card text-white">
+  <h4>Checkout</h4>
+  <p>{{ checkout.date_completed | date }}</p>
   <ul class="list-disc list-inside">
     <li *ngFor="let transaction of this.checkout.transactions">
       {{ transaction.count }}x {{ transaction.product.name }} &mdash; &euro; {{ transaction.amount }}

@@ -3,7 +3,7 @@ import {AccountService, TransactionI} from "../../../../core/services/user/accou
 import {Observable, of} from "rxjs";
 import {CheckoutI} from "../../../../shared/components/items/interactions/checkout";
 import {HttpClient} from "@angular/common/http";
-import {apiEnviroment} from "../../../../../enviroments";
+import {apiEnviroment} from "../../../../../environments/environment";
 
 interface Order {
   order_no: number

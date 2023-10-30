@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {from, Observable, of, shareReplay} from "rxjs";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {ItemI} from "../../../../shared/models/items/ItemI";
-import {apiEnviroment} from "../../../../../enviroments";
+import {apiEnviroment} from "../../../../../environments/environment";
 import {RecSysPreviewI} from "../../../../shared/models/items/recsys_interfaces";
 
 

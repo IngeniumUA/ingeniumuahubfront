@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Observable, interval, mergeMap } from 'rxjs';
 import { CheckoutI } from 'src/app/shared/components/items/interactions/checkout';
-import { apiEnviroment } from 'src/enviroments';
+import { apiEnviroment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-page',

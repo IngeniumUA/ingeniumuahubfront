@@ -22,6 +22,13 @@ import { ItemDetailDashboardComponent } from './item/item-detail-dashboard/item-
 import {
   StaffItemDetailComponent
 } from "../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component";
+import {
+    StaffUserDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component";
+import { CardDashboardComponent } from './item/card-dashboard/card-dashboard.component';
+import {
+  CardTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component";
 
 
 
@@ -33,6 +40,7 @@ import {
     GroupListComponent,
     ItemDashboardComponent,
     ItemDetailDashboardComponent,
+    CardDashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -44,6 +52,8 @@ import {
     UserTableComponent,
     ItemTableComponent,
     StaffItemDetailComponent,
+    StaffUserDetailComponent,
+    CardTableComponent,
   ]
 })
 export class WebmasterModule { }

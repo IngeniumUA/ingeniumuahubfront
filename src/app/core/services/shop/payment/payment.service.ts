@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CartService} from "../cart/cart.service";
 import {Observable, of, tap} from "rxjs";
-import {apiEnviroment} from "../../../../../enviroments";
+import {apiEnviroment} from "../../../../../environments/environment";
 
 export interface CheckoutIdI {
   checkout_id: string

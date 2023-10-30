@@ -9,7 +9,7 @@ import {
 } from '@stripe/stripe-js';
 import {FormBuilder} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
-import {apiEnviroment} from "../../../../../enviroments";
+import {apiEnviroment} from "../../../../../environments/environment";
 import {Router} from "@angular/router";
 import {first} from "rxjs/operators";
 

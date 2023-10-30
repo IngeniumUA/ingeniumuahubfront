@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { interval, mergeMap } from 'rxjs';
-import { apiEnviroment } from "../../../../../enviroments";
+import { apiEnviroment } from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-popupzorder',

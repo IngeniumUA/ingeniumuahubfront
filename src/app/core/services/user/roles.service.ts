@@ -4,7 +4,7 @@ import {HubAuthData, HubUserRolesI} from "../../../shared/models/user";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {map} from "rxjs/operators";
-import {apiEnviroment} from "../../../../enviroments";
+import {apiEnviroment} from "../../../../environments/environment";
 
 
 @Injectable({
@@ -15,7 +15,7 @@ export class RolesService {
               private httpClient: HttpClient) {
   }
 
-  savedRoles: HubUserRolesI = {is_staff: false, is_manager: false, is_lid: false}
+  savedRoles: HubUserRolesI = {is_staff: false, is_manager: false, is_webmaster: false, is_lid: false}
   lastUpdated: Date | null = null
 
   public setRoles(roles: HubUserRolesI) {
