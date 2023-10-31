@@ -1,4 +1,5 @@
 import {HubUserPersonalDetailsI, HubUserRolesI} from "../user";
+import {HubGroupI} from "./HubGroup";
 
 export interface StaffUserDetailI {
   uuid: string
@@ -16,6 +17,7 @@ export interface StaffUserDetailI {
 
   is_manager: boolean
 
+  groups: HubGroupI[]
   roles: HubUserRolesI
   user_detail: HubUserPersonalDetailsI
 }

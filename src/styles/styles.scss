@@ -15,6 +15,9 @@
 
   --secondblue: #1f2980; /*rgb(31, 41, 128)*/
 
+  --error-red: #FF5000;
+  --succes-green: #5cb85c;
+
   --ingenium-blue: #1f2980;
   --ingenium-grey: #d4dbe9;
   --ingenium-grey-75: rgba(212, 219, 233, 0.75);
@@ -152,13 +155,13 @@ span {
 }
 
 .error-message {
-  color: #FF5000;
+  color: var(--error-red);
   font-weight: bold;
   font-family: D-DIN Condensed, D-DIN, sans-serif;
 }
 
 .success-message {
-  color: #5cb85c;
+  color: var(--succes-green);
   font-weight: bold;
   font-family: D-DIN Condensed, D-DIN, sans-serif;
 }
