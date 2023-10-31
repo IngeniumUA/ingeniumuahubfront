@@ -30,7 +30,8 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
     'id', 'academic_year', 'card_type',
-    'card_nr', 'user_id', 'linked_date', 'last_edited', 'card_item'
+    'card_nr', 'user_id', 'linked_date', 'last_edited', 'card_item',
+    'unlink_button'
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -61,5 +62,16 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     }
     this.paginator!.pageIndex = event.pageIndex
     this.cards$ = this.cardService.getCards(event.pageIndex * event.pageSize, event.pageSize)
+  }
+
+  UnlinkCard(card: StaffCardDetailI) {
+    this.cardService.UnlinkCard(card).subscribe({
+      next: (value) => {
+        this.LoadData()
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    });
   }
 }
