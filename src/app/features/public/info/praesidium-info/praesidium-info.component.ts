@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Observable, of, Subject, takeUntil} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl} from "@angular/forms";
 
 interface PraesidiumButtonI {
   text: string
@@ -38,7 +38,6 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
               private httpClient: HttpClient) {
   }
   yearControl = new FormControl<string>('');
-  yearForm!: FormGroup;
   validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19'];
   praesidium$: Observable<PraesidiumGroupI[]> = of([])
 
