@@ -10,6 +10,7 @@ import {RouterLink} from "@angular/router";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {map} from "rxjs/operators";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {LayoutService} from "../../../../../core/services/layout/layout.service";
 
 @Component({
   selector: 'app-card-table',
@@ -37,8 +38,10 @@ export class CardTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   cards$: Observable<StaffCardDetailI[]> = of([])
+  isMobile$ = this.layoutService.isMobile;
 
-  constructor(private cardService: StaffCardService) {
+  constructor(private cardService: StaffCardService,
+              private layoutService: LayoutService) {
   }
 
   ngOnInit() {
