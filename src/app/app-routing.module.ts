@@ -22,6 +22,8 @@ import {ContactComponent} from "./features/public/info/contact/contact.component
 import {LoginComponent} from "./features/public/auth/login/login.component";
 import {RegisterComponent} from "./shared/components/auth/register/register.component";
 import {PartnersInfoComponent} from "./features/public/info/partners/partners-info.component";
+import {webmasterGuard} from "./core/guards/webmaster.guard";
+import {managerGuard} from "./core/guards/manager.guard";
 
 
 const routes: Routes = [
@@ -87,13 +89,13 @@ const routes: Routes = [
   //** Webmaster **//
   { path: 'web',
     loadChildren: () => import('src/app/features/webmaster/webmaster.module').then(x => x.WebmasterModule),
-    canActivate: [staffGuard]
+    canActivate: [webmasterGuard]
   },
 
   //** Manager **//
   { path: 'man',
     loadChildren: () => import('src/app/features/manager/manager.module').then(x => x.ManagerModule),
-    canActivate: [staffGuard]
+    canActivate: [managerGuard]
   },
 
   // Temporary Recsysform

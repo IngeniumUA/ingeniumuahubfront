@@ -10,6 +10,7 @@ import {RouterLink} from "@angular/router";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {map} from "rxjs/operators";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {LayoutService} from "../../../../../core/services/layout/layout.service";
 
 @Component({
   selector: 'app-card-table',
@@ -30,14 +31,17 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = [
     'id', 'academic_year', 'card_type',
-    'card_nr', 'user_id', 'linked_date', 'last_edited', 'card_item'
+    'card_nr', 'user_id', 'linked_date', 'last_edited', 'card_item',
+    'unlink_button'
   ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   cards$: Observable<StaffCardDetailI[]> = of([])
+  isMobile$ = this.layoutService.isMobile;
 
-  constructor(private cardService: StaffCardService) {
+  constructor(private cardService: StaffCardService,
+              private layoutService: LayoutService) {
   }
 
   ngOnInit() {
@@ -61,5 +65,16 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     }
     this.paginator!.pageIndex = event.pageIndex
     this.cards$ = this.cardService.getCards(event.pageIndex * event.pageSize, event.pageSize)
+  }
+
+  UnlinkCard(card: StaffCardDetailI) {
+    this.cardService.UnlinkCard(card).subscribe({
+      next: (value) => {
+        this.LoadData()
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    });
   }
 }

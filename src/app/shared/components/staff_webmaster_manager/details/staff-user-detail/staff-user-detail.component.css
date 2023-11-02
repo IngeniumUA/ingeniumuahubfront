@@ -1,0 +1,7 @@
+h2, h3 {
+  color: var(--secondblue)
+}
+
+section {
+  margin-bottom: 1rem;
+}
