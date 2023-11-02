@@ -25,7 +25,7 @@ export class RolesService {
 
   public getRoles(): Observable<HubUserRolesI> {
     if (!(this.lastUpdated === null)) {
-
+      return of(this.savedRoles)
     }
     return this.httpClient.get<HubUserRolesI>(apiEnviroment.apiUrl + "user/account/roles").pipe(shareReplay())
   }
