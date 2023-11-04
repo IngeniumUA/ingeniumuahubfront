@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {StaffItemDetailI} from "../../../../models/staff/staff_item_details";
-import {NgIf} from "@angular/common";
+import {NgIf, NgStyle} from "@angular/common";
 import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin-detail.component";
 
 @Component({
@@ -9,11 +9,14 @@ import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin
   styleUrls: ['./staff-item-detail.component.css'],
   imports: [
     NgIf,
-    DisplayMixinDetailComponent
+    DisplayMixinDetailComponent,
+    NgStyle
   ],
   standalone: true
 })
 export class StaffItemDetailComponent {
+
+  loading: boolean = false
 
   @Input() item!: StaffItemDetailI
 

@@ -6,10 +6,4 @@
       <input type="text" formControlName='{{ formField.selector }}'/>
     </label>
   </div>
-  <h4>Update deze details</h4>
-  <button class="button button-primary w-full button-inline"
-          [disabled]="this.loading"
-          [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
-    <span class="text-white">{{ this.loading ? "Updating ..." : "Update!" }}</span>
-  </button>
 </form>
