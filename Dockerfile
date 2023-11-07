@@ -10,7 +10,7 @@ RUN npm ci
 # Copy the rest of the files into the container and build
 COPY . .
 
-RUN npm run build --configuration $_API_ARG
+RUN npm run build --configuration=$_API_ARG
 
 FROM nginx:alpine
 COPY --from=build /source/dist/ingeniumuahubfront /usr/share/nginx/html
