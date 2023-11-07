@@ -5,6 +5,7 @@ export interface StaffUserDetailI {
   uuid: string
   is_active: boolean
   prefered_email: string
+  password_set: boolean
 
   email: string
   mail_verified: boolean

@@ -25,7 +25,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 })
 export class UserTableComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ["uuid", "prefered_mail", "lid", "is_staff", "is_manager", "modified_at"]
+  displayedColumns = ["uuid", "prefered_mail", "password_set", "lid", "is_staff", "is_manager", "modified_at"]
 
   userData$: Observable<StaffUserDetailI[]> = of([])
 
