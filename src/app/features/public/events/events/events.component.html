@@ -2,7 +2,7 @@
 
 <section *ngIf="this.events$ | async as events">
   <h1>Aanbevolen</h1>
-  <div class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
+  <div *ngIf="events.length > 0 else no_events" class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
     <app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of events" />
   </div>
 </section>
