@@ -19,7 +19,6 @@ import {MatSelectModule} from "@angular/material/select";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { PartnersInfoComponent } from './partners/partners-info.component';
 import {PartnerDumpComponent} from "../../../shared/components/partners/partner-dump/partner-dump.component";
-import {PartnerGridComponent} from "../../../shared/components/partners/partner-grid/partner-grid.component";
 
 
 
@@ -47,8 +46,7 @@ import {PartnerGridComponent} from "../../../shared/components/partners/partner-
         MatSelectModule,
         FormsModule,
         ReactiveFormsModule,
-        PartnerDumpComponent,
-        PartnerGridComponent
+        PartnerDumpComponent
     ]
 })
 export class InfoModule { }
