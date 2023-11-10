@@ -44,6 +44,7 @@ import { StaffItemDetailComponent } from './shared/components/staff_webmaster_ma
 import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster_manager/details/display-mixin-detail/display-mixin-detail.component';
 import { StaffUserDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
 import { CardTableComponent } from './shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
+import { PartnerGridComponent } from './shared/components/partners/partner-grid/partner-grid.component';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { CardTableComponent } from './shared/components/staff_webmaster_manager/
         CreditsComponent,
         PopupzComponent,
         PopupzorderComponent,
-        PopupzorderStaffComponent
+        PopupzorderStaffComponent,
+
     ],
   imports: [
     BrowserModule,
@@ -95,6 +97,7 @@ import { CardTableComponent } from './shared/components/staff_webmaster_manager/
     MatButtonModule,
     RegisterComponent,
     RecSysItemPreviewComponent,
+    PartnerGridComponent,
 
     BrowserAnimationsModule,
     ToastrModule.forRoot()

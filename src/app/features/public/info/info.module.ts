@@ -19,6 +19,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { PartnersInfoComponent } from './partners/partners-info.component';
 import {PartnerDumpComponent} from "../../../shared/components/partners/partner-dump/partner-dump.component";
+import {PartnerGridComponent} from "../../../shared/components/partners/partner-grid/partner-grid.component";
 
 
 
@@ -36,17 +37,18 @@ import {PartnerDumpComponent} from "../../../shared/components/partners/partner-
     SportInfoComponent,
     PartnersInfoComponent,
   ],
-  imports: [
-    CommonModule,
-    PublicHeaderComponent,
-    InfoRoutingModule,
-    UnderConstructionComponent,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-    PartnerDumpComponent
-  ]
+    imports: [
+        CommonModule,
+        PublicHeaderComponent,
+        InfoRoutingModule,
+        UnderConstructionComponent,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        PartnerDumpComponent,
+        PartnerGridComponent
+    ]
 })
 export class InfoModule { }

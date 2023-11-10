@@ -1,9 +1,9 @@
 <a [routerLink]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
-  <article class="event-card" [style]="{background: (this.recsysItem.color | colordbrgba: 1 )}">
+  <article class="event-card" [style]=CardStyle()>
     <div class="image"><img src="{{ this.image }}" alt=""></div>
     <div class="content">
-      <h3>{{ this.recsysItem.name }}</h3>
-      <span class="date">{{ this.recsysItem.date | date }}</span>
+      <h3 [ngStyle]="{'color': TextColor()}">{{ this.recsysItem.name }}</h3>
+      <span *ngIf="recsysItem.date != undefined" class="date" [ngStyle]="{'color': TextColor() }">{{ this.recsysItem.date | date }}</span>
     </div>
   </article>
 </a>

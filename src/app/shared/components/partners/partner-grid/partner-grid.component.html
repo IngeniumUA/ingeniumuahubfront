@@ -1,0 +1,5 @@
+<section>
+  <ng-container *ngFor="let partnerItem of partners | async">
+    <app-rec-sys-item-preview [recsysItem]="partnerItem"></app-rec-sys-item-preview>
+  </ng-container>
+</section>
