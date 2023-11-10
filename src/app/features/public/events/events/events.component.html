@@ -3,6 +3,7 @@
 <section *ngIf="this.events$ | async as events">
   <h1>Aanbevolen</h1>
   <div class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
+    {{ events[0].name }}
     <!--<app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of events" />-->
   </div>
 </section>
