@@ -1,6 +1,11 @@
 section {
   display: flex;
   flex-wrap: wrap;
+  gap: 1rem;
 
   margin: 1rem;
+}
+
+.event-card {
+  max-width: 10rem;
 }
