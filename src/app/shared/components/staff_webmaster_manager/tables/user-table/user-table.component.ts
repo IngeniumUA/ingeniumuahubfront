@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableModule} from "@angular/material/table";
-import {async, Observable, of} from "rxjs";
+import {Observable, of} from "rxjs";
 import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
 import {StaffUserService} from "../../../../../core/services/staff/staff-user-service";
 import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
