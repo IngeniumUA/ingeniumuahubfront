@@ -29,6 +29,9 @@ import { CardDashboardComponent } from './item/card-dashboard/card-dashboard.com
 import {
   CardTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component";
+import {
+    TransactionTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component";
 
 
 
@@ -42,18 +45,19 @@ import {
     ItemDetailDashboardComponent,
     CardDashboardComponent,
   ],
-  imports: [
-    CommonModule,
-    WebmasterRoutingModule,
-    BehindheaderComponent,
-    SidenavComponent,
-    GroupTableComponent,
-    PublicHeaderComponent,
-    UserTableComponent,
-    ItemTableComponent,
-    StaffItemDetailComponent,
-    StaffUserDetailComponent,
-    CardTableComponent,
-  ]
+    imports: [
+        CommonModule,
+        WebmasterRoutingModule,
+        BehindheaderComponent,
+        SidenavComponent,
+        GroupTableComponent,
+        PublicHeaderComponent,
+        UserTableComponent,
+        ItemTableComponent,
+        StaffItemDetailComponent,
+        StaffUserDetailComponent,
+        CardTableComponent,
+        TransactionTableComponent,
+    ]
 })
 export class WebmasterModule { }

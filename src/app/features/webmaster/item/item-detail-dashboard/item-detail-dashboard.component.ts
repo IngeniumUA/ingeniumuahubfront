@@ -13,6 +13,8 @@ export class ItemDetailDashboardComponent implements OnInit {
 
   $itemDetail: Observable<StaffItemDetailI| null> = of(null)
 
+  itemId!: string
+
   constructor(private staffItemService: StaffItemService,
               private route: ActivatedRoute) {
   }
@@ -26,8 +28,10 @@ export class ItemDetailDashboardComponent implements OnInit {
       // TODO Handle error
       return
     }
+    this.itemId = id
 
-    this.$itemDetail = this.staffItemService.getItem(id)
+
+    this.$itemDetail = this.staffItemService.getItem(this.itemId)
   }
 
 }

@@ -45,6 +45,7 @@ import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster
 import { StaffUserDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
 import { CardTableComponent } from './shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
 import { PartnerGridComponent } from './shared/components/partners/partner-grid/partner-grid.component';
+import { TransactionTableComponent } from './shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component';
 
 
 @NgModule({
@@ -91,6 +92,7 @@ import { PartnerGridComponent } from './shared/components/partners/partner-grid/
     StaffItemDetailComponent,
     StaffUserDetailComponent,
     DisplayMixinDetailComponent,
+    TransactionTableComponent,
 
     ReactiveFormsModule,
     MatRadioModule,
