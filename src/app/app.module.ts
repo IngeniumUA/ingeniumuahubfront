@@ -76,15 +76,18 @@ import { TransactionTableComponent } from './shared/components/staff_webmaster_m
     PublicFooterComponent,
 
     UnderConstructionComponent,
-    PartnerBalkComponent,
-    PartnerDumpComponent,
-    PartnerGridComponent,
 
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
     SocialLoginModule,
     CardComponent,
+
+    ReactiveFormsModule,
+    MatRadioModule,
+    MatButtonModule,
+    RegisterComponent,
+    RecSysItemPreviewComponent,
 
     UserTableComponent,
     GroupTableComponent,
@@ -95,11 +98,9 @@ import { TransactionTableComponent } from './shared/components/staff_webmaster_m
     DisplayMixinDetailComponent,
     TransactionTableComponent,
 
-    ReactiveFormsModule,
-    MatRadioModule,
-    MatButtonModule,
-    RegisterComponent,
-    RecSysItemPreviewComponent,
+    PartnerBalkComponent,
+    PartnerDumpComponent,
+    PartnerGridComponent,
 
     BrowserAnimationsModule,
     ToastrModule.forRoot()
