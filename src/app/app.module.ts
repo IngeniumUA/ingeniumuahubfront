@@ -87,15 +87,6 @@ import { CardTableComponent } from './shared/components/staff_webmaster_manager/
     RegisterComponent,
     RecSysItemPreviewComponent,
 
-    UserTableComponent,
-    GroupTableComponent,
-    ItemTableComponent,
-    CardTableComponent,
-    StaffItemDetailComponent,
-    StaffUserDetailComponent,
-    DisplayMixinDetailComponent,
-
-
     PartnerBalkComponent,
     PartnerDumpComponent,
 
