@@ -44,8 +44,6 @@ import { StaffItemDetailComponent } from './shared/components/staff_webmaster_ma
 import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster_manager/details/display-mixin-detail/display-mixin-detail.component';
 import { StaffUserDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
 import { CardTableComponent } from './shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
-import { PartnerGridComponent } from './shared/components/partners/partner-grid/partner-grid.component';
-import { TransactionTableComponent } from './shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component';
 
 
 @NgModule({
@@ -96,11 +94,10 @@ import { TransactionTableComponent } from './shared/components/staff_webmaster_m
     StaffItemDetailComponent,
     StaffUserDetailComponent,
     DisplayMixinDetailComponent,
-    TransactionTableComponent,
+
 
     PartnerBalkComponent,
     PartnerDumpComponent,
-    PartnerGridComponent,
 
     BrowserAnimationsModule,
     ToastrModule.forRoot()
