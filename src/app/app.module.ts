@@ -78,6 +78,7 @@ import { TransactionTableComponent } from './shared/components/staff_webmaster_m
     UnderConstructionComponent,
     PartnerBalkComponent,
     PartnerDumpComponent,
+    PartnerGridComponent,
 
     AppRoutingModule,
     HttpClientModule,
@@ -99,7 +100,6 @@ import { TransactionTableComponent } from './shared/components/staff_webmaster_m
     MatButtonModule,
     RegisterComponent,
     RecSysItemPreviewComponent,
-    PartnerGridComponent,
 
     BrowserAnimationsModule,
     ToastrModule.forRoot()
