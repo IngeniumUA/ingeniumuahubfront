@@ -8,6 +8,9 @@ import {EventDetailComponent} from "./event/event-detail.component";
 import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
 import {PublicHeaderComponent} from "../../../core/layout/public/header/public-header.component";
 import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
+import {
+  RecSysItemPreviewComponent
+} from "../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component";
 
 @NgModule({
   imports: [
@@ -16,7 +19,8 @@ import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
     EventRoutingModule,
     ProductComponent,
     PublicHeaderComponent,
-    ColordbrgbaPipe
+    ColordbrgbaPipe,
+    RecSysItemPreviewComponent
   ],
   declarations: [
     EventsComponent,
