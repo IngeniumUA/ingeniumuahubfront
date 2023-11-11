@@ -20,6 +20,7 @@ import {ColordbrgbaPipe} from "../../../../pipes/item/colorpipe.pipe";
 })
 export class RecSysItemPreviewComponent implements OnInit {
     @Input() recsysItem!: RecSysPreviewI;
+    @Input() small: boolean = false;
     isLandscape!: boolean;
     image!: string;
 
@@ -36,11 +37,21 @@ export class RecSysItemPreviewComponent implements OnInit {
       return colorPipe.transform(this.recsysItem.text_color, 1)
     }
 
-    CardStyle() {
+    CardStyle(): object {
       const colorPipe = new ColordbrgbaPipe()
-      return {
-        'background': colorPipe.transform(this.recsysItem.color, 1),
-        'border': 'solid 2px rgb(0, 0, 0)'
+      // TODO This is ugly, need to lookup more on how objects are created to make better
+      if (this.small) {
+          return {
+              'background': colorPipe.transform(this.recsysItem.color, 1),
+              'border': 'solid 2px rgb(0, 0, 0)',
+              'max-width': '10rem'
+          }
+      } else {
+          return {
+              'background': colorPipe.transform(this.recsysItem.color, 1),
+              'border': 'solid 2px rgb(0, 0, 0)'
+          }
       }
+
     }
 }
