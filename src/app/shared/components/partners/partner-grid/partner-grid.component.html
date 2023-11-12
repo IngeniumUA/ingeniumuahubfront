@@ -1,5 +1,11 @@
 <section>
   <ng-container *ngFor="let partnerItem of partners | async">
-    <app-rec-sys-item-preview [recsysItem]="partnerItem" [small]="true"></app-rec-sys-item-preview>
+    <div class="partner-card">
+      <div class="partner-logo-wrapper">
+        <img src="{{ partnerItem.logo }}">
+      </div>
+      <h3>{{ partnerItem.name }}</h3>
+      <p>-</p>
+    </div>
   </ng-container>
 </section>

@@ -6,6 +6,26 @@ section {
   margin: 1rem;
 }
 
-.event-card {
-  max-width: 10rem;
+.partner-card {
+  @apply w-32 h-48 flex flex-col flex-grow align-middle text-blue-950 shadow-inner rounded-lg;
+
+  border: solid var(--ingenium-grey) 2px;
+
+
+  .partner-logo-wrapper {
+    @apply h-28 w-28 flex justify-center align-middle m-1
+  }
+
+  img {
+    object-fit: contain;
+    width: 100%;
+  }
+
+  h3 {
+    @apply text-black font-bold m-1 text-left w-28 inline-block;
+  }
+
+  p {
+    @apply ml-1.5
+  }
 }
