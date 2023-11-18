@@ -39,7 +39,12 @@ import { AccessPolicyDashboardComponent } from './access/access-policy-dashboard
 import {
   AccessPolicyTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/access-policy-table/access-policy-table.component";
-
+import {
+  AccessPolicyDetailDashboardComponent
+} from "./access/access-policy-detail/access-policy-detail-dashboard.component";
+import {
+  AccessPolicyDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/access-policy-detail/access-policy-detail.component";
 
 
 @NgModule({
@@ -52,6 +57,7 @@ import {
     ItemDetailDashboardComponent,
     CardDashboardComponent,
     AccessPolicyDashboardComponent,
+    AccessPolicyDetailDashboardComponent
   ],
   imports: [
     CommonModule,
@@ -68,6 +74,7 @@ import {
     TransactionTableComponent,
     ProductBlueprintDetailComponent,
     AccessPolicyTableComponent,
+    AccessPolicyDetailComponent,
   ]
 })
 export class WebmasterModule { }

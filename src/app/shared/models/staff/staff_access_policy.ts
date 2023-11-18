@@ -1,4 +1,4 @@
-export interface StaffAccessPolicy {
+export interface StaffAccessPolicyI {
   id: number
   method: string
   content: object

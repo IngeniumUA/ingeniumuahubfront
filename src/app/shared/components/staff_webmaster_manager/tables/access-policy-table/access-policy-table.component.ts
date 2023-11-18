@@ -2,10 +2,11 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {Observable, of} from "rxjs";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {StaffAccessPolicyService} from "../../../../../core/services/staff/staff-accesspolicy.service";
-import {StaffAccessPolicy} from "../../../../models/staff/staff_access_policy";
+import {StaffAccessPolicyI} from "../../../../models/staff/staff_access_policy";
 import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-access-policy-table',
@@ -17,14 +18,15 @@ import {MatTableModule} from "@angular/material/table";
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatTableModule,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   standalone: true
 })
 export class AccessPolicyTableComponent implements AfterViewInit {
   displayedColumns = ["id", "method", "content", "is_disabled", "name", "description"]
 
-  accessPolicies$: Observable<StaffAccessPolicy[]> = of([])
+  accessPolicies$: Observable<StaffAccessPolicyI[]> = of([])
 
   constructor(private staffAccessPolicyService: StaffAccessPolicyService) {
   }

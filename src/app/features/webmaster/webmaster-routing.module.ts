@@ -8,6 +8,9 @@ import {ItemDetailDashboardComponent} from "./item/item-detail-dashboard/item-de
 import {UserDetailComponent} from "./user/user-detail/user-detail.component";
 import {CardDashboardComponent} from "./item/card-dashboard/card-dashboard.component";
 import {AccessPolicyDashboardComponent} from "./access/access-policy-dashboard/access-policy-dashboard.component";
+import {
+  AccessPolicyDetailDashboardComponent
+} from "./access/access-policy-detail/access-policy-detail-dashboard.component";
 
 
 const routes: Routes = [
@@ -20,7 +23,8 @@ const routes: Routes = [
       {path: 'item', component: ItemDashboardComponent},
       {path: 'item/:id', component: ItemDetailDashboardComponent},
       {path: 'card', component: CardDashboardComponent},
-      {path: 'access_policy', component: AccessPolicyDashboardComponent}
+      {path: 'access_policy', component: AccessPolicyDashboardComponent},
+      {path: 'access_policy/:id', component: AccessPolicyDetailDashboardComponent}
     ]
   },
 ];

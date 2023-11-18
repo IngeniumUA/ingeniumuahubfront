@@ -22,7 +22,7 @@
 
     <ng-container matColumnDef="content">
       <th mat-header-cell *matHeaderCellDef>Content</th>
-      <td mat-cell *matCellDef="let accessPolicy">{{ accessPolicy.content }}</td>
+      <td mat-cell *matCellDef="let accessPolicy"><a [routerLink]="[accessPolicy.id]"> View Content </a></td>
     </ng-container>
     <ng-container matColumnDef="is_disabled">
       <th mat-header-cell *matHeaderCellDef>Disabled</th>
