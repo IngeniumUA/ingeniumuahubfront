@@ -1,21 +1,38 @@
 <h1>Itemdetail</h1>
 <section *ngIf="this.item.item as itemModel">
   <h2>Core Item</h2>
-  <table>
-    <thead>
-    <tr><th scope="col"></th><th scope="col">Item:</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr><th>UUID</th><td>{{ itemModel.uuid }}</td></tr>
-    <tr><th>Name</th><td>{{ itemModel.name }}</td></tr>
-    <tr><th>Description</th><td>{{ itemModel.description }}</td></tr>
-    <tr><th>Last modified</th><td>{{ itemModel.modified_at | date: 'long' }}</td></tr>
-    <tr><th>Created At</th><td>{{ itemModel.created_at | date: 'long' }}</td></tr>
-    <tr><th>Is Available</th><td>{{ itemModel.available }}</td></tr>
-    <tr><th>Is Disabled</th><td>{{ itemModel.disabled }}</td></tr>
-    </tbody>
-  </table>
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+    <table>
+      <thead>
+        <tr><th scope="col"></th><th scope="col">Item:</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>UUID</th><td>{{ item.item.uuid }}</td></tr>
+        <tr>
+          <th>Name</th>
+          <td><label class="hubformfield-white">
+              <input type="text" formControlName="name" placeholder="Placeholder"/>
+          </label></td>
+        </tr>
+        <tr>
+          <th>Description</th>
+          <td><label class="hubformfield-white">
+            <input type="text" formControlName="description" placeholder="Placeholder"/>
+          </label></td>
+        </tr>
+        <tr>
+          <th>Available</th>
+          <td><input type="checkbox" formControlName="available"/></td>
+        </tr>
+        <tr>
+          <th>Disabled</th>
+          <td><input type="checkbox" formControlName="disabled"/></td>
+        </tr>
+        <tr><th>Created At</th><td>{{ item.item.created_at | date: 'medium' }}</td></tr>
+        <tr><th>Modified At</th><td>{{ item.item.modified_at | date: 'medium' }}</td></tr>
+      </tbody>
+    </table>
+  </form>
 </section>
 
 <section *ngIf="this.item.event_item as eventItem">
@@ -35,8 +52,7 @@
 
 <section>
   <h2>Update Item</h2>
-  Current mode: Viewing
-  <button class="button button-primary w-full button-inline"
+  <button class="button button-primary button-inline"
           [disabled]="this.loading"
           [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
     <span class="text-white">{{ this.loading ? "Updating ..." : "Update!" }}</span>
