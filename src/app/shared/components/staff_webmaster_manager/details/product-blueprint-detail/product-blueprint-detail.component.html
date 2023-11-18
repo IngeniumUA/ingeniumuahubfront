@@ -18,4 +18,10 @@
     <tr><th>Max Per Checkout</th><td>{{ productBlueprint.max_per_checkout }}</td></tr>
     </tbody>
   </table>
+  <br>
+  <h4>Product Meta</h4>
+  <pre>{{ productBlueprint.product_meta | json }}</pre>
+  <br>
+  <h4>Price Policies</h4>
+  <pre *ngFor="let pricePolicy of productBlueprint.price_policies">{{ pricePolicy | json }}</pre>
 </section>

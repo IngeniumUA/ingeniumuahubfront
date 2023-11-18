@@ -1,5 +1,5 @@
 <section class="staffSection" *ngIf="this.$itemDetail | async as item">
-  <app-staff-item-detail [item]="item"></app-staff-item-detail>
+  <app-staff-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)"></app-staff-item-detail>
 </section>
 
 <section class="staffSection">

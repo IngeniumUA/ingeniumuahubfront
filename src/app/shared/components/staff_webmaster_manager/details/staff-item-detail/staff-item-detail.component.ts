@@ -1,8 +1,9 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {StaffItemDetailI} from "../../../../models/staff/staff_item_details";
 import {DatePipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin-detail.component";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
 
 interface FormField {
   name: string
@@ -19,7 +20,8 @@ interface FormField {
     NgStyle,
     DatePipe,
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatInputModule
   ],
   standalone: true
 })
@@ -27,6 +29,7 @@ export class StaffItemDetailComponent {
 
   @Input() item!: StaffItemDetailI
   @Input() editing: boolean = false
+  @Output() itemUpdate = new EventEmitter<StaffItemDetailI>;
 
   form_error: string | null = null;
   loading: boolean = false
@@ -51,8 +54,17 @@ export class StaffItemDetailComponent {
       return;  }
 
     this.loading = true;
-    // Update de waarden op displayMixin ( Remember, dit is een pointer naar memory )
-    // Stuur signaal dat we ze geupdate hebben
+    // The underlying components always send updated information in their fields up to the parent
+    // When we send the formdata to the parent here, alle data is as seen on the page
+
+    // This manually assignign all fields is not great code
+    // So, to be changed later
+    this.item.item.available = this.itemForm.controls['available'].value
+    this.item.item.disabled = this.itemForm.controls['disabled'].value
+    this.item.item.name = this.itemForm.controls['name'].value
+    this.item.item.description = this.itemForm.controls['description'].value
+    this.itemUpdate.emit(this.item)
+
     this.loading = false;
   }
 

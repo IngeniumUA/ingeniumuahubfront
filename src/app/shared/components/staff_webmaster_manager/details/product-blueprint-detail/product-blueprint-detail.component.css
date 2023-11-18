@@ -1,3 +1,7 @@
 th {
   text-align: left;
 }
+
+h4 {
+  color: var(--secondblue);
+}

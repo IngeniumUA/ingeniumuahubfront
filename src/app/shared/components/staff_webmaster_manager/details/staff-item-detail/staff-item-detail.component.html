@@ -15,12 +15,6 @@
           </label></td>
         </tr>
         <tr>
-          <th>Description</th>
-          <td><label class="hubformfield-white">
-            <input type="text" formControlName="description" placeholder="Placeholder"/>
-          </label></td>
-        </tr>
-        <tr>
           <th>Available</th>
           <td><input type="checkbox" formControlName="available"/></td>
         </tr>
@@ -32,11 +26,17 @@
         <tr><th>Modified At</th><td>{{ item.item.modified_at | date: 'medium' }}</td></tr>
       </tbody>
     </table>
+    <h4><b>Description</b></h4>
+    <mat-form-field>
+      <mat-label></mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
   </form>
 </section>
 
 <section *ngIf="this.item.event_item as eventItem">
   <h2>Event Item</h2>
+  {{ this.item.event_item.start_date | date: 'medium' }}
   <app-display-mixin-detail [displayMixin]="eventItem.display_mixin"></app-display-mixin-detail>
 </section>
 
@@ -53,6 +53,7 @@
 <section>
   <h2>Update Item</h2>
   <button class="button button-primary button-inline"
+          (click)="onSubmit()"
           [disabled]="this.loading"
           [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
     <span class="text-white">{{ this.loading ? "Updating ..." : "Update!" }}</span>
