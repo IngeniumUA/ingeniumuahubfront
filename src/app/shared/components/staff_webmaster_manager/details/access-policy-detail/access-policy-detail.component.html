@@ -10,7 +10,11 @@
     <tr><th>Description</th><td>{{ accessPolicy.description }}</td></tr>
     <tr><th>Disabled</th><td>{{ accessPolicy.is_disabled }}</td></tr>
     <tr><th>Method</th><td>{{ accessPolicy.method }}</td></tr>
-    <tr><th>Method Content</th><td>{{ accessPolicy.content }}</td></tr>
     </tbody>
   </table>
+
+  <h3>Method</h3>
+  <span>
+    {{ accessPolicy.content | json }}
+  </span>
 </section>
