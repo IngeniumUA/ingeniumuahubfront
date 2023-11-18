@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {StaffDisplayMixin} from "../../../../models/staff/staff_item_details";
+import {StaffDisplayMixinI} from "../../../../models/staff/staff_item_details";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 
@@ -22,8 +22,9 @@ interface FormField {
 })
 export class DisplayMixinDetailComponent implements OnInit {
 
-  @Input() displayMixin!: StaffDisplayMixin;
+  @Input() displayMixin!: StaffDisplayMixinI;
   @Input() editing: boolean = false
+  @Output() displayUpdate = new EventEmitter<StaffDisplayMixinI>()
   // @Input() doSumbit https://stackoverflow.com/questions/44053227/how-to-emit-an-event-from-parent-to-child
   form: any;
 
@@ -49,6 +50,10 @@ export class DisplayMixinDetailComponent implements OnInit {
       image_square: [this.displayMixin.image_square],
       image_landscape: [this.displayMixin.image_landscape],
       preview_description: [this.displayMixin.preview_description],
+    })
+
+    this.form.valueChanges.subscribe((val: any) => {
+      this.displayUpdate.emit(val)
     })
   }
 

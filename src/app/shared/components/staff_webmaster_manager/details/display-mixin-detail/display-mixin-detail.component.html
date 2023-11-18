@@ -1,5 +1,5 @@
-<h3>Display mixin</h3>
-<ng-container *ngIf="editing else viewing">
+<section>
+  <h3>Display mixin</h3>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div *ngFor="let formField of formFields">
       <h4>{{ formField.name }}</h4>
@@ -8,19 +8,4 @@
       </label>
     </div>
   </form>
-</ng-container>
-<ng-template #viewing>
-  <table>
-    <thead>
-    <tr><th scope="col"></th><th scope="col">DisplayMixin:</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr><th>Color</th><td>{{ displayMixin.color }}</td></tr>
-    <tr><th>Click Link</th><td>{{ displayMixin.follow_through_link }}</td></tr>
-    <tr><th>Image Square</th><td>{{ displayMixin.image_square }}</td></tr>
-    <tr><th>Image Landscape</th><td>{{ displayMixin.image_landscape }}</td></tr>
-    <tr><th>Preview Description</th><td>{{ displayMixin.preview_description }}</td></tr>
-    </tbody>
-  </table>
-</ng-template>
+</section>
