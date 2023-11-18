@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {StaffItemDetailI} from "../../../../models/staff/staff_item_details";
-import {NgIf, NgStyle} from "@angular/common";
+import {DatePipe, NgIf, NgStyle} from "@angular/common";
 import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin-detail.component";
 
 @Component({
@@ -10,7 +10,8 @@ import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin
   imports: [
     NgIf,
     DisplayMixinDetailComponent,
-    NgStyle
+    NgStyle,
+    DatePipe
   ],
   standalone: true
 })

@@ -10,8 +10,8 @@
     <tr><th>UUID</th><td>{{ itemModel.uuid }}</td></tr>
     <tr><th>Name</th><td>{{ itemModel.name }}</td></tr>
     <tr><th>Description</th><td>{{ itemModel.description }}</td></tr>
-    <tr><th>Last modified</th><td>{{ itemModel.modified_at }}</td></tr>
-    <tr><th>Created At</th><td>{{ itemModel.created_at }}</td></tr>
+    <tr><th>Last modified</th><td>{{ itemModel.modified_at | date: 'long' }}</td></tr>
+    <tr><th>Created At</th><td>{{ itemModel.created_at | date: 'long' }}</td></tr>
     <tr><th>Is Available</th><td>{{ itemModel.available }}</td></tr>
     <tr><th>Is Disabled</th><td>{{ itemModel.disabled }}</td></tr>
     </tbody>
