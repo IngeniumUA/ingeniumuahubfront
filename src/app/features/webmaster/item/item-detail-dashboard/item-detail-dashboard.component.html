@@ -9,4 +9,14 @@
 
 <section>
   <h1>Product Blueprints</h1>
+  'Voeg nieuwe toe' knop hier<br>
+  <ng-container *ngIf="this.$productBlueprint | async as productBlueprints">
+    <div *ngIf="productBlueprints.length > 0 else noneFound">
+    <ng-container *ngFor="let productBlueprint of productBlueprints">
+      <app-product-blueprint-detail [productBlueprint]="productBlueprint"></app-product-blueprint-detail>
+    </ng-container>
+    </div>
+  </ng-container>
 </section>
+
+<ng-template #noneFound>Geen resultaat</ng-template>

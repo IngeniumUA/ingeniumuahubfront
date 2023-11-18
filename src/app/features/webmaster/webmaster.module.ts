@@ -32,6 +32,9 @@ import {
 import {
     TransactionTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component";
+import {
+    ProductBlueprintDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
 
 
 
@@ -58,6 +61,7 @@ import {
         StaffUserDetailComponent,
         CardTableComponent,
         TransactionTableComponent,
+        ProductBlueprintDetailComponent,
     ]
 })
 export class WebmasterModule { }

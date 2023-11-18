@@ -3,6 +3,8 @@ import {Observable, of} from "rxjs";
 import {StaffItemDetailI} from "../../../../shared/models/staff/staff_item_details";
 import {StaffItemService} from "../../../../core/services/staff/items/staff_item_router";
 import {ActivatedRoute} from "@angular/router";
+import {StaffProductBlueprintI} from "../../../../shared/models/staff/staff_productblueprint";
+import {StaffProductBlueprintService} from "../../../../core/services/staff/staff-productblueprint-service";
 
 @Component({
   selector: 'app-item-detail-dashboard',
@@ -12,10 +14,12 @@ import {ActivatedRoute} from "@angular/router";
 export class ItemDetailDashboardComponent implements OnInit {
 
   $itemDetail: Observable<StaffItemDetailI| null> = of(null)
+  $productBlueprint: Observable<StaffProductBlueprintI[]> = of([])
 
   itemId!: string
 
   constructor(private staffItemService: StaffItemService,
+              private staffProductService: StaffProductBlueprintService,
               private route: ActivatedRoute) {
   }
 
@@ -32,6 +36,7 @@ export class ItemDetailDashboardComponent implements OnInit {
 
 
     this.$itemDetail = this.staffItemService.getItem(this.itemId)
+    this.$productBlueprint = this.staffProductService.getProductBlueprint(0, 50, this.itemId)  // source_item
   }
 
 }
