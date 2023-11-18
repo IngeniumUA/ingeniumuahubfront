@@ -35,6 +35,10 @@ import {
 import {
     ProductBlueprintDetailComponent
 } from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
+import { AccessPolicyDashboardComponent } from './access/access-policy-dashboard/access-policy-dashboard.component';
+import {
+  AccessPolicyTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/access-policy-table/access-policy-table.component";
 
 
 
@@ -47,21 +51,23 @@ import {
     ItemDashboardComponent,
     ItemDetailDashboardComponent,
     CardDashboardComponent,
+    AccessPolicyDashboardComponent,
   ],
-    imports: [
-        CommonModule,
-        WebmasterRoutingModule,
-        BehindheaderComponent,
-        SidenavComponent,
-        GroupTableComponent,
-        PublicHeaderComponent,
-        UserTableComponent,
-        ItemTableComponent,
-        StaffItemDetailComponent,
-        StaffUserDetailComponent,
-        CardTableComponent,
-        TransactionTableComponent,
-        ProductBlueprintDetailComponent,
-    ]
+  imports: [
+    CommonModule,
+    WebmasterRoutingModule,
+    BehindheaderComponent,
+    SidenavComponent,
+    GroupTableComponent,
+    PublicHeaderComponent,
+    UserTableComponent,
+    ItemTableComponent,
+    StaffItemDetailComponent,
+    StaffUserDetailComponent,
+    CardTableComponent,
+    TransactionTableComponent,
+    ProductBlueprintDetailComponent,
+    AccessPolicyTableComponent,
+  ]
 })
 export class WebmasterModule { }
