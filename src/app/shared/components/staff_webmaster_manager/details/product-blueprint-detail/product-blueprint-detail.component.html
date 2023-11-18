@@ -1,1 +1,21 @@
-{{ productBlueprint.name }}
+<section>
+  <table>
+    <thead>
+    <tr><th scope="col"></th><th scope="col">Product:</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr><th>ID</th><td>{{ productBlueprint.id }}</td></tr>
+    <tr><th>Available</th><td>{{ productBlueprint.available }}</td></tr>
+    <tr><th>Disabled</th><td>{{ productBlueprint.disabled }}</td></tr>
+    <tr><th>Date Created</th><td>{{ productBlueprint.date_created | date }}</td></tr>
+    <tr><th>Origin Item ID</th><td><a [routerLink]="['/web/item/' + productBlueprint.origin_item_id]" >{{ productBlueprint.origin_item_id }}</a></td></tr>
+
+    <tr><th>Name</th><td>{{ productBlueprint.name }}</td></tr>
+    <tr><th>Description</th><td>{{ productBlueprint.description }}</td></tr>
+    <tr><th>Max Total</th><td>{{ productBlueprint.max_total }}</td></tr>
+    <tr><th>Max Individual</th><td>{{ productBlueprint.max_individual }}</td></tr>
+    <tr><th>Max Per Checkout</th><td>{{ productBlueprint.max_per_checkout }}</td></tr>
+    </tbody>
+  </table>
+</section>
