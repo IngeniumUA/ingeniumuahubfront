@@ -23,11 +23,11 @@
       </tr>
       <tr>
         <th>Last Login</th>
-        <td>{{ userDetail.last_login }}</td>
+        <td>{{ userDetail.last_login | date: 'long' }} </td>
       </tr>
       <tr>
         <th>Created At</th>
-        <td>{{ userDetail.created_at }}</td>
+        <td>{{ userDetail.created_at | date: 'long' }}</td>
       </tr>
       <tr>
         <th>Password Set</th>

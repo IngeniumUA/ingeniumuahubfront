@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StaffUserService} from "../../../../../core/services/staff/staff-user-service";
 import {Observable, of} from "rxjs";
 import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
@@ -22,7 +22,8 @@ import {MatTableModule} from "@angular/material/table";
     ReactiveFormsModule,
     NgIf,
     AsyncPipe,
-    MatTableModule
+    MatTableModule,
+    DatePipe
   ],
   standalone: true
 })
