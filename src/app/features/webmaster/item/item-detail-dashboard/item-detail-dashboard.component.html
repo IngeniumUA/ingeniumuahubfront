@@ -1,13 +1,13 @@
-<section *ngIf="this.$itemDetail | async as item">
+<section class="staffSection" *ngIf="this.$itemDetail | async as item">
   <app-staff-item-detail [item]="item"></app-staff-item-detail>
 </section>
 
-<section>
+<section class="staffSection">
   <h1>Transactions</h1>
   <app-transaction-table [item_id]="this.itemId"></app-transaction-table>
 </section>
 
-<section>
+<section class="staffSection">
   <h1>Product Blueprints</h1>
   'Voeg nieuwe toe' knop hier<br>
   <ng-container *ngIf="this.$productBlueprint | async as productBlueprints">
