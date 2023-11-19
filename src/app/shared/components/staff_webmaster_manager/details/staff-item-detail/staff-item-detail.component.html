@@ -61,9 +61,9 @@
   <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 0)" [displayMixin]="this.item.event_item.display_mixin"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="this.item.shop_item as shopItem">
+<section *ngIf="this.isShopItem">
   <h2>Shop Item</h2>
-  <app-display-mixin-detail [displayMixin]="shopItem.display_mixin"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 1)" [displayMixin]="this.item.shop_item.display_mixin"></app-display-mixin-detail>
 </section>
 
 <section *ngIf="this.item.promo_item as promoItem">
