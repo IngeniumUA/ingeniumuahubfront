@@ -46,31 +46,30 @@ export class StaffItemDetailComponent {
   }
   ngOnInit() {
     this.isEventItem = this.item.event_item != null;
-    this.isShopItem = this.item.event_item != null;
-    this.isPromoItem = this.item.event_item != null;
+    this.isShopItem = this.item.shop_item != null;
+    this.isPromoItem = this.item.promo_item != null;
 
     // Setting up form
     this.itemForm = this.formBuilder.group({
       name: [this.item.item.name, Validators.required],
-      description: [this.item.item.description, Validators.required],
+      description: [this.item.item.description],
       available: [true, Validators.required],
       disabled: [this.item.item.disabled, Validators.required],
     })
     // Adding event if required
     if (this.isEventItem) {
       this.itemForm.addControl('start_date', new FormControl(
-          this.datePipe.transform(this.item.event_item.start_date, 'yyyy-MM-ddThh:mm'))
-      )
+          this.datePipe.transform(this.item.event_item.start_date, 'yyyy-MM-ddThh:mm')))
       this.itemForm.addControl('end_date', new FormControl(
-          this.datePipe.transform(this.item.event_item.end_date, 'yyyy-MM-ddThh:mm'))
-      )
+          this.datePipe.transform(this.item.event_item.end_date, 'yyyy-MM-ddThh:mm')))
     }
   }
 
   onSubmit(): void {
     // Check if valid guardclause
     if (this.itemForm.invalid) {
-      const error: Error = Error("Wrong email or password");
+      const error: Error = Error("Form error");
+      console.log(error)
       this.handleFormError(error);
       return;  }
 
@@ -84,9 +83,10 @@ export class StaffItemDetailComponent {
     this.item.item.disabled = this.itemForm.controls['disabled'].value
     this.item.item.name = this.itemForm.controls['name'].value
     this.item.item.description = this.itemForm.controls['description'].value
-    this.item.event_item.start_date = this.itemForm.controls['start_date'].value
-    this.item.event_item.end_date = this.itemForm.controls['end_date'].value
-
+    if (this.isEventItem) {
+      this.item.event_item.start_date = this.itemForm.controls['start_date'].value
+      this.item.event_item.end_date = this.itemForm.controls['end_date'].value
+    }
     this.itemUpdate.emit(this.item)
 
     this.loading = false;
