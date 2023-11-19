@@ -1,11 +1,22 @@
-<section *ngIf="this.$itemDetail | async as item">
-  <app-staff-item-detail [item]="item"></app-staff-item-detail>
+<section class="staffSection" *ngIf="this.$itemDetail | async as item">
+  <app-staff-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)"></app-staff-item-detail>
 </section>
 
-<section>
+<section class="staffSection">
   <h1>Transactions</h1>
+  <app-transaction-table [item_id]="this.itemId"></app-transaction-table>
 </section>
 
-<section>
+<section class="staffSection">
   <h1>Product Blueprints</h1>
+  TODO: 'Voeg nieuwe toe' knop hier<br>
+  <ng-container *ngIf="this.$productBlueprint | async as productBlueprints">
+    <div *ngIf="productBlueprints.length > 0 else noneFound">
+    <ng-container *ngFor="let productBlueprint of productBlueprints">
+      <app-product-blueprint-detail [productBlueprint]="productBlueprint"></app-product-blueprint-detail>
+    </ng-container>
+    </div>
+  </ng-container>
 </section>
+
+<ng-template #noneFound>Nothing to display</ng-template>

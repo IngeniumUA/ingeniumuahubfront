@@ -11,7 +11,7 @@ export interface StaffItemI {
   modified_at: string
 }
 
-export interface StaffDisplayMixin {
+export interface StaffDisplayMixinI {
   color: string
 
   follow_through_link: string
@@ -26,18 +26,18 @@ export interface StaffItemEventDetail {
   start_date: string
   end_date: string
   location: string
-  display_mixin: StaffDisplayMixin
+  display_mixin: StaffDisplayMixinI
 }
 
 export interface StaffItemShopDetail {
-  display_mixin: StaffDisplayMixin
+  display_mixin: StaffDisplayMixinI
 }
 
 export interface StaffItemPromoDetail {
   type: string
   display_from_date: string
   display_until_date: string
-  display_mixin: StaffDisplayMixin
+  display_mixin: StaffDisplayMixinI
 }
 
 export interface StaffItemDetailI {

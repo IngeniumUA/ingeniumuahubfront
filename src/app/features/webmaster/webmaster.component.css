@@ -1,6 +1,8 @@
 #body {
   display: flex;
   flex-direction: row;
+
+  background-color: var(--ingenium-grey);
 }
 
 #webmaster-body {

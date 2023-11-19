@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableModule} from "@angular/material/table";
-import {async, Observable, of} from "rxjs";
+import {Observable, of} from "rxjs";
 import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
 import {StaffUserService} from "../../../../../core/services/staff/staff-user-service";
 import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
@@ -25,7 +25,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 })
 export class UserTableComponent implements OnInit, AfterViewInit {
 
-  displayedColumns = ["uuid", "prefered_mail", "lid", "is_staff", "is_manager", "modified_at"]
+  displayedColumns = ["uuid", "prefered_mail", "password_set", "lid", "is_staff", "is_manager", "modified_at"]
 
   userData$: Observable<StaffUserDetailI[]> = of([])
 

@@ -21,7 +21,7 @@ export class StaffItemService {
   public createItem(item_obj: StaffItemDetailI): Observable<StaffItemDetailI> {
     return this.httpClient.post<StaffItemDetailI>(this.apiUrl, item_obj)
   }
-  public updateItem(itemId: string, item_obj: StaffItemDetailI): Observable<StaffItemDetailI> {
-    return this.httpClient.put<StaffItemDetailI>(this.apiUrl + "/" + itemId, item_obj);
+  public patchItem(itemId: string, item_obj: StaffItemDetailI): Observable<StaffItemDetailI> {
+    return this.httpClient.patch<StaffItemDetailI>(this.apiUrl + "/" + itemId, item_obj);
   };
 }

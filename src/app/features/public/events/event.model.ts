@@ -20,7 +20,7 @@ import {
     ProductComponent,
     PublicHeaderComponent,
     ColordbrgbaPipe,
-    RecSysItemPreviewComponent,
+    RecSysItemPreviewComponent
   ],
   declarations: [
     EventsComponent,

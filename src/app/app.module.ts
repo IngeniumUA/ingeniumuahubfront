@@ -36,14 +36,7 @@ import { PopupzorderComponent } from './features/public/popupz/popupzorder/popup
 import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
 import { ToastrModule } from 'ngx-toastr';
 import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
-import { GroupTableComponent } from './shared/components/staff_webmaster_manager/tables/group-table/group-table.component';
-import { UserTableComponent } from './shared/components/staff_webmaster_manager/tables/user-table/user-table.component';
 import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
-import { ItemTableComponent } from './shared/components/staff_webmaster_manager/tables/item-table/item-table.component';
-import { StaffItemDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
-import { DisplayMixinDetailComponent } from './shared/components/staff_webmaster_manager/details/display-mixin-detail/display-mixin-detail.component';
-import { StaffUserDetailComponent } from './shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
-import { CardTableComponent } from './shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
 
 
 @NgModule({
@@ -65,7 +58,8 @@ import { CardTableComponent } from './shared/components/staff_webmaster_manager/
         CreditsComponent,
         PopupzComponent,
         PopupzorderComponent,
-        PopupzorderStaffComponent
+        PopupzorderStaffComponent,
+
     ],
   imports: [
     BrowserModule,
@@ -73,8 +67,6 @@ import { CardTableComponent } from './shared/components/staff_webmaster_manager/
     PublicFooterComponent,
 
     UnderConstructionComponent,
-    PartnerBalkComponent,
-    PartnerDumpComponent,
 
     AppRoutingModule,
     HttpClientModule,
@@ -82,19 +74,14 @@ import { CardTableComponent } from './shared/components/staff_webmaster_manager/
     SocialLoginModule,
     CardComponent,
 
-    UserTableComponent,
-    GroupTableComponent,
-    ItemTableComponent,
-    CardTableComponent,
-    StaffItemDetailComponent,
-    StaffUserDetailComponent,
-    DisplayMixinDetailComponent,
-
     ReactiveFormsModule,
     MatRadioModule,
     MatButtonModule,
     RegisterComponent,
     RecSysItemPreviewComponent,
+
+    PartnerBalkComponent,
+    PartnerDumpComponent,
 
     BrowserAnimationsModule,
     ToastrModule.forRoot()

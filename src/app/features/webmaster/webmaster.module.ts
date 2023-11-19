@@ -29,7 +29,22 @@ import { CardDashboardComponent } from './item/card-dashboard/card-dashboard.com
 import {
   CardTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component";
-
+import {
+    TransactionTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component";
+import {
+    ProductBlueprintDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
+import { AccessPolicyDashboardComponent } from './access/access-policy-dashboard/access-policy-dashboard.component';
+import {
+  AccessPolicyTableComponent
+} from "../../shared/components/staff_webmaster_manager/tables/access-policy-table/access-policy-table.component";
+import {
+  AccessPolicyDetailDashboardComponent
+} from "./access/access-policy-detail/access-policy-detail-dashboard.component";
+import {
+  AccessPolicyDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/access-policy-detail/access-policy-detail.component";
 
 
 @NgModule({
@@ -41,6 +56,8 @@ import {
     ItemDashboardComponent,
     ItemDetailDashboardComponent,
     CardDashboardComponent,
+    AccessPolicyDashboardComponent,
+    AccessPolicyDetailDashboardComponent
   ],
   imports: [
     CommonModule,
@@ -54,6 +71,10 @@ import {
     StaffItemDetailComponent,
     StaffUserDetailComponent,
     CardTableComponent,
+    TransactionTableComponent,
+    ProductBlueprintDetailComponent,
+    AccessPolicyTableComponent,
+    AccessPolicyDetailComponent,
   ]
 })
 export class WebmasterModule { }

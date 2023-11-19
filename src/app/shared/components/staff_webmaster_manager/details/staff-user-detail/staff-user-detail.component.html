@@ -1,15 +1,98 @@
 <section>
   <h2>Core user Obj</h2>
-  <p>{{ userDetail.uuid }}</p>
-  <p>
-    <ng-container *ngIf="userDetail.prefered_email == '0'">Unverified</ng-container>
-    <ng-container *ngIf="userDetail.prefered_email == '1'">{{ userDetail.email }}</ng-container>
-    <ng-container *ngIf="userDetail.prefered_email == '2'">{{ userDetail.google_email }}</ng-container>
-  </p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">User:</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th>UUID</th>
+        <td>{{ userDetail.uuid }}</td>
+      </tr>
+      <tr>
+        <th>EMAIL</th>
+        <td>
+          <ng-container *ngIf="userDetail.prefered_email == '0'">{{ userDetail.email }}</ng-container>
+          <ng-container *ngIf="userDetail.prefered_email == '1'">{{ userDetail.email }}</ng-container>
+          <ng-container *ngIf="userDetail.prefered_email == '2'">{{ userDetail.google_email }}</ng-container>
+        </td>
+      </tr>
+      <tr>
+        <th>Last Login</th>
+        <td>{{ userDetail.last_login | date: 'long' }} </td>
+      </tr>
+      <tr>
+        <th>Created At</th>
+        <td>{{ userDetail.created_at | date: 'long' }}</td>
+      </tr>
+      <tr>
+        <th>Password Set</th>
+        <td> {{ userDetail.password_set }} </td>
+      </tr>
+      <tr>
+        <th>Is Active</th>
+        <td>{{ userDetail.is_active }}</td>
+      </tr>
+      <tr>
+        <th>Is Manager</th>
+        <td>{{ userDetail.is_manager }}</td>
+      </tr>
+    </tbody>
+  </table>
 </section>
 
-<section>
+<section *ngIf="userDetail.user_detail">
   <h2>User Detail</h2>
+  <table>
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">User:</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th>Voornaam</th>
+      <td>{{ userDetail.user_detail.voornaam }}</td>
+    </tr>
+    <tr>
+      <th>Achternaam</th>
+      <td>{{ userDetail.user_detail.achternaam }}</td>
+    </tr>
+    <tr>
+      <th>Telefoonnummer</th>
+      <td>{{ userDetail.user_detail.telefoonnummer }}</td>
+    </tr>
+    <tr>
+      <th>Gemeente</th>
+      <td>{{ userDetail.user_detail.gemeente }}</td>
+    </tr>
+    <tr>
+      <th>Straat</th>
+      <td>{{ userDetail.user_detail.adres }}</td>
+    </tr>
+    <tr>
+      <th>Huisnr</th>
+      <td>{{ userDetail.user_detail.huisnummer }}</td>
+    </tr>
+    <tr>
+      <th>Afstudeerrichting</th>
+      <td>{{ userDetail.user_detail.afstudeerrichting }}</td>
+    </tr>
+    <tr>
+      <th>Sport Interesse</th>
+      <td>{{ userDetail.user_detail.sport_interesse }}</td>
+    </tr>
+    <tr>
+      <th>Doop Interesse</th>
+      <td>{{ userDetail.user_detail.doop_interesse }}</td>
+    </tr>
+    </tbody>
+  </table>
 </section>
 
 <section>

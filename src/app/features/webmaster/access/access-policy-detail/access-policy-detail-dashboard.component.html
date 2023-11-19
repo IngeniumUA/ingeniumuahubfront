@@ -1,0 +1,6 @@
+<section class="staffSection">
+  <h1>Access Policy Details</h1>
+  <ng-container *ngIf="accessPolicy$ | async as accessPolicy">
+   <app-access-policy-detail [accessPolicy]="accessPolicy"></app-access-policy-detail>
+  </ng-container>
+</section>
