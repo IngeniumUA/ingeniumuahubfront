@@ -11,7 +11,7 @@ export class StaffProductBlueprintService {
   constructor(private httpClient: HttpClient) {
   }
 
-  apiUrl = apiEnviroment.apiUrl + "staff/product";
+  apiUrl = apiEnviroment.apiUrl + "staff/blueprint";
 
   public getProductBlueprint(offset: number = 0, count: number = 50,
                              source_item_id: string | null = null,
