@@ -45,6 +45,9 @@ import {
 import {
   AccessPolicyDetailComponent
 } from "../../shared/components/staff_webmaster_manager/details/access-policy-detail/access-policy-detail.component";
+import {
+    ItemCreateComponent
+} from "../../shared/components/staff_webmaster_manager/create/item-create/item-create.component";
 
 
 @NgModule({
@@ -59,22 +62,23 @@ import {
     AccessPolicyDashboardComponent,
     AccessPolicyDetailDashboardComponent
   ],
-  imports: [
-    CommonModule,
-    WebmasterRoutingModule,
-    BehindheaderComponent,
-    SidenavComponent,
-    GroupTableComponent,
-    PublicHeaderComponent,
-    UserTableComponent,
-    ItemTableComponent,
-    StaffItemDetailComponent,
-    StaffUserDetailComponent,
-    CardTableComponent,
-    TransactionTableComponent,
-    ProductBlueprintDetailComponent,
-    AccessPolicyTableComponent,
-    AccessPolicyDetailComponent,
-  ]
+    imports: [
+        CommonModule,
+        WebmasterRoutingModule,
+        BehindheaderComponent,
+        SidenavComponent,
+        GroupTableComponent,
+        PublicHeaderComponent,
+        UserTableComponent,
+        ItemTableComponent,
+        StaffItemDetailComponent,
+        StaffUserDetailComponent,
+        CardTableComponent,
+        TransactionTableComponent,
+        ProductBlueprintDetailComponent,
+        AccessPolicyTableComponent,
+        AccessPolicyDetailComponent,
+        ItemCreateComponent,
+    ]
 })
 export class WebmasterModule { }

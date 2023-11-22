@@ -46,3 +46,28 @@ export interface StaffItemDetailI {
   shop_item: StaffItemShopDetail,
   promo_item: StaffItemPromoDetail
 }
+
+
+export interface ItemCreateI {
+  name: string
+  description: string
+}
+
+export interface DisplayMixinCreateI {
+  color: string
+  follow_through_link: string
+  image_square: string
+  image_landscape: string
+  preview_description: string
+}
+
+export interface EventCreateI {
+  start_date: string
+  end_date: string
+  location: string
+  display_mixin: DisplayMixinCreateI
+}
+
+export interface StaffItemCreateI {
+
+}
