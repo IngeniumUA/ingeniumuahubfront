@@ -1,0 +1,17 @@
+<section>
+
+</section>
+
+<section class="flex flex-row gap-2">
+    <button class="button button-primary w-1/6 button-inline"
+            [disabled]="this.loading"
+            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            (click)="onSubmit()">
+        <span class="text-white">{{ this.loading ? "Processing .." : "Create" }}</span>
+    </button>
+    <button class="button button-primary w-1/6 button-inline"
+            (click)="ToggleCreating.emit(true)">
+        <span class="text-white">Cancel</span>
+    </button>
+</section>
+<span class="error-message" *ngIf="this.form_error != null">{{ form_error }}</span>

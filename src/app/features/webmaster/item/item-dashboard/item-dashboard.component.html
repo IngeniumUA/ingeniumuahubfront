@@ -3,5 +3,14 @@
 </section>
 
 <section class="staffSection">
-  <app-item-create></app-item-create>
+  <ng-container *ngIf="addingNew else awaitAddNew">
+    <app-item-create (ToggleCreating)="ToggleAddNew()"></app-item-create>
+  </ng-container>
 </section>
+
+<ng-template #awaitAddNew>
+  <button class="button button-primary w-1/3 button-inline"
+          (click)="ToggleAddNew()">
+    <span class="text-white">Add New</span>
+  </button>
+</ng-template>

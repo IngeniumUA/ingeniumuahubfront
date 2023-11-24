@@ -1,0 +1,24 @@
+<section>
+<ng-container *ngIf="this.$productBlueprint | async as productBlueprints">
+    <div *ngIf="productBlueprints.length > 0 else noneFound">
+        <ng-container *ngFor="let productBlueprint of productBlueprints">
+            <app-product-blueprint-detail [productBlueprint]="productBlueprint"></app-product-blueprint-detail>
+        </ng-container>
+    </div>
+</ng-container>
+</section>
+
+<section>
+    <ng-container *ngIf="addingNew else awaitAddNew">
+        <app-product-blueprint-create (ToggleCreating)="ToggleAddNew()"></app-product-blueprint-create>
+    </ng-container>
+</section>
+
+<ng-template #noneFound>Nothing to display</ng-template>
+
+<ng-template #awaitAddNew>
+    <button class="button button-primary w-1/3 button-inline"
+            (click)="ToggleAddNew()">
+        <span class="text-white">Add New</span>
+    </button>
+</ng-template>

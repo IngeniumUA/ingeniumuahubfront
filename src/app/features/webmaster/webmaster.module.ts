@@ -32,9 +32,6 @@ import {
 import {
     TransactionTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component";
-import {
-    ProductBlueprintDetailComponent
-} from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
 import { AccessPolicyDashboardComponent } from './access/access-policy-dashboard/access-policy-dashboard.component';
 import {
   AccessPolicyTableComponent
@@ -48,6 +45,12 @@ import {
 import {
     AccessPolicyDetailComponent
 } from "../../shared/components/staff_webmaster_manager/details/access-policy/access-policy-detail/access-policy-detail.component";
+import {
+    ProductBlueprintDashboardComponent
+} from "../../shared/components/staff_webmaster_manager/dashboards/product-blueprint-dashboard/product-blueprint-dashboard.component";
+import {
+    ProductBlueprintCreateComponent
+} from "../../shared/components/staff_webmaster_manager/create/product-blueprint-create/product-blueprint-create.component";
 
 
 @NgModule({
@@ -73,12 +76,13 @@ import {
         ItemTableComponent,
         StaffItemDetailComponent,
         StaffUserDetailComponent,
+        ProductBlueprintDashboardComponent,
         CardTableComponent,
         TransactionTableComponent,
-        ProductBlueprintDetailComponent,
         AccessPolicyTableComponent,
         AccessPolicyDetailComponent,
         ItemCreateComponent,
+        ProductBlueprintCreateComponent
     ]
 })
 export class WebmasterModule { }

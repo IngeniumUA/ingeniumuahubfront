@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AsyncPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -47,6 +47,8 @@ export class ItemCreateComponent implements OnInit {
 
   form_error: string | null = null;
   loading: boolean = false
+
+  @Output() ToggleCreating = new EventEmitter<boolean>()
 
   constructor(private formBuilder: FormBuilder,
               private staffItemService: StaffItemService) {

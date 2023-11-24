@@ -28,4 +28,8 @@ export class StaffProductBlueprintService {
       this.apiUrl + query_str)
   };
 
+  public post(product: any): Observable<StaffProductBlueprintI> {
+    return this.httpClient.post<StaffProductBlueprintI>(this.apiUrl, product)
+  }
+
 }

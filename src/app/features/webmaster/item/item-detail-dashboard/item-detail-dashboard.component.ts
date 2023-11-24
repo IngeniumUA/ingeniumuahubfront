@@ -36,7 +36,6 @@ export class ItemDetailDashboardComponent implements OnInit {
 
 
     this.$itemDetail = this.staffItemService.getItem(this.itemId)
-    this.$productBlueprint = this.staffProductService.getProductBlueprint(0, 50, this.itemId)  // source_item
   }
 
   UpdateItem(item: StaffItemDetailI) {
