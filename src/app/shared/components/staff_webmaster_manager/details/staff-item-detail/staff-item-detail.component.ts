@@ -53,7 +53,7 @@ export class StaffItemDetailComponent {
     this.itemForm = this.formBuilder.group({
       name: [this.item.item.name, Validators.required],
       description: [this.item.item.description],
-      available: [true, Validators.required],
+      available: [this.item.item.available, Validators.required],
       disabled: [this.item.item.disabled, Validators.required],
     })
     // Adding event if required
@@ -111,6 +111,4 @@ export class StaffItemDetailComponent {
       this.item.promo_item.display_mixin = displaymixin_obj
     }
   }
-
-  protected readonly event = event;
 }
