@@ -9,6 +9,7 @@ import {ProductsService} from "../../../../core/services/shop/products/products.
 import {map} from "rxjs/operators";
 import {ItemI} from "../../../../shared/models/items/ItemI";
 import {CartService} from "../../../../core/services/shop/cart/cart.service";
+import {ProductsToCategoriesPipe} from "../../../../shared/pipes/product/product_to_categoriepipe.pipe";
 
 
 @Component({
@@ -49,7 +50,12 @@ export class EventDetailComponent implements OnInit {
     this.SetEvent(id);
 
     // Setup producttable
-    this.productCategories$ = of([]) // this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
+    const product_to_categorie = new ProductsToCategoriesPipe()
+    this.productCategories$ = this.productService.getProducts(id).pipe(
+      map(productArray => product_to_categorie.transform(productArray)),
+      shareReplay()
+    )
+    //this.productCategories$ = of([]) // this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
     this.SetProductCategorie(0)
   }
 
