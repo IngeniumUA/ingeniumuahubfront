@@ -44,9 +44,9 @@
   <button (click)="RefreshAuth()">Refresh Accesstoken</button>
 </section>
 
-
-<section class="account-section">
+<section>
   <h3>Mijn gegevens</h3>
+  <h4 class="text-white">{{ this.account.email }}</h4>
   <app-account-info
     (accountEvent)="this.SetupAccount($event)"
     [input_model]="account.personal_details"
