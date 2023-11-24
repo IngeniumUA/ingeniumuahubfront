@@ -19,9 +19,6 @@
         <input type="text" formControlName="description" placeholder="Placeholder"/>
       </label>
     </td></tr>
-    <tr><th>Disabled</th><td>
-      {{ accessPolicy.is_disabled }}
-    </td></tr>
     <tr><th>Method</th><td>
       {{ accessPolicy.method }}
     </td></tr>
@@ -33,6 +30,13 @@
   <ng-container *ngIf="accessPolicy.method === 'allow_deny_list'">
     <app-allow-deny-list [access_policy_json]="accessPolicy.content" [access_policy_name]="accessPolicy.name"></app-allow-deny-list>
   </ng-container>
+
+  <button class="button button-primary button-inline"
+          (click)="onSubmit()"
+          [disabled]="this.loading"
+          [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
+    <span class="text-white">{{ this.loading ? "Updating ..." : "Update!" }}</span>
+  </button>
 </section>
 
 <!--

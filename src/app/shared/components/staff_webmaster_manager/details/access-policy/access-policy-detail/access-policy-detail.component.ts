@@ -1,11 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {StaffAccessPolicyI} from "../../../../models/staff/staff_access_policy";
-import {JsonPipe, NgIf} from "@angular/common";
+import {JsonPipe, NgIf, NgStyle} from "@angular/common";
 import {AllowDenyListComponent} from "../access_policies/allow-deny-list/allow-deny-list.component";
 import {Form, FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {StaffProductBlueprintService} from "../../../../../core/services/staff/staff-productblueprint-service";
 import {first} from "rxjs/operators";
-import {StaffAccessPolicyService} from "../../../../../core/services/staff/staff-accesspolicy.service";
+import {StaffAccessPolicyI} from "../../../../../models/staff/staff_access_policy";
+import {StaffAccessPolicyService} from "../../../../../../core/services/staff/staff-accesspolicy.service";
 
 @Component({
   selector: 'app-access-policy-detail',
@@ -15,7 +14,8 @@ import {StaffAccessPolicyService} from "../../../../../core/services/staff/staff
     JsonPipe,
     NgIf,
     AllowDenyListComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgStyle
   ],
   standalone: true
 })
@@ -70,5 +70,9 @@ export class AccessPolicyDetailComponent implements OnInit {
         this.handleFormError(error);
       }
     })
+  }
+
+  UpdateAccessPolicyMethod(methodContent: object) {
+    this.accessPolicy.content = methodContent
   }
 }

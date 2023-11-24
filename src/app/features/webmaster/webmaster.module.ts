@@ -43,11 +43,11 @@ import {
   AccessPolicyDetailDashboardComponent
 } from "./access/access-policy-detail/access-policy-detail-dashboard.component";
 import {
-  AccessPolicyDetailComponent
-} from "../../shared/components/staff_webmaster_manager/details/access-policy-detail/access-policy-detail.component";
-import {
     ItemCreateComponent
 } from "../../shared/components/staff_webmaster_manager/create/item-create/item-create.component";
+import {
+    AccessPolicyDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/access-policy/access-policy-detail/access-policy-detail.component";
 
 
 @NgModule({
