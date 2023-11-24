@@ -1,4 +1,42 @@
 <section>
+  <form [formGroup]="this.policyForm" (ngSubmit)="onSubmit()">
+  <table>
+    <thead>
+    <tr><th scope="col"></th><th scope="col">DisplayMixin:</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr><th>ID</th><td>
+      {{ accessPolicy.id }}
+    </td></tr>
+    <tr><th>Name</th><td>
+      <label class="hubformfield-white">
+        <input type="text" formControlName="name" placeholder="Placeholder"/>
+      </label>
+    </td></tr>
+    <tr><th>Description</th><td>
+      <label class="hubformfield-white">
+        <input type="text" formControlName="description" placeholder="Placeholder"/>
+      </label>
+    </td></tr>
+    <tr><th>Disabled</th><td>
+      {{ accessPolicy.is_disabled }}
+    </td></tr>
+    <tr><th>Method</th><td>
+      {{ accessPolicy.method }}
+    </td></tr>
+    </tbody>
+  </table>
+  </form>
+  <br>
+  <h3>Method Content</h3>
+  <ng-container *ngIf="accessPolicy.method === 'allow_deny_list'">
+    <app-allow-deny-list [access_policy_json]="accessPolicy.content" [access_policy_name]="accessPolicy.name"></app-allow-deny-list>
+  </ng-container>
+</section>
+
+<!--
+<section>
   <table>
     <thead>
     <tr><th scope="col"></th><th scope="col">DisplayMixin:</th>
@@ -18,3 +56,4 @@
     {{ accessPolicy.content | json }}
   </pre>
 </section>
+-->

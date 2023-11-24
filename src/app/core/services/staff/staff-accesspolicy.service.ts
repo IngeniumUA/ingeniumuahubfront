@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {apiEnviroment} from "../../../../environments/environment";
 import {StaffAccessPolicyI} from "../../../shared/models/staff/staff_access_policy";
+import {StaffProductBlueprintI} from "../../../shared/models/staff/staff_productblueprint";
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,9 @@ export class StaffAccessPolicyService {
     return this.httpClient.get<StaffAccessPolicyI>(
       this.apiUrl + "/" + id)
   };
+
+  public put(blueprint_id: number, blueprint_obj: StaffAccessPolicyI) {
+    return this.httpClient.put<StaffAccessPolicyI>(this.apiUrl + "/" + blueprint_id.toString(), blueprint_obj)
+  }
 
 }
