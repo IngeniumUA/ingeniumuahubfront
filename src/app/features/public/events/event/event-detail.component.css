@@ -3,6 +3,17 @@ section {
   margin-bottom: 1rem;
 }
 
+.event-mobile {
+
+}
+
+.event-desktop {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
 /* Event Image */
 .event-banner {
   width: 100%;

@@ -85,4 +85,6 @@ export class EventDetailComponent implements OnInit {
     this.cartService.setProductCount(item, product, count);
     this.isCartEmpty = this.cartService.hasTransactions()
   }
+
+  protected readonly tap = tap;
 }
