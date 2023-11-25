@@ -51,6 +51,10 @@ import {
 import {
     ProductBlueprintCreateComponent
 } from "../../shared/components/staff_webmaster_manager/create/product-blueprint-create/product-blueprint-create.component";
+import { ProductWebmasterPageComponent } from './product/product-webmaster-page/product-webmaster-page.component';
+import {
+    ProductBlueprintDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
 
 
 @NgModule({
@@ -63,7 +67,8 @@ import {
     ItemDetailDashboardComponent,
     CardDashboardComponent,
     AccessPolicyDashboardComponent,
-    AccessPolicyDetailDashboardComponent
+    AccessPolicyDetailDashboardComponent,
+    ProductWebmasterPageComponent
   ],
     imports: [
         CommonModule,
@@ -82,7 +87,8 @@ import {
         AccessPolicyTableComponent,
         AccessPolicyDetailComponent,
         ItemCreateComponent,
-        ProductBlueprintCreateComponent
+        ProductBlueprintCreateComponent,
+        ProductBlueprintDetailComponent
     ]
 })
 export class WebmasterModule { }

@@ -14,9 +14,13 @@ export class StaffProductBlueprintService {
 
   apiUrl = apiEnviroment.apiUrl + "staff/blueprint";
 
-  public getProductBlueprint(offset: number = 0, count: number = 50,
-                             source_item_id: string | null = null,
-                             origin_item_id: string | null = null): Observable<StaffProductBlueprintI[]> {
+  public getProductBlueprint(blueprint_id: string): Observable<StaffProductBlueprintI> {
+    return this.httpClient.get<StaffProductBlueprintI>(this.apiUrl + "/" + blueprint_id.toString())
+  }
+
+  public getProductBlueprints(offset: number = 0, count: number = 50,
+                              source_item_id: string | null = null,
+                              origin_item_id: string | null = null): Observable<StaffProductBlueprintI[]> {
     let query_str = "?offset=" + offset.toString() + "&limit=" + count.toString()
     if (source_item_id !== null) {
       query_str += "&source_item_id="+source_item_id;
