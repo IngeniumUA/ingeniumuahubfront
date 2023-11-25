@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {StaffProductBlueprintService} from "../../../../../core/services/staff/staff-productblueprint-service";
 import {StaffProductBlueprintI} from "../../../../models/staff/staff_productblueprint";
 import {first} from "rxjs/operators";
-import {NgIf, NgStyle} from "@angular/common";
+import {DatePipe, NgIf, NgStyle} from "@angular/common";
 
 @Component({
   selector: 'app-product-blueprint-create',
@@ -11,36 +11,53 @@ import {NgIf, NgStyle} from "@angular/common";
   styleUrls: ['./product-blueprint-create.component.css'],
   imports: [
     NgIf,
-    NgStyle
+    NgStyle,
+    ReactiveFormsModule,
+    DatePipe
   ],
   standalone: true
 })
 export class ProductBlueprintCreateComponent {
 
   @Output() ToggleCreating = new EventEmitter<boolean>()
+  @Input() originItem!: string
 
   constructor(private formBuilder: FormBuilder,
               private staffProductService: StaffProductBlueprintService) {
   }
 
-  form = this.formBuilder.group({
-    fieldname: ['', Validators.required],
+  productBlueprintForm = this.formBuilder.group({
+    name: ['', Validators.required],
+    description: [''],
+    max_total: [0, [Validators.required, Validators.min(1)]],
+    max_individual: [0, [Validators.required, Validators.min(1)]],
+    max_per_checkout: [0, [Validators.required, Validators.min(1)]],
   })
   form_error: string | null = null;
   loading: boolean = false
 
-  get f() { return this.form.controls; }
+  get f() { return this.productBlueprintForm.controls; }
 
   onSubmit() {
     // Check if valid guardclause
-    if (this.form.invalid) {
-      const error: Error = Error("Wrong email or password");
+    if (this.productBlueprintForm.invalid) {
+      const error: Error = Error("Clientside invalid form");
       this.handleFormError(error);
       return;  }
 
     this.loading = true;
 
-    const product = {}
+    const product = {
+      origin_item: this.originItem,
+      name: this.productBlueprintForm.controls['name'].value,
+      description: this.productBlueprintForm.controls['description'].value,
+
+      max_total: this.productBlueprintForm.controls['max_total'].value,
+      max_individual: this.productBlueprintForm.controls['max_individual'].value,
+      max_per_checkout: this.productBlueprintForm.controls['max_per_checkout'].value,
+
+      product_meta: null,
+    }
 
     this.staffProductService.post(product).pipe(
         first()).subscribe({

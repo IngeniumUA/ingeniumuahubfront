@@ -1,5 +1,53 @@
 <section>
+    <h2>Create new:</h2>
+    <h3>Product Blueprint Core</h3>
+    <section class="flex flex-col gap-1">
+    <form [formGroup]="productBlueprintForm">
+        <table>
+            <thead>
+            <tr><th scope="col"></th><th scope="col">Product:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr><th>Name</th><td>
+                <label class="hubformfield-white">
+                    <input type="text" formControlName="name" placeholder="Name"/>
+                </label>
+            </td></tr>
+            <tr><th>Description</th><td>
+                <label class="hubformfield-white">
+                    <input type="text" formControlName="description" placeholder="Description"/>
+                </label>
+            </td></tr>
+            <tr><th>Max Total</th><td>
+                <label class="hubformfield-white">
+                    <input type="number" formControlName="max_total" placeholder="Max total"/>
+                </label>
+            </td></tr>
+            <tr><th>Max Individual</th><td>
+                <label class="hubformfield-white">
+                    <input type="number" formControlName="max_individual" placeholder="Max individual"/>
+                </label>
+            </td></tr>
+            <tr><th>Max Per Checkout</th><td>
+                <label class="hubformfield-white">
+                    <input type="number" formControlName="max_per_checkout" placeholder="Max per checkout"/>
+                </label>
+            </td></tr>
+            </tbody>
+        </table>
+    </form>
+    </section>
+</section>
 
+<section>
+    <h3>Product Pools</h3>
+    <p>Eerst ProductBlueprint aanmaken, daarna specifiëren!</p>
+</section>
+
+<section>
+    <h3>Price Policies</h3>
+    <p>Eerst ProductBlueprint aanmaken, daarna specifiëren!</p>
 </section>
 
 <section class="flex flex-row gap-2">
