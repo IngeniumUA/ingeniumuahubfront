@@ -1,7 +1,7 @@
 <div *ngIf="this.isSidenav" class="sidenav">
   <section *ngIf="isManager$ | async">
     <a [routerLink]="['/man']" class="section-title">Manager</a>
-    <a class="section-link">Flags</a>
+    <a [routerLink]="['/man/flag']" class="section-link">Flags</a>
     <!--
     <a class="section-link">Logs</a>
     <a class="section-link">Users</a>

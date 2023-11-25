@@ -9,11 +9,4 @@ import {apiEnviroment} from "../../../../../environments/environment";
 })
 export class ManagerHomeComponent {
 
-  constructor(private httpClient: HttpClient) {
-  }
-
-  public failSafe() {
-    this.httpClient.get(apiEnviroment.apiUrl + "staff/functions/failsafe").subscribe()
-  }
-
 }

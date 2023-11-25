@@ -7,6 +7,7 @@ import {ManagerRoutingModule} from "./manager-routing.module";
 import { SidenavComponent} from "../../core/layout/behind/sidenav/sidenav.component";
 import {BehindheaderComponent} from "../../core/layout/behind/behindheader/behindheader.component";
 import {PublicHeaderComponent} from "../../core/layout/public/header/public-header.component";
+import { FlagTableComponent } from './flag-table/flag-table.component';
 
 @NgModule({
     imports: [
@@ -19,6 +20,7 @@ import {PublicHeaderComponent} from "../../core/layout/public/header/public-head
   declarations: [
     ManagerHomeComponent,
     ManagerComponent,
+    FlagTableComponent,
   ]
 })
 export class ManagerModule {}
