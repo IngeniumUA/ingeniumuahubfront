@@ -84,10 +84,10 @@ export class EventDetailComponent implements OnInit {
     }))
   }
 
-  GetCurrentProductCount(item: ItemI, categorie_name: string, product: IProductItem): number {
+  GetCurrentProductCount(item: ItemI, product: IProductItem): number {
     return this.cartService.getProductCount(item, product)
   }
-  SetProductCount(item: ItemI, categorie_name: string, product: IProductItem, count: number) {
+  SetProductCount(item: ItemI, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
     this.isCartEmpty = !this.cartService.hasTransactions()
   }

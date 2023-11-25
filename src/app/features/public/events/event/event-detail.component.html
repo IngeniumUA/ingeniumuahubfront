@@ -29,9 +29,9 @@
       <h3>{{ product_group.group_name }}</h3>
       <div class="products">
         <ng-container *ngFor="let product of this.product_group.products">
-        <app-product [onInitValue]="this.GetCurrentProductCount(event.item, current_categorie, product)" [product]="product"
+        <app-product [onInitValue]="this.GetCurrentProductCount(event.item, product)" [product]="product"
                      [primaryColorFull]="(event.color | colordbrgba: 1)" [primaryColorHalf]="(event.color | colordbrgba: 0.5)"
-                     (countEvent)="this.SetProductCount(event.item, current_categorie, product, $event)"></app-product>
+                     (countEvent)="this.SetProductCount(event.item, product, $event)"></app-product>
         </ng-container>
       </div>
     </div>
