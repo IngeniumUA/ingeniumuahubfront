@@ -11,7 +11,7 @@
 <section class="mt-2">
   <h4>Blacklisted</h4>
   <div class="flex flex-row w-12" *ngFor="let control of blacklistGroupsForm.controls; index as i">
-    <input class="h-6" [formControl]="blacklistGroupsForm.controls[i]" />
+    <input class="h-6" type="number" [formControl]="blacklistGroupsForm.controls[i]" />
     <button class="font-bold" (click)="RemoveGroup(true, i)">Remove</button>
   </div>
   <button class="font-bold" (click)="AddGroupField(true)">Add New</button>

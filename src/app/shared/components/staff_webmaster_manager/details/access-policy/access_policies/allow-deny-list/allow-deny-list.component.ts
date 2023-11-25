@@ -46,44 +46,21 @@ export class AllowDenyListComponent implements OnInit {
         // Update button is on parent component.
         // Each time this form is updated we emit 'valuechange' to parent
         this.whitelistGroupsForm.valueChanges.subscribe(value => {
-            if (this.whitelistGroupsForm.length > 0) {
-                this.parsedPolicyContent.whitelist = null
-            } else {
-                let whitelist: number[] = []
-                for (let i =0;i< this.whitelistGroupsForm.length;i++) {
-                    const element = this.whitelistGroupsForm.at(i);
-                    if (element.valid) {
-                        whitelist.push(element.value)
-                    }
-                }
-                this.parsedPolicyContent.whitelist = whitelist
-                this.UpdateAccessPolicy.emit(this.parsedPolicyContent)
-            }
+            this.ValueChange()
         })
         // Pretty ugly code duplication
         this.blacklistGroupsForm.valueChanges.subscribe(value => {
-            if (this.blacklistGroupsForm.length > 0) {
-                this.parsedPolicyContent.blacklist = null
-            } else {
-                let blacklist: number[] = []
-                for (let i =0;i< this.blacklistGroupsForm.length;i++) {
-                    const element = this.blacklistGroupsForm.at(i);
-                    if (element.valid) {
-                        blacklist.push(element.value)
-                    }
-                }
-                this.parsedPolicyContent.blacklist = blacklist
-                this.UpdateAccessPolicy.emit(this.parsedPolicyContent)
-            }
+            this.ValueChange()
         })
     }
 
     AddGroupField(blacklist: boolean) {
         if (blacklist) {
-            this.blacklistGroupsForm.push(new FormControl('', Validators.min(0)))
+            this.blacklistGroupsForm.push(new FormControl(0, Validators.min(0)))
         } else {
-            this.whitelistGroupsForm.push(new FormControl('', Validators.min(0)))
+            this.whitelistGroupsForm.push(new FormControl(0, Validators.min(0)))
         }
+        this.ValueChange()
     }
 
     RemoveGroup(blacklist: boolean, index: number) {
@@ -92,5 +69,35 @@ export class AllowDenyListComponent implements OnInit {
         } else {
             this.whitelistGroupsForm.removeAt(index)
         }
+        this.ValueChange()
+    }
+
+    ValueChange() {
+        if (!(this.blacklistGroupsForm.length > 0)) {
+            this.parsedPolicyContent.blacklist = null
+        } else {
+            let blacklist: number[] = []
+            for (let i =0;i< this.blacklistGroupsForm.length;i++) {
+                const element = this.blacklistGroupsForm.at(i);
+                if (element.valid) {
+                    blacklist.push(element.value)
+                }
+            }
+            this.parsedPolicyContent.blacklist = blacklist
+        }
+        if (!(this.whitelistGroupsForm.length > 0)) {
+            this.parsedPolicyContent.whitelist = null
+        } else {
+            let whitelist: number[] = []
+            for (let i =0;i< this.whitelistGroupsForm.length;i++) {
+                const element = this.whitelistGroupsForm.at(i);
+                if (element.valid) {
+                    whitelist.push(element.value)
+                }
+            }
+            this.parsedPolicyContent.whitelist = whitelist
+        }
+        console.log(this.parsedPolicyContent)
+        this.UpdateAccessPolicy.emit(this.parsedPolicyContent)
     }
 }
