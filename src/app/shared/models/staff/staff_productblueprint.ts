@@ -1,4 +1,5 @@
 import {ProductMetaI} from "../items/products/products";
+import {PricePolicyI} from "../price_policy";
 
 export interface StaffProductBlueprintI {
   id: number
@@ -15,7 +16,7 @@ export interface StaffProductBlueprintI {
   max_individual: number
   max_per_checkout: number
 
-  price_policies: []
+  price_policies: PricePolicyI[]
 
   product_meta: ProductMetaI
 }

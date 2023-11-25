@@ -4,6 +4,8 @@ import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ProductMetaI} from "../../../../models/items/products/products";
+import {PricePolicyComponent} from "../price-policy/price-policy.component";
+import {PricePolicyComponentCreate} from "../../create/price-policy/price-policy-component-create.component";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -16,7 +18,9 @@ import {ProductMetaI} from "../../../../models/items/products/products";
         NgForOf,
         FormsModule,
         ReactiveFormsModule,
-        NgIf
+        NgIf,
+        PricePolicyComponent,
+        PricePolicyComponentCreate
     ],
   standalone: true
 })
@@ -93,5 +97,10 @@ export class ProductBlueprintDetailComponent implements OnInit {
 
     handleFormError(err: Error) {
         this.form_error = err.message;
+    }
+
+    addingNew: boolean = false
+    public ToggleAddNew() {
+        this.addingNew = !this.addingNew
     }
 }

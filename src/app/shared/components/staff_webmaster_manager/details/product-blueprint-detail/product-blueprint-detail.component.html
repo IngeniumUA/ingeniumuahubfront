@@ -72,13 +72,25 @@
 
 <section>
   <h4>Price Policies</h4>
-  <pre *ngFor="let pricePolicy of productBlueprint.price_policies">{{ pricePolicy | json }}</pre>
+  <div class="mb-2 p-0.5 border-2 rounded-md border-blue-900" *ngFor="let pricePolicy of productBlueprint.price_policies">
+    <app-price-policy [pricePolicy]="pricePolicy"></app-price-policy>
+  </div>
+  <ng-container *ngIf="!addingNew else addNewPolicy">
+    <button class="button button-primary w-1/3 button-inline"
+            (click)="ToggleAddNew()">
+      <span class="text-white">Add New</span>
+    </button>
+  </ng-container>
 </section>
 
 <section>
-  <h2>Update Item</h2>
+  <h2 class="text-blue-900">Update Product</h2>
   <button class="button button-primary button-inline"
           (click)="onSubmit()">
     <span class="text-white">Update</span>
   </button>
 </section>
+
+<ng-template #addNewPolicy>
+  <app-price-policy-create></app-price-policy-create>
+</ng-template>
