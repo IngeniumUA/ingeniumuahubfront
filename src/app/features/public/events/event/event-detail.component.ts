@@ -27,7 +27,7 @@ export class EventDetailComponent implements OnInit {
   }
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  isCartEmpty: boolean = this.cartService.hasTransactions()
+  isCartEmpty: boolean = !this.cartService.hasTransactions()
   // Event Info and Deco
   event$!: Observable<EventItemDetailI>;
   eventError$!: Observable<any>;
