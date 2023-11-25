@@ -92,5 +92,7 @@
 </section>
 
 <ng-template #addNewPolicy>
-  <app-price-policy-create></app-price-policy-create>
+  <section class="border-2 border-blue-900 rounded-md">
+    <app-price-policy-create (UpdatePricePolicyEvent)="AddPricyPolicy($event)"></app-price-policy-create>
+  </section>
 </ng-template>

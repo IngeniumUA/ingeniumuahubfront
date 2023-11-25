@@ -112,4 +112,9 @@ export class ProductBlueprintDetailComponent implements OnInit {
     public ToggleAddNew() {
         this.addingNewPricePolicy = !this.addingNewPricePolicy
     }
+
+    public AddPricyPolicy(pricePolicyObj: PricePolicyI) {
+        this.productBlueprint.price_policies.push(pricePolicyObj)
+        this.addingNewPricePolicy = false
+    }
 }

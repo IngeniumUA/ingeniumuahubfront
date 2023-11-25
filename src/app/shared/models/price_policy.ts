@@ -1,7 +1,7 @@
-import {StaffAccessPolicyI} from "./staff/staff_access_policy";
+import {AccessPolicyI, StaffAccessPolicyI} from "./staff/staff_access_policy";
 
 export interface PricePolicyI {
     price: number
-    access_policy: StaffAccessPolicyI
-    update_fields: []
+    access_policy: AccessPolicyI
+    update_fields: [] | null
 }
