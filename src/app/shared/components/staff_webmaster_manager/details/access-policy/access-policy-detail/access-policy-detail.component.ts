@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {JsonPipe, NgIf, NgStyle} from "@angular/common";
 import {AllowDenyListComponent} from "../access_policies/allow-deny-list/allow-deny-list.component";
-import {Form, FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {first} from "rxjs/operators";
 import {StaffAccessPolicyI} from "../../../../../models/staff/staff_access_policy";
 import {StaffAccessPolicyService} from "../../../../../../core/services/staff/staff-accesspolicy.service";

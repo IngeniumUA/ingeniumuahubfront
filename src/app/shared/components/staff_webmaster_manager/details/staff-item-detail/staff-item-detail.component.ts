@@ -4,12 +4,6 @@ import {DatePipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin-detail.component";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
-import {EventItemDetailI} from "../../../../models/items/events";
-
-interface FormField {
-  name: string
-  selector: string
-}
 
 @Component({
   selector: 'app-staff-item-detail',

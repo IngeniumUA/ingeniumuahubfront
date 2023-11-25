@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StaffProductBlueprintI} from "../../../../models/staff/staff_productblueprint";
 import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ProductMetaI} from "../../../../models/items/products/products";
 import {PricePolicyComponent} from "../price-policy/price-policy.component";
 import {PricePolicyComponentCreate} from "../../create/price-policy/price-policy-component-create.component";

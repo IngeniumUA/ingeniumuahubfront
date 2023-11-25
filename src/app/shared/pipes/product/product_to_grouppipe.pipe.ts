@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {IProductGroup, IProductItem} from "../../models/items/products/products";
-import {groupBy} from "./groupby";
 
 @Pipe({
   name: 'products_to_groups',

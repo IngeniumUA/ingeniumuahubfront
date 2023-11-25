@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {apiEnviroment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-manager-home',

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {StaffProductBlueprintService} from "../../../../../core/services/staff/staff-productblueprint-service";
-import {StaffProductBlueprintI} from "../../../../models/staff/staff_productblueprint";
 import {first} from "rxjs/operators";
 import {DatePipe, NgIf, NgStyle} from "@angular/common";
 

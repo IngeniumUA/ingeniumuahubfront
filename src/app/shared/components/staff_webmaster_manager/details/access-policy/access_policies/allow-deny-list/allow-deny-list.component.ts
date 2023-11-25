@@ -45,11 +45,11 @@ export class AllowDenyListComponent implements OnInit {
 
         // Update button is on parent component.
         // Each time this form is updated we emit 'valuechange' to parent
-        this.whitelistGroupsForm.valueChanges.subscribe(value => {
+        this.whitelistGroupsForm.valueChanges.subscribe(_ => {
             this.ValueChange()
         })
         // Pretty ugly code duplication
-        this.blacklistGroupsForm.valueChanges.subscribe(value => {
+        this.blacklistGroupsForm.valueChanges.subscribe(_ => {
             this.ValueChange()
         })
     }
