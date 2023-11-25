@@ -1,18 +1,96 @@
-import {Component, Input} from '@angular/core';
-import {JsonPipe} from "@angular/common";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {JsonPipe, NgForOf} from "@angular/common";
+import {FormArray, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AllowDenyListI} from "../../../../../../models/access_policies/access_policies";
 
 @Component({
   selector: 'app-allow-deny-list',
   templateUrl: './allow-deny-list.component.html',
   styleUrls: ['./allow-deny-list.component.css'],
-  imports: [
-    JsonPipe
-  ],
+    imports: [
+        JsonPipe,
+        ReactiveFormsModule,
+        NgForOf
+    ],
   standalone: true
 })
-export class AllowDenyListComponent {
+export class AllowDenyListComponent implements OnInit {
 
-    @Input() access_policy_json: object | undefined;
-    @Input() access_policy_name: string | undefined;
+    @Input() access_policy_content!: {[index: string]:any};
+    @Input() access_policy_method: string | undefined;
+    @Output() UpdateAccessPolicy = new EventEmitter<AllowDenyListI>
 
+    parsedPolicyContent!: AllowDenyListI
+
+    whitelistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([])
+    blacklistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([])
+
+    ngOnInit() {
+        // Parse content as correct interface ( allows for typehints )
+        this.parsedPolicyContent = {
+            whitelist: this.access_policy_content['whitelist'],
+            blacklist: this.access_policy_content['blacklist'],
+        }
+        // Adding existing groups to forms
+        if (this.parsedPolicyContent.whitelist !== null) {
+            for (const whitelistedGroup of this.parsedPolicyContent.whitelist) {
+                this.whitelistGroupsForm.push(new FormControl(whitelistedGroup, Validators.min(0)))
+            }
+        }
+        if (this.parsedPolicyContent.blacklist !== null) {
+            for (const blacklistedGroup of this.parsedPolicyContent.blacklist) {
+                this.blacklistGroupsForm.push(new FormControl(blacklistedGroup, Validators.min(0)))
+            }
+        }
+
+        // Update button is on parent component.
+        // Each time this form is updated we emit 'valuechange' to parent
+        this.whitelistGroupsForm.valueChanges.subscribe(value => {
+            if (this.whitelistGroupsForm.length > 0) {
+                this.parsedPolicyContent.whitelist = null
+            } else {
+                let whitelist: number[] = []
+                for (let i =0;i< this.whitelistGroupsForm.length;i++) {
+                    const element = this.whitelistGroupsForm.at(i);
+                    if (element.valid) {
+                        whitelist.push(element.value)
+                    }
+                }
+                this.parsedPolicyContent.whitelist = whitelist
+                this.UpdateAccessPolicy.emit(this.parsedPolicyContent)
+            }
+        })
+        // Pretty ugly code duplication
+        this.blacklistGroupsForm.valueChanges.subscribe(value => {
+            if (this.blacklistGroupsForm.length > 0) {
+                this.parsedPolicyContent.blacklist = null
+            } else {
+                let blacklist: number[] = []
+                for (let i =0;i< this.blacklistGroupsForm.length;i++) {
+                    const element = this.blacklistGroupsForm.at(i);
+                    if (element.valid) {
+                        blacklist.push(element.value)
+                    }
+                }
+                this.parsedPolicyContent.blacklist = blacklist
+                this.UpdateAccessPolicy.emit(this.parsedPolicyContent)
+            }
+        })
+    }
+
+    AddGroupField(blacklist: boolean) {
+        if (blacklist) {
+            this.blacklistGroupsForm.push(new FormControl('', Validators.min(0)))
+        } else {
+            this.whitelistGroupsForm.push(new FormControl('', Validators.min(0)))
+        }
+    }
+
+    RemoveGroup(blacklist: boolean, index: number) {
+        if (blacklist) {
+            this.blacklistGroupsForm.removeAt(index)
+        } else {
+            this.whitelistGroupsForm.removeAt(index)
+        }
+    }
 }

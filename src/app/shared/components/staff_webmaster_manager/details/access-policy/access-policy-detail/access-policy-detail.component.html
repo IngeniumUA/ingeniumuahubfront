@@ -28,7 +28,7 @@
   <br>
   <h3>Method Content</h3>
   <ng-container *ngIf="accessPolicy.method === 'allow_deny_list'">
-    <app-allow-deny-list [access_policy_json]="accessPolicy.content" [access_policy_name]="accessPolicy.name"></app-allow-deny-list>
+    <app-allow-deny-list [access_policy_content]="accessPolicy.content" [access_policy_method]="accessPolicy.name"></app-allow-deny-list>
   </ng-container>
 
   <button class="button button-primary button-inline"

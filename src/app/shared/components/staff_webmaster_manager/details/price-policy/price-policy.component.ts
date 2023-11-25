@@ -52,6 +52,8 @@ export class PricePolicyComponent implements OnInit {
       this.handleFormError(error);
       return;  }
 
+    this.UpdatePricePolicyEvent.emit(this.pricePolicy)
+
     this.loading = true;
   }
 
