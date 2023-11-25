@@ -32,12 +32,12 @@ export class AllowDenyListComponent implements OnInit {
             blacklist: this.access_policy_content['blacklist'],
         }
         // Adding existing groups to forms
-        if (this.parsedPolicyContent.whitelist !== null) {
+        if (this.parsedPolicyContent.whitelist !== null && this.parsedPolicyContent.whitelist !== undefined) {
             for (const whitelistedGroup of this.parsedPolicyContent.whitelist) {
                 this.whitelistGroupsForm.push(new FormControl(whitelistedGroup, Validators.min(0)))
             }
         }
-        if (this.parsedPolicyContent.blacklist !== null) {
+        if (this.parsedPolicyContent.blacklist !== null && this.parsedPolicyContent.blacklist !== undefined) {
             for (const blacklistedGroup of this.parsedPolicyContent.blacklist) {
                 this.blacklistGroupsForm.push(new FormControl(blacklistedGroup, Validators.min(0)))
             }
