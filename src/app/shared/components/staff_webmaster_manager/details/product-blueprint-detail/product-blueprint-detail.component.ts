@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StaffProductBlueprintI} from "../../../../models/staff/staff_productblueprint";
-import {DatePipe, JsonPipe, NgForOf} from "@angular/common";
+import {DatePipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ProductMetaI} from "../../../../models/items/products/products";
@@ -15,7 +15,8 @@ import {ProductMetaI} from "../../../../models/items/products/products";
         JsonPipe,
         NgForOf,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgIf
     ],
   standalone: true
 })
@@ -27,6 +28,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
     }
 
     blueprintForm: any
+    productMetaForm: any
     form_error: string | null = null;
 
     ngOnInit() {
@@ -38,14 +40,32 @@ export class ProductBlueprintDetailComponent implements OnInit {
             max_individual: [this.productBlueprint.max_individual, [Validators.required, Validators.min(1)]],
             max_per_checkout: [this.productBlueprint.max_per_checkout, [Validators.required, Validators.min(1)]],
         })
+
+        this.productMetaForm = this.formBuilder.group({
+            categorie: [this.productBlueprint.product_meta.categorie],
+            group: [this.productBlueprint.product_meta.group],
+        })
     }
 
     get f() { return this.blueprintForm.controls; }
 
     onSubmit() {
         // Check if valid guardclause
+        if (this.productMetaForm.invalid) {
+            const error: Error = Error("Invalid form");
+            this.handleFormError(error);
+            return;  }
+
+        const productMeta: ProductMetaI = {
+            group: this.productMetaForm.controls['group'].value,
+            categorie: this.productMetaForm.controls['categorie'].value,
+            upon_completion: this.productBlueprint.product_meta.upon_completion,
+            popupz_opties: this.productBlueprint.product_meta.popupz_opties
+        }
+
+        // Check if valid guardclause
         if (this.blueprintForm.invalid) {
-            const error: Error = Error("Wrong email or password");
+            const error: Error = Error("Invalid form");
             this.handleFormError(error);
             return;  }
 
@@ -66,7 +86,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
 
             price_policies: this.productBlueprint.price_policies,
 
-            product_meta: this.productBlueprint.product_meta,
+            product_meta: productMeta,
         }
         this.updateProduct.emit(product)
     }

@@ -43,9 +43,31 @@
   </form>
 </section>
 
-<section>
+<section *ngIf="(productBlueprint.product_meta !== null)">
   <h4>Product Meta</h4>
-  <pre>{{ productBlueprint.product_meta | json }}</pre>
+  <form [formGroup]="productMetaForm">
+    <table>
+      <thead>
+      <tr><th scope="col"></th><th scope="col">Product:</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr><th>Categorie</th><td>
+        <label class="hubformfield-white">
+          <input type="text" formControlName="categorie" placeholder=""/>
+        </label>
+      </td></tr>
+      <tr><th>Groep</th><td>
+        <label class="hubformfield-white">
+          <input type="text" formControlName="group" placeholder=""/>
+        </label>
+      </td></tr>
+      <tr><th>Upon completion</th><td>
+        {{ productBlueprint.product_meta.upon_completion }}
+      </td></tr>
+      </tbody>
+    </table>
+  </form>
 </section>
 
 <section>
