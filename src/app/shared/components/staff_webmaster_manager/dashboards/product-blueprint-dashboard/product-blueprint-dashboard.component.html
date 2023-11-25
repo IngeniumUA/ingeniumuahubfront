@@ -1,11 +1,26 @@
 <section>
-<ng-container *ngIf="this.$productBlueprint | async as productBlueprints">
-    <div *ngIf="productBlueprints.length > 0 else noneFound">
-        <ng-container *ngFor="let productBlueprint of productBlueprints">
-            <app-product-blueprint-detail [productBlueprint]="productBlueprint"></app-product-blueprint-detail>
-        </ng-container>
-    </div>
-</ng-container>
+    <ng-container *ngIf="this.$productBlueprintStats | async as productStatsList">
+        <mat-table [dataSource]="productStatsList">
+            <!-- uuid Column -->
+            <ng-container matColumnDef="product_id">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let productStat"><a [routerLink]="['../../product/' + productStat.product_id]">{{ productStat.product_id }}</a></td>
+            </ng-container>
+            <ng-container matColumnDef="product_name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let productStat"> {{ productStat.product_name }}</td>
+                <!--<td mat-cell *matCellDef="let item"><a [routerLink]="[item.item.uuid]"> {{ item.item.uuid }}</a></td>-->
+            </ng-container>
+            <ng-container matColumnDef="transactions_completed">
+                <th mat-header-cell *matHeaderCellDef> Transactions Completed </th>
+                <td mat-cell *matCellDef="let productStat"> {{ productStat.reduce_stats.transactions_completed }}</td>
+                <!--<td mat-cell *matCellDef="let item"><a [routerLink]="[item.item.uuid]"> {{ item.item.uuid }}</a></td>-->
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="['product_id', 'product_name', 'transactions_completed']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['product_id', 'product_name', 'transactions_completed'];"></tr>
+        </mat-table>
+    </ng-container>
 </section>
 
 <section>
