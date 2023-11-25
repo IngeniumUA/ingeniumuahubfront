@@ -97,7 +97,6 @@ export class AllowDenyListComponent implements OnInit {
             }
             this.parsedPolicyContent.whitelist = whitelist
         }
-        console.log(this.parsedPolicyContent)
         this.UpdateAccessPolicy.emit(this.parsedPolicyContent)
     }
 }

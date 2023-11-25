@@ -22,6 +22,7 @@ export class PricePolicyComponent implements OnInit {
 
   @Input() pricePolicy!: PricePolicyI
   @Output() UpdatePricePolicyEvent = new EventEmitter<PricePolicyI>()
+  @Output() RemovePricePolicyEvent = new EventEmitter<PricePolicyI>()
 
   constructor(private formBuilder: FormBuilder) {
   }
@@ -56,5 +57,9 @@ export class PricePolicyComponent implements OnInit {
       return;  }
 
     this.UpdatePricePolicyEvent.emit(this.pricePolicy)
+  }
+
+  public RemovePricePolicy() {
+    this.RemovePricePolicyEvent.emit()
   }
 }

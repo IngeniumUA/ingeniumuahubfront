@@ -73,7 +73,7 @@
 <section>
   <h4>Price Policies</h4>
   <div class="mb-2 p-0.5 border-2 rounded-md border-blue-900" *ngFor="let pricePolicy of productBlueprint.price_policies; index as i">
-    <app-price-policy (UpdatePricePolicyEvent)="this.UpdatePricePolicy($event, i)" [pricePolicy]="pricePolicy"></app-price-policy>
+    <app-price-policy (RemovePricePolicyEvent)="RemovePricePolicy(i)" (UpdatePricePolicyEvent)="this.UpdatePricePolicy($event, i)" [pricePolicy]="pricePolicy"></app-price-policy>
   </div>
   <ng-container *ngIf="!addingNewPricePolicy else addNewPolicy">
     <button class="button button-primary w-1/3 button-inline"

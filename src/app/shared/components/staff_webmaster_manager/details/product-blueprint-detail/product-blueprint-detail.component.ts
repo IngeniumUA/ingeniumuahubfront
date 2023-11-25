@@ -117,4 +117,8 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.productBlueprint.price_policies.push(pricePolicyObj)
         this.addingNewPricePolicy = false
     }
+
+    public RemovePricePolicy(i: number) {
+        this.productBlueprint.price_policies.splice(i, 1)
+    }
 }
