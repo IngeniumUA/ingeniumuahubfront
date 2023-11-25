@@ -24,7 +24,7 @@
     <p>{{ event.start_date | date:'d MMMM, hh:mm' }}</p>
   </section>
 
-  <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie">
+  <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie else noProducts">
     <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
       <h3>{{ product_group.group_name }}</h3>
       <div class="products">
@@ -44,7 +44,7 @@
   </section>
 
   <section class="description-section">
-    <p>{{ event.item.description }}</p>
+    <p class="text-blue-900">{{ event.item.description }}</p>
   </section>
     </ng-container>
   </ng-container>
@@ -52,4 +52,8 @@
 </ng-container>
 <ng-template #loading>
   Loading ...
+</ng-template>
+
+<ng-template #noProducts>
+  <p class="text-blue-900 font-bold">Nog geen producten om weer te geven!</p>
 </ng-template>
