@@ -34,4 +34,8 @@ export class ProductWebmasterPageComponent implements OnInit {
 
     this.productBlueprint$ = this.staffProductService.getProductBlueprint(this.productId)
   }
+
+  public UpdateProduct(product_obj: StaffProductBlueprintI) {
+    this.productBlueprint$ = this.staffProductService.putProductBlueprint(product_obj.id, product_obj)
+  }
 }

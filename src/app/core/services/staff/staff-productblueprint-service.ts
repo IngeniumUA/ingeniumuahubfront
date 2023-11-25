@@ -37,6 +37,10 @@ export class StaffProductBlueprintService {
     return this.httpClient.post<StaffProductBlueprintI>(this.apiUrl, product)
   }
 
+  public putProductBlueprint(product_id: number, product_obj: StaffProductBlueprintI): Observable<StaffProductBlueprintI> {
+    return this.httpClient.put<StaffProductBlueprintI>(this.apiUrl + "/" + product_id.toString(), product_obj)
+  }
+
   public getProductBlueprintStats(offset: number = 0, count: number = 50,
                              source_item_id: string | null = null,
                              origin_item_id: string | null = null): Observable<ProductStatsI[]> {
