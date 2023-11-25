@@ -13,11 +13,3 @@
         <app-allow-deny-list (UpdateAccessPolicy)="UpdateContent($event)" [access_policy_content]="pricePolicy.access_policy.content" [access_policy_method]="pricePolicy.access_policy.method"></app-allow-deny-list>
     </ng-container>
 </section>
-
-<section>
-    <h3 class="text-blue-900">Update Policy</h3>
-    <button class="button button-primary button-inline"
-            (click)="onSubmit()">
-        <span class="text-white">Update</span>
-    </button>
-</section>

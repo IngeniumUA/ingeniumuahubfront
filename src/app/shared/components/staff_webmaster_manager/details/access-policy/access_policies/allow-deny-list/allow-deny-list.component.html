@@ -1,5 +1,5 @@
 <h4>{{ access_policy_method }}</h4>
-<section>
+<section class="mt-2">
   <h4>Whitelisted</h4>
   <div class="flex flex-row w-12" *ngFor="let control of whitelistGroupsForm.controls; index as i">
     <input class="h-6" type="number" [formControl]="whitelistGroupsForm.controls[i]" />
@@ -8,7 +8,7 @@
   <button class="font-bold" (click)="AddGroupField(false)">Add New</button>
 </section>
 
-<section>
+<section class="mt-2">
   <h4>Blacklisted</h4>
   <div class="flex flex-row w-12" *ngFor="let control of blacklistGroupsForm.controls; index as i">
     <input class="h-6" [formControl]="blacklistGroupsForm.controls[i]" />

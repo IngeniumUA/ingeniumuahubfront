@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {ProductMetaI} from "../../../../models/items/products/products";
 import {PricePolicyComponent} from "../price-policy/price-policy.component";
 import {PricePolicyComponentCreate} from "../../create/price-policy/price-policy-component-create.component";
+import {PricePolicyI} from "../../../../models/price_policy";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -99,8 +100,16 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.form_error = err.message;
     }
 
-    addingNew: boolean = false
+    public UpdatePricePolicy(pricePolicyObj: PricePolicyI, index: number) {
+        if (this.productBlueprint.price_policies.length <= index) {
+            console.log("this.productBlueprint.price_policies.length <= index")
+            return
+        }
+        this.productBlueprint.price_policies[index] = pricePolicyObj
+    }
+
+    addingNewPricePolicy: boolean = false
     public ToggleAddNew() {
-        this.addingNew = !this.addingNew
+        this.addingNewPricePolicy = !this.addingNewPricePolicy
     }
 }

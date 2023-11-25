@@ -43,25 +43,18 @@ export class PricePolicyComponent implements OnInit {
     this.UpdatePricePolicyEvent.emit(pricePolicy)
   }
 
-  get f() { return this.form.controls; }
-
-  onSubmit() {
-    // Check if valid guardclause
-    if (this.form.invalid) {
-      const error: Error = Error("Wrong email or password");
-      this.handleFormError(error);
-      return;  }
-
-    this.UpdatePricePolicyEvent.emit(this.pricePolicy)
-
-    this.loading = true;
-  }
-
   handleFormError(err: Error) {
     this.form_error = err.message;
   }
 
   public UpdateContent(content: any) {
     this.pricePolicy.access_policy.content = content
+
+    if (this.form.invalid) {
+      const error: Error = Error("Invalid form");
+      this.handleFormError(error);
+      return;  }
+
+    this.UpdatePricePolicyEvent.emit(this.pricePolicy)
   }
 }
