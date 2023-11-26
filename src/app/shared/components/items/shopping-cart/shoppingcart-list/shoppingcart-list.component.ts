@@ -24,6 +24,8 @@ export class ShoppingcartListComponent implements OnInit {
   items: ItemI[] = [];
   budget: number = 0;
 
+  cartEmpty = !this.cartService.hasTransactions()
+
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class ShoppingcartListComponent implements OnInit {
       this.transactions.push(this.cartService.getCurrentTransactions(value));
     });
     this.CalcBudget();
+    this.cartEmpty = !this.cartService.hasTransactions()
   }
 
   SetProductCount(source: ItemI, product: IProductItem, count: number): void {

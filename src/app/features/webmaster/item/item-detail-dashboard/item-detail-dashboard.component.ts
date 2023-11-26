@@ -36,11 +36,21 @@ export class ItemDetailDashboardComponent implements OnInit {
 
 
     this.$itemDetail = this.staffItemService.getItem(this.itemId)
-    this.$productBlueprint = this.staffProductService.getProductBlueprint(0, 50, this.itemId)  // source_item
   }
 
   UpdateItem(item: StaffItemDetailI) {
-    this.$itemDetail = this.staffItemService.patchItem(item.item.uuid, item)
+    this.$itemDetail = this.staffItemService.putItem(item.item.uuid, item)
   }
 
+  disableItemBuffer: boolean = false
+  loadingDisable: boolean = false
+  public DisableItem() {
+    if (this.disableItemBuffer) {
+      this.loadingDisable = true
+      this.$itemDetail = this.staffItemService.patchItem(this.itemId, {'disabled':'True'})
+      this.loadingDisable = false
+    } else {
+      this.disableItemBuffer = true
+    }
+  }
 }

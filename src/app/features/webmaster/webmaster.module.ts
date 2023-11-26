@@ -32,9 +32,6 @@ import {
 import {
     TransactionTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component";
-import {
-    ProductBlueprintDetailComponent
-} from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
 import { AccessPolicyDashboardComponent } from './access/access-policy-dashboard/access-policy-dashboard.component';
 import {
   AccessPolicyTableComponent
@@ -43,8 +40,21 @@ import {
   AccessPolicyDetailDashboardComponent
 } from "./access/access-policy-detail/access-policy-detail-dashboard.component";
 import {
-  AccessPolicyDetailComponent
-} from "../../shared/components/staff_webmaster_manager/details/access-policy-detail/access-policy-detail.component";
+    ItemCreateComponent
+} from "../../shared/components/staff_webmaster_manager/create/item-create/item-create.component";
+import {
+    AccessPolicyDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/access-policy/access-policy-detail/access-policy-detail.component";
+import {
+    ProductBlueprintDashboardComponent
+} from "../../shared/components/staff_webmaster_manager/dashboards/product-blueprint-dashboard/product-blueprint-dashboard.component";
+import {
+    ProductBlueprintCreateComponent
+} from "../../shared/components/staff_webmaster_manager/create/product-blueprint-create/product-blueprint-create.component";
+import { ProductWebmasterPageComponent } from './product/product-webmaster-page/product-webmaster-page.component';
+import {
+    ProductBlueprintDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
 
 
 @NgModule({
@@ -57,24 +67,28 @@ import {
     ItemDetailDashboardComponent,
     CardDashboardComponent,
     AccessPolicyDashboardComponent,
-    AccessPolicyDetailDashboardComponent
+    AccessPolicyDetailDashboardComponent,
+    ProductWebmasterPageComponent
   ],
-  imports: [
-    CommonModule,
-    WebmasterRoutingModule,
-    BehindheaderComponent,
-    SidenavComponent,
-    GroupTableComponent,
-    PublicHeaderComponent,
-    UserTableComponent,
-    ItemTableComponent,
-    StaffItemDetailComponent,
-    StaffUserDetailComponent,
-    CardTableComponent,
-    TransactionTableComponent,
-    ProductBlueprintDetailComponent,
-    AccessPolicyTableComponent,
-    AccessPolicyDetailComponent,
-  ]
+    imports: [
+        CommonModule,
+        WebmasterRoutingModule,
+        BehindheaderComponent,
+        SidenavComponent,
+        GroupTableComponent,
+        PublicHeaderComponent,
+        UserTableComponent,
+        ItemTableComponent,
+        StaffItemDetailComponent,
+        StaffUserDetailComponent,
+        ProductBlueprintDashboardComponent,
+        CardTableComponent,
+        TransactionTableComponent,
+        AccessPolicyTableComponent,
+        AccessPolicyDetailComponent,
+        ItemCreateComponent,
+        ProductBlueprintCreateComponent,
+        ProductBlueprintDetailComponent
+    ]
 })
 export class WebmasterModule { }

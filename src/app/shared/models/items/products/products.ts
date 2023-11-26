@@ -11,7 +11,8 @@ export interface IProductGroup {
 export interface ProductMetaI {
   group: string;
   categorie: string;
-  popupz_opties: string;
+  upon_completion: string[];
+  popupz_opties: string | null;
 }
 
 export interface IProductItem {

@@ -18,10 +18,6 @@
           <th>Available</th>
           <td><input type="checkbox" formControlName="available"/></td>
         </tr>
-        <tr>
-          <th>Disabled</th>
-          <td><input type="checkbox" formControlName="disabled"/></td>
-        </tr>
         <tr><th>Created At</th><td>{{ item.item.created_at | date: 'medium' }}</td></tr>
         <tr><th>Modified At</th><td>{{ item.item.modified_at | date: 'medium' }}</td></tr>
       </tbody>

@@ -1,4 +1,5 @@
 <section>
+  <form [formGroup]="blueprintForm">
   <table>
     <thead>
     <tr><th scope="col"></th><th scope="col">Product:</th>
@@ -6,22 +7,92 @@
     </thead>
     <tbody>
     <tr><th>ID</th><td>{{ productBlueprint.id }}</td></tr>
-    <tr><th>Available</th><td>{{ productBlueprint.available }}</td></tr>
-    <tr><th>Disabled</th><td>{{ productBlueprint.disabled }}</td></tr>
+    <tr><th>Available</th><td>
+      <input type="checkbox" formControlName="available"/>
+    </td></tr>
     <tr><th>Date Created</th><td>{{ productBlueprint.date_created | date }}</td></tr>
     <tr><th>Origin Item ID</th><td><a [routerLink]="['/web/item/' + productBlueprint.origin_item_id]" >{{ productBlueprint.origin_item_id }}</a></td></tr>
 
-    <tr><th>Name</th><td>{{ productBlueprint.name }}</td></tr>
-    <tr><th>Description</th><td>{{ productBlueprint.description }}</td></tr>
-    <tr><th>Max Total</th><td>{{ productBlueprint.max_total }}</td></tr>
-    <tr><th>Max Individual</th><td>{{ productBlueprint.max_individual }}</td></tr>
-    <tr><th>Max Per Checkout</th><td>{{ productBlueprint.max_per_checkout }}</td></tr>
+    <tr><th>Name</th><td>
+      <label class="hubformfield-white">
+        <input type="text" formControlName="name" placeholder="Name"/>
+      </label>
+    </td></tr>
+    <tr><th>Description</th><td>
+      <label class="hubformfield-white">
+        <input type="text" formControlName="description" placeholder="Description"/>
+      </label>
+    </td></tr>
+    <tr><th>Max Total</th><td>
+      <label class="hubformfield-white">
+        <input type="number" formControlName="max_total" placeholder="Max total"/>
+      </label>
+    </td></tr>
+    <tr><th>Max Individual</th><td>
+      <label class="hubformfield-white">
+        <input type="number" formControlName="max_individual" placeholder="Max individual"/>
+      </label>
+    </td></tr>
+    <tr><th>Max Per Checkout</th><td>
+      <label class="hubformfield-white">
+        <input type="number" formControlName="max_per_checkout" placeholder="Max per checkout"/>
+      </label>
+    </td></tr>
     </tbody>
   </table>
-  <br>
-  <h4>Product Meta</h4>
-  <pre>{{ productBlueprint.product_meta | json }}</pre>
-  <br>
-  <h4>Price Policies</h4>
-  <pre *ngFor="let pricePolicy of productBlueprint.price_policies">{{ pricePolicy | json }}</pre>
+  </form>
 </section>
+
+<section *ngIf="(productBlueprint.product_meta !== null)">
+  <h4>Product Meta</h4>
+  <form [formGroup]="productMetaForm">
+    <table>
+      <thead>
+      <tr><th scope="col"></th><th scope="col">Product:</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr><th>Categorie</th><td>
+        <label class="hubformfield-white">
+          <input type="text" formControlName="categorie" placeholder=""/>
+        </label>
+      </td></tr>
+      <tr><th>Groep</th><td>
+        <label class="hubformfield-white">
+          <input type="text" formControlName="group" placeholder=""/>
+        </label>
+      </td></tr>
+      <tr><th>Upon completion</th><td>
+        {{ productBlueprint.product_meta.upon_completion }}
+      </td></tr>
+      </tbody>
+    </table>
+  </form>
+</section>
+
+<section>
+  <h4>Price Policies</h4>
+  <div class="mb-2 p-0.5 border-2 rounded-md border-blue-900" *ngFor="let pricePolicy of productBlueprint.price_policies; index as i">
+    <app-price-policy (RemovePricePolicyEvent)="RemovePricePolicy(i)" (UpdatePricePolicyEvent)="this.UpdatePricePolicy($event, i)" [pricePolicy]="pricePolicy"></app-price-policy>
+  </div>
+  <ng-container *ngIf="!addingNewPricePolicy else addNewPolicy">
+    <button class="button button-primary w-1/3 button-inline"
+            (click)="ToggleAddNew()">
+      <span class="text-white">Add New</span>
+    </button>
+  </ng-container>
+</section>
+
+<section>
+  <h2 class="text-blue-900">Update Product</h2>
+  <button class="button button-primary button-inline"
+          (click)="onSubmit()">
+    <span class="text-white">Update</span>
+  </button>
+</section>
+
+<ng-template #addNewPolicy>
+  <section class="border-2 border-blue-900 rounded-md">
+    <app-price-policy-create (UpdatePricePolicyEvent)="AddPricyPolicy($event)"></app-price-policy-create>
+  </section>
+</ng-template>

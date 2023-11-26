@@ -25,4 +25,8 @@ export class StaffAccessPolicyService {
       this.apiUrl + "/" + id)
   };
 
+  public put(blueprint_id: number, blueprint_obj: StaffAccessPolicyI) {
+    return this.httpClient.put<StaffAccessPolicyI>(this.apiUrl + "/" + blueprint_id.toString(), blueprint_obj)
+  }
+
 }

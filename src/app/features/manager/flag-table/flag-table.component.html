@@ -1,0 +1,15 @@
+<section class="staffSection">
+    <h2>Toggle Checkout</h2>
+    <br>
+
+    <ng-container *ngIf="$checkoutsEnabled | async as checkoutsFlag">
+        Current: {{ checkoutsFlag.int_value }}
+        <br>
+        <button class="button button-primary w-1/6 button-inline"
+                [disabled]="this.loading"
+                [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+                (click)="toggleCheckoutEnable(checkoutsFlag)">
+            <span class="text-white">{{ this.loading ? "Toggling .." : "Toggle" }}</span>
+        </button>
+    </ng-container>
+</section>

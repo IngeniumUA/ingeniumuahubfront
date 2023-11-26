@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {EventService} from "../../../../core/services/items/events/event.service";
@@ -9,6 +9,7 @@ import {ProductsService} from "../../../../core/services/shop/products/products.
 import {map} from "rxjs/operators";
 import {ItemI} from "../../../../shared/models/items/ItemI";
 import {CartService} from "../../../../core/services/shop/cart/cart.service";
+import {ProductsToCategoriesPipe} from "../../../../shared/pipes/product/product_to_categoriepipe.pipe";
 
 
 @Component({
@@ -26,7 +27,7 @@ export class EventDetailComponent implements OnInit {
   }
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  isCartEmpty: boolean = this.cartService.hasTransactions()
+  isCartEmpty: boolean = !this.cartService.hasTransactions()
   // Event Info and Deco
   event$!: Observable<EventItemDetailI>;
   eventError$!: Observable<any>;
@@ -49,7 +50,12 @@ export class EventDetailComponent implements OnInit {
     this.SetEvent(id);
 
     // Setup producttable
-    this.productCategories$ = of([]) // this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
+    const product_to_categorie = new ProductsToCategoriesPipe()
+    this.productCategories$ = this.productService.getProducts(id).pipe(
+      map(productArray => product_to_categorie.transform(productArray)),
+      shareReplay()
+    )
+    //this.productCategories$ = of([]) // this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
     this.SetProductCategorie(0)
   }
 
@@ -78,11 +84,11 @@ export class EventDetailComponent implements OnInit {
     }))
   }
 
-  GetCurrentProductCount(item: ItemI, categorie_name: string, product: IProductItem): number {
+  GetCurrentProductCount(item: ItemI, product: IProductItem): number {
     return this.cartService.getProductCount(item, product)
   }
-  SetProductCount(item: ItemI, categorie_name: string, product: IProductItem, count: number) {
+  SetProductCount(item: ItemI, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
-    this.isCartEmpty = this.cartService.hasTransactions()
+    this.isCartEmpty = !this.cartService.hasTransactions()
   }
 }

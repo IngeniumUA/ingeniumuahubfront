@@ -4,12 +4,6 @@ import {DatePipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin-detail.component";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
-import {EventItemDetailI} from "../../../../models/items/events";
-
-interface FormField {
-  name: string
-  selector: string
-}
 
 @Component({
   selector: 'app-staff-item-detail',
@@ -53,7 +47,7 @@ export class StaffItemDetailComponent {
     this.itemForm = this.formBuilder.group({
       name: [this.item.item.name, Validators.required],
       description: [this.item.item.description],
-      available: [true, Validators.required],
+      available: [this.item.item.available, Validators.required],
       disabled: [this.item.item.disabled, Validators.required],
     })
     // Adding event if required
@@ -111,6 +105,4 @@ export class StaffItemDetailComponent {
       this.item.promo_item.display_mixin = displaymixin_obj
     }
   }
-
-  protected readonly event = event;
 }
