@@ -1,3 +1,11 @@
+.shop-desktop {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
 section {
   margin-top: 1rem;
   margin-bottom: 1rem;

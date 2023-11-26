@@ -1,5 +1,8 @@
 <app-layout-public-header></app-layout-public-header>
 
+<ng-container *ngIf="{'isMobile': this.isMobile$ | async} as isMobile">
+<section [ngClass]="{'shop-desktop': !isMobile.isMobile}">
+
 <ng-container *ngIf="{shopItem: this.shopItem$ | async, error: this.shopError$ | async} as data; ">
   <ng-container *ngIf="data.shopItem as shop; else loading">
   <section class="shop-banner">
@@ -18,17 +21,19 @@
     </ng-container>
   </section>
 
-  <section class="order-section">
-    <button class="hubbutton-blue"
-            (click)="this.ToCheckout()">
-      <h3>Checkout!</h3>
-    </button>
-  </section>
+    <section class="order-section">
+      <button [disabled]="this.isCartEmpty" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
+        <h3>Checkout!</h3>
+      </button>
+    </section>
 
   <section class="description-section">
     <p>{{ shop.item.description }}</p>
   </section>
 </ng-container>
+</ng-container>
+
+</section>
 </ng-container>
 
 <ng-template #loading>
