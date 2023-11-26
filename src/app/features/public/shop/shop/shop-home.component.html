@@ -2,10 +2,11 @@
 
 <main class="shop">
   <h1>Shop</h1>
-  <h2>Koop een lidkaart aan de kassa!</h2>
   <!--
+  <h2>Koop een lidkaart aan de kassa!</h2>
+  -->
   <div class="product-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
     <app-rec-sys-item-preview [recsysItem]="shopitem" *ngFor="let shopitem of (this.shopitems$ | async)" />
   </div>
-  -->
+
 </main>
