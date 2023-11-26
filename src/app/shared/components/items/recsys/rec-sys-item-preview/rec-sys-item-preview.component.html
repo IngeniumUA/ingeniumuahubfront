@@ -1,4 +1,15 @@
-<a [routerLink]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
+<ng-container *ngIf="this.internalLink else externalLink">
+  <a [routerLink]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
+    <ng-container *ngTemplateOutlet="cardContent" ></ng-container>
+  </a>
+</ng-container>
+<ng-template #externalLink>
+  <a [href]=this.recsysItem.follow_through_link class="event-card-link-wrapper">
+    <ng-container *ngTemplateOutlet="cardContent" ></ng-container>
+  </a>
+</ng-template>
+
+<ng-template #cardContent>
   <article class="event-card" [style]=CardStyle()>
     <div class="image"><img src="{{ this.image }}" alt=""></div>
     <div class="content">
@@ -6,4 +17,4 @@
       <span *ngIf="recsysItem.date != undefined" class="date" [ngStyle]="{'color': TextColor() }">{{ this.recsysItem.date | date }}</span>
     </div>
   </article>
-</a>
+</ng-template>
