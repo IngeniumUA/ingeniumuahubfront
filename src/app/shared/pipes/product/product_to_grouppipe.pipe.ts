@@ -21,7 +21,7 @@ export class ProductsToGroupsPipe implements PipeTransform {
     let productGroups: IProductGroup[] = []
     for (const product_name in grouped_as_object) {
       const group: IProductGroup = {
-        group_name: product_name,
+        group_name: product_name !== null ? product_name: "",  // condition ? v_true: v_false
         products: grouped_as_object[product_name]
       }
       productGroups.push(group)
