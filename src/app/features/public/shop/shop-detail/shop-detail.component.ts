@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {LayoutService} from "../../../../core/services/layout/layout.service";
-import {EventService} from "../../../../core/services/items/events/event.service";
 import {CartService} from "../../../../core/services/shop/cart/cart.service";
 import {ProductsService} from "../../../../core/services/shop/products/products.service";
 import {catchError, ignoreElements, Observable, of, shareReplay} from "rxjs";
-import {EventItemDetailI} from "../../../../shared/models/items/events";
 import {ShopService} from "../../../../core/services/items/shop.service";
 import {ShopItemDetailI} from "../../../../shared/models/items/shopitem";
 import {IProductItem} from "../../../../shared/models/items/products/products";
@@ -28,7 +26,7 @@ export class ShopDetailComponent implements OnInit {
 
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  isCartFilled: boolean = this.cartService.hasTransactions()
+  isCartEmpty: boolean = !this.cartService.hasTransactions()
   // Event Info and Deco
   shopItem$?: Observable<ShopItemDetailI>;
   shopError$!: Observable<any>;
@@ -64,11 +62,11 @@ export class ShopDetailComponent implements OnInit {
   }
   SetProductCount(item: ItemI, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
-    this.isCartFilled = this.cartService.hasTransactions()
+    this.isCartEmpty = !this.cartService.hasTransactions()
   }
 
   ToCheckout() {
-    if (!this.isCartFilled) {
+    if (this.isCartEmpty) {
       return
     }
     this.router.navigateByUrl('/shop/checkout')
