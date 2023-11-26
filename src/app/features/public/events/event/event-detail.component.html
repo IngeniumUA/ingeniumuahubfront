@@ -21,7 +21,7 @@
 
   <section class="title-info-section">
     <h3>{{ event.item.name }}</h3>
-    <p>{{ event.start_date | date:'d MMMM, hh:mm' }}</p>
+    <p>{{ event.start_date | date:'d MMMM' }}</p>
   </section>
 
   <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie else noProducts">
