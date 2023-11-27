@@ -49,6 +49,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.productMetaForm = this.formBuilder.group({
             categorie: [this.productBlueprint.product_meta.categorie],
             group: [this.productBlueprint.product_meta.group],
+            upon_completion: [this.productBlueprint.product_meta.upon_completion]
         })
     }
 
@@ -61,10 +62,11 @@ export class ProductBlueprintDetailComponent implements OnInit {
             this.handleFormError(error);
             return;  }
 
+        const upon_completion_form = this.productMetaForm.controls['upon_completion'].value
         const productMeta: ProductMetaI = {
             group: this.productMetaForm.controls['group'].value,
             categorie: this.productMetaForm.controls['categorie'].value,
-            upon_completion: this.productBlueprint.product_meta.upon_completion,
+            upon_completion: upon_completion_form === '' ? null: [upon_completion_form],
             popupz_opties: this.productBlueprint.product_meta.popupz_opties
         }
 
