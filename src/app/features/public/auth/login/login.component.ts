@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false;
   form_error: string | null = null;
-
+  facebookBrowser: boolean = false
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
@@ -39,7 +39,12 @@ export class LoginComponent implements OnInit {
     // Setting up Google auth
     this.SetupGoogleAuth()
 
-    // Typehint
+    // Facebook browser check
+    const userAgent = window.navigator.userAgent;
+    this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) || (userAgent.indexOf("FBAV") > -1);
+    console.log(userAgent);
+
+    // Loginhint
     this.SetupLoginHint()
   }
 
