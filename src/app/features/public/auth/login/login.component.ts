@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit {
   loginHint: string | null = null
   ngOnInit() {
     if (this.authService.userValue) {
-      this.router.navigate(['home'])
+      const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+      this.router.navigateByUrl(returnUrl);
     }
 
     // Setting up form
@@ -42,7 +43,6 @@ export class LoginComponent implements OnInit {
     // Facebook browser check
     const userAgent = window.navigator.userAgent;
     this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) || (userAgent.indexOf("FBAV") > -1);
-    console.log(userAgent);
 
     // Loginhint
     this.SetupLoginHint()
