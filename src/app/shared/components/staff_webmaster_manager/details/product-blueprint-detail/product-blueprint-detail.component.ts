@@ -49,7 +49,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.productMetaForm = this.formBuilder.group({
             categorie: [this.productBlueprint.product_meta.categorie],
             group: [this.productBlueprint.product_meta.group],
-            upon_completion: [this.productBlueprint.product_meta.upon_completion]
+            upon_completion: [this.productBlueprint.product_meta.upon_completion === null ? '': this.productBlueprint.product_meta.upon_completion[0]]
         })
     }
 
