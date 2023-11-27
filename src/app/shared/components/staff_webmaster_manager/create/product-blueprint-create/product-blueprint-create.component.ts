@@ -19,6 +19,7 @@ import {DatePipe, NgIf, NgStyle} from "@angular/common";
 export class ProductBlueprintCreateComponent {
 
   @Output() ToggleCreating = new EventEmitter<boolean>()
+  @Output() FinishedCreating = new EventEmitter<boolean>()
   @Input() originItem!: string
 
   constructor(private formBuilder: FormBuilder,
@@ -61,7 +62,7 @@ export class ProductBlueprintCreateComponent {
     this.staffProductService.post(product).pipe(
         first()).subscribe({
       next: () => {
-        // Succes
+        this.FinishedCreating.emit(true)
       },
       error: error => {
         this.loading = false;

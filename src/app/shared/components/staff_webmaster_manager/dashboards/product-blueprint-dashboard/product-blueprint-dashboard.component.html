@@ -25,7 +25,7 @@
 
 <section>
     <ng-container *ngIf="addingNew else awaitAddNew">
-        <app-product-blueprint-create [originItem]="this.itemId" (ToggleCreating)="ToggleAddNew()"></app-product-blueprint-create>
+        <app-product-blueprint-create (FinishedCreating)="NewProduct()" [originItem]="this.itemId" (ToggleCreating)="ToggleAddNew()"></app-product-blueprint-create>
     </ng-container>
 </section>
 
