@@ -4,7 +4,7 @@
 
 <section class="staffSection">
   <ng-container *ngIf="addingNew else awaitAddNew">
-    <app-item-create (ToggleCreating)="ToggleAddNew()"></app-item-create>
+    <app-item-create (FinishedCreating)="Refetch()" (ToggleCreating)="ToggleAddNew()"></app-item-create>
   </ng-container>
 </section>
 
