@@ -94,7 +94,7 @@ export class RegisterPageComponent {
     this.registerService.register(email).pipe(
       first()).subscribe({
       next: () => {
-        this.router.navigateByUrl('/auth/login/await_email')
+        this.router.navigateByUrl('/auth/await_email')
       },
       error: (error: Error) => {
         this.loading = false;
