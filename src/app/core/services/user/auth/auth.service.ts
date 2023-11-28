@@ -93,6 +93,9 @@ export class AuthService {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
 
+        // Clear cart
+        this.cartService.clear()
+
         this.userSubject.next(user); // Set user observable to user?
         return user;
       }),
