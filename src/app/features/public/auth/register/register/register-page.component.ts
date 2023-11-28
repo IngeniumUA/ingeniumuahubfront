@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthService} from "../../../../../core/services/user/auth/auth.service";
 import {SocialAuthService} from "@abacritt/angularx-social-login";
@@ -16,6 +16,9 @@ export class RegisterPageComponent {
   form!: FormGroup;
   loading = false;
   submitted = false;
+  privacyPolicyAccepted: boolean = false
+
+  privacyAcceptedControl = new FormControl(false)
 
   constructor(private registerService: RegisterService,
               private formBuilder: FormBuilder,
@@ -33,6 +36,15 @@ export class RegisterPageComponent {
     this.form = this.formBuilder.group({
       email: ['', Validators.email],
     })
+
+    this.privacyAcceptedControl.valueChanges.subscribe(
+      value => {
+        if (value === null) {
+          return
+        }
+        this.privacyPolicyAccepted = value
+      }
+    )
 
     this.socialAuthService.authState.subscribe((user) => {
         this.authService.google_login(user.idToken).pipe(

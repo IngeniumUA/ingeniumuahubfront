@@ -47,12 +47,16 @@
     </div>
 
     <div class="register-page-section">
-      <button class="hubbutton-blue"><h3>Register</h3></button>
+      <button [disabled]="!this.privacyPolicyAccepted" class="hubbutton-blue"><h3>Register</h3></button>
     </div>
     <div *ngIf="this.form_error != null">
       <span class="error-message">{{ this.form_error }}</span>
     </div>
   </form>
+  <div class="flex flex-row gap-2">
+    <span>I have read and agree to the <a [href]="'https://hub.ingeniumua.be'">Privacy Policy</a></span>
+    <input type="checkbox" [formControl]="privacyAcceptedControl"/>
+  </div>
 
   <div class="register-page-section floating-text">
     <span>
