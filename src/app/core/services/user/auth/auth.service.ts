@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import {HubAuthData} from "../../../../shared/models/user";
 import {apiEnviroment} from "../../../../../environments/environment";
 import {RolesService} from "../roles.service";
+import {CartService} from "../../shop/cart/cart.service";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class AuthService {
   public user: Observable<HubAuthData | null>;
   constructor(private router: Router,
               private httpClient: HttpClient,
+              private cartService: CartService,
               private rolesService: RolesService) {
     this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
     this.user = this.userSubject.asObservable();
@@ -72,6 +74,10 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(user));
 
         this.userSubject.next(user); // Set user observable to user?
+
+        // Clear cart
+        this.cartService.clear()
+
         return user;
       }),
       catchError((error) => {
@@ -86,6 +92,9 @@ export class AuthService {
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
+
+        // Clear cart
+        this.cartService.clear()
 
         this.userSubject.next(user); // Set user observable to user?
         return user;

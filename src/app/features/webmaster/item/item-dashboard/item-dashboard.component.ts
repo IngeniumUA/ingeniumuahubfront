@@ -12,4 +12,8 @@ export class ItemDashboardComponent {
     this.addingNew = ! this.addingNew
   }
 
+  Refetch() {
+    this.addingNew = false
+  }
+
 }

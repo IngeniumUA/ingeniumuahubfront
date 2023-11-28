@@ -49,6 +49,7 @@ export class ItemCreateComponent implements OnInit {
   loading: boolean = false
 
   @Output() ToggleCreating = new EventEmitter<boolean>()
+  @Output() FinishedCreating = new EventEmitter<boolean>()
 
   constructor(private formBuilder: FormBuilder,
               private staffItemService: StaffItemService) {
@@ -90,7 +91,7 @@ export class ItemCreateComponent implements OnInit {
     this.staffItemService.createItem(createObject).pipe(
       first()).subscribe({
       next: () => {
-        // Succes
+        this.FinishedCreating.emit(true)
       },
       error: error => {
         this.loading = false;

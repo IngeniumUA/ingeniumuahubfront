@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {StaffItemService} from "../../../../../core/services/staff/items/staff_item_router";
 import {StaffItemDetailI} from "../../../../models/staff/staff_item_details";
 import {Observable, of} from "rxjs";

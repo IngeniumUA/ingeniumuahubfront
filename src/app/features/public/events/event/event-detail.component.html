@@ -37,9 +37,13 @@
     </div>
   </section>
 
-  <section class="order-section">
-    <button [disabled]="this.isCartEmpty" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
+  <section class="order-section flex flex-row gap-3">
+    <button [disabled]="this.isCartEmpty || !this.isAuth" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
       <h3>Checkout!</h3>
+    </button>
+
+    <button *ngIf="!isAuth" (click)="ToLogin()" class="hubbutton-blue">
+      <h3>Login!</h3>
     </button>
   </section>
 

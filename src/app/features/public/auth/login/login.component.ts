@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false;
   form_error: string | null = null;
-
+  facebookBrowser: boolean = false
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit {
   loginHint: string | null = null
   ngOnInit() {
     if (this.authService.userValue) {
-      this.router.navigate(['home'])
+      const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+      this.router.navigateByUrl(returnUrl);
     }
 
     // Setting up form
@@ -39,7 +40,11 @@ export class LoginComponent implements OnInit {
     // Setting up Google auth
     this.SetupGoogleAuth()
 
-    // Typehint
+    // Facebook browser check
+    const userAgent = window.navigator.userAgent;
+    this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) || (userAgent.indexOf("FBAV") > -1);
+
+    // Loginhint
     this.SetupLoginHint()
   }
 

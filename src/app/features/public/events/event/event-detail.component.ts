@@ -10,6 +10,7 @@ import {map} from "rxjs/operators";
 import {ItemI} from "../../../../shared/models/items/ItemI";
 import {CartService} from "../../../../core/services/shop/cart/cart.service";
 import {ProductsToCategoriesPipe} from "../../../../shared/pipes/product/product_to_categoriepipe.pipe";
+import {AuthService} from "../../../../core/services/user/auth/auth.service";
 
 
 @Component({
@@ -20,15 +21,18 @@ import {ProductsToCategoriesPipe} from "../../../../shared/pipes/product/product
 export class EventDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
+              private authService: AuthService,
               private layoutService: LayoutService,
               private eventService: EventService,
               private cartService: CartService,
               private productService: ProductsService) {
   }
   // Layout
+  isAuth: boolean = this.authService.isLoggedIn()
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
   isCartEmpty: boolean = !this.cartService.hasTransactions()
   // Event Info and Deco
+  eventId!: string
   event$!: Observable<EventItemDetailI>;
   eventError$!: Observable<any>;
 
@@ -60,6 +64,7 @@ export class EventDetailComponent implements OnInit {
   }
 
   SetEvent(id: string): void {
+    this.eventId = id
     this.event$ = this.eventService.getEvent(id).pipe()
     this.eventError$ = this.event$.pipe(
       ignoreElements(),
@@ -90,5 +95,9 @@ export class EventDetailComponent implements OnInit {
   SetProductCount(item: ItemI, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
     this.isCartEmpty = !this.cartService.hasTransactions()
+  }
+
+  ToLogin() {
+    this.router.navigateByUrl('/login?next=/event/'+ this.eventId)
   }
 }

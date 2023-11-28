@@ -49,4 +49,10 @@ export class ProductBlueprintDashboardComponent implements OnInit {
     this.addingNew = ! this.addingNew
   }
 
+  NewProduct() {
+    this.addingNew = false
+    this.$productBlueprintStats = this.staffProductService.getProductBlueprintStats(0, 50, this.itemId)  // source_item
+    this.$productBlueprint = this.staffProductService.getProductBlueprints(0, 50, this.itemId)  // source_item
+  }
+
 }
