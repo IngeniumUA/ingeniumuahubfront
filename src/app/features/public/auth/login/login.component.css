@@ -90,3 +90,13 @@ form {
   padding-right: 4px;
   margin: 0px;
 }
+
+.embedded-browser {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  50%, 75% {
+    transform: scale(1.1);
+  }
+}

@@ -42,7 +42,9 @@ export class LoginComponent implements OnInit {
 
     // Facebook browser check
     const userAgent = window.navigator.userAgent;
-    this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) || (userAgent.indexOf("FBAV") > -1);
+    this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) ||
+                           (userAgent.indexOf("FBAV") > -1) ||
+                           (userAgent.indexOf("Instagram") > -1);
 
     // Loginhint
     this.SetupLoginHint()

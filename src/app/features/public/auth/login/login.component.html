@@ -29,9 +29,10 @@
     </asl-google-signin-button>
   </div>
 
-  <div class="login-page-section floating-text" *ngIf="facebookBrowser">
-    <span class="text-blue-900 font-bold">
-      Problemen met inloggen via Google?<br>Open de website in je browser!
+  <div *ngIf="facebookBrowser" class="login-page-section floating-text">
+    <span class="text-red-600 font-bold embedded-browser">
+      Open de website in je browser!<br>
+      Google login werkt niet altijd in Facebook!
     </span>
   </div>
 
