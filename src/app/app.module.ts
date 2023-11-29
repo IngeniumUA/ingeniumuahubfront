@@ -37,6 +37,7 @@ import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-
 import { ToastrModule } from 'ngx-toastr';
 import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
 import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
+import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
 
 
 @NgModule({
@@ -61,31 +62,32 @@ import { PartnerDumpComponent } from './shared/components/partners/partner-dump/
         PopupzorderStaffComponent,
 
     ],
-  imports: [
-    BrowserModule,
-    PublicHeaderComponent,
-    PublicFooterComponent,
+    imports: [
+        BrowserModule,
+        PublicHeaderComponent,
+        PublicFooterComponent,
 
-    UnderConstructionComponent,
+        UnderConstructionComponent,
 
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    SocialLoginModule,
-    CardComponent,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        SocialLoginModule,
+        CardComponent,
 
-    ReactiveFormsModule,
-    MatRadioModule,
-    MatButtonModule,
-    RegisterComponent,
-    RecSysItemPreviewComponent,
+        ReactiveFormsModule,
+        MatRadioModule,
+        MatButtonModule,
+        RegisterComponent,
+        RecSysItemPreviewComponent,
 
-    PartnerBalkComponent,
-    PartnerDumpComponent,
+        PartnerBalkComponent,
+        PartnerDumpComponent,
 
-    BrowserAnimationsModule,
-    ToastrModule.forRoot()
-  ],
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        PartnerGridComponent
+    ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
         {provide: 'SocialAuthServiceConfig',
