@@ -29,10 +29,10 @@ export class PartnerGridComponent {
   // partners: Observable<RecSysPreviewI[]> = this.httpClient.get<RecSysPreviewI[]>("/assets/temp_partner_config/partners.json");
 
   partners: Observable<PartnerDisplay[]> = of([
-    {name: "Umicore", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/umicore.webp"},
-    {name: "Sparklink", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/sparklink.webp"},
-    {name: "Sweco", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/sweco.webp"},
-    {name: "BDO", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/bdo.webp"},
+    {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/umicore.webp"},
+    {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/sparklink.webp"},
+    {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/sweco.webp"},
+    {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/bdo.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/willemen_infra.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/aertssen.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/art_antwerp_nv.webp"},
