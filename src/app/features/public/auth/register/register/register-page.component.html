@@ -35,6 +35,13 @@
     </asl-google-signin-button>
   </div>
 
+  <div *ngIf="facebookBrowser" class="login-page-section floating-text">
+    <span class="text-red-600 font-bold embedded-browser">
+      Open de website in je browser!<br>
+      Google login werkt soms niet in Facebook/Instagram!
+    </span>
+  </div>
+
   <div class="register-page-section floating-text">
     <span>or</span>
   </div>

@@ -16,8 +16,10 @@ export class RegisterPageComponent {
   form!: FormGroup;
   loading = false;
   submitted = false;
-  privacyPolicyAccepted: boolean = false
 
+  facebookBrowser: boolean = false
+
+  privacyPolicyAccepted: boolean = false
   privacyAcceptedControl = new FormControl(false)
 
   constructor(private registerService: RegisterService,
@@ -61,6 +63,12 @@ export class RegisterPageComponent {
         })
       }
     )
+
+    // Facebook browser check
+    const userAgent = window.navigator.userAgent;
+    this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) ||
+      (userAgent.indexOf("FBAV") > -1) ||
+      (userAgent.indexOf("Instagram") > -1);
   }
 
   // convenience getter for easy access to form fields

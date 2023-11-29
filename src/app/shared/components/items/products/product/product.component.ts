@@ -3,6 +3,7 @@ import {IProductItem} from "../../../../models/items/products/products";
 import {NgIf, NgStyle} from "@angular/common";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Subject, takeUntil} from "rxjs";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-product',
@@ -17,15 +18,19 @@ import {Subject, takeUntil} from "rxjs";
 })
 export class ProductComponent implements OnInit, OnDestroy {
   @Input() product!: IProductItem;
+  @Input() itemId: string | null = null;
   @Input() onInitValue: number = 0;
   @Input() primaryColorFull!: string;
   @Input() primaryColorHalf!: string;
   @Output() countEvent: EventEmitter<number> = new EventEmitter<number>();
 
+  productHint: string | null = null
+
   productForm = this.formBuilder.group({
     count: [0, Validators.min(0)]
     });
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private router: Router) {
   }
   ngOnInit() {
     // Set max validator dynamically because it depends on product interface (which needs to be loaded)
@@ -88,5 +93,13 @@ export class ProductComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  ToLogin() {
+    if (this.itemId === null) {
+      this.router.navigateByUrl('/login?next=/event')
+    } else {
+      this.router.navigateByUrl('/login?next=/event/'+ this.itemId)
+    }
   }
 }

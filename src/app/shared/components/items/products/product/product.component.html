@@ -3,11 +3,12 @@
     {{ product.name }}
     <span *ngIf="product.product_meta.popupz_opties" class="mt-1 block text-xs text-gray-500">Optie: {{ product.product_meta.popupz_opties }}</span>
   </h5>
-  <ng-container *ngIf="this.product.price_eu > 0">
-    <p>&euro; {{ product.price_eu }}</p>
-  </ng-container>
 
-  <ng-container *ngIf="this.product.max_count != 0; else notAvailable">
+  <ng-container *ngIf="this.product.max_count > 0; else notAvailable">
+    <ng-container *ngIf="this.product.price_eu > 0">
+      <p class="whitespace-nowrap">&euro; {{ product.price_eu }}</p>
+    </ng-container>
+
     <button (click)="TryDecreaseCount()"
             [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) <= 0) ? 'gray' : this.primaryColorFull}"
             [disabled]="(this.productForm.controls.count.value ?? 0) <= 0">
@@ -28,5 +29,15 @@
 </div>
 
 <ng-template #notAvailable>
-  <p>Niet beschikbaar!</p>
+  <ng-container *ngIf="product.max_count === -1">
+    <p>Sold out!</p>
+  </ng-container>
+  <ng-container *ngIf="product.max_count === -2">
+    <p>Al gekocht!</p>
+  </ng-container>
+  <ng-container *ngIf="product.max_count === -3">
+    <button class="product-to-login"
+            [ngStyle]="{'background-color': this.primaryColorFull}"
+            (click)="ToLogin()">Login vereist!</button>
+  </ng-container>
 </ng-template>

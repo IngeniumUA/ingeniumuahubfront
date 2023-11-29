@@ -29,8 +29,11 @@
       <h3>{{ product_group.group_name }}</h3>
       <div class="products">
         <ng-container *ngFor="let product of this.product_group.products">
-        <app-product [onInitValue]="this.GetCurrentProductCount(event.item, product)" [product]="product"
-                     [primaryColorFull]="(event.color | colordbrgba: 1)" [primaryColorHalf]="(event.color | colordbrgba: 0.5)"
+        <app-product [onInitValue]="this.GetCurrentProductCount(event.item, product)"
+                     [product]="product"
+                     [primaryColorFull]="(event.color | colordbrgba: 1)"
+                     [primaryColorHalf]="(event.color | colordbrgba: 0.5)"
+                     [itemId]="this.eventId"
                      (countEvent)="this.SetProductCount(event.item, product, $event)"></app-product>
         </ng-container>
       </div>
@@ -38,12 +41,12 @@
   </section>
 
   <section class="order-section flex flex-row gap-3">
-    <button [disabled]="this.isCartEmpty || !this.isAuth" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
+    <button *ngIf="isAuth" [disabled]="this.isCartEmpty || !this.isAuth" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
       <h3>Checkout!</h3>
     </button>
 
     <button *ngIf="!isAuth" (click)="ToLogin()" class="hubbutton-blue">
-      <h3>Login!</h3>
+      <h3>Login</h3>
     </button>
   </section>
 

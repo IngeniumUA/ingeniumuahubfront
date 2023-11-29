@@ -78,3 +78,15 @@ input::-webkit-inner-spin-button {
 #product-count-form {
   width: 1.5rem;
 }
+
+.product-to-login {
+  width: auto;
+  font-size: inherit;
+
+  padding: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
+
+  border: none;
+  border-radius: 10px;
+}
