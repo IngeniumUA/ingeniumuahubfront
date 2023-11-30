@@ -3,6 +3,7 @@ import {IProductItem} from "../items/products/products";
 export interface StaffInteractionI {
   id: number
   user_id: string
+  user_email: string | null
   interaction_type: string
   item_id: string
   date_created: string
