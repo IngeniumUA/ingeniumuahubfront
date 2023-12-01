@@ -1,6 +1,5 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {Observable, of} from "rxjs";
-import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
 import {StaffTransactionI} from "../../../../models/staff/staff_transaction";
@@ -9,6 +8,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
 import {RouterLink} from "@angular/router";
 import {TransactionStatsI} from "../../../../models/stats/transactionStats";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {data} from "autoprefixer";
 
 @Component({
   selector: 'app-transaction-table',
@@ -24,11 +25,18 @@ import {TransactionStatsI} from "../../../../models/stats/transactionStats";
     RouterLink,
     NgForOf,
     NgClass,
-    NgStyle
+    NgStyle,
+    ReactiveFormsModule
   ],
   standalone: true
 })
 export class TransactionTableComponent {
+  constructor(private staffTransactionService: StaffTransactionService,
+              private formBuilder: FormBuilder) {
+  }
+  @Input() item_id: string | null = null
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   displayedColumns = ["interaction_id", "user", "count", "amount", "status", "date_completed", "date_created"]
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
@@ -37,15 +45,13 @@ export class TransactionTableComponent {
 
   transactionData$: Observable<StaffTransactionI[]> = of([])
 
-  @Input() item_id: string | null = null
-
-  constructor(private staffTransactionService: StaffTransactionService) {
-  }
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  searchForm = new FormGroup({
+    idControl: new FormControl(''),
+    emailControl: new FormControl('')
+  })
 
   ngOnInit() {
-    this.LoadData()
+    this.LoadData();
   }
 
   ngAfterViewInit() {
@@ -112,4 +118,14 @@ export class TransactionTableComponent {
     return ""
   }
 
+  SortData(dataIn: StaffTransactionI[]): StaffTransactionI[] {
+    return dataIn.filter((transaction, index, array) => {
+      const emailControlValue = this.searchForm.get('emailControl')?.value;
+      let emailBool = true
+      if (emailControlValue !== null && emailControlValue !== undefined && emailControlValue !== '' && transaction.interaction.user_email) {
+        emailBool = transaction.interaction.user_email?.includes(emailControlValue)
+      }
+      return emailBool
+    })
+  }
 }
