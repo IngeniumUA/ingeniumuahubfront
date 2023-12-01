@@ -9,3 +9,19 @@ h2 {
 .status-button-selected {
     @apply border-blue-900 border-2 font-bold
 }
+
+.SUCCESSFUL-text {
+  @apply p-0.5 pl-2 rounded-md bg-green-300 text-green-900
+}
+
+.PENDING-text {
+  @apply p-0.5 pl-2 rounded-md bg-orange-300 text-orange-900
+}
+
+.CANCELLED-text {
+  @apply p-0.5 pl-2 rounded-md bg-gray-300 text-gray-900
+}
+
+.FAILED-text {
+  @apply p-0.5 pl-2 rounded-md bg-red-300 text-red-900
+}

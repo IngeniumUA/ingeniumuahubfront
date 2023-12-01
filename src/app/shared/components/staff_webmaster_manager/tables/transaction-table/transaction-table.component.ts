@@ -4,7 +4,7 @@ import {StaffUserDetailI} from "../../../../models/staff/staff_user_detail";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
 import {StaffTransactionI} from "../../../../models/staff/staff_transaction";
-import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
 import {RouterLink} from "@angular/router";
@@ -23,12 +23,13 @@ import {TransactionStatsI} from "../../../../models/stats/transactionStats";
     NgIf,
     RouterLink,
     NgForOf,
-    NgClass
+    NgClass,
+    NgStyle
   ],
   standalone: true
 })
 export class TransactionTableComponent {
-  displayedColumns = ["interaction_id", "user", "count", "amount", "status"]
+  displayedColumns = ["interaction_id", "user", "count", "amount", "status", "date_completed", "date_created"]
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
   statusStats$!: Observable<TransactionStatsI>
@@ -96,6 +97,19 @@ export class TransactionTableComponent {
       return statsObject.PENDING
     }
     return 0
+  }
+
+  StyleClassFromStatus(status: string): string {
+    if (status === "SUCCESSFUL") {
+      return 'SUCCESSFUL-text'
+    } else if (status === "PENDING") {
+      return 'PENDING-text'
+    } else if (status === "CANCELLED") {
+      return 'CANCELLED-text'
+    } else if (status === "FAILED") {
+      return 'FAILED-text'
+    }
+    return ""
   }
 
 }
