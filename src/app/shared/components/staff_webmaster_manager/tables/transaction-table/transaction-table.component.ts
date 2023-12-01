@@ -25,7 +25,7 @@ import {RouterLink} from "@angular/router";
   standalone: true
 })
 export class TransactionTableComponent {
-  displayedColumns = ["interaction_id", "user_id", "status"]
+  displayedColumns = ["interaction_id", "user", "count", "amount", "status"]
 
   transactionData$: Observable<StaffTransactionI[]> = of([])
 
