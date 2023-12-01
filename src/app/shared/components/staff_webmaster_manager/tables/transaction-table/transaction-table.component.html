@@ -8,8 +8,8 @@
             [ngClass]="status === this.selectedStatus ? 'status-button-selected': ''"
             (click)="SwitchStatusFilter(status)"
     >
-      <p class="text-ingenium-grey-700"
-         [ngClass]="status === this.selectedStatus ? 'text-blue-900': ''"
+      <p
+         [ngClass]="status === this.selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'"
       >{{ status }}</p>
       <p class="font-bold">{{ StatusToStats(status, statusStats) }}</p>
     </button>
@@ -17,7 +17,7 @@
 
   <ng-container *ngIf="(this.transactionData$ | async) as transactionTable else loading">
     <mat-paginator
-      [length]="statusStats.ALL"
+      [length]="StatusToStats(this.selectedStatus, statusStats)"
       [pageSize]="50"
       (page)="LoadData($event)"
       showFirstLastButtons
