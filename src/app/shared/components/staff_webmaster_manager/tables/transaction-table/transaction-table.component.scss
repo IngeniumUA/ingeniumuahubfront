@@ -1,0 +1,11 @@
+h2 {
+  color: var(--secondblue)
+}
+
+.status-selector-button {
+  @apply flex flex-col items-start flex-grow p-2 pt-3 pb-3 border border-ingenium-grey-700 rounded-lg;
+}
+
+.status-button-selected {
+    @apply border-blue-900 border-2 font-bold
+}

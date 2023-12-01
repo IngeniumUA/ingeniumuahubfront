@@ -1,14 +1,29 @@
 <section>
   <h2>Transactions Table</h2>
+
+  <ng-container  *ngIf="statusStats$ | async as statusStats">
+  <div class="flex flex-row gap-2 max-w-full">
+    <button *ngFor="let status of this.statusFilters"
+            class="status-selector-button"
+            [ngClass]="status === this.selectedStatus ? 'status-button-selected': ''"
+            (click)="SwitchStatusFilter(status)"
+    >
+      <p class="text-ingenium-grey-700"
+         [ngClass]="status === this.selectedStatus ? 'text-blue-900': ''"
+      >{{ status }}</p>
+      <p class="font-bold">{{ StatusToStats(status, statusStats) }}</p>
+    </button>
+  </div>
+
   <ng-container *ngIf="(this.transactionData$ | async) as transactionTable else loading">
+    <mat-paginator
+      [length]="statusStats.ALL"
+      [pageSize]="50"
+      (page)="LoadData($event)"
+      showFirstLastButtons
+      aria-label="Select which cards">
+    </mat-paginator>
     <ng-container *ngIf="transactionTable.length > 0 else noItems">
-      <mat-paginator
-        [length]="1000"
-        [pageSize]="50"
-        (page)="LoadData($event)"
-        showFirstLastButtons
-        aria-label="Select which cards">
-      </mat-paginator>
 
     <table mat-table [dataSource]="transactionTable" class="mat-elevation-z8">
 
@@ -44,6 +59,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     </ng-container>
+  </ng-container>
   </ng-container>
 </section>
 
