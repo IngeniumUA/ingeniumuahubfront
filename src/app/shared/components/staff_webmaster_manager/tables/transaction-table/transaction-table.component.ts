@@ -1,5 +1,5 @@
 import {Component, Input, ViewChild} from '@angular/core';
-import {combineLatest, debounceTime, delay, interval, mergeAll, Observable, of, switchMap, takeLast} from "rxjs";
+import {debounceTime, delay, Observable, of} from "rxjs";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
 import {StaffTransactionI} from "../../../../models/staff/staff_transaction";
@@ -8,9 +8,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
 import {RouterLink} from "@angular/router";
 import {TransactionStatsI} from "../../../../models/stats/transactionStats";
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {data} from "autoprefixer";
-import {distinctUntilChanged, last} from "rxjs/operators";
+import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {distinctUntilChanged} from "rxjs/operators";
 
 @Component({
   selector: 'app-transaction-table',
@@ -32,8 +31,7 @@ import {distinctUntilChanged, last} from "rxjs/operators";
   standalone: true
 })
 export class TransactionTableComponent {
-  constructor(private staffTransactionService: StaffTransactionService,
-              private formBuilder: FormBuilder) {
+  constructor(private staffTransactionService: StaffTransactionService) {
   }
   @Input() item_id: string | null = null
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -79,7 +77,7 @@ export class TransactionTableComponent {
 
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
-    const interactionIdControlValue = null // TODO
+    const interactionIdControlValue = this.searchForm.get('idControl')!.value;
 
     // Transactions
     if (pageEvent === null) {
