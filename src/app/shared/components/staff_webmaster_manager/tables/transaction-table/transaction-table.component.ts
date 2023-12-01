@@ -1,5 +1,5 @@
 import {Component, Input, ViewChild} from '@angular/core';
-import {Observable, of} from "rxjs";
+import {combineLatest, debounceTime, delay, interval, mergeAll, Observable, of, switchMap, takeLast} from "rxjs";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
 import {StaffTransactionI} from "../../../../models/staff/staff_transaction";
@@ -10,6 +10,7 @@ import {RouterLink} from "@angular/router";
 import {TransactionStatsI} from "../../../../models/stats/transactionStats";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {data} from "autoprefixer";
+import {distinctUntilChanged, last} from "rxjs/operators";
 
 @Component({
   selector: 'app-transaction-table',
@@ -52,6 +53,15 @@ export class TransactionTableComponent {
 
   ngOnInit() {
     this.LoadData();
+    this.searchForm.valueChanges.pipe(
+      delay(500),
+      distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
+      debounceTime(500)
+      //combineLatest
+    ).subscribe((value) => {
+      this.LoadData()
+      }
+    )
   }
 
   ngAfterViewInit() {
@@ -67,14 +77,18 @@ export class TransactionTableComponent {
   LoadData(pageEvent: PageEvent | null = null) {
     const status = this.selectedStatus === 'All' ? null: this.selectedStatus
 
+    // Form parsing
+    const emailControlValue = this.searchForm.get('emailControl')!.value;
+    const interactionIdControlValue = null // TODO
+
     // Transactions
     if (pageEvent === null) {
       this.transactionData$ = this.staffTransactionService.getTransactions(
-        0, 50, this.item_id, null, status)
+        0, 50, this.item_id, null, status, emailControlValue, interactionIdControlValue)
     } else {
       this.paginator!.pageIndex = pageEvent.pageIndex
       this.transactionData$ = this.staffTransactionService.getTransactions(
-        pageEvent.pageIndex * pageEvent.pageSize, pageEvent.pageSize, null, null, status)
+        pageEvent.pageIndex * pageEvent.pageSize, pageEvent.pageSize, null, null, status, emailControlValue, interactionIdControlValue)
     }
 
     // Transactionstats
@@ -116,16 +130,5 @@ export class TransactionTableComponent {
       return 'FAILED-text'
     }
     return ""
-  }
-
-  SortData(dataIn: StaffTransactionI[]): StaffTransactionI[] {
-    return dataIn.filter((transaction, index, array) => {
-      const emailControlValue = this.searchForm.get('emailControl')?.value;
-      let emailBool = true
-      if (emailControlValue !== null && emailControlValue !== undefined && emailControlValue !== '' && transaction.interaction.user_email) {
-        emailBool = transaction.interaction.user_email?.includes(emailControlValue)
-      }
-      return emailBool
-    })
   }
 }
