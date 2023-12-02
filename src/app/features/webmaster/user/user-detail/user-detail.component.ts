@@ -15,7 +15,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   $userDetail!: Observable<StaffUserDetailI>
-
+  user_id!: string
   ngOnInit() {
     // Fetch ID
     const id: string | null = this.route.snapshot.paramMap.get('id');
@@ -25,23 +25,15 @@ export class UserDetailComponent implements OnInit {
       // TODO Handle error
       return
     }
+    this.user_id = id;
 
-    this.$userDetail = this.staffUserService.getUser(id)
+    this.$userDetail = this.staffUserService.getUser(this.user_id)
   }
 
   RefetchUser(refetchUser: boolean) {
     if (!refetchUser) {
       return;
     }
-
-    // Fetch ID
-    const id: string | null = this.route.snapshot.paramMap.get('id');
-
-    // If ID is null
-    if (id === null) {
-      return
-    }
-
-    this.$userDetail = this.staffUserService.getUser(id)
+    this.$userDetail = this.staffUserService.getUser(this.user_id)
   }
 }
