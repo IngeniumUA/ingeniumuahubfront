@@ -34,9 +34,8 @@ export class TransactionTableComponent {
   constructor(private staffTransactionService: StaffTransactionService) {
   }
   @Input() item_id: string | null = null
+  @Input() user_id: string | null = null
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  displayedColumns = ["interaction_id", "user", "count", "amount", "status", "date_completed", "date_created"]
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
   statusStats$!: Observable<TransactionStatsI>
@@ -46,8 +45,22 @@ export class TransactionTableComponent {
 
   searchForm = new FormGroup({
     idControl: new FormControl(''),
-    emailControl: new FormControl('')
+    emailControl: new FormControl(''),
+    productNameControl: new FormControl('')
   })
+
+  GetDisplayedColumns(): string[] {
+    let columns = ["interaction_id", "count", "amount", "status", "product", "date_completed", "date_created"]
+
+    if (this.item_id === null) {
+      columns.splice(columns.indexOf('interaction_id'), 0, 'item')
+    }
+    if (this.user_id === null) {
+      columns.splice(columns.indexOf('interaction_id'), 0, 'user')
+    }
+
+    return columns
+  }
 
   ngOnInit() {
     this.LoadData();
@@ -78,16 +91,20 @@ export class TransactionTableComponent {
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
     const interactionIdControlValue = this.searchForm.get('idControl')!.value;
+    const productNameControlValue = this.searchForm.get('productNameControl')!.value;
 
-    // Transactions
-    if (pageEvent === null) {
-      this.transactionData$ = this.staffTransactionService.getTransactions(
-        0, 50, this.item_id, null, status, emailControlValue, interactionIdControlValue)
-    } else {
-      this.paginator!.pageIndex = pageEvent.pageIndex
-      this.transactionData$ = this.staffTransactionService.getTransactions(
-        pageEvent.pageIndex * pageEvent.pageSize, pageEvent.pageSize, null, null, status, emailControlValue, interactionIdControlValue)
-    }
+    const emailQuery = emailControlValue === '' ? null: emailControlValue;
+    const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
+    const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
+
+    // Page behaviour
+    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
+
+    // Transaction fetching
+    this.transactionData$ = this.staffTransactionService.getTransactions(
+      pageIndex * pageSize, pageSize, this.item_id, this.user_id, status,
+      emailQuery, interactionQuery, productNameQuery)
 
     // Transactionstats
     this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, null)
