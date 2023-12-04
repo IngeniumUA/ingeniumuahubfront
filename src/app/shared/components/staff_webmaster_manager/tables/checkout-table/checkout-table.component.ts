@@ -1,62 +1,59 @@
 import {Component, Input, ViewChild} from '@angular/core';
-import {debounceTime, delay, Observable, of} from "rxjs";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
-import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
+import {debounceTime, delay, Observable, of} from "rxjs";
+import {StatusStatsI} from "../../../../models/stats/transactionStats";
 import {StaffTransactionI} from "../../../../models/staff/staff_transaction";
-import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
+import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {distinctUntilChanged} from "rxjs/operators";
+import {StaffCheckoutService} from "../../../../../core/services/staff/staff-checkout.service";
+import {StaffCheckoutI} from "../../../../models/staff/staff_checkout";
+import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
 import {RouterLink} from "@angular/router";
-import {StatusStatsI} from "../../../../models/stats/transactionStats";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {distinctUntilChanged} from "rxjs/operators";
 
 @Component({
-  selector: 'app-transaction-table',
-  templateUrl: './transaction-table.component.html',
-  styleUrls: ['./transaction-table.component.scss'],
+  selector: 'app-checkout-table',
+  templateUrl: './checkout-table.component.html',
+  styleUrls: ['./checkout-table.component.scss'],
   imports: [
     AsyncPipe,
     DatePipe,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatTableModule,
-    NgIf,
-    RouterLink,
     NgForOf,
+    NgIf,
+    ReactiveFormsModule,
     NgClass,
-    NgStyle,
-    ReactiveFormsModule
+    RouterLink
   ],
   standalone: true
 })
-export class TransactionTableComponent {
-  constructor(private staffTransactionService: StaffTransactionService) {
+export class CheckoutTableComponent {
+
+  constructor(private staffCheckoutService: StaffCheckoutService) {
   }
-  @Input() item_id: string | null = null
   @Input() user_id: string | null = null
+  @Input() item_id: string | null = null
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
   statusStats$!: Observable<StatusStatsI>
   selectedStatus: string = 'All'
 
-  transactionData$: Observable<StaffTransactionI[]> = of([])
+  checkoutData$: Observable<StaffCheckoutI[]> = of([])
 
   searchForm = new FormGroup({
     idControl: new FormControl(''),
-    emailControl: new FormControl(''),
-    productNameControl: new FormControl('')
+    emailControl: new FormControl('')
   })
 
   GetDisplayedColumns(): string[] {
-    let columns = ["interaction_id", "count", "amount", "status", "product", "date_completed", "date_created"]
+    let columns = ["checkout_id", "amount", "status", "date_completed", "date_created"]
 
-    if (this.item_id === null) {
-      columns.splice(columns.indexOf('interaction_id'), 0, 'item')
-    }
     if (this.user_id === null) {
-      columns.splice(columns.indexOf('interaction_id'), 0, 'user')
+      columns.splice(columns.indexOf('amount'), 0, 'user')
     }
 
     return columns
@@ -70,7 +67,7 @@ export class TransactionTableComponent {
       debounceTime(500)
       //combineLatest
     ).subscribe((value) => {
-      this.LoadData()
+        this.LoadData()
       }
     )
   }
@@ -90,24 +87,22 @@ export class TransactionTableComponent {
 
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
-    const interactionIdControlValue = this.searchForm.get('idControl')!.value;
-    const productNameControlValue = this.searchForm.get('productNameControl')!.value;
+    const checkoutIdControlValue = this.searchForm.get('idControl')!.value;
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
-    const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
-    const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
+    const checkoutIdQuery = checkoutIdControlValue === '' ? null: checkoutIdControlValue;
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
-    this.transactionData$ = this.staffTransactionService.getTransactions(
+    this.checkoutData$ = this.staffCheckoutService.getCheckouts(
       pageIndex * pageSize, pageSize, this.item_id, this.user_id, status,
-      emailQuery, interactionQuery, productNameQuery)
+      emailQuery, checkoutIdQuery)
 
     // Transactionstats
-    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, null)
+    this.statusStats$ = this.staffCheckoutService.getCheckoutStats(this.item_id, null)
   }
 
   SwitchStatusFilter(status: string) {

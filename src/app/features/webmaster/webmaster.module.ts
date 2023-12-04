@@ -55,6 +55,9 @@ import { ProductWebmasterPageComponent } from './product/product-webmaster-page/
 import {
     ProductBlueprintDetailComponent
 } from "../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component";
+import {
+    CheckoutAndTransactionDashboardComponent
+} from "../../shared/components/staff_webmaster_manager/dashboards/checkout-and-transaction-dashboard/checkout-and-transaction-dashboard.component";
 
 
 @NgModule({
@@ -88,7 +91,8 @@ import {
         AccessPolicyDetailComponent,
         ItemCreateComponent,
         ProductBlueprintCreateComponent,
-        ProductBlueprintDetailComponent
+        ProductBlueprintDetailComponent,
+        CheckoutAndTransactionDashboardComponent
     ]
 })
 export class WebmasterModule { }

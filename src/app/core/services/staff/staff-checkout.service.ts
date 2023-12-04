@@ -5,23 +5,23 @@ import {apiEnviroment} from "../../../../environments/environment";
 import {StaffUserDetailI} from "../../../shared/models/staff/staff_user_detail";
 import {StaffTransactionI} from "../../../shared/models/staff/staff_transaction";
 import {StatusStatsI} from "../../../shared/models/stats/transactionStats";
+import {StaffCheckoutI} from "../../../shared/models/staff/staff_checkout";
 
 @Injectable({
   providedIn: 'root'
 })
-export class StaffTransactionService {
+export class StaffCheckoutService {
   constructor(private httpClient: HttpClient) {
   }
 
-  apiUrl = apiEnviroment.apiUrl + "staff/transaction";
+  apiUrl = apiEnviroment.apiUrl + "staff/checkout";
 
-  public getTransactions(offset: number = 0, count: number = 50,
-                         item_id: string | null = null,
-                         user_id: string | null = null,
-                         status: string | null = null,
-                         user_email: string | null = null,
-                         interaction_id: string | null = null,
-                         product: string | null = null): Observable<StaffTransactionI[]> {
+  public getCheckouts(offset: number = 0, count: number = 50,
+                      item_id: string | null = null,
+                      user_id: string | null = null,
+                      status: string | null = null,
+                      user_email: string | null = null,
+                      checkout_id: string | null = null): Observable<StaffCheckoutI[]> {
     let query_str = "?offset=" + offset.toString() + "&limit=" + count.toString()
     if (item_id !== null) {
       query_str += "&item_id="+item_id;
@@ -35,20 +35,17 @@ export class StaffTransactionService {
     if (user_email !== null) {
       query_str += "&user_email="+user_email;
     }
-    if (interaction_id !== null) {
-      query_str += "&interaction_id="+interaction_id;
-    }
-    if (product !== null) {
-      query_str += "&product=" + product
+    if (checkout_id !== null) {
+      query_str += "&checkout_id=" + checkout_id
     }
 
-    return this.httpClient.get<StaffTransactionI[]>(
+    return this.httpClient.get<StaffCheckoutI[]>(
       this.apiUrl + query_str)
   };
 
-  public getTransactionStats(
-                         item_id: string | null = null,
-                         user_id: string | null = null): Observable<StatusStatsI> {
+  public getCheckoutStats(
+    item_id: string | null = null,
+    user_id: string | null = null): Observable<StatusStatsI> {
     let query_str = "?"
     if (item_id !== null) {
       query_str += "&item_id="+item_id;

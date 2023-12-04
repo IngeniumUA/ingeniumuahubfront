@@ -1,4 +1,4 @@
-export interface TransactionStatsI {
+export interface StatusStatsI {
   ALL: number
   SUCCESSFUL: number
   FAILED: number

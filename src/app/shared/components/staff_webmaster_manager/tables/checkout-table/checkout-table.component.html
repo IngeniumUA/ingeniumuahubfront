@@ -1,0 +1,91 @@
+<section>
+  <ng-container  *ngIf="statusStats$ | async as statusStats">
+    <div class="flex flex-row gap-2 max-w-full mt-2 mb-2">
+      <button *ngFor="let status of this.statusFilters"
+              class="status-selector-button"
+              [ngClass]="status === this.selectedStatus ? 'status-button-selected': ''"
+              (click)="SwitchStatusFilter(status)"
+      >
+        <span [ngClass]="status === this.selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'">{{ status }}</span>
+        <span class="font-bold">{{ StatusToStats(status, statusStats) }}</span>
+      </button>
+    </div>
+
+    <h2>Checkouts Table</h2>
+    <ng-container *ngIf="(this.checkoutData$ | async) as checkoutTable else loading">
+      <mat-paginator
+        [length]="StatusToStats(this.selectedStatus, statusStats)"
+        [pageSize]="100"
+        (page)="LoadData($event)"
+        showFirstLastButtons
+        aria-label="Select which cards">
+      </mat-paginator>
+
+      <table mat-table [dataSource]="checkoutTable" class="mat-elevation-z8">
+        <form [formGroup]="this.searchForm">
+
+          <ng-container matColumnDef="checkout_id">
+            <th mat-header-cell *matHeaderCellDef>
+              <div>
+                ID
+                <input class="w-3/4" type="text" placeholder="ID" [formControlName]="'idControl'">
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let checkout"> {{ checkout.id }} </td>
+          </ng-container>
+
+          <ng-container *ngIf="user_id===null" matColumnDef="user">
+            <th mat-header-cell *matHeaderCellDef>
+              <div>
+                User
+                <input type="text" placeholder="Email" [formControlName]="'emailControl'">
+              </div>
+            </th>
+            <td mat-cell *matCellDef="let checkout"><a [routerLink]="['../../user/'+checkout.user_id ]">
+              <ng-container *ngIf="checkout.user_email !== null">{{ checkout.user_email }}</ng-container>
+              <ng-container *ngIf="checkout.user_email === null">{{ checkout.user_id }}</ng-container>
+            </a></td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef><div>Amount</div></th>
+            <td mat-cell *matCellDef="let checkout"> {{ checkout.amount }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef><div>Status</div></th>
+            <td mat-cell *matCellDef="let checkout">
+              <p
+                [ngClass]="StyleClassFromStatus(checkout.status)"
+              >{{ checkout.status.toLowerCase() }}</p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date_completed">
+            <th mat-header-cell *matHeaderCellDef><div>Date Finished</div></th>
+            <td mat-cell *matCellDef="let checkout"> {{ checkout.date_completed | date: 'dd/MM/yyyy h:mm:ss' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date_created">
+            <th mat-header-cell *matHeaderCellDef><div>Date Created</div></th>
+            <td mat-cell *matCellDef="let checkout"> {{ checkout.date_created | date: 'dd/MM/yyyy HH:mm:ss' }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="GetDisplayedColumns()"></tr>
+          <tr mat-row *matRowDef="let row; columns: GetDisplayedColumns();"></tr>
+
+        </form>
+      </table>
+
+      <span *ngIf="checkoutTable.length === 0">Nothing to display</span>
+    </ng-container>
+  </ng-container>
+</section>
+
+<ng-template #noItems>Nothing to display</ng-template>
+
+<ng-template #loading>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
