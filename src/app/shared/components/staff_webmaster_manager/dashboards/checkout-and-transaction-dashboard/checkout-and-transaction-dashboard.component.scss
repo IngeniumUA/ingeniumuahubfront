@@ -1,0 +1,11 @@
+.table-selector {
+  @apply flex flex-row gap-1;
+}
+
+.table-selected {
+  @apply text-blue-900 font-bold cursor-pointer
+}
+
+.table-unselected {
+  @apply text-ingenium-grey-500 cursor-pointer
+}

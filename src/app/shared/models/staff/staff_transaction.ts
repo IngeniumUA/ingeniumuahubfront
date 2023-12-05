@@ -6,6 +6,7 @@ export interface StaffInteractionI {
   user_email: string | null
   interaction_type: string
   item_id: string
+  item_name: string | null
   date_created: string
 }
 

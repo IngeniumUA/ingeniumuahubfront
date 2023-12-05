@@ -17,10 +17,11 @@ section p {
 
 /* Lidkaart */
 .gold-button {
-  height: 1.75rem;
-  width: 12rem;
+  height: 2.75rem;
+  min-width: 16rem;
+  max-width: 18rem;
 
-  border-radius: 5px;
+  border-radius: 8px;
   border: none;
   background: linear-gradient(#CB841C, #FFE76C);
 
@@ -31,9 +32,11 @@ section p {
   gap: 0;
 }
 
-.gold-button h4 {
+.gold-button h3, .gold-button h4 {
   padding: 0;
+  width: auto;
   color: var(--mainblue);
+  font-weight: bold;
 }
 
 /* Account */

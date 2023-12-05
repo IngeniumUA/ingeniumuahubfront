@@ -1,0 +1,17 @@
+<section class="table-selector">
+  <h3 [ngClass]="StyleFromTablename('checkouts')" class="table-name" (click)="SetTable('checkouts')">Checkouts</h3>
+  <h3 [ngClass]="StyleFromTablename('transactions')" class="table-name" (click)="SetTable('transactions')">Transactions</h3>
+  <h3 [ngClass]="StyleFromTablename('refunds')" class="table-name" (click)="SetTable('refunds')">Refunds</h3>
+</section>
+
+<section>
+  <ng-container *ngIf="selectedTable === 'transactions'">
+    <app-transaction-table [user_id]="user_id" [item_id]="item_id"></app-transaction-table>
+  </ng-container>
+  <ng-container *ngIf="selectedTable === 'checkouts'">
+    <app-checkout-table [user_id]="user_id" [item_id]="item_id"></app-checkout-table>
+  </ng-container>
+  <ng-container *ngIf="selectedTable === 'refunds'">
+    Uh, nee, stop it
+  </ng-container>
+</section>
