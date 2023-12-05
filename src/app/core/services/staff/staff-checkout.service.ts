@@ -5,7 +5,7 @@ import {apiEnviroment} from "../../../../environments/environment";
 import {StaffUserDetailI} from "../../../shared/models/staff/staff_user_detail";
 import {StaffTransactionI} from "../../../shared/models/staff/staff_transaction";
 import {StatusStatsI} from "../../../shared/models/stats/transactionStats";
-import {StaffCheckoutI} from "../../../shared/models/staff/staff_checkout";
+import {StaffCheckoutI, StaffCheckoutPatchI} from "../../../shared/models/staff/staff_checkout";
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +57,9 @@ export class StaffCheckoutService {
     return this.httpClient.get<StatusStatsI>(
       this.apiUrl + '/stats' + query_str)
   };
+
+  public patchCheckout(checkout_id: string, patchObj: StaffCheckoutPatchI): Observable<StaffCheckoutI> {
+    return this.httpClient.patch<StaffCheckoutI>(this.apiUrl + '/' + checkout_id, patchObj)
+  }
 
 }

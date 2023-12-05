@@ -2,11 +2,10 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {StatusStatsI} from "../../../../models/stats/transactionStats";
-import {StaffTransactionI} from "../../../../models/staff/staff_transaction";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {distinctUntilChanged} from "rxjs/operators";
 import {StaffCheckoutService} from "../../../../../core/services/staff/staff-checkout.service";
-import {StaffCheckoutI} from "../../../../models/staff/staff_checkout";
+import {StaffCheckoutI, StaffCheckoutPatchI} from "../../../../models/staff/staff_checkout";
 import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
@@ -140,5 +139,22 @@ export class CheckoutTableComponent {
       return 'FAILED-text'
     }
     return ""
+  }
+
+  CancelCheckout(checkout_id: string) {
+    const patchObj: StaffCheckoutPatchI = {
+      status: 'CANCELLED'
+    }
+    this.staffCheckoutService.patchCheckout(checkout_id, patchObj).subscribe({
+      next: () => {
+        // Refetch data on complete
+        // This could replace the specific checkout in data
+        // But it would be a bit harder because we subscribe to the data in template
+        this.LoadData()
+    },
+      error: err => {
+        console.log(err)
+      }
+    })
   }
 }

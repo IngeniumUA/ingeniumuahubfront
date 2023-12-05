@@ -15,3 +15,7 @@ export interface StaffCheckoutI {
 
   payment_providor: string
 }
+
+export interface StaffCheckoutPatchI {
+  status: string | null
+}
