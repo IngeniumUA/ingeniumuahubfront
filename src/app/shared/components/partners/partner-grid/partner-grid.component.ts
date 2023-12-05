@@ -30,7 +30,7 @@ export class PartnerGridComponent {
 
   partners: Observable<PartnerDisplay[]> = of([
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/umicore.webp"},
-    {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/sparklink.webp"},
+    {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/sparklink_logo.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/sweco.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/bdo.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/willemen_infra.webp"},
