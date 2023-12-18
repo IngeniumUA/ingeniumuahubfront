@@ -50,7 +50,7 @@ export class TransactionTableComponent {
   })
 
   GetDisplayedColumns(): string[] {
-    let columns = ["interaction_id", "count", "amount", "status", "product", "date_completed", "date_created"]
+    let columns = ["interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"]
 
     if (this.item_id === null) {
       columns.splice(columns.indexOf('interaction_id'), 0, 'item')
