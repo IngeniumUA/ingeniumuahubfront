@@ -24,6 +24,13 @@
     <table mat-table [dataSource]="transactionTable" class="mat-elevation-z8">
     <form [formGroup]="this.searchForm">
 
+      <ng-container matColumnDef="checkout_id">
+        <th mat-header-cell *matHeaderCellDef>Checkout</th>
+        <td mat-cell *matCellDef="let transaction">
+          <a [routerLink]="['../../user/'+transaction.interaction.user_id ]">{{ transaction.checkout_id }}</a>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="interaction_id">
         <th mat-header-cell *matHeaderCellDef>
           <div>
