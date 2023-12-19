@@ -7,6 +7,7 @@ import {Observable, of} from "rxjs";
 import {StaffItemService} from "../../../../../core/services/staff/items/staff_item_router";
 import {StaffItemCreateI} from "../../../../models/staff/staff_item_details";
 import {first} from "rxjs/operators";
+import {ValidURLCharacters} from "../../../../validators/ValidUrlCharacters";
 
 @Component({
   selector: 'app-item-create',
@@ -31,7 +32,7 @@ export class ItemCreateComponent implements OnInit {
   eventTypeControl = new FormControl<string>('none');
 
   itemCreateForm = this.formBuilder.group({
-    itemName: ['', Validators.required],
+    itemName: ['', [Validators.required, ValidURLCharacters()]],
     itemDescription: ['', Validators.required],
 
     eventStartDate: ['', Validators.required],

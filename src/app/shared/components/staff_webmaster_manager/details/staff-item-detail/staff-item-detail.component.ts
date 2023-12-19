@@ -4,6 +4,7 @@ import {DatePipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {DisplayMixinDetailComponent} from "../display-mixin-detail/display-mixin-detail.component";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
+import {ValidURLCharacters} from "../../../../validators/ValidUrlCharacters";
 
 @Component({
   selector: 'app-staff-item-detail',
@@ -45,7 +46,7 @@ export class StaffItemDetailComponent {
 
     // Setting up form
     this.itemForm = this.formBuilder.group({
-      name: [this.item.item.name, Validators.required],
+      name: [this.item.item.name, [Validators.required, ValidURLCharacters()]],
       description: [this.item.item.description],
       available: [this.item.item.available, Validators.required],
       disabled: [this.item.item.disabled, Validators.required],
