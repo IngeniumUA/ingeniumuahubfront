@@ -10,23 +10,25 @@ import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatTableModule} from "@angular/material/table";
 import {RouterLink} from "@angular/router";
+import {CurrencyPipe} from "../../../../pipes/currency.pipe";
 
 @Component({
   selector: 'app-checkout-table',
   templateUrl: './checkout-table.component.html',
   styleUrls: ['./checkout-table.component.scss'],
-  imports: [
-    AsyncPipe,
-    DatePipe,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule,
-    NgClass,
-    RouterLink
-  ],
+    imports: [
+        AsyncPipe,
+        DatePipe,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatTableModule,
+        NgForOf,
+        NgIf,
+        ReactiveFormsModule,
+        NgClass,
+        RouterLink,
+        CurrencyPipe
+    ],
   standalone: true
 })
 export class CheckoutTableComponent {

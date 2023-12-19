@@ -10,6 +10,7 @@ import {RouterLink} from "@angular/router";
 import {StatusStatsI} from "../../../../models/stats/transactionStats";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {distinctUntilChanged} from "rxjs/operators";
+import {CurrencyPipe} from "../../../../pipes/currency.pipe";
 
 @Component({
   selector: 'app-transaction-table',
@@ -26,7 +27,8 @@ import {distinctUntilChanged} from "rxjs/operators";
     NgForOf,
     NgClass,
     NgStyle,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CurrencyPipe
   ],
   standalone: true
 })
