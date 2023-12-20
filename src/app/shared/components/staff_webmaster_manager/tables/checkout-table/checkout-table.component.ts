@@ -103,7 +103,7 @@ export class CheckoutTableComponent {
       emailQuery, checkoutIdQuery)
 
     // Transactionstats
-    this.statusStats$ = this.staffCheckoutService.getCheckoutStats(this.item_id, null)
+    this.statusStats$ = this.staffCheckoutService.getCheckoutStats(this.item_id, this.user_id)
   }
 
   SwitchStatusFilter(status: string) {
