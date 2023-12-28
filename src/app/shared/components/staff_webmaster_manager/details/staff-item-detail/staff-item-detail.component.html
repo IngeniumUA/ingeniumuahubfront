@@ -69,6 +69,11 @@
 
 <section>
   <h2>Update Item</h2>
+
+  <p *ngIf="form_error !== null" class="error-message">
+    {{ form_error }}
+  </p>
+
   <button class="button button-primary button-inline"
           (click)="onSubmit()"
           [disabled]="this.loading"
