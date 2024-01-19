@@ -60,6 +60,7 @@ export class PartnerGridComponent {
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/cordeel.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/elia.webp"},
     {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/process_automation_solutions.webp"},
+    {name: "", logo: "https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/23_24/lantis.webp"}
   ])
 
 }
