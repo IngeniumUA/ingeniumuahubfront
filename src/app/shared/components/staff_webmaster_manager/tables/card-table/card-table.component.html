@@ -1,70 +1,92 @@
-<h2>Kaarten table</h2>
+<section>
+  <ng-container *ngIf="this.cardStats$ | async as cardStats">
+  <h2>Kaarten table</h2>
 
-<mat-paginator
-  [length]="1000"
-  [pageSize]="50"
-  (page)="LoadData($event)"
-  showFirstLastButtons
-  aria-label="Select which cards">
-</mat-paginator>
-<ng-container *ngIf="(this.cards$ | async) as cards else loading">
-  <mat-table [dataSource]="cards">
-    <!-- uuid Column -->
-    <ng-container matColumnDef="id" *ngIf="!(this.isMobile$ | async)">
-      <th mat-header-cell *matHeaderCellDef> ID </th>
-      <td mat-cell *matCellDef="let card"> {{ card.id }}</td>
-      <!--<td mat-cell *matCellDef="let item"><a [routerLink]="[item.item.uuid]"> {{ item.item.uuid }}</a></td>-->
-    </ng-container>
+  <mat-paginator
+    [length]="cardStats.total"
+    [pageSize]="100"
+    (page)="LoadData($event)"
+    showFirstLastButtons
+    aria-label="Select which cards">
+  </mat-paginator>
+  <ng-container *ngIf="(this.cards$ | async) as cards else loading">
+    <table mat-table [dataSource]="cards" class="mat-elevation-z8">
+    <form [formGroup]="this.searchForm">
+      <!-- uuid Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let card"> {{ card.id }}</td>
+        <!--<td mat-cell *matCellDef="let item"><a [routerLink]="[item.item.uuid]"> {{ item.item.uuid }}</a></td>-->
+      </ng-container>
 
-    <ng-container matColumnDef="academic_year">
-      <th mat-header-cell *matHeaderCellDef> Academic Year </th>
-      <td mat-cell *matCellDef="let card"> {{ card.academic_year }}</td>
-    </ng-container>
+      <ng-container matColumnDef="academic_year">
+        <th mat-header-cell *matHeaderCellDef> Academic Year </th>
+        <td mat-cell *matCellDef="let card"> {{ card.academic_year }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="card_type">
-      <th mat-header-cell *matHeaderCellDef> Card type </th>
-      <td mat-cell *matCellDef="let card"> {{ card.card_type }}</td>
-    </ng-container>
+      <ng-container matColumnDef="card_type">
+        <th mat-header-cell *matHeaderCellDef>
+          <div>
+            Cardtype
+            <input class="w-3/4" type="text" placeholder="type" [formControlName]="'cardTypeControl'">
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let card"> {{ card.card_type }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="card_nr">
-      <th mat-header-cell *matHeaderCellDef> Card nr </th>
-      <td mat-cell *matCellDef="let card"> {{ card.card_nr }}</td>
-    </ng-container>
+      <ng-container matColumnDef="card_nr">
+        <th mat-header-cell *matHeaderCellDef>
+          <div>
+            Card nr
+            <input class="w-3/4" type="text" placeholder="nr" [formControlName]="'cardNrControl'">
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let card"> {{ card.card_nr }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="user_id">
-      <th mat-header-cell *matHeaderCellDef> User </th>
-      <td mat-cell *matCellDef="let card">
-        <a *ngIf="card.user_id !== 'None'" [routerLink]="['/web/user/'+card.user_id]"> {{ card.user_id }}</a>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef>
+          <div>
+            User
+            <input class="w-3/4" type="text" placeholder="user" [formControlName]="'userControl'">
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let card">
+          <ng-container *ngIf="card.user_id !== 'None'">
+            <a [routerLink]="['/web/user/'+card.user_id]"> {{ card.user_email }}</a>
+          </ng-container>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="linked_date">
-      <th mat-header-cell *matHeaderCellDef> Linked at </th>
-      <td mat-cell *matCellDef="let card"> {{ card.linked_date | date }}</td>
-    </ng-container>
+      <ng-container matColumnDef="linked_date">
+        <th mat-header-cell *matHeaderCellDef> Linked at </th>
+        <td mat-cell *matCellDef="let card"> {{ card.linked_date | date }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="last_edited">
-      <th mat-header-cell *matHeaderCellDef> Last edited </th>
-      <td mat-cell *matCellDef="let card"> {{ card.last_edited | date }}</td>
-    </ng-container>
+      <ng-container matColumnDef="last_edited">
+        <th mat-header-cell *matHeaderCellDef> Last edited </th>
+        <td mat-cell *matCellDef="let card"> {{ card.last_edited | date }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="card_item" *ngIf="!(this.isMobile$ | async)">
-      <th mat-header-cell *matHeaderCellDef> Card Item </th>
-      <td mat-cell *matCellDef="let card"> <a [routerLink]="['/web/item/'+card.card_item]"> {{ card.card_item }}</a></td>
-    </ng-container>
+      <ng-container matColumnDef="card_item" *ngIf="!(this.isMobile$ | async)">
+        <th mat-header-cell *matHeaderCellDef> Card Item </th>
+        <td mat-cell *matCellDef="let card"> <a [routerLink]="['/web/item/'+card.card_item]"> {{ card.card_item }}</a></td>
+      </ng-container>
 
-    <ng-container matColumnDef="unlink_button">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let card">
-          <button *ngIf="card.user_id !== 'None'" (click)="UnlinkCard(card)" class="hubbutton-blue" style="background-color: var(--error-red)">Unlink</button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="unlink_button">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let card">
+            <button *ngIf="card.user_id !== 'None'" (click)="UnlinkCard(card)" class="hubbutton-blue" style="background-color: var(--error-red)">Unlink</button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </mat-table>
-</ng-container>
-
+      <tr mat-header-row *matHeaderRowDef="GetDisplayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: GetDisplayedColumns()"></tr>
+    </form>
+    </table>
+  </ng-container>
+  </ng-container>
+</section>
 <ng-template #loading>
   <div class="spinner-container">
     <mat-spinner></mat-spinner>

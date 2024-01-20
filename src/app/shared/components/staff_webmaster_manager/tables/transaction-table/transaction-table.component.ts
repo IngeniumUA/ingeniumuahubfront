@@ -10,6 +10,7 @@ import {RouterLink} from "@angular/router";
 import {StatusStatsI} from "../../../../models/stats/transactionStats";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {distinctUntilChanged} from "rxjs/operators";
+import {CurrencyPipe} from "../../../../pipes/currency.pipe";
 
 @Component({
   selector: 'app-transaction-table',
@@ -26,7 +27,8 @@ import {distinctUntilChanged} from "rxjs/operators";
     NgForOf,
     NgClass,
     NgStyle,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CurrencyPipe
   ],
   standalone: true
 })
@@ -50,7 +52,7 @@ export class TransactionTableComponent {
   })
 
   GetDisplayedColumns(): string[] {
-    let columns = ["interaction_id", "count", "amount", "status", "product", "date_completed", "date_created"]
+    let columns = ["checkout_id", "interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"]
 
     if (this.item_id === null) {
       columns.splice(columns.indexOf('interaction_id'), 0, 'item')

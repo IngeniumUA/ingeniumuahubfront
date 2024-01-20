@@ -22,6 +22,8 @@ export interface StaffTransactionI {
   status: string
   checkout_id: string
 
+  validity: string
+
   date_created: string
   date_completed: string
 }

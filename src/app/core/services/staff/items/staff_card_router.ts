@@ -12,10 +12,51 @@ export class StaffCardService {
 
   apiUrl = apiEnviroment.apiUrl + "staff/card";
 
-  public getCards(offset: number = 0, count: number = 50): Observable<StaffCardDetailI[]> {
+  public getCards(offset: number = 0, count: number = 50,
+                  user: string | null = null,
+                  card_type: string | null = null, card_nr: string | null,
+                  academic_year: string | null = null
+                  ): Observable<StaffCardDetailI[]> {
+    let query_str = "?offset=" + offset.toString() + "&limit=" + count.toString()
+    if (card_type !== null) {
+      query_str += "&card_type=" + card_type.toString()
+    }
+    if (card_nr !== null) {
+      query_str += "&card_nr=" + card_nr.toString()
+    }
+    if (academic_year !== null) {
+      query_str += "&academic_year=" + academic_year.toString()
+    }
+    if (user !== null) {
+      query_str += "&user=" + user.toString()
+    }
     return this.httpClient.get<StaffCardDetailI[]>
-    (this.apiUrl + "?offset=" + offset.toString() + "&limit=" + count.toString())
+    (this.apiUrl + query_str)
   };
+  public getCardStats(offset: number = 0, count: number = 50,
+                      user: string | null = null,
+                      card_type: string | null = null, card_nr: string | null,
+                      academic_year: string | null = null
+  ): Observable<any> {
+    let query_str = "?offset=" + offset.toString() + "&limit=" + count.toString()
+    if (card_type !== null) {
+      query_str += "&card_type=" + card_type.toString()
+    }
+    if (card_nr !== null) {
+      query_str += "&card_nr=" + card_nr.toString()
+    }
+    if (academic_year !== null) {
+      query_str += "&academic_year=" + academic_year.toString()
+    }
+    if (user !== null) {
+      query_str += "&user=" + user.toString()
+    }
+    return this.httpClient.get<any>
+    (this.apiUrl + "/stats" + query_str)
+  };
+
+
+
   public getCard(CardId: string): Observable<StaffCardDetailI> {
     return this.httpClient.get<StaffCardDetailI>(this.apiUrl + "/" + CardId);
   };
@@ -28,6 +69,7 @@ export class StaffCardService {
       id: card.id,
       academic_year: card.academic_year,
       user_id: null,
+      user_email: null,
       card_type: card.card_type,
       card_nr: card.card_nr,
       linked_date: null,

@@ -12,10 +12,36 @@ export class StaffUserService {
 
   apiUrl = apiEnviroment.apiUrl + "staff/user";
 
-  public getUsers(offset: number = 0, count: number = 50): Observable<StaffUserDetailI[]> {
+  public getUsers(offset: number = 0, count: number = 50,
+                  user: string | null = null,
+                  user_email: string | null = null
+                  ): Observable<StaffUserDetailI[]> {
+    let query_str = "?offset=" + offset.toString() + "&limit=" + count.toString()
+    if (user !== null) {
+      query_str += "&user=" + user.toString()
+    }
+    if (user_email !== null) {
+      query_str += "&user_email=" + user_email.toString()
+    }
     return this.httpClient.get<StaffUserDetailI[]>(
-        this.apiUrl + "?offset=" + offset.toString() + "&limit=" + count.toString())
+        this.apiUrl + query_str)
   };
+
+  public getUserStats(offset: number = 0, count: number = 50,
+                      user: string | null = null,
+                      user_email: string | null = null
+  ): Observable<number> {
+    let query_str = "?offset=" + offset.toString() + "&limit=" + count.toString()
+    if (user !== null) {
+      query_str += "&user=" + user.toString()
+    }
+    if (user_email !== null) {
+      query_str += "&user_email=" + user_email.toString()
+    }
+    return this.httpClient.get<number>(
+        this.apiUrl + "/stats" + query_str)
+  }
+
   public getUser(userId: string): Observable<StaffUserDetailI> {
     return this.httpClient.get<StaffUserDetailI>(this.apiUrl + "/" + userId);
   };
