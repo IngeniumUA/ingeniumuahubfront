@@ -30,7 +30,7 @@ export class StaffTransactionService {
       query_str += "&user_id="+user_id;
     }
     if (status !== null) {
-      query_str += "&status="+status.toUpperCase();
+      query_str += "&transaction_status="+status.toUpperCase();
     }
     if (user_email !== null) {
       query_str += "&user_email="+user_email;
