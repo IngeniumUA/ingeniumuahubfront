@@ -19,6 +19,7 @@ import {RegisterComponent} from "./shared/components/auth/register/register.comp
 import {PartnersInfoComponent} from "./features/public/info/partners/partners-info.component";
 import {webmasterGuard} from "./core/guards/webmaster.guard";
 import {managerGuard} from "./core/guards/manager.guard";
+import {GalabalComponent} from "./features/public/custom-pages/galabal/galabal.component";
 
 
 const routes: Routes = [
@@ -58,6 +59,10 @@ const routes: Routes = [
     {path: 'account',
       loadChildren: () => import('src/app/features/public/account/account.module').then(x => x.AccountModule),
       canActivate: [authGuard]},
+
+    // Custom pages
+    {path: 'ingenium-galabal', component: GalabalComponent},
+    {path: 'galabal', component: GalabalComponent}
   ]},
 
   // POP-UP Z
