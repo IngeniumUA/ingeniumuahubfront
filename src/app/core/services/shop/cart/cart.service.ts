@@ -44,16 +44,20 @@ export class CartService {
 
       if (product === undefined) return sourceEquality
 
-      return sourceEquality && (value.product.name === product.name) && (value.product_meta.popupz_opties === product.product_meta.popupz_opties)
+      return sourceEquality &&
+        (value.product.name === product.name) &&
+        (value.product.price_eu === product.price_eu) &&
+        (value.product_meta.popupz_opties === product.product_meta.popupz_opties)
     })
 
     return boolMap.includes(true);
   }
   private getTransactionIndex(source: ItemI, product: IProductItem): number {
     const boolMap = this.transactionArray.map(value => {
-      return value.sourceItemName === source.name &&
-        value.product.name === product.name &&
-        value.product_meta.popupz_opties === product.product_meta.popupz_opties;
+      return (value.sourceItemName === source.name) &&
+        (value.product.name === product.name) &&
+        (value.product.price_eu === product.price_eu) &&
+        (value.product_meta.popupz_opties === product.product_meta.popupz_opties);
     })
 
     return boolMap.indexOf(true);
@@ -108,7 +112,7 @@ export class CartService {
 
       if (product === undefined) return sourceEquality
 
-      return sourceEquality && (value.product.name === product.name)
+      return sourceEquality && (value.product.name === product.name) && (value.product.price_eu === product.price_eu)
     });
 
     let index = 0;
