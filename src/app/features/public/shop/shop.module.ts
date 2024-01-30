@@ -19,6 +19,9 @@ import { ShopDetailComponent } from './shop-detail/shop-detail.component';
 import {ProductComponent} from "../../../shared/components/items/products/product/product.component";
 import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
 import { StripePaymentComponent } from './pay/stripe-payment/stripe-payment.component';
+import {
+    CheckoutDisplayComponent
+} from "../../../shared/components/account/transaction-display/checkout-display.component";
 
 
 @NgModule({
@@ -29,18 +32,19 @@ import { StripePaymentComponent } from './pay/stripe-payment/stripe-payment.comp
     ShopDetailComponent,
     StripePaymentComponent,
   ],
-  imports: [
-    CommonModule,
-    NgxStripeModule.forRoot("pk_live_nJtVFe7oRy6CCy9EEK8OKeFu"),
-    ShopRoutingModule,
-    ShoppingcartListComponent,
-    PublicHeaderComponent,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    UnderConstructionComponent,
-    RecSysItemPreviewComponent,
-    ProductComponent,
-    ColordbrgbaPipe,
-  ]
+    imports: [
+        CommonModule,
+        NgxStripeModule.forRoot("pk_live_nJtVFe7oRy6CCy9EEK8OKeFu"),
+        ShopRoutingModule,
+        ShoppingcartListComponent,
+        PublicHeaderComponent,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        UnderConstructionComponent,
+        RecSysItemPreviewComponent,
+        ProductComponent,
+        ColordbrgbaPipe,
+        CheckoutDisplayComponent,
+    ]
 })
 export class ShopModule { }

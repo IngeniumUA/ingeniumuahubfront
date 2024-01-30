@@ -1,5 +1,11 @@
 <app-layout-public-header></app-layout-public-header>
 
+<section [ngClass]="{'checkout-desktop': (this.isMobile | async)}">
+  <!-- Checkout Aanvragen van API
+  <app-checkout-display></app-checkout-display>
+  -->
+</section>
+
 <ng-container *ngIf="this.devPayment">
   <button (click)="this.doDevPayment()" class="button button-primary">Betalen (development)</button>
 </ng-container>

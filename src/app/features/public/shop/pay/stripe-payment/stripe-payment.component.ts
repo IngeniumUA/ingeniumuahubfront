@@ -42,7 +42,6 @@ export class StripePaymentComponent implements OnInit {
         }
       }).subscribe((result) => {
         this.paying = false;
-        console.log('Result', result);
         if (result.error) {
           // Show error to your customer (e.g., insufficient funds)
           alert({ success: false, error: result.error.message });

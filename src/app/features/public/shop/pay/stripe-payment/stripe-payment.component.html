@@ -3,6 +3,6 @@
   <ng-container *ngIf="elementsOptions?.clientSecret as clientSecret">
     <ngx-stripe-payment [clientSecret]="clientSecret">
     </ngx-stripe-payment>
+    <button (click)="stripePay()" class="button button-primary">Betalen</button>
   </ng-container>
-  <button (click)="stripePay()" class="button button-primary">Betalen</button>
 </div>
