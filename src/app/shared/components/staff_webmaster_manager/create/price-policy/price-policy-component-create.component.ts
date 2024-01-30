@@ -46,6 +46,8 @@ export class PricePolicyComponentCreate {
         method: this.form.controls['method'].value!,
         content: {}
       },
+      allow_invalid_access: false,
+      always_available: false,
       update_fields: null
     }
 
