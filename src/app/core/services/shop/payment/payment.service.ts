@@ -23,7 +23,7 @@ export class PaymentService {
       return {product: value.product, count: value.count}
     })
 
-    // return of({checkout_id:'pi_3NsBZYBSXssFMR3b2Cn7rhc1_secret_iLgROlVAsYtMNpcHJYvBiCvDm', payment_providor:'dev'})
+    // Post transaction to API
     return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + "interact/checkout", api_transactions).pipe(
       tap(_ => this.cartService.clear())
     )
