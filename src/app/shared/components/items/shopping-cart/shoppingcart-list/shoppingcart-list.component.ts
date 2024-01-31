@@ -6,6 +6,7 @@ import {ProductComponent} from "../../products/product/product.component";
 import {IProductItem} from "../../../../models/items/products/products";
 import {ItemI} from "../../../../models/items/ItemI";
 import {RouterLink} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-shoppingcart-list',
@@ -22,6 +23,7 @@ import {RouterLink} from "@angular/router";
 export class ShoppingcartListComponent implements OnInit {
   transactions: ITransaction[][] = [];
   items: ItemI[] = [];
+  paymentErrors: HttpErrorResponse[] = []
   budget: number = 0;
 
   cartEmpty = !this.cartService.hasTransactions()
@@ -29,6 +31,7 @@ export class ShoppingcartListComponent implements OnInit {
   constructor(private cartService: CartService) {}
 
   ngOnInit() {
+    this.paymentErrors = this.cartService.getCurrentPaymentErrors();
     this.SetTransactions();
   }
 

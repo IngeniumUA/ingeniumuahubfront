@@ -75,9 +75,6 @@ export class AuthService {
 
         this.userSubject.next(user); // Set user observable to user?
 
-        // Clear cart
-        this.cartService.clear()
-
         return user;
       }),
       catchError((error) => {
@@ -92,9 +89,6 @@ export class AuthService {
       map(user => {
         // store user and jwttoken TODO Move to cookiestorage
         localStorage.setItem('user', JSON.stringify(user));
-
-        // Clear cart
-        this.cartService.clear()
 
         this.userSubject.next(user); // Set user observable to user?
         return user;
