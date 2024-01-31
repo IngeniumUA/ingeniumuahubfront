@@ -22,6 +22,10 @@
   </ng-container>
 </section>
 
+<section *ngIf="this.paymentErrors.length > 0" class="transaction space-y-2">
+    <p class="error-message" *ngFor="let error of this.paymentErrors">{{ error.error.detail['Error'] }}</p>
+</section>
+
 <div class="mt-2 text-center">
   <a class="button button-primary" [routerLink]="['/shop/pay']"
      *ngIf="!this.cartEmpty">

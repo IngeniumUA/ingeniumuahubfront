@@ -3,5 +3,7 @@ import {AccessPolicyI, StaffAccessPolicyI} from "./staff/staff_access_policy";
 export interface PricePolicyI {
     price: number
     access_policy: AccessPolicyI
-    update_fields: [] | null
+    always_available: boolean
+    allow_invalid_access: boolean
+    update_fields: { [key: string]: any } | null
 }

@@ -38,6 +38,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
 import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
 import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
+import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import {PartnerGridComponent} from "./shared/components/partners/partner-grid/pa
         PopupzComponent,
         PopupzorderComponent,
         PopupzorderStaffComponent,
+        GalabalComponent,
 
     ],
     imports: [

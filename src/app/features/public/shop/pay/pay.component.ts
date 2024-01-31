@@ -8,10 +8,12 @@ import {
   StripeElementsOptions,
 } from '@stripe/stripe-js';
 import {FormBuilder} from "@angular/forms";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {apiEnviroment} from "../../../../../environments/environment";
 import {Router} from "@angular/router";
-import {first} from "rxjs/operators";
+import {first, last} from "rxjs/operators";
+import {LayoutService} from "../../../../core/services/layout/layout.service";
+import {CartService} from "../../../../core/services/shop/cart/cart.service";
 
 @Component({
   selector: 'app-pay',
@@ -20,6 +22,8 @@ import {first} from "rxjs/operators";
 })
 export class PayComponent implements OnInit {
   constructor(
+    private cartService: CartService,
+    private layoutService: LayoutService,
     private httpClient: HttpClient,
     private formBuilder: FormBuilder,
     private router: Router,
@@ -28,6 +32,8 @@ export class PayComponent implements OnInit {
     @Inject(DOCUMENT) private _document: any,
   ) {
   }
+
+  isMobile = this.layoutService.isMobile;
 
   checkoutId!: CheckoutIdI;
   stripePayment: boolean = false
@@ -49,7 +55,10 @@ export class PayComponent implements OnInit {
       }
     },
     error: error => {
-        this.router.navigateByUrl('/shop/checkout')
+      if (error instanceof HttpErrorResponse) {
+        this.cartService.insertPaymentError(error)
+      }
+      this.router.navigateByUrl('/shop/checkout')
     }}
     )
   }

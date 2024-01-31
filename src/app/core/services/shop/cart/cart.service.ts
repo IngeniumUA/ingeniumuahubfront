@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {IProductItem, ProductMetaI} from "../../../../shared/models/items/products/products";
 import {ItemI} from "../../../../shared/models/items/ItemI";
 import {ITransaction} from "../../../../shared/models/items/products/cart";
+import {HttpErrorResponse} from "@angular/common/http";
 
 interface IAbstractTransaction {
   sourceItemName: string  // TODO Change to source item_id
@@ -15,8 +16,8 @@ interface IAbstractTransaction {
 })
 export class CartService {
   transactionArray: IAbstractTransaction[] = [];
-
   sourceArray: ItemI[] = [];
+  paymentErrorArray: HttpErrorResponse[] = []
 
   // Initialization --------------------------------
   constructor() {
@@ -44,16 +45,20 @@ export class CartService {
 
       if (product === undefined) return sourceEquality
 
-      return sourceEquality && (value.product.name === product.name) && (value.product_meta.popupz_opties === product.product_meta.popupz_opties)
+      return sourceEquality &&
+        (value.product.name === product.name) &&
+        (value.product.price_eu === product.price_eu) &&
+        (value.product_meta.popupz_opties === product.product_meta.popupz_opties)
     })
 
     return boolMap.includes(true);
   }
   private getTransactionIndex(source: ItemI, product: IProductItem): number {
     const boolMap = this.transactionArray.map(value => {
-      return value.sourceItemName === source.name &&
-        value.product.name === product.name &&
-        value.product_meta.popupz_opties === product.product_meta.popupz_opties;
+      return (value.sourceItemName === source.name) &&
+        (value.product.name === product.name) &&
+        (value.product.price_eu === product.price_eu) &&
+        (value.product_meta.popupz_opties === product.product_meta.popupz_opties);
     })
 
     return boolMap.indexOf(true);
@@ -108,7 +113,7 @@ export class CartService {
 
       if (product === undefined) return sourceEquality
 
-      return sourceEquality && (value.product.name === product.name)
+      return sourceEquality && (value.product.name === product.name) && (value.product.price_eu === product.price_eu)
     });
 
     let index = 0;
@@ -185,6 +190,17 @@ export class CartService {
   public clear() {
     this.transactionArray = [];
     this.sourceArray = [];
+    this.paymentErrorArray = [];
     this.updateLocalStorage();
+  }
+
+  // Errors
+  public getCurrentPaymentErrors(): HttpErrorResponse[] {
+    return this.paymentErrorArray
+  }
+
+  public insertPaymentError(error: HttpErrorResponse) {
+    console.log(error)
+    this.paymentErrorArray.push(error)
   }
 }

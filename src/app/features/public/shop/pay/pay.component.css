@@ -1,0 +1,7 @@
+.checkout-desktop {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+  margin-left: 15%;
+  margin-right: 15%;
+}
