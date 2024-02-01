@@ -40,6 +40,9 @@ export class PayComponent implements OnInit {
   devPayment: boolean = false
 
   ngOnInit() {
+    if (! this.cartService.hasTransactions()) {
+      this.router.navigateByUrl('/shop/checkout')
+    }
     this.paymentService.getCheckoutID().pipe(first()).subscribe({
       next: (value) => {
       this.checkoutId = value;
@@ -55,6 +58,7 @@ export class PayComponent implements OnInit {
       }
     },
     error: error => {
+      this.cartService.clearPaymentErrors();
       if (error instanceof HttpErrorResponse) {
         this.cartService.insertPaymentError(error)
       }

@@ -203,4 +203,8 @@ export class CartService {
     console.log(error)
     this.paymentErrorArray.push(error)
   }
+
+  public clearPaymentErrors() {
+    this.paymentErrorArray = []
+  }
 }
