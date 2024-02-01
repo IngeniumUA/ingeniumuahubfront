@@ -168,6 +168,9 @@ export class CartService {
     this.updateLocalStorage();
 
     this.clearPaymentErrors()
+    if (! this.hasTransactions()) {
+      this.clear()
+    }
 
     if (this.transactionsIncludes(source)) {
       return
