@@ -167,6 +167,8 @@ export class CartService {
     this.transactionArray.splice(transactionIndex, 1);
     this.updateLocalStorage();
 
+    this.clearPaymentErrors()
+
     if (this.transactionsIncludes(source)) {
       return
     }
