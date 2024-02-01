@@ -167,6 +167,8 @@ export class CartService {
     this.transactionArray.splice(transactionIndex, 1);
     this.updateLocalStorage();
 
+    this.clearPaymentErrors()
+
     if (this.transactionsIncludes(source)) {
       return
     }
@@ -202,5 +204,9 @@ export class CartService {
   public insertPaymentError(error: HttpErrorResponse) {
     console.log(error)
     this.paymentErrorArray.push(error)
+  }
+
+  public clearPaymentErrors() {
+    this.paymentErrorArray = []
   }
 }

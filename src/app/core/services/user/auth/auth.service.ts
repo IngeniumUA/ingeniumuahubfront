@@ -53,6 +53,7 @@ export class AuthService {
   logout() {
     const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: "bearer" };
 
+    this.cartService.clear()
     this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/auth/logout', body )
 
     localStorage.removeItem('user');
