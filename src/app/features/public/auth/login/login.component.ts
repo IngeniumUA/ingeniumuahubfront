@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false;
   form_error: string | null = null;
-  facebookBrowser: boolean = false
+  embeddedBrowser: boolean = false
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
 
     // Facebook browser check
     const userAgent = window.navigator.userAgent;
-    this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) ||
+    this.embeddedBrowser = (userAgent.indexOf("FBAN") > -1) ||
                            (userAgent.indexOf("FBAV") > -1) ||
                            (userAgent.indexOf("Instagram") > -1);
 
