@@ -23,7 +23,7 @@
 </section>
 
 <section *ngIf="this.paymentErrors.length > 0" class="transaction space-y-2">
-    <p class="error-message" *ngFor="let error of this.paymentErrors">{{ error.error.detail['Error'] }}</p>
+    <p class="error-message" *ngFor="let error of this.paymentErrors">{{ error.error.detail['error_statement_nl'] }}</p>
 </section>
 
 <div class="mt-2 text-center">
@@ -35,3 +35,5 @@
     </svg>
   </a>
 </div>
+
+<span class="mt-2 block font-bold">Totaal: &euro; {{ this.budget }}</span>
