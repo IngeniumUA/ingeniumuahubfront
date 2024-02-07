@@ -3,6 +3,7 @@ import {StripeElementsOptions} from "@stripe/stripe-js";
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {CheckoutIdI, PaymentService} from "../../../../../core/services/shop/payment/payment.service";
 import {FormBuilder} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -13,7 +14,8 @@ export class StripePaymentComponent implements OnInit {
 
   constructor(    private formBuilder: FormBuilder,
                   private paymentService: PaymentService,
-                  private stripeService: StripeService,) {
+                  private stripeService: StripeService,
+                  private router: Router) {
   }
 
   @Input() checkoutId!: CheckoutIdI;
@@ -49,7 +51,11 @@ export class StripePaymentComponent implements OnInit {
           // The payment has been processed!
           if (result.paymentIntent.status === 'succeeded') {
             // Show a success message to your customer
-            alert({ success: true });
+            alert( 'Betaling Success!' );
+
+            // Redirect to transactions
+            // TODO Verify if this solves the apple pay issue
+            this.router.navigateByUrl('/account/transactions')
           }
         }
       });

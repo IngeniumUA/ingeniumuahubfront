@@ -1,0 +1,4 @@
+section {
+  min-height: 20rem;
+  @apply flex items-center;
+}
