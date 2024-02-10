@@ -118,7 +118,7 @@
     </form>
     </table>
 
-    <span *ngIf="transactionTable.length === 0">Nothing to display</span>
+    <ng-container *ngIf="transactionTable.length !== 0 else noItems"></ng-container>
   </ng-container>
   </ng-container>
 </section>
