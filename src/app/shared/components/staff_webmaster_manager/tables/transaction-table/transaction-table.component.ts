@@ -148,4 +148,19 @@ export class TransactionTableComponent {
     }
     return ""
   }
+
+  StyleClassFromValidity(validity: string): string {
+      if (validity === "valid") {
+          return 'SUCCESSFUL-text'
+      } else if (validity === "invalid") {
+          return 'PENDING-text'
+      } else if (validity === "consumed") {
+          return 'CANCELLED-text'
+      } else if (validity === "manually_verified") {
+          return 'CANCELLED-text'
+      } else if (validity === "forbidden") {
+          return 'FAILED-text'
+      }
+      return ""
+  }
 }

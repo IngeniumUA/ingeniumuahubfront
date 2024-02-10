@@ -99,7 +99,11 @@
 
       <ng-container matColumnDef="validity">
         <th mat-header-cell *matHeaderCellDef><div>Validity</div></th>
-        <td mat-cell *matCellDef="let transaction"> {{ transaction.validity }} </td>
+        <td mat-cell *matCellDef="let transaction">
+          <p
+            [ngClass]="StyleClassFromValidity(transaction.validity)"
+          >{{ transaction.validity }}</p>
+          </td>
       </ng-container>
 
       <ng-container matColumnDef="date_completed">
