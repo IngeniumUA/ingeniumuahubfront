@@ -13,6 +13,7 @@ export interface StaffInteractionI {
 export interface StaffTransactionI {
   interaction: StaffInteractionI
   product_blueprint_id: number
+  product_blueprint_name: string | null
 
   product: IProductItem
   count: number
