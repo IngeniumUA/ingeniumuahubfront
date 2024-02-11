@@ -22,6 +22,7 @@ import { StripePaymentComponent } from './pay/stripe-payment/stripe-payment.comp
 import {
     CheckoutDisplayComponent
 } from "../../../shared/components/account/transaction-display/checkout-display.component";
+import { CheckoutConfirmComponent } from './checkout-confirm/checkout-confirm.component';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import {
     PayComponent,
     ShopDetailComponent,
     StripePaymentComponent,
+    CheckoutConfirmComponent,
   ],
     imports: [
         CommonModule,

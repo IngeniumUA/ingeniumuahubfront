@@ -50,7 +50,9 @@ export class PayComponent implements OnInit {
       if (this.checkoutId.payment_providor === 'dev') {
         this.setupDev()
       } else if (this.checkoutId.payment_providor === 'kassa') {
-        this.setupDev()
+        this.router.navigateByUrl('/shop/confirm')
+      } else if (this.checkoutId.payment_providor === 'free') {
+        this.router.navigateByUrl('/shop/confirm')
       } else if (this.checkoutId.payment_providor === 'stripe') {
         this.stripePayment = true
       } else if (this.checkoutId.payment_providor === 'sumup') {
