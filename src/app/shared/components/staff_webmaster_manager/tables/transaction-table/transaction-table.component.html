@@ -94,12 +94,24 @@
             <input type="text" placeholder="Product Name" [formControlName]="'productNameControl'">
           </div>
         </th>
-        <td mat-cell *matCellDef="let transaction"><a [routerLink]="['../../product/'+transaction.product_blueprint_id ]"> {{ transaction.product.name }} </a></td>
+        <td mat-cell *matCellDef="let transaction">
+          <a [routerLink]="['../../product/'+transaction.product_blueprint_id ]">
+            <ng-container *ngIf="transaction.product_blueprint_name !== null">
+              {{ transaction.product_blueprint_name }}
+            </ng-container>
+            <ng-container *ngIf="transaction.product_blueprint_name === null">
+              {{ transaction.product_blueprint_id }}
+            </ng-container>
+          </a></td>
       </ng-container>
 
       <ng-container matColumnDef="validity">
         <th mat-header-cell *matHeaderCellDef><div>Validity</div></th>
-        <td mat-cell *matCellDef="let transaction"> {{ transaction.validity }} </td>
+        <td mat-cell *matCellDef="let transaction">
+          <p
+            [ngClass]="StyleClassFromValidity(transaction.validity)"
+          >{{ transaction.validity }}</p>
+          </td>
       </ng-container>
 
       <ng-container matColumnDef="date_completed">
@@ -118,7 +130,7 @@
     </form>
     </table>
 
-    <span *ngIf="transactionTable.length === 0">Nothing to display</span>
+    <ng-container *ngIf="transactionTable.length !== 0 else noItems"></ng-container>
   </ng-container>
   </ng-container>
 </section>

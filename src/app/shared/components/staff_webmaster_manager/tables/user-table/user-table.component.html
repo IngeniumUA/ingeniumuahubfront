@@ -75,9 +75,12 @@
     </form>
     </table>
 
+    <ng-container *ngIf="userTable.length !== 0 else noItems"></ng-container>
   </ng-container>
   </ng-container>
 </section>
+
+<ng-template #noItems>Nothing to display</ng-template>
 
 <ng-template #loading>
   <div class="spinner-container">
