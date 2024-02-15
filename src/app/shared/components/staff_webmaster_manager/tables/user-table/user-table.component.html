@@ -1,8 +1,27 @@
 <section>
-  <ng-container *ngIf="this.userStats$ | async as userCount">
+  <ng-container *ngIf="this.groups$ | async as groups">
 
   <h2>User Table</h2>
+
+  <section>
+    <h3 class="text-blue-900">Extra search params</h3>
+    <p>Groups</p>
+    <button class="font-bold" (click)="AddGroupField()">Add New</button>
+    <form [formGroup]="this.searchForm">
+      <div class="flex flex-row w-12" *ngFor="let control of searchForm.controls['groupsControl'].controls; index as i">
+          <select [formControl]="control">
+            <option [ngValue]="null">Choose group</option>
+            <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
+              {{ group.name }}
+            </option>
+          </select>
+        <button class="font-bold" (click)="RemoveGroupField(i)">Remove</button>
+      </div>
+    </form>
+  </section>
+
   <ng-container *ngIf="(this.userData$ | async) as userTable else loading">
+    <ng-container *ngIf="this.userStats$ | async as userCount else noItems">
     <mat-paginator
       [length]="userCount"
       [pageSize]="100"
@@ -12,8 +31,7 @@
     </mat-paginator>
 
     <table mat-table [dataSource]="userTable" class="mat-elevation-z8">
-    <form [formGroup]="this.searchForm">
-
+    <form [formGroup]="this.columnSearchForm">
       <ng-container matColumnDef="uuid">
         <th mat-header-cell *matHeaderCellDef>
           <div>
@@ -76,6 +94,7 @@
     </table>
 
     <ng-container *ngIf="userTable.length !== 0 else noItems"></ng-container>
+  </ng-container>
   </ng-container>
   </ng-container>
 </section>

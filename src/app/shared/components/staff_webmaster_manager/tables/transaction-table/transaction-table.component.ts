@@ -109,7 +109,7 @@ export class TransactionTableComponent {
       emailQuery, interactionQuery, productNameQuery)
 
     // Transactionstats
-    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, null)
+    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id)
   }
 
   SwitchStatusFilter(status: string) {

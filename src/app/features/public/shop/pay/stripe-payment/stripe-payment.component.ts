@@ -40,7 +40,8 @@ export class StripePaymentComponent implements OnInit {
         elements: this.paymentElement.elements,
         redirect: 'if_required',
         confirmParams: {
-          return_url: 'https://ingeniumua.be/shop/confirm'
+          return_url: 'https://ingeniumua.be/shop/confirm',
+          setup_future_usage: 'off_session',
         }
       }).subscribe((result) => {
         this.paying = false;
