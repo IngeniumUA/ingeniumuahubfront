@@ -13,6 +13,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {HubGroupI} from "../../../../models/staff/HubGroup";
 import {StaffGroupService} from "../../../../../core/services/staff/group/staff-group.service";
+import { saveAs } from 'file-saver-es';
 
 @Component({
   selector: 'app-user-table',
@@ -38,6 +39,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   userData$: Observable<StaffUserDetailI[]> = of([])
   userStats$: Observable<number> = of(0)
   groups$: Observable<HubGroupI[]> = this.staffGroupService.GetGroupsList()
+  usersExport$: Observable<Blob> = of()
 
   columnSearchForm = new FormGroup({
       uuidControl: new FormControl(''),
@@ -71,7 +73,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
         debounceTime(500),
         distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
         //combineLatest
-    ).subscribe((value) => {
+    ).subscribe(() => {
             this.LoadData()
         }
     )
@@ -108,6 +110,24 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
     // Stats
     this.userStats$ = this.staffUserService.getUserStats(pageIndex * pageSize, pageSize, uuidQuery, emailQuery, groupsQueries)
+  }
+
+  DownloadData() {
+      // Form parsing
+      const emailControlValue = this.columnSearchForm.get('emailControl')!.value;
+      const uuidControlValue = this.columnSearchForm.get('uuidControl')!.value;
+      const groupControls = this.searchForm.controls['groupsControl']
+      const groupControlValues = groupControls.controls.map((control) => {return control.value})
+      const groupControlValuesFiltered = groupControlValues.filter((value) => { return value > 0 })
+
+      const emailQuery = emailControlValue === '' ? null: emailControlValue;
+      const uuidQuery = uuidControlValue === '' ? null: uuidControlValue;
+      const groupsQueries: number[] = (groupControlValuesFiltered.length < 0) ? []: groupControlValuesFiltered;
+
+      this.usersExport$ = this.staffUserService.getUsersExport(uuidQuery, emailQuery, groupsQueries)
+      this.usersExport$.pipe(
+          
+      )
   }
 
   AddGroupField() {
