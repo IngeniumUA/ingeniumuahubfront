@@ -13,7 +13,6 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {HubGroupI} from "../../../../models/staff/HubGroup";
 import {StaffGroupService} from "../../../../../core/services/staff/group/staff-group.service";
-import { saveAs } from 'file-saver-es';
 
 @Component({
   selector: 'app-user-table',
@@ -126,7 +125,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
       this.usersExport$ = this.staffUserService.getUsersExport(uuidQuery, emailQuery, groupsQueries)
       this.usersExport$.pipe(
-          
+
       )
   }
 
