@@ -21,7 +21,7 @@ import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
 import { StripePaymentComponent } from './pay/stripe-payment/stripe-payment.component';
 import {
     CheckoutDisplayComponent
-} from "../../../shared/components/account/transaction-display/checkout-display.component";
+} from "../../../shared/components/account/checkout-display/checkout-display.component";
 import { CheckoutConfirmComponent } from './checkout-confirm/checkout-confirm.component';
 
 

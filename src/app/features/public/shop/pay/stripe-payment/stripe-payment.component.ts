@@ -22,6 +22,7 @@ export class StripePaymentComponent implements OnInit {
 
   ngOnInit() {
     this.elementsOptions.clientSecret = this.checkoutId.checkout_id
+
   }
 
   elementsOptions: StripeElementsOptions = {
@@ -46,7 +47,7 @@ export class StripePaymentComponent implements OnInit {
         this.paying = false;
         if (result.error) {
           // Show error to your customer (e.g., insufficient funds)
-          alert({ success: false, error: result.error.message });
+          alert( result.error.message );
         } else {
           // The payment has been processed!
           if (result.paymentIntent.status === 'succeeded') {

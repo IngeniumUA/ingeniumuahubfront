@@ -20,6 +20,11 @@
     </form>
   </section>
 
+    <section class="flex flex-row gap-3">
+      <button class="button button-primary button-inline" (click)="LoadData()">Refresh</button>
+      <button class="button button-primary button-inline" (click)="DownloadData()">Download</button>
+    </section>
+
   <ng-container *ngIf="(this.userData$ | async) as userTable else loading">
     <ng-container *ngIf="this.userStats$ | async as userCount else noItems">
     <mat-paginator
