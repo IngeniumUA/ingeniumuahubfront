@@ -1,0 +1,24 @@
+<div class="transaction-card bg-white p-2 rounded-md">
+    <h3 class="font-bold text-blue-900">{{ transaction.product.name }}</h3>
+    <h4 class="font-bold text-blue-900">{{ transaction.interaction.item_name }}</h4>
+
+    <hr class="h-0.5 my-1 bg-gray-300 border-0 dark:bg-gray-700">
+
+    <p>{{ transaction.date_complete | date }}</p>
+    <p>{{ transaction.product.name }}</p>
+    <p>€ {{ transaction.amount }}</p>
+
+    <hr class="h-0.5 my-1 bg-gray-300 border-0 dark:bg-gray-700">
+
+    <!-- TODO QR SECTION -->
+    <!-- <h4 class="text-center font-bold text-blue-900">QR Code</h4> -->
+
+    <!-- TODO RESEND EMAIL BUTTON -->
+    <!--
+    <div class="flex flex-col items-center">
+        <button class="button button-primary w-1/2 button-inline">
+            <span class="text-white">Resend Email</span>
+        </button>
+    </div>
+    -->
+</div>
