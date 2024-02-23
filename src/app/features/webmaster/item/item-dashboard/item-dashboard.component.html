@@ -1,5 +1,11 @@
 <section class="staffSection">
-  <app-item-table></app-item-table>
+  <!-- Little hacky code to reload the app-item-table when we add a new item -->
+  <ng-container *ngIf="addingNew">
+    <app-item-table></app-item-table>
+  </ng-container>
+  <ng-container *ngIf="!addingNew">
+    <app-item-table></app-item-table>
+  </ng-container>
 </section>
 
 <section class="staffSection">
