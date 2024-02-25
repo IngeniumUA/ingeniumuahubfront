@@ -12,6 +12,7 @@ import {
   AccessPolicyDetailDashboardComponent
 } from "./access/access-policy-detail/access-policy-detail-dashboard.component";
 import {ProductWebmasterPageComponent} from "./product/product-webmaster-page/product-webmaster-page.component";
+import {CheckoutDetailComponent} from "./checkout/checkout-detail/checkout-detail.component";
 
 
 const routes: Routes = [
@@ -26,7 +27,9 @@ const routes: Routes = [
       {path: 'card', component: CardDashboardComponent},
       {path: 'access_policy', component: AccessPolicyDashboardComponent},
       {path: 'access_policy/:id', component: AccessPolicyDetailDashboardComponent},
-      {path: 'product/:id', component: ProductWebmasterPageComponent}
+      {path: 'product/:id', component: ProductWebmasterPageComponent},
+      // {path: 'checkout',},
+      {path: 'checkout/:id', component: CheckoutDetailComponent }
     ]
   },
 ];

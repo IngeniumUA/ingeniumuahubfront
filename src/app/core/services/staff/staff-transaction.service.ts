@@ -18,6 +18,7 @@ export class StaffTransactionService {
   public getTransactions(offset: number = 0, count: number = 50,
                          item_id: string | null = null,
                          user_id: string | null = null,
+                         checkout_id: string | null = null,
                          status: string | null = null,
                          user_email: string | null = null,
                          interaction_id: string | null = null,
@@ -28,6 +29,9 @@ export class StaffTransactionService {
     }
     if (user_id !== null) {
       query_str += "&user_id="+user_id;
+    }
+    if (checkout_id !== null) {
+      query_str += "&checkout_id="+checkout_id
     }
     if (status !== null) {
       query_str += "&transaction_status="+status.toUpperCase();
@@ -48,13 +52,17 @@ export class StaffTransactionService {
 
   public getTransactionStats(
                          item_id: string | null = null,
-                         user_id: string | null = null): Observable<StatusStatsI> {
+                         user_id: string | null = null,
+                         checkout_id: string | null = null): Observable<StatusStatsI> {
     let query_str = "?"
     if (item_id !== null) {
       query_str += "&item_id="+item_id;
     }
     if (user_id !== null) {
       query_str += "&user_id="+user_id;
+    }
+    if (checkout_id !== null) {
+      query_str += "&checkout_id="+checkout_id
     }
 
     return this.httpClient.get<StatusStatsI>(

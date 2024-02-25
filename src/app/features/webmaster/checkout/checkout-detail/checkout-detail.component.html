@@ -1,0 +1,50 @@
+<section class="staffSection">
+  <h1 class="text-blue-900">Checkout Detail</h1>
+  <table *ngIf="(checkoutDetail$ | async) as checkout else loading">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">User:</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+      <th>Checkout ID</th>
+      <td>{{ checkout.id }}</td>
+    </tr>
+    <tr>
+      <th>User</th>
+      <td>{{ checkout.user_email }}</td>
+    </tr>
+    <tr>
+      <th>Amount</th>
+      <td>{{ checkout.currency }} {{ checkout.amount }} </td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{ checkout.status }}</td>
+    </tr>
+    <tr>
+      <th>Date Created</th>
+      <td>{{ checkout.date_created | date: 'long' }}</td>
+    </tr>
+    <tr>
+      <th>Date Completed</th>
+      <td>{{ checkout.date_completed | date: 'long' }}</td>
+    </tr>
+
+    </tbody>
+  </table>
+</section>
+
+<section class="staffSection">
+  <h1 class="text-blue-900">Transactions</h1>
+  <app-transaction-table [checkout_id]="this.checkout_id">
+
+  </app-transaction-table>
+</section>
+
+<ng-template #loading>
+  Loading
+</ng-template>

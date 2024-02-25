@@ -63,4 +63,8 @@ export class StaffCheckoutService {
     return this.httpClient.patch<StaffCheckoutI>(this.apiUrl + '/' + checkout_id, patchObj)
   }
 
+  public getCheckout(checkout_id: string): Observable<StaffCheckoutI> {
+    return this.httpClient.get<StaffCheckoutI>(this.apiUrl + "/" + checkout_id)
+  }
+
 }

@@ -58,6 +58,7 @@ import {
 import {
     CheckoutAndTransactionDashboardComponent
 } from "../../shared/components/staff_webmaster_manager/dashboards/checkout-and-transaction-dashboard/checkout-and-transaction-dashboard.component";
+import { CheckoutDetailComponent } from './checkout/checkout-detail/checkout-detail.component';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import {
     CardDashboardComponent,
     AccessPolicyDashboardComponent,
     AccessPolicyDetailDashboardComponent,
-    ProductWebmasterPageComponent
+    ProductWebmasterPageComponent,
+    CheckoutDetailComponent
   ],
     imports: [
         CommonModule,

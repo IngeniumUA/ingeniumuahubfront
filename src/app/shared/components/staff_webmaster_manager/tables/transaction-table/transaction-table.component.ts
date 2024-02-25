@@ -37,6 +37,7 @@ export class TransactionTableComponent {
   }
   @Input() item_id: string | null = null
   @Input() user_id: string | null = null
+  @Input() checkout_id: string | null = null
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
@@ -52,13 +53,17 @@ export class TransactionTableComponent {
   })
 
   GetDisplayedColumns(): string[] {
-    let columns = ["checkout_id", "interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"]
+    let columns = ["interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"];
 
+    // Add if not Input()
     if (this.item_id === null) {
       columns.splice(columns.indexOf('interaction_id'), 0, 'item')
     }
     if (this.user_id === null) {
       columns.splice(columns.indexOf('interaction_id'), 0, 'user')
+    }
+    if (this.checkout_id === null) {
+      columns.splice(0, 0, "checkout_id")
     }
 
     return columns
@@ -105,11 +110,11 @@ export class TransactionTableComponent {
 
     // Transaction fetching
     this.transactionData$ = this.staffTransactionService.getTransactions(
-      pageIndex * pageSize, pageSize, this.item_id, this.user_id, status,
+      pageIndex * pageSize, pageSize, this.item_id, this.user_id, this.checkout_id, status,
       emailQuery, interactionQuery, productNameQuery)
 
     // Transactionstats
-    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id)
+    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id)
   }
 
   SwitchStatusFilter(status: string) {
