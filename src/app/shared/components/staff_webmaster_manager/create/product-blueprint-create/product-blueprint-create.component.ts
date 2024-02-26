@@ -32,6 +32,7 @@ export class ProductBlueprintCreateComponent {
     max_total: [0, [Validators.required, Validators.min(1)]],
     max_individual: [0, [Validators.required, Validators.min(1)]],
     max_per_checkout: [0, [Validators.required, Validators.min(1)]],
+    ordering: [0, [Validators.required]],
   })
   form_error: string | null = null;
   loading: boolean = false
@@ -55,6 +56,8 @@ export class ProductBlueprintCreateComponent {
       max_total: this.productBlueprintForm.controls['max_total'].value,
       max_individual: this.productBlueprintForm.controls['max_individual'].value,
       max_per_checkout: this.productBlueprintForm.controls['max_per_checkout'].value,
+
+      ordering: this.productBlueprintForm.controls['ordering'].value,
 
       product_meta: null,
     }

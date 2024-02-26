@@ -16,6 +16,8 @@ export interface StaffProductBlueprintI {
   max_individual: number
   max_per_checkout: number
 
+  ordering: number
+
   price_policies: PricePolicyI[]
 
   product_meta: ProductMetaI
