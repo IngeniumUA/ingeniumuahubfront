@@ -1,0 +1,16 @@
+/* Put this code in your CSS file */
+
+/* The div container */
+.qrcodeImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+/* Add custom styles here */
+.center {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}

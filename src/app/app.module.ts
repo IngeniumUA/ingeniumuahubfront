@@ -39,6 +39,7 @@ import { PartnerBalkComponent } from './shared/components/partners/partner-balk/
 import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
 import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
 import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
+import {QRCodeModule} from "angularx-qrcode";
 
 
 @NgModule({
@@ -65,6 +66,11 @@ import { GalabalComponent } from './features/public/custom-pages/galabal/galabal
 
     ],
     imports: [
+        // https://www.npmjs.com/package/angularx-qrcode
+        // QRCode generator
+        QRCodeModule,
+
+
         BrowserModule,
         PublicHeaderComponent,
         PublicFooterComponent,

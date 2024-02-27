@@ -10,8 +10,23 @@
 
     <hr class="h-0.5 my-1 bg-gray-300 border-0 dark:bg-gray-700">
 
-    <!-- TODO QR SECTION -->
-    <!-- <h4 class="text-center font-bold text-blue-900">QR Code</h4> -->
+    <h3 class="text-center font-bold text-blue-900">QR Code</h3>
+    <div class="qrcodeImage">
+        <qrcode
+                [qrdata]="transaction.interaction.uuid"
+                [allowEmptyString]="true"
+                [ariaLabel]="'QR Code for a transaction'"
+                [cssClass]="'center'"
+                [colorDark]="'#00053D'"
+                [colorLight]="'#ffffffff'"
+                [elementType]="'canvas'"
+                [errorCorrectionLevel]="'M'"
+                [margin]="2"
+                [scale]="1"
+                [title]="'Transaction QR Code'"
+                [width]="200"
+        ></qrcode>
+    </div>
 
     <!-- TODO RESEND EMAIL BUTTON -->
     <!--
