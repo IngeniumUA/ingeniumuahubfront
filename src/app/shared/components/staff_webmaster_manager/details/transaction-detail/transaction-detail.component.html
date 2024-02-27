@@ -89,7 +89,6 @@
             Send Transaction Email</button>
     </div>
 
-    <p class="error-message" *ngIf="formError !== null">
-        {{ formError }}
-    </p>
+    <span class="error-message" *ngIf="formError !== null">{{ formError }}</span>
+    <span *ngIf="successMessage !== null" class="success-message">{{ successMessage }}</span>
 </section>
