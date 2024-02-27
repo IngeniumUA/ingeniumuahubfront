@@ -1,0 +1,55 @@
+<section>
+  <form [formGroup]="checkoutForm" class="flex flex-col">
+    <h3>Checkout</h3>
+    <label class="hubformfield-white">
+      Email:
+      <input type="email" formControlName="userEmail" placeholder="user@email.com"/>
+    </label>
+
+    <label class="hubformfield-white">
+      PaymentType:
+      <select formControlName="paymentProvider">
+        <option [ngValue]="null">Kies PaymentProvidor</option>
+        <option *ngFor="let paymentProvidor of paymentProvidors" [ngValue]="paymentProvidor" style="color: var(--mainblue)">
+          {{ paymentProvidor }}
+        </option>
+      </select>
+    </label>
+
+    <h3>Transactions</h3>
+    <ng-container *ngFor="let control of this.transactions().controls; index as i">
+      <div [formGroupName]=i>
+        Product:
+        <select formControlName="product">
+          <option [ngValue]="null">Kies Product</option>
+          <option *ngFor="let product of (this.products$ | async)" [ngValue]="product" style="color: var(--mainblue)">
+            {{ product.name }} {{ product.price_eu }}
+          </option>
+        </select>
+
+        Validity:
+        <select formControlName="validity">
+          <option [ngValue]="null">Kies Validity</option>
+          <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
+            {{ validity.name }}
+          </option>
+        </select>
+      </div>
+    </ng-container>
+
+    <h3>Creation Options</h3>
+    <label class="hubformfield-white">
+      Send Mail:
+      <input type="checkbox" formControlName="sendMail"/>
+    </label>
+    <label class="hubformfield-white">
+      Create User if not found:
+      <input type="checkbox" formControlName="createUserIfNone"/>
+    </label>
+
+    <button (click)="SubmitForm()">Create</button>
+    <p class="error-message" *ngIf="formError !== null">
+      {{ formError }}
+    </p>
+  </form>
+</section>
