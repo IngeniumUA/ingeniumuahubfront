@@ -1,0 +1,95 @@
+<section class="my-4 py-2 border-t border-gray-400">
+    <h2 class="text-blue-900">Transaction</h2>
+    <form [formGroup]="transactionForm">
+        <h3>Info</h3>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Transaction:</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <th>Interaction ID</th>
+                <td>{{ transaction.interaction.id }}</td>
+            </tr>
+            <tr>
+                <th>Item</th>
+                <td>{{ transaction.interaction.item_name }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ transaction.currency }} {{ transaction.amount }} </td>
+            </tr>
+            <tr>
+                <th>Checkout</th>
+                <td>{{ transaction.checkout_id }}</td>
+            </tr>
+            <tr>
+                <th>Date Created</th>
+                <td>{{ transaction.date_created | date: 'long' }}</td>
+            </tr>
+            <tr>
+                <th>Date Completed</th>
+                <td>{{ transaction.date_completed | date: 'long' }}</td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <h3>Ownership</h3>
+        <label>
+            User:
+            <input type="email" formControlName="userEmail" placeholder="user@email.com"/>
+        </label>
+
+        <h3>Configure</h3>
+        <section class="flex flex-row gap-1">
+        <div>
+        Validity:
+        <select formControlName="validity">
+            <option [ngValue]="null">Validity</option>
+            <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.name" style="color: var(--mainblue)">
+                {{ validity.name }}
+            </option>
+        </select>
+        </div>
+
+        <div>
+        Status:
+        <select formControlName="status">
+            <option [ngValue]="null">Status</option>
+            <option *ngFor="let status of StatusOptions" [ngValue]="status.value" style="color: var(--mainblue)">
+                {{ status.name }}
+            </option>
+        </select>
+        </div>
+        </section>
+    </form>
+
+    <div class="my-4 flex flex-row gap-3">
+        <button class="button button-primary w-1/6 button-inline"
+        [disabled]="this.loading"
+        [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+        (click)="Patch()">
+            Update</button>
+
+        <button class="button button-primary w-1/6 button-inline"
+                [disabled]="this.loading"
+                [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+        (click)="PartialRefund()">
+            Refund ( partial )</button>
+
+        <button class="button button-primary w-1/6 button-inline"
+                [disabled]="this.loading"
+                [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+        (click)="ResendEmail()">
+            Send Transaction Email</button>
+    </div>
+
+    <p class="error-message" *ngIf="formError !== null">
+        {{ formError }}
+    </p>
+</section>

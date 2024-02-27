@@ -59,6 +59,12 @@ import {
     CheckoutAndTransactionDashboardComponent
 } from "../../shared/components/staff_webmaster_manager/dashboards/checkout-and-transaction-dashboard/checkout-and-transaction-dashboard.component";
 import { CheckoutDetailComponent } from './checkout/checkout-detail/checkout-detail.component';
+import {
+    CreateCheckoutComponent
+} from "../../shared/components/staff_webmaster_manager/create/create-checkout/create-checkout.component";
+import {
+    TransactionDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/transaction-detail/transaction-detail.component";
 
 
 @NgModule({
@@ -94,7 +100,9 @@ import { CheckoutDetailComponent } from './checkout/checkout-detail/checkout-det
         ItemCreateComponent,
         ProductBlueprintCreateComponent,
         ProductBlueprintDetailComponent,
-        CheckoutAndTransactionDashboardComponent
+        CheckoutAndTransactionDashboardComponent,
+        CreateCheckoutComponent,
+        TransactionDetailComponent
     ]
 })
 export class WebmasterModule { }

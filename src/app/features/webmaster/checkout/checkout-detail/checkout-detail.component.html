@@ -4,7 +4,7 @@
     <thead>
     <tr>
       <th scope="col"></th>
-      <th scope="col">User:</th>
+      <th scope="col">Checkout:</th>
     </tr>
     </thead>
 
@@ -40,9 +40,16 @@
 
 <section class="staffSection">
   <h1 class="text-blue-900">Transactions</h1>
-  <app-transaction-table [checkout_id]="this.checkout_id">
+  <app-transaction-table [checkout_id]="this.checkout_id"></app-transaction-table>
+</section>
 
-  </app-transaction-table>
+<section class="staffSection">
+  <h1 class="text-blue-900">Edit transactions</h1>
+  <ng-container *ngIf="(transactions$ | async) as transactions else loading">
+  <ng-container *ngFor="let transaction of  transactions">
+  <app-transaction-detail (PatchedTransaction)="FetchData()" [transaction]="transaction"></app-transaction-detail>
+  </ng-container>
+  </ng-container>
 </section>
 
 <ng-template #loading>

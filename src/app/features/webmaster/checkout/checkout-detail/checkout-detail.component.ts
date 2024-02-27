@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Observable, of} from "rxjs";
-import {CheckoutI} from "../../../../shared/components/items/interactions/checkout";
 import {StaffCheckoutService} from "../../../../core/services/staff/staff-checkout.service";
 import {StaffCheckoutI} from "../../../../shared/models/staff/staff_checkout";
+import {StaffTransactionI} from "../../../../shared/models/staff/staff_transaction";
+import {StaffTransactionService} from "../../../../core/services/staff/staff-transaction.service";
 
 @Component({
   selector: 'app-checkout-detail',
@@ -12,11 +13,13 @@ import {StaffCheckoutI} from "../../../../shared/models/staff/staff_checkout";
 })
 export class CheckoutDetailComponent implements OnInit {
 
-  checkout_id: string | null = null;
+  checkout_id!: string;
   checkoutDetail$: Observable<StaffCheckoutI> = of();
+  transactions$: Observable<StaffTransactionI[]> = of()
 
   constructor(private route: ActivatedRoute,
-              private checkoutService: StaffCheckoutService) {
+              private checkoutService: StaffCheckoutService,
+              private staffTransactionService: StaffTransactionService) {
   }
 
   ngOnInit() {
@@ -30,7 +33,12 @@ export class CheckoutDetailComponent implements OnInit {
     }
     this.checkout_id = id;
 
-    this.checkoutDetail$ = this.checkoutService.getCheckout(this.checkout_id)
+    this.FetchData()
   }
 
+
+  public FetchData() {
+    this.checkoutDetail$ = this.checkoutService.getCheckout(this.checkout_id);
+    this.transactions$ = this.staffTransactionService.getTransactions(0, 100, null, null, this.checkout_id)
+  }
 }
