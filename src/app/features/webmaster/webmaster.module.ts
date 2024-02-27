@@ -32,13 +32,6 @@ import {
 import {
     TransactionTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component";
-import { AccessPolicyDashboardComponent } from './access/access-policy-dashboard/access-policy-dashboard.component';
-import {
-  AccessPolicyTableComponent
-} from "../../shared/components/staff_webmaster_manager/tables/access-policy-table/access-policy-table.component";
-import {
-  AccessPolicyDetailDashboardComponent
-} from "./access/access-policy-detail/access-policy-detail-dashboard.component";
 import {
     ItemCreateComponent
 } from "../../shared/components/staff_webmaster_manager/create/item-create/item-create.component";
@@ -76,8 +69,6 @@ import {
     ItemDashboardComponent,
     ItemDetailDashboardComponent,
     CardDashboardComponent,
-    AccessPolicyDashboardComponent,
-    AccessPolicyDetailDashboardComponent,
     ProductWebmasterPageComponent,
     CheckoutDetailComponent
   ],
@@ -95,7 +86,6 @@ import {
         ProductBlueprintDashboardComponent,
         CardTableComponent,
         TransactionTableComponent,
-        AccessPolicyTableComponent,
         AccessPolicyDetailComponent,
         ItemCreateComponent,
         ProductBlueprintCreateComponent,
