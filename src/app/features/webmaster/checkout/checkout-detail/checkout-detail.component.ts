@@ -16,6 +16,8 @@ export class CheckoutDetailComponent implements OnInit {
   checkout_id!: string;
   checkoutDetail$: Observable<StaffCheckoutI> = of();
   transactions$: Observable<StaffTransactionI[]> = of()
+  loading: boolean = false;
+  formError: null | string = null
 
   constructor(private route: ActivatedRoute,
               private checkoutService: StaffCheckoutService,
@@ -40,5 +42,17 @@ export class CheckoutDetailComponent implements OnInit {
   public FetchData() {
     this.checkoutDetail$ = this.checkoutService.getCheckout(this.checkout_id);
     this.transactions$ = this.staffTransactionService.getTransactions(0, 100, null, null, this.checkout_id)
+  }
+
+  public Patch() {
+
+  }
+
+  public Refund() {
+
+  }
+
+  public SendEmail() {
+
   }
 }
