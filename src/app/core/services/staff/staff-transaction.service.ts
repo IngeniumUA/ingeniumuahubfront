@@ -69,4 +69,8 @@ export class StaffTransactionService {
       this.apiUrl + '/stats' + query_str)
   };
 
+  public emailTransaction(transaction_id: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(this.apiUrl + '/email/' + transaction_id.toString())
+  }
+
 }

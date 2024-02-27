@@ -67,4 +67,11 @@ export class StaffCheckoutService {
     return this.httpClient.get<StaffCheckoutI>(this.apiUrl + "/" + checkout_id)
   }
 
+  public refundCheckout(checkout_id: string, forceRefund: boolean = false): Observable<StaffCheckoutI> {
+    return this.httpClient.patch<StaffCheckoutI>(this.apiUrl + "/refund/" + checkout_id + "&force_refund=" + String(forceRefund), {})
+  }
+
+  public emailCheckout(checkout_id: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(this.apiUrl + "/email/" + checkout_id)
+  }
 }

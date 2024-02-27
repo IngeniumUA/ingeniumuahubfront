@@ -1,6 +1,6 @@
 <section class="staffSection">
   <h1 class="text-blue-900">Checkout Detail</h1>
-  <table *ngIf="(checkoutDetail$ | async) as checkout else loading">
+  <table *ngIf="(checkoutDetail$ | async) as checkout else loadingData">
     <thead>
     <tr>
       <th scope="col"></th>
@@ -68,13 +68,13 @@
 
 <section class="staffSection">
   <h1 class="text-blue-900">Edit transactions</h1>
-  <ng-container *ngIf="(transactions$ | async) as transactions else loading">
+  <ng-container *ngIf="(transactions$ | async) as transactions else loadingData">
   <ng-container *ngFor="let transaction of  transactions">
   <app-transaction-detail (PatchedTransaction)="FetchData()" [transaction]="transaction"></app-transaction-detail>
   </ng-container>
   </ng-container>
 </section>
 
-<ng-template #loading>
+<ng-template #loadingData>
   Loading
 </ng-template>
