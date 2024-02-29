@@ -22,7 +22,8 @@ export class StaffTransactionService {
                          status: string | null = null,
                          user_email: string | null = null,
                          interaction_id: string | null = null,
-                         product: string | null = null): Observable<StaffTransactionI[]> {
+                         product: string | null = null,
+                         validity: string | null = null): Observable<StaffTransactionI[]> {
     let query_str = "?offset=" + offset.toString() + "&limit=" + count.toString()
     if (item_id !== null) {
       query_str += "&item_id="+item_id;
@@ -44,6 +45,9 @@ export class StaffTransactionService {
     }
     if (product !== null) {
       query_str += "&product=" + product
+    }
+    if (validity !== null) {
+      query_str += "&validity=" + validity
     }
 
     return this.httpClient.get<StaffTransactionI[]>(

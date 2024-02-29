@@ -11,6 +11,7 @@ import {StatusStatsI} from "../../../../models/stats/transactionStats";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {distinctUntilChanged} from "rxjs/operators";
 import {CurrencyPipe} from "../../../../pipes/currency.pipe";
+import {ValidityOptions} from "../../../../models/items/validity";
 
 @Component({
   selector: 'app-transaction-table',
@@ -49,7 +50,8 @@ export class TransactionTableComponent {
   searchForm = new FormGroup({
     idControl: new FormControl(''),
     emailControl: new FormControl(''),
-    productNameControl: new FormControl('')
+    productNameControl: new FormControl(''),
+    validityControl: new FormControl('')
   })
 
   GetDisplayedColumns(): string[] {
@@ -99,10 +101,12 @@ export class TransactionTableComponent {
     const emailControlValue = this.searchForm.get('emailControl')!.value;
     const interactionIdControlValue = this.searchForm.get('idControl')!.value;
     const productNameControlValue = this.searchForm.get('productNameControl')!.value;
+    const validityControlValue = this.searchForm.get('validityControl')!.value;
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
     const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
+    const validityQuery = validityControlValue === '' ? null: validityControlValue;
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
@@ -111,7 +115,7 @@ export class TransactionTableComponent {
     // Transaction fetching
     this.transactionData$ = this.staffTransactionService.getTransactions(
       pageIndex * pageSize, pageSize, this.item_id, this.user_id, this.checkout_id, status,
-      emailQuery, interactionQuery, productNameQuery)
+      emailQuery, interactionQuery, productNameQuery, validityQuery)
 
     // Transactionstats
     this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id)
@@ -168,4 +172,6 @@ export class TransactionTableComponent {
       }
       return ""
   }
+
+  protected readonly ValidityOptions = ValidityOptions;
 }
