@@ -79,7 +79,11 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Label popups are breaking something frontend related, just remove them
+    // Label popups are breaking something frontend related, we just remove them
+    // In some cases the paginator is undefined ? We check if it is defined
+    if (this.paginator === undefined) {
+      return
+    }
     const paginatorIntl = this.paginator._intl;
     paginatorIntl.itemsPerPageLabel = '';
     paginatorIntl.nextPageLabel = '';
