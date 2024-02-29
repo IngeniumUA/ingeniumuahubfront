@@ -12,6 +12,7 @@ const TESTAccount = {
 }
 
 export interface InteractionI {
+  id: number
   item_name: string
   uuid: string
   user_id: string
