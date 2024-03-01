@@ -2,6 +2,11 @@
   <ng-container *ngIf="this.cardStats$ | async as cardStats">
   <h2>Kaarten table</h2>
 
+  <section class="flex flex-row gap-3">
+    <button class="button button-primary button-inline" (click)="LoadData()">Refresh</button>
+    <button class="button button-primary button-inline" (click)="DownloadData()">Download</button>
+  </section>
+
   <mat-paginator
     [length]="cardStats.total"
     [pageSize]="100"
@@ -28,7 +33,12 @@
         <th mat-header-cell *matHeaderCellDef>
           <div>
             Cardtype
-            <input class="w-3/4" type="text" placeholder="type" [formControlName]="'cardTypeControl'">
+            <select formControlName="cardTypeControl">
+              <option [ngValue]="null" selected>all</option>
+              <option *ngFor="let cardType of CardTypes" [ngValue]="cardType" style="color: var(--mainblue)">
+                {{ cardType }}
+              </option>
+            </select>
           </div>
         </th>
         <td mat-cell *matCellDef="let card"> {{ card.card_type }}</td>
@@ -38,7 +48,7 @@
         <th mat-header-cell *matHeaderCellDef>
           <div>
             Card nr
-            <input class="w-3/4" type="text" placeholder="nr" [formControlName]="'cardNrControl'">
+            <input class="w-3/4" type="number" placeholder="nr" [formControlName]="'cardNrControl'">
           </div>
         </th>
         <td mat-cell *matCellDef="let card"> {{ card.card_nr }}</td>
