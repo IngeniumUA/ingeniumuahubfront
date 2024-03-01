@@ -1,0 +1,27 @@
+<app-layout-public-header [light_theme]="true"></app-layout-public-header>
+<main class="promo">
+    <h1>Vacatures</h1>
+    <!--
+    <h2>Koop een lidkaart aan de kassa!</h2>
+    -->
+    <div class="vacatures-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
+        <ng-container *ngIf="(this.vacatures$ | async) as vacatures else loading">
+            <ng-container *ngIf="vacatures.length > 0 else geenVacatures">
+                <app-rec-sys-item-preview [recsysItem]="vacature" *ngFor="let vacature of vacatures" />
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <section class="mt-12">
+        <h1>Partners</h1>
+        <app-partner-grid></app-partner-grid>
+    </section>
+
+</main>
+
+<ng-template #loading>Laden ...</ng-template>
+<ng-template #geenVacatures>
+    <p class="text-blue-900">
+    Er zijn momenteel geen vacatures beschikbaar!
+    </p>
+</ng-template>
