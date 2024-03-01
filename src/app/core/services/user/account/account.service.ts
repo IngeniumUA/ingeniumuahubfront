@@ -15,6 +15,7 @@ export interface InteractionI {
   id: number
   item_name: string
   uuid: string
+  id: number
   user_id: string
 }
 
