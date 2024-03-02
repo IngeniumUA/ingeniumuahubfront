@@ -5,6 +5,7 @@ import {VacaturesListDisplayComponent} from "./vacatures/vacatures-list-display/
 
 const routes: Routes = [
     {path: 'vacature/:id', component: VacatureDisplayComponent },
+    {path: 'vacatures/:id', component: VacatureDisplayComponent },
     {path: 'vacature', component: VacaturesListDisplayComponent },
     {path: 'vacatures', component: VacaturesListDisplayComponent }
     // {path: ':id', component: EventDetailComponent }

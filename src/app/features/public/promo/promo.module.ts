@@ -9,6 +9,7 @@ import {
     RecSysItemPreviewComponent
 } from "../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component";
 import {PartnerGridComponent} from "../../../shared/components/partners/partner-grid/partner-grid.component";
+import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
 
 @NgModule({
     imports: [
@@ -18,6 +19,7 @@ import {PartnerGridComponent} from "../../../shared/components/partners/partner-
         PublicHeaderComponent,
         RecSysItemPreviewComponent,
         PartnerGridComponent,
+        ColordbrgbaPipe,
     ],
     declarations: [
 
