@@ -58,6 +58,14 @@ export class StaffItemDetailComponent {
       this.itemForm.addControl('end_date', new FormControl(
           this.datePipe.transform(this.item.event_item.end_date, 'yyyy-MM-ddThh:mm')))
     }
+
+    // Promo
+    if (this.isPromoItem) {
+      this.itemForm.addControl('displayFromDate', new FormControl(
+          this.datePipe.transform(this.item.promo_item.display_from_date, 'yyyy-MM-ddThh:mm')))
+      this.itemForm.addControl('displayUntilDate', new FormControl(
+          this.datePipe.transform(this.item.promo_item.display_until_date, 'yyyy-MM-ddThh:mm')))
+    }
   }
 
   onSubmit(): void {
@@ -81,6 +89,10 @@ export class StaffItemDetailComponent {
     if (this.isEventItem) {
       this.item.event_item.start_date = this.itemForm.controls['start_date'].value
       this.item.event_item.end_date = this.itemForm.controls['end_date'].value
+    }
+    if (this.isPromoItem) {
+      this.item.promo_item.display_from_date = this.itemForm.controls['displayFromDate'].value
+      this.item.promo_item.display_until_date = this.itemForm.controls['displayUntilDate'].value
     }
     this.itemUpdate.emit(this.item)
 
