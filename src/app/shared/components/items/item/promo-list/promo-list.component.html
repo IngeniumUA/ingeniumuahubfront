@@ -1,0 +1,25 @@
+<section>
+    <h1 class="">
+    <ng-container *ngIf="this.promoType !== null">
+        {{ this.promoType.substring(0, 1).toUpperCase() }}{{ this.promoType.substring(1) }}s
+    </ng-container>
+    <ng-container *ngIf="this.promoType === null">
+        Promo Item
+    </ng-container>
+    </h1>
+    <div class="promo-list" *ngIf="(recsysItems$ | async) as recsysItems else loading">
+        <ng-container *ngFor="let recsysItem of recsysItems">
+            <ng-container *ngIf="recsysItems.length > 0 else noItem">
+                <app-rec-sys-item-preview [recsysItem]="recsysItem"></app-rec-sys-item-preview>
+            </ng-container>
+        </ng-container>
+    </div>
+</section>
+
+<ng-template #loading>Loading</ng-template>
+<ng-template #noItem>
+    Momenteel zijn er geen
+    <ng-container *ngIf="this.promoType !== null">{{ this.promoType.substring(0, 1).toUpperCase() }}{{ this.promoType.substring(1) }}s</ng-container>
+    <ng-container *ngIf="this.promoType === null">Promoitems</ng-container>
+    beschikbaar!
+</ng-template>

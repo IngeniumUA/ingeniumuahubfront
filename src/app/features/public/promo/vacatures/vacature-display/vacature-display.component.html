@@ -13,14 +13,14 @@
         </ng-container>
     </ng-template>
 
-<main *ngIf="data.vacature as vacature; else loading">
+<main *ngIf="data.vacature as vacature; else loading" [ngStyle]="{'border-color': (vacature.color | colordbrgba: 1) }">
 
 <section  class="border-gray-400 border-b-2 my-4">
     <h1 class="text-center" [ngStyle]="{'color': (vacature.color | colordbrgba: 1) }">{{ vacature.item.name }}</h1>
 </section>
 
-<section class="description-section">
-    <div [ngClass]="ImageDivClass(isMobile.isMobile)">
+<section>
+    <div class="my-4" [ngClass]="ImageDivClass(isMobile.isMobile)">
         <p class="text-blue-900"
            [ngStyle]="{'color': (vacature.color | colordbrgba: 1) }">
             {{ vacature.item.description }}
@@ -28,7 +28,12 @@
     </div>
 
     <div [ngClass]="ImageDivClass(isMobile.isMobile)">
-        <img src='{{vacature.image_landscape}}' alt="Image not working :(">
+        <ng-container *ngIf="(vacature.image_landscape !== null && vacature.image_landscape !== '')">
+            <img src='{{vacature.image_landscape}}' alt="Image not working :(">
+        </ng-container>
+        <ng-container *ngIf="(vacature.image_square !== null && vacature.image_square !== '')">
+            <img src='{{vacature.image_square}}' alt="Image not working :(">
+        </ng-container>
     </div>
 </section>
 

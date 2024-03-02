@@ -1,9 +1,6 @@
 <app-layout-public-header [light_theme]="true"></app-layout-public-header>
 <main class="promo">
     <h1>Vacatures</h1>
-    <!--
-    <h2>Koop een lidkaart aan de kassa!</h2>
-    -->
     <div class="vacatures-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
         <ng-container *ngIf="(this.vacatures$ | async) as vacatures else loading">
             <ng-container *ngIf="vacatures.length > 0 else geenVacatures">

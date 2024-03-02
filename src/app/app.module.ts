@@ -40,6 +40,7 @@ import { PartnerDumpComponent } from './shared/components/partners/partner-dump/
 import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
 import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
 import {QRCodeModule} from "angularx-qrcode";
+import {PromoListComponent} from "./shared/components/items/item/promo-list/promo-list.component";
 
 
 @NgModule({
@@ -94,7 +95,8 @@ import {QRCodeModule} from "angularx-qrcode";
 
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
-        PartnerGridComponent
+        PartnerGridComponent,
+        PromoListComponent
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
