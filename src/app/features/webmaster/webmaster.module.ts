@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { WebmasterComponent } from './webmaster.component';
 import {WebmasterRoutingModule} from "./webmaster-routing.module";
 import {BehindheaderComponent} from "../../core/layout/behind/behindheader/behindheader.component";
@@ -93,6 +93,8 @@ import {
         CheckoutAndTransactionDashboardComponent,
         CreateCheckoutComponent,
         TransactionDetailComponent
+    ], providers: [
+        DatePipe
     ]
 })
 export class WebmasterModule { }

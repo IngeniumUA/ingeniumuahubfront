@@ -34,7 +34,8 @@ import {ValidityOptions} from "../../../../models/items/validity";
   standalone: true
 })
 export class TransactionTableComponent {
-  constructor(private staffTransactionService: StaffTransactionService) {
+  constructor(private staffTransactionService: StaffTransactionService,
+              private datePipe: DatePipe) {
   }
   @Input() item_id: string | null = null
   @Input() user_id: string | null = null
@@ -46,6 +47,8 @@ export class TransactionTableComponent {
   selectedStatus: string = 'All'
 
   transactionData$: Observable<StaffTransactionI[]> = of([])
+
+  blob!: Blob
 
   searchForm = new FormGroup({
     idControl: new FormControl(''),
@@ -171,6 +174,44 @@ export class TransactionTableComponent {
           return 'FAILED-text'
       }
       return ""
+  }
+
+  DownloadData() {
+    const status = this.selectedStatus === 'All' ? null: this.selectedStatus
+
+    // Form parsing
+    const emailControlValue = this.searchForm.get('emailControl')!.value;
+    const interactionIdControlValue = this.searchForm.get('idControl')!.value;
+    const productNameControlValue = this.searchForm.get('productNameControl')!.value;
+    const validityControlValue = this.searchForm.get('validityControl')!.value;
+
+    const emailQuery = emailControlValue === '' ? null: emailControlValue;
+    const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
+    const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
+    const validityQuery = validityControlValue === '' ? null: validityControlValue;
+
+    const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
+    'product_id', 'product_name', 'amount', 'transaction_status', 'date_created', 'date_completed', 'validity']
+
+    this.staffTransactionService.getTransactionsExport(fields, this.item_id, this.user_id, this.checkout_id, status,
+        emailQuery, interactionQuery, productNameQuery, validityQuery).subscribe((data) => {
+      const date = new Date()
+      const pipedDate = this.datePipe.transform(date, 'dd-MM-yyyy')
+
+
+      this.blob = new Blob([data], {type: 'application/vnd.ms-excel'})
+
+      let downloadURL = URL.createObjectURL(data);
+      let link = document.createElement('a');
+      link.href = downloadURL
+      link.download = "TransactionExport_" + pipedDate + ".xlsx";
+      link.click()
+
+      // This took me longer than I would like to admit
+      // These two answers hold all the answers
+      // https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
+      // https://stackoverflow.com/questions/60730934/typescript-http-get-error-no-overload-matches-this-call
+    })
   }
 
   protected readonly ValidityOptions = ValidityOptions;

@@ -77,4 +77,56 @@ export class StaffTransactionService {
     return this.httpClient.get<boolean>(this.apiUrl + '/email/' + transaction_id.toString())
   }
 
+  public getTransactionsExport(fields: string[],
+                              item_id: string | null = null,
+                              user_id: string | null = null,
+                              checkout_id: string | null = null,
+                              status: string | null = null,
+                              user_email: string | null = null,
+                              interaction_id: string | null = null,
+                              product: string | null = null,
+                              validity: string | null = null) {
+    let query_str = "?";
+    // Fields parsing
+    // Starts from second item
+    if (fields.length == 0) {
+      query_str +="fields=email"
+    } else {
+      query_str += "fields=" + fields[0]
+    }
+    fields.slice(1).forEach((field: string) => {
+      query_str += "&fields=" + field
+    })
+
+    if (item_id !== null) {
+      query_str += "&item_id="+item_id;
+    }
+    if (user_id !== null) {
+      query_str += "&user_id="+user_id;
+    }
+    if (checkout_id !== null) {
+      query_str += "&checkout_id="+checkout_id
+    }
+    if (status !== null) {
+      query_str += "&transaction_status="+status.toUpperCase();
+    }
+    if (user_email !== null) {
+      query_str += "&user_email="+user_email;
+    }
+    if (interaction_id !== null) {
+      query_str += "&interaction_id="+interaction_id;
+    }
+    if (product !== null) {
+      query_str += "&product=" + product
+    }
+    if (validity !== null) {
+      query_str += "&validity=" + validity
+    }
+
+    const httpOptions: Object = {
+      responseType: ('blob' as 'application/vnd.ms-excel')
+    }
+
+    return this.httpClient.get<Blob>(this.apiUrl + "/export" + query_str, httpOptions)
+  }
 }

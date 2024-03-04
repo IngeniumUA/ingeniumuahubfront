@@ -40,6 +40,8 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   groups$: Observable<HubGroupI[]> = this.staffGroupService.GetGroupsList()
   usersExport$: Observable<Blob> = of()
 
+  blob!: Blob;
+
   columnSearchForm = new FormGroup({
       uuidControl: new FormControl(''),
       emailControl: new FormControl(''),
@@ -53,7 +55,8 @@ export class UserTableComponent implements OnInit, AfterViewInit {
       return ["uuid", "email", "password_set", "lid", "is_staff", "is_manager", "last_login", "modified_at"]
   }
 
-  constructor(private staffUserService: StaffUserService,
+  constructor(private datePipe: DatePipe,
+              private staffUserService: StaffUserService,
               private staffGroupService: StaffGroupService) {
   }
 
@@ -127,10 +130,29 @@ export class UserTableComponent implements OnInit, AfterViewInit {
       const uuidQuery = uuidControlValue === '' ? null: uuidControlValue;
       const groupsQueries: number[] = (groupControlValuesFiltered.length < 0) ? []: groupControlValuesFiltered;
 
-      this.usersExport$ = this.staffUserService.getUsersExport(uuidQuery, emailQuery, groupsQueries)
+      const fields: string[] = ['uuid', 'email', 'voornaam', 'achternaam']
+
+      this.usersExport$ = this.staffUserService.getUsersExport(fields, uuidQuery, emailQuery, groupsQueries)
       this.usersExport$.pipe(
 
-      )
+      ).subscribe((data) => {
+        const date = new Date()
+        const pipedDate = this.datePipe.transform(date, 'dd-MM-yyyy')
+
+
+        this.blob = new Blob([data], {type: 'application/vnd.ms-excel'})
+
+        let downloadURL = URL.createObjectURL(data);
+        let link = document.createElement('a');
+        link.href = downloadURL
+        link.download = "UserExport_" + pipedDate + ".xlsx";
+        link.click()
+
+        // This took me longer than I would like to admit
+        // These two answers hold all the answers
+        // https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
+        // https://stackoverflow.com/questions/60730934/typescript-http-get-error-no-overload-matches-this-call
+      })
   }
 
   AddGroupField() {
