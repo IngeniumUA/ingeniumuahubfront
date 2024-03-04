@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { WebmasterComponent } from './webmaster.component';
 import {WebmasterRoutingModule} from "./webmaster-routing.module";
 import {BehindheaderComponent} from "../../core/layout/behind/behindheader/behindheader.component";
@@ -32,13 +32,6 @@ import {
 import {
     TransactionTableComponent
 } from "../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component";
-import { AccessPolicyDashboardComponent } from './access/access-policy-dashboard/access-policy-dashboard.component';
-import {
-  AccessPolicyTableComponent
-} from "../../shared/components/staff_webmaster_manager/tables/access-policy-table/access-policy-table.component";
-import {
-  AccessPolicyDetailDashboardComponent
-} from "./access/access-policy-detail/access-policy-detail-dashboard.component";
 import {
     ItemCreateComponent
 } from "../../shared/components/staff_webmaster_manager/create/item-create/item-create.component";
@@ -58,6 +51,13 @@ import {
 import {
     CheckoutAndTransactionDashboardComponent
 } from "../../shared/components/staff_webmaster_manager/dashboards/checkout-and-transaction-dashboard/checkout-and-transaction-dashboard.component";
+import { CheckoutDetailComponent } from './checkout/checkout-detail/checkout-detail.component';
+import {
+    CreateCheckoutComponent
+} from "../../shared/components/staff_webmaster_manager/create/create-checkout/create-checkout.component";
+import {
+    TransactionDetailComponent
+} from "../../shared/components/staff_webmaster_manager/details/transaction-detail/transaction-detail.component";
 
 
 @NgModule({
@@ -69,9 +69,8 @@ import {
     ItemDashboardComponent,
     ItemDetailDashboardComponent,
     CardDashboardComponent,
-    AccessPolicyDashboardComponent,
-    AccessPolicyDetailDashboardComponent,
-    ProductWebmasterPageComponent
+    ProductWebmasterPageComponent,
+    CheckoutDetailComponent
   ],
     imports: [
         CommonModule,
@@ -87,12 +86,15 @@ import {
         ProductBlueprintDashboardComponent,
         CardTableComponent,
         TransactionTableComponent,
-        AccessPolicyTableComponent,
         AccessPolicyDetailComponent,
         ItemCreateComponent,
         ProductBlueprintCreateComponent,
         ProductBlueprintDetailComponent,
-        CheckoutAndTransactionDashboardComponent
+        CheckoutAndTransactionDashboardComponent,
+        CreateCheckoutComponent,
+        TransactionDetailComponent
+    ], providers: [
+        DatePipe
     ]
 })
 export class WebmasterModule { }

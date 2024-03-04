@@ -1,0 +1,47 @@
+<app-layout-public-header></app-layout-public-header>
+
+<ng-container *ngIf="{'isMobile': this.isMobile$ | async} as isMobile">
+
+<ng-container *ngIf="{vacature: this.vacature$ | async, error: vacatureError$ | async} as data; ">
+
+    <ng-template #loading>
+        <ng-container *ngIf="data.error">
+            Error {{ data.error.error.detail['error_nl'] }}
+        </ng-container>
+        <ng-container *ngIf="!data.error">
+            Loading ...
+        </ng-container>
+    </ng-template>
+
+<main *ngIf="data.vacature as vacature; else loading" [ngStyle]="{'border-color': (vacature.color | colordbrgba: 1) }">
+
+<section  class="border-gray-400 border-b-2 my-4">
+    <h1 class="text-center" [ngStyle]="{'color': (vacature.color | colordbrgba: 1) }">{{ vacature.item.name }}</h1>
+</section>
+
+<section>
+    <div class="my-4" [ngClass]="ImageDivClass(isMobile.isMobile)">
+        <p class="text-blue-900"
+           [ngStyle]="{'color': (vacature.color | colordbrgba: 1) }">
+            {{ vacature.item.description }}
+        </p>
+    </div>
+
+    <div [ngClass]="ImageDivClass(isMobile.isMobile)">
+        <ng-container *ngIf="(vacature.image_landscape !== null && vacature.image_landscape !== '')">
+            <img src='{{vacature.image_landscape}}' alt="Image not working :(">
+        </ng-container>
+        <ng-container *ngIf="(vacature.image_square !== null && vacature.image_square !== '')">
+            <img src='{{vacature.image_square}}' alt="Image not working :(">
+        </ng-container>
+    </div>
+</section>
+
+<section class="border-gray-400 border-t-2">
+    <h2 class="text-blue-900">Onze partners</h2>
+    <app-partner-grid></app-partner-grid>
+</section>
+</main>
+
+    </ng-container>
+</ng-container>

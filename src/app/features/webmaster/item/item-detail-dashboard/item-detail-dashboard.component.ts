@@ -16,6 +16,8 @@ export class ItemDetailDashboardComponent implements OnInit {
   $itemDetail: Observable<StaffItemDetailI| null> = of(null)
   $productBlueprint: Observable<StaffProductBlueprintI[]> = of([])
 
+  addingTransaction: boolean = false
+
   itemId!: string
 
   constructor(private staffItemService: StaffItemService,

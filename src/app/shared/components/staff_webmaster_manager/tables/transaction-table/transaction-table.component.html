@@ -12,6 +12,12 @@
   </div>
 
   <h2>Transactions Table</h2>
+
+  <section class="flex flex-row gap-3">
+    <button class="button button-primary button-inline" (click)="LoadData()">Refresh</button>
+    <button class="button button-primary button-inline" (click)="DownloadData()">Download</button>
+  </section>
+
   <ng-container *ngIf="(this.transactionData$ | async) as transactionTable else loading">
     <mat-paginator
       [length]="StatusToStats(this.selectedStatus, statusStats)"
@@ -24,7 +30,7 @@
     <table mat-table [dataSource]="transactionTable" class="mat-elevation-z8">
     <form [formGroup]="this.searchForm">
 
-      <ng-container matColumnDef="checkout_id">
+      <ng-container *ngIf="checkout_id === null" matColumnDef="checkout_id">
         <th mat-header-cell *matHeaderCellDef>Checkout</th>
         <td mat-cell *matCellDef="let transaction">
           <a [routerLink]="['../../checkout/'+transaction.checkout_id ]">{{ transaction.checkout_id }}</a>
@@ -106,7 +112,16 @@
       </ng-container>
 
       <ng-container matColumnDef="validity">
-        <th mat-header-cell *matHeaderCellDef><div>Validity</div></th>
+        <th mat-header-cell *matHeaderCellDef>
+          <div>Validity
+          <select formControlName="validityControl">
+            <option [ngValue]="null">Validity</option>
+            <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.name" style="color: var(--mainblue)">
+              {{ validity.name }}
+            </option>
+          </select>
+          </div>
+        </th>
         <td mat-cell *matCellDef="let transaction">
           <p
             [ngClass]="StyleClassFromValidity(transaction.validity)"

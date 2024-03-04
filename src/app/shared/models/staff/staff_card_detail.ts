@@ -9,3 +9,8 @@ export interface StaffCardDetailI {
   last_edited: string
   card_item: string
 }
+
+export const CardTypes: string[] = [
+  'lid',
+  'steunend'
+]

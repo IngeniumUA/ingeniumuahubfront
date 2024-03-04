@@ -7,7 +7,7 @@
         <tr><th scope="col"></th><th scope="col">Item:</th></tr>
       </thead>
       <tbody>
-        <tr><th>UUID</th><td>{{ item.item.uuid }}</td></tr>
+        <tr><th>UUID</th><td>{{ itemModel.uuid }}</td></tr>
         <tr>
           <th>Name</th>
           <td><label class="hubformfield-white">
@@ -18,8 +18,8 @@
           <th>Available</th>
           <td><input type="checkbox" formControlName="available"/></td>
         </tr>
-        <tr><th>Created At</th><td>{{ item.item.created_at | date: 'medium' }}</td></tr>
-        <tr><th>Modified At</th><td>{{ item.item.modified_at | date: 'medium' }}</td></tr>
+        <tr><th>Created At</th><td>{{ itemModel.created_at | date: 'medium' }}</td></tr>
+        <tr><th>Modified At</th><td>{{ itemModel.modified_at | date: 'medium' }}</td></tr>
       </tbody>
     </table>
     <h4><b>Description</b></h4>
@@ -64,7 +64,33 @@
 
 <section *ngIf="this.item.promo_item as promoItem">
   <h2>Promo Item</h2>
-  <app-display-mixin-detail [displayMixin]="promoItem.display_mixin"></app-display-mixin-detail>
+  <form [formGroup]="itemForm">
+    <table>
+      <thead>
+      <tr><th scope="col"></th><th scope="col">Promo Item:</th></tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th>Display From Date</th>
+        <td><label class="hubformfield-white">
+          <input type="datetime-local" formControlName="displayFromDate"/>
+        </label></td>
+      </tr>
+      <tr>
+        <th>Display Until Date</th>
+        <td><label class="hubformfield-white">
+          <input type="datetime-local" formControlName="displayUntilDate"/>
+        </label></td>
+      </tr>
+      <tr>
+        <th>Type</th>
+        <td>{{ promoItem.type }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </form>
+  <br>
+  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 2)" [displayMixin]="promoItem.display_mixin"></app-display-mixin-detail>
 </section>
 
 <section>

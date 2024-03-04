@@ -39,6 +39,8 @@ import { PartnerBalkComponent } from './shared/components/partners/partner-balk/
 import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
 import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
 import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
+import {QRCodeModule} from "angularx-qrcode";
+import {PromoListComponent} from "./shared/components/items/item/promo-list/promo-list.component";
 
 
 @NgModule({
@@ -65,6 +67,11 @@ import { GalabalComponent } from './features/public/custom-pages/galabal/galabal
 
     ],
     imports: [
+        // https://www.npmjs.com/package/angularx-qrcode
+        // QRCode generator
+        QRCodeModule,
+
+
         BrowserModule,
         PublicHeaderComponent,
         PublicFooterComponent,
@@ -88,7 +95,8 @@ import { GalabalComponent } from './features/public/custom-pages/galabal/galabal
 
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
-        PartnerGridComponent
+        PartnerGridComponent,
+        PromoListComponent
     ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},

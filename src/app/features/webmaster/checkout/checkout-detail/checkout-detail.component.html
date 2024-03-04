@@ -1,0 +1,81 @@
+<section class="staffSection">
+  <h1 class="text-blue-900">Checkout Detail</h1>
+  <table *ngIf="(checkoutDetail$ | async) as checkout else loadingData">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Checkout:</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+      <th>Checkout ID</th>
+      <td>{{ checkout.id }}</td>
+    </tr>
+    <tr>
+      <th>User</th>
+      <td>{{ checkout.user_email }}</td>
+    </tr>
+    <tr>
+      <th>Amount</th>
+      <td>{{ checkout.currency }} {{ checkout.amount }} </td>
+    </tr>
+    <tr>
+      <th>Status</th>
+      <td>{{ checkout.status }}</td>
+    </tr>
+    <tr>
+      <th>Date Created</th>
+      <td>{{ checkout.date_created | date: 'long' }}</td>
+    </tr>
+    <tr>
+      <th>Date Completed</th>
+      <td>{{ checkout.date_completed | date: 'long' }}</td>
+    </tr>
+
+    </tbody>
+  </table>
+
+  <div class="my-4 flex flex-row gap-3">
+    <button class="button button-primary w-1/6 button-inline"
+            [disabled]="this.loading"
+            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            (click)="Patch()">
+      Update</button>
+
+    <button class="button button-primary w-1/6 button-inline"
+            [disabled]="this.loading"
+            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            (click)="Refund()">
+      Refund</button>
+
+    <button class="button button-primary w-1/6 button-inline"
+            [disabled]="this.loading"
+            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            (click)="SendEmail()">
+      Send Email</button>
+  </div>
+
+  <span *ngIf="formError !== null" class="error-message">{{ formError }}</span>
+  <span *ngIf="successMessage !== null" class="success-message">{{ successMessage }}</span>
+
+</section>
+
+<section class="staffSection">
+  <h1 class="text-blue-900">Transactions</h1>
+  <app-transaction-table [checkout_id]="this.checkout_id"></app-transaction-table>
+</section>
+
+<section class="staffSection">
+  <h1 class="text-blue-900">Edit transactions</h1>
+  <ng-container *ngIf="(transactions$ | async) as transactions else loadingData">
+  <ng-container *ngFor="let transaction of  transactions">
+  <app-transaction-detail (PatchedTransaction)="FetchData()" [transaction]="transaction"></app-transaction-detail>
+  </ng-container>
+  </ng-container>
+</section>
+
+<ng-template #loadingData>
+  Loading
+</ng-template>

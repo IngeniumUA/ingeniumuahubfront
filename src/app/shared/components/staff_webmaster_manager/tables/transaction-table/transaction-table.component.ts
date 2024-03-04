@@ -11,6 +11,7 @@ import {StatusStatsI} from "../../../../models/stats/transactionStats";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {distinctUntilChanged} from "rxjs/operators";
 import {CurrencyPipe} from "../../../../pipes/currency.pipe";
+import {ValidityOptions} from "../../../../models/items/validity";
 
 @Component({
   selector: 'app-transaction-table',
@@ -33,10 +34,12 @@ import {CurrencyPipe} from "../../../../pipes/currency.pipe";
   standalone: true
 })
 export class TransactionTableComponent {
-  constructor(private staffTransactionService: StaffTransactionService) {
+  constructor(private staffTransactionService: StaffTransactionService,
+              private datePipe: DatePipe) {
   }
   @Input() item_id: string | null = null
   @Input() user_id: string | null = null
+  @Input() checkout_id: string | null = null
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
@@ -45,20 +48,27 @@ export class TransactionTableComponent {
 
   transactionData$: Observable<StaffTransactionI[]> = of([])
 
+  blob!: Blob
+
   searchForm = new FormGroup({
     idControl: new FormControl(''),
     emailControl: new FormControl(''),
-    productNameControl: new FormControl('')
+    productNameControl: new FormControl(''),
+    validityControl: new FormControl('')
   })
 
   GetDisplayedColumns(): string[] {
-    let columns = ["checkout_id", "interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"]
+    let columns = ["interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"];
 
+    // Add if not Input()
     if (this.item_id === null) {
       columns.splice(columns.indexOf('interaction_id'), 0, 'item')
     }
     if (this.user_id === null) {
       columns.splice(columns.indexOf('interaction_id'), 0, 'user')
+    }
+    if (this.checkout_id === null) {
+      columns.splice(0, 0, "checkout_id")
     }
 
     return columns
@@ -94,10 +104,12 @@ export class TransactionTableComponent {
     const emailControlValue = this.searchForm.get('emailControl')!.value;
     const interactionIdControlValue = this.searchForm.get('idControl')!.value;
     const productNameControlValue = this.searchForm.get('productNameControl')!.value;
+    const validityControlValue = this.searchForm.get('validityControl')!.value;
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
     const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
+    const validityQuery = validityControlValue === '' ? null: validityControlValue;
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
@@ -105,11 +117,11 @@ export class TransactionTableComponent {
 
     // Transaction fetching
     this.transactionData$ = this.staffTransactionService.getTransactions(
-      pageIndex * pageSize, pageSize, this.item_id, this.user_id, status,
-      emailQuery, interactionQuery, productNameQuery)
+      pageIndex * pageSize, pageSize, this.item_id, this.user_id, this.checkout_id, status,
+      emailQuery, interactionQuery, productNameQuery, validityQuery)
 
     // Transactionstats
-    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id)
+    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id)
   }
 
   SwitchStatusFilter(status: string) {
@@ -163,4 +175,44 @@ export class TransactionTableComponent {
       }
       return ""
   }
+
+  DownloadData() {
+    const status = this.selectedStatus === 'All' ? null: this.selectedStatus
+
+    // Form parsing
+    const emailControlValue = this.searchForm.get('emailControl')!.value;
+    const interactionIdControlValue = this.searchForm.get('idControl')!.value;
+    const productNameControlValue = this.searchForm.get('productNameControl')!.value;
+    const validityControlValue = this.searchForm.get('validityControl')!.value;
+
+    const emailQuery = emailControlValue === '' ? null: emailControlValue;
+    const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
+    const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
+    const validityQuery = validityControlValue === '' ? null: validityControlValue;
+
+    const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
+    'product_id', 'product_name', 'amount', 'transaction_status', 'date_created', 'date_completed', 'validity']
+
+    this.staffTransactionService.getTransactionsExport(fields, this.item_id, this.user_id, this.checkout_id, status,
+        emailQuery, interactionQuery, productNameQuery, validityQuery).subscribe((data) => {
+      const date = new Date()
+      const pipedDate = this.datePipe.transform(date, 'dd-MM-yyyy')
+
+
+      this.blob = new Blob([data], {type: 'application/vnd.ms-excel'})
+
+      let downloadURL = URL.createObjectURL(data);
+      let link = document.createElement('a');
+      link.href = downloadURL
+      link.download = "TransactionExport_" + pipedDate + ".xlsx";
+      link.click()
+
+      // This took me longer than I would like to admit
+      // These two answers hold all the answers
+      // https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
+      // https://stackoverflow.com/questions/60730934/typescript-http-get-error-no-overload-matches-this-call
+    })
+  }
+
+  protected readonly ValidityOptions = ValidityOptions;
 }

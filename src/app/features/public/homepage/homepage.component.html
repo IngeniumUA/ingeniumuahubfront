@@ -68,7 +68,7 @@
           </div>
           <a href="#">Meer info</a>
         </div>
-        <a [routerLink]="['/info/startweek']" class="image-wrapper"><img src="assets/images/GoodiebagFoto.jpg"></a>
+        <a [routerLink]="['/info/startweek']" class="image-wrapper"><img alt="Goodiebags" src="assets/images/GoodiebagFoto.jpg"></a>
       </article>
       <article class="homepage-card news">
         <div class="content">
@@ -77,7 +77,7 @@
           </div>
           <a href="#">Meer info</a>
         </div>
-        <a [routerLink]="['/info/startweek']" class="image-wrapper"><img src="assets/images/galabal.jpg"></a>
+        <a href="https://www.facebook.com/events/1057302698733213" class="image-wrapper"><img alt="Galabal" src="assets/images/galabal.jpg"></a>
       </article>
       <article class="homepage-card news">
         <div class="content">
@@ -86,10 +86,14 @@
           </div>
           <a href="#">Meer info</a>
         </div>
-        <a [routerLink]="['/info/praesidium']" class="image-wrapper"><img src="assets/images/wiezijnwij.png"></a>
+        <a [routerLink]="['/info/praesidium']" class="image-wrapper"><img alt="wiezijnwij" src="assets/images/wiezijnwij.png"></a>
       </article>
     </div>
   </div>
+</section>
+
+<section class="px-2">
+  <app-promo-list [promoType]="'vacature'"></app-promo-list>
 </section>
 
 <!-- Sponsorbalkje -->

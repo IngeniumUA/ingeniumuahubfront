@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {TransactionI} from "../../../../core/services/user/account/account.service";
 import {DatePipe, NgForOf} from "@angular/common";
+import {QRCodeModule} from "angularx-qrcode";
 
 @Component({
   selector: 'app-transaction-display',
@@ -8,7 +9,8 @@ import {DatePipe, NgForOf} from "@angular/common";
   styleUrls: ['./transaction-display.component.css'],
   imports: [
     DatePipe,
-    NgForOf
+    NgForOf,
+    QRCodeModule
   ],
   standalone: true
 })

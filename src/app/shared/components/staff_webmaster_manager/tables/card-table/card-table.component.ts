@@ -1,17 +1,18 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {MatTableModule} from "@angular/material/table";
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {StaffItemDetailI} from "../../../../models/staff/staff_item_details";
 import {StaffItemService} from "../../../../../core/services/staff/items/staff_item_router";
 import {StaffCardService} from "../../../../../core/services/staff/items/staff_card_router";
-import {StaffCardDetailI} from "../../../../models/staff/staff_card_detail";
+import {CardTypes, StaffCardDetailI} from "../../../../models/staff/staff_card_detail";
 import {RouterLink} from "@angular/router";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {distinctUntilChanged, map} from "rxjs/operators";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {LayoutService} from "../../../../../core/services/layout/layout.service";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {ValidityOptions} from "../../../../models/items/validity";
 
 @Component({
   selector: 'app-card-table',
@@ -25,7 +26,8 @@ import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
     MatPaginatorModule,
     MatProgressSpinnerModule,
     AsyncPipe,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgForOf
   ],
   standalone: true
 })
@@ -94,6 +96,10 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     this.cards$ = this.cardService.getCards(pageIndex * pageSize, pageSize, userQuery, cardTypeQuery, cardNrQuery, null)
   }
 
+  DownloadData() {
+
+  }
+
   UnlinkCard(card: StaffCardDetailI) {
     this.cardService.UnlinkCard(card).subscribe({
       next: (value) => {
@@ -104,4 +110,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  protected readonly ValidityOptions = ValidityOptions;
+  protected readonly CardTypes = CardTypes;
 }

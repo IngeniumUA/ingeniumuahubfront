@@ -1,0 +1,35 @@
+main.promo {
+    @apply h-full p-6;
+
+    h1, h2 {
+        @apply text-blue-900;
+    }
+
+    .vacatures-list {
+        @apply p-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2;
+    }
+}
+
+.warn {
+    height: 63vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--mainblue);
+}
+
+section h1 {
+    padding-bottom: 1rem;
+}
+
+.item-list {
+    padding: 1rem;
+
+    display: flex;
+    gap: 2rem;
+}
+
+.mobile {
+    display: flex;
+    flex-direction: column;
+}

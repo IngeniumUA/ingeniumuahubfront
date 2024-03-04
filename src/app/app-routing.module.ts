@@ -62,7 +62,10 @@ const routes: Routes = [
 
     // Custom pages
     {path: 'ingenium-galabal', component: GalabalComponent},
-    {path: 'galabal', component: GalabalComponent}
+    {path: 'galabal', component: GalabalComponent},
+
+    // Promo
+    {path: '', loadChildren: () => import('src/app/features/public/promo/promo.module').then(x => x.PromoModule)},
   ]},
 
   // POP-UP Z

@@ -50,11 +50,24 @@ export class StaffUserService {
         this.apiUrl + "/stats" + query_str)
   }
 
-  public getUsersExport(user: string | null = null,
+  public getUsersExport(fields: string[],
+                        user: string | null = null,
                         user_email: string | null = null,
                         user_ismemberof_group: number[] = []):
-      Observable<Blob>{
-    let query_str = "?offset=0&limit=0";
+      Observable<any>{
+    let query_str = "?";
+
+    // Fields parsing
+    // Starts from second item
+    if (fields.length == 0) {
+      query_str +="fields=email"
+    } else {
+      query_str += "fields=" + fields[0]
+    }
+    fields.slice(1).forEach((field: string) => {
+      query_str += "&fields=" + field
+    })
+
     if (user !== null) {
       query_str += "&user=" + user.toString()
     }
@@ -64,7 +77,12 @@ export class StaffUserService {
     user_ismemberof_group.forEach((group) => {
       query_str += "&ismemberof_group=" + group.toString()
     })
-    return this.httpClient.get<Blob>(this.apiUrl + "/file" + query_str)
+
+    const httpOptions: Object = {
+      responseType: ('blob' as 'application/vnd.ms-excel')
+    }
+
+    return this.httpClient.get<Blob>(this.apiUrl + "/export" + query_str, httpOptions)
   }
 
   public getUser(userId: string): Observable<StaffUserDetailI> {
