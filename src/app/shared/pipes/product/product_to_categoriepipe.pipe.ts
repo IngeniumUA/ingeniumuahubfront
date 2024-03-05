@@ -12,9 +12,17 @@ export class ProductsToCategoriesPipe implements PipeTransform {
       // Predefine result ( should be immutably refactored later on with .map(), but that was tricky on objects
       let result: IProductCategorie[] = []
 
+      // Sorting in Descending Order ( reversed )
+      // We sort the products beforehand and then construct the Groups and Categories later on
+      // As the order is preserved by reducing the products ( see Data Structures and Algorithms course )
+      const sortedProducts = products.sort(
+        (lhs, rhs) => rhs.product_ordering - lhs.product_ordering)
+
+      console.log(sortedProducts)
+
       // This is typescript wizardy
       // From this website https://sylhare.github.io/2022/03/08/Reduce-in-typescript.html
-      const productsPerCategorie: [] = products.reduce((result: any, product): IProductGroup[] => (
+      const productsPerCategorie: [] = sortedProducts.reduce((result: any, product): IProductGroup[] => (
           {...result,
               [product.product_meta.categorie]: [...(result[product.product_meta.categorie] || []), product]
           }

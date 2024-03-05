@@ -1,0 +1,17 @@
+h3 {
+    @apply text-blue-900
+}
+
+main {
+    section {
+        @apply my-4 flex flex-col gap-2
+    }
+
+  input {
+    @apply p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin;
+  }
+
+  select {
+    @apply p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin;
+  }
+}

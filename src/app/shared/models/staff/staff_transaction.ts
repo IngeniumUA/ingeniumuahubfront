@@ -28,3 +28,9 @@ export interface StaffTransactionI {
   date_created: string
   date_completed: string
 }
+
+export interface StaffTransactionPatchI {
+  validity: string | null
+  user: string | null
+  user_id: string | null
+}

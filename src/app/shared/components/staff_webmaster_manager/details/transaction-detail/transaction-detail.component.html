@@ -50,7 +50,7 @@
         <div>
         Validity:
         <select formControlName="validity">
-            <option [ngValue]="null">Validity</option>
+            <option [ngValue]="null" disabled>Validity</option>
             <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.name" style="color: var(--mainblue)">
                 {{ validity.name }}
             </option>
@@ -65,6 +65,18 @@
                 {{ status.name }}
             </option>
         </select>
+        </div>
+
+        <div>
+        Product:
+        <ng-container *ngIf="(this.products$ | async) as products else loadingProducts">
+          <select formControlName="productControl">
+            <option [ngValue]="transaction.product" disabled selected>{{ transaction.product.name }} {{ transaction.amount }}</option>
+            <option *ngFor="let product of products" [ngValue]="product">
+              {{ product.product_blueprint_name }} € {{ product.price_eu }}
+            </option>
+          </select>
+        </ng-container>
         </div>
         </section>
     </form>
@@ -92,3 +104,7 @@
     <span class="error-message" *ngIf="formError !== null">{{ formError }}</span>
     <span *ngIf="successMessage !== null" class="success-message">{{ successMessage }}</span>
 </section>
+
+<ng-template #loadingProducts>
+  Loading products
+</ng-template>

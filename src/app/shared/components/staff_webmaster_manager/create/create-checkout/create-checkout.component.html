@@ -1,55 +1,91 @@
-<section>
+<main>
   <form [formGroup]="checkoutForm" class="flex flex-col">
-    <h3>Checkout</h3>
-    <label class="hubformfield-white">
-      Email:
-      <input type="email" formControlName="userEmail" placeholder="user@email.com"/>
-    </label>
+    <section>
+      <h3>Checkout</h3>
+      <label>
+        Email:
+        <input type="email" formControlName="userEmailControl" placeholder="user@email.com"/>
+      </label>
 
-    <label class="hubformfield-white">
-      PaymentType:
-      <select formControlName="paymentProvider">
-        <option [ngValue]="null">Kies PaymentProvidor</option>
-        <option *ngFor="let paymentProvidor of paymentProvidors" [ngValue]="paymentProvidor" style="color: var(--mainblue)">
-          {{ paymentProvidor }}
-        </option>
-      </select>
-    </label>
-
-    <h3>Transactions</h3>
-    <ng-container *ngFor="let control of this.transactions().controls; index as i">
-      <div [formGroupName]=i>
-        Product:
-        <select formControlName="product">
-          <option [ngValue]="null">Kies Product</option>
-          <option *ngFor="let product of (this.products$ | async)" [ngValue]="product" style="color: var(--mainblue)">
-            {{ product.name }} {{ product.price_eu }}
+      <label>
+        PaymentType:
+        <select formControlName="paymentProvider">
+          <option [ngValue]="null" disabled selected>Kies PaymentProvidor</option>
+          <option *ngFor="let paymentProvidor of paymentProvidors" [ngValue]="paymentProvidor">
+            {{ paymentProvidor }}
           </option>
         </select>
+      </label>
+    </section>
 
-        Validity:
-        <select formControlName="validity">
-          <option [ngValue]="null">Kies Validity</option>
-          <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
-            {{ validity.name }}
-          </option>
-        </select>
-      </div>
-    </ng-container>
+    <section>
+      <h3>Transactions</h3>
+      <ng-container *ngFor="let control of this.transactions().controls; let i=index">
+        <div [formGroup]="GetControl(control)" class="my-4 py-2 border-t border-gray-400 flex flex-row gap-2">
+          <span>
+          Product:
+          <ng-container *ngIf="(this.products$ | async) as products else loadingProducts">
+            <select formControlName="productControl">
+              <option [ngValue]="null" disabled selected>Kies Product</option>
+              <option *ngFor="let product of products" [ngValue]="product">
+                {{ product.product_blueprint_name }} {{ product.price_eu }}
+              </option>
+            </select>
+          </ng-container>
+          </span>
 
-    <h3>Creation Options</h3>
-    <label class="hubformfield-white">
-      Send Mail:
-      <input type="checkbox" formControlName="sendMail"/>
-    </label>
-    <label class="hubformfield-white">
-      Create User if not found:
-      <input type="checkbox" formControlName="createUserIfNone"/>
-    </label>
+          <span>
+          Validity:
+          <select formControlName="validityControl">
+            <option [ngValue]="null" disabled selected>Kies Validity</option>
+            <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
+              {{ validity.name }}
+            </option>
+          </select>
+          </span>
 
-    <button (click)="SubmitForm()">Create</button>
-    <p class="error-message" *ngIf="formError !== null">
-      {{ formError }}
-    </p>
+          <button class="button button-primary w-1/12 button-inline"
+                  [disabled]="this.transactions().length == 1"
+                  (click)="RemoveTransaction(i)">
+            Remove</button>
+        </div>
+      </ng-container>
+      <button class="button button-primary w-1/6 button-inline"
+              (click)="AddTransaction()">
+        Add Transaction</button>
+    </section>
+
+    <section>
+      <h3>Creation Options</h3>
+      <label>
+        Send Mail:
+        <input type="checkbox" formControlName="sendMailControl"/>
+      </label>
+      <label>
+        Force Create:
+        <input type="checkbox" formControlName="forceCreateControl"/>
+      </label>
+      <label>
+        Create missing User
+        <input type="checkbox" formControlName="createUserIfNoneControl" [disabled]="this.userNotInAPI"/>
+      </label>
+
+      <button class="button button-primary w-1/6 button-inline"
+              [disabled]="this.loading"
+              [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+              (click)="SubmitForm()">
+        Create</button>
+
+      <span class="error-message" *ngIf="formError !== null">
+        {{ formError }}
+      </span>
+      <span class="success-message" *ngIf="successMessage !== null">
+        {{ successMessage }}
+      </span>
+    </section>
   </form>
-</section>
+</main>
+
+<ng-template #loadingProducts>
+  Loading products
+</ng-template>

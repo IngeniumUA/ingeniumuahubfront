@@ -18,6 +18,8 @@ export interface ProductMetaI {
 export interface IProductItem {
   id: number;
   product_blueprint_id: number;
+  product_blueprint_name: string | null
+  product_ordering: number
   name: string;
   price_eu: number;
   max_count: number;

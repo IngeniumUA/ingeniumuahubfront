@@ -89,6 +89,10 @@ export class TransactionTableComponent {
 
   ngAfterViewInit() {
     // Label popups are breaking something frontend related, just remove them
+    // In some cases the paginator is undefined ? We check if it is defined
+    if (this.paginator === undefined) {
+      return
+    }
     const paginatorIntl = this.paginator._intl;
     paginatorIntl.itemsPerPageLabel = '';
     paginatorIntl.nextPageLabel = '';
@@ -139,10 +143,10 @@ export class TransactionTableComponent {
     if (status === "Failed") {
       return statsObject.FAILED
     }
-    if (status === "Cancelled") {
+    if (status === "Cancelled" || status === "Refunded") {
       return statsObject.CANCELLED
     }
-    if (status === "Pending") {
+    if (status === "Pending" || status === "Refund_pending") {
       return statsObject.PENDING
     }
     return 0
@@ -151,9 +155,9 @@ export class TransactionTableComponent {
   StyleClassFromStatus(status: string): string {
     if (status === "SUCCESSFUL") {
       return 'SUCCESSFUL-text'
-    } else if (status === "PENDING") {
+    } else if (status === "PENDING" || status === "REFUND_PENDING") {
       return 'PENDING-text'
-    } else if (status === "CANCELLED") {
+    } else if (status === "CANCELLED" || status === "REFUNDED") {
       return 'CANCELLED-text'
     } else if (status === "FAILED") {
       return 'FAILED-text'
