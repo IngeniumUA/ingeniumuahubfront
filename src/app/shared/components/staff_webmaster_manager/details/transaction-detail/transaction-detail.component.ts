@@ -6,6 +6,9 @@ import {ValidityOptions} from "../../../../models/items/validity";
 import {StatusOptions} from "../../../../models/items/status";
 import {HttpErrorResponse} from "@angular/common/http";
 import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
+import {Observable, of} from "rxjs";
+import {IProductItem} from "../../../../models/items/products/products";
+import {StaffProductService} from "../../../../../core/services/staff/staff-product.service";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -28,18 +31,22 @@ export class TransactionDetailComponent implements OnInit {
   formError: string | null = null;
   successMessage: string | null = null;
   loading: boolean = false
+  products$: Observable<IProductItem[]> = of();
 
   transactionForm!: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private transactionService: StaffTransactionService) {
+              private transactionService: StaffTransactionService,
+              private staffProductService: StaffProductService) {
   }
 
   ngOnInit() {
+    this.products$ = this.staffProductService.getProducts(0, 50, this.transaction.interaction.item_id);
     this.transactionForm = this.fb.group({
       'userEmail': [this.transaction.interaction.user_email],
       'validity': [this.transaction.validity],
       'status': [this.transaction.status],
+      'productControl': [this.transaction.product]
     })
   }
 
