@@ -125,10 +125,10 @@ export class CheckoutTableComponent {
     if (status === "Failed") {
       return statsObject.FAILED
     }
-    if (status === "Cancelled") {
+    if (status === "Cancelled" || status === "Refunded") {
       return statsObject.CANCELLED
     }
-    if (status === "Pending") {
+    if (status === "Pending" || status === "Refund_pending") {
       return statsObject.PENDING
     }
     return 0
@@ -137,9 +137,9 @@ export class CheckoutTableComponent {
   StyleClassFromStatus(status: string): string {
     if (status === "SUCCESSFUL") {
       return 'SUCCESSFUL-text'
-    } else if (status === "PENDING") {
+    } else if (status === "PENDING" || status === "REFUND_PENDING") {
       return 'PENDING-text'
-    } else if (status === "CANCELLED") {
+    } else if (status === "CANCELLED" || status === "REFUNDED") {
       return 'CANCELLED-text'
     } else if (status === "FAILED") {
       return 'FAILED-text'
