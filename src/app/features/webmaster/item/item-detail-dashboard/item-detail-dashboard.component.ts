@@ -16,7 +16,7 @@ export class ItemDetailDashboardComponent implements OnInit {
   $itemDetail: Observable<StaffItemDetailI| null> = of(null)
   $productBlueprint: Observable<StaffProductBlueprintI[]> = of([])
 
-  addingTransaction: boolean = false
+  addingCheckout: boolean = false
 
   itemId!: string
 
@@ -54,5 +54,9 @@ export class ItemDetailDashboardComponent implements OnInit {
     } else {
       this.disableItemBuffer = true
     }
+  }
+
+  ToggleAddingCheckout() {
+    this.addingCheckout = !this.addingCheckout
   }
 }
