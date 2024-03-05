@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {apiEnviroment} from "../../../../environments/environment";
 import {StaffUserDetailI} from "../../../shared/models/staff/staff_user_detail";
-import {StaffTransactionI} from "../../../shared/models/staff/staff_transaction";
+import {StaffTransactionI, StaffTransactionPatchI} from "../../../shared/models/staff/staff_transaction";
 import {StatusStatsI} from "../../../shared/models/stats/transactionStats";
 
 @Injectable({
@@ -14,6 +14,10 @@ export class StaffTransactionService {
   }
 
   apiUrl = apiEnviroment.apiUrl + "staff/transaction";
+
+  public patchTransaction(transaction_id: number, patch_object: StaffTransactionPatchI, forcePatch: boolean = false): Observable<StaffTransactionI> {
+    return this.httpClient.patch<StaffTransactionI>(this.apiUrl + "/" + transaction_id + "?force_patch=" + String(forcePatch), patch_object)
+  }
 
   public getTransactions(offset: number = 0, count: number = 50,
                          item_id: string | null = null,

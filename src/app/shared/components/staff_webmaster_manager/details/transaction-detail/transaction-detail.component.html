@@ -50,7 +50,7 @@
         <div>
         Validity:
         <select formControlName="validity">
-            <option [ngValue]="null">Validity</option>
+            <option [ngValue]="null" disabled>Validity</option>
             <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.name" style="color: var(--mainblue)">
                 {{ validity.name }}
             </option>
