@@ -44,7 +44,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
             max_total: [this.productBlueprint.max_total, [Validators.required, Validators.min(1)]],
             max_individual: [this.productBlueprint.max_individual, [Validators.required, Validators.min(1)]],
             max_per_checkout: [this.productBlueprint.max_per_checkout, [Validators.required, Validators.min(1)]],
-            ordering: [this.productBlueprint.max_per_checkout, [Validators.required]],
+            product_ordering: [this.productBlueprint.product_ordering, [Validators.required]],
         })
 
         this.productMetaForm = this.formBuilder.group({
@@ -92,7 +92,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
             max_individual: this.blueprintForm.controls['max_individual'].value,
             max_per_checkout: this.blueprintForm.controls['max_per_checkout'].value,
 
-            ordering: this.blueprintForm.controls['ordering'].value,
+            product_ordering: this.blueprintForm.controls['product_ordering'].value,
 
             price_policies: this.productBlueprint.price_policies,
 
