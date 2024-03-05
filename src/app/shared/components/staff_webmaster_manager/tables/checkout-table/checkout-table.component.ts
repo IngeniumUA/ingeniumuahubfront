@@ -51,7 +51,7 @@ export class CheckoutTableComponent {
   })
 
   GetDisplayedColumns(): string[] {
-    let columns = ["checkout_id", "amount", "status", "date_completed", "date_created"]
+    let columns = ["checkout_id", "amount", "status", "date_completed", "date_created", "payment_providor"]
 
     if (this.user_id === null) {
       columns.splice(columns.indexOf('amount'), 0, 'user')

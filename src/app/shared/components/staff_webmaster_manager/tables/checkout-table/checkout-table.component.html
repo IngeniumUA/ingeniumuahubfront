@@ -72,6 +72,12 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="payment_providor">
+            <th mat-header-cell *matHeaderCellDef><div>Payment Providor</div></th>
+            <td mat-cell *matCellDef="let checkout">{{ checkout.payment_providor }}</td>
+
+          </ng-container>
+
           <ng-container matColumnDef="date_completed">
             <th mat-header-cell *matHeaderCellDef><div>Date Finished</div></th>
             <td mat-cell *matCellDef="let checkout"> {{ checkout.date_completed | date: 'dd/MM/yyyy h:mm:ss' }} </td>
