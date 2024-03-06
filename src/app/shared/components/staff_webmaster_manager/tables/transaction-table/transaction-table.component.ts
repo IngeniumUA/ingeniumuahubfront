@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
@@ -33,7 +33,7 @@ import {ValidityOptions} from "../../../../models/items/validity";
   ],
   standalone: true
 })
-export class TransactionTableComponent {
+export class TransactionTableComponent implements AfterViewInit {
   constructor(private staffTransactionService: StaffTransactionService,
               private datePipe: DatePipe) {
   }
@@ -81,7 +81,7 @@ export class TransactionTableComponent {
       distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
       debounceTime(500)
       //combineLatest
-    ).subscribe((value) => {
+    ).subscribe((_) => {
       this.LoadData()
       }
     )
@@ -125,7 +125,8 @@ export class TransactionTableComponent {
       emailQuery, interactionQuery, productNameQuery, validityQuery)
 
     // Transactionstats
-    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id)
+    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id,
+      status, emailQuery, interactionQuery, productNameQuery, validityQuery)
   }
 
   SwitchStatusFilter(status: string) {
