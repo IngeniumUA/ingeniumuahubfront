@@ -149,22 +149,6 @@
         ]
       },
       {
-        "categorieName": "Feest",
-        "categorieDescription": "Het feest-team organiseert de T.D.'s doorheen het academiejaar.",
-        "praesidia": [
-          {
-            "name": "Liesbeth Poppe",
-            "functie": "Feest",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LiesbethPoppe.webp"
-          },
-          {
-            "name": "Cyrianne Mintiens",
-            "functie": "Feest",
-            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/CyrianneMintiens.webp"
-          }
-        ]
-      },
-      {
         "categorieName": "Sport",
         "categorieDescription": "De sport functies onderhouden contact met het sportcommisariaat.\nZe coordineren sportmanifestaties waaraan Ingenium deelneemt, stellen ploegen samen en organiseren sportieve evenementen.",
         "praesidia": [
