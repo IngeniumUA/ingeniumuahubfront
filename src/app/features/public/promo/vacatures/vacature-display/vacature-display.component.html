@@ -13,7 +13,9 @@
         </ng-container>
     </ng-template>
 
-<main *ngIf="data.vacature as vacature; else loading" [ngStyle]="{'border-color': (vacature.color | colordbrgba: 1) }">
+<main *ngIf="data.vacature as vacature; else loading"
+      [ngClass]="isMobile.isMobile ? null : 'border-x-[2rem]'"
+      [ngStyle]="{'border-color': (vacature.color | colordbrgba: 1) }">
 
 <section  class="border-gray-400 border-b-2 my-4">
     <h1 class="text-center" [ngStyle]="{'color': (vacature.color | colordbrgba: 1) }">{{ vacature.item.name }}</h1>
@@ -21,10 +23,14 @@
 
 <section>
     <div class="my-4" [ngClass]="ImageDivClass(isMobile.isMobile)">
+        <app-htmldisplay [html]="vacature.item.description"></app-htmldisplay>
+      <!--
         <p class="text-blue-900"
            [ngStyle]="{'color': (vacature.color | colordbrgba: 1) }">
+
             {{ vacature.item.description }}
         </p>
+        -->
     </div>
 
     <div [ngClass]="ImageDivClass(isMobile.isMobile)">

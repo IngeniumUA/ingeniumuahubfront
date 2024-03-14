@@ -10,6 +10,7 @@ import {
 } from "../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component";
 import {PartnerGridComponent} from "../../../shared/components/partners/partner-grid/partner-grid.component";
 import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
+import {HTMLDisplayComponent} from "../../../shared/components/htmldisplay/htmldisplay.component";
 
 @NgModule({
     imports: [
@@ -20,6 +21,7 @@ import {ColordbrgbaPipe} from "../../../shared/pipes/item/colorpipe.pipe";
         RecSysItemPreviewComponent,
         PartnerGridComponent,
         ColordbrgbaPipe,
+        HTMLDisplayComponent,
     ],
     declarations: [
 
