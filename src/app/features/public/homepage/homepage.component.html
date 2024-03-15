@@ -16,7 +16,7 @@
 <section class="info-card-section">
   <div class="intro-card">
     <div class="intro-card__image cursor-pointer">
-      <img src="assets/images/GroepsfotoOpeningsdag.webp" alt="" aria-hidden="true" [routerLink]="['/info/praesidium']">
+      <img ngSrc="assets/images/praesidium_thumb.webp" alt="" aria-hidden="true" [routerLink]="['/info/praesidium']" width="1000" height="863">
     </div>
     <div class="intro-card__content">
       <p>
@@ -37,7 +37,7 @@
 
 <!-- Upcoming events -->
 <section class="info-card-section recsys-section">
-  <h1>Suggesties:</h1>
+  <h1>Suggesties</h1>
 
   <ng-container *ngIf="(this.homePageRec$ | async) as eventsRec; else noEventsAvailable">
     <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">

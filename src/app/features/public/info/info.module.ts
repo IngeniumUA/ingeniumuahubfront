@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { InfoComponent } from './info/info.component';
 import {PublicHeaderComponent} from "../../../core/layout/public/header/public-header.component";
 import { InfoLidComponent } from './lid-info/info-lid.component';
@@ -48,7 +48,8 @@ import {PartnerGridComponent} from "../../../shared/components/partners/partner-
         FormsModule,
         ReactiveFormsModule,
         PartnerDumpComponent,
-        PartnerGridComponent
+        PartnerGridComponent,
+        NgOptimizedImage
     ]
 })
 export class InfoModule { }

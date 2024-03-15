@@ -41,6 +41,7 @@ import {PartnerGridComponent} from "./shared/components/partners/partner-grid/pa
 import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
 import {QRCodeModule} from "angularx-qrcode";
 import {PromoListComponent} from "./shared/components/items/item/promo-list/promo-list.component";
+import {NgOptimizedImage} from "@angular/common";
 
 
 @NgModule({
@@ -66,38 +67,39 @@ import {PromoListComponent} from "./shared/components/items/item/promo-list/prom
         GalabalComponent,
 
     ],
-    imports: [
-        // https://www.npmjs.com/package/angularx-qrcode
-        // QRCode generator
-        QRCodeModule,
+  imports: [
+    // https://www.npmjs.com/package/angularx-qrcode
+    // QRCode generator
+    QRCodeModule,
 
 
-        BrowserModule,
-        PublicHeaderComponent,
-        PublicFooterComponent,
+    BrowserModule,
+    PublicHeaderComponent,
+    PublicFooterComponent,
 
-        UnderConstructionComponent,
+    UnderConstructionComponent,
 
-        AppRoutingModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        SocialLoginModule,
-        CardComponent,
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    SocialLoginModule,
+    CardComponent,
 
-        ReactiveFormsModule,
-        MatRadioModule,
-        MatButtonModule,
-        RegisterComponent,
-        RecSysItemPreviewComponent,
+    ReactiveFormsModule,
+    MatRadioModule,
+    MatButtonModule,
+    RegisterComponent,
+    RecSysItemPreviewComponent,
 
-        PartnerBalkComponent,
-        PartnerDumpComponent,
+    PartnerBalkComponent,
+    PartnerDumpComponent,
 
-        BrowserAnimationsModule,
-        ToastrModule.forRoot(),
-        PartnerGridComponent,
-        PromoListComponent
-    ],
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    PartnerGridComponent,
+    PromoListComponent,
+    NgOptimizedImage
+  ],
     providers: [
         {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
         {provide: 'SocialAuthServiceConfig',
