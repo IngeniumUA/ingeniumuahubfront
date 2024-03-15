@@ -140,7 +140,6 @@ export class CreateCheckoutComponent implements OnInit {
     this.staffCheckoutService.createCheckout(checkoutObj, forceCreate, sendMail, createMissingUser).subscribe(
         (checkoutObj) => {
             this.checkoutCreated.emit(true)
-            console.log("event emitted")
         },
         (err: Error) => {
             this.handleError(err)
