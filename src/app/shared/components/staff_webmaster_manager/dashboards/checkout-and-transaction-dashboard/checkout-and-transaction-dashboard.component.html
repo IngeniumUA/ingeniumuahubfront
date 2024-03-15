@@ -6,10 +6,10 @@
 
 <section>
   <ng-container *ngIf="selectedTable === 'transactions'">
-    <app-transaction-table [user_id]="user_id" [item_id]="item_id"></app-transaction-table>
+    <app-transaction-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-transaction-table>
   </ng-container>
   <ng-container *ngIf="selectedTable === 'checkouts'">
-    <app-checkout-table [user_id]="user_id" [item_id]="item_id"></app-checkout-table>
+    <app-checkout-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-checkout-table>
   </ng-container>
   <ng-container *ngIf="selectedTable === 'refunds'">
     Uh, nee, stop it

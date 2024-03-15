@@ -16,7 +16,7 @@
 <section class="staffSection">
   <h2>Add Checkout</h2>
   <ng-container  *ngIf="addingCheckout">
-    <app-create-checkout [item_id]="this.itemId"></app-create-checkout>
+    <app-create-checkout [item_id]="this.itemId" (checkoutCreated)="refetchTable($event)"></app-create-checkout>
     <button class="button button-primary w-1/6 button-inline"
             (click)="ToggleAddingCheckout()">
       Cancel

@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {apiEnviroment} from "../../../../environments/environment";
 import {StatusStatsI} from "../../../shared/models/stats/transactionStats";
-import {StaffCheckoutI, StaffCheckoutPatchI} from "../../../shared/models/staff/staff_checkout";
+import {StaffCheckoutI, StaffCheckoutPatchI, StaffCreateCheckoutI} from "../../../shared/models/staff/staff_checkout";
 
 @Injectable({
   providedIn: 'root'
@@ -73,5 +73,10 @@ export class StaffCheckoutService {
 
   public emailCheckout(checkout_id: string): Observable<boolean> {
     return this.httpClient.get<boolean>(this.apiUrl + "/email/" + checkout_id)
+  }
+
+  public createCheckout(checkoutObj: StaffCreateCheckoutI, forceCreate: boolean = false, sendMail: boolean = false, createMissingUser: boolean = false): Observable<StaffCheckoutI> {
+    const createParams = "?force_create=" + String(forceCreate) + "&send_mail=" + String(sendMail) + "&create_user_if_none=" + String(createMissingUser)
+    return this.httpClient.post<StaffCheckoutI>(this.apiUrl + createParams, checkoutObj)
   }
 }

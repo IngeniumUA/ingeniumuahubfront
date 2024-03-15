@@ -59,4 +59,9 @@ export class ItemDetailDashboardComponent implements OnInit {
   ToggleAddingCheckout() {
     this.addingCheckout = !this.addingCheckout
   }
+
+  refetchTable(reload: boolean) {
+    console.log("refetchTable")
+    this.ToggleAddingCheckout()
+  }
 }

@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {StatusStatsI} from "../../../../models/stats/transactionStats";
@@ -31,12 +31,13 @@ import {CurrencyPipe} from "../../../../pipes/currency.pipe";
     ],
   standalone: true
 })
-export class CheckoutTableComponent {
+export class CheckoutTableComponent implements OnChanges {
 
   constructor(private staffCheckoutService: StaffCheckoutService) {
   }
   @Input() user_id: string | null = null
   @Input() item_id: string | null = null
+  @Input() loadDataEvent: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
@@ -58,6 +59,15 @@ export class CheckoutTableComponent {
     }
 
     return columns
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const loadData: SimpleChange = changes['loadDataEvent']
+    if (loadData.previousValue && !loadData.currentValue) {
+      // When previous value was 'loading' and now 'loading' has switched off
+      // Then we can reload our own data as well
+      this.LoadData()
+    }
   }
 
   ngOnInit() {
