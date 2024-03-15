@@ -12,8 +12,15 @@ export class StaffItemService {
 
   apiUrl = apiEnviroment.apiUrl + "staff/item";
 
-  public getItems(): Observable<StaffItemDetailI[]> {
-    return this.httpClient.get<StaffItemDetailI[]>(this.apiUrl)
+  public getItems(limit: number = 50, offset: number = 0,
+                  item_type: string | null = null): Observable<StaffItemDetailI[]> {
+    let queryParams = "?limit=" + limit.toString() + "&offset=" + offset.toString()
+
+    if (item_type !== null) {
+      queryParams += "&type=" + item_type
+    }
+
+    return this.httpClient.get<StaffItemDetailI[]>(this.apiUrl + queryParams)
   };
   public getItem(itemId: string): Observable<StaffItemDetailI> {
     return this.httpClient.get<StaffItemDetailI>(this.apiUrl + "/" + itemId);
