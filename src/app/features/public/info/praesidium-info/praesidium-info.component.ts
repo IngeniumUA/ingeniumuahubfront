@@ -26,7 +26,6 @@ interface PraesidiumGroupI {
   categories: PraesidiumCategorieI[]
 }
 
-
 @Component({
   selector: 'app-praesidium-info',
   templateUrl: './praesidium-info.component.html',
@@ -35,59 +34,44 @@ interface PraesidiumGroupI {
 export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private httpClient: HttpClient) {
-  }
+              private httpClient: HttpClient) {}
+
   yearControl = new FormControl<string>('');
-  validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19'];
+  validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19']; // Put newest year first
   praesidium$: Observable<PraesidiumGroupI[]> = of([])
 
   ngOnInit() {
     // Fetch ID
-    const year: string | null = this.route.snapshot.paramMap.get('year');
-
-    // If ID is null
-    if (year === null) {
-      this.NavigateCurrentYear();
-      return
-    }
-
-    // Setup form
+    const year: string = this.route.snapshot.paramMap.get('year') || this.validYears[0];
     this.yearControl.patchValue(year);
+    this.SetupYear(year);
 
     // Event for form changeing
     this.yearControl.valueChanges.pipe(
-      takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
-      )
-      .subscribe(selectedValue => {
-        if (selectedValue === null) {
-          this.NavigateCurrentYear()
-        } else {
-          // Changes the url
-          this.router.navigateByUrl('/info/praesidium/' + selectedValue).then(() => {})
-          this.SetupYear(selectedValue)
-          return
-        }
+        takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
+      ).subscribe(selectedValue => {
+        if (selectedValue === null) return;
+        this.router.navigateByUrl(`/info/praesidium/${selectedValue}`).then(() => {});
       }
-    )
-    // Setupfunction
-    this.SetupYear(year)
-  }
+    );
 
-  NavigateCurrentYear() {
-    this.router.navigateByUrl('/info/praesidium/23-24').then(() => {})
-    return
+    // Start a watcher for the route parameter
+    this.route.paramMap.pipe(
+      takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
+    ).subscribe(params => {
+      const year = params.get('year');
+      if (year === null) return;
+      this.SetupYear(year);
+    });
   }
 
   SetupYear(year: string) {
-    const filePath: string = '/assets/praesidium_files/praesidium_' + year + '.json'
-
-    if (this.validYears.includes(year)) {
-      this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>(filePath);
-    } else {
-      // If no years match we redirect to current year
-      this.NavigateCurrentYear()
-      return
+    if (!this.validYears.includes(year)) {
+      this.router.navigateByUrl('/info/praesidium/' + this.validYears[0]).then(() => {});
+      return;
     }
+
+    this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>( `/assets/praesidium_files/praesidium_${year}.json`);
   }
 
   private ngUnsubscribe = new Subject<void>();

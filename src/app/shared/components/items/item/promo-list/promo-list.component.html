@@ -1,5 +1,5 @@
 <section>
-    <h1 class="">
+    <h1 class="text-white">
     <ng-container *ngIf="this.promoType !== null">
         {{ this.promoType.substring(0, 1).toUpperCase() }}{{ this.promoType.substring(1) }}s
     </ng-container>
@@ -16,7 +16,9 @@
     </div>
 </section>
 
-<ng-template #loading>Loading</ng-template>
+<ng-template #loading>
+  <span class="text-white font-bold">Loading</span>
+</ng-template>
 <ng-template #noItem>
     Momenteel zijn er geen
     <ng-container *ngIf="this.promoType !== null">{{ this.promoType.substring(0, 1).toUpperCase() }}{{ this.promoType.substring(1) }}s</ng-container>

@@ -1,12 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
-  FormBuilder, FormControl, FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators
+    AbstractControl,
+    FormArray,
+    FormBuilder,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+    ValidationErrors,
+    Validators
 } from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {StaffProductService} from "../../../../../core/services/staff/staff-product.service";
@@ -14,7 +15,9 @@ import {Observable, of} from "rxjs";
 import {IProductItem} from "../../../../models/items/products/products";
 import {ValidityOptions} from "../../../../models/items/validity";
 import {HttpErrorResponse} from "@angular/common/http";
-
+import {StaffCheckoutService} from "../../../../../core/services/staff/staff-checkout.service";
+import {StaffCreateCheckoutI} from "../../../../models/staff/staff_checkout";
+import {StaffCreateTransactionI} from "../../../../models/staff/staff_transaction";
 
 
 @Component({
@@ -34,6 +37,8 @@ import {HttpErrorResponse} from "@angular/common/http";
 export class CreateCheckoutComponent implements OnInit {
 
   @Input() item_id: string | null = null;
+  @Output() checkoutCreated = new EventEmitter<boolean>()
+
   loading = false
   userNotInAPI = false
 
@@ -73,7 +78,8 @@ export class CreateCheckoutComponent implements OnInit {
     }
 
     constructor(private formBuilder: FormBuilder,
-              private staffProductService: StaffProductService) {
+                private staffProductService: StaffProductService,
+                private staffCheckoutService: StaffCheckoutService) {
   }
 
   public transactions(): FormArray {
@@ -92,7 +98,8 @@ export class CreateCheckoutComponent implements OnInit {
     const validityDefault = this.forceEnabled() ? null: "Kies Validity" // Validity 2 is invalid
     const transactionGroup = this.formBuilder.group({
       "productControl": ["Kies Product", Validators.required],
-      "validityControl": [{value: validityDefault, disabled: !this.forceEnabled()}]
+      "validityControl": [{value: validityDefault, disabled: !this.forceEnabled()}],
+      "countControl": [1, [Validators.required, Validators.min(1)]]
     })
     this.transactions().push(transactionGroup);
   }
@@ -106,6 +113,38 @@ export class CreateCheckoutComponent implements OnInit {
             this.handleError(Error("Invalid form error ( without validation errors )"))
         }
     }
+
+    // Parsing create params
+    const forceCreateValue = this.checkoutForm.controls['forceCreateControl'].value
+    const sendMailValue = this.checkoutForm.controls['sendMailControl'].value
+    const createMissingUserValue = this.checkoutForm.controls['createUserIfNoneControl'].value
+
+    const forceCreate = forceCreateValue === null ? false : forceCreateValue;
+    const sendMail = sendMailValue === null ? false : sendMailValue;
+    const createMissingUser = createMissingUserValue === null ? false : createMissingUserValue
+
+     // Parsing create data
+    const userValue = this.checkoutForm.controls['userEmailControl'].value;
+    const paymentProvidorValue = this.checkoutForm.controls['paymentProvider'].value;
+    if (userValue === null || paymentProvidorValue === null) {
+        this.handleError(Error("userValue or paymentProvider is null")); return } // Fast return ( should not happen )
+
+    const transactions = this.parseTransactionFormArray(userValue)
+
+    const checkoutObj: StaffCreateCheckoutI = {
+        user: userValue,
+        payment_providor: paymentProvidorValue,
+        transactions: transactions
+      }
+
+    this.staffCheckoutService.createCheckout(checkoutObj, forceCreate, sendMail, createMissingUser).subscribe(
+        (checkoutObj) => {
+            this.checkoutCreated.emit(true)
+        },
+        (err: Error) => {
+            this.handleError(err)
+        }
+    )
   }
 
   public handleError(error: Error | ValidationErrors, isFormError: boolean = false) {
@@ -126,6 +165,30 @@ export class CreateCheckoutComponent implements OnInit {
   GetControl(control: AbstractControl): FormGroup {
     return control as FormGroup
   }
+
+  parseTransactionFormArray(userValue: string): StaffCreateTransactionI[] {
+      const transactionArray = this.transactions();
+      const abstractControls = transactionArray.controls;
+      const formGroups = abstractControls.map((abstactControl) => {
+          return this.GetControl(abstactControl)
+      })
+      return formGroups.map((formGroup) => {
+          return this.parseTransactionFormGroup(userValue, formGroup);
+      })
+  }
+
+  parseTransactionFormGroup(userValue: string, formGroup: FormGroup): StaffCreateTransactionI {
+      const productControl: IProductItem = formGroup.controls['productControl'].value;
+      const validityControl: number = formGroup.controls['validityControl'].value;
+      const countControl: number = formGroup.controls['countControl'].value
+      return {
+            user: userValue,
+            item_id: this.item_id!,
+            product: productControl,
+            validity: validityControl,
+            count: countControl
+        }
+    }
 
     protected readonly ValidityOptions = ValidityOptions;
 }

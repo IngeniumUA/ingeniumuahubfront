@@ -43,6 +43,7 @@ section p {
 h2, h3 {
   width: 100%;
   text-align: left;
+  color: var(--mainwhite)
 }
 
 /* Specific */

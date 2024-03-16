@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {apiEnviroment} from "../../../../environments/environment";
-import {StaffUserDetailI} from "../../../shared/models/staff/staff_user_detail";
 import {StaffTransactionI, StaffTransactionPatchI} from "../../../shared/models/staff/staff_transaction";
 import {StatusStatsI} from "../../../shared/models/stats/transactionStats";
 
@@ -61,7 +60,12 @@ export class StaffTransactionService {
   public getTransactionStats(
                          item_id: string | null = null,
                          user_id: string | null = null,
-                         checkout_id: string | null = null): Observable<StatusStatsI> {
+                         checkout_id: string | null = null,
+                         status: string | null = null,
+                         user_email: string | null = null,
+                         interaction_id: string | null = null,
+                         product: string | null = null,
+                         validity: string | null = null): Observable<StatusStatsI> {
     let query_str = "?"
     if (item_id !== null) {
       query_str += "&item_id="+item_id;
@@ -71,6 +75,21 @@ export class StaffTransactionService {
     }
     if (checkout_id !== null) {
       query_str += "&checkout_id="+checkout_id
+    }
+    if (status !== null) {
+      query_str += "&transaction_status="+status.toUpperCase();
+    }
+    if (user_email !== null) {
+      query_str += "&user_email="+user_email;
+    }
+    if (interaction_id !== null) {
+      query_str += "&interaction_id="+interaction_id;
+    }
+    if (product !== null) {
+      query_str += "&product=" + product
+    }
+    if (validity !== null) {
+      query_str += "&validity=" + validity
     }
 
     return this.httpClient.get<StatusStatsI>(

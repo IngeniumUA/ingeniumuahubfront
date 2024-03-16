@@ -26,6 +26,10 @@
       <td>{{ checkout.status }}</td>
     </tr>
     <tr>
+      <th>Payment providor</th>
+      <td>{{ checkout.payment_providor }}</td>
+    </tr>
+    <tr>
       <th>Date Created</th>
       <td>{{ checkout.date_created | date: 'long' }}</td>
     </tr>
@@ -64,14 +68,15 @@
 
 <section class="staffSection">
   <h1 class="text-blue-900">Transactions</h1>
-  <app-transaction-table [checkout_id]="this.checkout_id"></app-transaction-table>
+  <app-transaction-table [loadDataEvent]="this.loading" [checkout_id]="this.checkout_id"></app-transaction-table>
 </section>
 
 <section class="staffSection">
   <h1 class="text-blue-900">Edit transactions</h1>
   <ng-container *ngIf="(transactions$ | async) as transactions else loadingData">
   <ng-container *ngFor="let transaction of  transactions">
-  <app-transaction-detail (PatchedTransaction)="FetchData()" [transaction]="transaction"></app-transaction-detail>
+  <app-transaction-detail (PatchedTransaction)="FetchData()"
+                          [transaction]="transaction"></app-transaction-detail>
   </ng-container>
   </ng-container>
 </section>

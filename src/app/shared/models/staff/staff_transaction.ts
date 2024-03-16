@@ -34,3 +34,11 @@ export interface StaffTransactionPatchI {
   user: string | null
   user_id: string | null
 }
+
+export interface StaffCreateTransactionI {
+  user: string
+  item_id: string
+  product: IProductItem
+  validity: number
+  count: number
+}

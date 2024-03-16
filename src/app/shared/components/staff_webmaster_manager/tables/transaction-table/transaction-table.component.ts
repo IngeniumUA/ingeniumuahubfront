@@ -1,4 +1,4 @@
-import {Component, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
@@ -33,13 +33,14 @@ import {ValidityOptions} from "../../../../models/items/validity";
   ],
   standalone: true
 })
-export class TransactionTableComponent {
+export class TransactionTableComponent implements AfterViewInit, OnChanges {
   constructor(private staffTransactionService: StaffTransactionService,
               private datePipe: DatePipe) {
   }
   @Input() item_id: string | null = null
   @Input() user_id: string | null = null
   @Input() checkout_id: string | null = null
+  @Input() loadDataEvent: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
@@ -56,6 +57,15 @@ export class TransactionTableComponent {
     productNameControl: new FormControl(''),
     validityControl: new FormControl('')
   })
+
+  ngOnChanges(changes: SimpleChanges) {
+    const loadData: SimpleChange = changes['loadDataEvent']
+    if (loadData.previousValue && !loadData.currentValue) {
+      // When previous value was 'loading' and now 'loading' has switched off
+      // Then we can reload our own data as well
+      this.LoadData()
+    }
+  }
 
   GetDisplayedColumns(): string[] {
     let columns = ["interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"];
@@ -81,7 +91,7 @@ export class TransactionTableComponent {
       distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
       debounceTime(500)
       //combineLatest
-    ).subscribe((value) => {
+    ).subscribe((_) => {
       this.LoadData()
       }
     )
@@ -125,7 +135,8 @@ export class TransactionTableComponent {
       emailQuery, interactionQuery, productNameQuery, validityQuery)
 
     // Transactionstats
-    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id)
+    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id,
+      status, emailQuery, interactionQuery, productNameQuery, validityQuery)
   }
 
   SwitchStatusFilter(status: string) {

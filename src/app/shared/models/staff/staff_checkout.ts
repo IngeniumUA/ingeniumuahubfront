@@ -1,3 +1,5 @@
+import {StaffCreateTransactionI} from "./staff_transaction";
+
 export interface StaffCheckoutI {
   id: string
 
@@ -18,4 +20,10 @@ export interface StaffCheckoutI {
 
 export interface StaffCheckoutPatchI {
   status: string | null
+}
+
+export interface StaffCreateCheckoutI {
+  user: string
+  payment_providor: string
+  transactions: StaffCreateTransactionI[]
 }
