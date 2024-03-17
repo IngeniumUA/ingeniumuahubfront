@@ -130,7 +130,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
       const uuidQuery = uuidControlValue === '' ? null: uuidControlValue;
       const groupsQueries: number[] = (groupControlValuesFiltered.length < 0) ? []: groupControlValuesFiltered;
 
-      const fields: string[] = ['uuid', 'email', 'voornaam', 'achternaam']
+      const fields: string[] = ['uuid', 'email', 'voornaam', 'achternaam', 'telefoonnummer', 'last_login', 'last_edited']
 
       this.usersExport$ = this.staffUserService.getUsersExport(fields, uuidQuery, emailQuery, groupsQueries)
       this.usersExport$.pipe(

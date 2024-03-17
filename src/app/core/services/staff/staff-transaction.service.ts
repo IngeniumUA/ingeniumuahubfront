@@ -113,7 +113,7 @@ export class StaffTransactionService {
     // Fields parsing
     // Starts from second item
     if (fields.length == 0) {
-      query_str +="fields=email"
+      query_str +="fields=user_email"
     } else {
       query_str += "fields=" + fields[0]
     }
