@@ -13,7 +13,7 @@ import {StaffProductService} from "../../../../../core/services/staff/staff-prod
 @Component({
   selector: 'app-transaction-detail',
   templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.css'],
+  styleUrls: ['./transaction-detail.component.scss'],
   imports: [
     NgForOf,
     ReactiveFormsModule,
@@ -43,10 +43,12 @@ export class TransactionDetailComponent implements OnInit {
   ngOnInit() {
     this.products$ = this.staffProductService.getProducts(0, 50, this.transaction.interaction.item_id);
     this.transactionForm = this.fb.group({
-      'userEmail': [this.transaction.interaction.user_email],
-      'validity': [this.transaction.validity],
-      'status': [this.transaction.status],
-      'productControl': [this.transaction.product]
+      'userEmailControl': [this.transaction.interaction.user_email],
+      'validityControl': [this.transaction.validity],
+      'statusControl': [{value: this.transaction.status, disabled: !this.forceEnabled()}],
+      'productControl': [this.transaction.product],
+      'noteControl': [this.transaction.note],
+      'forcePatchControl': [false]
     })
   }
 
@@ -62,20 +64,30 @@ export class TransactionDetailComponent implements OnInit {
       this.handleError(Error("Invalid form ( but no .errors ? )"))
     }
 
-    const validityControlValue = this.transactionForm.controls['validity'].value;
-    const userControlValue = this.transactionForm.controls['userEmail'].value;
+    const validityControlValue = this.transactionForm.controls['validityControl'].value;
+    const userControlValue = this.transactionForm.controls['userEmailControl'].value;
+    const statusControlValue = this.transactionForm.controls['statusControl'].value;
+    const noteControlValue = this.transactionForm.controls['noteControl'].value;
+    const productControlValue = this.transactionForm.controls['productControl'].value;
+
+    // Quick check for none ( more space efficient on DB )
+    const noteValue = noteControlValue === '' ? null: noteControlValue
 
     // Only add value to patch object if it is different from input
     const patchValidity = validityControlValue !== this.transaction.validity ? validityControlValue : null;
     const patchUserEmail = userControlValue !== this.transaction.interaction.user_email ? userControlValue : null;
+    const patchProduct = productControlValue !== this.transaction.product ? productControlValue : null
+    const patchNote = noteValue !== this.transaction.note ? noteValue: null
 
     const patchObject: StaffTransactionPatchI = {
         validity: patchValidity,
         user: patchUserEmail,
-        user_id: null
+        user_id: null,
+        product: patchProduct
     }
 
-    if (patchObject.validity === null && patchObject.user === null && patchObject.user_id === null) {
+    if (patchObject.validity === null && patchObject.user === null && patchObject.user_id === null &&
+        patchObject.product === null) {
       this.successMessage = "Geen verandering!"
       this.loading = false
       return
@@ -85,6 +97,7 @@ export class TransactionDetailComponent implements OnInit {
         (transaction: StaffTransactionI) => {
           this.transaction = transaction
           this.successMessage = "Transaction Patched!"
+          this.PatchedTransaction.emit(true)
         },
         (err: Error) => {
           this.handleError(err)
@@ -127,6 +140,13 @@ export class TransactionDetailComponent implements OnInit {
 
   public PartialRefund() {
     this.formError = "Not anytime soon bro";
+  }
+
+  public forceEnabled(): boolean {
+    if (this.transactionForm === undefined) {
+      return false
+    }
+    return this.transactionForm.controls['forcePatchControl'].value
   }
 
   protected readonly ValidityOptions = ValidityOptions;

@@ -60,7 +60,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     const loadData: SimpleChange = changes['loadDataEvent']
-    if (loadData.previousValue && !loadData.currentValue) {
+    if (loadData.previousValue !== loadData.currentValue) {
       // When previous value was 'loading' and now 'loading' has switched off
       // Then we can reload our own data as well
       this.LoadData()
@@ -68,7 +68,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
   }
 
   GetDisplayedColumns(): string[] {
-    let columns = ["interaction_id", "count", "amount", "status", "product", "validity", "date_completed", "date_created"];
+    let columns = ["interaction_id", "amount", "status", "product", "validity", "date_completed", "date_created"];
 
     // Add if not Input()
     if (this.item_id === null) {
@@ -206,7 +206,8 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
     const validityQuery = validityControlValue === '' ? null: validityControlValue;
 
     const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
-    'product_id', 'product_name', 'amount', 'transaction_status', 'date_created', 'date_completed', 'validity']
+    'product_id', 'product_name', 'amount', 'transaction_status',
+      'date_created', 'date_completed', 'validity', 'currency']
 
     this.staffTransactionService.getTransactionsExport(fields, this.item_id, this.user_id, this.checkout_id, status,
         emailQuery, interactionQuery, productNameQuery, validityQuery).subscribe((data) => {

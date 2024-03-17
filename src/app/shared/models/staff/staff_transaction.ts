@@ -27,12 +27,15 @@ export interface StaffTransactionI {
 
   date_created: string
   date_completed: string
+
+  note: string | null
 }
 
 export interface StaffTransactionPatchI {
   validity: string | null
   user: string | null
   user_id: string | null
+  product: IProductItem | null
 }
 
 export interface StaffCreateTransactionI {
