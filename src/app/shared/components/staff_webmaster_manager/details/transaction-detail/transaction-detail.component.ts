@@ -47,6 +47,7 @@ export class TransactionDetailComponent implements OnInit {
       'validityControl': [this.transaction.validity],
       'statusControl': [{value: this.transaction.status, disabled: !this.forceEnabled()}],
       'productControl': [this.transaction.product],
+      'noteControl': [this.transaction.note],
       'forcePatchControl': [false]
     })
   }
@@ -66,12 +67,17 @@ export class TransactionDetailComponent implements OnInit {
     const validityControlValue = this.transactionForm.controls['validityControl'].value;
     const userControlValue = this.transactionForm.controls['userEmailControl'].value;
     const statusControlValue = this.transactionForm.controls['statusControl'].value;
+    const noteControlValue = this.transactionForm.controls['noteControl'].value;
     const productControlValue = this.transactionForm.controls['productControl'].value;
+
+    // Quick check for none ( more space efficient on DB )
+    const noteValue = noteControlValue === '' ? null: noteControlValue
 
     // Only add value to patch object if it is different from input
     const patchValidity = validityControlValue !== this.transaction.validity ? validityControlValue : null;
     const patchUserEmail = userControlValue !== this.transaction.interaction.user_email ? userControlValue : null;
     const patchProduct = productControlValue !== this.transaction.product ? productControlValue : null
+    const patchNote = noteValue !== this.transaction.note ? noteValue: null
 
     const patchObject: StaffTransactionPatchI = {
         validity: patchValidity,

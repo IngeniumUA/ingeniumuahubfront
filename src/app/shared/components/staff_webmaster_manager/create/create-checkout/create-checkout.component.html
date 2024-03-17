@@ -44,7 +44,7 @@
           <span>
           Validity:
           <select formControlName="validityControl">
-            <option [ngValue]="null" disabled selected>Kies Validity</option>
+            <option [ngValue]="null" selected>Kies Validity</option>
             <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
               {{ validity.name }}
             </option>

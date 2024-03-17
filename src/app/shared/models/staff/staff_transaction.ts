@@ -27,6 +27,8 @@ export interface StaffTransactionI {
 
   date_created: string
   date_completed: string
+
+  note: string | null
 }
 
 export interface StaffTransactionPatchI {
