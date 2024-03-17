@@ -42,24 +42,24 @@
         <h3>Ownership</h3>
         <label>
             User:
-            <input type="email" formControlName="userEmail" placeholder="user@email.com"/>
+            <input type="email" formControlName="userEmailControl" [value]="transaction.interaction.user_email"/>
         </label>
 
         <h3>Configure</h3>
         <section class="flex flex-row gap-1">
         <div>
         Validity:
-        <select formControlName="validity">
-            <option [ngValue]="null" disabled>Validity</option>
-            <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.name" style="color: var(--mainblue)">
-                {{ validity.name }}
-            </option>
+        <select formControlName="validityControl">
+          <option selected [value]="this.transaction.validity">{{ transaction.validity }}</option>
+          <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.name" style="color: var(--mainblue)">
+              {{ validity.name }}
+          </option>
         </select>
         </div>
 
         <div>
         Status:
-        <select formControlName="status">
+        <select formControlName="statusControl">
             <option [ngValue]="null">Status</option>
             <option *ngFor="let status of StatusOptions" [ngValue]="status.value" style="color: var(--mainblue)">
                 {{ status.name }}
@@ -78,6 +78,16 @@
           </select>
         </ng-container>
         </div>
+        </section>
+
+        <h3>Patch Options</h3>
+        <section class="flex flex-row gap-1">
+          <div>
+            <label>
+              Force Patch:
+              <input type="checkbox" formControlName="forcePatchControl"/>
+            </label>
+          </div>
         </section>
     </form>
 

@@ -20,6 +20,7 @@ export class CheckoutDetailComponent implements OnInit {
   loading: boolean = false;
   formError: null | string = null;
   successMessage: null | string = null
+  transactionPatched: boolean = false
 
   constructor(private route: ActivatedRoute,
               private checkoutService: StaffCheckoutService,
@@ -41,11 +42,15 @@ export class CheckoutDetailComponent implements OnInit {
   }
 
 
-  public FetchData() {
+  public FetchData(patchedTransaction: boolean = false) {
     this.loading = true
     this.checkoutDetail$ = this.checkoutService.getCheckout(this.checkout_id);
     this.transactions$ = this.staffTransactionService.getTransactions(0, 100, null, null, this.checkout_id)
     this.loading = false
+
+    if (patchedTransaction) {
+      this.transactionPatched = true
+    }
   }
 
   public Patch() {

@@ -60,7 +60,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     const loadData: SimpleChange = changes['loadDataEvent']
-    if (loadData.previousValue && !loadData.currentValue) {
+    if (loadData.previousValue !== loadData.currentValue) {
       // When previous value was 'loading' and now 'loading' has switched off
       // Then we can reload our own data as well
       this.LoadData()
