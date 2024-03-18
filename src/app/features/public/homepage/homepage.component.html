@@ -15,8 +15,8 @@
 <!-- Leading infocard -->
 <section class="info-card-section">
   <div class="intro-card">
-    <div class="intro-card__image cursor-pointer">
-      <img ngSrc="assets/images/praesidium_thumb.webp" alt="" aria-hidden="true" [routerLink]="['/info/praesidium']" width="1000" height="863">
+    <div class="intro-card__image">
+      <img ngSrc="assets/images/praesidium_thumb.webp" alt="" aria-hidden="true" width="1000" height="863">
     </div>
     <div class="intro-card__content">
       <p>
@@ -66,27 +66,27 @@
           <div class="title-wrapper">
             <h3>Kom uw lidkaart/goodiebag halen op campus Groenenborger!</h3>
           </div>
-          <a href="#">Meer info</a>
+          <!--<a href="#">Meer info</a>-->
         </div>
-        <a [routerLink]="['/info/startweek']" class="image-wrapper"><img alt="Goodiebags" src="assets/images/GoodiebagFoto.jpg"></a>
+        <a [routerLink]="['/info/startweek']" class="image-wrapper" aria-hidden="true"><img alt="Goodiebags" src="assets/images/GoodiebagFoto.jpg"></a>
       </article>
       <article class="homepage-card news">
         <div class="content">
           <div class="title-wrapper">
-            <h3>Dit was het epische gala 2023!</h3>
+            <h3>Ingenium Galabal 2024</h3>
           </div>
-          <a href="#">Meer info</a>
+          <a href="https://www.facebook.com/events/1057302698733213">Meer info</a>
         </div>
-        <a href="https://www.facebook.com/events/1057302698733213" class="image-wrapper"><img alt="Galabal" src="assets/images/galabal.jpg"></a>
+        <a href="https://www.facebook.com/events/1057302698733213" class="image-wrapper" aria-hidden="true"><img alt="" ngSrc="assets/images/galabal.jpg" height="496" width="602"></a>
       </article>
       <article class="homepage-card news">
         <div class="content">
           <div class="title-wrapper">
             <h3>Praesidium 2023-2024</h3>
           </div>
-          <a href="#">Meer info</a>
+          <a [routerLink]="['/info/praesidium']">Meer info</a>
         </div>
-        <a [routerLink]="['/info/praesidium']" class="image-wrapper"><img alt="wiezijnwij" src="assets/images/wiezijnwij.png"></a>
+        <a [routerLink]="['/info/praesidium']" class="image-wrapper" aria-hidden="true"><img alt="" ngSrc="assets/images/wiezijnwij.png" height="258" width="597"></a>
       </article>
     </div>
   </div>
