@@ -56,7 +56,7 @@ export class CreateCheckoutComponent implements OnInit {
       "paymentProvider": [Validators.required],
 
       "forceCreateControl": [false,Validators.required],
-      "createUserIfNoneControl": [{value: false, disabled: !this.userNotInAPI}],
+      "createUserIfNoneControl": [false], // TODO disabled: !this.userNotInAPI}
       "sendMailControl": [false],
 
       "transactions": this.formBuilder.array([])
