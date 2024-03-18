@@ -150,7 +150,7 @@ export class CreateCheckoutComponent implements OnInit {
   public handleError(error: Error | ValidationErrors, isFormError: boolean = false) {
       if (error instanceof HttpErrorResponse) {
           if (error.status == 404) {
-            if (error.message === "User not found" && !this.userNotInAPI) {
+            if (!this.userNotInAPI) {
               this.userNotInAPI = true
             }
           }
