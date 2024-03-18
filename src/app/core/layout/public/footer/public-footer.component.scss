@@ -1,11 +1,15 @@
 footer {
-  @apply bg-blue-950 p-6 text-white;
+  @apply bg-blue-950 p-6 text-gray-300;
 
   .footer-content {
     @apply flex flex-row items-center;
 
-    address {
-      @apply flex-1 not-italic text-sm;
+    .left-footer-content {
+      @apply flex-1 text-sm;
+
+      address {
+        @apply not-italic;
+      }
 
       span {
         @apply text-inherit text-xl;
