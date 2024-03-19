@@ -7,7 +7,7 @@ import {LayoutService} from "../../../../../core/services/layout/layout.service"
 @Component({
   selector: 'app-vacatures-list-display',
   templateUrl: './vacatures-list-display.component.html',
-  styleUrls: ['./vacatures-list-display.component.css']
+  styleUrls: ['./vacatures-list-display.component.scss']
 })
 export class VacaturesListDisplayComponent {
 
