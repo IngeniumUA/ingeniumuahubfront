@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {IProductItem} from "../../../../models/items/products/products";
-import {NgIf, NgStyle} from "@angular/common";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Subject, takeUntil} from "rxjs";
-import {Router} from "@angular/router";
+import {IProductItem} from '../../../../models/items/products/products';
+import {NgIf, NgStyle} from '@angular/common';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Subject, takeUntil} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-product',
@@ -24,11 +24,11 @@ export class ProductComponent implements OnInit, OnDestroy {
   @Input() primaryColorHalf!: string;
   @Output() countEvent: EventEmitter<number> = new EventEmitter<number>();
 
-  productHint: string | null = null
+  productHint: string | null = null;
 
   productForm = this.formBuilder.group({
     count: [0, Validators.min(0)]
-    });
+  });
   constructor(private formBuilder: FormBuilder,
               private router: Router) {
   }
@@ -39,7 +39,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     // Set initial value (which is saved in parent component
     this.productForm.patchValue({
       count: this.onInitValue
-    })
+    });
 
     // Form input correction
     this.ValueChangePipeline();
@@ -57,36 +57,36 @@ export class ProductComponent implements OnInit, OnDestroy {
         if (value < 0) { // Set to 0 if value is negative
           this.productForm.patchValue({
             count: 0
-          })}
+          });}
         if (this.product.max_count < value) { // Set to max_count if value is higher
           this.productForm.patchValue({
             count: this.product.max_count
-          })}
+          });}
       }
-    )
+      );
   }
 
   TryIncreaseCount(): void {
     this.productForm.patchValue({
-      count: (this.productForm.get("count")!.value ?? 0) + 1
-    })
+      count: (this.productForm.get('count')!.value ?? 0) + 1
+    });
   }
 
   TryDecreaseCount(): void {
     this.productForm.patchValue({
-      count: (this.productForm.get("count")!.value ?? 0) - 1
-    })
+      count: (this.productForm.get('count')!.value ?? 0) - 1
+    });
   }
 
   StyleInput() {
     if ((this.productForm.controls.count.value ?? 0) > 0) {
       return {'text-decoration' :'underline 2px solid ' + this.primaryColorFull,
         '-webkit-text-decoration-color': this.primaryColorFull,
-        '-webkit-text-decoration-thickness': '3px'}
+        '-webkit-text-decoration-thickness': '3px'};
     }
     return {'text-decoration' :'underline 2px solid gray',
       '-webkit-text-decoration-color': 'gray',
-      '-webkit-text-decoration-thickness': '3px'}
+      '-webkit-text-decoration-thickness': '3px'};
   }
 
   private ngUnsubscribe = new Subject<void>();
@@ -97,9 +97,9 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   ToLogin() {
     if (this.itemId === null) {
-      this.router.navigateByUrl('/login?next=/event')
+      this.router.navigateByUrl('/login?next=/event');
     } else {
-      this.router.navigateByUrl('/login?next=/event/'+ this.itemId)
+      this.router.navigateByUrl('/login?next=/event/'+ this.itemId);
     }
   }
 }

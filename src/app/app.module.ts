@@ -1,34 +1,34 @@
 import {NgModule, OnInit, isDevMode } from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import {NgOptimizedImage} from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxsModule, Store } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { QRCodeModule } from "angularx-qrcode";
+import { QRCodeModule } from 'angularx-qrcode';
 
-import {User, UserState} from "./core/store";
+import {User, UserState} from './core/store';
 
 import { AppComponent } from './app.component';
 import { PublicHeaderComponent } from './core/layout/public/header/public-header.component';
 import { HomepageComponent } from './features/public/homepage/homepage.component';
-import { AppRoutingModule } from "./app-routing.module";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import { AppRoutingModule } from './app-routing.module';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { NotfoundpageComponent } from './features/notfoundpage/notfoundpage.component';
 import { RecSysFormComponent } from './features/recsysform/rec-sys-form.component';
-import {ReactiveFormsModule} from "@angular/forms";
-import {MatRadioModule} from "@angular/material/radio";
-import {MatButtonModule} from "@angular/material/button";
-import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonModule} from '@angular/material/button';
+import {JWTInterceptor} from './core/interceptors/jwt-interceptor.service';
 
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
-import {GroupnamePipe} from "./shared/pipes/account/groupname.pipe";
+import {GroupnamePipe} from './shared/pipes/account/groupname.pipe';
 
 import { PublicRoutingComponent } from './features/public/public-routing.component';
 import { PublicFooterComponent } from './core/layout/public/footer/public-footer.component';
 import { CloudComponent } from './features/public/cloud/cloud.component';
-import {RegisterComponent} from "./shared/components/auth/register/register.component";
-import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@abacritt/angularx-social-login";
+import {RegisterComponent} from './shared/components/auth/register/register.component';
+import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
 import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
 import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import { CardComponent } from './shared/components/account/card/card.component';
@@ -43,9 +43,9 @@ import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-
 import { ToastrModule } from 'ngx-toastr';
 import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
 import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
-import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
+import {PartnerGridComponent} from './shared/components/partners/partner-grid/partner-grid.component';
 import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
-import {PromoListComponent} from "./shared/components/items/item/promo-list/promo-list.component";
+import {PromoListComponent} from './shared/components/items/item/promo-list/promo-list.component';
 
 @NgModule({
   declarations: [

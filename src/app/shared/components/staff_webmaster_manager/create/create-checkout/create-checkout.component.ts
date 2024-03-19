@@ -1,194 +1,194 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
-    AbstractControl,
-    FormArray,
-    FormBuilder,
-    FormGroup,
-    FormsModule,
-    ReactiveFormsModule,
-    ValidationErrors,
-    Validators
-} from "@angular/forms";
-import {AsyncPipe, NgForOf, NgIf, NgStyle} from "@angular/common";
-import {StaffProductService} from "../../../../../core/services/staff/staff-product.service";
-import {Observable, of} from "rxjs";
-import {IProductItem} from "../../../../models/items/products/products";
-import {ValidityOptions} from "../../../../models/items/validity";
-import {HttpErrorResponse} from "@angular/common/http";
-import {StaffCheckoutService} from "../../../../../core/services/staff/staff-checkout.service";
-import {StaffCreateCheckoutI} from "../../../../models/staff/staff_checkout";
-import {StaffCreateTransactionI} from "../../../../models/staff/staff_transaction";
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
+import {AsyncPipe, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {StaffProductService} from '../../../../../core/services/staff/staff-product.service';
+import {Observable, of} from 'rxjs';
+import {IProductItem} from '../../../../models/items/products/products';
+import {ValidityOptions} from '../../../../models/items/validity';
+import {HttpErrorResponse} from '@angular/common/http';
+import {StaffCheckoutService} from '../../../../../core/services/staff/staff-checkout.service';
+import {StaffCreateCheckoutI} from '../../../../models/staff/staff_checkout';
+import {StaffCreateTransactionI} from '../../../../models/staff/staff_transaction';
 
 
 @Component({
   selector: 'app-create-checkout',
   templateUrl: './create-checkout.component.html',
   styleUrls: ['./create-checkout.component.scss'],
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        NgForOf,
-        AsyncPipe,
-        NgIf,
-        NgStyle
-    ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgForOf,
+    AsyncPipe,
+    NgIf,
+    NgStyle
+  ],
   standalone: true
 })
 export class CreateCheckoutComponent implements OnInit {
 
   @Input() item_id: string | null = null;
-  @Output() checkoutCreated = new EventEmitter<boolean>()
+  @Output() checkoutCreated = new EventEmitter<boolean>();
 
-  loading = false
-  userNotInAPI = false
+  loading = false;
+  userNotInAPI = false;
 
-  products$: Observable<IProductItem[]> = of()
+  products$: Observable<IProductItem[]> = of();
 
-  paymentProvidors = ["free", "stripe (wip)", "kassa"];
+  paymentProvidors = ['free', 'stripe (wip)', 'kassa'];
 
 
   formError: string | null = null;
-  successMessage: string | null = null
+  successMessage: string | null = null;
 
   checkoutForm = this.formBuilder.group(
     {
-      "userEmailControl": ['', [Validators.required]],
-      "paymentProvider": [Validators.required],
+      'userEmailControl': ['', [Validators.required]],
+      'paymentProvider': [Validators.required],
 
-      "forceCreateControl": [false,Validators.required],
-      "createUserIfNoneControl": [false], // TODO disabled: !this.userNotInAPI}
-      "sendMailControl": [false],
+      'forceCreateControl': [false,Validators.required],
+      'createUserIfNoneControl': [false], // TODO disabled: !this.userNotInAPI}
+      'sendMailControl': [false],
 
-      "transactions": this.formBuilder.array([])
+      'transactions': this.formBuilder.array([])
     }
-  )
+  );
 
-    ngOnInit() {
-      this.products$ = this.staffProductService.getProducts(0, 50, this.item_id);
-      this.checkoutForm.controls['forceCreateControl'].valueChanges.subscribe((forceCreateValue) => {
-        this.transactions().controls.forEach((abstract) => {
-          const groupControl = abstract as FormGroup;
-          if (forceCreateValue) {
-              groupControl.controls['validityControl'].enable()
-          } else {
-              groupControl.controls['validityControl'].disable()
-          }
-        })
-      })
-    }
+  ngOnInit() {
+    this.products$ = this.staffProductService.getProducts(0, 50, this.item_id);
+    this.checkoutForm.controls['forceCreateControl'].valueChanges.subscribe((forceCreateValue) => {
+      this.transactions().controls.forEach((abstract) => {
+        const groupControl = abstract as FormGroup;
+        if (forceCreateValue) {
+          groupControl.controls['validityControl'].enable();
+        } else {
+          groupControl.controls['validityControl'].disable();
+        }
+      });
+    });
+  }
 
-    constructor(private formBuilder: FormBuilder,
+  constructor(private formBuilder: FormBuilder,
                 private staffProductService: StaffProductService,
                 private staffCheckoutService: StaffCheckoutService) {
   }
 
   public transactions(): FormArray {
-    return this.checkoutForm.controls['transactions'] as FormArray
+    return this.checkoutForm.controls['transactions'] as FormArray;
   }
 
   public forceEnabled(): boolean {
-    return this.checkoutForm.controls['forceCreateControl'].value!
+    return this.checkoutForm.controls['forceCreateControl'].value!;
   }
 
   public RemoveTransaction(index: number) {
-    this.transactions().removeAt(index)
+    this.transactions().removeAt(index);
   }
 
   public AddTransaction() {
-    const validityDefault = this.forceEnabled() ? null: "Kies Validity" // Validity 2 is invalid
+    const validityDefault = this.forceEnabled() ? null: 'Kies Validity'; // Validity 2 is invalid
     const transactionGroup = this.formBuilder.group({
-      "productControl": ["Kies Product", Validators.required],
-      "validityControl": [{value: validityDefault, disabled: !this.forceEnabled()}],
-      "countControl": [1, [Validators.required, Validators.min(1)]]
-    })
+      'productControl': ['Kies Product', Validators.required],
+      'validityControl': [{value: validityDefault, disabled: !this.forceEnabled()}],
+      'countControl': [1, [Validators.required, Validators.min(1)]]
+    });
     this.transactions().push(transactionGroup);
   }
 
   public SubmitForm() {
     this.formError = null;
     if (this.checkoutForm.invalid) {
-        if (this.checkoutForm.errors !== null) {
-            this.handleError(this.checkoutForm.errors, true)
-        } else {
-            this.handleError(Error("Invalid form error ( without validation errors )"))
-        }
+      if (this.checkoutForm.errors !== null) {
+        this.handleError(this.checkoutForm.errors, true);
+      } else {
+        this.handleError(Error('Invalid form error ( without validation errors )'));
+      }
     }
 
     // Parsing create params
-    const forceCreateValue = this.checkoutForm.controls['forceCreateControl'].value
-    const sendMailValue = this.checkoutForm.controls['sendMailControl'].value
-    const createMissingUserValue = this.checkoutForm.controls['createUserIfNoneControl'].value
+    const forceCreateValue = this.checkoutForm.controls['forceCreateControl'].value;
+    const sendMailValue = this.checkoutForm.controls['sendMailControl'].value;
+    const createMissingUserValue = this.checkoutForm.controls['createUserIfNoneControl'].value;
 
     const forceCreate = forceCreateValue === null ? false : forceCreateValue;
     const sendMail = sendMailValue === null ? false : sendMailValue;
-    const createMissingUser = createMissingUserValue === null ? false : createMissingUserValue
+    const createMissingUser = createMissingUserValue === null ? false : createMissingUserValue;
 
-     // Parsing create data
+    // Parsing create data
     const userValue = this.checkoutForm.controls['userEmailControl'].value;
     const paymentProvidorValue = this.checkoutForm.controls['paymentProvider'].value;
     if (userValue === null || paymentProvidorValue === null) {
-        this.handleError(Error("userValue or paymentProvider is null")); return } // Fast return ( should not happen )
+      this.handleError(Error('userValue or paymentProvider is null')); return; } // Fast return ( should not happen )
 
-    const transactions = this.parseTransactionFormArray(userValue)
+    const transactions = this.parseTransactionFormArray(userValue);
 
     const checkoutObj: StaffCreateCheckoutI = {
-        user: userValue,
-        payment_providor: paymentProvidorValue,
-        transactions: transactions
-      }
+      user: userValue,
+      payment_providor: paymentProvidorValue,
+      transactions: transactions
+    };
 
     this.staffCheckoutService.createCheckout(checkoutObj, forceCreate, sendMail, createMissingUser).subscribe(
-        (checkoutObj) => {
-            this.checkoutCreated.emit(true)
-        },
-        (err: Error) => {
-            this.handleError(err)
-        }
-    )
+      (checkoutObj) => {
+        this.checkoutCreated.emit(true);
+      },
+      (err: Error) => {
+        this.handleError(err);
+      }
+    );
   }
 
   public handleError(error: Error | ValidationErrors, isFormError: boolean = false) {
-      if (error instanceof HttpErrorResponse) {
-          if (error.status == 404) {
-            if (!this.userNotInAPI) {
-              this.userNotInAPI = true
-            }
-          }
+    if (error instanceof HttpErrorResponse) {
+      if (error.status == 404) {
+        if (!this.userNotInAPI) {
+          this.userNotInAPI = true;
+        }
       }
-      if (isFormError) {
-          const errorV = error as ValidationErrors;
-          this.formError = errorV.toString()
-      }
-      this.formError = error.message
+    }
+    if (isFormError) {
+      const errorV = error as ValidationErrors;
+      this.formError = errorV.toString();
+    }
+    this.formError = error.message;
   }
 
   GetControl(control: AbstractControl): FormGroup {
-    return control as FormGroup
+    return control as FormGroup;
   }
 
   parseTransactionFormArray(userValue: string): StaffCreateTransactionI[] {
-      const transactionArray = this.transactions();
-      const abstractControls = transactionArray.controls;
-      const formGroups = abstractControls.map((abstactControl) => {
-          return this.GetControl(abstactControl)
-      })
-      return formGroups.map((formGroup) => {
-          return this.parseTransactionFormGroup(userValue, formGroup);
-      })
+    const transactionArray = this.transactions();
+    const abstractControls = transactionArray.controls;
+    const formGroups = abstractControls.map((abstactControl) => {
+      return this.GetControl(abstactControl);
+    });
+    return formGroups.map((formGroup) => {
+      return this.parseTransactionFormGroup(userValue, formGroup);
+    });
   }
 
   parseTransactionFormGroup(userValue: string, formGroup: FormGroup): StaffCreateTransactionI {
-      const productControl: IProductItem = formGroup.controls['productControl'].value;
-      const validityControl: number = formGroup.controls['validityControl'].value;
-      const countControl: number = formGroup.controls['countControl'].value
-      return {
-            user: userValue,
-            item_id: this.item_id!,
-            product: productControl,
-            validity: validityControl,
-            count: countControl
-        }
-    }
+    const productControl: IProductItem = formGroup.controls['productControl'].value;
+    const validityControl: number = formGroup.controls['validityControl'].value;
+    const countControl: number = formGroup.controls['countControl'].value;
+    return {
+      user: userValue,
+      item_id: this.item_id!,
+      product: productControl,
+      validity: validityControl,
+      count: countControl
+    };
+  }
 
-    protected readonly ValidityOptions = ValidityOptions;
+  protected readonly ValidityOptions = ValidityOptions;
 }

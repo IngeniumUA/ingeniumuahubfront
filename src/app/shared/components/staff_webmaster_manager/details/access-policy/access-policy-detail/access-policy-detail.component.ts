@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {JsonPipe, NgIf, NgStyle} from "@angular/common";
-import {AllowDenyListComponent} from "../access_policies/allow-deny-list/allow-deny-list.component";
-import { FormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {first} from "rxjs/operators";
-import {StaffAccessPolicyI} from "../../../../../models/staff/staff_access_policy";
-import {StaffAccessPolicyService} from "../../../../../../core/services/staff/staff-accesspolicy.service";
+import {JsonPipe, NgIf, NgStyle} from '@angular/common';
+import {AllowDenyListComponent} from '../access_policies/allow-deny-list/allow-deny-list.component';
+import { FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {first} from 'rxjs/operators';
+import {StaffAccessPolicyI} from '../../../../../models/staff/staff_access_policy';
+import {StaffAccessPolicyService} from '../../../../../../core/services/staff/staff-accesspolicy.service';
 
 @Component({
   selector: 'app-access-policy-detail',
@@ -20,10 +20,10 @@ import {StaffAccessPolicyService} from "../../../../../../core/services/staff/st
   standalone: true
 })
 export class AccessPolicyDetailComponent implements OnInit {
-  @Input() accessPolicy!: StaffAccessPolicyI
+  @Input() accessPolicy!: StaffAccessPolicyI;
 
   form_error: string | null = null;
-  loading: boolean = false
+  loading: boolean = false;
 
   policyForm!: any;
 
@@ -41,25 +41,25 @@ export class AccessPolicyDetailComponent implements OnInit {
       description: [this.accessPolicy.description],
       is_disabled: [this.accessPolicy.is_disabled],
       method: [this.accessPolicy.method]
-    })
+    });
   }
 
   onSubmit() {
     // Check if valid guardclause
     if (this.policyForm.invalid) {
-      const error: Error = Error("Wrong email or password");
+      const error: Error = Error('Wrong email or password');
       this.handleFormError(error);
       return;  }
 
     this.loading = true;
     const product_obj: StaffAccessPolicyI = {
       id: this.accessPolicy.id,
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       is_disabled: false,
-      method: "",
+      method: '',
       content: {},
-    }
+    };
     this.staffAccessPolicyService.put(this.accessPolicy.id, product_obj).pipe(
       first()).subscribe({
       next: () => {
@@ -69,10 +69,10 @@ export class AccessPolicyDetailComponent implements OnInit {
         this.loading = false;
         this.handleFormError(error);
       }
-    })
+    });
   }
 
   UpdateAccessPolicyMethod(methodContent: object) {
-    this.accessPolicy.content = methodContent
+    this.accessPolicy.content = methodContent;
   }
 }

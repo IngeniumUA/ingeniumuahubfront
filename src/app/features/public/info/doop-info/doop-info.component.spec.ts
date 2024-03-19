@@ -10,7 +10,7 @@ describe('DoopInfoComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ DoopInfoComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DoopInfoComponent);
     component = fixture.componentInstance;

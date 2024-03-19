@@ -14,24 +14,24 @@ class Dictionary<T> {
   }
   public delete(key: string) {
     if( this.has(key) ){
-      delete this.items[key]
+      delete this.items[key];
       return true;
     }
     return false;
   }
 
   public get values(): T[] {
-    let resultArray: T[] = [];
-    for (let key in this.items) {
+    const resultArray: T[] = [];
+    for (const key in this.items) {
       resultArray.push(this.items[key]);
     }
-    return resultArray
+    return resultArray;
   }
   public get keys(): string[] {
-    let resultArray: string[] = [];
-    for (let key in this.items) {
+    const resultArray: string[] = [];
+    for (const key in this.items) {
       resultArray.push(key);
     }
-    return resultArray
+    return resultArray;
   }
 }

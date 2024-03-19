@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {Observable} from "rxjs";
-import {PromoService} from "../../../../../core/services/items/promo/promo.service";
-import {RecSysPreviewI} from "../../../../../shared/models/items/recsys_interfaces";
-import {LayoutService} from "../../../../../core/services/layout/layout.service";
+import {Observable} from 'rxjs';
+import {PromoService} from '../../../../../core/services/items/promo/promo.service';
+import {RecSysPreviewI} from '../../../../../shared/models/items/recsys_interfaces';
+import {LayoutService} from '../../../../../core/services/layout/layout.service';
 
 @Component({
   selector: 'app-vacatures-list-display',
@@ -12,7 +12,7 @@ import {LayoutService} from "../../../../../core/services/layout/layout.service"
 export class VacaturesListDisplayComponent {
 
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(0, 10, 'vacature')
+  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(0, 10, 'vacature');
 
   constructor(private promoService: PromoService,
               private layoutService: LayoutService) {

@@ -1,19 +1,19 @@
 import {Component, Inject, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {DOCUMENT} from "@angular/common";
-import {CheckoutIdI, PaymentService} from "../../../../core/services/shop/payment/payment.service";
+import {DOCUMENT} from '@angular/common';
+import {CheckoutIdI, PaymentService} from '../../../../core/services/shop/payment/payment.service';
 
 import {StripeCardNumberComponent, StripePaymentElementComponent, StripeService} from 'ngx-stripe';
 import {
   StripeCardElementOptions,
   StripeElementsOptions,
 } from '@stripe/stripe-js';
-import {FormBuilder} from "@angular/forms";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {apiEnviroment} from "../../../../../environments/environment";
-import {Router} from "@angular/router";
-import {first, last} from "rxjs/operators";
-import {LayoutService} from "../../../../core/services/layout/layout.service";
-import {CartService} from "../../../../core/services/shop/cart/cart.service";
+import {FormBuilder} from '@angular/forms';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {apiEnviroment} from '../../../../../environments/environment';
+import {Router} from '@angular/router';
+import {first, last} from 'rxjs/operators';
+import {LayoutService} from '../../../../core/services/layout/layout.service';
+import {CartService} from '../../../../core/services/shop/cart/cart.service';
 
 @Component({
   selector: 'app-pay',
@@ -36,37 +36,37 @@ export class PayComponent implements OnInit {
   isMobile = this.layoutService.isMobile;
 
   checkoutId!: CheckoutIdI;
-  stripePayment: boolean = false
-  devPayment: boolean = false
+  stripePayment: boolean = false;
+  devPayment: boolean = false;
 
   ngOnInit() {
     if (! this.cartService.hasTransactions()) {
-      this.router.navigateByUrl('/shop/checkout')
+      this.router.navigateByUrl('/shop/checkout');
     }
     this.paymentService.getCheckoutID().pipe(first()).subscribe({
       next: (value) => {
-      this.checkoutId = value;
+        this.checkoutId = value;
 
-      if (this.checkoutId.payment_providor === 'dev') {
-        this.setupDev()
-      } else if (this.checkoutId.payment_providor === 'kassa') {
-        this.router.navigateByUrl('/shop/confirm')
-      } else if (this.checkoutId.payment_providor === 'free') {
-        this.router.navigateByUrl('/shop/confirm')
-      } else if (this.checkoutId.payment_providor === 'stripe') {
-        this.stripePayment = true
-      } else if (this.checkoutId.payment_providor === 'sumup') {
-        this.loadSumupSource();
-      }
-    },
-    error: error => {
-      this.cartService.clearPaymentErrors();
-      if (error instanceof HttpErrorResponse) {
-        this.cartService.insertPaymentError(error)
-      }
-      this.router.navigateByUrl('/shop/checkout')
-    }}
-    )
+        if (this.checkoutId.payment_providor === 'dev') {
+          this.setupDev();
+        } else if (this.checkoutId.payment_providor === 'kassa') {
+          this.router.navigateByUrl('/shop/confirm');
+        } else if (this.checkoutId.payment_providor === 'free') {
+          this.router.navigateByUrl('/shop/confirm');
+        } else if (this.checkoutId.payment_providor === 'stripe') {
+          this.stripePayment = true;
+        } else if (this.checkoutId.payment_providor === 'sumup') {
+          this.loadSumupSource();
+        }
+      },
+      error: error => {
+        this.cartService.clearPaymentErrors();
+        if (error instanceof HttpErrorResponse) {
+          this.cartService.insertPaymentError(error);
+        }
+        this.router.navigateByUrl('/shop/checkout');
+      }}
+    );
   }
 
   /* DEV */
@@ -76,9 +76,9 @@ export class PayComponent implements OnInit {
   }
 
   doDevPayment() {
-    this.httpClient.get(apiEnviroment.apiUrl + "webhook/payment/dev/" + this.checkoutId.checkout_id).subscribe()
-    this.router.navigateByUrl('/account/transactions')
-    return
+    this.httpClient.get(apiEnviroment.apiUrl + 'webhook/payment/dev/' + this.checkoutId.checkout_id).subscribe();
+    this.router.navigateByUrl('/account/transactions');
+    return;
   }
 
   /* SUMUP */
@@ -87,7 +87,7 @@ export class PayComponent implements OnInit {
     scriptElement.onload = this.mountSumupCard.bind(this);
     scriptElement.type = 'text/javascript';
     scriptElement.src = 'https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js'; // Defines someGlobalObject
-    scriptElement.text = ``;
+    scriptElement.text = '';
     this.renderer2.appendChild(this._document.body, scriptElement);
   }
 
@@ -107,7 +107,7 @@ export class PayComponent implements OnInit {
     showFooter: false,
     onPaymentMethodsLoad: function () { return ['paypal', 'bancontact']; }
   });
-    `
+    `;
     this.renderer2.appendChild(this._document.body, s);
   }
 }

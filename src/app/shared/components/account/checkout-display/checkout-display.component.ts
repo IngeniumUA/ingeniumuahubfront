@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {Component, Input, OnInit} from '@angular/core';
-import {TransactionI} from "../../../../core/services/user/account/account.service";
-import {CheckoutI} from "../../items/interactions/checkout";
+import {TransactionI} from '../../../../core/services/user/account/account.service';
+import {CheckoutI} from '../../items/interactions/checkout';
 
 @Component({
   selector: 'app-checkout-display',

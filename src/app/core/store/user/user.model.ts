@@ -1,4 +1,4 @@
-import { HubAccountData } from "../../../shared/models/user";
+import { HubAccountData } from '../../../shared/models/user';
 
 export interface UserStateModel {
   token: string | null;

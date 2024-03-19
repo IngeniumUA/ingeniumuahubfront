@@ -24,7 +24,7 @@ export class PopupzComponent {
   ngOnInit() {
     this.updateProductTotal();
     this.getProducts();
-    this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + "popup/event").pipe(shareReplay()).subscribe((item) => {
+    this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + 'popup/event').pipe(shareReplay()).subscribe((item) => {
       this.event = item;
     });
   }
@@ -35,7 +35,7 @@ export class PopupzComponent {
   }
 
   getProducts(): void {
-    this.products$ = this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + "popup/" + this.category);
+    this.products$ = this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + 'popup/' + this.category);
   }
 
   addProduct(product: IProductItem): void {
@@ -48,7 +48,7 @@ export class PopupzComponent {
       const option = document.querySelector(`input[name="${product.product_blueprint_id}_saus"]:checked`);
 
       if (option) {
-        product.product_meta.popupz_opties = option.getAttribute("value") || "geen";
+        product.product_meta.popupz_opties = option.getAttribute('value') || 'geen';
       }
     }
 

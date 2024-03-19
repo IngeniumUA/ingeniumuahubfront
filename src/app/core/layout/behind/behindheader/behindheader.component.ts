@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Router} from "@angular/router";
-import {NgClass, NgIf, NgStyle} from "@angular/common";
+import {Router} from '@angular/router';
+import {NgClass, NgIf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-behindheader',

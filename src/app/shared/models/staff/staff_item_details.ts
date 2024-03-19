@@ -1,4 +1,4 @@
-import {ItemI} from "../items/ItemI";
+import {ItemI} from '../items/ItemI';
 
 
 export interface StaffItemI {

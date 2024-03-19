@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, of, Subject, takeUntil} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {FormControl} from "@angular/forms";
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, of, Subject, takeUntil} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {FormControl} from '@angular/forms';
 
 interface PraesidiumButtonI {
   text: string
@@ -38,7 +38,7 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
 
   yearControl = new FormControl<string>('');
   validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19']; // Put newest year first
-  praesidium$: Observable<PraesidiumGroupI[]> = of([])
+  praesidium$: Observable<PraesidiumGroupI[]> = of([]);
 
   ngOnInit() {
     // Fetch ID
@@ -48,11 +48,11 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
 
     // Event for form changeing
     this.yearControl.valueChanges.pipe(
-        takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
-      ).subscribe(selectedValue => {
-        if (selectedValue === null) return;
-        this.router.navigateByUrl(`/info/praesidium/${selectedValue}`).then(() => {});
-      }
+      takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
+    ).subscribe(selectedValue => {
+      if (selectedValue === null) return;
+      this.router.navigateByUrl(`/info/praesidium/${selectedValue}`).then(() => {});
+    }
     );
 
     // Start a watcher for the route parameter

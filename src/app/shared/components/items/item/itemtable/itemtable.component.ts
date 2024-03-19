@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, NgFor, NgIf} from "@angular/common";
-import {Observable} from "rxjs";
-import {ItemI} from "../../../../models/items/ItemI";
-import {RouterLink} from "@angular/router";
-import {ItemService} from "../../../../../core/services/items/item.service";
+import {AsyncPipe, NgFor, NgIf} from '@angular/common';
+import {Observable} from 'rxjs';
+import {ItemI} from '../../../../models/items/ItemI';
+import {RouterLink} from '@angular/router';
+import {ItemService} from '../../../../../core/services/items/item.service';
 
 
 @Component({

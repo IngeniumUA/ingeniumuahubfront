@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {StaffGroupService} from "../../../../../core/services/staff/group/staff-group.service";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {Observable} from "rxjs";
-import {HubGroupI} from "../../../../models/staff/HubGroup";
+import {StaffGroupService} from '../../../../../core/services/staff/group/staff-group.service';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {Observable} from 'rxjs';
+import {HubGroupI} from '../../../../models/staff/HubGroup';
 
 @Component({
   selector: 'app-group-table',

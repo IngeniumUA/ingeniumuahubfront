@@ -8,8 +8,8 @@ import {
 } from '@angular/common/http';
 import {catchError, Observable, switchMap, throwError} from 'rxjs';
 
-import {AuthService} from "../services/user/auth/auth.service";
-import {Router} from "@angular/router";
+import {AuthService} from '../services/user/auth/auth.service';
+import {Router} from '@angular/router';
 @Injectable()
 export class JWTInterceptor implements HttpInterceptor {
   private isRefreshing: boolean = false;
@@ -18,14 +18,14 @@ export class JWTInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add auth header with access if user is logged in and request is to api
-    const isApiUrl = true // TODO request.url.startsWith('')
+    const isApiUrl = true; // TODO request.url.startsWith('')
 
     if (isApiUrl && this.authService.isLoggedIn() && !request.url.includes('auth/refresh')) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.authService.accessToken}`
         }
-      })
+      });
     }
 
     // Every intercept ends with next.handle() ?
@@ -43,7 +43,7 @@ export class JWTInterceptor implements HttpInterceptor {
           !request.url.includes('auth/login') &&
           error.status === 403) {
           // If forbidden is found, route to home
-          this.router.navigate(['/home'])
+          this.router.navigate(['/home']);
         }
 
         // Else continuing throwing error
@@ -76,7 +76,7 @@ export class JWTInterceptor implements HttpInterceptor {
           setHeaders: {
             Authorization: `Bearer ${this.authService.accessToken}`
           }
-        })
+        });
         return next.handle(request);
       }),
       // Case 2) If error, check error
@@ -89,7 +89,7 @@ export class JWTInterceptor implements HttpInterceptor {
 
         // Continue throwing error
         return throwError(() => error);
-    })
+      })
     );
   }
 }

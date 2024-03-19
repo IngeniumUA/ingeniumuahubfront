@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {Store} from "@ngxs/store";
-import {Observable} from "rxjs";
-import {HubAccountData} from "../../../shared/models/user";
+import {Store} from '@ngxs/store';
+import {Observable} from 'rxjs';
+import {HubAccountData} from '../../../shared/models/user';
 
 @Component({
   selector: 'app-page',

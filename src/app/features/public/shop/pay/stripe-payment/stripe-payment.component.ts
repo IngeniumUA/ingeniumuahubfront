@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {StripeElementsOptions} from "@stripe/stripe-js";
-import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
-import {CheckoutIdI, PaymentService} from "../../../../../core/services/shop/payment/payment.service";
-import {FormBuilder} from "@angular/forms";
-import {Router} from "@angular/router";
+import {StripeElementsOptions} from '@stripe/stripe-js';
+import {StripePaymentElementComponent, StripeService} from 'ngx-stripe';
+import {CheckoutIdI, PaymentService} from '../../../../../core/services/shop/payment/payment.service';
+import {FormBuilder} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-stripe-payment',
@@ -21,7 +21,7 @@ export class StripePaymentComponent implements OnInit {
   @Input() checkoutId!: CheckoutIdI;
 
   ngOnInit() {
-    this.elementsOptions.clientSecret = this.checkoutId.checkout_id
+    this.elementsOptions.clientSecret = this.checkoutId.checkout_id;
 
   }
 
@@ -30,8 +30,8 @@ export class StripePaymentComponent implements OnInit {
   };
 
   @ViewChild(StripePaymentElementComponent)
-  paymentElement!: StripePaymentElementComponent;
-  paying: boolean = false
+    paymentElement!: StripePaymentElementComponent;
+  paying: boolean = false;
   paymentElementForm = this.formBuilder.group({});
 
   stripePay() {
@@ -55,7 +55,7 @@ export class StripePaymentComponent implements OnInit {
             alert( 'Betaling Success!' );
 
             // Redirect to transactions
-            this.router.navigateByUrl('/account/transactions')
+            this.router.navigateByUrl('/account/transactions');
           }
         }
       });

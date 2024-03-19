@@ -1,17 +1,17 @@
 import {AfterViewInit, Component, Input, OnChanges, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
-import {debounceTime, delay, Observable, of} from "rxjs";
-import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
-import {StaffTransactionService} from "../../../../../core/services/staff/staff-transaction.service";
-import {StaffTransactionI} from "../../../../models/staff/staff_transaction";
-import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {MatTableModule} from "@angular/material/table";
-import {RouterLink} from "@angular/router";
-import {StatusStatsI} from "../../../../models/stats/transactionStats";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {distinctUntilChanged} from "rxjs/operators";
-import {CurrencyPipe} from "../../../../pipes/currency.pipe";
-import {ValidityOptions} from "../../../../models/items/validity";
+import {debounceTime, delay, Observable, of} from 'rxjs';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {StaffTransactionService} from '../../../../../core/services/staff/staff-transaction.service';
+import {StaffTransactionI} from '../../../../models/staff/staff_transaction';
+import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTableModule} from '@angular/material/table';
+import {RouterLink} from '@angular/router';
+import {StatusStatsI} from '../../../../models/stats/transactionStats';
+import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {distinctUntilChanged} from 'rxjs/operators';
+import {CurrencyPipe} from '../../../../pipes/currency.pipe';
+import {ValidityOptions} from '../../../../models/items/validity';
 
 @Component({
   selector: 'app-transaction-table',
@@ -37,51 +37,51 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
   constructor(private staffTransactionService: StaffTransactionService,
               private datePipe: DatePipe) {
   }
-  @Input() item_id: string | null = null
-  @Input() user_id: string | null = null
-  @Input() checkout_id: string | null = null
+  @Input() item_id: string | null = null;
+  @Input() user_id: string | null = null;
+  @Input() checkout_id: string | null = null;
   @Input() loadDataEvent: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed']
-  statusStats$!: Observable<StatusStatsI>
-  selectedStatus: string = 'All'
+  statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed'];
+  statusStats$!: Observable<StatusStatsI>;
+  selectedStatus: string = 'All';
 
-  transactionData$: Observable<StaffTransactionI[]> = of([])
+  transactionData$: Observable<StaffTransactionI[]> = of([]);
 
-  blob!: Blob
+  blob!: Blob;
 
   searchForm = new FormGroup({
     idControl: new FormControl(''),
     emailControl: new FormControl(''),
     productNameControl: new FormControl(''),
     validityControl: new FormControl('')
-  })
+  });
 
   ngOnChanges(changes: SimpleChanges) {
-    const loadData: SimpleChange = changes['loadDataEvent']
+    const loadData: SimpleChange = changes['loadDataEvent'];
     if (loadData.previousValue !== loadData.currentValue) {
       // When previous value was 'loading' and now 'loading' has switched off
       // Then we can reload our own data as well
-      this.LoadData()
+      this.LoadData();
     }
   }
 
   GetDisplayedColumns(): string[] {
-    let columns = ["interaction_id", "amount", "status", "product", "validity", "date_completed", "date_created"];
+    const columns = ['interaction_id', 'amount', 'status', 'product', 'validity', 'date_completed', 'date_created'];
 
     // Add if not Input()
     if (this.item_id === null) {
-      columns.splice(columns.indexOf('interaction_id'), 0, 'item')
+      columns.splice(columns.indexOf('interaction_id'), 0, 'item');
     }
     if (this.user_id === null) {
-      columns.splice(columns.indexOf('interaction_id'), 0, 'user')
+      columns.splice(columns.indexOf('interaction_id'), 0, 'user');
     }
     if (this.checkout_id === null) {
-      columns.splice(0, 0, "checkout_id")
+      columns.splice(0, 0, 'checkout_id');
     }
 
-    return columns
+    return columns;
   }
 
   ngOnInit() {
@@ -92,16 +92,16 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
       debounceTime(500)
       //combineLatest
     ).subscribe((_) => {
-      this.LoadData()
-      }
-    )
+      this.LoadData();
+    }
+    );
   }
 
   ngAfterViewInit() {
     // Label popups are breaking something frontend related, just remove them
     // In some cases the paginator is undefined ? We check if it is defined
     if (this.paginator === undefined) {
-      return
+      return;
     }
     const paginatorIntl = this.paginator._intl;
     paginatorIntl.itemsPerPageLabel = '';
@@ -112,7 +112,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
   }
 
   LoadData(pageEvent: PageEvent | null = null) {
-    const status = this.selectedStatus === 'All' ? null: this.selectedStatus
+    const status = this.selectedStatus === 'All' ? null: this.selectedStatus;
 
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
@@ -132,67 +132,67 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
     // Transaction fetching
     this.transactionData$ = this.staffTransactionService.getTransactions(
       pageIndex * pageSize, pageSize, this.item_id, this.user_id, this.checkout_id, status,
-      emailQuery, interactionQuery, productNameQuery, validityQuery)
+      emailQuery, interactionQuery, productNameQuery, validityQuery);
 
     // Transactionstats
     this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id,
-      status, emailQuery, interactionQuery, productNameQuery, validityQuery)
+      status, emailQuery, interactionQuery, productNameQuery, validityQuery);
   }
 
   SwitchStatusFilter(status: string) {
-    this.selectedStatus = status
-    this.LoadData()
+    this.selectedStatus = status;
+    this.LoadData();
   }
 
   StatusToStats(status: string, statsObject: StatusStatsI): number {
-    if (status === "All") {
-      return statsObject.ALL
+    if (status === 'All') {
+      return statsObject.ALL;
     }
-    if (status === "Successful") {
-      return statsObject.SUCCESSFUL
+    if (status === 'Successful') {
+      return statsObject.SUCCESSFUL;
     }
-    if (status === "Failed") {
-      return statsObject.FAILED
+    if (status === 'Failed') {
+      return statsObject.FAILED;
     }
-    if (status === "Cancelled" || status === "Refunded") {
-      return statsObject.CANCELLED
+    if (status === 'Cancelled' || status === 'Refunded') {
+      return statsObject.CANCELLED;
     }
-    if (status === "Pending" || status === "Refund_pending") {
-      return statsObject.PENDING
+    if (status === 'Pending' || status === 'Refund_pending') {
+      return statsObject.PENDING;
     }
-    return 0
+    return 0;
   }
 
   StyleClassFromStatus(status: string): string {
-    if (status === "SUCCESSFUL") {
-      return 'SUCCESSFUL-text'
-    } else if (status === "PENDING" || status === "REFUND_PENDING") {
-      return 'PENDING-text'
-    } else if (status === "CANCELLED" || status === "REFUNDED") {
-      return 'CANCELLED-text'
-    } else if (status === "FAILED") {
-      return 'FAILED-text'
+    if (status === 'SUCCESSFUL') {
+      return 'SUCCESSFUL-text';
+    } else if (status === 'PENDING' || status === 'REFUND_PENDING') {
+      return 'PENDING-text';
+    } else if (status === 'CANCELLED' || status === 'REFUNDED') {
+      return 'CANCELLED-text';
+    } else if (status === 'FAILED') {
+      return 'FAILED-text';
     }
-    return ""
+    return '';
   }
 
   StyleClassFromValidity(validity: string): string {
-      if (validity === "valid") {
-          return 'SUCCESSFUL-text'
-      } else if (validity === "invalid") {
-          return 'PENDING-text'
-      } else if (validity === "consumed") {
-          return 'CANCELLED-text'
-      } else if (validity === "manually_verified") {
-          return 'CANCELLED-text'
-      } else if (validity === "forbidden") {
-          return 'FAILED-text'
-      }
-      return ""
+    if (validity === 'valid') {
+      return 'SUCCESSFUL-text';
+    } else if (validity === 'invalid') {
+      return 'PENDING-text';
+    } else if (validity === 'consumed') {
+      return 'CANCELLED-text';
+    } else if (validity === 'manually_verified') {
+      return 'CANCELLED-text';
+    } else if (validity === 'forbidden') {
+      return 'FAILED-text';
+    }
+    return '';
   }
 
   DownloadData() {
-    const status = this.selectedStatus === 'All' ? null: this.selectedStatus
+    const status = this.selectedStatus === 'All' ? null: this.selectedStatus;
 
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
@@ -206,28 +206,28 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
     const validityQuery = validityControlValue === '' ? null: validityControlValue;
 
     const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
-    'product_id', 'product_name', 'amount', 'transaction_status',
-      'date_created', 'date_completed', 'validity', 'currency']
+      'product_id', 'product_name', 'amount', 'transaction_status',
+      'date_created', 'date_completed', 'validity', 'currency'];
 
     this.staffTransactionService.getTransactionsExport(fields, this.item_id, this.user_id, this.checkout_id, status,
-        emailQuery, interactionQuery, productNameQuery, validityQuery).subscribe((data) => {
-      const date = new Date()
-      const pipedDate = this.datePipe.transform(date, 'dd-MM-yyyy')
+      emailQuery, interactionQuery, productNameQuery, validityQuery).subscribe((data) => {
+      const date = new Date();
+      const pipedDate = this.datePipe.transform(date, 'dd-MM-yyyy');
 
 
-      this.blob = new Blob([data], {type: 'application/vnd.ms-excel'})
+      this.blob = new Blob([data], {type: 'application/vnd.ms-excel'});
 
-      let downloadURL = URL.createObjectURL(data);
-      let link = document.createElement('a');
-      link.href = downloadURL
-      link.download = "TransactionExport_" + pipedDate + ".xlsx";
-      link.click()
+      const downloadURL = URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = downloadURL;
+      link.download = 'TransactionExport_' + pipedDate + '.xlsx';
+      link.click();
 
       // This took me longer than I would like to admit
       // These two answers hold all the answers
       // https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
       // https://stackoverflow.com/questions/60730934/typescript-http-get-error-no-overload-matches-this-call
-    })
+    });
   }
 
   protected readonly ValidityOptions = ValidityOptions;

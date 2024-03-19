@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {Observable, of} from "rxjs";
-import {StaffCheckoutService} from "../../../../core/services/staff/staff-checkout.service";
-import {StaffCheckoutI} from "../../../../shared/models/staff/staff_checkout";
-import {StaffTransactionI} from "../../../../shared/models/staff/staff_transaction";
-import {StaffTransactionService} from "../../../../core/services/staff/staff-transaction.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {ActivatedRoute} from '@angular/router';
+import {Observable, of} from 'rxjs';
+import {StaffCheckoutService} from '../../../../core/services/staff/staff-checkout.service';
+import {StaffCheckoutI} from '../../../../shared/models/staff/staff_checkout';
+import {StaffTransactionI} from '../../../../shared/models/staff/staff_transaction';
+import {StaffTransactionService} from '../../../../core/services/staff/staff-transaction.service';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-checkout-detail',
@@ -19,8 +19,8 @@ export class CheckoutDetailComponent implements OnInit {
   transactions$: Observable<StaffTransactionI[]> = of();
   loading: boolean = false;
   formError: null | string = null;
-  successMessage: null | string = null
-  transactionPatched: boolean = false
+  successMessage: null | string = null;
+  transactionPatched: boolean = false;
 
   constructor(private route: ActivatedRoute,
               private checkoutService: StaffCheckoutService,
@@ -34,28 +34,28 @@ export class CheckoutDetailComponent implements OnInit {
     // If ID is null
     if (id === null) {
       // TODO Handle error
-      return
+      return;
     }
     this.checkout_id = id;
 
-    this.FetchData()
+    this.FetchData();
   }
 
 
   public FetchData(patchedTransaction: boolean = false) {
-    this.loading = true
+    this.loading = true;
     this.checkoutDetail$ = this.checkoutService.getCheckout(this.checkout_id);
-    this.transactions$ = this.staffTransactionService.getTransactions(0, 100, null, null, this.checkout_id)
-    this.loading = false
+    this.transactions$ = this.staffTransactionService.getTransactions(0, 100, null, null, this.checkout_id);
+    this.loading = false;
 
     if (patchedTransaction) {
-      this.transactionPatched = true
+      this.transactionPatched = true;
     }
   }
 
   public Patch() {
     this.loading = true;
-    this.formError = "Not Implemented";
+    this.formError = 'Not Implemented';
     this.loading = false;
   }
 
@@ -63,17 +63,17 @@ export class CheckoutDetailComponent implements OnInit {
     this.successMessage = null;
     this.formError = null;
 
-    this.loading = true
-    const forceRefund = true // TODO Place this param in a form
+    this.loading = true;
+    const forceRefund = true; // TODO Place this param in a form
     this.checkoutService.refundCheckout(this.checkout_id, forceRefund).subscribe(
       (checkout) => {
-        this.FetchData()
-        this.successMessage = "Refund started!"
+        this.FetchData();
+        this.successMessage = 'Refund started!';
       },
       (error: Error) => {
-        this.handleError(error)
-      })
-      this.loading = false
+        this.handleError(error);
+      });
+    this.loading = false;
   }
 
   public SendEmail() {
@@ -82,24 +82,24 @@ export class CheckoutDetailComponent implements OnInit {
 
     this.loading = true;
     this.checkoutService.emailCheckout(this.checkout_id).subscribe(
-        (succes) => {
-          if (succes) {
-            this.successMessage = "Email sent!"
-          } else {
-            this.formError = "Email not sent :§"
-          }
-        },
-        (error) => {
-            this.handleError(error)
+      (succes) => {
+        if (succes) {
+          this.successMessage = 'Email sent!';
+        } else {
+          this.formError = 'Email not sent :§';
         }
-    )
+      },
+      (error) => {
+        this.handleError(error);
+      }
+    );
     this.loading = false;
   }
 
   public handleError(error: Error) {
     this.successMessage = null;
     if (error instanceof HttpErrorResponse) {
-      this.formError = error.message
+      this.formError = error.message;
     }
   }
 }

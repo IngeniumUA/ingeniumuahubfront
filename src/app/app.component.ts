@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {HubAuthData} from "./shared/models/user";
-import {AuthService} from "./core/services/user/auth/auth.service";
+import {HubAuthData} from './shared/models/user';
+import {AuthService} from './core/services/user/auth/auth.service';
 
 @Component({
   selector: 'app-root',

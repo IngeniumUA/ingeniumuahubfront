@@ -1,18 +1,18 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
-import {MatTableModule} from "@angular/material/table";
-import {debounceTime, delay, Observable, of} from "rxjs";
-import {StaffItemDetailI} from "../../../../models/staff/staff_item_details";
-import {StaffItemService} from "../../../../../core/services/staff/items/staff_item_router";
-import {StaffCardService} from "../../../../../core/services/staff/items/staff_card_router";
-import {CardTypes, StaffCardDetailI} from "../../../../models/staff/staff_card_detail";
-import {RouterLink} from "@angular/router";
-import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/paginator";
-import {distinctUntilChanged, map} from "rxjs/operators";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {LayoutService} from "../../../../../core/services/layout/layout.service";
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {ValidityOptions} from "../../../../models/items/validity";
+import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
+import {MatTableModule} from '@angular/material/table';
+import {debounceTime, delay, Observable, of} from 'rxjs';
+import {StaffItemDetailI} from '../../../../models/staff/staff_item_details';
+import {StaffItemService} from '../../../../../core/services/staff/items/staff_item_router';
+import {StaffCardService} from '../../../../../core/services/staff/items/staff_card_router';
+import {CardTypes, StaffCardDetailI} from '../../../../models/staff/staff_card_detail';
+import {RouterLink} from '@angular/router';
+import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {distinctUntilChanged, map} from 'rxjs/operators';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {LayoutService} from '../../../../../core/services/layout/layout.service';
+import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {ValidityOptions} from '../../../../models/items/validity';
 
 @Component({
   selector: 'app-card-table',
@@ -35,20 +35,20 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  cardStats$: Observable<any> = of()
-  cards$: Observable<StaffCardDetailI[]> = of([])
+  cardStats$: Observable<any> = of();
+  cards$: Observable<StaffCardDetailI[]> = of([]);
   isMobile$ = this.layoutService.isMobile;
 
   searchForm = new FormGroup({
-      userControl: new FormControl(''),
-      cardTypeControl: new FormControl(''),
-      cardNrControl: new FormControl('')
-  })
+    userControl: new FormControl(''),
+    cardTypeControl: new FormControl(''),
+    cardNrControl: new FormControl('')
+  });
 
   GetDisplayedColumns(): string[] {
     return ['id', 'academic_year', 'card_type',
-        'card_nr', 'user', 'linked_date', 'last_edited', 'card_item',
-        'unlink_button']
+      'card_nr', 'user', 'linked_date', 'last_edited', 'card_item',
+      'unlink_button'];
   }
 
   constructor(private cardService: StaffCardService,
@@ -63,9 +63,9 @@ export class CardTableComponent implements OnInit, AfterViewInit {
       debounceTime(500)
       //combineLatest
     ).subscribe((value) => {
-        this.LoadData()
-      }
-    )
+      this.LoadData();
+    }
+    );
   }
 
   ngAfterViewInit() {
@@ -92,8 +92,8 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
-    this.cardStats$ = this.cardService.getCardStats(pageIndex * pageSize, pageSize, userQuery, cardTypeQuery, cardNrQuery, null)
-    this.cards$ = this.cardService.getCards(pageIndex * pageSize, pageSize, userQuery, cardTypeQuery, cardNrQuery, null)
+    this.cardStats$ = this.cardService.getCardStats(pageIndex * pageSize, pageSize, userQuery, cardTypeQuery, cardNrQuery, null);
+    this.cards$ = this.cardService.getCards(pageIndex * pageSize, pageSize, userQuery, cardTypeQuery, cardNrQuery, null);
   }
 
   DownloadData() {
@@ -103,10 +103,10 @@ export class CardTableComponent implements OnInit, AfterViewInit {
   UnlinkCard(card: StaffCardDetailI) {
     this.cardService.UnlinkCard(card).subscribe({
       next: (value) => {
-        this.LoadData()
+        this.LoadData();
       },
       error: (err) => {
-        console.log(err)
+        console.log(err);
       }
     });
   }

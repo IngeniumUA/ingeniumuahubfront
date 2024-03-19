@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NgClass, NgForOf} from "@angular/common";
+import {NgClass, NgForOf} from '@angular/common';
 
 interface PartnerDisplay {
   xOffset: number
@@ -20,21 +20,21 @@ export class PartnerBalkComponent implements OnInit, OnDestroy {
 
   partners: PartnerDisplay[] = [
 
-  ]
+  ];
   displayedPartners: PartnerDisplay[] = [
-    {xOffset: 0, logo: "assets/images/sponsors/SparklinkLogo.png"},
-    {xOffset: 0, logo: "assets/images/sponsors/umicore-logo-2017.svg"},
-    {xOffset: 0, logo: "assets/images/sponsors/Vorsselmans_logo.png"},
-  ]
+    {xOffset: 0, logo: 'assets/images/sponsors/SparklinkLogo.png'},
+    {xOffset: 0, logo: 'assets/images/sponsors/umicore-logo-2017.svg'},
+    {xOffset: 0, logo: 'assets/images/sponsors/Vorsselmans_logo.png'},
+  ];
 
   ngOnInit() {
     // this.intervalId = setInterval(this.DoStep, 1000);
   }
 
-  intervalId!: any
+  intervalId!: any;
 
   DoStep() {
-    console.log(this.displayedPartners)
+    console.log(this.displayedPartners);
   }
 
   GetStyleClass(partner: PartnerDisplay): any {
@@ -42,6 +42,6 @@ export class PartnerBalkComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    clearInterval(this.intervalId)
+    clearInterval(this.intervalId);
   }
 }

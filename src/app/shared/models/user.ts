@@ -1,5 +1,5 @@
-import {HubCardI} from "./card";
-import {Validators} from "@angular/forms";
+import {HubCardI} from './card';
+import {Validators} from '@angular/forms';
 
 export interface HubAuthData {
   access_token: string;

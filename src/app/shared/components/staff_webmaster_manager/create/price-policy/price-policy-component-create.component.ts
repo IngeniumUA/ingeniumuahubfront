@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {PricePolicyI} from "../../../../models/price_policy";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {NgForOf} from "@angular/common";
+import {PricePolicyI} from '../../../../models/price_policy';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-price-policy-create',
@@ -19,23 +19,23 @@ import {NgForOf} from "@angular/common";
 })
 export class PricePolicyComponentCreate {
 
-  @Output() UpdatePricePolicyEvent = new EventEmitter<PricePolicyI>()
+  @Output() UpdatePricePolicyEvent = new EventEmitter<PricePolicyI>();
 
-  methods = ['allow_deny_list']
+  methods = ['allow_deny_list'];
 
   constructor(private formBuilder: FormBuilder) {
   }
 
   form = this.formBuilder.group({
     price: [0, [Validators.required, Validators.min(0)]],
-    method: ["", Validators.required]
-  })
+    method: ['', Validators.required]
+  });
   form_error: string | null = null;
 
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      const error: Error = Error("Invalid form");
+      const error: Error = Error('Invalid form');
       this.handleFormError(error);
       return;
     }
@@ -49,9 +49,9 @@ export class PricePolicyComponentCreate {
       allow_invalid_access: false,
       always_available: false,
       update_fields: null
-    }
+    };
 
-    this.UpdatePricePolicyEvent.emit(pricePolicy)
+    this.UpdatePricePolicyEvent.emit(pricePolicy);
   }
 
   handleFormError(err: Error) {

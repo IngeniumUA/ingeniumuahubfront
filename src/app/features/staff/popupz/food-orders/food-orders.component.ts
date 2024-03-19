@@ -15,13 +15,13 @@ export class FoodOrdersComponent {
   ngOnInit() {
     interval(5000)
       .pipe(
-          mergeMap(() => this.httpService.get<any>(apiEnviroment.apiUrl + "popup/cache/food_dashboard"))
+        mergeMap(() => this.httpService.get<any>(apiEnviroment.apiUrl + 'popup/cache/food_dashboard'))
       )
       .subscribe((data) => {
         this.orders = data;
 
         // if query has ?kitchen=true, remove any orders where the status is true
-        if (window.location.search.includes("kitchen=true")) {
+        if (window.location.search.includes('kitchen=true')) {
           this.orders = this.orders.filter((order: any) => order.status == false);
         }
       });
@@ -29,7 +29,7 @@ export class FoodOrdersComponent {
 
   public removeOrder(order: any, index: number): void {
     // Remove item from database
-    this.httpService.post(apiEnviroment.apiUrl + "popup/cache/delete/" + order.order_no, null).subscribe();
+    this.httpService.post(apiEnviroment.apiUrl + 'popup/cache/delete/' + order.order_no, null).subscribe();
 
     // Remove item from orders
     this.orders.splice(index, 1);
