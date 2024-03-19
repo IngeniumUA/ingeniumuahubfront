@@ -1,0 +1,24 @@
+<app-layout-public-header />
+
+<main>
+  <div class="p-5 mx-auto container">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <nav class="vertical-nav">
+        <a [routerLink]="['/account']">Account</a>
+        <a [routerLink]="['/account/transactions']">Aankopen</a>
+
+        <div *ngIf="user$">
+
+        </div>
+
+        <a [routerLink]="['/man']" *ngIf="true">Manager</a>
+        <a [routerLink]="['/web']" *ngIf="true">Webmaster</a>
+        <a [routerLink]="['/staff']" *ngIf="true">Staff</a>
+      </nav>
+
+      <div class="col-span-1 md:col-span-3">
+        <router-outlet />
+      </div>
+    </div>
+  </div>
+</main>

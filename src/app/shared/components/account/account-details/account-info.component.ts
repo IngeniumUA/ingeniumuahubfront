@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {HttpErrorResponse} from "@angular/common/http";
-import {NgClass, NgIf, NgStyle} from "@angular/common";
+import {KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {MatRadioModule} from "@angular/material/radio";
-import {HubUserPersonalDetailsI} from "../../../models/user";
+import {HubAccountData, HubUserPersonalDetailsI} from "../../../models/user";
 import {AccountService} from "../../../../core/services/user/account/account.service";
 import {first} from "rxjs/operators";
 
@@ -17,7 +17,9 @@ import {first} from "rxjs/operators";
     ReactiveFormsModule,
     NgStyle,
     NgIf,
-    MatRadioModule
+    MatRadioModule,
+    NgForOf,
+    KeyValuePipe
   ],
   standalone: true
 })
@@ -27,7 +29,19 @@ export class AccountInfo implements OnInit {
               private accountService: AccountService) {
   }
 
-  form!: FormGroup
+  form!: FormGroup;
+  loading = false;
+  submitted = false;
+  form_error: string | null = null;
+  graduationTracts = {
+    'bouwkunde': 'Bouwkunde',
+    'elektromechanica': 'Elektromechanica',
+    'elektronica_ict': 'Elektronica-ICT',
+    'chemie': 'Chemie',
+    'biochemie': 'Biochemie',
+    'uantwerpen': 'UAntwerpen',
+    'other': 'Andere'
+  };
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -46,11 +60,6 @@ export class AccountInfo implements OnInit {
   @Input() input_model!: HubUserPersonalDetailsI
   @Input() success_message: string | null = null;
   @Output() accountEvent = new EventEmitter<string>();
-
-
-  loading = false;
-  submitted = false;
-  form_error: string | null = null;
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }

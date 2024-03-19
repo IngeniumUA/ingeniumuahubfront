@@ -1,16 +1,55 @@
 <section>
+  <h2 class="mb-3">Mijn gegevens</h2>
+  <form action="" class="w-full space-y-4">
+    <fieldset>
+      <div class="form-field">
+        <label for="email">E-mailadres</label>
+        <input id="email" type="email" readonly disabled value="" />
+      </div>
+    </fieldset>
+
+    <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="form-field">
+        <label for="firstName">Voornaam</label>
+        <input id="firstName" type="text" formControlName="voornaam" [ngClass]="{ 'is-invalid': submitted && f['voornaam'].errors }"/>
+      </div>
+
+      <div class="form-field">
+        <label for="lastName">Achternaam</label>
+        <input id="lastName" type="text" formControlName="achternaam" [ngClass]="{ 'is-invalid': submitted && f['achternaam'].errors }"/>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-field">
+        <label for="phoneNumber">Telefoonnummer</label>
+        <input id="phoneNumber" type="text" formControlName="telefoonnummer" [ngClass]="{ 'is-invalid': submitted && f['telefoonnummer'].errors }"/>
+      </div>
+    </fieldset>
+
+    <fieldset class="grid grid-cols-4 gap-4">
+      <legend class="sr-only">Adres</legend>
+      <div class="form-field col-span-3">
+        <label for="street">Straat</label>
+        <input id="street" type="text" formControlName="adres" [ngClass]="{ 'is-invalid': submitted && f['adres'].errors }"/>
+      </div>
+
+      <div class="form-field">
+        <label for="houseNumber">Huisnummer</label>
+        <input id="houseNumber" type="text" formControlName="huisnummer" [ngClass]="{ 'is-invalid': submitted && f['huisnummer'].errors }"/>
+      </div>
+
+      <div class="form-field col-span-4">
+        <label for="municipality">Gemeente</label>
+        <input id="municipality" type="text" formControlName="gemeente" [ngClass]="{ 'is-invalid': submitted && f['gemeente'].errors }"/>
+      </div>
+    </fieldset>
+  </form>
+</section>
+
+<!--<section>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h3>Vul je informatie in!</h3>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="voornaam" placeholder="Voornaam" [ngClass]="{ 'is-invalid': submitted && f['voornaam'].errors }"/>
-      </label>
-    </div>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="achternaam" placeholder="Achternaam" [ngClass]="{ 'is-invalid': submitted && f['achternaam'].errors }"/>
-      </label>
-    </div>
+
     <div class="account-info-field-wrapper">
       <label class="hubformfield-blue">
         <input type="text" formControlName="telefoonnummer" placeholder="Telefoonnummer" [ngClass]="{ 'is-invalid': submitted && f['telefoonnummer'].errors }"/>
@@ -49,7 +88,7 @@
     </div>
 
     <div class="account-info-field-wrapper">
-      <h3>Asftudeerrichting</h3>
+      <h3></h3>
       <mat-radio-group formControlName="afstudeerrichting" aria-label="Select an option">
         <mat-radio-button value="bouwkunde">Bouwkunde</mat-radio-button>
         <mat-radio-button value="elektromechanica">Elektromechanica</mat-radio-button>
@@ -59,6 +98,16 @@
         <mat-radio-button value="uantwerpen">UAntwerpen</mat-radio-button>
         <mat-radio-button value="other">Other</mat-radio-button>
       </mat-radio-group>
+
+      <div>
+        <h2 class="text-gray-800 font-medium">Asftudeerrichting</h2>
+        <ul class="mt-3 space-y-3">
+          <li class="flex items-center gap-x-2.5" *ngFor="let item of graduationTracts | keyvalue">
+            <input type="radio" name="graduationTrajects" [id]="'graduationTracts' + item.key" [value]="item.key" class="form-radio border-gray-400 text-indigo-600 focus:ring-indigo-600 duration-150" />
+            <label [for]="'graduationTracts' + item.key" class="text-sm text-gray-700 font-medium">{{ item.value }}</label>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="account-button-wrapper">
@@ -77,4 +126,4 @@
     </div>
 
   </form>
-</section>
+</section>-->

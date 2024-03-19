@@ -5,8 +5,10 @@
 @import 'ngx-toastr/toastr';
 @import "staff_styles";
 @import "button";
+@import "vertical_nav";
 @import "cards";
 @import "alert";
+@import "forms";
 
 :root {
   --mainblue: rgb(0, 5, 61); /* #00053D */
@@ -26,7 +28,7 @@
 }
 
 html, body, app-root {
-  @apply w-full overflow-x-hidden h-full block;
+  @apply w-full overflow-x-hidden h-full block text-gray-900;
 }
 
 app-public-routing {

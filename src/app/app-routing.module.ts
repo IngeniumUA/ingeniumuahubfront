@@ -56,9 +56,11 @@ const routes: Routes = [
     {path: 'card/:id', component: CardRedirectComponent, canActivate: [authGuard]},
 
     // User specific pages
-    {path: 'account',
+    {
+      path: 'account',
       loadChildren: () => import('src/app/features/public/account/account.module').then(x => x.AccountModule),
-      canActivate: [authGuard]},
+      canActivate: [authGuard]
+    },
 
     // Custom pages
     {path: 'ingenium-galabal', component: GalabalComponent},

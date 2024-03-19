@@ -1,0 +1,7 @@
+.vertical-nav {
+  @apply space-y-0.5 bg-gray-50 rounded;
+
+  a {
+    @apply block w-full px-4 py-3 text-blue-900 hover:bg-blue-900 hover:text-white font-bold text-sm rounded transition-colors ease-in-out focus-visible:ring-black focus-visible:ring-4 focus:outline-none;
+  }
+}

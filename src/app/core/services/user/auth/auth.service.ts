@@ -8,6 +8,8 @@ import {HubAuthData} from "../../../../shared/models/user";
 import {apiEnviroment} from "../../../../../environments/environment";
 import {RolesService} from "../roles.service";
 import {CartService} from "../../shop/cart/cart.service";
+import {Store} from "@ngxs/store";
+import {User} from "../../../store";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,8 @@ export class AuthService {
   constructor(private router: Router,
               private httpClient: HttpClient,
               private cartService: CartService,
-              private rolesService: RolesService) {
+              private rolesService: RolesService,
+              private store: Store) {
     this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
     this.user = this.userSubject.asObservable();
   }
@@ -55,6 +58,7 @@ export class AuthService {
 
     this.cartService.clear()
     this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/auth/logout', body )
+    this.store.dispatch(new User.removeUserDetails());
 
     localStorage.removeItem('user');
     this.userSubject.next(null); // Set observable to null
@@ -75,6 +79,9 @@ export class AuthService {
         localStorage.setItem('user', JSON.stringify(user));
 
         this.userSubject.next(user); // Set user observable to user?
+
+        // New Store state
+        this.store.dispatch(new User.FetchUserDetails());
 
         return user;
       }),

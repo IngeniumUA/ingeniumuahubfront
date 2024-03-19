@@ -1,5 +1,11 @@
-import { NgModule } from '@angular/core';
+import {NgModule, OnInit, isDevMode } from '@angular/core';
+import {NgOptimizedImage} from "@angular/common";
 import { BrowserModule } from '@angular/platform-browser';
+import { NgxsModule, Store } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { QRCodeModule } from "angularx-qrcode";
+
+import {User, UserState} from "./core/store";
 
 import { AppComponent } from './app.component';
 import { PublicHeaderComponent } from './core/layout/public/header/public-header.component';
@@ -39,39 +45,34 @@ import { PartnerBalkComponent } from './shared/components/partners/partner-balk/
 import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
 import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
 import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
-import {QRCodeModule} from "angularx-qrcode";
 import {PromoListComponent} from "./shared/components/items/item/promo-list/promo-list.component";
-import {NgOptimizedImage} from "@angular/common";
-
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomepageComponent,
-        NotfoundpageComponent,
-        RecSysFormComponent,
+  declarations: [
+    AppComponent,
+    HomepageComponent,
+    NotfoundpageComponent,
+    RecSysFormComponent,
 
-        PublicRoutingComponent,
-        CloudComponent,
+    PublicRoutingComponent,
+    CloudComponent,
 
-        EventdatePipe,
-        GroupnamePipe,
-        SetpwComponent,
-        ContactComponent,
-        CardRedirectComponent,
-        AwaitpasswordLinkComponent,
-        CreditsComponent,
-        PopupzComponent,
-        PopupzorderComponent,
-        PopupzorderStaffComponent,
-        GalabalComponent,
-
-    ],
+    EventdatePipe,
+    GroupnamePipe,
+    SetpwComponent,
+    ContactComponent,
+    CardRedirectComponent,
+    AwaitpasswordLinkComponent,
+    CreditsComponent,
+    PopupzComponent,
+    PopupzorderComponent,
+    PopupzorderStaffComponent,
+    GalabalComponent,
+  ],
   imports: [
     // https://www.npmjs.com/package/angularx-qrcode
     // QRCode generator
     QRCodeModule,
-
 
     BrowserModule,
     PublicHeaderComponent,
@@ -98,28 +99,47 @@ import {NgOptimizedImage} from "@angular/common";
     ToastrModule.forRoot(),
     PartnerGridComponent,
     PromoListComponent,
-    NgOptimizedImage
+    NgOptimizedImage,
+
+    NgxsModule.forRoot([ UserState ], {
+      developmentMode: isDevMode(),
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot({
+      disabled: !isDevMode(),
+    }),
+    /*NgxsStoragePluginModule.forRoot({
+      key: 'auth.token'
+    })*/
   ],
-    providers: [
-        {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
-        {provide: 'SocialAuthServiceConfig',
-        useValue: {
-          autoLogin: false,
-          providers: [
-            {
-              id: GoogleLoginProvider.PROVIDER_ID,
-              provider: new GoogleLoginProvider('955811433543-a10u2jjmsatmruf7p8cf2d005higk2k5.apps.googleusercontent.com')
-            }
-          ],
-          onError: ({err}: { err: any }) => {
-            console.error(err);
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('955811433543-a10u2jjmsatmruf7p8cf2d005higk2k5.apps.googleusercontent.com')
           }
-        } as unknown as SocialAuthServiceConfig,
-      }
-    ],
+        ],
+        onError: ({err}: { err: any }) => {
+          console.error(err);
+        }
+      } as unknown as SocialAuthServiceConfig,
+    }
+  ],
   exports: [
     EventdatePipe,
   ],
-    bootstrap: [AppComponent]
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule implements OnInit {
+
+  constructor(private store: Store) { }
+
+  ngOnInit() {
+    this.store.dispatch(new User.FetchUserDetails());
+  }
+
+}
