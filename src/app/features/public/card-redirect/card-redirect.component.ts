@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AccountService} from '../../../core/services/user/account/account.service';
 import {CardService} from '../../../core/services/user/card.service';
 import {first} from 'rxjs/operators';
-import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {HubCardI} from '../../../shared/models/card';
 
 @Component({
@@ -46,7 +46,7 @@ export class CardRedirectComponent implements OnInit {
     this.router.navigateByUrl('/account/card');
   }
 
-  HandleSuccesResponse(response: HubCardI): string {
+  HandleSuccesResponse(_response: HubCardI): string {
     return 'Kaart gelinkt!';
   }
 

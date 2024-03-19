@@ -1,4 +1,4 @@
-import {AccessPolicyI, StaffAccessPolicyI} from './staff/staff_access_policy';
+import {AccessPolicyI} from './staff/staff_access_policy';
 
 export interface PricePolicyI {
     price: number

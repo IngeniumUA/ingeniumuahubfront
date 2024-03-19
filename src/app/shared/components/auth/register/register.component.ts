@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgClass} from '@angular/common';
@@ -18,7 +18,7 @@ import {GoogleSigninButtonModule} from '@abacritt/angularx-social-login';
   ],
   standalone: true
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;

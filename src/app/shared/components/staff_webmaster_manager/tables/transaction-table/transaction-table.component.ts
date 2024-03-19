@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, Input, OnChanges, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChange,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {StaffTransactionService} from '../../../../../core/services/staff/staff-transaction.service';
@@ -33,7 +42,7 @@ import {ValidityOptions} from '../../../../models/items/validity';
   ],
   standalone: true
 })
-export class TransactionTableComponent implements AfterViewInit, OnChanges {
+export class TransactionTableComponent implements AfterViewInit, OnChanges, OnInit {
   constructor(private staffTransactionService: StaffTransactionService,
               private datePipe: DatePipe) {
   }
@@ -91,7 +100,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
       distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
       debounceTime(500)
       //combineLatest
-    ).subscribe((_) => {
+    ).subscribe(() => {
       this.LoadData();
     }
     );

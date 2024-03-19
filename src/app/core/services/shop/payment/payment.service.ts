@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CartService} from '../cart/cart.service';
-import {Observable, of, tap} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {apiEnviroment} from '../../../../../environments/environment';
 
 export interface CheckoutIdI {
@@ -25,7 +25,7 @@ export class PaymentService {
 
     // Post transaction to API
     return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + 'interact/checkout', api_transactions).pipe(
-      tap(_ => this.cartService.clear())
+      tap(() => this.cartService.clear())
     );
   }
 }

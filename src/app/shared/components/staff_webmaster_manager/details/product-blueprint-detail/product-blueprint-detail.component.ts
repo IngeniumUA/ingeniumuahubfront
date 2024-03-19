@@ -5,7 +5,7 @@ import {RouterLink} from '@angular/router';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ProductMetaI} from '../../../../models/items/products/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
-import {PricePolicyComponentCreate} from '../../create/price-policy/price-policy-component-create.component';
+import {PricePolicyComponentCreateComponent} from '../../create/price-policy/price-policy-component-create.component';
 import {PricePolicyI} from '../../../../models/price_policy';
 
 @Component({
@@ -21,7 +21,7 @@ import {PricePolicyI} from '../../../../models/price_policy';
     ReactiveFormsModule,
     NgIf,
     PricePolicyComponent,
-    PricePolicyComponentCreate
+    PricePolicyComponentCreateComponent
   ],
   standalone: true
 })

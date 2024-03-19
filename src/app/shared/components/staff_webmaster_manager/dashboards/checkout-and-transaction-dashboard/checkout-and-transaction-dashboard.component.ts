@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {TransactionTableComponent} from '../../tables/transaction-table/transaction-table.component';
 import {CheckoutTableComponent} from '../../tables/checkout-table/checkout-table.component';
 import {NgClass, NgIf, NgStyle} from '@angular/common';

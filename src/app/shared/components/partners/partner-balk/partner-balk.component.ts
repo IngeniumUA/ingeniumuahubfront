@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {NgClass, NgForOf} from '@angular/common';
 
 interface PartnerDisplay {
@@ -16,7 +16,7 @@ interface PartnerDisplay {
   ],
   standalone: true
 })
-export class PartnerBalkComponent implements OnInit, OnDestroy {
+export class PartnerBalkComponent implements OnDestroy {
 
   partners: PartnerDisplay[] = [
 
@@ -27,9 +27,9 @@ export class PartnerBalkComponent implements OnInit, OnDestroy {
     {xOffset: 0, logo: 'assets/images/sponsors/Vorsselmans_logo.png'},
   ];
 
-  ngOnInit() {
-    // this.intervalId = setInterval(this.DoStep, 1000);
-  }
+  /*ngOnInit() {
+    this.intervalId = setInterval(this.DoStep, 1000);
+  }*/
 
   intervalId!: any;
 
@@ -37,7 +37,7 @@ export class PartnerBalkComponent implements OnInit, OnDestroy {
     console.log(this.displayedPartners);
   }
 
-  GetStyleClass(partner: PartnerDisplay): any {
+  GetStyleClass(_partner: PartnerDisplay): any {
 
   }
 

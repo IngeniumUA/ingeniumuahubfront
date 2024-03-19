@@ -2,13 +2,11 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
-import {StaffItemDetailI} from '../../../../models/staff/staff_item_details';
-import {StaffItemService} from '../../../../../core/services/staff/items/staff_item_router';
 import {StaffCardService} from '../../../../../core/services/staff/items/staff_card_router';
 import {CardTypes, StaffCardDetailI} from '../../../../models/staff/staff_card_detail';
 import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import {distinctUntilChanged, map} from 'rxjs/operators';
+import {distinctUntilChanged} from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {LayoutService} from '../../../../../core/services/layout/layout.service';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
@@ -62,7 +60,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
       distinctUntilChanged((prev, next) => prev === next),
       debounceTime(500)
       //combineLatest
-    ).subscribe((value) => {
+    ).subscribe(() => {
       this.LoadData();
     }
     );
@@ -102,7 +100,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   UnlinkCard(card: StaffCardDetailI) {
     this.cardService.UnlinkCard(card).subscribe({
-      next: (value) => {
+      next: () => {
         this.LoadData();
       },
       error: (err) => {

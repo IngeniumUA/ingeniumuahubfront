@@ -66,7 +66,7 @@ export class CheckoutDetailComponent implements OnInit {
     this.loading = true;
     const forceRefund = true; // TODO Place this param in a form
     this.checkoutService.refundCheckout(this.checkout_id, forceRefund).subscribe(
-      (checkout) => {
+      (_checkout) => {
         this.FetchData();
         this.successMessage = 'Refund started!';
       },

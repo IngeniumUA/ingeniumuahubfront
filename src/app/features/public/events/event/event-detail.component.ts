@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EventItemDetailI} from '../../../../shared/models/items/events';
 import {EventService} from '../../../../core/services/items/events/event.service';
-import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay, tap} from 'rxjs';
+import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {LayoutService} from '../../../../core/services/layout/layout.service';
 import {IProductCategorie, IProductGroup, IProductItem} from '../../../../shared/models/items/products/products';
 import {ProductsService} from '../../../../core/services/shop/products/products.service';

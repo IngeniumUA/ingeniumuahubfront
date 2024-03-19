@@ -16,7 +16,7 @@ const TESTpopUpZ: IProductGroup[] = [
     products: [
       {'name': "Niet-lid", 'max_count': 1, 'price_eu': 5.0}]}
 ]
-*/
+
 const TESTpitch = [
   {
     categorie_name: 'Tickets',
@@ -61,7 +61,7 @@ const TESTding = [
   { groupinfo:
   { name: 'TEST'},
   products: [{'name': 'TEST', 'max_count': 1, 'price_eu': 1.0}]}
-];
+];*/
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +74,7 @@ export class ProductsService {
     return this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + 'interact/product/' + itemID);
   }
 
-  getProductWithCart(itemId: string): Observable<IProductCategorie[]> {
+  getProductWithCart(_itemId: string): Observable<IProductCategorie[]> {
     // TODO return this.httpClient.post<IProductCategorie[]>(apiEnviroment.apiUrl + "interact/product/" + itemID)
     return of([]);
   }

@@ -48,7 +48,7 @@ export class PricePolicyComponent implements OnInit {
       delay(500),
       distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
       debounceTime(500)
-    ).subscribe(_ => {
+    ).subscribe(() => {
       const update_fields: { [key: string]: any } = {};
 
       const productNameControlValue = this.pricePolicyForm.get('productNameControl')!.value;

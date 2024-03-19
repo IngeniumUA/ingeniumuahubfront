@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, shareReplay} from 'rxjs';
 import {RecSysPreviewI} from '../../../shared/models/items/recsys_interfaces';
 import {apiEnviroment} from '../../../../environments/environment';
-import {EventItemDetailI} from '../../../shared/models/items/events';
 import {ShopItemDetailI} from '../../../shared/models/items/shopitem';
 
 @Injectable({

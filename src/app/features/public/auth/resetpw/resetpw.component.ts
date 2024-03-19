@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PasswordService} from '../../../../core/services/user/password/password.service';
@@ -9,7 +9,7 @@ import {first} from 'rxjs/operators';
   templateUrl: './resetpw.component.html',
   styleUrls: ['./resetpw.component.css']
 })
-export class ResetpwComponent {
+export class ResetpwComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;

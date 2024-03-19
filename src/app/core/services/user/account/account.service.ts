@@ -1,15 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {HubAccountData, HubUserPersonalDetailsI} from '../../../../shared/models/user';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '../../../../../environments/environment';
 import {HubCardI} from '../../../../shared/models/card';
 import {IProductItem} from '../../../../shared/models/items/products/products';
-import {CheckoutI} from '../../../../shared/components/items/interactions/checkout';
-
-const TESTAccount = {
-  email: 'een.mail@domain.root'
-};
 
 export interface InteractionI {
   id: number

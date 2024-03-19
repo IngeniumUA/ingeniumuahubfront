@@ -1,27 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {from, Observable, of, shareReplay} from 'rxjs';
+import {Observable, shareReplay} from 'rxjs';
 import {EventItemDetailI} from '../../../../shared/models/items/events';
-import {ItemI} from '../../../../shared/models/items/ItemI';
 import {apiEnviroment} from '../../../../../environments/environment';
 import {RecSysPreviewI} from '../../../../shared/models/items/recsys_interfaces';
 
-
-const TESTevent = {
-  item: {
-    uuid: 'test_item_id',
-    date_created: 'string',
-    name: 'Deme Pitchavond',
-    description: 'test_deme_pitch',
-  },
-  start_date: '1970-01-01 00:00:00',
-  end_date: '',
-  follow_through_link: '',
-  location: '',
-  image_landscape: 'assets/images/PitchDEME.png',
-  image_square: '',
-  color: '000000000'
-};
 
 @Injectable({
   providedIn: 'root'

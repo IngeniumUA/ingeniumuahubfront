@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StaffDisplayMixinI, StaffItemDetailI} from '../../../../models/staff/staff_item_details';
 import {DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {DisplayMixinDetailComponent} from '../display-mixin-detail/display-mixin-detail.component';
@@ -22,7 +22,7 @@ import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
   standalone: true,
   providers: [DatePipe]
 })
-export class StaffItemDetailComponent {
+export class StaffItemDetailComponent implements OnInit{
 
   @Input() item!: StaffItemDetailI;
   @Input() editing: boolean = false;

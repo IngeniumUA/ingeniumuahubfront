@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { interval, mergeMap } from 'rxjs';
 import { apiEnviroment } from 'src/environments/environment';
@@ -8,7 +8,7 @@ import { apiEnviroment } from 'src/environments/environment';
   templateUrl: './food-orders.component.html',
   styleUrls: ['./food-orders.component.css']
 })
-export class FoodOrdersComponent {
+export class FoodOrdersComponent implements OnInit {
   constructor(private httpService: HttpClient) {}
   orders: any = [];
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import { UserStateModel } from './user.model';
 import {User} from './user.actions';
-import {HubAccountData, HubUserPersonalDetailsI} from '../../../shared/models/user';
+import {HubAccountData} from '../../../shared/models/user';
 import {apiEnviroment} from '../../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs';
@@ -43,7 +43,7 @@ export class UserState {
    */
 
   @Action(User.FetchUserDetails)
-  fetchUserDetails(ctx: StateContext<UserStateModel>, action: User.FetchUserDetails) {
+  fetchUserDetails(ctx: StateContext<UserStateModel>, _action: User.FetchUserDetails) {
     return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + 'user/account/')
       .pipe(
         tap((userDetails) => {

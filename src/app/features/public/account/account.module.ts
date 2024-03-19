@@ -9,14 +9,13 @@ import { CardDetailComponent } from './card/card-detail.component';
 import {CardComponent} from '../../../shared/components/account/card/card.component';
 import { AccountTransactionsComponent } from './account-transactions/account-transactions.component';
 import {UnderConstructionComponent} from '../../../shared/components/under-construction/under-construction.component';
-import {AppModule} from '../../../app.module';
 import {
   CheckoutDisplayComponent
 } from '../../../shared/components/account/checkout-display/checkout-display.component';
 import {
   TransactionDisplayComponent
 } from '../../../shared/components/account/transaction-display/transaction-display.component';
-import {AccountInfo} from '../../../shared/components/account/account-details/account-info.component';
+import {AccountInfoComponent} from '../../../shared/components/account/account-details/account-info.component';
 
 @NgModule({
   imports: [
@@ -28,7 +27,7 @@ import {AccountInfo} from '../../../shared/components/account/account-details/ac
     UnderConstructionComponent,
     CheckoutDisplayComponent,
     TransactionDisplayComponent,
-    AccountInfo,
+    AccountInfoComponent,
   ],
   declarations: [
     AccountDetailsComponent,

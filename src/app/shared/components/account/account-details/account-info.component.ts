@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {HttpErrorResponse} from '@angular/common/http';
 import {KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {MatRadioModule} from '@angular/material/radio';
-import {HubAccountData, HubUserPersonalDetailsI} from '../../../models/user';
+import {HubUserPersonalDetailsI} from '../../../models/user';
 import {AccountService} from '../../../../core/services/user/account/account.service';
 import {first} from 'rxjs/operators';
 
@@ -23,7 +23,7 @@ import {first} from 'rxjs/operators';
   ],
   standalone: true
 })
-export class AccountInfo implements OnInit {
+export class AccountInfoComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private accountService: AccountService) {

@@ -21,7 +21,7 @@ export class StaffFunctionsService {
       { email: email, card_type: lid_type, card_nr: lidkaart_nr } );
   }
 
-  public undo_register_new_account(succes_response: AssignLidPayload) {
+  public undo_register_new_account(_succes_response: AssignLidPayload) {
 
   }
 }

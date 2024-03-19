@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {Observable} from 'rxjs';
 import {RecSysPreviewI} from '../../../../shared/models/items/recsys_interfaces';
-import {EventService} from '../../../../core/services/items/events/event.service';
 import {LayoutService} from '../../../../core/services/layout/layout.service';
 import {ShopService} from '../../../../core/services/items/shop.service';
 

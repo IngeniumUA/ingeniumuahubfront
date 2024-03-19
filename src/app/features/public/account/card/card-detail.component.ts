@@ -1,6 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {AccountService} from '../../../../core/services/user/account/account.service';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-card-detail',

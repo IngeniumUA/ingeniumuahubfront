@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {RecSysItemPreviewComponent} from '../../items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import {AsyncPipe, NgForOf} from '@angular/common';
-import {RecSysPreviewI} from '../../../models/items/recsys_interfaces';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 

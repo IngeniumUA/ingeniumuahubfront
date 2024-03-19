@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import {Observable, of, shareReplay} from 'rxjs';
 import { CartService } from 'src/app/core/services/shop/cart/cart.service';
 import { EventItemDetailI } from 'src/app/shared/models/items/events';
-import { ItemI } from 'src/app/shared/models/items/ItemI';
 import { IProductItem } from 'src/app/shared/models/items/products/products';
 import { apiEnviroment } from 'src/environments/environment';
 
@@ -13,7 +12,7 @@ import { apiEnviroment } from 'src/environments/environment';
   templateUrl: './popupz.component.html',
   styleUrls: ['./popupz.component.scss']
 })
-export class PopupzComponent {
+export class PopupzComponent implements OnInit {
   category: 'food' | 'drinks' | 'snacks' = 'food';
   totalProducts: number = 0;
   products$: Observable<IProductItem[]> = of([]);

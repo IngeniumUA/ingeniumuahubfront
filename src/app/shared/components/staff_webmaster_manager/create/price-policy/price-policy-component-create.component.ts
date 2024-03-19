@@ -17,7 +17,7 @@ import {NgForOf} from '@angular/common';
   ],
   standalone: true
 })
-export class PricePolicyComponentCreate {
+export class PricePolicyComponentCreateComponent {
 
   @Output() UpdatePricePolicyEvent = new EventEmitter<PricePolicyI>();
 

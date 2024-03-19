@@ -5,8 +5,8 @@
     </div>
     <p>{{ card.card_nr }}</p>
   </ng-container>
-  <span *ngIf="failed_notification != null" class="error-message">{{ failed_notification }}</span>
-  <span *ngIf="success_notification != null" class="success-message">{{ success_notification}}</span>
+  <span *ngIf="failed_notification !== null" class="error-message">{{ failed_notification }}</span>
+  <span *ngIf="success_notification !== null" class="success-message">{{ success_notification}}</span>
 </div>
 
 <ng-template #nocard>

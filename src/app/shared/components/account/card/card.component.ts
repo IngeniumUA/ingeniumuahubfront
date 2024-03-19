@@ -1,9 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Route, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {HubCardI} from '../../../models/card';
 import {AsyncPipe, NgClass, NgIf} from '@angular/common';
-import {RolesService} from '../../../../core/services/user/roles.service';
-import {Observable} from 'rxjs';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AccountService} from '../../../../core/services/user/account/account.service';
 import {first} from 'rxjs/operators';

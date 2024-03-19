@@ -3,7 +3,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {EventItemDetailI} from '../../../../shared/models/items/events';
 import {EventService} from '../../../../core/services/items/events/event.service';
-import {FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-staff-event-detail',

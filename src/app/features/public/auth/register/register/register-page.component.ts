@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../../../core/services/user/auth/auth.service';
@@ -12,7 +12,7 @@ import {HttpErrorResponse} from '@angular/common/http';
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css']
 })
-export class RegisterPageComponent {
+export class RegisterPageComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;

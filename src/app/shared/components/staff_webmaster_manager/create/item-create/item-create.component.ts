@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AsyncPipe, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {Observable, of} from 'rxjs';
@@ -8,7 +8,6 @@ import {StaffItemService} from '../../../../../core/services/staff/items/staff_i
 import {StaffItemCreateI} from '../../../../models/staff/staff_item_details';
 import {first} from 'rxjs/operators';
 import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
-import {ValidityOptions} from '../../../../models/items/validity';
 import {PromoTypes} from '../../../../models/items/promo';
 
 @Component({

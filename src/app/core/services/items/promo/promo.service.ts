@@ -24,8 +24,7 @@ export class PromoService {
     return this.httpClient.get<RecSysPreviewI[]>(this.apiUrl + '/list' + query_str);
   }
 
-  public getPromo(type: string, item_id: string): Observable<PromoI> {
-    // return of(TESTevent)
+  public getPromo(_type: string, item_id: string): Observable<PromoI> {
     return this.httpClient.get<PromoI>(this.apiUrl + '/' + item_id).pipe(shareReplay());
   }
 }

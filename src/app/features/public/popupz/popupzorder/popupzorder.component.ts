@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { interval, mergeMap } from 'rxjs';
 import { apiEnviroment } from '../../../../../environments/environment';
 
@@ -8,7 +8,7 @@ import { apiEnviroment } from '../../../../../environments/environment';
   templateUrl: './popupzorder.component.html',
   styleUrls: ['./popupzorder.component.css']
 })
-export class PopupzorderComponent {
+export class PopupzorderComponent implements OnInit {
   orders: any[] = [];
 
   constructor(private httpService: HttpClient) {}

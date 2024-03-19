@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AssignLidPayload, StaffFunctionsService} from '../../../core/services/staff/staff-functions.service';
 import {Observable, of} from 'rxjs';
@@ -9,7 +9,7 @@ import {first} from 'rxjs/operators';
   templateUrl: './functions.component.html',
   styleUrls: ['./functions.component.css']
 })
-export class FunctionsComponent implements OnInit {
+export class FunctionsComponent {
 
   constructor(private formBuilder: FormBuilder,
               private staffFuncService: StaffFunctionsService) {
@@ -17,10 +17,6 @@ export class FunctionsComponent implements OnInit {
 
   succes: boolean = false;
   loading: boolean = false;
-
-  ngOnInit() {
-
-  }
 
   form_error: string | null = null;
   registerForm = this.formBuilder.group({

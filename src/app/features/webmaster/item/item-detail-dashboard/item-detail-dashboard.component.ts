@@ -60,7 +60,7 @@ export class ItemDetailDashboardComponent implements OnInit {
     this.addingCheckout = !this.addingCheckout;
   }
 
-  refetchTable(reload: boolean) {
+  refetchTable(_reload: boolean) {
     this.ToggleAddingCheckout();
   }
 }

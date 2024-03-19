@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Observable, interval, mergeMap } from 'rxjs';
-import { CheckoutI } from 'src/app/shared/components/items/interactions/checkout';
+import {Component, OnInit} from '@angular/core';
+import { interval, mergeMap } from 'rxjs';
 import { apiEnviroment } from 'src/environments/environment';
 
 @Component({
@@ -9,7 +8,7 @@ import { apiEnviroment } from 'src/environments/environment';
   templateUrl: './drink-orders.component.html',
   styleUrls: ['./drink-orders.component.css']
 })
-export class DrinkOrdersComponent {
+export class DrinkOrdersComponent implements OnInit {
   constructor(private httpService: HttpClient) {}
   orders: any = [];
 

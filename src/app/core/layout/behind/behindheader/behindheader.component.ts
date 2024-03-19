@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Router} from '@angular/router';
-import {NgClass, NgIf, NgStyle} from '@angular/common';
+import {NgClass, NgIf, NgOptimizedImage, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-behindheader',
@@ -10,7 +10,8 @@ import {NgClass, NgIf, NgStyle} from '@angular/common';
   imports: [
     NgStyle,
     NgClass,
-    NgIf
+    NgIf,
+    NgOptimizedImage
   ]
 })
 export class BehindheaderComponent {

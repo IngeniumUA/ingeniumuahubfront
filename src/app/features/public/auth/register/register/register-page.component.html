@@ -56,7 +56,7 @@
     <div class="register-page-section">
       <button [disabled]="!this.privacyPolicyAccepted" class="hubbutton-blue"><h3>Register</h3></button>
     </div>
-    <div *ngIf="this.form_error != null">
+    <div *ngIf="this.form_error !== null">
       <span class="error-message">{{ this.form_error }}</span>
     </div>
   </form>

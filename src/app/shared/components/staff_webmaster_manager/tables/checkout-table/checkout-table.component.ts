@@ -1,4 +1,13 @@
-import {Component, Input, OnChanges, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChange,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {StatusStatsI} from '../../../../models/stats/transactionStats';
@@ -31,7 +40,7 @@ import {CurrencyPipe} from '../../../../pipes/currency.pipe';
   ],
   standalone: true
 })
-export class CheckoutTableComponent implements OnChanges {
+export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit {
 
   constructor(private staffCheckoutService: StaffCheckoutService) {
   }
@@ -77,7 +86,7 @@ export class CheckoutTableComponent implements OnChanges {
       distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
       debounceTime(500)
       //combineLatest
-    ).subscribe((value) => {
+    ).subscribe(() => {
       this.LoadData();
     }
     );

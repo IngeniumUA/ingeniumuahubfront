@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject, catchError, Observable, of, throwError} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import {HubAuthData} from '../../../../shared/models/user';

@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {apiEnviroment} from '../../../../environments/environment';
-import {StaffProductBlueprintI} from '../../../shared/models/staff/staff_productblueprint';
-import {ProductStatsI} from '../../../shared/models/stats/productStats';
 import {IProductItem} from '../../../shared/models/items/products/products';
 
 @Injectable({

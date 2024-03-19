@@ -1,17 +1,12 @@
-import {Component, Inject, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, Renderer2} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {CheckoutIdI, PaymentService} from '../../../../core/services/shop/payment/payment.service';
 
-import {StripeCardNumberComponent, StripePaymentElementComponent, StripeService} from 'ngx-stripe';
-import {
-  StripeCardElementOptions,
-  StripeElementsOptions,
-} from '@stripe/stripe-js';
 import {FormBuilder} from '@angular/forms';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {apiEnviroment} from '../../../../../environments/environment';
 import {Router} from '@angular/router';
-import {first, last} from 'rxjs/operators';
+import {first} from 'rxjs/operators';
 import {LayoutService} from '../../../../core/services/layout/layout.service';
 import {CartService} from '../../../../core/services/shop/cart/cart.service';
 

@@ -12,7 +12,7 @@ import { FunctionsComponent } from './functions/functions.component';
 import { DrinkOrdersComponent } from './popupz/drink-orders/drink-orders.component';
 import { FoodOrdersComponent } from './popupz/food-orders/food-orders.component';
 import {PublicHeaderComponent} from '../../core/layout/public/header/public-header.component';
-import { StaffUsefullQR } from './payment-code/staff-usefull-q-r.component';
+import { StaffUseFullQRComponent } from './payment-code/staff-usefull-q-r.component';
 
 
 
@@ -34,7 +34,7 @@ import { StaffUsefullQR } from './payment-code/staff-usefull-q-r.component';
     FunctionsComponent,
     DrinkOrdersComponent,
     FoodOrdersComponent,
-    StaffUsefullQR
+    StaffUseFullQRComponent
   ],
 })
 export class StaffModule { }

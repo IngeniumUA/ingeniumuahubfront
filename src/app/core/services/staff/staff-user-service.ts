@@ -78,7 +78,7 @@ export class StaffUserService {
       query_str += '&ismemberof_group=' + group.toString();
     });
 
-    const httpOptions: Object = {
+    const httpOptions: object = {
       responseType: ('blob' as 'application/vnd.ms-excel')
     };
 

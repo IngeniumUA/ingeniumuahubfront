@@ -146,7 +146,7 @@ export class StaffTransactionService {
       query_str += '&validity=' + validity;
     }
 
-    const httpOptions: Object = {
+    const httpOptions: object = {
       responseType: ('blob' as 'application/vnd.ms-excel')
     };
 

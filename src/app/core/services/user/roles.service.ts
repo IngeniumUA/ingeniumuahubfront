@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, of, shareReplay} from 'rxjs';
-import {HubAuthData, HubUserRolesI} from '../../../shared/models/user';
+import {Observable, of, shareReplay} from 'rxjs';
+import {HubUserRolesI} from '../../../shared/models/user';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
