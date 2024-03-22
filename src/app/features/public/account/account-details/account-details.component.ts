@@ -46,8 +46,4 @@ export class AccountDetailsComponent implements OnInit {
   RefreshAuth(): void {
     this.authService.refreshAccessToken().subscribe();
   }
-
-  Logout(): void {
-    this.authService.logout();
-  }
 }

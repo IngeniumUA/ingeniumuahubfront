@@ -19,6 +19,10 @@
     &:hover {
       @apply border-blue-950 bg-blue-950;
     }
+
+    &.button-accessibility-white {
+      @apply focus:outline-white;
+    }
   }
 
   &.button-danger {
@@ -37,10 +41,11 @@
     }
   }
 
-  svg {
-    @apply ml-3 -mr-1 -mt-0.5 h-5 w-5;
+  &:not(.button-icon-only) {
+    svg {
+      @apply ml-3 -mr-1 -mt-0.5 h-5 w-5;
+    }
   }
-
 }
 
 .button-group {

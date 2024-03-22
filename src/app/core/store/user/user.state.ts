@@ -6,6 +6,7 @@ import {HubAccountData} from '../../../shared/models/user';
 import {apiEnviroment} from '../../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs';
+import {AuthService} from '../../services/user/auth/auth.service';
 
 @State<UserStateModel>({
   name: 'user',
@@ -17,7 +18,7 @@ import {tap} from 'rxjs';
 })
 @Injectable()
 export class UserState {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private authService: AuthService) {}
 
   /**
    * Selectors
@@ -59,6 +60,18 @@ export class UserState {
   removeUserDetails(ctx: StateContext<UserStateModel>) {
     ctx.setState({
       ...ctx.getState(),
+      userDetails: null,
+    });
+  }
+
+  @Action(User.Logout)
+  logout(ctx: StateContext<UserStateModel>) {
+    this.authService.logout();
+    console.log('Logout');
+
+    ctx.setState({
+      token: null,
+      refreshToken: null,
       userDetails: null,
     });
   }

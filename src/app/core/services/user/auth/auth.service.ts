@@ -58,7 +58,6 @@ export class AuthService {
 
     this.cartService.clear();
     this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/auth/logout', body );
-    this.store.dispatch(new User.removeUserDetails());
 
     localStorage.removeItem('user');
     this.userSubject.next(null); // Set observable to null
