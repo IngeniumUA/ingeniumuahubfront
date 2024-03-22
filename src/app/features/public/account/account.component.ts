@@ -6,6 +6,7 @@ import {HubAccountData} from '../../../shared/models/user';
 @Component({
   selector: 'app-page',
   templateUrl: './account.component.html',
+  styleUrls: ['./account.component.scss']
 })
 export class AccountComponent {
 

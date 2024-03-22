@@ -1,18 +1,13 @@
 <div *ngIf="this.account$ | async as account">
-  <section>
-    <app-card
-      [card]="account.card_details"
-      [on_account_page]="true"
-      [is_lid]="this.account.roles.is_lid"
-    />
-  </section>
+  <app-card
+    [card]="account.card_details"
+    [on_account_page]="true"
+    [is_lid]="this.account.roles.is_lid"
+  />
 
-  <section>
-    <h3>Mijn gegevens</h3>
-    <app-account-info
-      (accountEvent)="this.SetupAccount($event)"
-      [input_model]="account.personal_details"
-      [success_message]="this.form_success"
-    />
-  </section>
+  <app-account-info
+    (accountEvent)="this.SetupAccount($event)"
+    [input_model]="account.personal_details"
+    [success_message]="this.form_success"
+  />
 </div>

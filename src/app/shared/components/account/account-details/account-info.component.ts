@@ -10,7 +10,7 @@ import {first} from 'rxjs/operators';
 @Component({
   selector: 'app-account-info',
   templateUrl: './account-info.component.html',
-  styleUrls: ['./account-info.component.css'],
+  styleUrls: ['./account-info.component.scss'],
   imports: [
     NgClass,
     FormsModule,
