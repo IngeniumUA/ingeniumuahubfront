@@ -1,12 +1,12 @@
 <app-layout-public-header [light_theme]="true" />
 
 <main class="shop">
-  <h1>Shop</h1>
-  <!--
-  <h2>Koop een lidkaart aan de kassa!</h2>
-  -->
-  <div class="product-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    <app-rec-sys-item-preview [recsysItem]="shopitem" *ngFor="let shopitem of (this.shopitems$ | async)" />
-  </div>
+  <div class="p-5 mx-auto container">
+    <h1 class="white-section-title">Shop</h1>
+    <p></p>
 
+    <div class="product-list mt-4" [ngClass]="{'mobile': (this.isMobile$ | async)}">
+      <app-rec-sys-item-preview [recsysItem]="shopitem" *ngFor="let shopitem of (this.shopitems$ | async)" />
+    </div>
+  </div>
 </main>
