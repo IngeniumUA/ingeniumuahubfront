@@ -19,12 +19,10 @@
           </a>
 
           <div *ngIf="user$">
-
+            <a [routerLink]="['/man']" *ngIf="true">Manager</a>
+            <a [routerLink]="['/web']" *ngIf="true">Webmaster</a>
+            <a [routerLink]="['/staff']" *ngIf="true">Staff</a>
           </div>
-
-          <a [routerLink]="['/man']" *ngIf="true">Manager</a>
-          <a [routerLink]="['/web']" *ngIf="true">Webmaster</a>
-          <a [routerLink]="['/staff']" *ngIf="true">Staff</a>
         </nav>
       </div>
 

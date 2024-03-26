@@ -25,9 +25,9 @@
     "@angular/router": "^17.3.0",
     "@ngxs/store": "^3.8.2",
     "@stripe/stripe-js": "^3.0.10",
-    "angularx-qrcode": "^17.0.0",
     "ngx-stripe": "^17.1.1",
     "ngx-toastr": "^16.2.0",
+    "qrcode": "^1.5.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.4"

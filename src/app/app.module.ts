@@ -3,7 +3,6 @@ import {NgOptimizedImage} from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import {NgxsAfterBootstrap, NgxsModule, StateContext} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
-import {QRCodeModule} from 'angularx-qrcode';
 
 import {User, UserState} from './core/store';
 
@@ -73,10 +72,6 @@ import {PromoListComponent} from './shared/components/items/item/promo-list/prom
     GalabalComponent,
   ],
   imports: [
-    // https://www.npmjs.com/package/angularx-qrcode
-    // QRCode generator
-    QRCodeModule,
-
     BrowserModule,
     PublicHeaderComponent,
     PublicFooterComponent,
