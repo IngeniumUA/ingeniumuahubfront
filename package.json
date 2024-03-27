@@ -8,7 +8,11 @@
     "watch": "ng serve --watch --configuration development",
     "test": "ng test",
     "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint:fix": "eslint src --fix",
+    "dev:ssr": "ng run ingeniumuahubfront:serve-ssr",
+    "serve:ssr": "node dist/ingeniumuahubfront/server/main.js",
+    "build:ssr": "ng build && ng run ingeniumuahubfront:server",
+    "prerender": "ng run ingeniumuahubfront:prerender"
   },
   "private": true,
   "dependencies": {
@@ -22,9 +26,12 @@
     "@angular/material": "^17.3.0",
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/platform-server": "^17.3.0",
     "@angular/router": "^17.3.0",
+    "@angular/ssr": "^17.3.0",
     "@ngxs/store": "^3.8.2",
     "@stripe/stripe-js": "^3.0.10",
+    "express": "^4.19.2",
     "ngx-stripe": "^17.1.1",
     "ngx-toastr": "^16.2.0",
     "qrcode": "^1.5.3",
@@ -43,11 +50,14 @@
     "@angular/compiler-cli": "^17.3.0",
     "@ngxs/devtools-plugin": "^3.8.2",
     "@tailwindcss/forms": "^0.5.6",
+    "@types/express": "^4.17.17",
     "@types/jasmine": "~4.3.0",
+    "@types/node": "^18.18.0",
     "@types/qrcode": "^1.5.5",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@typescript-eslint/parser": "7.2.0",
     "autoprefixer": "^10.4.16",
+    "browser-sync": "^3.0.0",
     "eslint": "^8.57.0",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
@@ -57,6 +67,7 @@
     "karma-jasmine-html-reporter": "~2.0.0",
     "postcss": "^8.4.30",
     "tailwindcss": "^3.3.3",
-    "typescript": "~5.4.2"
+    "typescript": "~5.4.2",
+    "wrangler": "^3.38.0"
   }
 }

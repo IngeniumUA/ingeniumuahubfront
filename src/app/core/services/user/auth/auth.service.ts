@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import { Router } from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
@@ -10,6 +10,7 @@ import {RolesService} from '../roles.service';
 import {CartService} from '../../shop/cart/cart.service';
 import {Store} from '@ngxs/store';
 import {User} from '../../../store';
+import {isPlatformServer} from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +18,17 @@ import {User} from '../../../store';
 export class AuthService {
   private userSubject: BehaviorSubject<HubAuthData | null>;  // Onthoudt de user, observables subscriben naar dit subject
   public user: Observable<HubAuthData | null>;
-  constructor(private router: Router,
+  constructor(@Inject(PLATFORM_ID) platformId: Object,
+              private router: Router,
               private httpClient: HttpClient,
               private cartService: CartService,
               private rolesService: RolesService,
               private store: Store) {
-    this.userSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
+    let authData: HubAuthData | null = null;
+    if (!isPlatformServer(platformId)) { // For SSR this may need to be different and data needs to be stored in cookies
+      new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
+    }
+    this.userSubject = new BehaviorSubject<HubAuthData | null>(authData);
     this.user = this.userSubject.asObservable();
   }
 

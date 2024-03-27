@@ -1,0 +1,12 @@
+/
+/info
+/info/relations
+/info/praesidium
+/info/praesidium/22-23
+/info/praesidium/21-22
+/info/praesidium/20-21
+/info/praesidium/19-20
+/info/praesidium/18-19
+/info/clublied
+/info/contact
+/credits
