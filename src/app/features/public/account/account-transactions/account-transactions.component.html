@@ -1,6 +1,6 @@
 <section class="h-full">
-  <h1>Transacties</h1>
-  <p>Hier zie je jouw voltooide transacties.</p>
+  <h1 class="white-section-title">Jouw aankopen</h1>
+  <p>Op deze pagina kan je al jouw voltooide aankopen herbekijken.</p>
 
   <div *ngIf="(this.transactions$ | async) as transactions" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4">
     <article *ngFor="let transaction of transactions">

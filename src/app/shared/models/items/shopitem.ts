@@ -1,4 +1,4 @@
-import {ItemI} from "./ItemI";
+import {ItemI} from './ItemI';
 
 export interface ShopItemDetailI {
   item: ItemI;

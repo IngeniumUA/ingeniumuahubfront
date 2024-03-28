@@ -10,7 +10,7 @@ describe('PopupzorderStaffComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ PopupzorderStaffComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PopupzorderStaffComponent);
     component = fixture.componentInstance;

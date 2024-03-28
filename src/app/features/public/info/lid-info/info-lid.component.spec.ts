@@ -10,7 +10,7 @@ describe('InfoLidComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ InfoLidComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(InfoLidComponent);
     component = fixture.componentInstance;

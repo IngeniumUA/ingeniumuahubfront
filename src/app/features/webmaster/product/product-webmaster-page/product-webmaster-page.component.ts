@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable} from "rxjs";
-import {StaffProductBlueprintI} from "../../../../shared/models/staff/staff_productblueprint";
-import {StaffItemService} from "../../../../core/services/staff/items/staff_item_router";
-import {StaffProductBlueprintService} from "../../../../core/services/staff/staff-productblueprint-service";
-import {ActivatedRoute} from "@angular/router";
+import {Observable} from 'rxjs';
+import {StaffProductBlueprintI} from '../../../../shared/models/staff/staff_productblueprint';
+import {StaffItemService} from '../../../../core/services/staff/items/staff_item_router';
+import {StaffProductBlueprintService} from '../../../../core/services/staff/staff-productblueprint-service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-product-webmaster-page',
@@ -12,9 +12,9 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class ProductWebmasterPageComponent implements OnInit {
 
-  productBlueprint$!: Observable<StaffProductBlueprintI>
+  productBlueprint$!: Observable<StaffProductBlueprintI>;
 
-  productId!: string
+  productId!: string;
 
   constructor(private staffItemService: StaffItemService,
               private staffProductService: StaffProductBlueprintService,
@@ -28,14 +28,14 @@ export class ProductWebmasterPageComponent implements OnInit {
     // If ID is null
     if (id === null) {
       // TODO Handle error
-      return
+      return;
     }
-    this.productId = id
+    this.productId = id;
 
-    this.productBlueprint$ = this.staffProductService.getProductBlueprint(this.productId)
+    this.productBlueprint$ = this.staffProductService.getProductBlueprint(this.productId);
   }
 
   public UpdateProduct(product_obj: StaffProductBlueprintI) {
-    this.productBlueprint$ = this.staffProductService.putProductBlueprint(product_obj.id, product_obj)
+    this.productBlueprint$ = this.staffProductService.putProductBlueprint(product_obj.id, product_obj);
   }
 }

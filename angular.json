@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ingeniumuahubfront",
+            "outputPath": "dist/ingeniumuahubfront/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -52,6 +52,12 @@
               "outputHashing": "all"
             },
             "development": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ],
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -64,13 +70,16 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "src/proxy.conf.json"
+          },
           "configurations": {
             "production": {
-              "browserTarget": "ingeniumuahubfront:build:production"
+              "buildTarget": "ingeniumuahubfront:build:production"
             },
             "development": {
-              "browserTarget": "ingeniumuahubfront:build:development",
-              "disableHostCheck": true
+              "disableHostCheck": true,
+              "buildTarget": "ingeniumuahubfront:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +87,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ingeniumuahubfront:build"
+            "buildTarget": "ingeniumuahubfront:build"
           }
         },
         "test": {
@@ -99,11 +108,88 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/ingeniumuahubfront/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ],
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "ingeniumuahubfront:build:development",
+              "serverTarget": "ingeniumuahubfront:server:development"
+            },
+            "production": {
+              "browserTarget": "ingeniumuahubfront:build:production",
+              "serverTarget": "ingeniumuahubfront:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "discoverRoutes": false,
+            "routesFile": "prerender-routes.txt"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ingeniumuahubfront:build:production",
+              "serverTarget": "ingeniumuahubfront:server:production"
+            },
+            "development": {
+              "browserTarget": "ingeniumuahubfront:build:development",
+              "serverTarget": "ingeniumuahubfront:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

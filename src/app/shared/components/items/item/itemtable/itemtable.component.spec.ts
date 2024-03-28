@@ -10,7 +10,7 @@ describe('ItemtableComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ItemtableComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ItemtableComponent);
     component = fixture.componentInstance;

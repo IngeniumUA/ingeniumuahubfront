@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {AccountService} from "../../../core/services/user/account/account.service";
-import {CardService} from "../../../core/services/user/card.service";
-import {first} from "rxjs/operators";
-import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {HubCardI} from "../../../shared/models/card";
+import {ActivatedRoute, Router} from '@angular/router';
+import {AccountService} from '../../../core/services/user/account/account.service';
+import {CardService} from '../../../core/services/user/card.service';
+import {first} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
+import {HubCardI} from '../../../shared/models/card';
 
 @Component({
   selector: 'app-card-redirect',
@@ -20,10 +20,10 @@ export class CardRedirectComponent implements OnInit {
   }
 
   ngOnInit() {
-    const card_uuid: string | null = this.route.snapshot.paramMap.get('id')
+    const card_uuid: string | null = this.route.snapshot.paramMap.get('id');
 
     if (card_uuid === null) {
-      this.router.navigateByUrl('home')
+      this.router.navigateByUrl('home');
     }
 
     // Submit card to backend
@@ -33,36 +33,36 @@ export class CardRedirectComponent implements OnInit {
       next: (response: HubCardI) => {
         // User was added to lid
         const notification = this.HandleSuccesResponse(response);
-        this.router.navigateByUrl('/account' + "?card_notification=s_"+notification)
-        return
+        this.router.navigateByUrl('/account' + '?card_notification=s_'+notification);
+        return;
       },
       error: (error: any) => {
-        const notification = this.HandleErrorResponse(error)
-        this.router.navigateByUrl('/account' + "?card_notification=f_"+notification)
-        return
+        const notification = this.HandleErrorResponse(error);
+        this.router.navigateByUrl('/account' + '?card_notification=f_'+notification);
+        return;
       }
-    })
+    });
 
-    this.router.navigateByUrl('/account/card')
+    this.router.navigateByUrl('/account/card');
   }
 
-  HandleSuccesResponse(response: HubCardI): string {
-    return "Kaart gelinkt!"
+  HandleSuccesResponse(_response: HubCardI): string {
+    return 'Kaart gelinkt!';
   }
 
   HandleErrorResponse(response: any): string {
     if (response instanceof HttpErrorResponse) {
       const status_code = response.status;
       if (status_code == 406) {
-        return response.error['detail']['Error']
+        return response.error['detail']['Error'];
       } else if (status_code == 404) {
-        return "Ongeldige kaart!"
+        return 'Ongeldige kaart!';
       } else if (status_code == 500) {
-        return response.error['detail']['Error']
+        return response.error['detail']['Error'];
       }
-      return "Ongekende Server Error!"
+      return 'Ongekende Server Error!';
     }
     // If the response is not a HTTPResponse we throw unknown error
-    return "Ongekende Error!"
+    return 'Ongekende Error!';
   }
 }

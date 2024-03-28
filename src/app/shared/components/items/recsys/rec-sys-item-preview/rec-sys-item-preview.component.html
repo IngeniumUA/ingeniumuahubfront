@@ -14,7 +14,7 @@
     <div class="image"><img src="{{ this.image }}" alt=""></div>
     <div class="content">
       <h3 [ngStyle]="{'color': TextColor()}">{{ this.recsysItem.name }}</h3>
-      <span *ngIf="recsysItem.date != undefined" class="date" [ngStyle]="{'color': TextColor() }">{{ this.recsysItem.date | date }}</span>
+      <span *ngIf="recsysItem.date !== undefined" class="date" [ngStyle]="{'color': TextColor() }">{{ this.recsysItem.date | date }}</span>
     </div>
   </article>
 </ng-template>

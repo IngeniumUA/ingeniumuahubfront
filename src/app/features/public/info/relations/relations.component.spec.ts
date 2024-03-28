@@ -10,7 +10,7 @@ describe('RelationsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ RelationsComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(RelationsComponent);
     component = fixture.componentInstance;

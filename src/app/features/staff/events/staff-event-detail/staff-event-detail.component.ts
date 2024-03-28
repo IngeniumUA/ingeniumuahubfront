@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable} from "rxjs";
-import {EventItemDetailI} from "../../../../shared/models/items/events";
-import {EventService} from "../../../../core/services/items/events/event.service";
-import {FormBuilder, FormGroup, FormsModule, Validators} from "@angular/forms";
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {EventItemDetailI} from '../../../../shared/models/items/events';
+import {EventService} from '../../../../core/services/items/events/event.service';
 
 @Component({
   selector: 'app-staff-event-detail',
@@ -22,13 +21,13 @@ export class StaffEventDetailComponent implements OnInit {
     // Fetch ID
     const id: string | null = this.route.snapshot.paramMap.get('id');
     if (id === null) {
-      this.router.navigateByUrl("home")
-      return
+      this.router.navigateByUrl('home');
+      return;
     }
     this.SetEvent(id);
   }
 
   SetEvent(id: string): void {
-    this.event$ = this.eventService.getEvent(id)
+    this.event$ = this.eventService.getEvent(id);
   }
 }

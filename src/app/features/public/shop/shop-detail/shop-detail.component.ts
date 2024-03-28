@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {LayoutService} from "../../../../core/services/layout/layout.service";
-import {CartService} from "../../../../core/services/shop/cart/cart.service";
-import {ProductsService} from "../../../../core/services/shop/products/products.service";
-import {catchError, ignoreElements, Observable, of, shareReplay} from "rxjs";
-import {ShopService} from "../../../../core/services/items/shop.service";
-import {ShopItemDetailI} from "../../../../shared/models/items/shopitem";
-import {IProductItem} from "../../../../shared/models/items/products/products";
-import {ItemI} from "../../../../shared/models/items/ItemI";
+import {ActivatedRoute, Router} from '@angular/router';
+import {LayoutService} from '../../../../core/services/layout/layout.service';
+import {CartService} from '../../../../core/services/shop/cart/cart.service';
+import {ProductsService} from '../../../../core/services/shop/products/products.service';
+import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
+import {ShopService} from '../../../../core/services/items/shop.service';
+import {ShopItemDetailI} from '../../../../shared/models/items/shopitem';
+import {IProductItem} from '../../../../shared/models/items/products/products';
+import {ItemI} from '../../../../shared/models/items/ItemI';
 
 @Component({
   selector: 'app-shop-detail',
@@ -26,11 +26,11 @@ export class ShopDetailComponent implements OnInit {
 
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  isCartEmpty: boolean = !this.cartService.hasTransactions()
+  isCartEmpty: boolean = !this.cartService.hasTransactions();
   // Event Info and Deco
   shopItem$?: Observable<ShopItemDetailI>;
   shopError$!: Observable<any>;
-  products$: Observable<IProductItem[]> = of([])
+  products$: Observable<IProductItem[]> = of([]);
 
   ngOnInit() {
     // Fetch ID
@@ -38,8 +38,8 @@ export class ShopDetailComponent implements OnInit {
 
     // If ID is null
     if (id === null) {
-      this.router.navigateByUrl('/shop')
-      return
+      this.router.navigateByUrl('/shop');
+      return;
     }
 
     // Setup event observable and color observables
@@ -51,24 +51,24 @@ export class ShopDetailComponent implements OnInit {
     this.shopError$ = this.shopItem$.pipe(
       ignoreElements(),
       catchError((err) => {
-        this.router.navigateByUrl('/home')
+        this.router.navigateByUrl('/home');
         return of(err);
-      }))
+      }));
     this.products$ = this.productService.getProducts(id).pipe(shareReplay());
   }
 
   GetCurrentProductCount(item: ItemI, product: IProductItem): number {
-    return this.cartService.getProductCount(item, product)
+    return this.cartService.getProductCount(item, product);
   }
   SetProductCount(item: ItemI, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
-    this.isCartEmpty = !this.cartService.hasTransactions()
+    this.isCartEmpty = !this.cartService.hasTransactions();
   }
 
   ToCheckout() {
     if (this.isCartEmpty) {
-      return
+      return;
     }
-    this.router.navigateByUrl('/shop/checkout')
+    this.router.navigateByUrl('/shop/checkout');
   }
 }

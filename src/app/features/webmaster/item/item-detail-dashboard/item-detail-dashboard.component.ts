@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {Observable, of} from "rxjs";
-import {StaffItemDetailI} from "../../../../shared/models/staff/staff_item_details";
-import {StaffItemService} from "../../../../core/services/staff/items/staff_item_router";
-import {ActivatedRoute} from "@angular/router";
-import {StaffProductBlueprintI} from "../../../../shared/models/staff/staff_productblueprint";
-import {StaffProductBlueprintService} from "../../../../core/services/staff/staff-productblueprint-service";
+import {Observable, of} from 'rxjs';
+import {StaffItemDetailI} from '../../../../shared/models/staff/staff_item_details';
+import {StaffItemService} from '../../../../core/services/staff/items/staff_item_router';
+import {ActivatedRoute} from '@angular/router';
+import {StaffProductBlueprintI} from '../../../../shared/models/staff/staff_productblueprint';
+import {StaffProductBlueprintService} from '../../../../core/services/staff/staff-productblueprint-service';
 
 @Component({
   selector: 'app-item-detail-dashboard',
@@ -13,12 +13,12 @@ import {StaffProductBlueprintService} from "../../../../core/services/staff/staf
 })
 export class ItemDetailDashboardComponent implements OnInit {
 
-  $itemDetail: Observable<StaffItemDetailI| null> = of(null)
-  $productBlueprint: Observable<StaffProductBlueprintI[]> = of([])
+  $itemDetail: Observable<StaffItemDetailI| null> = of(null);
+  $productBlueprint: Observable<StaffProductBlueprintI[]> = of([]);
 
-  addingCheckout: boolean = false
+  addingCheckout: boolean = false;
 
-  itemId!: string
+  itemId!: string;
 
   constructor(private staffItemService: StaffItemService,
               private staffProductService: StaffProductBlueprintService,
@@ -32,35 +32,35 @@ export class ItemDetailDashboardComponent implements OnInit {
     // If ID is null
     if (id === null) {
       // TODO Handle error
-      return
+      return;
     }
-    this.itemId = id
+    this.itemId = id;
 
 
-    this.$itemDetail = this.staffItemService.getItem(this.itemId)
+    this.$itemDetail = this.staffItemService.getItem(this.itemId);
   }
 
   UpdateItem(item: StaffItemDetailI) {
-    this.$itemDetail = this.staffItemService.putItem(item.item.uuid, item)
+    this.$itemDetail = this.staffItemService.putItem(item.item.uuid, item);
   }
 
-  disableItemBuffer: boolean = false
-  loadingDisable: boolean = false
+  disableItemBuffer: boolean = false;
+  loadingDisable: boolean = false;
   public DisableItem() {
     if (this.disableItemBuffer) {
-      this.loadingDisable = true
-      this.$itemDetail = this.staffItemService.patchItem(this.itemId, {'disabled':'True'})
-      this.loadingDisable = false
+      this.loadingDisable = true;
+      this.$itemDetail = this.staffItemService.patchItem(this.itemId, {'disabled':'True'});
+      this.loadingDisable = false;
     } else {
-      this.disableItemBuffer = true
+      this.disableItemBuffer = true;
     }
   }
 
   ToggleAddingCheckout() {
-    this.addingCheckout = !this.addingCheckout
+    this.addingCheckout = !this.addingCheckout;
   }
 
-  refetchTable(reload: boolean) {
-    this.ToggleAddingCheckout()
+  refetchTable(_reload: boolean) {
+    this.ToggleAddingCheckout();
   }
 }

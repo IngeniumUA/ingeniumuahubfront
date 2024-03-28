@@ -9,5 +9,5 @@ import {Component, Input, ViewEncapsulation} from '@angular/core';
 })
 export class HTMLDisplayComponent {
 
-  @Input() html!: string
+  @Input() html!: string;
 }

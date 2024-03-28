@@ -6,7 +6,7 @@ describe('JWTInterceptorInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       JWTInterceptor
-      ]
+    ]
   }));
 
   it('should be created', () => {

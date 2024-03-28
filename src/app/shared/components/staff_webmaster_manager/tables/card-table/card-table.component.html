@@ -78,7 +78,7 @@
         <td mat-cell *matCellDef="let card"> {{ card.last_edited | date }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="card_item" *ngIf="!(this.isMobile$ | async)">
+      <ng-container matColumnDef="card_item" *ngIf="(this.isMobile$ | async) === false">
         <th mat-header-cell *matHeaderCellDef> Card Item </th>
         <td mat-cell *matCellDef="let card"> <a [routerLink]="['/web/item/'+card.card_item]"> {{ card.card_item }}</a></td>
       </ng-container>

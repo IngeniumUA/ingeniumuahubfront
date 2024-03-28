@@ -10,7 +10,7 @@ describe('StartweekComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ StartweekComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(StartweekComponent);
     component = fixture.componentInstance;

@@ -7,13 +7,13 @@ import { Component } from '@angular/core';
 })
 export class ItemDashboardComponent {
 
-  addingNew: boolean = false
+  addingNew: boolean = false;
   ToggleAddNew() {
-    this.addingNew = ! this.addingNew
+    this.addingNew = ! this.addingNew;
   }
 
   Refetch() {
-    this.addingNew = false
+    this.addingNew = false;
   }
 
 }

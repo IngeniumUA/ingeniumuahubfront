@@ -13,7 +13,7 @@
       <h3 *ngIf="!this.loading">Submit</h3>
       <h3 *ngIf="this.loading">Working ...</h3>
     </button>
-  <div *ngIf="this.form_error != null">
+  <div *ngIf="this.form_error !== null">
     <span class="error-message">{{ this.form_error }}</span>
   </div>
 </form>

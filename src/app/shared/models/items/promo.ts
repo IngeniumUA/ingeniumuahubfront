@@ -1,4 +1,4 @@
-import {ItemI} from "./ItemI";
+import {ItemI} from './ItemI';
 
 export interface PromoI {
   item: ItemI;
@@ -18,4 +18,4 @@ export interface PromoType {
 
 export const PromoTypes: PromoType[] = [
   {name: 'vacature', value: 1}
-]
+];

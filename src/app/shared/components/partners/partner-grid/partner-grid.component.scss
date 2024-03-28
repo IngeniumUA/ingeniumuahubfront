@@ -1,9 +1,5 @@
 section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  margin: 1rem;
+  @apply flex flex-row flex-wrap justify-center gap-4 m-1;
 }
 
 .partner-card {

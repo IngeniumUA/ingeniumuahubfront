@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Observable} from "rxjs";
-import {BreakpointObserver} from "@angular/cdk/layout";
-import {map} from "rxjs/operators";
+import {Observable} from 'rxjs';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

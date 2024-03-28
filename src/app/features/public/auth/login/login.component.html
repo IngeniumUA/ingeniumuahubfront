@@ -25,7 +25,7 @@
     <ng-container *ngIf="! this.embeddedBrowser">
       <asl-google-signin-button
         type='standard' size='medium'
-        width="266px" theme="outline"
+        [width]="266" theme="outline"
         text='continue_with' shape="rectangular">
       </asl-google-signin-button>
     </ng-container>
@@ -66,7 +66,7 @@
         <span class="text-white">{{ this.loading ? "Logging in..." : "Log In" }}</span>
       </button>
     </div>
-    <div *ngIf="this.form_error != null">
+    <div *ngIf="this.form_error !== null">
       <span class="error-message">{{ this.form_error }}</span>
     </div>
 
@@ -79,7 +79,7 @@
     </span>
   </div>
 
-  <div class="login-page-section floating-text" *ngIf="loginHint != null" style="margin-top: 2rem;">
+  <div class="login-page-section floating-text" *ngIf="loginHint !== null" style="margin-top: 2rem;">
     <span class="success-message">
       {{ loginHint }}
     </span>

@@ -10,7 +10,7 @@ describe('ItemlogsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ItemlogComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ItemlogComponent);
     component = fixture.componentInstance;

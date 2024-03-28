@@ -10,7 +10,7 @@ describe('StripePaymentComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ StripePaymentComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(StripePaymentComponent);
     component = fixture.componentInstance;

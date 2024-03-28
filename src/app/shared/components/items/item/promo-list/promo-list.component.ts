@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {RecSysItemPreviewComponent} from "../../recsys/rec-sys-item-preview/rec-sys-item-preview.component";
-import {Observable, of} from "rxjs";
-import {RecSysPreviewI} from "../../../../models/items/recsys_interfaces";
-import {PromoService} from "../../../../../core/services/items/promo/promo.service";
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {RecSysItemPreviewComponent} from '../../recsys/rec-sys-item-preview/rec-sys-item-preview.component';
+import {Observable, of} from 'rxjs';
+import {RecSysPreviewI} from '../../../../models/items/recsys_interfaces';
+import {PromoService} from '../../../../../core/services/items/promo/promo.service';
 
 @Component({
   selector: 'app-promo-list',
@@ -21,7 +21,7 @@ export class PromoListComponent implements OnInit {
 
   @Input() promoType: string | null = null;
 
-  recsysItems$: Observable<RecSysPreviewI[]> = of()
+  recsysItems$: Observable<RecSysPreviewI[]> = of();
 
   constructor(private promoService: PromoService) {
   }

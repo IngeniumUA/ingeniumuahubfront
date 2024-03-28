@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
-import {AsyncPipe, NgClass} from "@angular/common";
-import {LayoutService} from "../../../services/layout/layout.service";
-import {Observable} from "rxjs";
+import {Router, RouterLink} from '@angular/router';
+import {AsyncPipe, NgClass} from '@angular/common';
+import {LayoutService} from '../../../services/layout/layout.service';
+import {Observable} from 'rxjs';
 
 @Component({
   standalone: true, // Allows it to be imported outside of routing

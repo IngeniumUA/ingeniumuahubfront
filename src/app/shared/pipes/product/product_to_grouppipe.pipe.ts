@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {IProductGroup, IProductItem} from "../../models/items/products/products";
+import {IProductGroup, IProductItem} from '../../models/items/products/products';
 
 @Pipe({
   name: 'products_to_groups',
@@ -14,20 +14,20 @@ export class ProductsToGroupsPipe implements PipeTransform {
       {...result,
         [product.product_meta.group]: [...(result[product.product_meta.group] || []), product]
       }
-    ), {})
+    ), {});
 
     // From the wizardy above we get a list of objects
     // Last step is transforming the objects intoa list of IProductGroup objects
-    let productGroups: IProductGroup[] = []
+    const productGroups: IProductGroup[] = [];
     for (const product_name in grouped_as_object) {
       const group: IProductGroup = {
-        group_name: product_name !== null ? product_name: "",  // condition ? v_true: v_false
+        group_name: product_name !== null ? product_name: '',  // condition ? v_true: v_false
         products: grouped_as_object[product_name]
-      }
-      productGroups.push(group)
+      };
+      productGroups.push(group);
     }
 
-    return productGroups
+    return productGroups;
   }
 
 }

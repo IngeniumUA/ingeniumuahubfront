@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes} from "@angular/router";
-import {ShopHomeComponent} from "./shop/shop-home.component";
-import {CheckoutComponent} from "./checkout/checkout.component";
-import {authGuard} from "../../../core/guards/auth/auth.guard";
-import {PayComponent} from "./pay/pay.component";
-import {ShopDetailComponent} from "./shop-detail/shop-detail.component";
-import {CheckoutConfirmComponent} from "./checkout-confirm/checkout-confirm.component";
+import { RouterModule, Routes} from '@angular/router';
+import {ShopHomeComponent} from './shop/shop-home.component';
+import {CheckoutComponent} from './checkout/checkout.component';
+import {authGuard} from '../../../core/guards/auth/auth.guard';
+import {PayComponent} from './pay/pay.component';
+import {ShopDetailComponent} from './shop-detail/shop-detail.component';
+import {CheckoutConfirmComponent} from './checkout-confirm/checkout-confirm.component';
 
 
 const routes: Routes = [
