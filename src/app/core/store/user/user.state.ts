@@ -43,6 +43,15 @@ export class UserState {
    * Actions
    */
 
+  @Action(User.FetchAuthTokenFromStorage)
+  fetchAuthTokenFromStorage(ctx: StateContext<UserStateModel>, _action: User.FetchAuthTokenFromStorage) {
+    // Get the JWT token from local storage
+    const token = window.localStorage.getItem('token');
+
+    if (token == null) return;
+
+  }
+
   @Action(User.FetchUserDetails)
   fetchUserDetails(ctx: StateContext<UserStateModel>, _action: User.FetchUserDetails) {
     return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + 'user/account/')
@@ -56,7 +65,7 @@ export class UserState {
       );
   }
 
-  @Action(User.removeUserDetails)
+  @Action(User.RemoveUserDetails)
   removeUserDetails(ctx: StateContext<UserStateModel>) {
     ctx.setState({
       ...ctx.getState(),

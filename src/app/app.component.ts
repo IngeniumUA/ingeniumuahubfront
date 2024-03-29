@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {HubAuthData} from './shared/models/user';
 import {AuthService} from './core/services/user/auth/auth.service';
+import {Store} from '@ngxs/store';
+import {User} from './core/store';
 
 @Component({
   selector: 'app-root',
@@ -12,12 +14,12 @@ export class AppComponent implements OnInit {
 
   user?: HubAuthData | null;
 
-  constructor(private accountService: AuthService) {
+  constructor(private accountService: AuthService, private store: Store) {
     this.accountService.user.subscribe(x => this.user = x);
   }
 
   ngOnInit() {
-
+    this.store.dispatch(new User.FetchUserDetails());
   }
 
   logout() {
