@@ -27,6 +27,14 @@ nav {
         @apply bg-blue-50 hover:bg-blue-950;
       }
     }
+
+    hr {
+      @apply border-t border-gray-200 my-1;
+    }
+
+    span.nav-dropdown-no-link {
+      @apply block px-4 py-2 text-sm text-gray-500 truncate;
+    }
   }
 
   .desktop-nav {

@@ -10,20 +10,24 @@ import {catchError, Observable, switchMap, throwError} from 'rxjs';
 
 import {AuthService} from '../services/user/auth/auth.service';
 import {Router} from '@angular/router';
+import {Store} from "@ngxs/store";
+import {UserState} from "../store";
+
 @Injectable()
 export class JWTInterceptor implements HttpInterceptor {
   private isRefreshing: boolean = false;
-  constructor(private authService: AuthService,
+  constructor(private store: Store,
+              private authService: AuthService,
               private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add auth header with access if user is logged in and request is to api
     const isApiUrl = true; // TODO request.url.startsWith('')
 
-    if (isApiUrl && this.authService.isLoggedIn() && !request.url.includes('auth/refresh')) {
+    if (isApiUrl && this.store.selectSnapshot(UserState.isAuthenticated) && !request.url.includes('auth/refresh')) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${this.authService.accessToken}`
+          Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`
         }
       });
     }
@@ -51,6 +55,7 @@ export class JWTInterceptor implements HttpInterceptor {
       })
     );
   }
+
   private handleUnAuthorisedError(request: HttpRequest<any>, next: HttpHandler) {
     // 1) If already refreshing, handle next
     if (this.isRefreshing) {
@@ -85,7 +90,7 @@ export class JWTInterceptor implements HttpInterceptor {
 
         // TODO Maybe match on a couple status codes instead of all errors?
         // if (error.status == '401') {  // 401 means unauthenticated
-        this.authService.logout();
+        //this.authService.logout();
 
         // Continue throwing error
         return throwError(() => error);

@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
-import {NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
-import {NavigationStart, Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {AuthService} from '../../../services/user/auth/auth.service';
-import {distinctUntilChanged} from 'rxjs/operators';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {AsyncPipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
+import {RouterLink, RouterLinkActive} from '@angular/router';
+import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
-import {User} from '../../../store';
+import {AuthService} from '@ingenium/app/core/services/user/auth/auth.service';
+import {User, UserState} from '@ingenium/app/core/store';
+import {HubAccountData} from "@ingenium/app/shared/models/user";
 
 
 @Component({
@@ -21,15 +21,16 @@ import {User} from '../../../store';
     NgStyle,
     NgOptimizedImage,
     RouterLinkActive,
+    AsyncPipe,
   ],
 })
-export class PublicHeaderComponent implements OnInit {
+export class PublicHeaderComponent {
   mobileMenuOpen: boolean = false;
   accountDropdownOpen: boolean = false;
   infoDropdownOpen: boolean = false;
 
-  isNavdropdown: boolean = false;
-  isAuth: boolean = false;
+  user$: Observable<HubAccountData|null>;
+  isAuth$: Observable<boolean>;
 
   @Input() light_theme: boolean = false;  // 'dark' or 'light'
   @Input() background: boolean = true;  // If background is shown ( and vh is required )
@@ -37,18 +38,9 @@ export class PublicHeaderComponent implements OnInit {
   @Input() internalToggle: boolean = true; // If toggling the navbar should use this navbar or outsource it
   @Output() isToggleEmitter = new EventEmitter<boolean>();
 
-  constructor(private authService: AuthService, private store: Store) {}
-
-  ngOnInit() {
-    if (this.authService.userValue) {
-      this.isAuth = true;
-    }
-
-    this.authService.user
-      .pipe(distinctUntilChanged())
-      .subscribe((data) => {
-        this.isAuth = data != null;
-      });
+  constructor(private authService: AuthService, private store: Store) {
+    this.user$ = store.select(UserState.userDetails);
+    this.isAuth$ = store.select(UserState.isAuthenticated);
   }
 
   Logout() {

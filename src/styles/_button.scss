@@ -23,6 +23,10 @@
     &.button-accessibility-white {
       @apply focus:outline-white;
     }
+
+    * {
+      @apply text-white;
+    }
   }
 
   &.button-danger {

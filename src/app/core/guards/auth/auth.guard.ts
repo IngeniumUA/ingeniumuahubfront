@@ -1,13 +1,13 @@
 import {inject} from '@angular/core';
-import { Router } from '@angular/router';
-
-import {AuthService} from '../../services/user/auth/auth.service';
+import {Router} from '@angular/router';
+import {Store} from "@ngxs/store";
+import {UserState} from "@ingenium/app/core/store/user/user.state";
 
 export const authGuard = () => {
-  const authService = inject(AuthService);
+  const store = inject(Store);
   const router = inject(Router);
 
-  if (authService.userValue) {
+  if (store.selectSnapshot(UserState.isAuthenticated)) {
     return true;
   }
 

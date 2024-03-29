@@ -9,7 +9,7 @@ import {apiEnviroment} from '../../../../../environments/environment';
 import {RolesService} from '../roles.service';
 import {CartService} from '../../shop/cart/cart.service';
 import {Store} from '@ngxs/store';
-import {User} from '../../../store';
+import {User, UserState} from '../../../store';
 import {isPlatformServer} from '@angular/common';
 
 @Injectable({
@@ -18,13 +18,13 @@ import {isPlatformServer} from '@angular/common';
 export class AuthService {
   private userSubject: BehaviorSubject<HubAuthData | null>;  // Onthoudt de user, observables subscriben naar dit subject
   public user: Observable<HubAuthData | null>;
-  constructor(@Inject(PLATFORM_ID) platformId: Object,
+  constructor(@Inject(PLATFORM_ID) platformId: object,
               private router: Router,
               private httpClient: HttpClient,
               private cartService: CartService,
               private rolesService: RolesService,
               private store: Store) {
-    let authData: HubAuthData | null = null;
+    const authData: HubAuthData | null = null;
     if (!isPlatformServer(platformId)) { // For SSR this may need to be different and data needs to be stored in cookies
       new BehaviorSubject(JSON.parse(localStorage.getItem('user')!));
     }
@@ -36,8 +36,12 @@ export class AuthService {
     return this.userSubject.value;
   }
 
+
+  /**
+   * @deprecated Use the NGXS store instead: store.select(UserState.userDetails) as an Observable or immediately from the store using store.selectSnapshot(UserState.userDetails)
+   */
   public isLoggedIn(): boolean {
-    return this.userValue != null;
+    return this.store.selectSnapshot(UserState.isAuthenticated);
   }
 
   public get accessToken() {
@@ -74,27 +78,7 @@ export class AuthService {
   // Login methods
   // ----------
   login(email: string, password: string) {
-    const formdata = new FormData();
-    formdata.append('username', email);
-    formdata.append('password', password);
-
-    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/token', formdata).pipe(
-      map(user => {
-        // store user and jwttoken TODO Move to cookiestorage
-        localStorage.setItem('user', JSON.stringify(user));
-
-        this.userSubject.next(user); // Set user observable to user?
-
-        // New Store state
-        this.store.dispatch(new User.FetchUserDetails());
-
-        return user;
-      }),
-      catchError((error) => {
-        console.log(error);
-        return throwError(() => error);
-      })
-    );
+    return this.store.dispatch(new User.LoginUser(email, password));
   }
 
   public google_login(google_auth_token: string) {
