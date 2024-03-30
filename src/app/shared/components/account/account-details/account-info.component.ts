@@ -70,8 +70,8 @@ export class AccountInfoComponent implements OnInit {
       gemeente: [details.gemeente, Validators.required],
       adres: [details.adres, Validators.required],
       huisnummer: [details.huisnummer, Validators.required],
-      sport_interesse: [details.sport_interesse.toString(), Validators.required],
-      doop_interesse: [details.doop_interesse.toString(), Validators.required],
+      sport_interesse: [details.sport_interesse, Validators.required],
+      doop_interesse: [details.doop_interesse, Validators.required],
       afstudeerrichting: [details.afstudeerrichting, Validators.required]
     });
   }
@@ -96,7 +96,6 @@ export class AccountInfoComponent implements OnInit {
 
 
   onSubmit() {
-
     // Check if valid guardclause
     if (this.form.invalid) {
       const error: Error = Error('Ongeldig formulier!');
@@ -126,6 +125,8 @@ export class AccountInfoComponent implements OnInit {
     this.accountService.updatePersonalDetails(personalDetails).pipe(
       first()).subscribe({
       next: () => {
+        this.toastr.success('Account gegevens succesvol geüpdatet!', 'Succes');
+
         // If successfull, we want to send a message to
         //this.accountEvent.emit('submitted');
         //this.form_success = "Updated!"
