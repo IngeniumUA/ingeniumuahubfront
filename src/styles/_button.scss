@@ -27,6 +27,10 @@
     * {
       @apply text-white;
     }
+
+    &:disabled {
+      @apply hover:bg-blue-900;
+    }
   }
 
   &.button-danger {
@@ -34,6 +38,10 @@
 
     &:hover {
       @apply border-red-950 bg-red-950;
+    }
+
+    &:disabled {
+      @apply hover:bg-red-900;
     }
   }
 
@@ -61,6 +69,10 @@
 
   &.button-full {
     @apply w-full text-center justify-center;
+  }
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-50;
   }
 }
 
