@@ -6,46 +6,80 @@
     <fieldset>
       <div class="form-field">
         <label for="email">E-mailadres</label>
-        <input id="email" type="email" readonly disabled value="" />
+        <input id="email" type="email" readonly disabled [value]="email" />
       </div>
     </fieldset>
 
     <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="form-field">
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['voornaam'].errors }">
         <label for="firstName">Voornaam</label>
-        <input id="firstName" type="text" formControlName="voornaam" [ngClass]="{ 'is-invalid': submitted && f['voornaam'].errors }"/>
+        <input id="firstName" type="text" formControlName="voornaam" [attr.aria-invalid]="f['voornaam'].errors !== null" [attr.aria-errormessage]="f['voornaam'].errors !== null ? 'firstName-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['voornaam'].errors" class="field-error-message-list" id="firstName-errors">
+          <li *ngIf="f['voornaam'].errors?.['required']">Voornaam is verplicht</li>
+        </ul>
       </div>
 
-      <div class="form-field">
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['achternaam'].errors }">
         <label for="lastName">Achternaam</label>
-        <input id="lastName" type="text" formControlName="achternaam" [ngClass]="{ 'is-invalid': submitted && f['achternaam'].errors }"/>
+        <input id="lastName" type="text" formControlName="achternaam" [attr.aria-invalid]="f['achternaam'].errors !== null" [attr.aria-errormessage]="f['achternaam'].errors !== null ? 'lastName-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['achternaam'].errors" class="field-error-message-list" id="lastName-errors">
+          <li *ngIf="f['achternaam'].errors?.['required']">Achternaam is verplicht</li>
+        </ul>
       </div>
     </fieldset>
 
     <fieldset>
-      <div class="form-field">
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['telefoonnummer'].errors }">
         <label for="phoneNumber">Telefoonnummer</label>
-        <input id="phoneNumber" type="text" formControlName="telefoonnummer" [ngClass]="{ 'is-invalid': submitted && f['telefoonnummer'].errors }"/>
+        <input id="phoneNumber" type="text" formControlName="telefoonnummer" [attr.aria-invalid]="f['telefoonnummer'].errors !== null" [attr.aria-errormessage]="f['telefoonnummer'].errors !== null ? 'phoneNumber-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['telefoonnummer'].errors" class="field-error-message-list" id="phoneNumber-errors">
+          <li *ngIf="f['telefoonnummer'].errors?.['required']">Telefoonnummer is verplicht</li>
+        </ul>
       </div>
     </fieldset>
 
     <fieldset class="grid grid-cols-4 gap-4">
       <legend class="sr-only">Adres</legend>
-      <div class="form-field col-span-3">
+      <div [ngClass]="{ 'form-field col-span-3': true, 'is-invalid': f['adres'].errors }">
         <label for="street">Straat</label>
-        <input id="street" type="text" formControlName="adres" [ngClass]="{ 'is-invalid': submitted && f['adres'].errors }"/>
+        <input id="street" type="text" formControlName="adres" [attr.aria-invalid]="f['adres'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'street-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['adres'].errors" class="field-error-message-list" id="street-errors">
+          <li *ngIf="f['adres'].errors?.['required']">Straat is verplicht</li>
+        </ul>
       </div>
 
-      <div class="form-field">
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['huisnummer'].errors }">
         <label for="houseNumber">Huisnummer</label>
-        <input id="houseNumber" type="text" formControlName="huisnummer" [ngClass]="{ 'is-invalid': submitted && f['huisnummer'].errors }"/>
+        <input id="houseNumber" type="text" formControlName="huisnummer" [attr.aria-invalid]="f['huisnummer'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'houseNumber-Errors' : ''"  />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['huisnummer'].errors" class="field-error-message-list" id="houseNumber-errors">
+          <li *ngIf="f['huisnummer'].errors?.['required']">Huisnummer is verplicht</li>
+        </ul>
       </div>
 
-      <div class="form-field col-span-4">
+      <div [ngClass]="{ 'form-field col-span-4': true, 'is-invalid': f['gemeente'].errors }">
         <label for="municipality">Gemeente</label>
-        <input id="municipality" type="text" formControlName="gemeente" [ngClass]="{ 'is-invalid': submitted && f['gemeente'].errors }"/>
+        <input id="municipality" type="text" formControlName="gemeente" [attr.aria-invalid]="f['gemeente'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'municipality-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['gemeente'].errors" class="field-error-message-list" id="municipality-errors">
+          <li *ngIf="f['gemeente'].errors?.['required']">Gemeente is verplicht</li>
+        </ul>
       </div>
     </fieldset>
+
+    <div class="form-field text-right">
+      <button type="submit" class="button button-danger">Opslaan</button>
+    </div>
   </form>
 </section>
 

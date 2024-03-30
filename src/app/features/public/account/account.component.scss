@@ -1,7 +1,6 @@
 main {
   @apply bg-blue-950 h-full;
 
-
   .white-box-wrapper {
     @apply relative;
 
@@ -17,7 +16,7 @@ main {
     }
 
     .white-box-page-container {
-      @apply relative z-20 mx-4 sm:ml-10 sm:mr-0 my-8;
+      @apply relative z-20 mx-4 my-8 md:ml-10 md:mr-0;
     }
   }
 }

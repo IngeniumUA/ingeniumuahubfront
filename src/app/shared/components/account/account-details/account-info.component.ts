@@ -1,11 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpErrorResponse} from '@angular/common/http';
-import {KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {MatRadioModule} from '@angular/material/radio';
-import {HubUserPersonalDetailsI} from '../../../models/user';
-import {AccountService} from '../../../../core/services/user/account/account.service';
+import {HubUserPersonalDetailsI} from '@ingenium/app/shared/models/user';
+import {AccountService} from '@ingenium/app/core/services/user/account/account.service';
 import {first} from 'rxjs/operators';
+import {Store} from "@ngxs/store";
+import {UserState} from "@ingenium/app/core/store";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-account-info',
@@ -19,16 +22,12 @@ import {first} from 'rxjs/operators';
     NgIf,
     MatRadioModule,
     NgForOf,
-    KeyValuePipe
+    KeyValuePipe,
+    AsyncPipe,
   ],
   standalone: true
 })
 export class AccountInfoComponent implements OnInit {
-
-  constructor(private formBuilder: FormBuilder,
-              private accountService: AccountService) {
-  }
-
   form!: FormGroup;
   loading = false;
   submitted = false;
@@ -43,23 +42,39 @@ export class AccountInfoComponent implements OnInit {
     'other': 'Andere'
   };
 
-  ngOnInit() {
-    this.form = this.formBuilder.group({
-      voornaam: [this.input_model.voornaam, Validators.required],
-      achternaam: [this.input_model.achternaam, Validators.required],
-      telefoonnummer: [this.input_model.telefoonnummer, Validators.required],
-      gemeente: [this.input_model.gemeente, Validators.required],
-      adres: [this.input_model.adres, Validators.required],
-      huisnummer: [this.input_model.huisnummer, Validators.required],
-      sport_interesse: [this.input_model.sport_interesse.toString(), Validators.required],
-      doop_interesse: [this.input_model.doop_interesse.toString(), Validators.required],
-      afstudeerrichting: [this.input_model.afstudeerrichting, Validators.required]
-    });
+  email;
+
+  constructor(private formBuilder: FormBuilder,
+              private accountService: AccountService,
+              private store: Store,
+              private toastr: ToastrService) {
+
+    this.email = this.store.selectSnapshot(UserState.userDetails)?.google_mail || this.store.selectSnapshot(UserState.userDetails)?.email || '';
   }
 
-  @Input() input_model!: HubUserPersonalDetailsI;
-  @Input() success_message: string | null = null;
-  @Output() accountEvent = new EventEmitter<string>();
+
+  ngOnInit() {
+    this.loadFieldsFromStore()
+  }
+
+  loadFieldsFromStore() {
+    const details = this.store.selectSnapshot(UserState.userDetails)?.personal_details;
+    if (!details) {
+      return;
+    }
+
+    this.form = this.formBuilder.group({
+      voornaam: [details.voornaam, Validators.required],
+      achternaam: [details.achternaam, Validators.required],
+      telefoonnummer: [details.telefoonnummer, Validators.required],
+      gemeente: [details.gemeente, Validators.required],
+      adres: [details.adres, Validators.required],
+      huisnummer: [details.huisnummer, Validators.required],
+      sport_interesse: [details.sport_interesse.toString(), Validators.required],
+      doop_interesse: [details.doop_interesse.toString(), Validators.required],
+      afstudeerrichting: [details.afstudeerrichting, Validators.required]
+    });
+  }
 
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
@@ -68,12 +83,12 @@ export class AccountInfoComponent implements OnInit {
   handleFormError(err: Error) {
     if (!(err instanceof HttpErrorResponse)) {
       this.form_error = err.message;
-      this.success_message = null;
+      //this.success_message = null;
       return;
     } else {
       if (err.status == 401) {
         this.form_error = err.message;
-        this.success_message = null;
+        //this.success_message = null;
         return;
       }
     }
@@ -81,9 +96,13 @@ export class AccountInfoComponent implements OnInit {
 
 
   onSubmit() {
+
     // Check if valid guardclause
     if (this.form.invalid) {
       const error: Error = Error('Ongeldig formulier!');
+
+      this.toastr.error('Ongeldig formulier!', 'Fout');
+
       this.handleFormError(error);
       return;
     }
@@ -108,7 +127,7 @@ export class AccountInfoComponent implements OnInit {
       first()).subscribe({
       next: () => {
         // If successfull, we want to send a message to
-        this.accountEvent.emit('submitted');
+        //this.accountEvent.emit('submitted');
         //this.form_success = "Updated!"
         // console.log(this.form_success)
       },
@@ -119,4 +138,6 @@ export class AccountInfoComponent implements OnInit {
     });
     this.loading = false;
   }
+
+  protected readonly document = document;
 }

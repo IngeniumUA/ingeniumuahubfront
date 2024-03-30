@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {Store} from '@ngxs/store';
 import {Observable} from 'rxjs';
-import {HubAccountData} from '../../../shared/models/user';
+import {HubUserRolesI} from '@ingenium/app/shared/models/user';
+import {UserState} from "@ingenium/app/core/store";
 
 @Component({
   selector: 'app-page',
@@ -9,9 +10,9 @@ import {HubAccountData} from '../../../shared/models/user';
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent {
+  roles$: Observable<HubUserRolesI|undefined>;
 
-  constructor(private store: Store) {}
-
-  user$: Observable<HubAccountData|null> = this.store.select(state => state.user.userDetails);
-
+  constructor(private store: Store) {
+    this.roles$ = this.store.select(UserState.getRoles);
+  }
 }

@@ -36,7 +36,7 @@ app-public-routing {
 }
 
 app-page {
-  @apply flex-1;
+  @apply flex flex-col flex-1;
 }
 
 body {

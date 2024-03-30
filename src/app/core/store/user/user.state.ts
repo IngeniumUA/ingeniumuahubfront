@@ -41,6 +41,11 @@ export class UserState {
     return !!state.token;
   }
 
+  @Selector()
+  static getRoles(state: UserStateModel) {
+    return state.userDetails?.roles;
+  }
+
   /**
    * Actions
    */

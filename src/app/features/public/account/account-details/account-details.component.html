@@ -5,9 +5,5 @@
     [is_lid]="this.account.roles.is_lid"
   />
 
-  <app-account-info
-    (accountEvent)="this.SetupAccount($event)"
-    [input_model]="account.personal_details"
-    [success_message]="this.form_success"
-  />
+  <app-account-info />
 </div>
