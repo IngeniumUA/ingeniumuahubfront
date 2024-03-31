@@ -2,7 +2,7 @@
   <h2 class="white-section-title">Jouw gegevens</h2>
   <p>Wijzig hier jouw persoonlijke gegevens.</p>
 
-  <form (ngSubmit)="onSubmit()" [formGroup]="form" class="mt-10 w-full space-y-6">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" class="mt-6 w-full space-y-6">
     <fieldset>
       <div class="form-field">
         <label for="email">E-mailadres</label>
@@ -109,7 +109,7 @@
     </fieldset>
 
     <div class="form-field text-right">
-      <button type="submit" class="button button-danger" [disabled]="form.invalid">Opslaan</button>
+      <button type="submit" class="button button-danger" [disabled]="form.invalid || loading">Opslaan</button>
     </div>
   </form>
 </section>

@@ -1,3 +1,3 @@
 export const apiEnviroment = {
-  apiUrl: ""
+  apiUrl: 'https://hub.ingeniumua.be/api/v1/'
 };

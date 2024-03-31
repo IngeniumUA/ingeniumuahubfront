@@ -79,38 +79,15 @@ export class AccountInfoComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.form.controls; }
 
-  // Handling errors
-  handleFormError(err: Error) {
-    if (!(err instanceof HttpErrorResponse)) {
-      this.form_error = err.message;
-      //this.success_message = null;
-      return;
-    } else {
-      if (err.status == 401) {
-        this.form_error = err.message;
-        //this.success_message = null;
-        return;
-      }
-    }
-  }
-
-
   onSubmit() {
-    // Check if valid guardclause
+    // Check if valid guard clause
     if (this.form.invalid) {
-      const error: Error = Error('Ongeldig formulier!');
-
       this.toastr.error('Ongeldig formulier!', 'Fout');
-
-      this.handleFormError(error);
       return;
     }
-    if (this.loading) {
-      return;
-    }
+    if (this.loading) return;
 
     this.loading = true;
-
     const personalDetails: HubUserPersonalDetailsI = {
       voornaam: this.form.controls['voornaam'].value,
       achternaam: this.form.controls['achternaam'].value,
@@ -122,19 +99,14 @@ export class AccountInfoComponent implements OnInit {
       doop_interesse: this.form.controls['doop_interesse'].value,
       afstudeerrichting: this.form.controls['afstudeerrichting'].value,
     };
-    this.accountService.updatePersonalDetails(personalDetails).pipe(
-      first()).subscribe({
+
+    this.accountService.updatePersonalDetails(personalDetails).pipe(first()).subscribe({
       next: () => {
         this.toastr.success('Account gegevens succesvol geüpdatet!', 'Succes');
-
-        // If successfull, we want to send a message to
-        //this.accountEvent.emit('submitted');
-        //this.form_success = "Updated!"
-        // console.log(this.form_success)
       },
       error: error => {
         this.loading = false;
-        this.handleFormError(error);
+        console.error(error); // TODO: Handle error in a better way
       }
     });
     this.loading = false;
