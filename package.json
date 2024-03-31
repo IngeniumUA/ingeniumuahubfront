@@ -31,6 +31,7 @@
     "@angular/router": "^17.3.0",
     "@angular/ssr": "^17.3.0",
     "@ngxs/store": "^3.8.2",
+    "@sentry/angular-ivy": "^7.109.0",
     "@stripe/stripe-js": "^3.0.10",
     "express": "^4.19.2",
     "js-cookie": "^3.0.5",

@@ -1,6 +1,7 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {HttpClient} from '@angular/common/http';
+import { setUser }from "@sentry/angular-ivy";
 import Cookies from 'js-cookie';
 import { UserStateModel } from './user.model';
 import {User} from './user.actions';
@@ -120,6 +121,8 @@ export class UserState {
 
   @Action(User.RemoveUserDetails)
   removeUserDetails(ctx: StateContext<UserStateModel>) {
+    setUser(null);
+
     ctx.setState({
       ...ctx.getState(),
       userDetails: null,

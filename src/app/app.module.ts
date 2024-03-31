@@ -1,8 +1,10 @@
-import {NgModule, isDevMode} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, NgModule, isDevMode} from '@angular/core';
+import { Router } from "@angular/router";
 import {NgOptimizedImage} from '@angular/common';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
 import {NgxsAfterBootstrap, NgxsModule, StateContext} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
+import * as Sentry from "@sentry/angular-ivy";
 
 import {User, UserState} from './core/store';
 
@@ -110,7 +112,22 @@ import {PromoListComponent} from './shared/components/items/item/promo-list/prom
     })*/
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: true,
+      }),
+    }, {
+      provide: Sentry.TraceService,
+        deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+        useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
