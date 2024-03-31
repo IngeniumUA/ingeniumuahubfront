@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://hub.ingeniumua.be",
+    "target": "https://hub.dev.ingeniumua.be",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

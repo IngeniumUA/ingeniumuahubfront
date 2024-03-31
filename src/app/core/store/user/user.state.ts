@@ -126,6 +126,7 @@ export class UserState {
     ctx.setState({
       ...ctx.getState(),
       userDetails: null,
+      token: null,
     });
   }
 
@@ -136,5 +137,8 @@ export class UserState {
       refreshToken: null,
       userDetails: null,
     });
+
+    // Remove tokens from cookies
+    Cookies.remove('access_token');
   }
 }

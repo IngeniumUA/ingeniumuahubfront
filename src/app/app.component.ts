@@ -21,8 +21,4 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(new User.FetchAuthTokenFromStorage());
   }
-
-  logout() {
-    this.accountService.logout();
-  }
 }

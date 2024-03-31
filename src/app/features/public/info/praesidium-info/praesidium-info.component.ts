@@ -3,28 +3,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, of, Subject, takeUntil} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {FormControl} from '@angular/forms';
+import {PraesidiumGroupI} from "@ingenium/app/shared/models/praesidium";
 
-interface PraesidiumButtonI {
-  text: string
-  url: string
-}
-
-interface PraesidiumDisplayI {
-  name: string
-  functie: string
-  image: string
-}
-interface PraesidiumCategorieI {
-  categorieName: string
-  categorieDescription: string
-  praesidia: PraesidiumDisplayI[]
-  button: PraesidiumButtonI
-}
-interface PraesidiumGroupI {
-  groupName: string
-  groupDescription: string
-  categories: PraesidiumCategorieI[]
-}
+import praesidium from "@ingenium/app/shared/data/praesidium";
 
 @Component({
   selector: 'app-praesidium-info',
@@ -41,6 +22,7 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   praesidium$: Observable<PraesidiumGroupI[]> = of([]);
 
   ngOnInit() {
+
     // Fetch ID
     const year: string = this.route.snapshot.paramMap.get('year') || this.validYears[0];
     this.yearControl.patchValue(year);
@@ -71,7 +53,8 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>( `/assets/praesidium_files/praesidium_${year}.json`);
+    // @ts-ignore
+    this.praesidium$ = of(praesidium[year]);
   }
 
   private ngUnsubscribe = new Subject<void>();
