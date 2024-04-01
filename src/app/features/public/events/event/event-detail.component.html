@@ -9,15 +9,13 @@
     <img src='{{event.image_landscape}}' alt="Image not working :(">
   </section>
 
-  <section class="categorie-section" [ngStyle]="{'background-color': (event.color | colordbrgba: 1) }">
-    <div class="categorie-button"
+  <nav role="tablist" class="categorie-section" [ngStyle]="{'background-color': (event.color | colordbrgba: 1) }">
+    <button class="categorie-button"
          *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
          (click)="this.SetProductCategorie(i)"
          [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': (event.color | colordbrgba: 1)}"
-    >
-      <h4>{{ product_categorie.categorie_name }}</h4>
-    </div>
-  </section>
+    >{{ product_categorie.categorie_name }}</button>
+  </nav>
 
   <section class="title-info-section">
     <h3>{{ event.item.name }}</h3>

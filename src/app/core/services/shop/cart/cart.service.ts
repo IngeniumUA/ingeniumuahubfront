@@ -1,9 +1,8 @@
-import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {afterNextRender, Injectable} from '@angular/core';
 import {IProductItem, ProductMetaI} from '../../../../shared/models/items/products/products';
 import {ItemI} from '../../../../shared/models/items/ItemI';
 import {ITransaction} from '../../../../shared/models/items/products/cart';
 import {HttpErrorResponse} from '@angular/common/http';
-import {isPlatformServer} from '@angular/common';
 
 interface IAbstractTransaction {
   sourceItemName: string  // TODO Change to source item_id
@@ -21,15 +20,15 @@ export class CartService {
   paymentErrorArray: HttpErrorResponse[] = [];
 
   // Initialization --------------------------------
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
-    if (isPlatformServer(platformId)) return; // For SSR this may need to be different and data needs to be stored in cookies
-
-    if (window.localStorage.getItem('sources') !== null) {
-      this.sourceArray = JSON.parse(window.localStorage.getItem('sources') as string);
-    }
-    if (window.localStorage.getItem('transactions') !== null) {
-      this.transactionArray = JSON.parse(window.localStorage.getItem('transactions') as string);
-    }
+  constructor() {
+    afterNextRender(() => {
+      if (window.localStorage.getItem('sources') !== null) {
+        this.sourceArray = JSON.parse(window.localStorage.getItem('sources') as string);
+      }
+      if (window.localStorage.getItem('transactions') !== null) {
+        this.transactionArray = JSON.parse(window.localStorage.getItem('transactions') as string);
+      }
+    });
   }
 
   // Private --------------------------------

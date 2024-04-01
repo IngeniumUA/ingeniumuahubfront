@@ -53,7 +53,7 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // @ts-ignore
+    // @ts-expect-error there isn't a type for this. I might change this later and thus am too lazy right now
     this.praesidium$ = of(praesidium[year]);
   }
 

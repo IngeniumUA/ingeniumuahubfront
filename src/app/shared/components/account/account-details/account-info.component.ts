@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {HttpErrorResponse} from '@angular/common/http';
 import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {MatRadioModule} from '@angular/material/radio';
 import {HubUserPersonalDetailsI} from '@ingenium/app/shared/models/user';

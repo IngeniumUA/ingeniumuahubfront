@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StaffComponent } from './staff.component';
-import {BehindheaderComponent} from '../../core/layout/behind/behindheader/behindheader.component';
-import {SidenavComponent} from '../../core/layout/behind/sidenav/sidenav.component';
+import {SidenavComponent} from '@ingenium/app/core/layout/behind/sidenav/sidenav.component';
 import {StaffRoutingModule} from './staff-routing.module';
 import { StaffEventListComponent } from './events/staff-event-list/staff-event-list.component';
 import { StaffEventDetailComponent } from './events/staff-event-detail/staff-event-detail.component';
@@ -11,7 +10,7 @@ import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-e
 import { FunctionsComponent } from './functions/functions.component';
 import { DrinkOrdersComponent } from './popupz/drink-orders/drink-orders.component';
 import { FoodOrdersComponent } from './popupz/food-orders/food-orders.component';
-import {PublicHeaderComponent} from '../../core/layout/public/header/public-header.component';
+import {PublicHeaderComponent} from '@ingenium/app/core/layout/public/header/public-header.component';
 import { StaffUseFullQRComponent } from './payment-code/staff-usefull-q-r.component';
 
 
@@ -20,7 +19,6 @@ import { StaffUseFullQRComponent } from './payment-code/staff-usefull-q-r.compon
   imports: [
     CommonModule,
     StaffRoutingModule,
-    BehindheaderComponent,
     SidenavComponent,
     FormsModule,
     ReactiveFormsModule,

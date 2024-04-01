@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {apiEnviroment} from '../../../../environments/environment';
+import {apiEnviroment} from '@ingenium/environments/environment';
 import {Observable} from 'rxjs';
 
 interface FlagI {

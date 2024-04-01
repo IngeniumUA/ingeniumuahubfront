@@ -29,7 +29,7 @@ export class TransactionDisplayComponent {
         },
       });
       return true;
-    } catch (err) {
+    } catch (_err) {
       return false;
     }
   }
