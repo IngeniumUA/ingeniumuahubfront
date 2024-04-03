@@ -5,8 +5,8 @@ nav {
     @apply bg-white border-b border-gray-100;
   }
 
-  &.nav-absolute {
-    @apply absolute bg-transparent top-0 z-30;
+  &.nav-transparent-background {
+    @apply bg-transparent;
   }
 
   .nav-item {
