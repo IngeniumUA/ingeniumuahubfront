@@ -10,43 +10,36 @@ import {authGuard} from './core/guards/auth/auth.guard';
 import {EventsComponent} from './features/public/events/events/events.component';
 import {staffGuard} from './core/guards/staff.guard';
 import {CardRedirectComponent} from './features/public/card-redirect/card-redirect.component';
-import {InfoComponent} from './features/public/info/info/info.component';
-import {PraesidiumInfoComponent} from './features/public/info/praesidium-info/praesidium-info.component';
 import { CreditsComponent } from 'src/app/features/public/info/credits/credits.component';
-import {ContactComponent} from './features/public/info/contact/contact.component';
-import {LoginComponent} from './features/public/auth/login/login.component';
-import {RegisterComponent} from './shared/components/auth/register/register.component';
-import {PartnersInfoComponent} from './features/public/info/partners/partners-info.component';
 import {webmasterGuard} from './core/guards/webmaster.guard';
 import {managerGuard} from './core/guards/manager.guard';
-import {GalabalComponent} from './features/public/custom-pages/galabal/galabal.component';
 
 
 const routes: Routes = [
   // Homepages
-  {path: '', component: HomepageComponent,},
-  {path: 'home', component: HomepageComponent}, // For routing to homepage (makes it easier)
+  {path: '', component: HomepageComponent},
+  {path: 'home', redirectTo: '/', pathMatch: "full"}, // For routing to homepage (makes it easier)
   {path: '',
     component: PublicRoutingComponent,
     children: [
       // Authentication pages
       {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
-      {path: 'login', component: LoginComponent},
-      {path: 'register', component: RegisterComponent},
+      {path: 'login', redirectTo: 'auth/login', pathMatch: 'full'},
+      {path: 'register', redirectTo: 'auth/register', pathMatch: 'full'},
 
       // Public event related pages
-      {path: 'event', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
-      {path: 'events', component: EventsComponent },
+      {path: 'events', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
+      {path: 'event', redirectTo: 'events', pathMatch: 'prefix'},
 
       // Shop
       {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
 
       // Info
       {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
-      {path: 'over-ons', component: InfoComponent},
-      {path: 'praesidium', component: PraesidiumInfoComponent},
-      {path: 'contact', component: ContactComponent},
-      {path: 'partners', component: PartnersInfoComponent},
+      {path: 'over-ons', redirectTo: 'info', pathMatch: 'full'},
+      {path: 'praesidium', redirectTo: 'info/praesidium', pathMatch: 'prefix'},
+      {path: 'partners', redirectTo: 'info/partners', pathMatch: 'full'},
+      {path: 'contact', redirectTo: 'info/contact', pathMatch: 'full'},
       {path: 'credits', component: CreditsComponent},
 
       // Cloud
@@ -61,10 +54,6 @@ const routes: Routes = [
         loadChildren: () => import('src/app/features/public/account/account.module').then(x => x.AccountModule),
         canActivate: [authGuard]
       },
-
-      // Custom pages
-      {path: 'ingenium-galabal', component: GalabalComponent},
-      {path: 'galabal', component: GalabalComponent},
 
       // Promo
       {path: '', loadChildren: () => import('src/app/features/public/promo/promo.module').then(x => x.PromoModule)},
