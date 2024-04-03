@@ -7,10 +7,9 @@ import {RecSysFormComponent} from './features/recsysform/rec-sys-form.component'
 import {PublicRoutingComponent} from './features/public/public-routing.component';
 import {CloudComponent} from './features/public/cloud/cloud.component';
 import {authGuard} from './core/guards/auth/auth.guard';
-import {EventsComponent} from './features/public/events/events/events.component';
 import {staffGuard} from './core/guards/staff.guard';
 import {CardRedirectComponent} from './features/public/card-redirect/card-redirect.component';
-import { CreditsComponent } from 'src/app/features/public/info/credits/credits.component';
+import {CreditsComponent} from 'src/app/features/public/info/credits/credits.component';
 import {webmasterGuard} from './core/guards/webmaster.guard';
 import {managerGuard} from './core/guards/manager.guard';
 
