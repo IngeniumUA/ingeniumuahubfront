@@ -207,7 +207,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges {
 
     const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
     'product_id', 'product_name', 'amount', 'transaction_status',
-      'date_created', 'date_completed', 'validity', 'currency']
+      'date_created', 'date_completed', 'validity', 'currency', 'payment_provider']
 
     this.staffTransactionService.getTransactionsExport(fields, this.item_id, this.user_id, this.checkout_id, status,
         emailQuery, interactionQuery, productNameQuery, validityQuery).subscribe((data) => {
