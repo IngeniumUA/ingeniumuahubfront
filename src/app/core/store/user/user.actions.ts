@@ -7,6 +7,11 @@ export namespace User {
     constructor(public username: string, public password: string) {}
   }
 
+  export class GoogleLogin {
+    static readonly type = '[User] Google Login';
+    constructor(public googleAuthToken: string) {}
+  }
+
   export class RefreshToken {
     static readonly type = '[User] Refresh Token';
     constructor() {}

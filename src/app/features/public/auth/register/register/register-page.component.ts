@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '@ingenium/app/core/services/user/auth/auth.service';
 import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {first} from 'rxjs/operators';
 import {RegisterService} from '@ingenium/app/core/services/user/register/register.service';
 import {HttpErrorResponse} from '@angular/common/http';
+import {User} from "@ingenium/app/core/store";
+import {Store} from "@ngxs/store";
 
 @Component({
   selector: 'app-register-page',
@@ -26,7 +27,7 @@ export class RegisterPageComponent implements OnInit {
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService,
+              private store: Store,
               private socialAuthService: SocialAuthService,
   ) { }
 
@@ -45,20 +46,20 @@ export class RegisterPageComponent implements OnInit {
     );
 
     this.socialAuthService.authState.subscribe((user) => {
-      this.authService.google_login(user.idToken).pipe(
-        first()).subscribe({
-        next: () => {
-          // get return url from query parameters ( so, ?next='' in the url), else default to home page
-          const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-          this.router.navigateByUrl(returnUrl);
-        },
-        error: error => {
-          this.loading = false;
-          this.handleRegisterError(error);
-        }
+      this.store.dispatch(new User.GoogleLogin(user.idToken))
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            // get return url from query parameters ( so, ?next='' in the url), else default to home page
+            const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+            this.router.navigateByUrl(returnUrl);
+          },
+          error: error => {
+            this.loading = false;
+            this.handleRegisterError(error);
+          }
+        });
       });
-    }
-    );
 
     // Facebook browser check
     const userAgent = window.navigator.userAgent;

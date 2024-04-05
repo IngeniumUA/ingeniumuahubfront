@@ -7,7 +7,7 @@ import { UserStateModel } from './user.model';
 import {User} from './user.actions';
 import {HubAccountData, HubAuthData} from '@ingenium/app/shared/models/user';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {catchError, tap} from 'rxjs';
+import {catchError, tap, throwError} from 'rxjs';
 import {SsrCookieService} from "ngx-cookie-service-ssr";
 import {map} from "rxjs/operators";
 import {CartService} from "@ingenium/app/core/services/shop/cart/cart.service";
@@ -62,8 +62,19 @@ export class UserState {
 
     return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/token', formData)
       .pipe(
-        tap((userDetails) => {
-          ctx.dispatch(new User.SetAuthData(userDetails));
+        tap((userDetails) => ctx.dispatch(new User.SetAuthData(userDetails)))
+      );
+  }
+
+
+  @Action(User.GoogleLogin)
+  googleLogin(ctx: StateContext<UserStateModel>, action: User.GoogleLogin) {
+    return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl + 'auth/google?token=' + action.googleAuthToken)
+      .pipe(
+        tap(userDetails => ctx.dispatch(new User.SetAuthData(userDetails))),
+        catchError((error) => {
+          console.log(error);
+          return throwError(() => error);
         })
       );
   }
@@ -78,9 +89,7 @@ export class UserState {
       refresh_token: refreshToken,
       token_type: 'bearer'
     }).pipe(
-        map(userDetails => {
-          ctx.dispatch(new User.SetAuthData(userDetails));
-        })
+        tap(userDetails => ctx.dispatch(new User.SetAuthData(userDetails)))
       );
   }
 

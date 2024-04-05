@@ -3,9 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import {AuthService} from '../../../../core/services/user/auth/auth.service';
 import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {HttpErrorResponse} from '@angular/common/http';
+import {Store} from "@ngxs/store";
+import {User} from "@ingenium/app/core/store";
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService,
+              private store: Store,
               private socialAuthService: SocialAuthService,
   ) {
     afterNextRender(() => {
@@ -75,18 +76,19 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
-    this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).pipe(
-      first()).subscribe({
-      next: () => {
-        // get return url from query parameters ( so, ?next='' in the url), else default to home page
-        const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-        this.router.navigateByUrl(returnUrl);
-      },
-      error: error => {
-        this.loading = false;
-        this.handleFormError(error);
-      }
-    });
+    this.store.dispatch(new User.LoginUser(this.form.controls['email'].value, this.form.controls['password'].value))
+      .pipe(first())
+      .subscribe({
+        next: () => {
+          // get return url from query parameters ( so, ?next='' in the url), else default to home page
+          const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+          this.router.navigateByUrl(returnUrl);
+        },
+        error: error => {
+          this.loading = false;
+          this.handleFormError(error);
+        }
+      });
   }
 
   handleFormError(err: Error) {
@@ -122,26 +124,19 @@ export class LoginComponent implements OnInit {
   /* Google Authentication */
   SetupGoogleAuth() {
     this.socialAuthService.authState.subscribe((user) => {
-      this.authService.google_login(user.idToken).pipe(
-        first()).subscribe({
-        next: () => {
-          // get return url from query parameters ( so, ?next='' in the url), else default to home page
-          const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-          this.router.navigateByUrl(returnUrl);
-        },
-        error: error => {
-          this.loading = false;
-          this.handleFormError(error);
-        }
-      });
-    }
-    );
-  }
-
-  /* UAntwerpen Authentication */
-  loginUAntwerp() {
-    const error: Error = Error('Da zou mooi zijn ofni');
-    this.handleFormError(error);
-    return;
+      this.store.dispatch(new User.GoogleLogin(user.idToken))
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            // get return url from query parameters ( so, ?next='' in the url), else default to home page
+            const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+            this.router.navigateByUrl(returnUrl);
+          },
+          error: error => {
+            this.loading = false;
+            this.handleFormError(error);
+          }
+        });
+    });
   }
 }
