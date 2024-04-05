@@ -1,15 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {HttpClient} from '@angular/common/http';
-import { setUser }from "@sentry/angular-ivy";
-import Cookies from 'js-cookie';
-import { UserStateModel } from './user.model';
+import {setUser}from "@sentry/angular-ivy";
+import {UserStateModel} from './user.model';
 import {User} from './user.actions';
 import {HubAccountData, HubAuthData} from '@ingenium/app/shared/models/user';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {catchError, tap, throwError} from 'rxjs';
+import {tap} from 'rxjs';
 import {SsrCookieService} from "ngx-cookie-service-ssr";
-import {map} from "rxjs/operators";
 import {CartService} from "@ingenium/app/core/services/shop/cart/cart.service";
 import {Router} from "@angular/router";
 
@@ -71,11 +69,7 @@ export class UserState {
   googleLogin(ctx: StateContext<UserStateModel>, action: User.GoogleLogin) {
     return this.httpClient.get<HubAuthData>(apiEnviroment.apiUrl + 'auth/google?token=' + action.googleAuthToken)
       .pipe(
-        tap(userDetails => ctx.dispatch(new User.SetAuthData(userDetails))),
-        catchError((error) => {
-          console.log(error);
-          return throwError(() => error);
-        })
+        tap(userDetails => ctx.dispatch(new User.SetAuthData(userDetails)))
       );
   }
 
@@ -103,8 +97,8 @@ export class UserState {
     });
 
     // Store tokens in cookie
-    Cookies.set('access_token', action.userDetails.access_token, { secure: true, sameSite: 'strict' });
-    Cookies.set('refresh_token', action.userDetails.refresh_token, { secure: true, sameSite: 'strict' });
+    this.cookieService.set('access_token', action.userDetails.access_token, 1, undefined, undefined, true, 'Strict');
+    this.cookieService.set('refresh_token', action.userDetails.refresh_token, 7, undefined, undefined, true, 'Strict');
 
     // Fetch user details
     return ctx.dispatch(new User.FetchUserDetails());
@@ -114,7 +108,6 @@ export class UserState {
   @Action(User.FetchAuthTokenFromStorage)
   fetchAuthTokenFromStorage(ctx: StateContext<UserStateModel>) {
     const token: string = this.cookieService.get('access_token');
-    console.log(token);
 
     if (token) {
       ctx.setState({
@@ -124,31 +117,23 @@ export class UserState {
 
       ctx.dispatch(new User.FetchUserDetails());
     }
-
-    // We can possibly return dispatches (in if statement and here).
   }
 
   @Action(User.FetchUserDetails)
   fetchUserDetails(ctx: StateContext<UserStateModel>) {
+    console.log('Fetching user details')
+
     return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + 'user/account/')
       .pipe(
         tap((userDetails) => {
           ctx.setState({
             ...ctx.getState(),
-            userDetails
+            userDetails,
           });
+        })
 
-          return userDetails;
-        }),
-        catchError((error) => {
-          // If the error is 401, we should log out the user
-          if (error.status === 401) {
-            ctx.dispatch(new User.Logout());
-          }
-
-          return error;
-        }
-      ));
+        // Retry perhaps if refresh token is implemented?
+      );
   }
 
   @Action(User.RemoveUserDetails)
@@ -170,7 +155,7 @@ export class UserState {
       userDetails: null,
     });
 
-    Cookies.remove('access_token');
+    this.cookieService.delete('access_token');
     this.cartService.clear();
 
     this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/auth/logout', {

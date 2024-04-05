@@ -38,16 +38,12 @@ export class JWTInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error) => {
         // Check if error is 401 (not authorised)
-        if (error instanceof HttpErrorResponse &&
-            !request.url.includes('auth/login') &&
-            error.status === 401) {
+        if (error instanceof HttpErrorResponse && !request.url.includes('auth/login') && error.status === 401) {
           return this.handleUnAuthorisedError(request, next);
         }
 
         // Check if error is 403 (forbidden)
-        if (error instanceof HttpErrorResponse &&
-          !request.url.includes('auth/login') &&
-          error.status === 403) {
+        if (error instanceof HttpErrorResponse && !request.url.includes('auth/login') && error.status === 403) {
           // If forbidden is found, route to home
           this.router.navigate(['/']);
         }
@@ -69,8 +65,8 @@ export class JWTInterceptor implements HttpInterceptor {
     if (this.isRefreshing) {
       return next.handle(request);
     }
-    this.isRefreshing = true; // Not refreshing yet, set bool to true
 
+    this.isRefreshing = true; // Not refreshing yet, set bool to true
 
     // 2) Check if user is logged in (if we have a refresh token to attempt a refresh with)
     if (!this.store.selectSnapshot(UserState.isAuthenticated)) {
@@ -96,9 +92,8 @@ export class JWTInterceptor implements HttpInterceptor {
       catchError((error) => {
         this.isRefreshing = false;
 
-        // TODO Maybe match on a couple status codes instead of all errors?
-        // if (error.status == '401') {  // 401 means unauthenticated
-        //this.store.dispatch(new User.Logout);
+        // If any error occurs, simply logout the user
+        this.store.dispatch(new User.Logout);
 
         // Continue throwing error
         return throwError(() => error);

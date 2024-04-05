@@ -23,7 +23,7 @@ export namespace User {
   }
 
   export class FetchAuthTokenFromStorage {
-    static readonly type = '[User] Fetch browser token'
+    static readonly type = '[User] Fetch browser token';
   }
 
   export class FetchUserDetails {
