@@ -28,13 +28,19 @@ export function app(): express.Express {
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
+    console.log('HELLO!')
+
     commonEngine
       .render({
         bootstrap: AppServerModule,
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: req.baseUrl },
+          { provide: 'REQUEST', useValue: req },
+          { provide: 'RESPONSE', useValue: res },
+        ],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));

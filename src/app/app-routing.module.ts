@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {RouterModule, Routes, TitleStrategy} from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import {HomepageComponent} from './features/public/homepage/homepage.component';
 import {NotfoundpageComponent} from './features/notfoundpage/notfoundpage.component';
@@ -9,9 +9,9 @@ import {CloudComponent} from './features/public/cloud/cloud.component';
 import {authGuard} from './core/guards/auth/auth.guard';
 import {staffGuard} from './core/guards/staff.guard';
 import {CardRedirectComponent} from './features/public/card-redirect/card-redirect.component';
-import {CreditsComponent} from 'src/app/features/public/info/credits/credits.component';
 import {webmasterGuard} from './core/guards/webmaster.guard';
 import {managerGuard} from './core/guards/manager.guard';
+import {TemplatePageTitleStrategy} from "@ingenium/app/shared/others/PageTitleStrategy";
 
 
 const routes: Routes = [
@@ -27,11 +27,11 @@ const routes: Routes = [
       {path: 'register', redirectTo: 'auth/register', pathMatch: 'full'},
 
       // Public event related pages
-      {path: 'events', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
+      {path: 'events', title: 'Events', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
       {path: 'event', redirectTo: 'events', pathMatch: 'prefix'},
 
       // Shop
-      {path: 'shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
+      {path: 'shop', title: 'Shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
 
       // Info
       {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
@@ -39,10 +39,10 @@ const routes: Routes = [
       {path: 'praesidium', redirectTo: 'info/praesidium', pathMatch: 'prefix'},
       {path: 'partners', redirectTo: 'info/partners', pathMatch: 'full'},
       {path: 'contact', redirectTo: 'info/contact', pathMatch: 'full'},
-      {path: 'credits', component: CreditsComponent},
+      {path: 'credits', redirectTo: 'info/credits', pathMatch: 'full'},
 
       // Cloud
-      {path: 'cloud', component: CloudComponent, canActivate: [authGuard]},
+      {path: 'cloud', title: 'Cloud', component: CloudComponent, canActivate: [authGuard]},
 
       // Cardredirect
       {path: 'card/:id', component: CardRedirectComponent, canActivate: [authGuard]},
@@ -100,6 +100,12 @@ const routes: Routes = [
 
 @NgModule({
   imports: [BrowserModule, RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    {
+      provide: TitleStrategy,
+      useClass: TemplatePageTitleStrategy
+    }
+  ]
 })
 export class AppRoutingModule { }

@@ -6,6 +6,7 @@ import {FormControl} from '@angular/forms';
 import {PraesidiumGroupI} from "@ingenium/app/shared/models/praesidium";
 
 import praesidium from "@ingenium/app/shared/data/praesidium";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-praesidium-info',
@@ -15,18 +16,18 @@ import praesidium from "@ingenium/app/shared/data/praesidium";
 export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private httpClient: HttpClient) {}
+              private titleService: Title) {}
 
   yearControl = new FormControl<string>('');
   validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19']; // Put newest year first
   praesidium$: Observable<PraesidiumGroupI[]> = of([]);
 
   ngOnInit() {
-
     // Fetch ID
     const year: string = this.route.snapshot.paramMap.get('year') || this.validYears[0];
     this.yearControl.patchValue(year);
     this.SetupYear(year);
+    this.titleService.setTitle(`Praesidium ${year}`);
 
     // Event for form changeing
     this.yearControl.valueChanges.pipe(

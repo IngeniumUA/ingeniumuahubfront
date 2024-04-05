@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {afterNextRender, Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -23,7 +23,21 @@ export class LoginComponent implements OnInit {
               private router: Router,
               private authService: AuthService,
               private socialAuthService: SocialAuthService,
-  ) { }
+  ) {
+    afterNextRender(() => {
+      // Setting up Google auth
+      this.SetupGoogleAuth();
+
+      // Facebook browser check
+      const userAgent = window.navigator.userAgent;
+      this.embeddedBrowser = (userAgent.indexOf('FBAN') > -1) ||
+        (userAgent.indexOf('FBAV') > -1) ||
+        (userAgent.indexOf('Instagram') > -1);
+
+      // Loginhint
+      this.SetupLoginHint();
+    });
+  }
   loginHint: string | null = null;
   ngOnInit() {
     if (this.authService.userValue) {
@@ -36,18 +50,6 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.email],
       password: ['', Validators.required]
     });
-
-    // Setting up Google auth
-    this.SetupGoogleAuth();
-
-    // Facebook browser check
-    const userAgent = window.navigator.userAgent;
-    this.embeddedBrowser = (userAgent.indexOf('FBAN') > -1) ||
-                           (userAgent.indexOf('FBAV') > -1) ||
-                           (userAgent.indexOf('Instagram') > -1);
-
-    // Loginhint
-    this.SetupLoginHint();
   }
 
   SetupLoginHint() {

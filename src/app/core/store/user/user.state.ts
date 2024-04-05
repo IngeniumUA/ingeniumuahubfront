@@ -1,4 +1,4 @@
-import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {HttpClient} from '@angular/common/http';
 import { setUser }from "@sentry/angular-ivy";
@@ -8,7 +8,7 @@ import {User} from './user.actions';
 import {HubAccountData, HubAuthData} from '@ingenium/app/shared/models/user';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {catchError, tap} from 'rxjs';
-import {isPlatformServer} from "@angular/common";
+import {SsrCookieService} from "ngx-cookie-service-ssr";
 
 @State<UserStateModel>({
   name: 'user',
@@ -21,7 +21,7 @@ import {isPlatformServer} from "@angular/common";
 @Injectable()
 export class UserState {
 
-  constructor(private httpClient: HttpClient, @Inject(PLATFORM_ID) private platformId: object) {}
+  constructor(private httpClient: HttpClient, private cookieService: SsrCookieService) { }
 
   /**
    * Selectors
@@ -79,13 +79,8 @@ export class UserState {
 
   @Action(User.FetchAuthTokenFromStorage)
   fetchAuthTokenFromStorage(ctx: StateContext<UserStateModel>) {
-    let token: string|undefined;
-    if (isPlatformServer(this.platformId)) {
-      // TODO: Implement cookie storage for SSR
-      console.warn('SSR not implemented yet')
-    } else {
-      token = Cookies.get('access_token');
-    }
+    const token: string = this.cookieService.get('access_token');
+    console.log(token);
 
     if (token) {
       ctx.setState({

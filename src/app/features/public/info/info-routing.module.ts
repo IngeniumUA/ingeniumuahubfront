@@ -17,20 +17,20 @@ import {PartnersInfoComponent} from './partners/partners-info.component';
 
 
 const routes: Routes = [
-  { path: '', component: InfoComponent },
-  { path: 'partners', component: PartnersInfoComponent},
-  { path: 'lid', component: InfoLidComponent },
+  { path: '', title: 'Over ons', component: InfoComponent },
+  { path: 'partners', title: 'Onze partners', component: PartnersInfoComponent},
+  { path: 'lid', title: 'Lid worden', component: InfoLidComponent },
   { path: 'praesidium/:year', component: PraesidiumInfoComponent },
-  { path: 'praesidium', component: PraesidiumInfoComponent},
-  { path: 'clublied', component: ClubliedComponent },
-  { path: 'startweek', component: StartweekComponent },
-  { path: 'contact', component: ContactComponent },
-  { path: 'credits', component: CreditsComponent },
-  { path: 'relations', component: RelationsComponent },
-  { path: 'education', component: EducationInfoComponent},
-  { path: 'doop', component: DoopInfoComponent},
-  { path: 'cantus', component: CantusInfoComponent},
-  { path: 'sport', component: SportInfoComponent },
+  { path: 'praesidium', title: 'Praesidium', component: PraesidiumInfoComponent},
+  { path: 'clublied', title: 'Ons clublied', component: ClubliedComponent },
+  { path: 'startweek', title: 'Start week', component: StartweekComponent },
+  { path: 'contact', title: 'Contacteer ons', component: ContactComponent },
+  { path: 'credits', title: 'Credits', component: CreditsComponent },
+  { path: 'relations', title: 'Relations', component: RelationsComponent },
+  { path: 'education', title: 'Education', component: EducationInfoComponent},
+  { path: 'doop', title: 'Doop', component: DoopInfoComponent},
+  { path: 'cantus', title: 'Cantus', component: CantusInfoComponent},
+  { path: 'sport', title: 'Sport', component: SportInfoComponent },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

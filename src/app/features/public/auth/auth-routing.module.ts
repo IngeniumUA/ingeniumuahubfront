@@ -9,9 +9,9 @@ import {AwaitpasswordLinkComponent} from './awaitpassword-link/awaitpassword-lin
 
 
 const routes: Routes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterPageComponent},
-  {path: 'reset', component: ResetpwComponent},
+  {path: 'login', title: 'Aanmelden', component: LoginComponent},
+  {path: 'register', title: 'Registreren', component: RegisterPageComponent},
+  {path: 'reset', title: 'Wachtwoord opnieuw instellen', component: ResetpwComponent},
   {path: 'await_email', component: AwaitpasswordLinkComponent},
   {path: 'set/:uuid/:pw_settoken', component: SetpwComponent},
 ];
