@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../../../../../core/services/user/auth/auth.service';
+import {AuthService} from '@ingenium/app/core/services/user/auth/auth.service';
 import {SocialAuthService} from '@abacritt/angularx-social-login';
 import {first} from 'rxjs/operators';
-import {RegisterService} from '../../../../../core/services/user/register/register.service';
+import {RegisterService} from '@ingenium/app/core/services/user/register/register.service';
 import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
@@ -31,10 +31,6 @@ export class RegisterPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.authService.userValue) {
-      this.router.navigate(['home']);
-    }
-
     this.form = this.formBuilder.group({
       email: ['', Validators.email],
     });

@@ -1,16 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EventItemDetailI} from '../../../../shared/models/items/events';
-import {EventService} from '../../../../core/services/items/events/event.service';
+import {EventItemDetailI} from '@ingenium/app/shared/models/items/events';
+import {EventService} from '@ingenium/app/core/services/items/events/event.service';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
-import {LayoutService} from '../../../../core/services/layout/layout.service';
-import {IProductCategorie, IProductGroup, IProductItem} from '../../../../shared/models/items/products/products';
-import {ProductsService} from '../../../../core/services/shop/products/products.service';
+import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
+import {IProductCategorie, IProductGroup, IProductItem} from '@ingenium/app/shared/models/items/products/products';
+import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {map} from 'rxjs/operators';
-import {ItemI} from '../../../../shared/models/items/ItemI';
-import {CartService} from '../../../../core/services/shop/cart/cart.service';
-import {ProductsToCategoriesPipe} from '../../../../shared/pipes/product/product_to_categoriepipe.pipe';
-import {AuthService} from '../../../../core/services/user/auth/auth.service';
+import {ItemI} from '@ingenium/app/shared/models/items/ItemI';
+import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
+import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
 
 
 @Component({
@@ -21,14 +20,12 @@ import {AuthService} from '../../../../core/services/user/auth/auth.service';
 export class EventDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService,
               private layoutService: LayoutService,
               private eventService: EventService,
               private cartService: CartService,
               private productService: ProductsService) {
   }
   // Layout
-  isAuth: boolean = this.authService.isLoggedIn();
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
   isCartEmpty: boolean = !this.cartService.hasTransactions();
   // Event Info and Deco

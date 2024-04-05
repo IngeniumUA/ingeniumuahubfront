@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgClass} from '@angular/common';
-import {AuthService} from '../../../../core/services/user/auth/auth.service';
-import {RegisterService} from '../../../../core/services/user/register/register.service';
+import {RegisterService} from '@ingenium/app/core/services/user/register/register.service';
 import {GoogleSigninButtonModule} from '@abacritt/angularx-social-login';
 
 @Component({
@@ -24,17 +23,10 @@ export class RegisterComponent implements OnInit {
   submitted = false;
 
   constructor(private formBuilder: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router,
-              private authService: AuthService,
               private registerService: RegisterService,
   ) { }
 
   ngOnInit() {
-    if (this.authService.userValue) {
-      this.router.navigate(['home']);
-    }
-
     this.form = this.formBuilder.group({
       email: ['', Validators.email]
     });

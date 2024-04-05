@@ -1,3 +1,5 @@
+import {HubAuthData} from "@ingenium/app/shared/models/user";
+
 export namespace User {
 
   export class LoginUser {
@@ -5,14 +7,14 @@ export namespace User {
     constructor(public username: string, public password: string) {}
   }
 
-  export class LoginUserSuccess {
-    static readonly type = '[User] Login success';
-    constructor(public token: string, public refreshToken: string) {}
+  export class RefreshToken {
+    static readonly type = '[User] Refresh Token';
+    constructor() {}
   }
 
-  export class LoginUserFailure {
-    static readonly type = '[User] Login failure';
-    constructor(public error: any) {}
+  export class SetAuthData {
+    static readonly type = '[User] Set Auth Data';
+    constructor(public userDetails: HubAuthData) {}
   }
 
   export class FetchAuthTokenFromStorage {

@@ -4,12 +4,12 @@ import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import {HubAuthData} from '../../../../shared/models/user';
-import {apiEnviroment} from '../../../../../environments/environment';
-import {RolesService} from '../roles.service';
-import {CartService} from '../../shop/cart/cart.service';
+import {HubAuthData} from '@ingenium/app/shared/models/user';
+import {apiEnviroment} from '@ingenium/environments/environment';
+import {RolesService} from '@ingenium/app/core/services/user/roles.service';
+import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
 import {Store} from '@ngxs/store';
-import {User, UserState} from '../../../store';
+import {User} from '@ingenium/app/core/store';
 import {isPlatformServer} from '@angular/common';
 
 @Injectable({
@@ -36,18 +36,6 @@ export class AuthService {
     return this.userSubject.value;
   }
 
-
-  /**
-   * @deprecated Use the NGXS store instead: store.select(UserState.userDetails) as an Observable or immediately from the store using store.selectSnapshot(UserState.userDetails)
-   */
-  public isLoggedIn(): boolean {
-    return this.store.selectSnapshot(UserState.isAuthenticated);
-  }
-
-  public get accessToken() {
-    return this.userSubject.value?.access_token;
-  }
-
   public refreshAccessToken() {
     const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: 'bearer' };
 
@@ -61,17 +49,6 @@ export class AuthService {
           return user;
         })
       );
-  }
-
-  logout() {
-    const body = { access_token: this.userValue?.access_token, refresh_token: this.userValue?.refresh_token, token_type: 'bearer' };
-
-    this.cartService.clear();
-    this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/auth/logout', body );
-
-    localStorage.removeItem('user');
-    this.userSubject.next(null); // Set observable to null
-    this.router.navigate(['home']);
   }
 
   // ----------
@@ -95,9 +72,5 @@ export class AuthService {
         return throwError(() => error);
       })
     );
-  }
-
-  signUp(email: string) {
-    return this.httpClient.post<any>(apiEnviroment.apiUrl + 'user/signup/mail', {email: email});
   }
 }

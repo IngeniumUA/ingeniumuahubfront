@@ -3,7 +3,6 @@ import {AsyncPipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} f
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
-import {AuthService} from '@ingenium/app/core/services/user/auth/auth.service';
 import {User, UserState} from '@ingenium/app/core/store';
 import {HubAccountData} from "@ingenium/app/shared/models/user";
 
@@ -38,7 +37,7 @@ export class PublicHeaderComponent {
   @Input() internalToggle: boolean = true; // If toggling the navbar should use this navbar or outsource it
   @Output() isToggleEmitter = new EventEmitter<boolean>();
 
-  constructor(private authService: AuthService, private store: Store) {
+  constructor(private store: Store) {
     this.user$ = store.select(UserState.userDetails);
     this.isAuth$ = store.select(UserState.isAuthenticated);
   }

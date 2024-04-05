@@ -38,13 +38,10 @@ export class LoginComponent implements OnInit {
       this.SetupLoginHint();
     });
   }
-  loginHint: string | null = null;
-  ngOnInit() {
-    if (this.authService.userValue) {
-      const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-      this.router.navigateByUrl(returnUrl);
-    }
 
+  loginHint: string | null = null;
+
+  ngOnInit() {
     // Setting up form
     this.form = this.formBuilder.group({
       email: ['', Validators.email],

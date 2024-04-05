@@ -9,6 +9,9 @@ import {HubAccountData, HubAuthData} from '@ingenium/app/shared/models/user';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {catchError, tap} from 'rxjs';
 import {SsrCookieService} from "ngx-cookie-service-ssr";
+import {map} from "rxjs/operators";
+import {CartService} from "@ingenium/app/core/services/shop/cart/cart.service";
+import {Router} from "@angular/router";
 
 @State<UserStateModel>({
   name: 'user',
@@ -21,7 +24,7 @@ import {SsrCookieService} from "ngx-cookie-service-ssr";
 @Injectable()
 export class UserState {
 
-  constructor(private httpClient: HttpClient, private cookieService: SsrCookieService) { }
+  constructor(private httpClient: HttpClient, private cookieService: SsrCookieService, private cartService: CartService, private router: Router) { }
 
   /**
    * Selectors
@@ -60,20 +63,42 @@ export class UserState {
     return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/token', formData)
       .pipe(
         tap((userDetails) => {
-          ctx.setState({
-            ...ctx.getState(),
-            token: userDetails.access_token,
-            refreshToken: userDetails.refresh_token,
-          });
-
-          // Store tokens in cookie
-          Cookies.set('access_token', userDetails.access_token, { secure: true, sameSite: 'strict' });
-          Cookies.set('refresh_token', userDetails.refresh_token, { secure: true, sameSite: 'strict' });
-
-          // Fetch user details
-          ctx.dispatch(new User.FetchUserDetails());
+          ctx.dispatch(new User.SetAuthData(userDetails));
         })
       );
+  }
+
+
+  @Action(User.RefreshToken)
+  refreshAccessToken(ctx: StateContext<UserStateModel>, _action: User.RefreshToken) {
+    const { token, refreshToken } = ctx.getState();
+
+    return this.httpClient.post<HubAuthData>(apiEnviroment.apiUrl + 'auth/refresh', {
+      access_token: token,
+      refresh_token: refreshToken,
+      token_type: 'bearer'
+    }).pipe(
+        map(userDetails => {
+          ctx.dispatch(new User.SetAuthData(userDetails));
+        })
+      );
+  }
+
+
+  @Action(User.SetAuthData)
+  setAuthData(ctx: StateContext<UserStateModel>, action: User.SetAuthData) {
+    ctx.setState({
+      ...ctx.getState(),
+      token: action.userDetails.access_token,
+      refreshToken: action.userDetails.refresh_token,
+    });
+
+    // Store tokens in cookie
+    Cookies.set('access_token', action.userDetails.access_token, { secure: true, sameSite: 'strict' });
+    Cookies.set('refresh_token', action.userDetails.refresh_token, { secure: true, sameSite: 'strict' });
+
+    // Fetch user details
+    return ctx.dispatch(new User.FetchUserDetails());
   }
 
 
@@ -103,12 +128,15 @@ export class UserState {
             ...ctx.getState(),
             userDetails
           });
+
+          return userDetails;
         }),
         catchError((error) => {
           // If the error is 401, we should log out the user
           if (error.status === 401) {
             ctx.dispatch(new User.Logout());
           }
+
           return error;
         }
       ));
@@ -133,7 +161,14 @@ export class UserState {
       userDetails: null,
     });
 
-    // Remove tokens from cookies
     Cookies.remove('access_token');
+    this.cartService.clear();
+
+    this.httpClient.post<any>(apiEnviroment.apiUrl + 'api/auth/logout', {
+      access_token: ctx.getState().token, // TODO: This doesn't seem to make much sense, why do I need to sent these tokens like this to logout? Only the access token should be enough and that is already in the header?
+      refresh_token: ctx.getState().refreshToken,
+      token_type: 'bearer'
+    });
+    this.router.navigate(['/']);
   }
 }
