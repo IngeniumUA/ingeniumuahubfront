@@ -1,5 +1,5 @@
-import {ProductMetaI} from "../items/products/products";
-import {PricePolicyI} from "../price_policy";
+import {ProductMetaI} from '../items/products/products';
+import {PricePolicyI} from '../price_policy';
 
 export interface StaffProductBlueprintI {
   id: number

@@ -1,4 +1,4 @@
-import {StaffCreateTransactionI} from "./staff_transaction";
+import {StaffCreateTransactionI} from './staff_transaction';
 
 export interface StaffCheckoutI {
   id: string

@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {PasswordService} from "../../../../core/services/user/password/password.service";
-import {first} from "rxjs/operators";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PasswordService} from '../../../../core/services/user/password/password.service';
+import {first} from 'rxjs/operators';
 
 @Component({
   selector: 'app-auth-resetpw',
   templateUrl: './resetpw.component.html',
   styleUrls: ['./resetpw.component.css']
 })
-export class ResetpwComponent {
+export class ResetpwComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;
@@ -28,7 +28,7 @@ export class ResetpwComponent {
   ngOnInit() {
     this.form = this.formBuilder.group({
       email: ['', Validators.required]
-    })
+    });
   }
 
   // convenience getter for easy access to form fields
@@ -48,9 +48,9 @@ export class ResetpwComponent {
 
     // Check if valid guardclause
     if (this.form.invalid) {
-      const error: Error = Error("Ongeldig email!");
+      const error: Error = Error('Ongeldig email!');
       this.handleFormError(error);
-      return
+      return;
     }
 
     this.loading = true;
@@ -64,6 +64,6 @@ export class ResetpwComponent {
         this.loading = false;
         this.handleFormError(error);
       }
-    })
+    });
   }
 }

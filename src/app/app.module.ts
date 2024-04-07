@@ -1,78 +1,80 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {APP_INITIALIZER, ErrorHandler, NgModule, isDevMode} from '@angular/core';
+import { Router } from "@angular/router";
+import {NgOptimizedImage} from '@angular/common';
+import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
+import {NgxsAfterBootstrap, NgxsModule, StateContext} from '@ngxs/store';
+import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
+import * as Sentry from "@sentry/angular-ivy";
 
-import { AppComponent } from './app.component';
-import { PublicHeaderComponent } from './core/layout/public/header/public-header.component';
-import { HomepageComponent } from './features/public/homepage/homepage.component';
-import { AppRoutingModule } from "./app-routing.module";
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import { NotfoundpageComponent } from './features/notfoundpage/notfoundpage.component';
-import { RecSysFormComponent } from './features/recsysform/rec-sys-form.component';
-import {ReactiveFormsModule} from "@angular/forms";
-import {MatRadioModule} from "@angular/material/radio";
-import {MatButtonModule} from "@angular/material/button";
-import {JWTInterceptor} from "./core/interceptors/jwt-interceptor.service";
+import {User, UserState} from './core/store';
 
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {AppComponent} from './app.component';
+import {PublicHeaderComponent} from './core/layout/public/header/public-header.component';
+import {HomepageComponent} from './features/public/homepage/homepage.component';
+import {AppRoutingModule} from './app-routing.module';
+import {HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http';
+import {NotfoundpageComponent} from './features/notfoundpage/notfoundpage.component';
+import {RecSysFormComponent} from './features/recsysform/rec-sys-form.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonModule} from '@angular/material/button';
+import {JWTInterceptor} from './core/interceptors/jwt-interceptor.service';
 
-import { EventdatePipe } from './shared/pipes/eventpreview/eventdate.pipe';
-import {GroupnamePipe} from "./shared/pipes/account/groupname.pipe";
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { PublicRoutingComponent } from './features/public/public-routing.component';
-import { PublicFooterComponent } from './core/layout/public/footer/public-footer.component';
-import { CloudComponent } from './features/public/cloud/cloud.component';
-import {RegisterComponent} from "./shared/components/auth/register/register.component";
-import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@abacritt/angularx-social-login";
-import { SetpwComponent } from './features/public/auth/setpw/setpw.component';
-import { RecSysItemPreviewComponent } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
-import { CardComponent } from './shared/components/account/card/card.component';
-import { UnderConstructionComponent } from './shared/components/under-construction/under-construction.component';
-import { ContactComponent } from './features/public/info/contact/contact.component';
-import { CardRedirectComponent } from './features/public/card-redirect/card-redirect.component';
-import { AwaitpasswordLinkComponent } from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
-import { CreditsComponent } from './features/public/info/credits/credits.component';
-import { PopupzComponent } from './features/public/popupz/popupz.component';
-import { PopupzorderComponent } from './features/public/popupz/popupzorder/popupzorder.component';
-import { PopupzorderStaffComponent } from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
-import { ToastrModule } from 'ngx-toastr';
-import { PartnerBalkComponent } from './shared/components/partners/partner-balk/partner-balk.component';
-import { PartnerDumpComponent } from './shared/components/partners/partner-dump/partner-dump.component';
-import {PartnerGridComponent} from "./shared/components/partners/partner-grid/partner-grid.component";
-import { GalabalComponent } from './features/public/custom-pages/galabal/galabal.component';
-import {QRCodeModule} from "angularx-qrcode";
-import {PromoListComponent} from "./shared/components/items/item/promo-list/promo-list.component";
-import {NgOptimizedImage} from "@angular/common";
+import {EventDatePipe} from './shared/pipes/eventpreview/EventDate.pipe';
+import {GroupnamePipe} from './shared/pipes/account/groupname.pipe';
+
+import {PublicRoutingComponent} from './features/public/public-routing.component';
+import {PublicFooterComponent} from './core/layout/public/footer/public-footer.component';
+import {CloudComponent} from './features/public/cloud/cloud.component';
+import {RegisterComponent} from './shared/components/auth/register/register.component';
+import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
+import {SetpwComponent} from './features/public/auth/setpw/setpw.component';
+import {
+  RecSysItemPreviewComponent
+} from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
+import {CardComponent} from './shared/components/account/card/card.component';
+import {UnderConstructionComponent} from './shared/components/under-construction/under-construction.component';
+import {ContactComponent} from './features/public/info/contact/contact.component';
+import {CardRedirectComponent} from './features/public/card-redirect/card-redirect.component';
+import {AwaitpasswordLinkComponent} from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
+import {CreditsComponent} from './features/public/info/credits/credits.component';
+import {PopupzComponent} from './features/public/popupz/popupz.component';
+import {PopupzorderComponent} from './features/public/popupz/popupzorder/popupzorder.component';
+import {PopupzorderStaffComponent} from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
+import {ToastrModule} from 'ngx-toastr';
+import {PartnerBalkComponent} from './shared/components/partners/partner-balk/partner-balk.component';
+import {PartnerDumpComponent} from './shared/components/partners/partner-dump/partner-dump.component';
+import {PartnerGridComponent} from './shared/components/partners/partner-grid/partner-grid.component';
+import {GalabalComponent} from './features/public/custom-pages/galabal/galabal.component';
+import {PromoListComponent} from './shared/components/items/item/promo-list/promo-list.component';
+import {SsrCookieService} from "ngx-cookie-service-ssr";
 
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomepageComponent,
-        NotfoundpageComponent,
-        RecSysFormComponent,
+  declarations: [
+    AppComponent,
+    HomepageComponent,
+    NotfoundpageComponent,
+    RecSysFormComponent,
 
-        PublicRoutingComponent,
-        CloudComponent,
+    PublicRoutingComponent,
+    CloudComponent,
 
-        EventdatePipe,
-        GroupnamePipe,
-        SetpwComponent,
-        ContactComponent,
-        CardRedirectComponent,
-        AwaitpasswordLinkComponent,
-        CreditsComponent,
-        PopupzComponent,
-        PopupzorderComponent,
-        PopupzorderStaffComponent,
-        GalabalComponent,
-
-    ],
+    EventDatePipe,
+    GroupnamePipe,
+    SetpwComponent,
+    ContactComponent,
+    CardRedirectComponent,
+    AwaitpasswordLinkComponent,
+    CreditsComponent,
+    PopupzComponent,
+    PopupzorderComponent,
+    PopupzorderStaffComponent,
+    GalabalComponent,
+  ],
   imports: [
-    // https://www.npmjs.com/package/angularx-qrcode
-    // QRCode generator
-    QRCodeModule,
-
-
     BrowserModule,
     PublicHeaderComponent,
     PublicFooterComponent,
@@ -98,28 +100,58 @@ import {NgOptimizedImage} from "@angular/common";
     ToastrModule.forRoot(),
     PartnerGridComponent,
     PromoListComponent,
-    NgOptimizedImage
+    NgOptimizedImage,
+
+    NgxsModule.forRoot([UserState], {
+      developmentMode: isDevMode(),
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot({
+      disabled: !isDevMode(),
+    }),
+    /*NgxsStoragePluginModule.forRoot({
+      key: 'auth.token'
+    })*/
   ],
-    providers: [
-        {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
-        {provide: 'SocialAuthServiceConfig',
-        useValue: {
-          autoLogin: false,
-          providers: [
-            {
-              id: GoogleLoginProvider.PROVIDER_ID,
-              provider: new GoogleLoginProvider('955811433543-a10u2jjmsatmruf7p8cf2d005higk2k5.apps.googleusercontent.com')
-            }
-          ],
-          onError: ({err}: { err: any }) => {
-            console.error(err);
+  providers: [
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: true,
+      }),
+    }, {
+      provide: Sentry.TraceService,
+        deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+        useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('955811433543-a10u2jjmsatmruf7p8cf2d005higk2k5.apps.googleusercontent.com')
           }
-        } as unknown as SocialAuthServiceConfig,
-      }
-    ],
-  exports: [
-    EventdatePipe,
+        ]
+      } as unknown as SocialAuthServiceConfig,
+    },
+    provideClientHydration(),
+    provideHttpClient(withFetch()),
+    SsrCookieService,
   ],
-    bootstrap: [AppComponent]
+  exports: [
+    EventDatePipe,
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule implements NgxsAfterBootstrap {
+  ngxsAfterBootstrap(ctx: StateContext<any>): void {
+    ctx.dispatch(new User.FetchUserDetails());
+  }
+}

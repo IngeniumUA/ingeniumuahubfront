@@ -1,0 +1,37 @@
+<app-layout-public-header />
+
+<main>
+  <div class="ingenium-container h-full">
+    <div class="flex flex-col md:flex-row h-full">
+      <div class="py-16 px-4 mt-0 sm:mt-8 sm:px-6 md:p-0 md:pr-12 col-span-1 md:col-span-2 w-full md:w-1/4 lg:w-1/5">
+        <nav class="vertical-nav vertical-nav-transparent">
+          <a [routerLink]="['/account']" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact: true}">
+            <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            Account
+          </a>
+          <a [routerLink]="['/account/transactions']" routerLinkActive="nav-item-active">
+            <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            Aankopen
+          </a>
+
+          <div *ngIf="(roles$ | async) as roles">
+            <a [routerLink]="['/man']" *ngIf="roles.is_manager">Manager</a>
+            <a [routerLink]="['/web']" *ngIf="roles.is_webmaster">Webmaster</a>
+            <a [routerLink]="['/staff']" *ngIf="roles.is_staff">Staff</a>
+          </div>
+        </nav>
+      </div>
+
+      <div class="flex-1 col-span-1 md:col-span-4 lg:col-span-6 relative white-box-wrapper">
+        <div aria-hidden="true" class="white-box-underlay"></div>
+        <div class="white-box-page-container">
+          <router-outlet />
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

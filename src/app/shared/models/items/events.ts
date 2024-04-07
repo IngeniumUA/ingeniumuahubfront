@@ -1,4 +1,4 @@
-import {ItemI} from "./ItemI";
+import {ItemI} from './ItemI';
 export interface EventItemDetailI {  item: ItemI;
   start_date: string;
   end_date: string;

@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './staff-usefull-q-r.component.html',
   styleUrls: ['./staff-usefull-q-r.component.css']
 })
-export class StaffUsefullQR {
-
-}
+export class StaffUseFullQRComponent {}

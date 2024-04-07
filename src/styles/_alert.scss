@@ -13,6 +13,18 @@
     }
   }
 
+  &.alert-info {
+    @apply bg-blue-50;
+
+    a {
+      @apply font-medium underline text-blue-700 hover:text-blue-600;
+    }
+
+    &.alert-border {
+      @apply border-blue-400;
+    }
+  }
+
   &.alert-border {
     @apply border-l-4;
   }

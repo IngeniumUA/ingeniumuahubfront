@@ -1,0 +1,23 @@
+.vertical-nav {
+  @apply space-y-0.5 bg-gray-50 rounded;
+
+  a {
+    @apply block w-full px-4 py-3 text-blue-900 hover:bg-blue-900 hover:text-white text-sm rounded transition-colors ease-in-out focus-visible:ring-black focus-visible:ring-4 focus:outline-none;
+  }
+
+  &.vertical-nav-transparent {
+    @apply bg-transparent;
+
+    a {
+      @apply text-white hover:bg-white hover:text-blue-900 inline-flex items-center focus-visible:ring-white;
+
+      svg {
+        @apply mr-2 -ml-1 -mt-0.5 h-5 w-5;
+      }
+
+      &.nav-item-active {
+        @apply bg-blue-900 text-white hover:bg-white hover:text-blue-900;
+      }
+    }
+  }
+}

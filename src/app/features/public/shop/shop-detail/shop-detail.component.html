@@ -1,41 +1,36 @@
-<app-layout-public-header></app-layout-public-header>
+<header><app-layout-public-header [light_theme]="true" /></header>
 
-<ng-container *ngIf="{'isMobile': this.isMobile$ | async} as isMobile">
-<section [ngClass]="{'shop-desktop': !isMobile.isMobile}">
+<main class="ingenium-container ingenium-container-no-padding-mobile relative h-full">
+  <ng-container *ngIf="{shopItem: this.shopItem$ | async, error: this.shopError$ | async} as data; ">
+    <ng-container *ngIf="data.shopItem as shop; else loading">
+      <section class="shop-banner">
+        <img src="{{shop.image_landscape}}" alt="Image not working :(">
+      </section>
 
-<ng-container *ngIf="{shopItem: this.shopItem$ | async, error: this.shopError$ | async} as data; ">
-  <ng-container *ngIf="data.shopItem as shop; else loading">
-  <section class="shop-banner">
-    <img src='{{shop.image_landscape}}' alt="Image not working :(">
-  </section>
+      <section class="title-info-section">
+        <h3>{{ shop.item.name }}</h3>
+      </section>
 
-  <section class="title-info-section">
-    <h3>{{ shop.item.name }}</h3>
-  </section>
+      <section>
+        <ng-container *ngFor="let product of (this.products$ | async)">
+          <app-product [onInitValue]="this.GetCurrentProductCount(shop.item, product)" [product]="product"
+                       [primaryColorFull]="(shop.color | colordbrgba: 1)" [primaryColorHalf]="(shop.color | colordbrgba: 0.5)"
+                       (countEvent)="this.SetProductCount(shop.item, product, $event)" />
+        </ng-container>
+      </section>
 
-  <section>
-    <ng-container *ngFor="let product of (this.products$ | async)">
-      <app-product [onInitValue]="this.GetCurrentProductCount(shop.item, product)" [product]="product"
-                   [primaryColorFull]="(shop.color | colordbrgba: 1)" [primaryColorHalf]="(shop.color | colordbrgba: 0.5)"
-                   (countEvent)="this.SetProductCount(shop.item, product, $event)"></app-product>
+      <div class="order-section">
+        <button [disabled]="this.isCartEmpty" class="button button-primary" [routerLink]="['/shop/checkout']">Checkout</button>
+      </div>
+
+      <div class="description-section">
+        <p>{{ shop.item.description }}</p>
+      </div>
     </ng-container>
-  </section>
+  </ng-container>
 
-    <section class="order-section">
-      <button [disabled]="this.isCartEmpty" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
-        <h3>Checkout!</h3>
-      </button>
-    </section>
+  <ng-template #loading>
+    <app-loading-indicator [isLoading]="true" />
+  </ng-template>
+</main>
 
-  <section class="description-section">
-    <p>{{ shop.item.description }}</p>
-  </section>
-</ng-container>
-</ng-container>
-
-</section>
-</ng-container>
-
-<ng-template #loading>
-  Loading ...
-</ng-template>

@@ -16,9 +16,9 @@
       <tr>
         <th>EMAIL</th>
         <td>
-          <ng-container *ngIf="userDetail.prefered_email == '0'">{{ userDetail.email }}</ng-container>
-          <ng-container *ngIf="userDetail.prefered_email == '1'">{{ userDetail.email }}</ng-container>
-          <ng-container *ngIf="userDetail.prefered_email == '2'">{{ userDetail.google_email }}</ng-container>
+          <ng-container *ngIf="userDetail.prefered_email === '0'">{{ userDetail.email }}</ng-container>
+          <ng-container *ngIf="userDetail.prefered_email === '1'">{{ userDetail.email }}</ng-container>
+          <ng-container *ngIf="userDetail.prefered_email === '2'">{{ userDetail.google_email }}</ng-container>
         </td>
       </tr>
       <tr>

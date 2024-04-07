@@ -10,7 +10,7 @@ describe('CantusInfoComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ CantusInfoComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CantusInfoComponent);
     component = fixture.componentInstance;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HubAuthData} from "../../../shared/models/user";
+import {HubAuthData} from '../../../shared/models/user';
 
 const USER_KEY = 'auth-user';
 
@@ -18,7 +18,7 @@ export class StorageService {
   }
 
   public getUser(): HubAuthData | null {
-    const user = JSON.parse(localStorage.getItem('user')!)
+    const user = JSON.parse(localStorage.getItem('user')!);
     if (user) {
       return JSON.parse(user);
     }

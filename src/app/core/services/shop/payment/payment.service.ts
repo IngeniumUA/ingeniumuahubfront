@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {CartService} from "../cart/cart.service";
-import {Observable, of, tap} from "rxjs";
-import {apiEnviroment} from "../../../../../environments/environment";
+import {HttpClient} from '@angular/common/http';
+import {CartService} from '../cart/cart.service';
+import {Observable, tap} from 'rxjs';
+import {apiEnviroment} from '../../../../../environments/environment';
 
 export interface CheckoutIdI {
   checkout_id: string
@@ -18,14 +18,14 @@ export class PaymentService {
               private cartService: CartService) { }
 
   public getCheckoutID(): Observable<CheckoutIdI> {
-    const cart_transactions = this.cartService.getCurrentTransactions()
+    const cart_transactions = this.cartService.getCurrentTransactions();
     const api_transactions = cart_transactions.map((value) => {
-      return {product: value.product, count: value.count}
-    })
+      return {product: value.product, count: value.count};
+    });
 
     // Post transaction to API
-    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + "interact/checkout", api_transactions).pipe(
-      tap(_ => this.cartService.clear())
-    )
+    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + 'interact/checkout', api_transactions).pipe(
+      tap(() => this.cartService.clear())
+    );
   }
 }

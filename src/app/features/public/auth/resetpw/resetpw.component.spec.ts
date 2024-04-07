@@ -10,7 +10,7 @@ describe('AuthResetpwComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ ResetpwComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ResetpwComponent);
     component = fixture.componentInstance;

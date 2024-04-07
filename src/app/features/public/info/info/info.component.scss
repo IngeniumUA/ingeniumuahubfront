@@ -2,20 +2,12 @@ h2 {
   @apply my-2;
 }
 
-.main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    flex-direction: column;
-}
-
 .infosection {
-    background-color: var(--mainblue);
-    color: var(--mainwhite);
-    margin: 1rem;
-    padding: 1.5rem;
-    border-radius: 25px;
+  background-color: var(--mainblue);
+  color: var(--mainwhite);
+  padding: 1.5rem;
+
+  @apply rounded-lg;
 }
 
 .infosection .info {

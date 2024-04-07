@@ -1,80 +1,115 @@
-<section>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h3>Vul je informatie in!</h3>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="voornaam" placeholder="Voornaam" [ngClass]="{ 'is-invalid': submitted && f['voornaam'].errors }"/>
-      </label>
-    </div>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="achternaam" placeholder="Achternaam" [ngClass]="{ 'is-invalid': submitted && f['achternaam'].errors }"/>
-      </label>
-    </div>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="telefoonnummer" placeholder="Telefoonnummer" [ngClass]="{ 'is-invalid': submitted && f['telefoonnummer'].errors }"/>
-      </label>
-    </div>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="gemeente" placeholder="Gemeente" [ngClass]="{ 'is-invalid': submitted && f['gemeente'].errors }"/>
-      </label>
-    </div>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="adres" placeholder="Adres" [ngClass]="{ 'is-invalid': submitted && f['adres'].errors }"/>
-      </label>
-    </div>
-    <div class="account-info-field-wrapper">
-      <label class="hubformfield-blue">
-        <input type="text" formControlName="huisnummer" placeholder="Huisnummer" [ngClass]="{ 'is-invalid': submitted && f['huisnummer'].errors }"/>
-      </label>
-    </div>
+<section class="border-t border-gray-900/10 pt-12">
+  <h2 class="white-section-title">Jouw gegevens</h2>
+  <p>Wijzig hier jouw persoonlijke gegevens.</p>
 
-    <div class="account-info-field-wrapper">
-      <h3>Geïnteresseerd in sport?</h3>
-      <mat-radio-group formControlName="sport_interesse" aria-label="Select an option">
-        <mat-radio-button value=true>Graag!</mat-radio-button>
-        <mat-radio-button value=false>Nee</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="account-info-field-wrapper">
-      <h3>Wil je meer info rond dopen?</h3>
-      <mat-radio-group formControlName="doop_interesse" aria-label="Select an option">
-        <mat-radio-button value=true>Graag!</mat-radio-button>
-        <mat-radio-button value=false>Nee</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="account-info-field-wrapper">
-      <h3>Asftudeerrichting</h3>
-      <mat-radio-group formControlName="afstudeerrichting" aria-label="Select an option">
-        <mat-radio-button value="bouwkunde">Bouwkunde</mat-radio-button>
-        <mat-radio-button value="elektromechanica">Elektromechanica</mat-radio-button>
-        <mat-radio-button value="elektronica_ict">Elektronica-ICT</mat-radio-button>
-        <mat-radio-button value="chemie">Chemie</mat-radio-button>
-        <mat-radio-button value="biochemie">Biochemie</mat-radio-button>
-        <mat-radio-button value="uantwerpen">UAntwerpen</mat-radio-button>
-        <mat-radio-button value="other">Other</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="account-button-wrapper">
-      <button class="hubbutton-blue"
-              [disabled]="this.loading"
-              [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
-        <h3 *ngIf="!this.loading">Submit</h3>
-        <h3 *ngIf="this.loading">Working ...</h3>
-      </button>
-      <div *ngIf="this.form_error != null">
-        <span class="error-message">{{ this.form_error }}</span>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" class="mt-6 w-full space-y-6">
+    <fieldset>
+      <div class="form-field">
+        <label for="email">E-mailadres</label>
+        <input id="email" type="email" readonly disabled [value]="email" />
+        <p class="text-sm text-gray-500 mt-1.5">Je kan je e-mailadres niet wijzigen. Contacteer ons als je dit toch wil aanpassen.</p>
       </div>
-      <div *ngIf="this.success_message != null">
-        <span class="success-message">{{ this.success_message }}</span>
-      </div>
-    </div>
+    </fieldset>
 
+    <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['voornaam'].errors }">
+        <label for="firstName">Voornaam</label>
+        <input id="firstName" type="text" formControlName="voornaam" [attr.aria-invalid]="f['voornaam'].errors !== null" [attr.aria-errormessage]="f['voornaam'].errors !== null ? 'firstName-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['voornaam'].errors" class="field-error-message-list" id="firstName-errors">
+          <li *ngIf="f['voornaam'].errors?.['required']">Voornaam is verplicht</li>
+        </ul>
+      </div>
+
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['achternaam'].errors }">
+        <label for="lastName">Achternaam</label>
+        <input id="lastName" type="text" formControlName="achternaam" [attr.aria-invalid]="f['achternaam'].errors !== null" [attr.aria-errormessage]="f['achternaam'].errors !== null ? 'lastName-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['achternaam'].errors" class="field-error-message-list" id="lastName-errors">
+          <li *ngIf="f['achternaam'].errors?.['required']">Achternaam is verplicht</li>
+        </ul>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['telefoonnummer'].errors }">
+        <label for="phoneNumber">Telefoonnummer</label>
+        <input id="phoneNumber" type="text" formControlName="telefoonnummer" [attr.aria-invalid]="f['telefoonnummer'].errors !== null" [attr.aria-errormessage]="f['telefoonnummer'].errors !== null ? 'phoneNumber-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['telefoonnummer'].errors" class="field-error-message-list" id="phoneNumber-errors">
+          <li *ngIf="f['telefoonnummer'].errors?.['required']">Telefoonnummer is verplicht</li>
+        </ul>
+      </div>
+    </fieldset>
+
+    <fieldset class="grid grid-cols-4 gap-4">
+      <legend class="sr-only">Adres gegevens</legend>
+      <div [ngClass]="{ 'form-field col-span-3': true, 'is-invalid': f['adres'].errors }">
+        <label for="street">Straat</label>
+        <input id="street" type="text" formControlName="adres" [attr.aria-invalid]="f['adres'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'street-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['adres'].errors" class="field-error-message-list" id="street-errors">
+          <li *ngIf="f['adres'].errors?.['required']">Straat is verplicht</li>
+        </ul>
+      </div>
+
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['huisnummer'].errors }">
+        <label for="houseNumber">Huisnummer</label>
+        <input id="houseNumber" type="text" formControlName="huisnummer" [attr.aria-invalid]="f['huisnummer'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'houseNumber-Errors' : ''"  />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['huisnummer'].errors" class="field-error-message-list" id="houseNumber-errors">
+          <li *ngIf="f['huisnummer'].errors?.['required']">Huisnummer is verplicht</li>
+        </ul>
+      </div>
+
+      <div [ngClass]="{ 'form-field col-span-4': true, 'is-invalid': f['gemeente'].errors }">
+        <label for="municipality">Gemeente</label>
+        <input id="municipality" type="text" formControlName="gemeente" [attr.aria-invalid]="f['gemeente'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'municipality-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['gemeente'].errors" class="field-error-message-list" id="municipality-errors">
+          <li *ngIf="f['gemeente'].errors?.['required']">Gemeente is verplicht</li>
+        </ul>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend class="sr-only">School gegevens</legend>
+
+      <div [ngClass]="{ 'form-field col-span-4': true, 'is-invalid': f['afstudeerrichting'].errors }">
+        <label for="graduationTracts">Afstudeerrichting</label>
+        <select id="graduationTracts" formControlName="afstudeerrichting"  [attr.aria-invalid]="f['afstudeerrichting'].errors !== null" [attr.aria-errormessage]="f['afstudeerrichting'].errors !== null ? 'graduationTracts-Errors' : ''" >
+          <option *ngFor="let item of graduationTracts | keyvalue" [ngValue]="item.key">{{ item.value }}</option>
+        </select>
+
+        <!-- Error messages -->
+        <ul *ngIf="f['afstudeerrichting'].errors" class="field-error-message-list" id="graduationTracts-errors">
+          <li *ngIf="f['afstudeerrichting'].errors?.['required']">Afstudeerrichting is verplicht</li>
+        </ul>
+      </div>
+    </fieldset>
+
+    <fieldset class="grid space-y-1.5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+      <legend>Jouw interesses</legend>
+
+      <div class="form-field form-field-checkbox">
+        <input id="sportInterestCheckbox" type="checkbox" formControlName="sport_interesse">
+        <label for="sportInterestCheckbox">Ik wil graag meer weten over sport</label>
+      </div>
+
+      <div class="form-field form-field-checkbox">
+        <input id="baptismInterestCheckbox" type="checkbox" formControlName="doop_interesse">
+        <label for="baptismInterestCheckbox">Ik wil graag meer weten over dopen</label>
+      </div>
+    </fieldset>
+
+    <div class="form-field text-right">
+      <button type="submit" class="button button-danger" [disabled]="form.invalid || loading">Opslaan</button>
+    </div>
   </form>
 </section>
