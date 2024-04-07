@@ -90,8 +90,16 @@ h4 {
 .white-section-title {
   @apply font-semibold leading-7 text-gray-900;
 
+  &.white-section-title-large {
+    @apply text-2xl;
+  }
+
+  &.white-section-title-blue {
+    @apply text-blue-900;
+  }
+
   & + p {
-    @apply mt-1 text-sm leading-6 text-gray-600;
+    @apply mt-1 text-sm leading-6 text-gray-600 mb-6;
   }
 }
 
@@ -101,6 +109,15 @@ a {
 
 span {
   color: var(--mainblue)
+}
+
+// Ingenium Container
+.ingenium-container {
+  @apply p-5 md:px-0 mx-auto container;
+
+  &.ingenium-container-no-padding-mobile {
+    @apply p-0 py-5;
+  }
 }
 
 /* Button */

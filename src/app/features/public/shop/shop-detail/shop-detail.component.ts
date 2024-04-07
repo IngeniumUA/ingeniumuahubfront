@@ -10,7 +10,7 @@ import {IProductItem} from '../../../../shared/models/items/products/products';
 import {ItemI} from '../../../../shared/models/items/ItemI';
 
 @Component({
-  selector: 'app-shop-detail',
+  selector: 'app-page',
   templateUrl: './shop-detail.component.html',
   styleUrls: ['./shop-detail.component.css']
 })

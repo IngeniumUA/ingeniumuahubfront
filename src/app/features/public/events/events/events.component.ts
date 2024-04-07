@@ -7,12 +7,11 @@ import {RecSysPreviewI} from '../../../../shared/models/items/recsys_interfaces'
 @Component({
   selector: 'app-page',
   templateUrl: './events.component.html',
-  styleUrls: ['./events.component.css']
+  styleUrls: ['./events.component.scss']
 })
 export class EventsComponent {
   events$: Observable<RecSysPreviewI[]> = this.eventService.getEventsList();
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  constructor(private eventService: EventService,
-              private layoutService: LayoutService) {
-  }
+
+  constructor(private eventService: EventService, private layoutService: LayoutService) {}
 }

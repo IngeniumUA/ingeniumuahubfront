@@ -1,60 +1,58 @@
-<app-layout-public-header [light_theme]="true"></app-layout-public-header>
+<header><app-layout-public-header [light_theme]="true" /></header>
 
-<ng-container *ngIf="{'isMobile': this.isMobile$ | async} as isMobile">
+<main class="ingenium-container ingenium-container-no-padding-mobile">
+  <section>
+    <ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
+      <ng-container *ngIf="data.event as event; else loading">
+        <section class="event-banner">
+          <img src='{{event.image_landscape}}' alt="" aria-hidden="true">
+        </section>
 
-<section [ngClass]="{'event-desktop': !isMobile.isMobile}">
-  <ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
-    <ng-container *ngIf="data.event as event; else loading">
-  <section class="event-banner">
-    <img src='{{event.image_landscape}}' alt="Image not working :(">
-  </section>
+        <nav role="tablist" class="categorie-section" [ngStyle]="{'background-color': (event.color | colordbrgba: 1) }">
+          <button class="categorie-button"
+                  *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
+                  (click)="this.SetProductCategorie(i)"
+                  [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': (event.color | colordbrgba: 1)}"
+          >{{ product_categorie.categorie_name }}</button>
+        </nav>
 
-  <nav role="tablist" class="categorie-section" [ngStyle]="{'background-color': (event.color | colordbrgba: 1) }">
-    <button class="categorie-button"
-         *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
-         (click)="this.SetProductCategorie(i)"
-         [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': (event.color | colordbrgba: 1)}"
-    >{{ product_categorie.categorie_name }}</button>
-  </nav>
+        <section class="title-info-section">
+          <h3>{{ event.item.name }}</h3>
+          <p>{{ event.start_date | date:'d MMMM' }}</p>
+        </section>
 
-  <section class="title-info-section">
-    <h3>{{ event.item.name }}</h3>
-    <p>{{ event.start_date | date:'d MMMM' }}</p>
-  </section>
+        <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie else noProducts">
+          <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
+            <h3>{{ product_group.group_name }}</h3>
+            <div class="products">
+              <ng-container *ngFor="let product of this.product_group.products">
+                <app-product [onInitValue]="this.GetCurrentProductCount(event.item, product)"
+                             [product]="product"
+                             [primaryColorFull]="(event.color | colordbrgba: 1)"
+                             [primaryColorHalf]="(event.color | colordbrgba: 0.5)"
+                             [itemId]="this.eventId"
+                             (countEvent)="this.SetProductCount(event.item, product, $event)" />
+              </ng-container>
+            </div>
+          </div>
+        </section>
 
-  <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie else noProducts">
-    <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
-      <h3>{{ product_group.group_name }}</h3>
-      <div class="products">
-        <ng-container *ngFor="let product of this.product_group.products">
-        <app-product [onInitValue]="this.GetCurrentProductCount(event.item, product)"
-                     [product]="product"
-                     [primaryColorFull]="(event.color | colordbrgba: 1)"
-                     [primaryColorHalf]="(event.color | colordbrgba: 0.5)"
-                     [itemId]="this.eventId"
-                     (countEvent)="this.SetProductCount(event.item, product, $event)"></app-product>
-        </ng-container>
-      </div>
-    </div>
-  </section>
+        <div class="order-section flex flex-row gap-3">
+          <button [disabled]="this.isCartEmpty" class="button button-primary" [routerLink]="['/shop/checkout']">Checkout</button>
+        </div>
 
-  <section class="order-section flex flex-row gap-3">
-    <button [disabled]="this.isCartEmpty" class="hubbutton-blue" [routerLink]="['/shop/checkout']">
-      <h3>Checkout!</h3>
-    </button>
-  </section>
-
-  <section class="description-section">
-    <p class="text-blue-900">{{ event.item.description }}</p>
-  </section>
+        <div class="description-section">
+          <p class="text-blue-900">{{ event.item.description }}</p>
+        </div>
+      </ng-container>
     </ng-container>
-  </ng-container>
-</section>
-</ng-container>
-<ng-template #loading>
-  Loading ...
-</ng-template>
+  </section>
 
-<ng-template #noProducts>
-  <p class="text-blue-900 font-bold">Nog geen producten om weer te geven!</p>
-</ng-template>
+  <ng-template #loading>
+    Loading ...
+  </ng-template>
+
+  <ng-template #noProducts>
+    <p class="text-blue-900 font-bold">Nog geen producten om weer te geven!</p>
+  </ng-template>
+</main>

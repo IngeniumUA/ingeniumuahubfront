@@ -13,9 +13,9 @@ import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/produ
 
 
 @Component({
-  selector: 'app-event',
+  selector: 'app-page',
   templateUrl: './event-detail.component.html',
-  styleUrls: ['./event-detail.component.css']
+  styleUrls: ['./event-detail.component.scss']
 })
 export class EventDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,

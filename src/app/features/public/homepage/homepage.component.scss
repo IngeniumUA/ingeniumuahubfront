@@ -25,7 +25,7 @@ section {
 /* Hero */
 .hero {
   @apply w-full m-0 p-0 relative flex flex-col;
-  height: 90vh;
+  height: 80vh;
 
 
   picture {
@@ -44,7 +44,7 @@ section {
   }
 
   .hero-content {
-    @apply flex-1 flex flex-col justify-end pl-4 pb-4 md:pl-8 md:pb-8;
+    @apply flex-1 flex flex-col justify-end;
   }
 
   h1 {
@@ -70,9 +70,6 @@ section {
 .info-card-section {
   box-sizing: border-box;
   width: 100%;
-  padding: 1.5rem;
-  padding-bottom: 2rem;
-  gap: 1rem;
 
   display: flex;
   flex-wrap: wrap;
@@ -113,6 +110,10 @@ section {
   a {
     color: var(--mainwhite);
   }
+}
+
+main {
+  @apply bg-blue-950;
 }
 
 .image-wrapper {
@@ -286,7 +287,6 @@ section {
 }
 
 @media only screen and (min-width: 768px) {
-
   .homepage-card p {
     display: block;
   }
