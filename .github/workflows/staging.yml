@@ -4,14 +4,11 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     environment: Staging
-    permissions:
-      contents: read
-      deployments: write
 
     name: Publish to Cloudflare Pages - Staging
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js
         uses: actions/setup-node@v4
