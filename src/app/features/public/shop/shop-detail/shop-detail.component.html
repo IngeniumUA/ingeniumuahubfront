@@ -1,6 +1,6 @@
 <header><app-layout-public-header [light_theme]="true" /></header>
 
-<main class="ingenium-container ingenium-container-no-padding-mobile">
+<main class="ingenium-container ingenium-container-no-padding-mobile relative h-full">
   <ng-container *ngIf="{shopItem: this.shopItem$ | async, error: this.shopError$ | async} as data; ">
     <ng-container *ngIf="data.shopItem as shop; else loading">
       <section class="shop-banner">
@@ -30,7 +30,7 @@
   </ng-container>
 
   <ng-template #loading>
-    Loading ...
+    <app-loading-indicator [isLoading]="true" />
   </ng-template>
 </main>
 

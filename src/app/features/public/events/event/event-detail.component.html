@@ -1,6 +1,6 @@
 <header><app-layout-public-header [light_theme]="true" /></header>
 
-<main class="ingenium-container ingenium-container-no-padding-mobile">
+<main class="ingenium-container ingenium-container-no-padding-mobile relative h-full">
   <section>
     <ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
       <ng-container *ngIf="data.event as event; else loading">
@@ -49,7 +49,7 @@
   </section>
 
   <ng-template #loading>
-    Loading ...
+    <app-loading-indicator [isLoading]="true" />
   </ng-template>
 
   <ng-template #noProducts>

@@ -23,6 +23,7 @@ import {
   CheckoutDisplayComponent
 } from '../../../shared/components/account/checkout-display/checkout-display.component';
 import { CheckoutConfirmComponent } from './checkout-confirm/checkout-confirm.component';
+import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading-indicator/loading-indicator.component";
 
 
 @NgModule({
@@ -34,19 +35,20 @@ import { CheckoutConfirmComponent } from './checkout-confirm/checkout-confirm.co
     StripePaymentComponent,
     CheckoutConfirmComponent,
   ],
-  imports: [
-    CommonModule,
-    NgxStripeModule.forRoot('pk_live_nJtVFe7oRy6CCy9EEK8OKeFu'),
-    ShopRoutingModule,
-    ShoppingcartListComponent,
-    PublicHeaderComponent,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    UnderConstructionComponent,
-    RecSysItemPreviewComponent,
-    ProductComponent,
-    ColordbrgbaPipe,
-    CheckoutDisplayComponent,
-  ]
+    imports: [
+        CommonModule,
+        NgxStripeModule.forRoot('pk_live_nJtVFe7oRy6CCy9EEK8OKeFu'),
+        ShopRoutingModule,
+        ShoppingcartListComponent,
+        PublicHeaderComponent,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        UnderConstructionComponent,
+        RecSysItemPreviewComponent,
+        ProductComponent,
+        ColordbrgbaPipe,
+        CheckoutDisplayComponent,
+        LoadingIndicatorComponent,
+    ]
 })
 export class ShopModule { }

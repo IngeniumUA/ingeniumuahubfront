@@ -11,17 +11,19 @@ import {ColordbrgbaPipe} from '../../../shared/pipes/item/colorpipe.pipe';
 import {
   RecSysItemPreviewComponent
 } from '../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
+import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading-indicator/loading-indicator.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    EventRoutingModule,
-    ProductComponent,
-    PublicHeaderComponent,
-    ColordbrgbaPipe,
-    RecSysItemPreviewComponent
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        EventRoutingModule,
+        ProductComponent,
+        PublicHeaderComponent,
+        ColordbrgbaPipe,
+        RecSysItemPreviewComponent,
+        LoadingIndicatorComponent
+    ],
   declarations: [
     EventsComponent,
     EventDetailComponent,

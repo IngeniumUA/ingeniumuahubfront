@@ -1,20 +1,18 @@
 <app-layout-public-header [light_theme]="true" />
 
 <main class="ingenium-container">
-  <div class="p-5 mx-auto container">
-    <h1 class="white-section-title white-section-title-blue white-section-title-large">Shop</h1>
-    <p>Hier kan je de producten van Ingenium bekijken en bestellen.</p>
+  <h1 class="white-section-title white-section-title-blue white-section-title-large">Shop</h1>
+  <p>Hier kan je de producten van Ingenium bekijken en bestellen.</p>
 
-    <section *ngIf="this.shopitems$ | async as shopItems; else noShopItems">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" *ngIf="shopItems.length > 0">
-        <app-rec-sys-item-preview [recsysItem]="item" *ngFor="let item of shopItems" />
-      </div>
-    </section>
+  <section *ngIf="this.shopitems$ | async as shopItems; else noShopItems">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" *ngIf="shopItems.length > 0">
+      <app-rec-sys-item-preview [recsysItem]="item" *ngFor="let item of shopItems" />
+    </div>
+  </section>
 
-    <ng-template #noShopItems>
-      <div class="alert alert-info alert-border">
-        <p class="text-sm text-blue-700">Er staat momenteel geen producten online</p>
-      </div>
-    </ng-template>
-  </div>
+  <ng-template #noShopItems>
+    <div class="alert alert-info alert-border">
+      <p class="text-sm text-blue-700">Er staat momenteel geen producten online</p>
+    </div>
+  </ng-template>
 </main>
