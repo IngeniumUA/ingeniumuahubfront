@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, of, Subject, takeUntil} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {FormControl} from '@angular/forms';
 import {PraesidiumGroupI} from "@ingenium/app/shared/models/praesidium";
 

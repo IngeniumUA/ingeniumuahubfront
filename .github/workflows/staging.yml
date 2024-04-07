@@ -1,0 +1,40 @@
+on: [push]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: Staging
+    permissions:
+      contents: read
+      deployments: write
+
+    name: Publish to Cloudflare Pages - Staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linter
+        run: npm run test
+
+      - name: Build
+        run: npm run build:staging
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: dist/ingeniumuahubfront/browser
+          # Optional: Enable this if you want to have GitHub Deployments triggered
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          wranglerVersion: '3'
