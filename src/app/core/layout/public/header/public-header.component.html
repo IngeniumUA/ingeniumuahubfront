@@ -1,6 +1,6 @@
 <nav [ngClass]="{
   'nav-transparent-background': !this.background,
-  'nav-light': this.background && this.light_theme,
+  'nav-white': this.background && this.light_theme,
   'nav-dark': this.background && !this.light_theme,
   }">
   <div class="px-2 sm:px-6 lg:px-8">
@@ -39,14 +39,13 @@
         <!-- DESKTOP MENU -->
         <div class="desktop-nav">
           <div class="flex space-x-4">
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
             <a routerLink="/" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">Home</a>
             <a routerLink="/events" routerLinkActive="nav-item-active" class="nav-item">Events</a>
 
             <!-- INFO DROPDOWN -->
             <div class="relative">
               <button (click)="setInfoDropdown(!infoDropdownOpen)" [attr.aria-expanded]="infoDropdownOpen" type="button" class="nav-item flex items-center" aria-expanded="false" aria-haspopup="true" id="info-menu-button">
-                Info <span aria-hidden="true" class="text-white ml-2 text-xs">&#9660;</span>
+                Info <span aria-hidden="true" class="text-inherit ml-2 text-xs">&#9660;</span>
               </button>
 
               <div *ngIf="infoDropdownOpen" class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="info-menu-button" tabindex="-1">
@@ -104,7 +103,6 @@
   <!-- Mobile menu -->
   <div class="mobile-nav" *ngIf="mobileMenuOpen">
     <div class="space-y-1 px-2 pb-3 pt-2">
-      <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
       <a routerLink="/" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">Home</a>
       <a routerLink="/events" routerLinkActive="nav-item-active" class="nav-item">Events</a>
       <a routerLink="/shop" routerLinkActive="nav-item-active" class="nav-item">Shop</a>
