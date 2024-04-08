@@ -13,4 +13,4 @@ export interface StaffCardDetailI {
 export const CardTypes: string[] = [
   'lid',
   'steunend'
-]
+];

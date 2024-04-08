@@ -1,8 +1,8 @@
 <section>
   <ng-container *ngFor="let partnerItem of partners | async">
     <div class="partner-card">
-      <div class="partner-logo-wrapper">
-        <img src="{{ partnerItem.logo }}">
+      <div class="partner-logo-wrapper" aria-hidden="true">
+        <img src="{{ partnerItem.logo }}" loading="lazy"  alt="">
       </div>
       <h3>{{ partnerItem.name }}</h3>
     </div>

@@ -1,31 +1,36 @@
-<div class="lidkaart-card">
-  <ng-container *ngIf="this.card as card else nocard">
-    <div class="lidkaart-wrapper">
-      <img src="{{ card.card_image }}" alt="card">
-    </div>
-    <p>{{ card.card_nr }}</p>
-  </ng-container>
-  <span *ngIf="failed_notification != null" class="error-message">{{ failed_notification }}</span>
-  <span *ngIf="success_notification != null" class="success-message">{{ success_notification}}</span>
-</div>
+<section class="pb-10">
+  <h2 class="white-section-title">Jouw lidkaart</h2>
+  <p>Met je lidkaart krijg je toegang tot alle voordelen van onze vereniging. Heb je nog geen lidkaart? Koop er dan snel eentje!</p>
 
-<ng-template #nocard>
-  <ng-container *ngIf="this.is_lid else buycard">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <h4>Vul je code in:</h4>
+  <div class="lidkaart-card">
+    <ng-container *ngIf="this.card as card else nocard">
+      <div class="lidkaart-wrapper">
+        <img src="{{ card.card_image }}" alt="card">
+      </div>
+      <p>{{ card.card_nr }}</p>
+    </ng-container>
+    <span *ngIf="failed_notification !== null" class="error-message">{{ failed_notification }}</span>
+    <span *ngIf="success_notification !== null" class="success-message">{{ success_notification}}</span>
+  </div>
+
+  <ng-template #nocard>
+    <ng-container *ngIf="this.is_lid else buycard">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <h4>Vul je code in:</h4>
         <label class="hubformfield-white">
           <input type="text" formControlName="uuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" [ngClass]="{ 'is-invalid': submitted && f['uuid'].errors }"/>
         </label>
-      <h4>Of scan de achterkant<br>van je lidkaart!</h4>
-      <h4 (click)="this.onSubmit()">Submit</h4>
-    </form>
-  </ng-container>
+        <h4>Of scan de achterkant<br>van je lidkaart!</h4>
+        <button type="submit" (click)="this.onSubmit()">Submit</button>
+      </form>
+    </ng-container>
 
-</ng-template>
+  </ng-template>
 
-<ng-template #buycard>
-  <div class="lidkaart-wrapper">
-    <h4>Je bent nog geen lid!</h4>
-    <h4>Grote fout :o</h4>
-  </div>
-</ng-template>
+  <ng-template #buycard>
+    <div class="lidkaart-wrapper">
+      <h4>Je bent nog geen lid!</h4>
+      <h4>Grote fout :o</h4>
+    </div>
+  </ng-template>
+</section>

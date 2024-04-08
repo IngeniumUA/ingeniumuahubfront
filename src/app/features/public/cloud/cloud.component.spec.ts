@@ -10,7 +10,7 @@ describe('CloudComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ CloudComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CloudComponent);
     component = fixture.componentInstance;

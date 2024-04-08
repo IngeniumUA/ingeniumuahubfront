@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { interval, mergeMap } from 'rxjs';
-import { apiEnviroment } from "../../../../../environments/environment";
+import { apiEnviroment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-popupzorder',
   templateUrl: './popupzorder.component.html',
   styleUrls: ['./popupzorder.component.css']
 })
-export class PopupzorderComponent {
+export class PopupzorderComponent implements OnInit {
   orders: any[] = [];
 
   constructor(private httpService: HttpClient) {}
@@ -16,7 +16,7 @@ export class PopupzorderComponent {
   ngOnInit() {
     interval(5000)
       .pipe(
-          mergeMap(() => this.httpService.get<any[]>(apiEnviroment.apiUrl + "popup/cache/order_progress"))
+        mergeMap(() => this.httpService.get<any[]>(apiEnviroment.apiUrl + 'popup/cache/order_progress'))
       )
       .subscribe((data) => {
         this.orders = data;

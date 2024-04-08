@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {StaffProductBlueprintService} from "../../../../../core/services/staff/staff-productblueprint-service";
-import {first} from "rxjs/operators";
-import {DatePipe, NgIf, NgStyle} from "@angular/common";
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {StaffProductBlueprintService} from '../../../../../core/services/staff/staff-productblueprint-service';
+import {first} from 'rxjs/operators';
+import {DatePipe, NgIf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-product-blueprint-create',
@@ -18,9 +18,9 @@ import {DatePipe, NgIf, NgStyle} from "@angular/common";
 })
 export class ProductBlueprintCreateComponent {
 
-  @Output() ToggleCreating = new EventEmitter<boolean>()
-  @Output() FinishedCreating = new EventEmitter<boolean>()
-  @Input() originItem!: string
+  @Output() ToggleCreating = new EventEmitter<boolean>();
+  @Output() FinishedCreating = new EventEmitter<boolean>();
+  @Input() originItem!: string;
 
   constructor(private formBuilder: FormBuilder,
               private staffProductService: StaffProductBlueprintService) {
@@ -33,16 +33,16 @@ export class ProductBlueprintCreateComponent {
     max_individual: [0, [Validators.required, Validators.min(1)]],
     max_per_checkout: [0, [Validators.required, Validators.min(1)]],
     ordering: [0, [Validators.required]],
-  })
+  });
   form_error: string | null = null;
-  loading: boolean = false
+  loading: boolean = false;
 
   get f() { return this.productBlueprintForm.controls; }
 
   onSubmit() {
     // Check if valid guardclause
     if (this.productBlueprintForm.invalid) {
-      const error: Error = Error("Clientside invalid form");
+      const error: Error = Error('Clientside invalid form');
       this.handleFormError(error);
       return;  }
 
@@ -60,18 +60,18 @@ export class ProductBlueprintCreateComponent {
       ordering: this.productBlueprintForm.controls['ordering'].value,
 
       product_meta: null,
-    }
+    };
 
     this.staffProductService.post(product).pipe(
-        first()).subscribe({
+      first()).subscribe({
       next: () => {
-        this.FinishedCreating.emit(true)
+        this.FinishedCreating.emit(true);
       },
       error: error => {
         this.loading = false;
         this.handleFormError(error);
       }
-    })
+    });
   }
 
   handleFormError(err: Error) {

@@ -19,6 +19,18 @@
     &:hover {
       @apply border-blue-950 bg-blue-950;
     }
+
+    &.button-accessibility-white {
+      @apply focus:outline-white;
+    }
+
+    * {
+      @apply text-white;
+    }
+
+    &:disabled {
+      @apply hover:bg-blue-900;
+    }
   }
 
   &.button-danger {
@@ -26,6 +38,10 @@
 
     &:hover {
       @apply border-red-950 bg-red-950;
+    }
+
+    &:disabled {
+      @apply hover:bg-red-900;
     }
   }
 
@@ -37,10 +53,27 @@
     }
   }
 
-  svg {
-    @apply ml-3 -mr-1 -mt-0.5 h-5 w-5;
+  &.button-outline-blue {
+    @apply border-blue-900 text-blue-900 bg-transparent;
+
+    &:hover {
+      @apply bg-blue-900 text-white;
+    }
   }
 
+  &:not(.button-icon-only) {
+    svg {
+      @apply ml-3 -mr-1 -mt-0.5 h-5 w-5;
+    }
+  }
+
+  &.button-full {
+    @apply w-full text-center justify-center;
+  }
+
+  &:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
 }
 
 .button-group {

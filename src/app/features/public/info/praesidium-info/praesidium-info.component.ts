@@ -1,30 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, of, Subject, takeUntil} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {FormControl} from "@angular/forms";
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, of, Subject, takeUntil} from 'rxjs';
+import {FormControl} from '@angular/forms';
+import {PraesidiumGroupI} from "@ingenium/app/shared/models/praesidium";
 
-interface PraesidiumButtonI {
-  text: string
-  url: string
-}
-
-interface PraesidiumDisplayI {
-  name: string
-  functie: string
-  image: string
-}
-interface PraesidiumCategorieI {
-  categorieName: string
-  categorieDescription: string
-  praesidia: PraesidiumDisplayI[]
-  button: PraesidiumButtonI
-}
-interface PraesidiumGroupI {
-  groupName: string
-  groupDescription: string
-  categories: PraesidiumCategorieI[]
-}
+import praesidium from "@ingenium/app/shared/data/praesidium";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-praesidium-info',
@@ -34,25 +15,26 @@ interface PraesidiumGroupI {
 export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private httpClient: HttpClient) {}
+              private titleService: Title) {}
 
   yearControl = new FormControl<string>('');
   validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19']; // Put newest year first
-  praesidium$: Observable<PraesidiumGroupI[]> = of([])
+  praesidium$: Observable<PraesidiumGroupI[]> = of([]);
 
   ngOnInit() {
     // Fetch ID
     const year: string = this.route.snapshot.paramMap.get('year') || this.validYears[0];
     this.yearControl.patchValue(year);
     this.SetupYear(year);
+    this.titleService.setTitle(`Praesidium ${year}`);
 
     // Event for form changeing
     this.yearControl.valueChanges.pipe(
-        takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
-      ).subscribe(selectedValue => {
-        if (selectedValue === null) return;
-        this.router.navigateByUrl(`/info/praesidium/${selectedValue}`).then(() => {});
-      }
+      takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
+    ).subscribe(selectedValue => {
+      if (selectedValue === null) return;
+      this.router.navigateByUrl(`/info/praesidium/${selectedValue}`).then(() => {});
+    }
     );
 
     // Start a watcher for the route parameter
@@ -71,7 +53,8 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.praesidium$ = this.httpClient.get<PraesidiumGroupI[]>( `/assets/praesidium_files/praesidium_${year}.json`);
+    // @ts-expect-error there isn't a type for this. I might change this later and thus am too lazy right now
+    this.praesidium$ = of(praesidium[year]);
   }
 
   private ngUnsubscribe = new Subject<void>();

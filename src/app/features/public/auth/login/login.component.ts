@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {afterNextRender, Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import {AuthService} from "../../../../core/services/user/auth/auth.service";
-import {SocialAuthService} from "@abacritt/angularx-social-login";
-import {HttpErrorResponse} from "@angular/common/http";
+import {SocialAuthService} from '@abacritt/angularx-social-login';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Store} from "@ngxs/store";
+import {User} from "@ingenium/app/core/store";
 
 @Component({
   selector: 'app-login',
@@ -17,46 +18,45 @@ export class LoginComponent implements OnInit {
   loading = false;
   submitted = false;
   form_error: string | null = null;
-  embeddedBrowser: boolean = false
+  embeddedBrowser: boolean = false;
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService,
+              private store: Store,
               private socialAuthService: SocialAuthService,
-              ) { }
-  loginHint: string | null = null
-  ngOnInit() {
-    if (this.authService.userValue) {
-      const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-      this.router.navigateByUrl(returnUrl);
-    }
+  ) {
+    afterNextRender(() => {
+      // Setting up Google auth
+      this.SetupGoogleAuth();
 
+      // Facebook browser check
+      const userAgent = window.navigator.userAgent;
+      this.embeddedBrowser = (userAgent.indexOf('FBAN') > -1) ||
+        (userAgent.indexOf('FBAV') > -1) ||
+        (userAgent.indexOf('Instagram') > -1);
+
+      // Loginhint
+      this.SetupLoginHint();
+    });
+  }
+
+  loginHint: string | null = null;
+
+  ngOnInit() {
     // Setting up form
     this.form = this.formBuilder.group({
       email: ['', Validators.email],
       password: ['', Validators.required]
-    })
-
-    // Setting up Google auth
-    this.SetupGoogleAuth()
-
-    // Facebook browser check
-    const userAgent = window.navigator.userAgent;
-    this.embeddedBrowser = (userAgent.indexOf("FBAN") > -1) ||
-                           (userAgent.indexOf("FBAV") > -1) ||
-                           (userAgent.indexOf("Instagram") > -1);
-
-    // Loginhint
-    this.SetupLoginHint()
+    });
   }
 
   SetupLoginHint() {
     const returnUrl: string = this.route.snapshot.queryParams['next'] || null;
     if (returnUrl === null) {
-      return
+      return;
     }
     if (returnUrl.includes('cloud')) {
-      this.loginHint = "De cloud is gratis!\nJe moet enkel even inloggen om er gebruik van te maken."
+      this.loginHint = 'De cloud is gratis!\nJe moet enkel even inloggen om er gebruik van te maken.';
     }
   }
 
@@ -67,17 +67,18 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      const error: Error = Error("Ongeldige email or password");
+      const error: Error = Error('Ongeldige email or password');
       this.handleFormError(error);
       return;
     }
     if (this.loading) {
-      return
+      return;
     }
 
     this.loading = true;
-    this.authService.login(this.form.controls['email'].value, this.form.controls['password'].value).pipe(
-      first()).subscribe({
+    this.store.dispatch(new User.LoginUser(this.form.controls['email'].value, this.form.controls['password'].value))
+      .pipe(first())
+      .subscribe({
         next: () => {
           // get return url from query parameters ( so, ?next='' in the url), else default to home page
           const returnUrl = this.route.snapshot.queryParams['next'] || '/';
@@ -87,7 +88,7 @@ export class LoginComponent implements OnInit {
           this.loading = false;
           this.handleFormError(error);
         }
-    })
+      });
   }
 
   handleFormError(err: Error) {
@@ -100,49 +101,42 @@ export class LoginComponent implements OnInit {
 
       // 401_INVALID_CREDENTIALS is thrown in most of the cases
       if (err.status == 401) {
-        this.form_error = "Ongeldige email en password combinatie";
+        this.form_error = 'Ongeldige email en password combinatie';
         return;
       }
 
       // 404_NOT_FOUND is thrown bij niet gevonden email
       if (err.status == 404) {
-        this.form_error = "Ongeldige email en password combinatie";
+        this.form_error = 'Ongeldige email en password combinatie';
         return;
       }
 
       // 500_INTERNAL_SERVER_ERROR should never happen.
       if (err.status == 500) {
-        this.form_error = "Interne fout! Probeer het later opnieuw.";
+        this.form_error = 'Interne fout! Probeer het later opnieuw.';
         return;
       }
 
     }
-    this.form_error = "Er ging iets fout!";
+    this.form_error = 'Er ging iets fout!';
   }
 
   /* Google Authentication */
   SetupGoogleAuth() {
     this.socialAuthService.authState.subscribe((user) => {
-          this.authService.google_login(user.idToken).pipe(
-              first()).subscribe({
-            next: () => {
-              // get return url from query parameters ( so, ?next='' in the url), else default to home page
-              const returnUrl = this.route.snapshot.queryParams['next'] || '/';
-              this.router.navigateByUrl(returnUrl);
-            },
-            error: error => {
-              this.loading = false;
-              this.handleFormError(error);
-            }
-          })
-        }
-    )
-  }
-
-  /* UAntwerpen Authentication */
-  loginUAntwerp() {
-    const error: Error = Error("Da zou mooi zijn ofni");
-    this.handleFormError(error);
-    return;
+      this.store.dispatch(new User.GoogleLogin(user.idToken))
+        .pipe(first())
+        .subscribe({
+          next: () => {
+            // get return url from query parameters ( so, ?next='' in the url), else default to home page
+            const returnUrl = this.route.snapshot.queryParams['next'] || '/';
+            this.router.navigateByUrl(returnUrl);
+          },
+          error: error => {
+            this.loading = false;
+            this.handleFormError(error);
+          }
+        });
+    });
   }
 }

@@ -10,7 +10,7 @@ describe('RecsysComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ RecSysFormComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(RecSysFormComponent);
     component = fixture.componentInstance;

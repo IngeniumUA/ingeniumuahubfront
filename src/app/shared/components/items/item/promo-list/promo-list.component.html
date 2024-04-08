@@ -1,12 +1,4 @@
 <section>
-    <h1 class="text-white">
-    <ng-container *ngIf="this.promoType !== null">
-        {{ this.promoType.substring(0, 1).toUpperCase() }}{{ this.promoType.substring(1) }}s
-    </ng-container>
-    <ng-container *ngIf="this.promoType === null">
-        Promo Item
-    </ng-container>
-    </h1>
     <div class="promo-list" *ngIf="(recsysItems$ | async) as recsysItems else loading">
         <ng-container *ngFor="let recsysItem of recsysItems">
             <ng-container *ngIf="recsysItems.length > 0 else noItem">

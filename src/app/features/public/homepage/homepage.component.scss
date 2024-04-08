@@ -21,18 +21,30 @@ section {
   justify-content: center;
 }
 
+
 /* Hero */
-#hero-section {
-  @apply w-full m-0 p-0 relative;
-  height: 90vh;
+.hero {
+  @apply w-full m-0 p-0 relative flex flex-col;
+  height: 80vh;
 
-  background-color: var(--mainblue);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
 
-  div {
-    @apply absolute w-full md:w-1/2 left-0 bottom-0 pl-4 pb-4 md:pl-8 md:pb-8;
+  picture {
+    @apply absolute w-full h-full top-0 left-0;
+
+    img {
+      @apply w-full h-full object-cover object-center;
+    }
+  }
+
+  .hero-wrapper {
+    @apply flex-1 flex flex-col z-10;
+
+    background-color: var(--mainblue); // Fall back for browsers that don't support background-blend-mode
+    background: linear-gradient(to bottom, rgba(0, 5, 61, 0.6), rgba(0, 5, 61, 0.6) 80%, rgba(0, 5, 61, 1));
+  }
+
+  .hero-content {
+    @apply flex-1 flex flex-col justify-end;
   }
 
   h1 {
@@ -58,9 +70,6 @@ section {
 .info-card-section {
   box-sizing: border-box;
   width: 100%;
-  padding: 1.5rem;
-  padding-bottom: 2rem;
-  gap: 1rem;
 
   display: flex;
   flex-wrap: wrap;
@@ -101,6 +110,10 @@ section {
   a {
     color: var(--mainwhite);
   }
+}
+
+main {
+  @apply bg-blue-950;
 }
 
 .image-wrapper {
@@ -155,8 +168,7 @@ section {
 .info-card-section {
   .homepage-card {
     background-color: var(--secondblue);
-    align-items: start;
-    padding: 0;
+    align-items: flex-start;
     margin: 0;
     width: 100%;
     padding: 1rem;
@@ -275,7 +287,6 @@ section {
 }
 
 @media only screen and (min-width: 768px) {
-
   .homepage-card p {
     display: block;
   }

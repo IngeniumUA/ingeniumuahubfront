@@ -52,7 +52,7 @@
           </span>
 
           <button class="button button-primary w-1/12 button-inline"
-                  [disabled]="this.transactions().length == 1"
+                  [disabled]="this.transactions().length === 1"
                   (click)="RemoveTransaction(i)">
             Remove</button>
         </div>

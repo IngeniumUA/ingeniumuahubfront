@@ -1,0 +1,11 @@
+.contact-section {
+  @apply leading-6 text-gray-600;
+
+  dt {
+    @apply text-base font-bold text-blue-950 mt-3 mb-1;
+  }
+
+  dl {
+    @apply text-sm;
+  }
+}

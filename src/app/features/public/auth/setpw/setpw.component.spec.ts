@@ -10,7 +10,7 @@ describe('SetpwComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ SetpwComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SetpwComponent);
     component = fixture.componentInstance;

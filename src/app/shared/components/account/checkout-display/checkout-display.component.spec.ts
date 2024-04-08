@@ -10,7 +10,7 @@ describe('TransactionDisplayComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ CheckoutDisplayComponent ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CheckoutDisplayComponent);
     component = fixture.componentInstance;
