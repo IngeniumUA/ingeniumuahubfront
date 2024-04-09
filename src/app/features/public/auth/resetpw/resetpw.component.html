@@ -1,16 +1,24 @@
-<app-layout-public-header [light_theme]="true"></app-layout-public-header>
-<section class="resetpw-page">
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h3 class="info-text">Vul het email address in!</h3>
-    <div class="resetpw-page-section">
-      <label class="hubformfield-white">
-        <input type="email" formControlName="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
-      </label>
-    </div>
+<header><app-layout-public-header [light_theme]="true" /></header>
 
-    <div class="resetpw-page-section">
-      <button class="hubbutton-blue"><h3>Send email</h3></button>
-    </div>
-    <h3 class="info-text">Hierna moet je de link volgend in de mail die je krijgt!</h3>
-  </form>
-</section>
+<div class="flex justify-center items-center flex-1">
+  <main class="px-1 sm:px-0 sm:mx-auto sm:w-full sm:max-w-sm md:max-w-md">
+    <h1 class="white-section-title white-section-title-blue white-section-title-large mb-7 text-center">Wachtwoord vergeten?</h1>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['email'].errors }">
+        <label for="email">E-mailadres</label>
+        <input id="email" type="email" formControlName="email" email="true" [attr.aria-invalid]="f['email'].errors !== null" [attr.aria-errormessage]="f['email'].errors !== null ? 'email-Errors' : ''" />
+
+        <!-- Error messages -->
+        <ul *ngIf="f['email'].errors" class="field-error-message-list" id="email-errors">
+          <li *ngIf="f['email'].errors?.['email'] || f['email'].errors?.['required']">Vul een geldig e-mailadres in</li>
+        </ul>
+      </div>
+
+      <div class="form-field">
+        <button type="submit" class="button button-primary w-full button-inline" [disabled]="this.loading">E-mail versturen</button>
+      </div>
+    </form>
+  </main>
+</div>

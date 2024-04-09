@@ -1,5 +1,5 @@
 footer {
-  @apply bg-blue-950 p-6 text-gray-300;
+  @apply bg-blue-950 p-6 text-gray-300 border-t border-white/5;;
 
   .footer-content {
     @apply flex flex-row items-center;
