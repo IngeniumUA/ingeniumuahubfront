@@ -53,7 +53,7 @@ export class StripePaymentComponent implements OnInit {
     } else {
       // TODO Loading code
     }
-  };
+  }
 
   handleStripeResponse(result: PaymentIntentResult | PaymentIntentOrSetupIntentResult) {
       if (result.error || result.paymentIntent === undefined) {

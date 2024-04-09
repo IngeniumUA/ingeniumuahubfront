@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import {Observable, of, shareReplay} from 'rxjs';
-import {HubUserRolesI} from '../../../shared/models/user';
-import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
 import {apiEnviroment} from '../../../../environments/environment';
 import {HubCheckoutTrackerI} from "@ingenium/app/shared/models/tracker";
 
