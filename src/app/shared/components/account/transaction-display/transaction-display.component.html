@@ -7,7 +7,7 @@
     <dd>{{ transaction.date_complete | date:'d MMM y, H:mm' }}</dd>
 
     <dt>Product</dt>
-    <dd>{{transaction.count }}x {{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro; {{ transaction.product.price_eu }}</span></dd>
+    <dd>{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro; {{ transaction.product.price_eu }}</span></dd>
 
     <dt>Totaal bedrag</dt>
     <dd>&euro; {{ transaction.amount }}</dd>
