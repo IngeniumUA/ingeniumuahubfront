@@ -23,8 +23,13 @@ export class PaymentService {
       return {product: value.product, count: value.count};
     });
 
+    const checkout_in = {
+      cart: api_transactions,
+      description: null  // TODO description can be added to checkout create code
+    }
+
     // Post transaction to API
-    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + 'interact/checkout', api_transactions).pipe(
+    return this.httpClient.post<CheckoutIdI>(apiEnviroment.apiUrl + 'interact/checkout', checkout_in).pipe(
       tap(() => this.cartService.clear())
     );
   }
