@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {StaffUserService} from "../../../../core/services/staff/staff-user-service";
-import {Observable} from "rxjs";
-import {StaffUserDetailI} from "../../../../shared/models/staff/staff_user_detail";
+import {ActivatedRoute} from '@angular/router';
+import {StaffUserService} from '../../../../core/services/staff/staff-user-service';
+import {Observable} from 'rxjs';
+import {StaffUserDetailI} from '../../../../shared/models/staff/staff_user_detail';
 
 @Component({
   selector: 'app-user-detail',
@@ -14,8 +14,8 @@ export class UserDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private staffUserService: StaffUserService) {
   }
 
-  $userDetail!: Observable<StaffUserDetailI>
-  user_id!: string
+  $userDetail!: Observable<StaffUserDetailI>;
+  user_id!: string;
   ngOnInit() {
     // Fetch ID
     const id: string | null = this.route.snapshot.paramMap.get('id');
@@ -23,17 +23,17 @@ export class UserDetailComponent implements OnInit {
     // If ID is null
     if (id === null) {
       // TODO Handle error
-      return
+      return;
     }
     this.user_id = id;
 
-    this.$userDetail = this.staffUserService.getUser(this.user_id)
+    this.$userDetail = this.staffUserService.getUser(this.user_id);
   }
 
   RefetchUser(refetchUser: boolean) {
     if (!refetchUser) {
       return;
     }
-    this.$userDetail = this.staffUserService.getUser(this.user_id)
+    this.$userDetail = this.staffUserService.getUser(this.user_id);
   }
 }

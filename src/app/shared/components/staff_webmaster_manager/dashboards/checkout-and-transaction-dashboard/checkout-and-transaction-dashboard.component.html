@@ -1,7 +1,7 @@
 <section class="table-selector">
-  <h3 [ngClass]="StyleFromTablename('checkouts')" class="table-name" (click)="SetTable('checkouts')">Checkouts</h3>
-  <h3 [ngClass]="StyleFromTablename('transactions')" class="table-name" (click)="SetTable('transactions')">Transactions</h3>
-  <h3 [ngClass]="StyleFromTablename('refunds')" class="table-name" (click)="SetTable('refunds')">Refunds</h3>
+  <button [ngClass]="StyleFromTablename('checkouts')" class="table-name" (click)="SetTable('checkouts')">Checkouts</button>
+  <button [ngClass]="StyleFromTablename('transactions')" class="table-name" (click)="SetTable('transactions')">Transactions</button>
+  <button [ngClass]="StyleFromTablename('refunds')" class="table-name" (click)="SetTable('refunds')">Refunds</button>
 </section>
 
 <section>

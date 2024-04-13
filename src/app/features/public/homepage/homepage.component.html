@@ -1,104 +1,84 @@
-<div id="hero-section" style="background-image:
-         linear-gradient(to bottom, rgba(0, 5, 61, 0.6), rgba(0, 5, 61, 0.6) 80%, rgba(0, 5, 61, 1)),
-         url('assets/static-images/GalabalAchtergrond2CroppedUpscaledReducedEdited.webp')">
+<header class="hero">
+  <picture aria-hidden="true">
+    <img
+      sizes="(max-width: 1400px) 100vw"
+      srcset="/assets/images/galabal-background/galabalbg_c_scale,w_713.webp 713w, /assets/images/galabal-background/galabalbg_c_scale,w_1082.webp 1082w,
+      /assets/images/galabal-background/galabalbg_c_scale,w_1270.webp 1270w, /assets/images/galabal-background/galabalbg_c_scale,w_1400.webp 1400w"
+      ngSrc="/assets/images/galabal-background/galabalbg_c_scale,w_1270.webp"
+      alt="" height="740" width="1270" priority>
+  </picture>
 
-  <app-layout-public-header [background]="false" [light_theme]="false" />
+  <div class="hero-wrapper">
+    <app-layout-public-header [background]="false" [light_theme]="false" />
 
-  <div>
-    <h1>
-      Toegepaste Ingenieurs&shy; wetenschappen<br>
-      <small>Faculteitsvereniging</small>
-    </h1>
-  </div>
-</div>
-
-<!-- Leading infocard -->
-<section class="info-card-section">
-  <div class="intro-card">
-    <div class="intro-card__image cursor-pointer">
-      <img src="assets/images/GroepsfotoOpeningsdag.webp" alt="" aria-hidden="true" [routerLink]="['/info/praesidium']">
+    <div class="hero-content">
+      <div class="ingenium-container">
+        <h1>
+          Toegepaste Ingenieurswetenschappen<br>
+          <small>Faculteitsvereniging</small>
+        </h1>
+      </div>
     </div>
-    <div class="intro-card__content">
-      <p>
-        Sinds 2018 is Ingenium de officiële faculteitsvereniging van de faculteit Toegepaste Ingenieurswetenschappen aan
-        de Universiteit Antwerpen.
-      </p>
-      <div class="mt-4">
-        <a class="button button-outline-white button-lg uppercase" [routerLink]="['/shop']">
-          Word lid
+  </div>
+</header>
+
+<main class="bg-blue-950">
+  <section class="ingenium-container">
+    <div class="intro-card">
+      <div class="intro-card__image">
+        <img ngSrc="assets/images/praesidium_thumb.webp" alt="" aria-hidden="true" width="1000" height="863">
+      </div>
+      <div class="intro-card__content">
+        <p>
+          Sinds 2018 is Ingenium de officiële faculteitsvereniging van de faculteit Toegepaste Ingenieurswetenschappen aan
+          de Universiteit Antwerpen.
+        </p>
+        <div class="mt-4">
+          <a class="button button-outline-white button-lg uppercase" [routerLink]="['/shop']">
+            Word lid
+            <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming events -->
+  <section class="ingenium-container" aria-labelledby="recommendations-title">
+    <h2 id="recommendations-title" class="text-white mb-4">Onze toekomstige evenementen</h2>
+
+    <ng-container *ngIf="(this.homePageRec$ | async) as eventsRec; else noEventsAvailable">
+      <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
+        <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" *ngFor="let recsys_item of eventsRec" />
+      </div>
+
+      <div class="text-center mt-4">
+        <a class="button button-outline-white button-lg uppercase" [routerLink]="['/events']">
+          Alle events
           <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
         </a>
       </div>
-    </div>
-  </div>
-</section>
+    </ng-container>
 
-<!-- Upcoming events -->
-<section class="info-card-section recsys-section">
-  <h1>Suggesties:</h1>
+    <ng-template #noEventsAvailable>
+      <p class="text-white text-lg w-full">Geen aanbevelingen, check onze social media!</p>
+    </ng-template>
+  </section>
 
-  <ng-container *ngIf="(this.homePageRec$ | async) as eventsRec; else noEventsAvailable">
-    <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
-      <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" *ngFor="let recsys_item of eventsRec" />
-    </div>
+  <section class="ingenium-container" aria-labelledby="jobs-title">
+    <h2 id="jobs-title" class="text-white mb-4">Vacatures</h2>
 
-    <a class="button button-outline-white button-lg uppercase" [routerLink]="['/event']">
-      Alle events
-      <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
-      </svg>
-    </a>
-  </ng-container>
-
-  <ng-template #noEventsAvailable>
-    <p class="text-white text-lg w-full">Geen aanbevelingen, check onze social media!</p>
-  </ng-template>
-</section>
-
-<!-- Recommendatie TODO: 1 recommendatie voor alle soorten items -->
-<section class="info-card-section">
-  <div class="container">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <article class="homepage-card news">
-        <div class="content">
-          <div class="title-wrapper">
-            <h3>Kom uw lidkaart/goodiebag halen op campus Groenenborger!</h3>
-          </div>
-          <a href="#">Meer info</a>
-        </div>
-        <a [routerLink]="['/info/startweek']" class="image-wrapper"><img alt="Goodiebags" src="assets/images/GoodiebagFoto.jpg"></a>
-      </article>
-      <article class="homepage-card news">
-        <div class="content">
-          <div class="title-wrapper">
-            <h3>Dit was het epische gala 2023!</h3>
-          </div>
-          <a href="#">Meer info</a>
-        </div>
-        <a href="https://www.facebook.com/events/1057302698733213" class="image-wrapper"><img alt="Galabal" src="assets/images/galabal.jpg"></a>
-      </article>
-      <article class="homepage-card news">
-        <div class="content">
-          <div class="title-wrapper">
-            <h3>Praesidium 2023-2024</h3>
-          </div>
-          <a href="#">Meer info</a>
-        </div>
-        <a [routerLink]="['/info/praesidium']" class="image-wrapper"><img alt="wiezijnwij" src="assets/images/wiezijnwij.png"></a>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="px-2">
-  <app-promo-list [promoType]="'vacature'"></app-promo-list>
-</section>
+    <app-promo-list [promoType]="'vacature'" />
+  </section>
+</main>
 
 <!-- Sponsorbalkje -->
 <section class="bg-white partner-section">
-  <h1 class="max-w-full text-center text-blue-900">Met dank aan onze partners:</h1>
+  <h1 class="max-w-full text-center text-blue-900">Met dank aan onze partners</h1>
   <!--<app-partner-balk></app-partner-balk>-->
   <app-partner-grid></app-partner-grid>
 </section>

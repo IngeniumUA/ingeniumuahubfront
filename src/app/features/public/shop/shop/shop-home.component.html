@@ -1,12 +1,18 @@
 <app-layout-public-header [light_theme]="true" />
 
-<main class="shop">
-  <h1>Shop</h1>
-  <!--
-  <h2>Koop een lidkaart aan de kassa!</h2>
-  -->
-  <div class="product-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    <app-rec-sys-item-preview [recsysItem]="shopitem" *ngFor="let shopitem of (this.shopitems$ | async)" />
-  </div>
+<main class="ingenium-container">
+  <h1 class="white-section-title white-section-title-blue white-section-title-large">Shop</h1>
+  <p>Hier kan je de producten van Ingenium bekijken en bestellen.</p>
 
+  <section *ngIf="this.shopitems$ | async as shopItems; else noShopItems">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" *ngIf="shopItems.length > 0">
+      <app-rec-sys-item-preview [recsysItem]="item" *ngFor="let item of shopItems" />
+    </div>
+  </section>
+
+  <ng-template #noShopItems>
+    <div class="alert alert-info alert-border">
+      <p class="text-sm text-blue-700">Er staat momenteel geen producten online</p>
+    </div>
+  </ng-template>
 </main>

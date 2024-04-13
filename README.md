@@ -1,27 +1,26 @@
-# Ingeniumuahubfront
+# IngeniumUA Hub - Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.8.
+This repository contains the frontend Angular project for the IngeniumUA (https://ingeniumua.be) website.
 
-## Development server
+## Development setup
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Prerequisites
+- Node v18 or higher
+- npm
 
-## Code scaffolding
+### Installation
+1. Clone the repository
+2. Run `npm install` to install the dependencies
+3. Copy the `src/environments/environment.ts.example` file to `src/environments/environment.ts` and fill in the necessary values. This file is in a `.gitignore` so it won't (and shouldn't) be commited to the repository.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Running the project
+You can run `npm run watch` to start the development server. The application will be available at `http://localhost:4200/` and it will automatically reload if you change any of the source files.
 
-## Build
+### Linter
+You can run `npm run lint` to lint the project.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+## Building
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- Staging: `npm run build:staging`
+- Production: `npm run build`

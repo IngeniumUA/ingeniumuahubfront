@@ -1,56 +1,54 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "../../../../../core/services/user/auth/auth.service";
-import {SocialAuthService} from "@abacritt/angularx-social-login";
-import {first} from "rxjs/operators";
-import {RegisterService} from "../../../../../core/services/user/register/register.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SocialAuthService} from '@abacritt/angularx-social-login';
+import {first} from 'rxjs/operators';
+import {RegisterService} from '@ingenium/app/core/services/user/register/register.service';
+import {HttpErrorResponse} from '@angular/common/http';
+import {User} from "@ingenium/app/core/store";
+import {Store} from "@ngxs/store";
 
 @Component({
   selector: 'app-register-page',
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css']
 })
-export class RegisterPageComponent {
+export class RegisterPageComponent implements OnInit {
   form!: FormGroup;
   loading = false;
   submitted = false;
 
-  facebookBrowser: boolean = false
+  facebookBrowser: boolean = false;
 
-  privacyPolicyAccepted: boolean = false
-  privacyAcceptedControl = new FormControl(false)
+  privacyPolicyAccepted: boolean = false;
+  privacyAcceptedControl = new FormControl(false);
 
   constructor(private registerService: RegisterService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private authService: AuthService,
+              private store: Store,
               private socialAuthService: SocialAuthService,
   ) { }
 
   ngOnInit() {
-    if (this.authService.userValue) {
-      this.router.navigate(['home'])
-    }
-
     this.form = this.formBuilder.group({
       email: ['', Validators.email],
-    })
+    });
 
     this.privacyAcceptedControl.valueChanges.subscribe(
       value => {
         if (value === null) {
-          return
+          return;
         }
-        this.privacyPolicyAccepted = value
+        this.privacyPolicyAccepted = value;
       }
-    )
+    );
 
     this.socialAuthService.authState.subscribe((user) => {
-        this.authService.google_login(user.idToken).pipe(
-          first()).subscribe({
+      this.store.dispatch(new User.GoogleLogin(user.idToken))
+        .pipe(first())
+        .subscribe({
           next: () => {
             // get return url from query parameters ( so, ?next='' in the url), else default to home page
             const returnUrl = this.route.snapshot.queryParams['next'] || '/';
@@ -58,17 +56,16 @@ export class RegisterPageComponent {
           },
           error: error => {
             this.loading = false;
-            this.handleRegisterError(error)
+            this.handleRegisterError(error);
           }
-        })
-      }
-    )
+        });
+      });
 
     // Facebook browser check
     const userAgent = window.navigator.userAgent;
-    this.facebookBrowser = (userAgent.indexOf("FBAN") > -1) ||
-      (userAgent.indexOf("FBAV") > -1) ||
-      (userAgent.indexOf("Instagram") > -1);
+    this.facebookBrowser = (userAgent.indexOf('FBAN') > -1) ||
+      (userAgent.indexOf('FBAV') > -1) ||
+      (userAgent.indexOf('Instagram') > -1);
   }
 
   // convenience getter for easy access to form fields
@@ -78,21 +75,21 @@ export class RegisterPageComponent {
   onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      const error: Error = Error("Probeer een andere!");
+      const error: Error = Error('Probeer een andere!');
       this.handleRegisterError(error);
       return;
     }
     if (this.loading) {
       return;
     }
-    const email: string = this.form.controls['email'].value
-    if (email.includes("ad.ua.ac.be")) {
-      const error: Error = Error("UAntwerpen mailadressen werken niet!");
+    const email: string = this.form.controls['email'].value;
+    if (email.includes('ad.ua.ac.be')) {
+      const error: Error = Error('UAntwerpen mailadressen werken niet!');
       this.handleRegisterError(error);
       return;
     }
-    if (email.includes("uantwerpen")) {
-      const error: Error = Error("UAntwerpen mailadressen werken niet!");
+    if (email.includes('uantwerpen')) {
+      const error: Error = Error('UAntwerpen mailadressen werken niet!');
       this.handleRegisterError(error);
       return;
     }
@@ -102,20 +99,20 @@ export class RegisterPageComponent {
     this.registerService.register(email).pipe(
       first()).subscribe({
       next: () => {
-        this.router.navigateByUrl('/auth/await_email')
+        this.router.navigateByUrl('/auth/await_email');
       },
       error: (error: Error) => {
         this.loading = false;
         this.handleRegisterError(error);
       }
-    })
+    });
   }
 
   handleRegisterError(err: Error) {
     if (err instanceof HttpErrorResponse) {
       if (err.status == 406) {
-        this.form_error = "Kan geen nieuw account aanmaken met die email"
-        return
+        this.form_error = 'Kan geen nieuw account aanmaken met die email';
+        return;
       }
     } else {
       this.form_error = err.message;

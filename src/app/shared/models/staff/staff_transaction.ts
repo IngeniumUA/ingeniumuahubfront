@@ -1,4 +1,4 @@
-import {IProductItem} from "../items/products/products";
+import {IProductItem} from '../items/products/products';
 
 export interface StaffInteractionI {
   id: number

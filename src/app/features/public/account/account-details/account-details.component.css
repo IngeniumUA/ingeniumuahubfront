@@ -1,20 +1,3 @@
-section {
-  box-sizing: border-box;
-  width: 100%;
-  margin: 0;
-  padding: 1rem;
-  padding-top: 2rem;
-  background-color: var(--mainblue);
-  border-bottom: solid 1px var(--ingenium-grey);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-section p {
-  color: var(--mainwhite);
-}
-
 /* Lidkaart */
 .gold-button {
   height: 2.75rem;

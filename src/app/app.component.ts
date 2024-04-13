@@ -1,22 +1,16 @@
-import { Component } from '@angular/core';
-import {HubAuthData} from "./shared/models/user";
-import {AuthService} from "./core/services/user/auth/auth.service";
+import {Component, OnInit} from '@angular/core';
+import {Store} from '@ngxs/store';
+import {User} from './core/store';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  title = 'ingeniumuahubfront';
+export class AppComponent implements OnInit {
+  constructor(private store: Store) {}
 
-  user?: HubAuthData | null;
-
-  constructor(private accountService: AuthService) {
-    this.accountService.user.subscribe(x => this.user = x);
-  }
-
-  logout() {
-    this.accountService.logout();
+  ngOnInit() {
+    this.store.dispatch(new User.FetchAuthTokenFromStorage());
   }
 }

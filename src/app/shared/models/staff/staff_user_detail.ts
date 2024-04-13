@@ -1,5 +1,5 @@
-import {HubUserPersonalDetailsI, HubUserRolesI} from "../user";
-import {HubGroupI} from "./HubGroup";
+import {HubUserPersonalDetailsI, HubUserRolesI} from '../user';
+import {HubGroupI} from './HubGroup';
 
 export interface StaffUserDetailI {
   uuid: string

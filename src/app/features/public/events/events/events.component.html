@@ -1,21 +1,29 @@
-<app-layout-public-header></app-layout-public-header>
+<header>
+  <app-layout-public-header [light_theme]="true" />
+</header>
 
-<section *ngIf="this.events$ | async as events">
-  <h1>Aanbevolen</h1>
-  <div *ngIf="events.length > 0 else no_events" class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    <app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of events" />
-  </div>
-</section>
+<main class="ingenium-container relative">
+  <h1 class="white-section-title white-section-title-blue white-section-title-large">Evenementen</h1>
+  <p>TD's en andere evenementen kan je op deze pagina vinden.</p>
 
-<ng-template #no_events>
-  <h2>Geen evenementen om weer te geven</h2>
-</ng-template>
+  <section *ngIf="this.events$ | async as events; else no_events">
+    <div *ngIf="events.length > 0 else no_events" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of events" />
+    </div>
+  </section>
 
-<!--
-<section [ngClass]="{'mobile': (this.isMobile$ | async)}">
-  <h1>Toekomstig</h1>
-  <div class="event-list" [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    Todo
-  </div>
-</section>
--->
+  <ng-template #no_events>
+    <div class="alert alert-info alert-border">
+      <p class="text-sm text-blue-700">Er staat momenteel geen evenementen online</p>
+    </div>
+  </ng-template>
+
+  <!--
+  <section [ngClass]="{'mobile': (this.isMobile$ | async)}">
+    <h1>Toekomstig</h1>
+    <div class="event-list">
+      Todo
+    </div>
+  </section>
+  -->
+</main>

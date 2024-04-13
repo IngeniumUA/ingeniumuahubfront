@@ -30,7 +30,7 @@
   <div class="register-page-section register-section-border">
     <asl-google-signin-button
       type='standard' size='medium'
-      width="266px" theme="outline"
+      [width]="266" theme="outline"
       text='continue_with' shape="rectangular">
     </asl-google-signin-button>
   </div>
@@ -56,7 +56,7 @@
     <div class="register-page-section">
       <button [disabled]="!this.privacyPolicyAccepted" class="hubbutton-blue"><h3>Register</h3></button>
     </div>
-    <div *ngIf="this.form_error != null">
+    <div *ngIf="this.form_error !== null">
       <span class="error-message">{{ this.form_error }}</span>
     </div>
   </form>

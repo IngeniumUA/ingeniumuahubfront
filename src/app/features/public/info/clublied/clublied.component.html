@@ -1,6 +1,6 @@
-<app-layout-public-header [background]="true" [light_theme]="true" />
+<header><app-layout-public-header [background]="true" [light_theme]="true" /></header>
 
-<section class="p-5 mx-auto container">
+<main class="ingenium-container">
   <h1 class="text-blue-900 mb-5">Clublied</h1>
 
   <p>
@@ -48,9 +48,17 @@
       Ons lam zuipen in de KP In de KP (bis)
     </blockquote>
 
-    <div class="col-span-1 lg:col-span-2 justify-self-center mt-6 w-full md:max-w-lg">
-      <iframe class="aspect-video w-full" src="https://www.youtube-nocookie.com/embed/vl3dRHtI3ww" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-    </div>
+    <aside class="col-span-1 lg:col-span-2 justify-self-center mt-6 w-full md:max-w-lg">
+      <div class="white-section-title">Beluisteren</div>
+      <p>Je kan ons clublied beluisteren via de speler hieronder of via YouTube</p>
+
+      <audio controls class="w-full" preload="none">
+        <source src="/assets/audio/clublied.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+
+      <a href="https://www.youtube.com/watch?v=vl3dRHtI3ww" target="_blank" rel="noreferrer noopener" class="button button-outline-blue button-sm mt-6 block">Beluisteren via YouTube</a>
+    </aside>
   </div>
 
-</section>
+</main>

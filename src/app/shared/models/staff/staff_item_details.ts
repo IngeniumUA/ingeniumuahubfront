@@ -1,6 +1,3 @@
-import {ItemI} from "../items/ItemI";
-
-
 export interface StaffItemI {
   uuid: string;
   name: string;

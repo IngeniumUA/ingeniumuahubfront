@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import {FormBuilder} from '@angular/forms';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -40,15 +40,15 @@ interface RecSysUser {
   providedIn: 'root'
 })
 class RecSysService {
-  public baseUrl = "https://ingeniumuahub.ew.r.appspot.com/api/recsys/";
+  public baseUrl = 'https://ingeniumuahub.ew.r.appspot.com/api/recsys/';
   constructor(private httpClient: HttpClient) { }
 
   public getItems(): Observable<any> {
-    return this.httpClient.get(this.baseUrl + "items")
+    return this.httpClient.get(this.baseUrl + 'items');
   }
 
   public postUser(formdata: object): any {
-    this.httpClient.post<any>(this.baseUrl + "user", formdata).subscribe(
+    this.httpClient.post<any>(this.baseUrl + 'user', formdata).subscribe(
       (res) => {
         console.log(res);
         return res;
@@ -58,11 +58,11 @@ class RecSysService {
   }
 
   public postGetUser(formdata: object): Observable<any> {
-    return this.httpClient.post<any>(this.baseUrl + "user", formdata);
+    return this.httpClient.post<any>(this.baseUrl + 'user', formdata);
   }
 
   public postInteraction(formdata: object) {
-    this.httpClient.post<any>(this.baseUrl + "interaction", formdata).subscribe(
+    this.httpClient.post<any>(this.baseUrl + 'interaction', formdata).subscribe(
       (res) => console.log(res),
       (err) => console.log(err)
     );
@@ -117,7 +117,7 @@ export class RecSysFormComponent implements OnInit {
       interaction8: [''],
       interaction9: [''],
     })
-  })
+  });
 
   // Items
   items!: RecSysItem[];
@@ -129,14 +129,14 @@ export class RecSysFormComponent implements OnInit {
   ngOnInit(): void {
     this.recsysService.getItems().subscribe(
       data => {this.items = data;}
-    )
+    );
   }
 
   onSubmit() {
     // Userdata
     const formData = new FormData();
     const userData: {[key:string]: any} = this.recsysForm.get('user')!.value;
-    Object.keys(userData).forEach(key => formData.append(key, this.checkEmpty(userData[key])))
+    Object.keys(userData).forEach(key => formData.append(key, this.checkEmpty(userData[key])));
 
     const user$: Observable<RecSysUser> = this.recsysService.postGetUser(formData);
 
@@ -153,68 +153,68 @@ export class RecSysFormComponent implements OnInit {
           console.log(res);
 
           // All interactionData
-        const interactionData: {[key:string]: any} = this.recsysForm.get('interactions')!.value;
-        let index: number = 0;
-        Object.keys(interactionData).forEach(key => {
-          const formData = new FormData();
-          if (this.items.length <= index) {
-            return;}
-          formData.append('user', res.id);
-          formData.append('item', (this.items[index].id).toString());
-          formData.append('interaction_type', interactionData[key]);
+          const interactionData: {[key:string]: any} = this.recsysForm.get('interactions')!.value;
+          let index: number = 0;
+          Object.keys(interactionData).forEach(key => {
+            const formData = new FormData();
+            if (this.items.length <= index) {
+              return;}
+            formData.append('user', res.id);
+            formData.append('item', (this.items[index].id).toString());
+            formData.append('interaction_type', interactionData[key]);
 
-          this.recsysService.postInteraction(formData);
+            this.recsysService.postInteraction(formData);
 
-          index = index + 1;
+            index = index + 1;
+          });
         })
-      })
-    ).subscribe()
+    ).subscribe();
 
     //this.formDataService.postFormData(formData);
 
     // Routing to homepage
-    this.router.navigate([""]); // Redirect to homescreen
+    this.router.navigate(['']); // Redirect to homescreen
   }
 
   checkEmpty(s: string) {
-    if (s === "") {
-      s = "false";
+    if (s === '') {
+      s = 'false';
     }
     return s;
   }
 
   async previous() {
-    const toHide: Element = this.element.nativeElement.querySelector(".active");
+    const toHide: Element = this.element.nativeElement.querySelector('.active');
     const toShow: any = toHide.previousElementSibling!;
 
-    toHide.classList.add("slideUpOutOfView");
+    toHide.classList.add('slideUpOutOfView');
     await new Promise(f => setTimeout(f, 650));
-    toHide.classList.remove("active");
-    toHide.classList.remove("slideUpOutOfView");
+    toHide.classList.remove('active');
+    toHide.classList.remove('slideUpOutOfView');
 
     this.showNext = true;
 
-    toShow.classList.add("active");
-    toShow.classList.add("slideDownIntoView");
+    toShow.classList.add('active');
+    toShow.classList.add('slideDownIntoView');
     await new Promise(f => setTimeout(f, 650));
-    toShow.classList.remove("slideDownIntoView");
+    toShow.classList.remove('slideDownIntoView');
   }
 
   async next() {
-    const toHide: Element = this.element.nativeElement.querySelector(".active");
+    const toHide: Element = this.element.nativeElement.querySelector('.active');
     const toShow: any = toHide.nextElementSibling!;
 
-    toHide.classList.add("slideOutOfView");
+    toHide.classList.add('slideOutOfView');
     await new Promise(f => setTimeout(f, 650));
-    toHide.classList.remove("active");
-    toHide.classList.remove("slideOutOfView");
+    toHide.classList.remove('active');
+    toHide.classList.remove('slideOutOfView');
 
     this.showNext = false;
 
-    toShow.classList.add("active");
-    toShow.classList.add("slideIntoView");
+    toShow.classList.add('active');
+    toShow.classList.add('slideIntoView');
     await new Promise(f => setTimeout(f, 650));
-    toShow.classList.remove("slideIntoView");
+    toShow.classList.remove('slideIntoView');
   }
 
   delay(ms: number) {
@@ -222,43 +222,43 @@ export class RecSysFormComponent implements OnInit {
   }
 
   radioChange(event:any) {
-    let source: string = event.source.name;
+    const source: string = event.source.name;
     let value: boolean = false;
 
-    if (event.value === "true") {
+    if (event.value === 'true') {
       value = true;
     }
 
     switch (source) {
-      case "studeert":
-        this.showNext = !value;
-        this.studeert = value;
-        break;
-      case "studeertUA":
-        this.showNext = !value;
-        this.studeertUA = value;
-        break;
-      case "studeertFTI":
-        this.showNext = true;
-        this.studeertFTI = value;
-        break;
-      case "ingeniumLid":
-        this.showNext = !value;
+    case 'studeert':
+      this.showNext = !value;
+      this.studeert = value;
+      break;
+    case 'studeertUA':
+      this.showNext = !value;
+      this.studeertUA = value;
+      break;
+    case 'studeertFTI':
+      this.showNext = true;
+      this.studeertFTI = value;
+      break;
+    case 'ingeniumLid':
+      this.showNext = !value;
 
-        this.ingeniumLid = value;
-        break;
-      case "ingeniumGedoopt":
-        this.showNext = !value;
+      this.ingeniumLid = value;
+      break;
+    case 'ingeniumGedoopt':
+      this.showNext = !value;
 
-        this.ingeniumGedoopt = value;
-        break;
-      case "ingeniumOntgroend":
-        this.showNext = true;
-        this.ingeniumOntgroend = value;
-        break;
-      default:
-        this.showNext = true;
-        break;
+      this.ingeniumGedoopt = value;
+      break;
+    case 'ingeniumOntgroend':
+      this.showNext = true;
+      this.ingeniumOntgroend = value;
+      break;
+    default:
+      this.showNext = true;
+      break;
     }
   }
 }
