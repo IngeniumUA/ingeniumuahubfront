@@ -9,9 +9,9 @@ import {Store} from "@ngxs/store";
 import {User} from "@ingenium/app/core/store";
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-page',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   submitted = false;
   form_error: string | null = null;
   embeddedBrowser: boolean = false;
+
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
@@ -45,7 +46,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // Setting up form
     this.form = this.formBuilder.group({
-      email: ['', Validators.email],
+      email: ['', Validators.required, Validators.email],
       password: ['', Validators.required]
     });
   }

@@ -1,11 +1,19 @@
 nav {
-  @apply w-full bg-blue-950;
+  @apply w-full bg-blue-950 border-b border-white/5;
 
   .nav-item {
     @apply text-gray-300 border border-transparent hover:border-b-white hover:text-white rounded px-3.5 py-2.5 font-medium outline-none focus:ring-2 focus-visible:ring-4 ring-white transition-colors ease-in-out;
 
     &.nav-item-active {
       @apply text-white border-b-white;
+    }
+  }
+
+  .nav-logo-wrapper {
+    @apply flex flex-1 items-center justify-center sm:items-stretch sm:justify-start;
+
+    .nav-logo-link {
+      @apply flex flex-shrink-0 items-center outline-none focus-visible:ring-2 ring-white rounded-md;
     }
   }
 
@@ -47,13 +55,19 @@ nav {
   }
 
   &.nav-white {
-    @apply bg-white border-b border-gray-100;
+    @apply bg-white border-gray-100;
 
     .nav-item {
-      @apply text-gray-600 border-transparent hover:border-b-gray-900 hover:text-gray-900;
+      @apply text-gray-600 border-transparent hover:border-b-gray-900 hover:text-gray-900 ring-black;
 
       &.nav-item-active {
         @apply text-blue-900 border-b-blue-900;
+      }
+    }
+
+    .nav-logo-wrapper {
+      .nav-logo-link {
+        @apply ring-black;
       }
     }
   }

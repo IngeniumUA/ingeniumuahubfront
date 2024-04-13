@@ -1,33 +1,25 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
 import {PasswordService} from '../../../../core/services/user/password/password.service';
 import {first} from 'rxjs/operators';
+import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-auth-resetpw',
+  selector: 'app-page',
   templateUrl: './resetpw.component.html',
-  styleUrls: ['./resetpw.component.css']
 })
 export class ResetpwComponent implements OnInit {
   form!: FormGroup;
   loading = false;
-  submitted = false;
-  form_error: string | null = null;
 
   constructor(private formBuilder: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router,
               private passwordService: PasswordService,
-  ) {
-  }
-
-  uuid!: string;
-  pw_settoken!: string;
+              private toastService: ToastrService
+  ) {}
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      email: ['', Validators.required]
+      email: ['', Validators.required, Validators.email]
     });
   }
 
@@ -36,20 +28,8 @@ export class ResetpwComponent implements OnInit {
     return this.form.controls;
   }
 
-  handleFormError(err: Error) {
-    this.form_error = err.message;
-  }
-
   onSubmit() {
-    // Prevents double clicking
-    if (this.loading) {
-      return;
-    }
-
-    // Check if valid guardclause
-    if (this.form.invalid) {
-      const error: Error = Error('Ongeldig email!');
-      this.handleFormError(error);
+    if (this.loading || this.form.invalid) {
       return;
     }
 
@@ -57,12 +37,11 @@ export class ResetpwComponent implements OnInit {
     this.passwordService.sendPasswordEmail(this.form.controls['email'].value).pipe(
       first()).subscribe({
       next: () => {
-        // get return url from query parameters ( so, ?next='' in the url), else default to home pag
-        this.router.navigateByUrl('/home');
+        this.toastService.success('We hebben een e-mail gestuurd met instructies om je wachtwoord te resetten.', 'E-mail verstuurd');
       },
       error: (error: any) => {
         this.loading = false;
-        this.handleFormError(error);
+        this.toastService.error(error.error.message, 'Er is iets misgegaan');
       }
     });
   }

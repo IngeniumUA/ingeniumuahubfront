@@ -8,7 +8,7 @@
 
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
         <!-- Mobile menu button-->
-        <button type="button" class="button button-primary button-icon-only button-accessibility-white relative inline-flex items-center justify-center"
+        <button type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }"
                 aria-controls="mobile-menu" [attr.aria-expanded]="mobileMenuOpen"
                 (click)="ToggleNavDropdown()"
         >
@@ -26,10 +26,9 @@
         </button>
       </div>
 
-      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-
+      <div class="nav-logo-wrapper">
         <!-- LOGO -->
-        <a [routerLink]="'/'" class="flex flex-shrink-0 items-center outline-none focus-visible:ring-2 ring-white rounded-md">
+        <a [routerLink]="'/'" class="nav-logo-link">
           <span class="sr-only">Ingenium home pagina</span>
           <img class="h-16 w-auto" ngSrc="assets/Ingenium-schild.png" alt="Ingenium schild" height="512" width="512">
         </a>
@@ -52,7 +51,7 @@
                 <a routerLink="/info" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-dropdown-item" role="menuitem">Over ons</a>
                 <a routerLink="/info/praesidium" routerLinkActive="nav-item-active" class="nav-dropdown-item" role="menuitem">Praesidium</a>
                 <a routerLink="/info/relations" routerLinkActive="nav-item-active" class="nav-dropdown-item">Partner relations</a>
-                <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-dropdown-item">Club lied</a>
+                <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-dropdown-item">Clublied</a>
                 <a routerLink="/info/contact" routerLinkActive="nav-item-active" class="nav-dropdown-item">Contact</a>
               </div>
             </div>
@@ -68,7 +67,7 @@
         <div class="relative ml-3">
           <div>
             <!-- Profile dropdown button -->
-            <button *ngIf="isAuth$ | async" (click)="setAccountDropdown(!accountDropdownOpen)" [attr.aria-expanded]="accountDropdownOpen" type="button" class="button button-primary button-icon-only button-accessibility-white relative inline-flex items-center justify-center" aria-haspopup="true" id="profile-menu-button">
+            <button *ngIf="isAuth$ | async" (click)="setAccountDropdown(!accountDropdownOpen)" [attr.aria-expanded]="accountDropdownOpen" type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" aria-haspopup="true" id="profile-menu-button">
               <span class="hidden md:inline">Profiel <span aria-hidden="true" class="text-white ml-2 text-xs">&#9660;</span></span>
               <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -76,7 +75,7 @@
             </button>
 
             <!-- Login button -->
-            <a *ngIf="(isAuth$ | async) === false" routerLink="/auth/login" class="button button-primary button-icon-only button-accessibility-white relative inline-flex items-center justify-center" title="Aanmelden">
+            <a *ngIf="(isAuth$ | async) === false" routerLink="/auth/login" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" title="Aanmelden">
               <span class="hidden md:inline">Aanmelden</span>
               <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -110,7 +109,7 @@
       <a routerLink="/info" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-item" role="menuitem">Over ons</a>
       <a routerLink="/info/praesidium" routerLinkActive="nav-item-active" class="nav-item" role="menuitem">Praesidium</a>
       <a routerLink="/info/relations" routerLinkActive="nav-item-active" class="nav-item">Partner relations</a>
-      <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-item">Club lied</a>
+      <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-item">Clublied</a>
       <a routerLink="/info/contact" routerLinkActive="nav-item-active" class="nav-item">Contact</a>
     </div>
   </div>
