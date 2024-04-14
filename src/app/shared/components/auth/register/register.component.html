@@ -41,7 +41,7 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="register-page-section">
       <label class="hubformfield-white">
-        <input type="text" formControlName="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"/>
+        <input type="text" formControlName="email" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" email />
       </label>
     </div>
 
