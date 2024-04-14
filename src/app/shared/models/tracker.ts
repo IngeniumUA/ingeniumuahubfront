@@ -3,5 +3,5 @@ import {CheckoutI} from "@ingenium/app/shared/components/items/interactions/chec
 export interface HubCheckoutTrackerI {
   id: number,
   checkout: CheckoutI
-  tracker_status: string
+  tracker_status: number
 }

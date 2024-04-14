@@ -9,6 +9,7 @@
 @import "cards";
 @import "alert";
 @import "forms";
+@import "badges";
 
 :root {
   --mainblue: rgb(0, 5, 61); /* #00053D */
@@ -96,6 +97,10 @@ h4 {
 
   &.white-section-title-blue {
     @apply text-blue-900;
+  }
+
+  &.white-section-title--base {
+    @apply text-base;
   }
 
   & + p {
