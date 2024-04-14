@@ -14,9 +14,6 @@
 
     <article *ngFor="let trackedItem of trackedItems" class="transaction-card">
       <dl>
-        <dt>Datum</dt>
-        <dd>{{ trackedItem.checkout.date_completed | date:'d MMM y, H:mm' }}</dd>
-
         <dt>Producten</dt>
         <dd>
           <ul class="list-disc list-inside">

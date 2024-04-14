@@ -29,7 +29,6 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.timeInterval = setInterval(() => {
-      this.transactions$ = this.accountService.getTransactions();
       this.trackedItems$ = this.trackerService.getTrackers();
     }, 5000);
   }
