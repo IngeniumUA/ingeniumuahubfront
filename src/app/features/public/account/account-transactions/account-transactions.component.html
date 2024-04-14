@@ -2,33 +2,50 @@
   <h1 class="white-section-title">Jouw aankopen</h1>
   <p>Op deze pagina kan je al jouw voltooide aankopen herbekijken.</p>
 
-  <div *ngIf="(this.trackedItems$ | async) as trackedItems" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4">
-    <article *ngFor="let trackedItem of trackedItems">
-      <div class="transaction-card">
-        <dl>
-          <dt>Evenement</dt>
-          <dd>{{ trackedItem.checkout.id }}</dd>
+  <div *ngIf="(this.trackedItems$ | async) as trackedItems" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="in-progress-purchases">
+    <div class="col-span-1 md:col-span-2 xl:col-span-4 -mb-6">
+      <h2 class="white-section-title white-section-title-blue white-section-title--base" id="in-progress-purchases">Aankopen in behandeling</h2>
+      <p>De onderstaande aankopen worden momenteel nog behandeld. De pagina update automatisch.</p>
 
-          <dt>Datum</dt>
-          <dd>{{ trackedItem.checkout.date_completed | date:'d MMM y, H:mm' }}</dd>
-
-          <dt>Producten</dt>
-          <dd>
-            <ul class="list-disc list-inside">
-              <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro;&nbsp;{{ transaction.product.price_eu }}</span></li>
-            </ul>
-          </dd>
-
-          <dt>Totaal bedrag</dt>
-          <dd>&euro; {{ trackedItem.checkout.amount }}</dd>
-        </dl>
+      <div class="alert alert-info alert-border mb-6" *ngIf="trackedItems.length === 0">
+        <p class="text-sm text-blue-300">Er zijn momenteel geen aankopen in behandeling.</p>
       </div>
+    </div>
 
+    <article *ngFor="let trackedItem of trackedItems" class="transaction-card">
+      <dl>
+        <dt>Datum</dt>
+        <dd>{{ trackedItem.checkout.date_completed | date:'d MMM y, H:mm' }}</dd>
+
+        <dt>Producten</dt>
+        <dd>
+          <ul class="list-disc list-inside">
+            <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro;&nbsp;{{ transaction.product.price_eu }}</span></li>
+          </ul>
+        </dd>
+
+        <dt>Totaal bedrag</dt>
+        <dd>&euro; {{ trackedItem.checkout.amount }}</dd>
+      </dl>
+
+      <div class="badge" [ngClass]="{
+          'badge-red': trackedItem.tracker_status === 1,
+          'badge-green animate-bounce': trackedItem.tracker_status === 2
+        }">
+        <span class="sr-only">Bestelling status</span>
+        {{ trackedItem.tracker_status === 1 ? 'In behandeling' : 'Klaar' }}
+      </div>
     </article>
   </div>
 
   <!-- Previous transactions -->
-  <div *ngIf="(this.transactions$ | async) as transactions" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4">
+  <div *ngIf="(this.transactions$ | async) as transactions" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="">
+    <div class="col-span-1 md:col-span-2 xl:col-span-4 -mb-6">
+      <hr class="border-t border-gray-100 mb-4">
+      <h2 class="white-section-title white-section-title-blue white-section-title--base" id="past-purchases">Vorige aankopen</h2>
+      <p>De onderstaande aankopen worden momenteel nog behandeld. De pagina update automatisch.</p>
+    </div>
+
     <article *ngFor="let transaction of transactions" class="transaction-card">
       <dl>
         <dt>Evenement</dt>
@@ -38,7 +55,7 @@
         <dd>{{ transaction.date_complete | date:'d MMM y, H:mm' }}</dd>
 
         <dt>Product</dt>
-        <dd>{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro; {{ transaction.product.price_eu }}</span></dd>
+        <dd>{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro;&nbsp;{{ transaction.product.price_eu }}</span></dd>
 
         <dt>Totaal bedrag</dt>
         <dd>&euro; {{ transaction.amount }}</dd>

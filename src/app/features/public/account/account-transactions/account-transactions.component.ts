@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountService, TransactionI} from '../../../../core/services/user/account/account.service';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {TrackerService} from '@ingenium/app/core/services/user/tracker.service';
 import {HubCheckoutTrackerI} from '@ingenium/app/shared/models/tracker';
 import QRCode from 'qrcode';
@@ -17,16 +16,23 @@ import QRCode from 'qrcode';
   templateUrl: './account-transactions.component.html',
   styleUrls: ['./account-transactions.component.scss']
 })
-export class AccountTransactionsComponent {
+export class AccountTransactionsComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService,
-              private trackerService: TrackerService) {
-  }
+              private trackerService: TrackerService) {}
 
+  timeInterval: any;
   transactions$: Observable<TransactionI[]> = this.accountService.getTransactions();
   trackedItems$: Observable<HubCheckoutTrackerI[]> = this.trackerService.getTrackers();
 
   qrCode: {[key:string]:string} = {};
   qrCodeVisible: {[key:string]:boolean} = {};
+
+  ngOnInit() {
+    this.timeInterval = setInterval(() => {
+      this.transactions$ = this.accountService.getTransactions();
+      this.trackedItems$ = this.trackerService.getTrackers();
+    }, 5000);
+  }
 
   async createQrCode(transaction: TransactionI) {
     try {
@@ -50,5 +56,9 @@ export class AccountTransactionsComponent {
     }
 
     this.qrCodeVisible[transaction.interaction.uuid] = !this.qrCodeVisible[transaction.interaction.uuid];
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.timeInterval);
   }
 }
