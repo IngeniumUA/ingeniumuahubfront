@@ -116,7 +116,7 @@ import {SsrCookieService} from "ngx-cookie-service-ssr";
     {
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({
-        showDialog: true,
+        showDialog: false,
       }),
     }, {
       provide: Sentry.TraceService,
