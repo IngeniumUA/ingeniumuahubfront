@@ -2,18 +2,24 @@
   <h1 class="white-section-title">Jouw aankopen</h1>
   <p>Op deze pagina kan je al jouw voltooide aankopen herbekijken.</p>
 
-  <div *ngIf="(this.trackedItems$ | async) as trackedItems" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="in-progress-purchases">
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="in-progress-purchases">
     <div class="col-span-1 md:col-span-2 xl:col-span-4 -mb-6">
       <h2 class="white-section-title white-section-title-blue white-section-title--base" id="in-progress-purchases">Aankopen in behandeling</h2>
-      <p>De onderstaande aankopen worden momenteel nog behandeld. De pagina update automatisch.</p>
+      <p>
+        De onderstaande aankopen worden momenteel nog behandeld. <br>
+        De pagina update automatisch. Laatste update: {{ lastUpdate | date:'H:mm:ss' }}.
+      </p>
 
       <div class="alert alert-info alert-border mb-6" *ngIf="trackedItems.length === 0">
         <p class="text-sm text-blue-300">Er zijn momenteel geen aankopen in behandeling.</p>
       </div>
     </div>
 
-    <article *ngFor="let trackedItem of trackedItems" class="transaction-card">
+    <article *ngFor="let trackedItem of trackedItems; trackBy: getCheckoutId" class="transaction-card">
       <dl>
+        <dt>Bestellingnummer</dt>
+        <dd>{{ trackedItem.id }}</dd>
+
         <dt>Producten</dt>
         <dd>
           <ul class="list-disc list-inside">

@@ -18,6 +18,6 @@ export class TrackerService {
      * Fetches all current HubCheckoutTracker objects for the authenticated user
      * Hardcoded limit of 10 on backend
      */
-    return this.httpClient.get<HubCheckoutTrackerI[]>(this.apiUrl)
+    return this.httpClient.get<HubCheckoutTrackerI[]>(this.apiUrl + '?salt=' + (new Date()).getTime().toString()); // Do this dumb thing cuz the server doesn't send cache control header
   }
 }

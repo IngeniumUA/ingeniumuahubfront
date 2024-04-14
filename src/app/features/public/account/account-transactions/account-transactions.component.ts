@@ -1,15 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountService, TransactionI} from '../../../../core/services/user/account/account.service';
-import {Observable} from 'rxjs';
+import {exhaustMap, Observable, Subscription, timer} from 'rxjs';
 import {TrackerService} from '@ingenium/app/core/services/user/tracker.service';
 import {HubCheckoutTrackerI} from '@ingenium/app/shared/models/tracker';
 import QRCode from 'qrcode';
-//import {apiEnviroment} from '../../../../../environments/environment';
-
-/*interface Order {
-  order_no: number
-  status: boolean
-}*/
 
 @Component({
   selector: 'app-account-transactions',
@@ -20,17 +14,26 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService,
               private trackerService: TrackerService) {}
 
-  timeInterval: any;
+  lastUpdate: Date = new Date();
+  trackerSubscription: Subscription = new Subscription();
   transactions$: Observable<TransactionI[]> = this.accountService.getTransactions();
-  trackedItems$: Observable<HubCheckoutTrackerI[]> = this.trackerService.getTrackers();
+  trackedItems: HubCheckoutTrackerI[] = [];
 
   qrCode: {[key:string]:string} = {};
   qrCodeVisible: {[key:string]:boolean} = {};
 
   ngOnInit() {
-    this.timeInterval = setInterval(() => {
-      this.trackedItems$ = this.trackerService.getTrackers();
-    }, 5000);
+    this.trackerSubscription = timer(0, 5000).pipe(
+      exhaustMap(() => this.trackerService.getTrackers())
+    ).subscribe({
+      next: (data) => {
+        this.trackedItems = data;
+        this.lastUpdate = new Date();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   async createQrCode(transaction: TransactionI) {
@@ -57,7 +60,11 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     this.qrCodeVisible[transaction.interaction.uuid] = !this.qrCodeVisible[transaction.interaction.uuid];
   }
 
+  getCheckoutId(_index: number, item: HubCheckoutTrackerI) {
+    return item.checkout.id;
+  }
+
   ngOnDestroy() {
-    clearInterval(this.timeInterval);
+    this.trackerSubscription.unsubscribe();
   }
 }
