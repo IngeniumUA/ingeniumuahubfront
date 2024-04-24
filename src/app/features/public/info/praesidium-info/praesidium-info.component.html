@@ -27,7 +27,7 @@
               <div class="praesidium-lid highlight"
                    *ngFor="let persoon of praesidiumCategorie.praesidia"
               >
-                <img src='{{ persoon.image }}' alt='{{ persoon.name }}'>
+                <img src='{{ persoon.image }}' alt='{{ persoon.name }}' loading="lazy">
                 <h4>{{ persoon.name }} - {{ persoon.functie }}</h4>
               </div>
               <ng-container *ngIf="praesidiumCategorie.button as button">
