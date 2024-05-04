@@ -16,10 +16,4 @@ export class HomepageComponent {
       this.homePageRec$ = this.eventService.getEventsList();
     });
   }
-
-  sponsors: string[] = [
-    'assets/images/sponsors/umicore-logo-2017.svg',
-    'assets/images/sponsors/SparklinkLogo.png',
-    'assets/images/sponsors/Vorsselmans_logo.png'
-  ];
 }
