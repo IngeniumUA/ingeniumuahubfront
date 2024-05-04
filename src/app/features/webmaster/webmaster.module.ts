@@ -57,6 +57,9 @@ import {
 import {
   TransactionDetailComponent
 } from '../../shared/components/staff_webmaster_manager/details/transaction-detail/transaction-detail.component';
+import {
+  OrderTrackingComponent
+} from '@ingenium/app/features/webmaster/order-tracking/order-tracking.component';
 
 
 @NgModule({
@@ -69,7 +72,8 @@ import {
     ItemDetailDashboardComponent,
     CardDashboardComponent,
     ProductWebmasterPageComponent,
-    CheckoutDetailComponent
+    CheckoutDetailComponent,
+    OrderTrackingComponent
   ],
   imports: [
     CommonModule,

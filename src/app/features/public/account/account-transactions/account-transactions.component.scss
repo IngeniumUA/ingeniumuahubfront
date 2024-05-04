@@ -1,31 +1,27 @@
-.popupz-orders {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
+.transaction-card {
+  @apply border rounded p-4;
 
-.popupz-order-box {
-  width: 7rem;
-  height: 7rem;
+  dl {
+    @apply mb-4;
 
-  border-radius: 15px;
+    dt {
+      @apply mt-4 text-gray-500 text-xs;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+      &:first-child {
+        @apply mt-0;
+      }
+    }
 
-.popupz-order-box span {
-  color: var(--mainwhite);
-  font-weight: bolder;
-  font-size: 3rem;
-  line-height: 3rem;
-}
+    dd {
+      @apply mt-1 text-gray-900 text-sm;
 
-.popupz-order-box p {
-  padding: 0.2rem;
-  margin: 0;
-  text-align: center;
+      .transaction-card-product-price-tag {
+        @apply text-gray-600 text-xs;
+      }
+    }
+  }
+
+  .transaction-card-qr {
+    @apply flex justify-center items-center;
+  }
 }

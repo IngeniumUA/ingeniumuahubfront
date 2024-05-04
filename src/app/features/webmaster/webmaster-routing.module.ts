@@ -9,6 +9,7 @@ import {UserDetailComponent} from './user/user-detail/user-detail.component';
 import {CardDashboardComponent} from './item/card-dashboard/card-dashboard.component';
 import {ProductWebmasterPageComponent} from './product/product-webmaster-page/product-webmaster-page.component';
 import {CheckoutDetailComponent} from './checkout/checkout-detail/checkout-detail.component';
+import {OrderTrackingComponent} from '@ingenium/app/features/webmaster/order-tracking/order-tracking.component';
 
 
 const routes: Routes = [
@@ -23,7 +24,8 @@ const routes: Routes = [
       {path: 'card', component: CardDashboardComponent},
       {path: 'product/:id', component: ProductWebmasterPageComponent},
       // {path: 'checkout',},
-      {path: 'checkout/:id', component: CheckoutDetailComponent }
+      {path: 'checkout/:id', component: CheckoutDetailComponent},
+      {path: 'tracking/:id', component: OrderTrackingComponent},
     ]
   },
 ];
