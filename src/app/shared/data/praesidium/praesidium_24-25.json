@@ -38,11 +38,7 @@
             "functie": "Cantor",
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSmit.webp"
           }
-        ],
-        "button": {
-          "text": "Wat is een cantus",
-          "url": "/info/cantus"
-        }
+        ]
       },
       {
         "categorieName": "Business Relations",
@@ -61,7 +57,7 @@
           }
         ],
         "button": {
-          "text": "Meer informatie!",
+          "text": "Meer informatie",
           "url": "/info/relations"
         }
       },
@@ -94,7 +90,7 @@
       },
       {
         "categorieName": "Ledenwerving",
-        "categorieDescription": "Het doopteam zorgt voor een veilige doop en daaropvolgend een goede opleiding van schachten tot waardevolle IngeniumUA leden.",
+        "categorieDescription": "De ledenwerving organiseert een breed aanbod aan toffe activiteiten tijdens je studies, zoals het organiseren van de Eerstejaarscantus.",
         "praesidia": [
           {
             "name": "Jonas Verburgh",
@@ -106,11 +102,7 @@
             "functie": "Zedenmeester (en Mentor)",
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.webp"
           }
-        ],
-        "button": {
-          "text": "Doop Informatie",
-          "url": "/info/doop"
-        }
+        ]
       },
       {
         "categorieName": "Webmaster",
@@ -179,11 +171,7 @@
             "functie": "Sport",
             "image": ""
           }
-        ],
-        "button": {
-          "text": "Sport Info",
-          "url": "/info/sport"
-        }
+        ]
       },
       {
         "categorieName": "Ere",

@@ -104,7 +104,15 @@ h4 {
   }
 
   & + p {
-    @apply mt-1 text-sm leading-6 text-gray-600 mb-6;
+    @apply mt-0.5 text-sm leading-6 text-gray-600 mb-6;
+  }
+
+  & + p.small-margin {
+    @apply mb-2;
+  }
+
+  & + p.no-margin {
+    @apply mb-0;
   }
 }
 
