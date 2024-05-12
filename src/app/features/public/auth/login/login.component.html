@@ -1,7 +1,7 @@
 <header><app-layout-public-header [light_theme]="true" /></header>
 
 <div class="flex justify-center items-center flex-1">
-  <main class="px-1 sm:px-0 sm:mx-auto sm:w-full sm:max-w-sm md:max-w-md">
+  <main class="px-1 py-8 sm:px-0 sm:mx-auto sm:w-full sm:max-w-sm md:max-w-md">
     <h1 class="white-section-title white-section-title-blue white-section-title-large mb-7 text-center">Aanmelden op IngeniumUA</h1>
 
     <div class="flex justify-center">
@@ -34,20 +34,20 @@
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
       <div class="alert alert-info alert-border" *ngIf="this.form_error !== null">
-        <span class="text-sm text-yellow-700">{{ this.form_error }}</span>
+        <span class="text-sm text-blue-700">{{ this.form_error }}</span>
       </div>
 
-      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['email'].errors }">
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['email'].errors && (f['email'].dirty || f['email'].touched) }">
         <label for="email">E-mailadres</label>
         <input id="email" type="email" formControlName="email" email="true" [attr.aria-invalid]="f['email'].errors !== null" [attr.aria-errormessage]="f['email'].errors !== null ? 'email-Errors' : ''" />
 
         <!-- Error messages -->
-        <ul *ngIf="f['email'].errors" class="field-error-message-list" id="email-errors">
+        <ul *ngIf="f['email'].errors && (f['email'].dirty || f['email'].touched)" class="field-error-message-list" id="email-errors">
           <li *ngIf="f['email'].errors?.['email'] || f['email'].errors?.['required']">Vul een geldig e-mailadres in</li>
         </ul>
       </div>
 
-      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['password'].errors }">
+      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['password'].errors && (f['password'].dirty || f['password'].touched) }">
         <label for="password">Wachtwoord</label>
         <input id="password" type="password" formControlName="password" [attr.aria-invalid]="f['password'].errors !== null" />
       </div>

@@ -30,6 +30,7 @@ export class ResetpwComponent implements OnInit {
 
   onSubmit() {
     if (this.loading || this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
 
