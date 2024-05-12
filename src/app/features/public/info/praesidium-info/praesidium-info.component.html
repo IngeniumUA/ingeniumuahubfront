@@ -1,5 +1,40 @@
-<app-layout-public-header [background]="true" [light_theme]="true"></app-layout-public-header>
-<section class="main">
+<header><app-layout-public-header [background]="true" [light_theme]="true" /></header>
+
+<main class="ingenium-container ingenium-container--no-padding-x relative h-full">
+
+  <div *ngIf="praesidium$ | async as praesidiumGroups" class="space-y-8">
+
+    @for (group of praesidiumGroups; track group.groupName) {
+      <section class="praesidium" [attr.aria-labelledby]="'group-' + group.groupName">
+        <h2 [id]="'group-' + group.groupName" class="white-section-title white-section-title-blue white-section-title-large">{{ group.groupName }}</h2>
+        <p>{{ group.groupDescription }}</p>
+
+        <ul>
+          @for (categorie of group.categories; track categorie.categorieName) {
+            <li class="group-card">
+              <h3>{{ categorie.categorieName }}</h3>
+              <p>{{ categorie.categorieDescription }}</p>
+
+              <ul class="group-card--person-list">
+                @for (persoon of categorie.praesidia; track persoon.name) {
+                  <li class="person-card">
+                    <img *ngIf="persoon.image !== ''" [src]="persoon.image" alt="" loading="lazy" />
+                    <h4 class="white-section-title">{{ persoon.name }}</h4>
+                    <p>{{ persoon.functie }}</p>
+                  </li>
+                }
+              </ul>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+  </div>
+
+</main>
+
+<!--<section class="main">
     <img ngSrc="assets/images/praesidium.webp" alt="" height="2607" width="2931">
 
     <section class="infosection">
@@ -21,20 +56,24 @@
                  *ngFor="let praesidiumCategorie of praesidiumGroup.categories"
             >
 
-              <h3>{{ praesidiumCategorie.categorieName }}</h3>
+              <h3 class="">{{ praesidiumCategorie.categorieName }}</h3>
               <p>{{ praesidiumCategorie.categorieDescription }}</p>
 
-              <div class="praesidium-lid highlight"
-                   *ngFor="let persoon of praesidiumCategorie.praesidia"
-              >
-                <img src='{{ persoon.image }}' alt='{{ persoon.name }}' loading="lazy">
-                <h4>{{ persoon.name }} - {{ persoon.functie }}</h4>
-              </div>
-              <ng-container *ngIf="praesidiumCategorie.button as button">
-                <a [routerLink]="[ button.url ]" class="button button-outline-white -mt-6 mb-6">{{ button.text }}</a>
-              </ng-container>
+              <ul>
+                <li class="praesidium-lid highlight" *ngFor="let persoon of praesidiumCategorie.praesidia">
+                  <img *ngIf="persoon.image !== ''" src='{{ persoon.image }}' alt='{{ persoon.name }}' loading="lazy" />
+                  <div>
+                    <h4 class="white-section-title">{{ persoon.name }}</h4>
+                    <p class="text-sm font-semibold leading-6">{{ persoon.functie }}</p>
+                  </div>
+                </li>
+              </ul>
+
+              @if (praesidiumCategorie.button) {
+                <a [routerLink]="[ praesidiumCategorie.button.url ]" class="button button-outline-white mt-6 mb-6 block">{{ praesidiumCategorie.button.text }}</a>
+              }
             </div>
           </section>
         </div>
     </section>
-</section>
+</section>-->
