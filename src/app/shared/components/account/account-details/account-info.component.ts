@@ -79,12 +79,14 @@ export class AccountInfoComponent implements OnInit {
   get f() { return this.form.controls; }
 
   onSubmit() {
+    if (this.loading) return;
+    this.form.markAllAsTouched();
+
     // Check if valid guard clause
     if (this.form.invalid) {
       this.toastr.error('Ongeldig formulier!', 'Fout');
       return;
     }
-    if (this.loading) return;
 
     this.loading = true;
     const personalDetails: HubUserPersonalDetailsI = {

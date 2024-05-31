@@ -22,7 +22,7 @@ const routes: Routes = [
     component: PublicRoutingComponent,
     children: [
       // Authentication pages
-      {path: 'auth', loadChildren: () => import('src/app/features/public/auth/auth.model').then(x => x.AuthModule)},
+      {path: 'auth', loadChildren: () => import('@ingenium/app/features/public/auth/auth.module').then(x => x.AuthModule)},
       {path: 'login', redirectTo: 'auth/login', pathMatch: 'full'},
       {path: 'register', redirectTo: 'auth/register', pathMatch: 'full'},
 

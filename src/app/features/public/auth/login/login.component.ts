@@ -66,13 +66,11 @@ export class LoginComponent implements OnInit {
   get f() { return this.form.controls; }
 
   onSubmit() {
-    // Check if valid guardclause
+    if (this.loading) return;
+    this.form_error = null;
+
     if (this.form.invalid) {
-      const error: Error = Error('Ongeldige email or password');
-      this.handleFormError(error);
-      return;
-    }
-    if (this.loading) {
+      this.form.markAllAsTouched();
       return;
     }
 

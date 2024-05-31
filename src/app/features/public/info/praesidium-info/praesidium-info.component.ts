@@ -8,9 +8,9 @@ import praesidium from "@ingenium/app/shared/data/praesidium";
 import {Title} from "@angular/platform-browser";
 
 @Component({
-  selector: 'app-praesidium-info',
+  selector: 'app-page',
   templateUrl: './praesidium-info.component.html',
-  styleUrls: ['./praesidium-info.component.css']
+  styleUrls: ['./praesidium-info.component.scss']
 })
 export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
@@ -18,7 +18,7 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
               private titleService: Title) {}
 
   yearControl = new FormControl<string>('');
-  validYears: string[] = ['23-24', '22-23', '21-22', '20-21', '19-20', '18-19']; // Put newest year first
+  validYears: string[] = Object.keys(praesidium); // Put newest year first
   praesidium$: Observable<PraesidiumGroupI[]> = of([]);
 
   ngOnInit() {

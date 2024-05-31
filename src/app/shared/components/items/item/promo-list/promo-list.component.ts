@@ -19,6 +19,7 @@ import {PromoService} from '../../../../../core/services/items/promo/promo.servi
 })
 export class PromoListComponent implements OnInit {
 
+  @Input() queryLimit: number = 5;
   @Input() promoType: string | null = null;
 
   recsysItems$: Observable<RecSysPreviewI[]> = of();
@@ -27,6 +28,6 @@ export class PromoListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.recsysItems$ = this.promoService.getPromosList(5, 0, this.promoType);
+    this.recsysItems$ = this.promoService.getPromosList(this.queryLimit, 0, this.promoType);
   }
 }

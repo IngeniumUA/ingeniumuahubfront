@@ -1,40 +1,38 @@
-<app-layout-public-header [background]="true" [light_theme]="true"></app-layout-public-header>
-<section class="main">
-    <img ngSrc="assets/images/praesidium.webp" alt="" height="2607" width="2931">
+<header><app-layout-public-header [background]="true" [light_theme]="true" /></header>
 
-    <section class="infosection">
-        <mat-form-field>
-          <select matNativeControl required [formControl]="yearControl">
-            <option *ngFor="let year of validYears" [value]="year" style="color: var(--mainblue)">
-              {{ year }}
-            </option>
-          </select>
-        </mat-form-field>
+<main class="ingenium-container relative h-full">
 
-        <div class="info" *ngIf="praesidium$ | async as praesidiumGroups">
-          <section class="praesidium"
-                   *ngFor="let praesidiumGroup of praesidiumGroups"
-          >
-            <h2>{{ praesidiumGroup.groupName }}</h2>
-            <h3>{{ praesidiumGroup.groupDescription }}</h3>
-            <div class="categorie"
-                 *ngFor="let praesidiumCategorie of praesidiumGroup.categories"
-            >
+  <div *ngIf="praesidium$ | async as praesidiumGroups" class="space-y-12">
 
-              <h3>{{ praesidiumCategorie.categorieName }}</h3>
-              <p>{{ praesidiumCategorie.categorieDescription }}</p>
+    @for (group of praesidiumGroups; track group.groupName) {
+      <section class="praesidium" [attr.aria-labelledby]="'group-' + group.groupName">
+        <h2 [id]="'group-' + group.groupName" class="white-section-title white-section-title-blue white-section-title-large">{{ group.groupName }}</h2>
+        <p>{{ group.groupDescription }}</p>
 
-              <div class="praesidium-lid highlight"
-                   *ngFor="let persoon of praesidiumCategorie.praesidia"
-              >
-                <img src='{{ persoon.image }}' alt='{{ persoon.name }}' loading="lazy">
-                <h4>{{ persoon.name }} - {{ persoon.functie }}</h4>
+        <ul>
+          @for (categorie of group.categories; track categorie.categorieName) {
+            <li class="group-card">
+              <div class="group-card--title">
+                <h3 class="white-section-title">{{ categorie.categorieName }}</h3>
+                <p class="small-margin">{{ categorie.categorieDescription }}</p>
+                <a [routerLink]="categorie.button.url" *ngIf="categorie.button" class="button button-outline-blue button-sm">{{ categorie.button.text }}</a>
               </div>
-              <ng-container *ngIf="praesidiumCategorie.button as button">
-                <a [routerLink]="[ button.url ]" class="button button-outline-white -mt-6 mb-6">{{ button.text }}</a>
-              </ng-container>
-            </div>
-          </section>
-        </div>
-    </section>
-</section>
+
+              <ul class="group-card--person-list">
+                @for (persoon of categorie.praesidia; track persoon.name) {
+                  <li class="person-card">
+                    <img *ngIf="persoon.image !== ''" [src]="persoon.image" alt="" loading="lazy" />
+                    <h4 class="white-section-title">{{ persoon.name }}</h4>
+                    <p class="no-margin">{{ persoon.functie }}</p>
+                  </li>
+                }
+              </ul>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+  </div>
+
+</main>

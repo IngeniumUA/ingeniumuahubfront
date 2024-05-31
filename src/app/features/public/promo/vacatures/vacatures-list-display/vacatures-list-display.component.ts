@@ -12,7 +12,7 @@ import {LayoutService} from '../../../../../core/services/layout/layout.service'
 export class VacaturesListDisplayComponent {
 
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(0, 10, 'vacature');
+  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(50, 0, 'vacature');
 
   constructor(private promoService: PromoService,
               private layoutService: LayoutService) {

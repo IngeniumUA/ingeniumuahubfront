@@ -75,7 +75,11 @@ export class StripePaymentComponent implements OnInit {
           // It's a specific Bancontact authentication problem where a bank requires extra authentication
           // https://docs.stripe.com/js/payment_intents/handle_next_action
           this.paying = true;
-          this.stripeService.handleNextAction({clientSecret: result.paymentIntent.client_secret!}
+          if (result.paymentIntent.client_secret == null) {
+            alert("Client Secret was invalid!");
+            return;
+          }
+          this.stripeService.handleNextAction({clientSecret: result.paymentIntent.client_secret}
           ).subscribe((result) => {
             this.handleStripeResponse(result);
             this.paying = false;

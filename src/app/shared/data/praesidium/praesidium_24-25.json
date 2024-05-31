@@ -1,0 +1,241 @@
+[
+  {
+    "groupName": "Praesidium",
+    "groupDescription": "Ontmoet het praesidium van 2024-2025!",
+    "categories": [
+      {
+        "categorieName": "Hoog Praesidium",
+        "categorieDescription": "Het bestuur van de VZW",
+        "praesidia": [
+          {
+            "name": "Wannes Brusselmans",
+            "functie": "Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WannesBrusselmans.webp"
+          },
+          {
+            "name": "Robbe De Helt",
+            "functie": "Vice-Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RobbeDeHelt.webp"
+          },
+          {
+            "name": "Nico Verstappen",
+            "functie": "Vice-Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NicoVerstappen.webp"
+          },
+          {
+            "name": "Jorre Beyltiens",
+            "functie": "Quaestor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JorreBeyltiens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Cantor",
+        "categorieDescription": "De cantor zit naast de Praeses bij een cantus en zorgt voor een tof verloop!",
+        "praesidia": [
+          {
+            "name": "Wout De Smit",
+            "functie": "Cantor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSmit.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Business Relations",
+        "categorieDescription": "Onze Business Relations onderhouden het contact met onze partnerbedrijven.\nWil je als bedrijf graag eens polsen hoe een partnership met ons er uit zou zien?\nOns team staat voor je klaar!",
+        "praesidia": [
+
+          {
+            "name": "Yorben Joosen",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YorbenJoossen.webp"
+          },
+          {
+            "name": "Renzo Craeymeersch",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RenzoCraeymeersch.webp"
+          }
+        ],
+        "button": {
+          "text": "Meer informatie",
+          "url": "/info/relations"
+        }
+      },
+      {
+        "categorieName": "Event",
+        "categorieDescription": "De Event functie organiseert en voert reclame voor grote evenementen en activiteiten.\nDenk maar aan het Pop-Up Z middagfestival of het Galabal Der Antwerpse Ingenieurs",
+        "praesidia": [
+          {
+            "name": "Yarno Geurs",
+            "functie": "Event",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YarnoGeurs.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Feest",
+        "categorieDescription": "Feest is verantwoordelijk voor het organiseren van de TD's en andere feestjes.",
+        "praesidia": [
+          {
+            "name": "Lennart Willems",
+            "functie": "Feest",
+            "image": ""
+          },
+          {
+            "name": "Niels Selleslagh",
+            "functie": "Feest",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "categorieName": "Ledenwerving",
+        "categorieDescription": "De ledenwerving organiseert een breed aanbod aan toffe activiteiten tijdens je studies, zoals het organiseren van de Eerstejaarscantus.",
+        "praesidia": [
+          {
+            "name": "Jonas Verburgh",
+            "functie": "Ledenwerving",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonasVerburgh.webp"
+          },
+          {
+            "name": "Jarne Arnouts",
+            "functie": "Zedenmeester (en Mentor)",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Webmaster",
+        "categorieDescription": "De Webmaster is verantwoordelijk voor het onderhouden en configureren van technische aspecten van de vereniging.\nWebsite configuratie, onderhoudt van apparaten, ..",
+        "praesidia": [
+          {
+            "name": "Sigfried Seldeslachts",
+            "functie": "Webmaster",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "categorieName": "Public Relations",
+        "categorieDescription": "De Public Relations verzorgt publieke kanalen van IngeniumUA.\nHij/zij beheert onder andere de Facebook, Instagram en LinkedIn pagina's.",
+        "praesidia": [
+          {
+            "name": "Jona Vandormael",
+            "functie": "Public Relations",
+            "image": ""
+          },
+          {
+            "name": "Ailee Louise Van Hauwaert",
+            "functie": "Public Relations",
+            "image": ""
+          }
+        ],
+        "button": {
+          "text": "Contact",
+          "url": "/info/contact"
+        }
+      },
+      {
+        "categorieName": "Mentor",
+        "categorieDescription": "Aan het hoofd van het education team staat de Mentor.\nOnder zijn taken valt het organiseren van de boekenverkoop, het organiseren van studie-gerelateerde evenementen en het onderhouden van de Ingenium cloud.",
+        "praesidia": [
+          {
+            "name": "Jarne Arnouts",
+            "functie": "Mentor (en Zedenmeester)",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Ab-actis & Scriptor",
+        "categorieDescription": "De Ab-actis & scriptor is de auteur van de club.\nHij/zij ontwerpt onder andere de ledenmail en de crick.Als Ab-actis is hij/zij ook verantwoordelijk voor de agenda en vergaderingsverslagen.",
+        "praesidia": [
+          {
+            "name": "Pauline Kricfalusi",
+            "functie": "Ab-actis & Scriptor",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "categorieName": "Sport",
+        "categorieDescription": "De sport functies onderhouden contact met het sportcommisariaat.\nZe coordineren sportmanifestaties waaraan Ingenium deelneemt, stellen ploegen samen en organiseren sportieve evenementen.",
+        "praesidia": [
+          {
+            "name": "Sam Morbee",
+            "functie": "Sport",
+            "image": ""
+          },
+          {
+            "name": "Wesley Van Bladel",
+            "functie": "Sport",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "categorieName": "Ere",
+        "categorieDescription": "Een Ere is een Praesidiumlid die zijn laatste jaar als Praesidium volbrengt.\nHij/zij danken we op deze manier voor hun bijdrage aan de club in vorige jaren.",
+        "praesidia": [
+          {
+            "name": "Vincent Jacobs",
+            "functie": "Peter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/VincentJacobs.webp"
+          },
+          {
+            "name": "Wout Saenen",
+            "functie": "Peter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSaenen.webp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Education",
+    "groupDescription": "Het Ingenium Education-team!",
+    "categories": [
+      {
+        "categorieName": "Mentor",
+        "categorieDescription": "Aan het hoofd van het education team staat de Mentor.\nOnder zijn taken valt het organiseren van de boekenverkoop, het organiseren van studie-gerelateerde evenementen en het onderhouden van de Ingenium cloud.",
+        "praesidia": [
+          {
+            "name": "Jarne Arnouts",
+            "functie": "Mentor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Education",
+        "categorieDescription": "Onze verschillende education leden zijn elks verantwoordelijk voor een richting.\nHeb je vragen over eender welk studiegerelateerd onderwerp?\nStuur ze een berichtje!",
+        "praesidia": [
+          {
+            "name": "Mohammed Hamdoune",
+            "functie": "Education Elektronica ICT",
+            "image": ""
+          },
+          {
+            "name": "San Seppion",
+            "functie": "Education Elektromechanica",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SanSeppion.webp"
+          },
+          {
+            "name": "Thomas De Mulder",
+            "functie": "Education Elektromechanica",
+            "image": ""
+          },
+          {
+            "name": "Michiel Vercauteren",
+            "functie": "Education Chemie",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MichielVercauteren.webp"
+          }
+        ],
+        "button": {
+          "text": "Cloud",
+          "url": "/cloud"
+        }
+      }
+    ]
+  }
+]
