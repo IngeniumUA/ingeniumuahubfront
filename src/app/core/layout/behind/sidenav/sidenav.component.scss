@@ -1,16 +1,10 @@
-.sidenav {
-  background-color: var(--mainblue);
-  height: 100%;
-  width: 40vw;
-  max-width: 12rem;
-
-  display: flex;
-  flex-direction: column;
+main {
+  @apply bg-blue-950 h-full flex flex-col;
 
   animation: slideIntoView 0.1s ease-in 0s 1 normal forwards;
 }
 
-.sidenav section {
+main section {
   box-sizing: border-box;
   padding-left: clamp(0.1rem, 2vh, 1rem);
   padding-bottom: 1.5rem;
@@ -21,19 +15,15 @@
   flex-direction: column;
 }
 
-.sidenav section .section-title, .sidenav section .section-link {
+main section .section-title, main section .section-link {
   padding: 0.5rem;
 }
 
-.sidenav section .section-title {
-  margin: 0;
-
-  text-decoration: underline;
-  font-weight: bold;
-  color: var(--mainwhite);
+main section .section-title {
+  @apply text-white bg-blue-900 p-2 rounded;
 }
 
-.sidenav section .section-link {
+main section .section-link {
   padding-left: clamp(0.1rem, 2vh, 1rem);
 
   color: var(--mainwhite);

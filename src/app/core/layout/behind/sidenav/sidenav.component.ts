@@ -1,19 +1,21 @@
 import {Component, Input} from '@angular/core';
 import {AsyncPipe, NgClass, NgIf} from '@angular/common';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {RolesService} from '../../../services/user/roles.service';
 import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.css'],
+  styleUrls: ['./sidenav.component.scss'],
   standalone: true,
   imports: [
     NgIf,
     NgClass,
     RouterLink,
-    AsyncPipe
+    AsyncPipe,
+    RouterLinkActive,
+    RouterOutlet
   ]
 })
 export class SidenavComponent {
