@@ -26,6 +26,9 @@ jobs:
       - name: Build
         run: npm run build:staging
 
+      - name: Copy 3rdpartylicenses.txt to browser folder
+        run: dist/ingeniumuahubfront/3rdpartylicenses.txt dist/ingeniumuahubfront/browser
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
