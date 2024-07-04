@@ -56,6 +56,10 @@
   &.button-outline-blue {
     @apply border-blue-900 text-blue-900 bg-transparent;
 
+    &.active {
+      @apply bg-blue-950 text-white border-blue-950;
+    }
+
     &:hover {
       @apply bg-blue-900 text-white;
     }
@@ -77,9 +81,9 @@
 }
 
 .button-group {
-  @apply flex flex-row;
+  @apply flex flex-row flex-wrap;
 
   .button {
-    @apply first:rounded-r-none last:rounded-l-none;
+    @apply rounded-none first:rounded-l-md last:rounded-r-md;
   }
 }
