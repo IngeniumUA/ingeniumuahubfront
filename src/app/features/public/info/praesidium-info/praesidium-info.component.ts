@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable, of, Subject, takeUntil} from 'rxjs';
-import {FormControl} from '@angular/forms';
 import {PraesidiumGroupI} from "@ingenium/app/shared/models/praesidium";
 
 import praesidium from "@ingenium/app/shared/data/praesidium";
@@ -17,25 +16,15 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private titleService: Title) {}
 
-  yearControl = new FormControl<string>('');
   validYears: string[] = Object.keys(praesidium); // Put newest year first
+  currentYear: string = this.validYears[0];
   praesidium$: Observable<PraesidiumGroupI[]> = of([]);
 
   ngOnInit() {
     // Fetch ID
-    const year: string = this.route.snapshot.paramMap.get('year') || this.validYears[0];
-    this.yearControl.patchValue(year);
-    this.SetupYear(year);
-    this.titleService.setTitle(`Praesidium ${year}`);
-
-    // Event for form changeing
-    this.yearControl.valueChanges.pipe(
-      takeUntil(this.ngUnsubscribe) // Unsubscribe behaviour
-    ).subscribe(selectedValue => {
-      if (selectedValue === null) return;
-      this.router.navigateByUrl(`/info/praesidium/${selectedValue}`).then(() => {});
-    }
-    );
+    this.currentYear = this.route.snapshot.paramMap.get('year') || this.validYears[0];
+    this.SetupYear(this.currentYear);
+    this.titleService.setTitle(`Praesidium '${this.currentYear}`);
 
     // Start a watcher for the route parameter
     this.route.paramMap.pipe(
@@ -55,6 +44,7 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
 
     // @ts-expect-error there isn't a type for this. I might change this later and thus am too lazy right now
     this.praesidium$ = of(praesidium[year]);
+    this.currentYear = year;
   }
 
   private ngUnsubscribe = new Subject<void>();

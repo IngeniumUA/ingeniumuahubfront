@@ -1,7 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {JsonPipe, NgForOf} from '@angular/common';
+import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {FormArray, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AllowDenyListI} from '../../../../../../models/access_policies/access_policies';
+import {Observable} from "rxjs";
+import {HubGroupI} from "@ingenium/app/shared/models/staff/HubGroup";
+import {StaffGroupService} from "@ingenium/app/core/services/staff/group/staff-group.service";
 
 @Component({
   selector: 'app-allow-deny-list',
@@ -10,7 +13,9 @@ import {AllowDenyListI} from '../../../../../../models/access_policies/access_po
   imports: [
     JsonPipe,
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    AsyncPipe,
+    NgIf
   ],
   standalone: true
 })
@@ -20,10 +25,15 @@ export class AllowDenyListComponent implements OnInit {
     @Input() access_policy_method: string | undefined;
     @Output() UpdateAccessPolicy = new EventEmitter<AllowDenyListI>;
 
+  groups$: Observable<HubGroupI[]> = this.staffGroupService.GetGroupsList();
+
     parsedPolicyContent!: AllowDenyListI;
 
     whitelistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([]);
     blacklistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([]);
+
+    constructor(private staffGroupService: StaffGroupService) {
+    }
 
     ngOnInit() {
       // Parse content as correct interface ( allows for typehints )

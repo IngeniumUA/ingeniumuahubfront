@@ -1,10 +1,12 @@
-<app-layout-public-header [light_theme]="true" />
+<header><app-layout-public-header [light_theme]="true" /></header>
 
-<main class="container p-6 mx-auto">
-  <h1 class="text-blue-900 mb-3">Credits</h1>
+<main class="ingenium-container">
+  <h1 class="white-section-title white-section-title-blue">Credits</h1>
+  <p>Our website was not made in a few minutes, it required the hard work of a lot of people. This page serves as a thank you to all the people who contributed to the creation of this website.</p>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
     <div>
+      <p class="font-bold text-black">List of students</p>
       <ul class="list-disc list-inside">
         <li>Robbe De Helt</li>
         <li>Yorben Joosen</li>
@@ -16,7 +18,10 @@
       </ul>
     </div>
     <div>
-
+      <p class="font-bold text-black">Others</p>
+      <ul class="list-disc list-inside">
+        <li><a href="/3rdpartylicenses.txt">3rd party licenses</a></li>
+      </ul>
     </div>
   </div>
 </main>

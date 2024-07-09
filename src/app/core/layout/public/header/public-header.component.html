@@ -51,6 +51,7 @@
                 <a routerLink="/info" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-dropdown-item" role="menuitem">Over ons</a>
                 <a routerLink="/info/praesidium" routerLinkActive="nav-item-active" class="nav-dropdown-item" role="menuitem">Praesidium</a>
                 <a routerLink="/info/relations" routerLinkActive="nav-item-active" class="nav-dropdown-item">Partner relations</a>
+                <a routerLink="/vacatures" routerLinkActive="nav-item-active" class="nav-dropdown-item">Vacatures</a>
                 <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-dropdown-item">Clublied</a>
                 <a routerLink="/info/contact" routerLinkActive="nav-item-active" class="nav-dropdown-item">Contact</a>
               </div>
@@ -85,9 +86,17 @@
 
           <!-- Profile dropdown menu -->
           <div *ngIf="accountDropdownOpen && (isAuth$ | async)" class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
-            <a routerLink="/account" class="nav-dropdown-item" role="menuitem">Jouw profiel</a>
+
+            <a routerLink="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
             <a routerLink="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
+
             <button (click)="Logout()" type="button" class="nav-dropdown-item" role="menuitem">Afmelden</button>
+
+            <ng-container *ngIf="(user$ | async)!.roles.is_staff">
+              <hr class="nav-dropdown-divider">
+              <a routerLink="/staff" class="nav-dropdown-item" role="menuitem">Staff</a>
+            </ng-container>
+
             <hr class="nav-dropdown-divider">
             <span class="nav-dropdown-no-link">
               <span class="sr-only">Je bent ingelogd met</span>
@@ -109,6 +118,7 @@
       <a routerLink="/info" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-item" role="menuitem">Over ons</a>
       <a routerLink="/info/praesidium" routerLinkActive="nav-item-active" class="nav-item" role="menuitem">Praesidium</a>
       <a routerLink="/info/relations" routerLinkActive="nav-item-active" class="nav-item">Partner relations</a>
+      <a routerLink="/vacatures" routerLinkActive="nav-item-active" class="nav-item">Vacatures</a>
       <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-item">Clublied</a>
       <a routerLink="/info/contact" routerLinkActive="nav-item-active" class="nav-item">Contact</a>
     </div>
