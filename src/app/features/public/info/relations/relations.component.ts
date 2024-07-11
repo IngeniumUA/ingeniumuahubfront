@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-relations',
+  selector: 'app-page',
   templateUrl: './relations.component.html',
   styleUrls: ['./relations.component.css']
 })
