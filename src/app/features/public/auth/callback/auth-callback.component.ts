@@ -34,7 +34,7 @@ export class AuthCallbackComponent implements OnInit {
         claims['email'],
       ))
 
-      this.router.navigate(['/']);
+      this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
     } catch (error) {
       console.error(error)
       this.failure = true

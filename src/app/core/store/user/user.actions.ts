@@ -1,7 +1,7 @@
 export namespace User {
   export class Login {
     static readonly type = '[User] Login';
-    constructor() {}
+    constructor(public destinationPath: string = "/") {}
   }
 
   export class RefreshToken {

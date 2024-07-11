@@ -55,8 +55,8 @@ export class UserState {
    */
 
   @Action(User.Login)
-  loginUser(_ctx: StateContext<UserStateModel>, _action: User.Login) {
-    this.oauthService.initLoginFlow();
+  loginUser(_ctx: StateContext<UserStateModel>, action: User.Login) {
+    this.oauthService.initLoginFlow(action.destinationPath);
   }
 
   @Action(User.RefreshToken)
