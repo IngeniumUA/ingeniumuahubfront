@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "default";
 @import 'ngx-toastr/toastr';
 @import "staff_styles";
 @import "button";
@@ -118,14 +119,6 @@ h4 {
 
 p {
   @apply leading-6 text-gray-600;
-}
-
-a {
-  color: var(--secondblue)
-}
-
-span {
-  color: var(--mainblue)
 }
 
 // Ingenium Container
