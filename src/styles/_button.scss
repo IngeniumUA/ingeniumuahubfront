@@ -57,7 +57,7 @@
     @apply border-blue-900 text-blue-900 bg-transparent;
 
     &.active {
-      @apply bg-blue-950 text-white border-blue-950;
+      @apply bg-blue-950 text-white border-blue-950 focus:outline-blue-950;
     }
 
     &:hover {
