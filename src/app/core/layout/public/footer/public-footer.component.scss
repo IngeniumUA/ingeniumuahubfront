@@ -22,7 +22,7 @@ footer {
     @apply bg-blue-950 -mt-8 pb-4 text-xs text-gray-300;
 
     .footer-end {
-      @apply border-t border-blue-900 px-6 pt-4 flex flex-col md:flex-row gap-y-3 gap-x-6 items-center;
+      @apply border-t border-blue-900 px-6 pt-4 flex flex-col md:flex-row gap-y-3 gap-x-6 items-center justify-center;
 
       p {
         @apply text-inherit;
