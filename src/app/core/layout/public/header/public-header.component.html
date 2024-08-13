@@ -1,5 +1,5 @@
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
-<a class="accessibility-go-to-content" [href]="router.url + '#main-content'">Naar de inhoud</a>
+<a class="accessibility-go-to-content" [href]="router.url.split('#')[0] + '#main-content'">Naar de inhoud</a>
 <!-- NAVIGATION -->
 <nav [ngClass]="{
   'nav-transparent-background': !this.background,
