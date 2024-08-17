@@ -10,11 +10,7 @@ footer {
   }
 
   &:before {
-    @apply block bg-blue-950 h-36;
-    width: 110%;
-    margin-left: -5%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
+    @apply block bg-blue-950 h-36 w-full;
     content: '';
   }
 
