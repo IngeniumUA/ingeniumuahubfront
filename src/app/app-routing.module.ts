@@ -58,19 +58,12 @@ const routes: Routes = [
       {path: '', loadChildren: () => import('src/app/features/public/promo/promo.module').then(x => x.PromoModule)},
     ]},
 
-  // POP-UP Z
-  /*
-  { path: '',
-    children: [
-      { path: 'popupz', component: PopupzComponent },
-      { path: 'popupzorder', component: PopupzorderComponent },
-      { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
-
-      // { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [staffGuard] },
-      { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [staffGuard] },
-    ]
+  //** Popupz **//
+  {
+    path: 'popupz',
+    loadChildren: () => import('src/app/features/popupz/popupz.module').then(x => x.PopupzModule),
   },
-  */
+  { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },
 
   //** Employee **//
 

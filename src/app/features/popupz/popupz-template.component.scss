@@ -1,0 +1,15 @@
+#popupz-menu {
+  @apply flex justify-center items-center gap-x-6;
+
+  .menu-item {
+    @apply py-4 px-2.5 no-underline focus:outline outline-black;
+
+    &.active {
+      @apply bg-blue-900 text-white;
+    }
+  }
+}
+
+#popupz-menu + #popupz-content {
+  @apply border-transparent;
+}

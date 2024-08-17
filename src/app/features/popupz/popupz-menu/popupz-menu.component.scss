@@ -1,0 +1,15 @@
+#popupz-food-menu {
+  @apply flex justify-center items-center gap-x-6 bg-blue-900 sticky top-0;
+
+  .menu-item {
+    @apply py-3 px-2 no-underline outline-black text-white transition-colors ease-in-out;
+
+    &:hover {
+      @apply bg-blue-950/50;
+    }
+
+    &.active {
+      @apply bg-blue-950 text-white;
+    }
+  }
+}
