@@ -48,7 +48,7 @@ export class AccountInfoComponent implements OnInit {
               private store: Store,
               private toastr: ToastrService) {
 
-    this.email = this.store.selectSnapshot(UserState.userDetails)?.google_mail || this.store.selectSnapshot(UserState.userDetails)?.email || '';
+    this.email = this.store.selectSnapshot(UserState.getEmail);
   }
 
 
@@ -57,7 +57,7 @@ export class AccountInfoComponent implements OnInit {
   }
 
   loadFieldsFromStore() {
-    const details = this.store.selectSnapshot(UserState.userDetails)?.personal_details;
+    const details = this.store.selectSnapshot(UserState.userDetails);
     if (!details) {
       return;
     }

@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "extractLicenses": true,
             "outputPath": {
               "base": "dist/ingeniumuahubfront"
             },
@@ -36,6 +37,7 @@
           },
           "configurations": {
             "production": {
+              "extractLicenses": true,
               "prerender": false,
               "budgets": [
                 {
@@ -52,6 +54,7 @@
               "outputHashing": "all"
             },
             "staging": {
+              "extractLicenses": true,
               "prerender": false,
               "fileReplacements": [
                 {

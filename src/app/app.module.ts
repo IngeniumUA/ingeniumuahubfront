@@ -28,9 +28,6 @@ import {GroupnamePipe} from './shared/pipes/account/groupname.pipe';
 import {PublicRoutingComponent} from './features/public/public-routing.component';
 import {PublicFooterComponent} from './core/layout/public/footer/public-footer.component';
 import {CloudComponent} from './features/public/cloud/cloud.component';
-import {RegisterComponent} from './shared/components/auth/register/register.component';
-import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from '@abacritt/angularx-social-login';
-import {SetpwComponent} from './features/public/auth/setpw/setpw.component';
 import {
   RecSysItemPreviewComponent
 } from './shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
@@ -38,7 +35,6 @@ import {CardComponent} from './shared/components/account/card/card.component';
 import {UnderConstructionComponent} from './shared/components/under-construction/under-construction.component';
 import {ContactComponent} from './features/public/info/contact/contact.component';
 import {CardRedirectComponent} from './features/public/card-redirect/card-redirect.component';
-import {AwaitpasswordLinkComponent} from './features/public/auth/awaitpassword-link/awaitpassword-link.component';
 import {CreditsComponent} from './features/public/info/credits/credits.component';
 import {PopupzComponent} from './features/public/popupz/popupz.component';
 import {PopupzorderComponent} from './features/public/popupz/popupzorder/popupzorder.component';
@@ -50,7 +46,13 @@ import {PartnerGridComponent} from './shared/components/partners/partner-grid/pa
 import {GalabalComponent} from './features/public/custom-pages/galabal/galabal.component';
 import {PromoListComponent} from './shared/components/items/item/promo-list/promo-list.component';
 import {SsrCookieService} from "ngx-cookie-service-ssr";
+import {OAuthModule, OAuthStorage} from "angular-oauth2-oidc";
 
+// Storage factory for OAuthModule
+export function storageFactory() : OAuthStorage {
+  console.log('storageFactory')
+  return localStorage
+}
 
 @NgModule({
   declarations: [
@@ -64,10 +66,8 @@ import {SsrCookieService} from "ngx-cookie-service-ssr";
 
     EventDatePipe,
     GroupnamePipe,
-    SetpwComponent,
     ContactComponent,
     CardRedirectComponent,
-    AwaitpasswordLinkComponent,
     CreditsComponent,
     PopupzComponent,
     PopupzorderComponent,
@@ -84,13 +84,11 @@ import {SsrCookieService} from "ngx-cookie-service-ssr";
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    SocialLoginModule,
     CardComponent,
 
     ReactiveFormsModule,
     MatRadioModule,
     MatButtonModule,
-    RegisterComponent,
     RecSysItemPreviewComponent,
 
     PartnerBalkComponent,
@@ -102,15 +100,13 @@ import {SsrCookieService} from "ngx-cookie-service-ssr";
     PromoListComponent,
     NgOptimizedImage,
 
+    OAuthModule.forRoot(),
     NgxsModule.forRoot([UserState], {
       developmentMode: isDevMode(),
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: !isDevMode(),
     }),
-    /*NgxsStoragePluginModule.forRoot({
-      key: 'auth.token'
-    })*/
   ],
   providers: [
     {
@@ -129,18 +125,7 @@ import {SsrCookieService} from "ngx-cookie-service-ssr";
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider('955811433543-a10u2jjmsatmruf7p8cf2d005higk2k5.apps.googleusercontent.com')
-          }
-        ]
-      } as unknown as SocialAuthServiceConfig,
-    },
+    { provide: OAuthStorage, useFactory: storageFactory },
     provideClientHydration(),
     provideHttpClient(withFetch()),
     SsrCookieService,

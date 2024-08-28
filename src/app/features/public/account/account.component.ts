@@ -10,7 +10,7 @@ import {UserState} from "@ingenium/app/core/store";
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent {
-  roles$: Observable<HubUserRolesI|undefined>;
+  roles$: Observable<HubUserRolesI|null>;
 
   constructor(private store: Store) {
     this.roles$ = this.store.select(UserState.getRoles);

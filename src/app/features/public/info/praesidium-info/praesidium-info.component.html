@@ -2,6 +2,15 @@
 
 <main class="ingenium-container relative h-full">
 
+  <div class="flex flex-col md:flex-row items-center mb-8">
+    <span class="mb-2 mr-0 md:mb-0 md:mr-2">Alle Praesidium jaren:</span>
+    <div class="grid grid-cols-4 gap-2 md:block md:space-x-2">
+      @for (validYear of validYears; track validYear) {
+        <a [routerLink]="['/info/praesidium', validYear]" [ngClass]="{ 'button button-outline-blue button-sm': true, 'active': validYear === currentYear }"><span class="sr-only">Jaar </span> {{ validYear }}</a>
+      }
+    </div>
+  </div>
+
   <div *ngIf="praesidium$ | async as praesidiumGroups" class="space-y-12">
 
     @for (group of praesidiumGroups; track group.groupName) {

@@ -4,7 +4,8 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
 import {User, UserState} from '@ingenium/app/core/store';
-import {HubAccountData} from "@ingenium/app/shared/models/user";
+import {HubUserRolesI} from "@ingenium/app/shared/models/user";
+import {OAuthService} from "angular-oauth2-oidc";
 
 
 @Component({
@@ -28,7 +29,8 @@ export class PublicHeaderComponent {
   accountDropdownOpen: boolean = false;
   infoDropdownOpen: boolean = false;
 
-  user$: Observable<HubAccountData|null>;
+  email$: Observable<string|null>;
+  roles$: Observable<HubUserRolesI|null>;
   isAuth$: Observable<boolean>;
 
   @Input() light_theme: boolean = false;  // 'dark' or 'light'
@@ -37,9 +39,14 @@ export class PublicHeaderComponent {
   @Input() internalToggle: boolean = true; // If toggling the navbar should use this navbar or outsource it
   @Output() isToggleEmitter = new EventEmitter<boolean>();
 
-  constructor(private store: Store) {
-    this.user$ = store.select(UserState.userDetails);
+  constructor(private store: Store, private oauthService: OAuthService) {
+    this.email$ = store.select(UserState.getEmail);
+    this.roles$ = store.select(UserState.getRoles);
     this.isAuth$ = store.select(UserState.isAuthenticated);
+  }
+
+  Login() {
+    this.store.dispatch(new User.Login());
   }
 
   Logout() {

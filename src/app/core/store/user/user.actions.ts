@@ -1,15 +1,7 @@
-import {HubAuthData} from "@ingenium/app/shared/models/user";
-
 export namespace User {
-
-  export class LoginUser {
+  export class Login {
     static readonly type = '[User] Login';
-    constructor(public username: string, public password: string) {}
-  }
-
-  export class GoogleLogin {
-    static readonly type = '[User] Google Login';
-    constructor(public googleAuthToken: string) {}
+    constructor(public destinationPath: string = "/") {}
   }
 
   export class RefreshToken {
@@ -19,7 +11,7 @@ export namespace User {
 
   export class SetAuthData {
     static readonly type = '[User] Set Auth Data';
-    constructor(public userDetails: HubAuthData) {}
+    constructor(public token: string, public email: string) {}
   }
 
   export class FetchAuthTokenFromStorage {
@@ -28,10 +20,6 @@ export namespace User {
 
   export class FetchUserDetails {
     static readonly type =  '[User] Fetch User Details';
-  }
-
-  export class RemoveUserDetails {
-    static readonly type = '[User] Logout';
   }
 
   export class Logout {

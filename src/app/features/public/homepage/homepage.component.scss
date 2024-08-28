@@ -48,11 +48,11 @@ section {
   }
 
   h1 {
-    @apply pb-0 mb-0 text-3xl md:text-5xl;
+    @apply pb-0 mb-0 text-xl sm:text-3xl md:text-5xl;
     color: var(--mainwhite);
 
     small {
-      @apply block font-normal text-xl md:text-3xl mt-1.5;
+      @apply block font-normal text-lg sm:text-xl md:text-3xl mt-1.5;
     }
   }
 
