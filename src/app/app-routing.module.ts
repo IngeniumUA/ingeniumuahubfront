@@ -3,7 +3,6 @@ import {RouterModule, Routes, TitleStrategy} from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import {HomepageComponent} from './features/public/homepage/homepage.component';
 import {NotfoundpageComponent} from './features/notfoundpage/notfoundpage.component';
-import {RecSysFormComponent} from './features/recsysform/rec-sys-form.component';
 import {PublicRoutingComponent} from './features/public/public-routing.component';
 import {CloudComponent} from './features/public/cloud/cloud.component';
 import {authGuard} from './core/guards/auth/auth.guard';
@@ -83,9 +82,6 @@ const routes: Routes = [
     loadChildren: () => import('src/app/features/manager/manager.module').then(x => x.ManagerModule),
     canActivate: [managerGuard]
   },
-
-  // Temporary Recsysform
-  { path: 'recsysform', component: RecSysFormComponent },
 
   // Not found as last
   { path: '**', component: NotfoundpageComponent }

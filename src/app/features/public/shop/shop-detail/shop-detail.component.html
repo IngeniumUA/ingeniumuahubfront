@@ -4,7 +4,7 @@
   <ng-container *ngIf="{shopItem: this.shopItem$ | async, error: this.shopError$ | async} as data; ">
     <ng-container *ngIf="data.shopItem as shop; else loading">
       <section class="shop-banner">
-        <img src="{{shop.image_landscape}}" alt="Image not working :(">
+        <img src="{{shop.derived_type.display.image_landscape}}" alt="Image not working :(">
       </section>
 
       <section class="title-info-section">
@@ -14,7 +14,7 @@
       <section>
         <ng-container *ngFor="let product of (this.products$ | async)">
           <app-product [onInitValue]="this.GetCurrentProductCount(shop.item, product)" [product]="product"
-                       [primaryColorFull]="(shop.color | colordbrgba: 1)" [primaryColorHalf]="(shop.color | colordbrgba: 0.5)"
+                       [primaryColorFull]="(shop.derived_type.display.color | colordbrgba: 1)" [primaryColorHalf]="(shop.derived_type.display.color | colordbrgba: 0.5)"
                        (countEvent)="this.SetProductCount(shop.item, product, $event)" />
         </ng-container>
       </section>

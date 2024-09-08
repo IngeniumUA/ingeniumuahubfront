@@ -27,7 +27,7 @@ export class RolesService {
     if (!(this.lastUpdated === null)) {
       return of(this.savedRoles);
     }
-    return this.httpClient.get<HubUserRolesI>(apiEnviroment.apiUrl + 'user/account/roles').pipe(shareReplay());
+    return this.httpClient.get<HubUserRolesI>(apiEnviroment.apiUrl + 'account/roles').pipe(shareReplay());
   }
 
   public get isStaff(): Observable<boolean> {

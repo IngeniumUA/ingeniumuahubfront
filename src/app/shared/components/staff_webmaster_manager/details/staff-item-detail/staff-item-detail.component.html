@@ -7,7 +7,7 @@
         <tr><th scope="col"></th><th scope="col">Item:</th></tr>
       </thead>
       <tbody>
-        <tr><th>UUID</th><td>{{ itemModel.uuid }}</td></tr>
+        <tr><th>ID</th><td>{{ itemModel.id }}</td></tr>
         <tr>
           <th>Name</th>
           <td><label class="hubformfield-white">
@@ -18,8 +18,8 @@
           <th>Available</th>
           <td><input type="checkbox" formControlName="available"/></td>
         </tr>
-        <tr><th>Created At</th><td>{{ itemModel.created_at | date: 'medium' }}</td></tr>
-        <tr><th>Modified At</th><td>{{ itemModel.modified_at | date: 'medium' }}</td></tr>
+        <tr><th>Created At</th><td>{{ itemModel.created_timestamp | date: 'medium' }}</td></tr>
+        <tr><th>Modified At</th><td>{{ itemModel.last_update_timestamp | date: 'medium' }}</td></tr>
       </tbody>
     </table>
     <h4><b>Description</b></h4>
@@ -54,15 +54,15 @@
     </table>
   </form>
   <br>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 0)" [displayMixin]="this.item.event_item.display_mixin"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 0)" [displayMixin]="this.item.derived_type.display"></app-display-mixin-detail>
 </section>
 
 <section *ngIf="this.isShopItem">
   <h2>Shop Item</h2>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 1)" [displayMixin]="this.item.shop_item.display_mixin"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 1)" [displayMixin]="this.item.derived_type.display"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="this.item.promo_item as promoItem">
+<section *ngIf="this.item.derived_type as promoItem">
   <h2>Promo Item</h2>
   <form [formGroup]="itemForm">
     <table>
@@ -84,13 +84,13 @@
       </tr>
       <tr>
         <th>Type</th>
-        <td>{{ promoItem.type }}</td>
+        <td>{{ promoItem }}</td>
       </tr>
       </tbody>
     </table>
   </form>
   <br>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 2)" [displayMixin]="promoItem.display_mixin"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 2)" [displayMixin]="promoItem.display"></app-display-mixin-detail>
 </section>
 
 <section>

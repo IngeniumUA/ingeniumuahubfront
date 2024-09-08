@@ -3,9 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import {Observable, of, shareReplay} from 'rxjs';
 import { CartService } from 'src/app/core/services/shop/cart/cart.service';
-import { EventItemDetailI } from 'src/app/shared/models/items/events';
 import { IProductItem } from 'src/app/shared/models/items/products/products';
 import { apiEnviroment } from 'src/environments/environment';
+import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 
 @Component({
   selector: 'app-page',
@@ -16,14 +16,14 @@ export class PopupzComponent implements OnInit {
   category: 'food' | 'drinks' | 'snacks' = 'food';
   totalProducts: number = 0;
   products$: Observable<IProductItem[]> = of([]);
-  event: EventItemDetailI = {} as EventItemDetailI;
+  event: ItemWideLimitedI = {} as ItemWideLimitedI;
 
   constructor(private httpClient: HttpClient, private cartService: CartService, private toastr: ToastrService) {}
 
   ngOnInit() {
     this.updateProductTotal();
     this.getProducts();
-    this.httpClient.get<EventItemDetailI>(apiEnviroment.apiUrl + 'popup/event').pipe(shareReplay()).subscribe((item) => {
+    this.httpClient.get<ItemWideLimitedI>(apiEnviroment.apiUrl + 'popup/event').pipe(shareReplay()).subscribe((item) => {
       this.event = item;
     });
   }

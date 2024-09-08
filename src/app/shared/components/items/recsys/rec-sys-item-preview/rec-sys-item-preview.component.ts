@@ -33,11 +33,8 @@ export class RecSysItemPreviewComponent implements OnInit {
     }
 
     TextColor() {
-      if (this.recsysItem.text_color === undefined) {
-        return 'rgb(255,255,255)';
-      }
-      const colorPipe = new ColordbrgbaPipe();
-      return colorPipe.transform(this.recsysItem.text_color, 1);
+      // We could customize this
+      return 'rgb(255,255,255)';
     }
 
     CardStyle(): object {

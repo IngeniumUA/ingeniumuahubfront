@@ -49,6 +49,6 @@ export class AccountService {
   }
 
   public getTransactions(): Observable<TransactionI[]> {
-    return this.httpClient.get<TransactionI[]>(apiEnviroment.apiUrl + 'user/account/transactions');
+    return this.httpClient.get<TransactionI[]>(apiEnviroment.apiUrl + 'account/transactions');
   }
 }

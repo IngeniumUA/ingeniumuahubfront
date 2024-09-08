@@ -11,7 +11,7 @@ import {HubCheckoutTrackerI} from "@ingenium/app/shared/models/tracker";
 export class TrackerService {
   constructor(private httpClient: HttpClient) {}
 
-  apiUrl = apiEnviroment.apiUrl + 'user/tracker';
+  apiUrl = apiEnviroment.apiUrl + 'account/trackers';
 
   public getTrackers(): Observable<HubCheckoutTrackerI[]> {
     /**
