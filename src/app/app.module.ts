@@ -44,7 +44,6 @@ import {PartnerDumpComponent} from './shared/components/partners/partner-dump/pa
 import {PartnerGridComponent} from './shared/components/partners/partner-grid/partner-grid.component';
 import {GalabalComponent} from './features/public/custom-pages/galabal/galabal.component';
 import {PromoListComponent} from './shared/components/items/item/promo-list/promo-list.component';
-import {SsrCookieService} from "ngx-cookie-service-ssr";
 import {OAuthModule, OAuthStorage} from "angular-oauth2-oidc";
 
 // Storage factory for OAuthModule
@@ -126,7 +125,6 @@ export function storageFactory() : OAuthStorage {
     { provide: OAuthStorage, useFactory: storageFactory },
     provideClientHydration(),
     provideHttpClient(withFetch()),
-    SsrCookieService,
   ],
   exports: [
     EventDatePipe,
