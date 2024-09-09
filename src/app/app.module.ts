@@ -12,7 +12,7 @@ import {AppComponent} from './app.component';
 import {PublicHeaderComponent} from './core/layout/public/header/public-header.component';
 import {HomepageComponent} from './features/public/homepage/homepage.component';
 import {AppRoutingModule} from './app-routing.module';
-import {HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
 import {NotfoundpageComponent} from './features/notfoundpage/notfoundpage.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatRadioModule} from '@angular/material/radio';
@@ -52,85 +52,71 @@ export function storageFactory() : OAuthStorage {
   return localStorage
 }
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    HomepageComponent,
-    NotfoundpageComponent,
-
-    PublicRoutingComponent,
-    CloudComponent,
-
-    EventDatePipe,
-    GroupnamePipe,
-    ContactComponent,
-    CardRedirectComponent,
-    CreditsComponent,
-    PopupzComponent,
-    PopupzorderComponent,
-    PopupzorderStaffComponent,
-    GalabalComponent,
-  ],
-  imports: [
-    BrowserModule,
-    PublicHeaderComponent,
-    PublicFooterComponent,
-
-    UnderConstructionComponent,
-
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    CardComponent,
-
-    ReactiveFormsModule,
-    MatRadioModule,
-    MatButtonModule,
-    RecSysItemPreviewComponent,
-
-    PartnerBalkComponent,
-    PartnerDumpComponent,
-
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    PartnerGridComponent,
-    PromoListComponent,
-    NgOptimizedImage,
-
-    OAuthModule.forRoot(),
-    NgxsModule.forRoot([UserState], {
-      developmentMode: isDevMode(),
-    }),
-    NgxsReduxDevtoolsPluginModule.forRoot({
-      disabled: !isDevMode(),
-    }),
-  ],
-  providers: [
-    {
-      provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler({
-        showDialog: false,
-      }),
-    }, {
-      provide: Sentry.TraceService,
-        deps: [Router],
-    },
-    {
-      provide: APP_INITIALIZER,
-        useFactory: () => () => {},
-      deps: [Sentry.TraceService],
-      multi: true,
-    },
-    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
-    { provide: OAuthStorage, useFactory: storageFactory },
-    provideClientHydration(),
-    provideHttpClient(withFetch()),
-  ],
-  exports: [
-    EventDatePipe,
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        HomepageComponent,
+        NotfoundpageComponent,
+        PublicRoutingComponent,
+        CloudComponent,
+        EventDatePipe,
+        GroupnamePipe,
+        ContactComponent,
+        CardRedirectComponent,
+        CreditsComponent,
+        PopupzComponent,
+        PopupzorderComponent,
+        PopupzorderStaffComponent,
+        GalabalComponent,
+    ],
+    exports: [
+        EventDatePipe,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        PublicHeaderComponent,
+        PublicFooterComponent,
+        UnderConstructionComponent,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        CardComponent,
+        ReactiveFormsModule,
+        MatRadioModule,
+        MatButtonModule,
+        RecSysItemPreviewComponent,
+        PartnerBalkComponent,
+        PartnerDumpComponent,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        PartnerGridComponent,
+        PromoListComponent,
+        NgOptimizedImage,
+        OAuthModule.forRoot(),
+        NgxsModule.forRoot([UserState], {
+            developmentMode: isDevMode(),
+        }),
+        NgxsReduxDevtoolsPluginModule.forRoot({
+            disabled: !isDevMode(),
+        })], providers: [
+        {
+            provide: ErrorHandler,
+            useValue: Sentry.createErrorHandler({
+                showDialog: false,
+            }),
+        }, {
+            provide: Sentry.TraceService,
+            deps: [Router],
+        },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: () => () => { },
+            deps: [Sentry.TraceService],
+            multi: true,
+        },
+        { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
+        { provide: OAuthStorage, useFactory: storageFactory },
+        provideClientHydration(),
+        provideHttpClient(withFetch()),
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule implements NgxsAfterBootstrap {
   ngxsAfterBootstrap(ctx: StateContext<any>): void {
     ctx.dispatch(new User.FetchUserDetails());
