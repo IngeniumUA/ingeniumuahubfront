@@ -6,7 +6,7 @@ export interface HubAuthData {
   token_type: string;
 }
 
-export interface HubUserRolesI {
+export interface UserRolesI {
   is_manager: boolean
   is_webmaster: boolean
   is_staff: boolean
@@ -30,7 +30,7 @@ export interface HubAccountData {
   google_mail: string,
   ua_mail: string,
 
-  roles: HubUserRolesI,
+  roles: UserRolesI,
   personal_details: HubUserPersonalDetailsI,
 
   card_details: HubCardI

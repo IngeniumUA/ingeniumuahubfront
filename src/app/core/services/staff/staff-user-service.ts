@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {apiEnviroment} from '../../../../environments/environment';
-import {StaffUserDetailI} from '../../../shared/models/staff/staff_user_detail';
+import {UserI} from '../../../shared/models/staff/staff_user_detail';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class StaffUserService {
     user: string | null = null,
     user_email: string | null = null,
     user_ismemberof_group: number[] = []
-  ): Observable<StaffUserDetailI[]> {
+  ): Observable<UserI[]> {
     let query_str = '?offset=' + offset.toString() + '&limit=' + count.toString();
     if (user !== null) {
       query_str += '&user=' + user.toString();
@@ -27,7 +27,7 @@ export class StaffUserService {
     user_ismemberof_group.forEach((group) => {
       query_str += '&ismemberof_group=' + group.toString();
     });
-    return this.httpClient.get<StaffUserDetailI[]>(
+    return this.httpClient.get<UserI[]>(
       this.apiUrl + query_str);
   }
 
@@ -85,13 +85,13 @@ export class StaffUserService {
     return this.httpClient.get<Blob>(this.apiUrl + '/export' + query_str, httpOptions);
   }
 
-  public getUser(userId: string): Observable<StaffUserDetailI> {
-    return this.httpClient.get<StaffUserDetailI>(this.apiUrl + '/' + userId);
+  public getUser(userId: string): Observable<UserI> {
+    return this.httpClient.get<UserI>(this.apiUrl + '/' + userId);
   }
-  public createUser(user_obj: StaffUserDetailI): Observable<StaffUserDetailI> {
-    return this.httpClient.post<StaffUserDetailI>(this.apiUrl, user_obj);
+  public createUser(user_obj: UserI): Observable<UserI> {
+    return this.httpClient.post<UserI>(this.apiUrl, user_obj);
   }
-  public updateUser(userId: string, user_obj: StaffUserDetailI): Observable<StaffUserDetailI> {
-    return this.httpClient.put<StaffUserDetailI>(this.apiUrl + '/' + userId, user_obj);
+  public updateUser(userId: string, user_obj: UserI): Observable<UserI> {
+    return this.httpClient.put<UserI>(this.apiUrl + '/' + userId, user_obj);
   }
 }

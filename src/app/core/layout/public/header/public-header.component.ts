@@ -4,7 +4,7 @@ import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
 import {User, UserState} from '@ingenium/app/core/store';
-import {HubUserRolesI} from "@ingenium/app/shared/models/user";
+import {UserRolesI} from "@ingenium/app/shared/models/user";
 import {OAuthService} from "angular-oauth2-oidc";
 
 
@@ -30,7 +30,7 @@ export class PublicHeaderComponent {
   infoDropdownOpen: boolean = false;
 
   email$: Observable<string|null>;
-  roles$: Observable<HubUserRolesI|null>;
+  roles$: Observable<UserRolesI|null>;
   isAuth$: Observable<boolean>;
 
   @Input() light_theme: boolean = false;  // 'dark' or 'light'

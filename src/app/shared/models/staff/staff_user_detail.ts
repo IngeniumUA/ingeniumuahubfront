@@ -1,24 +1,17 @@
-import {HubUserPersonalDetailsI, HubUserRolesI} from '../user';
+import {HubUserPersonalDetailsI, UserRolesI} from '../user';
 import {HubGroupI} from './HubGroup';
 
-export interface StaffUserDetailI {
+export interface UserI {
   uuid: string
-  is_active: boolean
-  prefered_email: string
-  password_set: boolean
 
   email: string
-  mail_verified: boolean
-  google_email: string
-  google_verified: boolean
+  disabled: boolean
 
-  created_at: string
-  modified_at: string
+  created_timestamp: string
+  last_update_timestamp: string
   last_login: string
 
-  is_manager: boolean
+  manager: boolean
 
-  groups: HubGroupI[]
-  roles: HubUserRolesI
-  user_detail: HubUserPersonalDetailsI
+  roles: UserRolesI
 }

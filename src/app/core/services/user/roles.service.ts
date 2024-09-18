@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable, of, shareReplay} from 'rxjs';
-import {HubUserRolesI} from '../../../shared/models/user';
+import {UserRolesI} from '../../../shared/models/user';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
@@ -15,19 +15,19 @@ export class RolesService {
               private httpClient: HttpClient) {
   }
 
-  savedRoles: HubUserRolesI = {is_staff: false, is_manager: false, is_webmaster: false, is_lid: false};
+  savedRoles: UserRolesI = {is_staff: false, is_manager: false, is_webmaster: false, is_lid: false};
   lastUpdated: Date | null = null;
 
-  public setRoles(roles: HubUserRolesI) {
+  public setRoles(roles: UserRolesI) {
     this.savedRoles = roles;
     this.lastUpdated = new Date();
   }
 
-  public getRoles(): Observable<HubUserRolesI> {
+  public getRoles(): Observable<UserRolesI> {
     if (!(this.lastUpdated === null)) {
       return of(this.savedRoles);
     }
-    return this.httpClient.get<HubUserRolesI>(apiEnviroment.apiUrl + 'account/roles').pipe(shareReplay());
+    return this.httpClient.get<UserRolesI>(apiEnviroment.apiUrl + 'account/roles').pipe(shareReplay());
   }
 
   public get isStaff(): Observable<boolean> {

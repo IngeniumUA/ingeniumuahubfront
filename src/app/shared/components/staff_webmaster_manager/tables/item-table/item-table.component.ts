@@ -4,7 +4,7 @@ import {MatTableModule} from '@angular/material/table';
 import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {RolesService} from '@ingenium/app/core/services/user/roles.service';
-import {HubUserRolesI} from '../../../../models/user';
+import {UserRolesI} from '../../../../models/user';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 
@@ -35,7 +35,7 @@ export class ItemTableComponent implements OnInit {
     this.items$ = this.itemService.getItems();
   }
 
-  public GetDisplayedColumns(roles: HubUserRolesI): string[] {
+  public GetDisplayedColumns(roles: UserRolesI): string[] {
     const displayed_columns = ['name', 'available', 'disabled', 'created_at', 'modified_at'];
     if (roles.is_manager || roles.is_webmaster) {
       displayed_columns.splice(0, 0, 'uuid'); // TODO Add 'disabled' here

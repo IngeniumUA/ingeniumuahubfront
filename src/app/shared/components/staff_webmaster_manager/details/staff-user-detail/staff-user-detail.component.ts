@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs';
-import {StaffUserDetailI} from '../../../../models/staff/staff_user_detail';
+import {UserI} from '../../../../models/staff/staff_user_detail';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -30,7 +30,7 @@ export class StaffUserDetailComponent {
   constructor(private staffGroupService: StaffGroupService) {
   }
 
-  @Input() userDetail!: StaffUserDetailI;
+  @Input() userDetail!: UserI;
   @Output() refetchUserEvent = new EventEmitter<boolean>();
 
   $groups: Observable<HubGroupI[]> = this.staffGroupService.GetGroupsList();
