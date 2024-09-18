@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {StaffUserService} from '../../../../core/services/staff/staff-user-service';
 import {Observable} from 'rxjs';
-import {UserI} from '../../../../shared/models/staff/staff_user_detail';
+import {UserI} from '../../../../shared/models/user/userI';
 
 @Component({
   selector: 'app-user-detail',

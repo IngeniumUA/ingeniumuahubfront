@@ -3,7 +3,7 @@ import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {StaffUserService} from '../../../../../core/services/staff/staff-user-service';
-import {UserI} from '../../../../models/staff/staff_user_detail';
+import {UserI} from '../../../../models/user/userI';
 import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -11,7 +11,7 @@ import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Val
 import {distinctUntilChanged} from 'rxjs/operators';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {HubGroupI} from '../../../../models/staff/HubGroup';
+import {GroupI} from '../../../../models/group/HubGroup';
 import {StaffGroupService} from '../../../../../core/services/staff/group/staff-group.service';
 
 @Component({
@@ -37,7 +37,7 @@ import {StaffGroupService} from '../../../../../core/services/staff/group/staff-
 export class UserTableComponent implements OnInit, AfterViewInit {
   userData$: Observable<UserI[]> = of([]);
   userStats$: Observable<number> = of(0);
-  groups$: Observable<HubGroupI[]> = this.staffGroupService.GetGroupsList();
+  groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
   usersExport$: Observable<Blob> = of();
 
   blob!: Blob;

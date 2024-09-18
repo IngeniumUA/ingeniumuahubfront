@@ -3,7 +3,7 @@ import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {FormArray, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AllowDenyListI} from '../../../../../../models/access_policies/access_policies';
 import {Observable} from "rxjs";
-import {HubGroupI} from "@ingenium/app/shared/models/staff/HubGroup";
+import {GroupI} from "@ingenium/app/shared/models/group/HubGroup";
 import {StaffGroupService} from "@ingenium/app/core/services/staff/group/staff-group.service";
 
 @Component({
@@ -25,7 +25,7 @@ export class AllowDenyListComponent implements OnInit {
     @Input() access_policy_method: string | undefined;
     @Output() UpdateAccessPolicy = new EventEmitter<AllowDenyListI>;
 
-  groups$: Observable<HubGroupI[]> = this.staffGroupService.GetGroupsList();
+  groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
 
     parsedPolicyContent!: AllowDenyListI;
 

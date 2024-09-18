@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
-import {HubAccountData, HubUserPersonalDetailsI} from '../../../../shared/models/user';
+import {HubAccountData, HubUserPersonalDetailsI} from '../../../../shared/models/user/user';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '../../../../../environments/environment';
-import {HubCardI} from '../../../../shared/models/card';
+import {CardLimitedI} from '../../../../shared/models/card';
 import {IProductItem} from '../../../../shared/models/items/products/products';
 
 export interface InteractionI {
@@ -44,8 +44,8 @@ export class AccountService {
 
   // -----
 
-  public linkCard(card_uuid: string): Observable<HubCardI> {
-    return this.httpClient.post<HubCardI>(apiEnviroment.apiUrl + 'item/card/link/' + card_uuid, {});
+  public linkCard(card_uuid: string): Observable<CardLimitedI> {
+    return this.httpClient.post<CardLimitedI>(apiEnviroment.apiUrl + 'item/card/link/' + card_uuid, {});
   }
 
   public getTransactions(): Observable<TransactionI[]> {

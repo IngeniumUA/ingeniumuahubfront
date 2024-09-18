@@ -1,16 +1,10 @@
-import {HubCardI} from './card';
+import {CardLimitedI} from '../card';
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 export interface HubAuthData {
   access_token: string;
   refresh_token: string;
   token_type: string;
-}
-
-export interface UserRolesI {
-  is_manager: boolean
-  is_webmaster: boolean
-  is_staff: boolean
-  is_lid: boolean
 }
 
 export interface HubUserPersonalDetailsI {
@@ -33,5 +27,5 @@ export interface HubAccountData {
   roles: UserRolesI,
   personal_details: HubUserPersonalDetailsI,
 
-  card_details: HubCardI
+  card_details: CardLimitedI
 }

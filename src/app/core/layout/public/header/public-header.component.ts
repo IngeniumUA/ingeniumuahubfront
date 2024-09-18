@@ -4,8 +4,8 @@ import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
 import {User, UserState} from '@ingenium/app/core/store';
-import {UserRolesI} from "@ingenium/app/shared/models/user";
 import {OAuthService} from "angular-oauth2-oidc";
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 
 @Component({

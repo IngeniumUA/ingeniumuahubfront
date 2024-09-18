@@ -4,9 +4,9 @@ import {MatTableModule} from '@angular/material/table';
 import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {RolesService} from '@ingenium/app/core/services/user/roles.service';
-import {UserRolesI} from '../../../../models/user';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 @Component({
   selector: 'app-item-table',

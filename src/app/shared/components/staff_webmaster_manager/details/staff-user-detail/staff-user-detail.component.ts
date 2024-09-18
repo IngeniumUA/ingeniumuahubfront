@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs';
-import {UserI} from '../../../../models/staff/staff_user_detail';
+import {UserI} from '../../../../models/user/userI';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import {HubGroupI} from '../../../../models/staff/HubGroup';
+import {GroupI} from '../../../../models/group/HubGroup';
 import {StaffGroupService} from '../../../../../core/services/staff/group/staff-group.service';
 import {MatTableModule} from '@angular/material/table';
 
@@ -33,7 +33,7 @@ export class StaffUserDetailComponent {
   @Input() userDetail!: UserI;
   @Output() refetchUserEvent = new EventEmitter<boolean>();
 
-  $groups: Observable<HubGroupI[]> = this.staffGroupService.GetGroupsList();
+  $groups: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
   groupControl = new FormControl<string>('');
 
   AddToGroup() {

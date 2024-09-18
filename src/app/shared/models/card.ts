@@ -1,4 +1,4 @@
-export interface HubCardI {
+export interface CardLimitedI {
   id: string
   card_nr: string
   type: string

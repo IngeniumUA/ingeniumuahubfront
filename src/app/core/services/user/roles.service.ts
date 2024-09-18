@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {Observable, of, shareReplay} from 'rxjs';
-import {UserRolesI} from '../../../shared/models/user';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {apiEnviroment} from '../../../../environments/environment';
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 
 @Injectable({

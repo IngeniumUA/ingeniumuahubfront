@@ -1,5 +1,5 @@
-import {HubUserPersonalDetailsI, UserRolesI} from '../user';
-import {HubGroupI} from './HubGroup';
+import {HubUserPersonalDetailsI} from './user';
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 export interface UserI {
   uuid: string
