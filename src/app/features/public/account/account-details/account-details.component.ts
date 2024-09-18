@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HubAccountData} from '@ingenium/app/shared/models/user';
+import {HubAccountData} from '@ingenium/app/shared/models/user/user';
 import {Store} from "@ngxs/store";
 
 @Component({

@@ -3,7 +3,7 @@
   <app-staff-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)"></app-staff-item-detail>
 </section>
 
-<ng-container *ngIf="item.shop_item !== null || item.event_item !== null">
+<ng-container *ngIf="item.derived_type.derived_type_enum != 'promoitem'">
 <section class="staffSection">
   <h1>Product Blueprints</h1>
   <app-product-blueprint-dashboard [itemId]="itemId"></app-product-blueprint-dashboard>
@@ -35,7 +35,7 @@
 <section class="staffSection">
   <p class="text-sm text-yellow-700">Don't press this by accident<br>Klik hier ni per ongeluk op</p>
   <button class="bg-yellow-700 button button-primary button-inline"
-          (click)="DisableItem()"
+          (click)="DisableItem(item.item.id)"
   >
     <span class="text-white">{{ this.loadingDisable ? "Verwijderen ..." : "Verwijder" }}</span>
   </button>

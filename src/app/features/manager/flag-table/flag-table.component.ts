@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 interface FlagI {
   id: number
   name: string
-  int_value: number
+  value: object
 }
 
 @Component({
@@ -21,16 +21,19 @@ export class FlagTableComponent {
   constructor(private httpClient: HttpClient) {
   }
 
-  $checkoutsEnabled: Observable<FlagI> = this.httpClient.get<FlagI>(apiEnviroment.apiUrl + 'manager/flag?name=checkouts_enabled');
+  $checkoutsEnabled: Observable<FlagI> = this.httpClient.get<FlagI>(apiEnviroment.apiUrl + 'flag?name=checkouts_enabled');
 
   public toggleCheckoutEnable(flagObj: FlagI) {
     this.loading = true;
 
     // Syntax is -> value = condition ? v_true: v_false
+    // @ts-ignore
+    const flagValue = flagObj.value["checkouts_enabled"] == 1 ? {"checkouts_enabled": 0}: {"checkouts_enabled": 1};
+
     const putFlag: FlagI = {
       id: flagObj.id,
       name: flagObj.name,
-      int_value: flagObj.int_value == 1 ? 0: 1
+      value: flagValue,
     };
 
     this.$checkoutsEnabled = this.httpClient.put<FlagI>(

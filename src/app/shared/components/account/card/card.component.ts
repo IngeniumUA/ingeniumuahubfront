@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {HubCardI} from '../../../models/card';
+import {CardLimitedI} from '../../../models/card';
 import {AsyncPipe, NgClass, NgIf} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AccountService} from '../../../../core/services/user/account/account.service';
@@ -20,7 +20,7 @@ import {first} from 'rxjs/operators';
   standalone: true
 })
 export class CardComponent implements OnInit {
-  @Input() card: HubCardI | null = null;
+  @Input() card: CardLimitedI | null = null;
   @Input() is_lid: boolean = false;
   @Input() on_account_page: boolean = false;
 

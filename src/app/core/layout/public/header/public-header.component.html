@@ -1,3 +1,6 @@
+<!-- ACCESSIBILITY BUTTON TO CONTENT -->
+<a class="accessibility-go-to-content" [href]="router.url.split('#')[0] + '#main-content'">Naar de inhoud</a>
+<!-- NAVIGATION -->
 <nav [ngClass]="{
   'nav-transparent-background': !this.background,
   'nav-white': this.background && this.light_theme,
@@ -30,7 +33,7 @@
         <!-- LOGO -->
         <a [routerLink]="'/'" class="nav-logo-link">
           <span class="sr-only">Ingenium home pagina</span>
-          <img class="h-16 w-auto" ngSrc="assets/Ingenium-schild.png" alt="Ingenium schild" height="512" width="512">
+          <img class="h-16 w-auto" ngSrc="assets/svg/ingenium-schild.svg" alt="" aria-hidden="true" height="1024" width="1024">
         </a>
       </div>
 

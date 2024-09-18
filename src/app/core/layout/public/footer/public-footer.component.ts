@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {AsyncPipe, NgClass} from '@angular/common';
+import {AsyncPipe, NgClass, NgOptimizedImage} from '@angular/common';
 import {LayoutService} from '../../../services/layout/layout.service';
 import {Observable} from 'rxjs';
 
@@ -11,7 +11,8 @@ import {Observable} from 'rxjs';
   imports: [
     NgClass,
     AsyncPipe,
-    RouterLink
+    RouterLink,
+    NgOptimizedImage
   ],
   styleUrls: ['./public-footer.component.scss']
 })

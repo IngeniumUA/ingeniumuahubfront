@@ -4,7 +4,7 @@ import {AccountService} from '../../../core/services/user/account/account.servic
 import {CardService} from '../../../core/services/user/card.service';
 import {first} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
-import {HubCardI} from '../../../shared/models/card';
+import {CardLimitedI} from '../../../shared/models/card';
 
 @Component({
   selector: 'app-card-redirect',
@@ -30,7 +30,7 @@ export class CardRedirectComponent implements OnInit {
     this.cardService.post_card_uuid(card_uuid!).pipe(
       first()).subscribe({
 
-      next: (response: HubCardI) => {
+      next: (response: CardLimitedI) => {
         // User was added to lid
         const notification = this.HandleSuccesResponse(response);
         this.router.navigateByUrl('/account' + '?card_notification=s_'+notification);
@@ -46,7 +46,7 @@ export class CardRedirectComponent implements OnInit {
     this.router.navigateByUrl('/account/card');
   }
 
-  HandleSuccesResponse(_response: HubCardI): string {
+  HandleSuccesResponse(_response: CardLimitedI): string {
     return 'Kaart gelinkt!';
   }
 

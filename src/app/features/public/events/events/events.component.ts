@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import {Observable} from 'rxjs';
-import {EventService} from '../../../../core/services/items/events/event.service';
 import {LayoutService} from '../../../../core/services/layout/layout.service';
 import {RecSysPreviewI} from '../../../../shared/models/items/recsys_interfaces';
+import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 
 @Component({
   selector: 'app-page',

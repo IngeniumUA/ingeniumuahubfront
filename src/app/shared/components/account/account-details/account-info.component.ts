@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {MatRadioModule} from '@angular/material/radio';
-import {HubUserPersonalDetailsI} from '@ingenium/app/shared/models/user';
+import {HubUserPersonalDetailsI} from '@ingenium/app/shared/models/user/user';
 import {AccountService} from '@ingenium/app/core/services/user/account/account.service';
 import {first} from 'rxjs/operators';
 import {Store} from "@ngxs/store";

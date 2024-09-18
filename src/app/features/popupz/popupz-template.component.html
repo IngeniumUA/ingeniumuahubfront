@@ -1,0 +1,14 @@
+<div class="flex-1">
+  <header>
+    <app-layout-public-header [light_theme]="true" />
+
+    <nav id="popupz-menu">
+      <a routerLink="/popupz" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="menu-item">Pop-Up Z</a>
+      <a routerLink="/popupz/menu" routerLinkActive="active" class="menu-item" [attr.aria-expanded]="foodMenuExpanded" aria-controls="popup-food-menu">Menu</a>
+      <a routerLink="/popupz/allergies" routerLinkActive="active" class="menu-item">Allergenen</a>
+    </nav>
+  </header>
+
+  <router-outlet />
+</div>
+<app-layout-public-footer />

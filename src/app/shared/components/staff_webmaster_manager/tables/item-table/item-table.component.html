@@ -6,7 +6,7 @@
     <ng-container matColumnDef="uuid"
     *ngIf="displayedColumns.includes('uuid')">
       <th mat-header-cell *matHeaderCellDef> UUID </th>
-      <td mat-cell *matCellDef="let item"><a [routerLink]="[item.item.uuid]"> {{ item.item.uuid }}</a></td>
+      <td mat-cell *matCellDef="let item"><a [routerLink]="[item.item.id]"> {{ item.item.id }}</a></td>
     </ng-container>
 
     <!-- Name Column -->

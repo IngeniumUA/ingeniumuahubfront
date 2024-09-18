@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ItemService} from '../../../../../core/services/items/item.service';
 import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
-import {ItemI} from '../../../../models/items/ItemI';
 import {AsyncPipe, NgIf} from '@angular/common';
+import {ItemService} from "@ingenium/app/core/services/coreAPI/item/item.service";
+import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 
 @Component({
   selector: 'app-itemdetail',

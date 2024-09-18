@@ -1,9 +1,14 @@
-<div *ngIf="this.account$ | async as account">
+@if (this.account$ | async; as account) {
   <app-card
     [card]="account.card_details"
     [on_account_page]="true"
     [is_lid]="this.account.roles.is_lid"
   />
 
-  <app-account-info />
-</div>
+  <app-account-info></app-account-info>
+} @else {
+  <div class="alert alert-danger alert-border">
+    <p class="alert-text">Er ging iets mis, we konden jouw profiel gegevens niet ophalen.</p>
+  </div>
+}
+

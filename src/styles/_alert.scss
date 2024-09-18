@@ -1,6 +1,10 @@
 .alert {
   @apply p-4;
 
+  .alert-text {
+    @apply text-sm;
+  }
+
   &.alert-warning {
     @apply bg-yellow-50;
 
@@ -22,6 +26,22 @@
 
     &.alert-border {
       @apply border-blue-400;
+    }
+  }
+
+  &.alert-danger {
+    @apply bg-red-50;
+
+    a {
+      @apply font-medium underline text-red-700 hover:text-red-600;
+    }
+
+    &.alert-border {
+      @apply border-red-400;
+    }
+
+    .alert-text {
+      @apply text-red-700;
     }
   }
 

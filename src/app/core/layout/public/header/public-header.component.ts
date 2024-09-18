@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AsyncPipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
-import {RouterLink, RouterLinkActive} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
 import {User, UserState} from '@ingenium/app/core/store';
-import {HubUserRolesI} from "@ingenium/app/shared/models/user";
 import {OAuthService} from "angular-oauth2-oidc";
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 
 @Component({
@@ -30,7 +30,7 @@ export class PublicHeaderComponent {
   infoDropdownOpen: boolean = false;
 
   email$: Observable<string|null>;
-  roles$: Observable<HubUserRolesI|null>;
+  roles$: Observable<UserRolesI|null>;
   isAuth$: Observable<boolean>;
 
   @Input() light_theme: boolean = false;  // 'dark' or 'light'
@@ -39,7 +39,7 @@ export class PublicHeaderComponent {
   @Input() internalToggle: boolean = true; // If toggling the navbar should use this navbar or outsource it
   @Output() isToggleEmitter = new EventEmitter<boolean>();
 
-  constructor(private store: Store, private oauthService: OAuthService) {
+  constructor(private store: Store, private oauthService: OAuthService, protected router: Router) {
     this.email$ = store.select(UserState.getEmail);
     this.roles$ = store.select(UserState.getRoles);
     this.isAuth$ = store.select(UserState.isAuthenticated);

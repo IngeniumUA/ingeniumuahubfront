@@ -1,15 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EventItemDetailI} from '@ingenium/app/shared/models/items/events';
-import {EventService} from '@ingenium/app/core/services/items/events/event.service';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {IProductCategorie, IProductGroup, IProductItem} from '@ingenium/app/shared/models/items/products/products';
 import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {map} from 'rxjs/operators';
-import {ItemI} from '@ingenium/app/shared/models/items/ItemI';
 import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
 import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
+import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
+import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 
 
 @Component({
@@ -30,7 +29,7 @@ export class EventDetailComponent implements OnInit {
   isCartEmpty: boolean = !this.cartService.hasTransactions();
   // Event Info and Deco
   eventId!: string;
-  event$!: Observable<EventItemDetailI>;
+  event$!: Observable<ItemWideLimitedI>;
   eventError$!: Observable<any>;
 
   productCategories$!: Observable<IProductCategorie[]>;
@@ -86,11 +85,11 @@ export class EventDetailComponent implements OnInit {
     }));
   }
 
-  GetCurrentProductCount(item: ItemI, product: IProductItem): number {
-    return this.cartService.getProductCount(item, product);
+  GetCurrentProductCount(item: ItemWideLimitedI, product: IProductItem): number {
+    return this.cartService.getProductCount(item.item, product);
   }
-  SetProductCount(item: ItemI, product: IProductItem, count: number) {
-    this.cartService.setProductCount(item, product, count);
+  SetProductCount(item: ItemWideLimitedI, product: IProductItem, count: number) {
+    this.cartService.setProductCount(item.item, product, count);
     this.isCartEmpty = !this.cartService.hasTransactions();
   }
 
