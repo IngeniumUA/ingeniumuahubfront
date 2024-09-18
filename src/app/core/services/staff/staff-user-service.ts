@@ -10,7 +10,7 @@ import {UserI} from '../../../shared/models/staff/staff_user_detail';
 export class StaffUserService {
   constructor(private httpClient: HttpClient) { }
 
-  apiUrl = apiEnviroment.apiUrl + 'staff/user';
+  apiUrl = apiEnviroment.apiUrl + 'user';
 
   public getUsers(offset: number = 0, count: number = 50,
     user: string | null = null,
@@ -47,7 +47,7 @@ export class StaffUserService {
       query_str += '&ismemberof_group=' + group.toString();
     });
     return this.httpClient.get<number>(
-      this.apiUrl + '/stats' + query_str);
+      this.apiUrl + '/count' + query_str);
   }
 
   public getUsersExport(fields: string[],
