@@ -4,7 +4,7 @@ import {NgOptimizedImage} from '@angular/common';
 import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
 import {NgxsAfterBootstrap, NgxsModule, StateContext} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
-import * as Sentry from "@sentry/angular-ivy";
+import * as Sentry from "@sentry/angular";
 
 import {User, UserState} from './core/store';
 
