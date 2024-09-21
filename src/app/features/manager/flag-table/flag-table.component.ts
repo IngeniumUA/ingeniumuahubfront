@@ -27,7 +27,7 @@ export class FlagTableComponent {
     this.loading = true;
 
     // Syntax is -> value = condition ? v_true: v_false
-    // @ts-ignore
+    // @ts-expect-error I don't know cuz I did not write this...
     const flagValue = flagObj.value["checkouts_enabled"] == 1 ? {"checkouts_enabled": 0}: {"checkouts_enabled": 1};
 
     const putFlag: FlagI = {

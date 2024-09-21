@@ -1,4 +1,3 @@
-import {HubUserPersonalDetailsI} from './user';
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 export interface UserI {

@@ -3,7 +3,7 @@
   <app-staff-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)"></app-staff-item-detail>
 </section>
 
-<ng-container *ngIf="item.derived_type.derived_type_enum != 'promoitem'">
+<ng-container *ngIf="item.derived_type.derived_type_enum !== 'promoitem'">
 <section class="staffSection">
   <h1>Product Blueprints</h1>
   <app-product-blueprint-dashboard [itemId]="itemId"></app-product-blueprint-dashboard>
