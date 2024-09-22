@@ -59,24 +59,38 @@ export class AccountInfoComponent implements OnInit {
   loadFieldsFromStore() {
     const details = this.store.selectSnapshot(UserState.userDetails);
     if (!details) {
+      this.form = this.formBuilder.group({
+        //voornaam: [Validators.required],
+        //achternaam: [Validators.required],
+        telefoonnummer: ['', Validators.required],
+        //gemeente: [details.gemeente, Validators.required],
+        //adres: [details.adres, Validators.required],
+        //huisnummer: [details.huisnummer, Validators.required],
+        sport_interesse: [false, Validators.required],
+        doop_interesse: [false, Validators.required],
+        //afstudeerrichting: [details.afstudeerrichting, Validators.required]
+      });
       return;
     }
 
     this.form = this.formBuilder.group({
-      voornaam: [details.voornaam, Validators.required],
-      achternaam: [details.achternaam, Validators.required],
+      //voornaam: [details.voornaam, Validators.required],
+      //achternaam: [details.achternaam, Validators.required],
       telefoonnummer: [details.telefoonnummer, Validators.required],
-      gemeente: [details.gemeente, Validators.required],
-      adres: [details.adres, Validators.required],
-      huisnummer: [details.huisnummer, Validators.required],
+      //gemeente: [details.gemeente, Validators.required],
+      //adres: [details.adres, Validators.required],
+      //huisnummer: [details.huisnummer, Validators.required],
       sport_interesse: [details.sport_interesse, Validators.required],
       doop_interesse: [details.doop_interesse, Validators.required],
-      afstudeerrichting: [details.afstudeerrichting, Validators.required]
+      //afstudeerrichting: [details.afstudeerrichting, Validators.required]
     });
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.form.controls; }
+  get f() {
+    console.log(this.form);
+    return this.form.controls;
+  }
 
   onSubmit() {
     if (this.loading) return;
@@ -90,15 +104,21 @@ export class AccountInfoComponent implements OnInit {
 
     this.loading = true;
     const personalDetails: HubUserPersonalDetailsI = {
-      voornaam: this.form.controls['voornaam'].value,
-      achternaam: this.form.controls['achternaam'].value,
+      voornaam: '',
+      achternaam: '',
+      //voornaam: this.form.controls['voornaam'].value,
+      //achternaam: this.form.controls['achternaam'].value,
       telefoonnummer: this.form.controls['telefoonnummer'].value,
-      gemeente: this.form.controls['gemeente'].value,
-      adres: this.form.controls['adres'].value,
-      huisnummer: this.form.controls['huisnummer'].value,
+      gemeente: '',
+      adres: '',
+      huisnummer: '',
+      //gemeente: this.form.controls['gemeente'].value,
+      //adres: this.form.controls['adres'].value,
+      //huisnummer: this.form.controls['huisnummer'].value,
       sport_interesse: this.form.controls['sport_interesse'].value,
       doop_interesse: this.form.controls['doop_interesse'].value,
-      afstudeerrichting: this.form.controls['afstudeerrichting'].value,
+      afstudeerrichting: '',
+      //afstudeerrichting: this.form.controls['afstudeerrichting'].value,
     };
 
     this.accountService.updatePersonalDetails(personalDetails).pipe(first()).subscribe({

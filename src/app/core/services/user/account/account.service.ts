@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {HubAccountData, HubUserPersonalDetailsI} from '../../../../shared/models/user/user';
 import {HttpClient} from '@angular/common/http';
-import {apiEnviroment} from '../../../../../environments/environment';
-import {CardLimitedI} from '../../../../shared/models/card';
-import {IProductItem} from '../../../../shared/models/items/products/products';
+import {apiEnviroment} from '@ingenium/environments/environment';
+import {CardLimitedI} from '@ingenium/app/shared/models/card';
+import {IProductItem} from '@ingenium/app/shared/models/items/products/products';
+import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
 
 export interface InteractionI {
   id: number
@@ -43,6 +44,10 @@ export class AccountService {
   }
 
   // -----
+
+  public getCard() {
+    return this.httpClient.get<CardItemI>(apiEnviroment.apiUrl + 'account/card');
+  }
 
   public linkCard(card_uuid: string): Observable<CardLimitedI> {
     return this.httpClient.post<CardLimitedI>(apiEnviroment.apiUrl + 'item/card/link/' + card_uuid, {});
