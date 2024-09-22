@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import {EventService} from '../../../../core/services/items/events/event.service';
 import {Observable} from 'rxjs';
-import {EventItemDetailI} from '../../../../shared/models/items/events';
+import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
+import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 
 @Component({
   selector: 'app-staff-event-list',
@@ -10,8 +10,8 @@ import {EventItemDetailI} from '../../../../shared/models/items/events';
 })
 export class StaffEventListComponent {
 
-  events$: Observable<EventItemDetailI[]> = this.eventsService.getEvents();
+  events$: Observable<ItemWideI[]> = this.eventsService.getItems(50, 0, "eventitem");
 
-  constructor(private eventsService: EventService) {
+  constructor(private eventsService: ItemWideService) {
   }
 }

@@ -5,20 +5,20 @@
     <ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
       <ng-container *ngIf="data.event as event; else loading">
         <section class="event-banner">
-          <img src='{{event.image_landscape}}' alt="" aria-hidden="true">
+          <img src='{{event.derived_type.display.image_landscape}}' alt="" aria-hidden="true">
         </section>
 
-        <nav role="tablist" class="categorie-section" [ngStyle]="{'background-color': (event.color | colordbrgba: 1) }">
+        <nav role="tablist" class="categorie-section" [ngStyle]="{'background-color': (event.derived_type.display.color | colordbrgba: 1) }">
           <button class="categorie-button"
                   *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
                   (click)="this.SetProductCategorie(i)"
-                  [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': (event.color | colordbrgba: 1)}"
+                  [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': (event.derived_type.display.color | colordbrgba: 1)}"
           >{{ product_categorie.categorie_name }}</button>
         </nav>
 
         <section class="title-info-section">
           <h3>{{ event.item.name }}</h3>
-          <p>{{ event.start_date | date:'d MMMM' }}</p>
+          <!--<p>{{ event.item.name | date:'d MMMM' }}</p>-->
         </section>
 
         <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie else noProducts">
@@ -26,12 +26,12 @@
             <h3>{{ product_group.group_name }}</h3>
             <div class="products">
               <ng-container *ngFor="let product of this.product_group.products">
-                <app-product [onInitValue]="this.GetCurrentProductCount(event.item, product)"
+                <app-product [onInitValue]="this.GetCurrentProductCount(event, product)"
                              [product]="product"
-                             [primaryColorFull]="(event.color | colordbrgba: 1)"
-                             [primaryColorHalf]="(event.color | colordbrgba: 0.5)"
+                             [primaryColorFull]="(event.derived_type.display.color | colordbrgba: 1)"
+                             [primaryColorHalf]="(event.derived_type.display.color | colordbrgba: 0.5)"
                              [itemId]="this.eventId"
-                             (countEvent)="this.SetProductCount(event.item, product, $event)" />
+                             (countEvent)="this.SetProductCount(event, product, $event)" />
               </ng-container>
             </div>
           </div>

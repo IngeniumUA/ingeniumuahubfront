@@ -3,7 +3,9 @@
     <br>
 
     <ng-container *ngIf="$checkoutsEnabled | async as checkoutsFlag">
-        Current: {{ checkoutsFlag.int_value }}
+      Name: {{ checkoutsFlag.name }}
+      <br>
+      Current: {{ checkoutsFlag.value }}
         <br>
         <button class="button button-primary w-1/6 button-inline"
                 [disabled]="this.loading"

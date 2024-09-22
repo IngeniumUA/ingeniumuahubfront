@@ -3,7 +3,6 @@ import {RouterModule, Routes, TitleStrategy} from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import {HomepageComponent} from './features/public/homepage/homepage.component';
 import {NotfoundpageComponent} from './features/notfoundpage/notfoundpage.component';
-import {RecSysFormComponent} from './features/recsysform/rec-sys-form.component';
 import {PublicRoutingComponent} from './features/public/public-routing.component';
 import {CloudComponent} from './features/public/cloud/cloud.component';
 import {authGuard} from './core/guards/auth/auth.guard';
@@ -58,19 +57,12 @@ const routes: Routes = [
       {path: '', loadChildren: () => import('src/app/features/public/promo/promo.module').then(x => x.PromoModule)},
     ]},
 
-  // POP-UP Z
-  /*
-  { path: '',
-    children: [
-      { path: 'popupz', component: PopupzComponent },
-      { path: 'popupzorder', component: PopupzorderComponent },
-      { path: 'popupzorderstaff', component: PopupzorderStaffComponent },
-
-      // { path: 'popupz/orders/drinks', component: DrinkOrdersComponent, canActivate: [staffGuard] },
-      { path: 'popupz/orders/food', component: FoodOrdersComponent, canActivate: [staffGuard] },
-    ]
+  //** Popupz **//
+  {
+    path: 'popupz',
+    loadChildren: () => import('src/app/features/popupz/popupz.module').then(x => x.PopupzModule),
   },
-  */
+  { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },
 
   //** Employee **//
 
@@ -90,9 +82,6 @@ const routes: Routes = [
     loadChildren: () => import('src/app/features/manager/manager.module').then(x => x.ManagerModule),
     canActivate: [managerGuard]
   },
-
-  // Temporary Recsysform
-  { path: 'recsysform', component: RecSysFormComponent },
 
   // Not found as last
   { path: '**', component: NotfoundpageComponent }

@@ -40,21 +40,3 @@
   width: 100%;
   height: auto;
 }
-
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.card h4 {
-  padding: 0;
-  color: var(--mainblue);
-}
-
-input {
-  width: 12rem;
-  height: 1.7rem;
-  font-size: 10px;
-}

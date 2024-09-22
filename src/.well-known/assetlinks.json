@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "development.com.app.ingeniumua",
+    "sha256_cert_fingerprints":
+    ["D4:FA:03:C5:27:08:96:A0:5B:83:5E:20:6E:47:46:3D:6B:96:51:11:25:97:ED:ED:9D:36:F4:52:86:6D:94:C2"]
+  }
+}]

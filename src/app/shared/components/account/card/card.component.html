@@ -2,35 +2,32 @@
   <h2 class="white-section-title">Jouw lidkaart</h2>
   <p>Met je lidkaart krijg je toegang tot alle voordelen van onze vereniging. Heb je nog geen lidkaart? Koop er dan snel eentje!</p>
 
-  <div class="lidkaart-card">
-    <ng-container *ngIf="this.card as card else nocard">
+  @if ($card | async; as card) {
+    <div class="lidkaart-card">
       <div class="lidkaart-wrapper">
-        <img src="{{ card.card_image }}" alt="card">
+        <img src="{{ card.display.image_landscape }}" alt="card">
       </div>
-      <p>{{ card.card_nr }}</p>
-    </ng-container>
-    <span *ngIf="failed_notification !== null" class="error-message">{{ failed_notification }}</span>
-    <span *ngIf="success_notification !== null" class="success-message">{{ success_notification}}</span>
-  </div>
-
-  <ng-template #nocard>
-    <ng-container *ngIf="this.is_lid else buycard">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <h4>Vul je code in:</h4>
-        <label class="hubformfield-white">
-          <input type="text" formControlName="uuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" [ngClass]="{ 'is-invalid': submitted && f['uuid'].errors }"/>
-        </label>
-        <h4>Of scan de achterkant<br>van je lidkaart!</h4>
-        <button type="submit" (click)="this.onSubmit()">Submit</button>
-      </form>
-    </ng-container>
-
-  </ng-template>
-
-  <ng-template #buycard>
-    <div class="lidkaart-wrapper">
-      <h4>Je bent nog geen lid!</h4>
-      <h4>Grote fout :o</h4>
+      <p>{{ card.card_uuid }}</p>
+      <span *ngIf="failed_notification !== null" class="error-message">{{ failed_notification }}</span>
+      <span *ngIf="success_notification !== null" class="success-message">{{ success_notification}}</span>
     </div>
-  </ng-template>
+  } @else {
+    <div class="alert alert-info mb-4">
+      <p class="alert-text">Het lijkt erop dat je nog geen lidkaart hebt gekoppeld. Je kan de <span class="font-bold">QR-code op de achterkant van je kaart scannen</span> of als je <span class="font-bold">online een kaart kocht</span> de code ervan onderaan invullen.</p>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-2">
+      <div class="form-field" [ngClass]="{ 'is-invalid': (f['uuid'].errors && submitted) || form_error }">
+        <label for="card-uuid">Vul je code in</label>
+        <input id="card-uuid" type="text" formControlName="uuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+
+        <!-- Error messages -->
+        <ul *ngIf="form_error" class="field-error-message-list" id="phoneNumber-errors">
+          <li>{{ form_error }}</li>
+        </ul>
+      </div>
+      <div class="form-field">
+        <button class="button button-primary button-sm" type="submit" [disabled]="loading">Koppelen</button>
+      </div>
+    </form>
+  }
 </section>

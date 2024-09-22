@@ -4,10 +4,10 @@ import {LayoutService} from '../../../../core/services/layout/layout.service';
 import {CartService} from '../../../../core/services/shop/cart/cart.service';
 import {ProductsService} from '../../../../core/services/shop/products/products.service';
 import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
-import {ShopService} from '../../../../core/services/items/shop.service';
-import {ShopItemDetailI} from '../../../../shared/models/items/shopitem';
 import {IProductItem} from '../../../../shared/models/items/products/products';
-import {ItemI} from '../../../../shared/models/items/ItemI';
+import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";
+import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 
 @Component({
   selector: 'app-page',
@@ -28,7 +28,7 @@ export class ShopDetailComponent implements OnInit {
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
   isCartEmpty: boolean = !this.cartService.hasTransactions();
   // Event Info and Deco
-  shopItem$?: Observable<ShopItemDetailI>;
+  shopItem$?: Observable<ItemWideLimitedI>;
   shopError$!: Observable<any>;
   products$: Observable<IProductItem[]> = of([]);
 
@@ -47,7 +47,7 @@ export class ShopDetailComponent implements OnInit {
   }
 
   public Setup(id: string) {
-    this.shopItem$ = this.shopService.getShopItem(id);
+    this.shopItem$ = this.shopService.getShop(id);
     this.shopError$ = this.shopItem$.pipe(
       ignoreElements(),
       catchError((err) => {
@@ -57,18 +57,11 @@ export class ShopDetailComponent implements OnInit {
     this.products$ = this.productService.getProducts(id).pipe(shareReplay());
   }
 
-  GetCurrentProductCount(item: ItemI, product: IProductItem): number {
+  GetCurrentProductCount(item: ItemLimitedI, product: IProductItem): number {
     return this.cartService.getProductCount(item, product);
   }
-  SetProductCount(item: ItemI, product: IProductItem, count: number) {
+  SetProductCount(item: ItemLimitedI, product: IProductItem, count: number) {
     this.cartService.setProductCount(item, product, count);
     this.isCartEmpty = !this.cartService.hasTransactions();
-  }
-
-  ToCheckout() {
-    if (this.isCartEmpty) {
-      return;
-    }
-    this.router.navigateByUrl('/shop/checkout');
   }
 }

@@ -4,26 +4,22 @@ import { CommonModule } from '@angular/common';
 
 import { AuthRoutingModule } from './auth-routing.module';
 
-import { LoginComponent } from './login/login.component';
-import {RegisterPageComponent} from './register/register/register-page.component';
-import {ResetpwComponent} from './resetpw/resetpw.component';
-import {RegisterComponent} from '../../../shared/components/auth/register/register.component';
-import {GoogleSigninButtonModule} from '@abacritt/angularx-social-login';
 import {PublicHeaderComponent} from '../../../core/layout/public/header/public-header.component';
+import {AuthCallbackComponent} from "@ingenium/app/features/public/auth/callback/auth-callback.component";
+import {AuthLogoutComponent} from "@ingenium/app/features/public/auth/logout/auth-logout.component";
+import {AuthLoginComponent} from "@ingenium/app/features/public/auth/login/auth-login.component";
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     AuthRoutingModule,
-    RegisterComponent,
-    GoogleSigninButtonModule,
     PublicHeaderComponent,
   ],
   declarations: [
-    LoginComponent,
-    RegisterPageComponent,
-    ResetpwComponent,
+    AuthCallbackComponent,
+    AuthLogoutComponent,
+    AuthLoginComponent,
   ]
 })
 export class AuthModule { }

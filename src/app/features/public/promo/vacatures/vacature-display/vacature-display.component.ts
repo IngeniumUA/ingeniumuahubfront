@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PromoService} from '../../../../../core/services/items/promo/promo.service';
 import {catchError, ignoreElements, Observable, of} from 'rxjs';
-import {PromoI} from '../../../../../shared/models/items/promo';
-import {LayoutService} from '../../../../../core/services/layout/layout.service';
+import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
+import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
+import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 
 @Component({
   selector: 'app-vacature-display',
@@ -13,7 +13,7 @@ import {LayoutService} from '../../../../../core/services/layout/layout.service'
 export class VacatureDisplayComponent implements OnInit {
 
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  vacature$: Observable<PromoI> = of();
+  vacature$: Observable<ItemWideLimitedI> = of();
   vacatureError$!: Observable<any>;
   item_id!: string;
 
@@ -52,7 +52,7 @@ export class VacatureDisplayComponent implements OnInit {
     if (isMobile === null) {
       return 'mx-[20%]';
     }
-    if (isMobile === true) {
+    if (isMobile) {
       return '';
     } else {
       return 'mx-[20%]';

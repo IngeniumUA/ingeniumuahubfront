@@ -1,5 +1,19 @@
+.accessibility-go-to-content {
+  @apply fixed bg-black text-white p-4 z-50 text-xl;
+  left: 50%;
+  transform: translateY(-100%);
+
+  &:focus {
+    transform: translateY(1rem) translateX(-50%);
+  }
+}
+
 nav {
   @apply w-full bg-blue-950 border-b border-white/5;
+
+  a {
+    @apply no-underline;
+  }
 
   .nav-item {
     @apply text-gray-300 border border-transparent hover:border-b-white hover:text-white rounded px-3.5 py-2.5 font-medium outline-none focus:ring-2 focus-visible:ring-4 ring-white transition-colors ease-in-out;

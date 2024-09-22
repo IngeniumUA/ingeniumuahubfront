@@ -11,85 +11,14 @@
       </div>
     </fieldset>
 
-    <fieldset class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['voornaam'].errors && (f['voornaam'].dirty || f['voornaam'].touched) }">
-        <label for="firstName">Voornaam</label>
-        <input id="firstName" type="text" formControlName="voornaam" [attr.aria-invalid]="f['voornaam'].errors !== null" [attr.aria-errormessage]="f['voornaam'].errors !== null ? 'firstName-Errors' : ''" />
-
-        <!-- Error messages -->
-        <ul *ngIf="f['voornaam'].errors && (f['voornaam'].dirty || f['voornaam'].touched)" class="field-error-message-list" id="firstName-errors">
-          <li *ngIf="f['voornaam'].errors?.['required']">Voornaam is verplicht</li>
-        </ul>
-      </div>
-
-      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['achternaam'].errors && (f['achternaam'].dirty || f['achternaam'].touched) }">
-        <label for="lastName">Achternaam</label>
-        <input id="lastName" type="text" formControlName="achternaam" [attr.aria-invalid]="f['achternaam'].errors !== null" [attr.aria-errormessage]="f['achternaam'].errors !== null ? 'lastName-Errors' : ''" />
-
-        <!-- Error messages -->
-        <ul *ngIf="f['achternaam'].errors && (f['achternaam'].dirty || f['achternaam'].touched)" class="field-error-message-list" id="lastName-errors">
-          <li *ngIf="f['achternaam'].errors?.['required']">Achternaam is verplicht</li>
-        </ul>
-      </div>
-    </fieldset>
-
     <fieldset>
-      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['telefoonnummer'].errors && (f['telefoonnummer'].dirty || f['telefoonnummer'].touched) }">
+      <div class="form-field" [ngClass]="{ 'is-invalid': f['telefoonnummer'].errors && (f['telefoonnummer'].dirty || f['telefoonnummer'].touched) }">
         <label for="phoneNumber">Telefoonnummer</label>
         <input id="phoneNumber" type="text" formControlName="telefoonnummer" [attr.aria-invalid]="f['telefoonnummer'].errors !== null" [attr.aria-errormessage]="f['telefoonnummer'].errors !== null ? 'phoneNumber-Errors' : ''" />
 
         <!-- Error messages -->
         <ul *ngIf="f['telefoonnummer'].errors && (f['telefoonnummer'].dirty || f['telefoonnummer'].touched)" class="field-error-message-list" id="phoneNumber-errors">
           <li *ngIf="f['telefoonnummer'].errors?.['required']">Telefoonnummer is verplicht</li>
-        </ul>
-      </div>
-    </fieldset>
-
-    <fieldset class="grid grid-cols-4 gap-4">
-      <legend class="sr-only">Adres gegevens</legend>
-      <div [ngClass]="{ 'form-field col-span-3': true, 'is-invalid': f['adres'].errors && (f['adres'].dirty || f['adres'].touched) }">
-        <label for="street">Straat</label>
-        <input id="street" type="text" formControlName="adres" [attr.aria-invalid]="f['adres'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'street-Errors' : ''" />
-
-        <!-- Error messages -->
-        <ul *ngIf="f['adres'].errors && (f['adres'].dirty || f['adres'].touched)" class="field-error-message-list" id="street-errors">
-          <li *ngIf="f['adres'].errors?.['required']">Straat is verplicht</li>
-        </ul>
-      </div>
-
-      <div [ngClass]="{ 'form-field': true, 'is-invalid': f['huisnummer'].errors && (f['huisnummer'].dirty || f['huisnummer'].touched) }">
-        <label for="houseNumber">Huisnummer</label>
-        <input id="houseNumber" type="text" formControlName="huisnummer" [attr.aria-invalid]="f['huisnummer'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'houseNumber-Errors' : ''"  />
-
-        <!-- Error messages -->
-        <ul *ngIf="f['huisnummer'].errors && (f['huisnummer'].dirty || f['huisnummer'].touched)" class="field-error-message-list" id="houseNumber-errors">
-          <li *ngIf="f['huisnummer'].errors?.['required']">Huisnummer is verplicht</li>
-        </ul>
-      </div>
-
-      <div [ngClass]="{ 'form-field col-span-4': true, 'is-invalid': f['gemeente'].errors && (f['gemeente'].dirty || f['gemeente'].touched) }">
-        <label for="municipality">Gemeente</label>
-        <input id="municipality" type="text" formControlName="gemeente" [attr.aria-invalid]="f['gemeente'].errors !== null" [attr.aria-errormessage]="f['adres'].errors !== null ? 'municipality-Errors' : ''" />
-
-        <!-- Error messages -->
-        <ul *ngIf="f['gemeente'].errors && (f['gemeente'].dirty || f['gemeente'].touched)" class="field-error-message-list" id="municipality-errors">
-          <li *ngIf="f['gemeente'].errors?.['required']">Gemeente is verplicht</li>
-        </ul>
-      </div>
-    </fieldset>
-
-    <fieldset>
-      <legend class="sr-only">School gegevens</legend>
-
-      <div [ngClass]="{ 'form-field col-span-4': true, 'is-invalid': f['afstudeerrichting'].errors && (f['afstudeerrichting'].dirty || f['afstudeerrichting'].touched) }">
-        <label for="graduationTracts">Afstudeerrichting</label>
-        <select id="graduationTracts" formControlName="afstudeerrichting"  [attr.aria-invalid]="f['afstudeerrichting'].errors !== null" [attr.aria-errormessage]="f['afstudeerrichting'].errors !== null ? 'graduationTracts-Errors' : ''" >
-          <option *ngFor="let item of graduationTracts | keyvalue" [ngValue]="item.key">{{ item.value }}</option>
-        </select>
-
-        <!-- Error messages -->
-        <ul *ngIf="f['afstudeerrichting'].errors && (f['afstudeerrichting'].dirty || f['afstudeerrichting'].touched)" class="field-error-message-list" id="graduationTracts-errors">
-          <li *ngIf="f['afstudeerrichting'].errors?.['required']">Afstudeerrichting is verplicht</li>
         </ul>
       </div>
     </fieldset>

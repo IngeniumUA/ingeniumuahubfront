@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {StaffProductBlueprintI} from '../../../../shared/models/staff/staff_productblueprint';
-import {StaffItemService} from '../../../../core/services/staff/items/staff_item_router';
 import {StaffProductBlueprintService} from '../../../../core/services/staff/staff-productblueprint-service';
 import {ActivatedRoute} from '@angular/router';
+import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 
 @Component({
   selector: 'app-product-webmaster-page',
@@ -16,7 +16,7 @@ export class ProductWebmasterPageComponent implements OnInit {
 
   productId!: string;
 
-  constructor(private staffItemService: StaffItemService,
+  constructor(private itemWideService: ItemWideService,
               private staffProductService: StaffProductBlueprintService,
               private route: ActivatedRoute) {
   }
