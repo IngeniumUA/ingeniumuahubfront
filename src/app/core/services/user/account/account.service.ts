@@ -50,7 +50,7 @@ export class AccountService {
   }
 
   public linkCard(card_uuid: string): Observable<CardLimitedI> {
-    return this.httpClient.post<CardLimitedI>(apiEnviroment.apiUrl + 'item/card/link/' + card_uuid, {});
+    return this.httpClient.get<CardLimitedI>(apiEnviroment.apiUrl + 'item/card/' + card_uuid, {});
   }
 
   public getTransactions(): Observable<TransactionI[]> {

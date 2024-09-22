@@ -16,7 +16,7 @@
       <p class="alert-text">Het lijkt erop dat je nog geen lidkaart hebt gekoppeld. Je kan de <span class="font-bold">QR-code op de achterkant van je kaart scannen</span> of als je <span class="font-bold">online een kaart kocht</span> de code ervan onderaan invullen.</p>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-2">
-      <div class="form-field" [ngClass]="{ 'is-invalid': f['uuid'].errors && submitted }">
+      <div class="form-field" [ngClass]="{ 'is-invalid': (f['uuid'].errors && submitted) || form_error }">
         <label for="card-uuid">Vul je code in</label>
         <input id="card-uuid" type="text" formControlName="uuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
 
@@ -26,7 +26,7 @@
         </ul>
       </div>
       <div class="form-field">
-        <button class="button button-primary button-sm" type="submit">Koppelen</button>
+        <button class="button button-primary button-sm" type="submit" [disabled]="loading">Koppelen</button>
       </div>
     </form>
   }

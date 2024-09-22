@@ -68,12 +68,13 @@ export class CardComponent implements OnInit {
   public onSubmit() {
     // Check if valid guardclause
     if (this.form.invalid) {
-      const error: Error = Error('Invalid UUID');
+      const error: Error = Error('Foutieve code ingevuld');
       this.handleFormError(error);
       return;
     }
 
     this.loading = true;
+    this.form_error = null;
     this.accountService.linkCard(this.form.controls['uuid'].value!).pipe(
       first()).subscribe({
       next: () => {
@@ -82,7 +83,13 @@ export class CardComponent implements OnInit {
       },
       error: error => {
         this.loading = false;
-        this.handleFormError(error);
+
+        // Get response status code
+        if (error.status && error.status === 406) {
+          this.form_error = "Deze kaart kon niet gekoppeld worden. Mogelijks is de code fout of is deze al gekoppeld met een ander account.";
+        } else {
+          this.handleFormError(error);
+        }
       }
     });
   }

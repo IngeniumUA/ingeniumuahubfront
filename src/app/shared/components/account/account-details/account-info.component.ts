@@ -88,7 +88,6 @@ export class AccountInfoComponent implements OnInit {
 
   // convenience getter for easy access to form fields
   get f() {
-    console.log(this.form);
     return this.form.controls;
   }
 
