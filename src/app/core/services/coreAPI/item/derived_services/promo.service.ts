@@ -19,9 +19,9 @@ export class PromoService {
     // Specifically fetches events for use as a preview
     // IE Homepage or events page
     let query_str = '?offset=' + offset.toString() + '&limit=' + limit.toString();
-    if (type !== null) {
-      query_str += '&type='+type;
-    }
+    // if (type !== null) {
+    //   query_str += '&type='+type;
+    // }
     return this.httpClient.get<RecSysPreviewI[]>(this.apiUrl + 'list' + query_str);
   }
 
