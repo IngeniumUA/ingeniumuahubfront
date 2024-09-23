@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AccountService} from '../../../core/services/user/account/account.service';
-import {CardService} from '../../../core/services/user/card.service';
 import {first} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CardLimitedI} from '../../../shared/models/card';
@@ -14,7 +13,6 @@ import {CardLimitedI} from '../../../shared/models/card';
 export class CardRedirectComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-              private cardService: CardService,
               private router: Router,
               private accountService: AccountService) {
   }
@@ -27,7 +25,7 @@ export class CardRedirectComponent implements OnInit {
     }
 
     // Submit card to backend
-    this.cardService.post_card_uuid(card_uuid!).pipe(
+    this.accountService.linkCard(card_uuid!).pipe(
       first()).subscribe({
 
       next: (response: CardLimitedI) => {

@@ -12,13 +12,29 @@
     </fieldset>
 
     <fieldset>
-      <div class="form-field" [ngClass]="{ 'is-invalid': f['telefoonnummer'].errors && (f['telefoonnummer'].dirty || f['telefoonnummer'].touched) }">
+      <div class="form-field" [ngClass]="{ 'is-invalid': f['telephone'].errors && (f['telephone'].dirty || f['telephone'].touched) }">
         <label for="phoneNumber">Telefoonnummer</label>
-        <input id="phoneNumber" type="text" formControlName="telefoonnummer" [attr.aria-invalid]="f['telefoonnummer'].errors !== null" [attr.aria-errormessage]="f['telefoonnummer'].errors !== null ? 'phoneNumber-Errors' : ''" />
+        <input id="phoneNumber" type="text" formControlName="telephone" [attr.aria-invalid]="f['telephone'].errors !== null" [attr.aria-errormessage]="f['telephone'].errors !== null ? 'phoneNumber-Errors' : ''" />
 
         <!-- Error messages -->
-        <ul *ngIf="f['telefoonnummer'].errors && (f['telefoonnummer'].dirty || f['telefoonnummer'].touched)" class="field-error-message-list" id="phoneNumber-errors">
-          <li *ngIf="f['telefoonnummer'].errors?.['required']">Telefoonnummer is verplicht</li>
+        <ul *ngIf="f['telephone'].errors && (f['telephone'].dirty || f['telephone'].touched)" class="field-error-message-list" id="phoneNumber-errors">
+          <li *ngIf="f['telephone'].errors?.['required']">Telefoonnummer is verplicht</li>
+        </ul>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend class="sr-only">School gegevens</legend>
+
+      <div [ngClass]="{ 'form-field col-span-4': true, 'is-invalid': f['graduation_tract'].errors && (f['graduation_tract'].dirty || f['graduation_tract'].touched) }">
+        <label for="graduationTracts">Afstudeerrichting</label>
+        <select id="graduationTracts" formControlName="graduation_tract"  [attr.aria-invalid]="f['graduation_tract'].errors !== null" [attr.aria-errormessage]="f['graduation_tract'].errors !== null ? 'graduationTracts-Errors' : ''" >
+          <option *ngFor="let item of graduationTracts | keyvalue" [ngValue]="item.key">{{ item.value }}</option>
+        </select>
+
+        <!-- Error messages -->
+        <ul *ngIf="f['graduation_tract'].errors && (f['graduation_tract'].dirty || f['graduation_tract'].touched)" class="field-error-message-list" id="graduationTracts-errors">
+          <li *ngIf="f['graduation_tract'].errors?.['required']">Afstudeerrichting is verplicht</li>
         </ul>
       </div>
     </fieldset>
@@ -27,13 +43,18 @@
       <legend>Jouw interesses</legend>
 
       <div class="form-field form-field-checkbox">
-        <input id="sportInterestCheckbox" type="checkbox" formControlName="sport_interesse">
+        <input id="recreationInterestCheckbox" type="checkbox" formControlName="recreation_interest">
+        <label for="recreationInterestCheckbox">Ik wil graag meer weten over recreatie (TD's, Cantussen, ...)</label>
+      </div>
+
+      <div class="form-field form-field-checkbox">
+        <input id="sportInterestCheckbox" type="checkbox" formControlName="sport_interest">
         <label for="sportInterestCheckbox">Ik wil graag meer weten over sport</label>
       </div>
 
       <div class="form-field form-field-checkbox">
-        <input id="baptismInterestCheckbox" type="checkbox" formControlName="doop_interesse">
-        <label for="baptismInterestCheckbox">Ik wil graag meer weten over dopen</label>
+        <input id="relationsInterestCheckbox" type="checkbox" formControlName="relations_interest">
+        <label for="relationsInterestCheckbox">Ik wil graag meer weten over bedrijfsevents</label>
       </div>
     </fieldset>
 

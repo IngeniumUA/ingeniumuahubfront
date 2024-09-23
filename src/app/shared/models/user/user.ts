@@ -8,15 +8,13 @@ export interface HubAuthData {
 }
 
 export interface HubUserPersonalDetailsI {
-  voornaam: string
-  achternaam: string
-  telefoonnummer: string
-  gemeente: string
-  adres: string
-  huisnummer: string
-  sport_interesse: string
-  doop_interesse: string
-  afstudeerrichting: string
+  given_name: '',
+  last_name: '',
+  telephone: string,
+  recreation_interest: boolean,
+  sport_interest: boolean,
+  relations_interest: boolean,
+  graduation_tract: string,
 }
 
 export interface HubAccountData {
