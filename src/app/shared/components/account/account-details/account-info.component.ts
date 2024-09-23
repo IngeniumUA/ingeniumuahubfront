@@ -49,6 +49,13 @@ export class AccountInfoComponent implements OnInit {
               private toastr: ToastrService) {
 
     this.email = this.store.selectSnapshot(UserState.getEmail);
+    this.form = this.formBuilder.group({
+      telephone: ['', Validators.required],
+      recreation_interest: [false, Validators.required],
+      sport_interest: [false, Validators.required],
+      relations_interest: [false, Validators.required],
+      graduation_tract: ['', Validators.required]
+    });
   }
 
 
@@ -57,26 +64,18 @@ export class AccountInfoComponent implements OnInit {
   }
 
   loadFieldsFromStore() {
-    let details: HubUserPersonalDetailsI = null!;
-    this.accountService.getAccount().pipe(take(1)).subscribe(d => details = d);
+    this.accountService.getAccount().subscribe(details => {
+      if (!details) {
+        return;
+      }
 
-    if (!details) {
       this.form = this.formBuilder.group({
-        telephone: ['', Validators.required],
-        recreation_interest: [false, Validators.required],
-        sport_interest: [false, Validators.required],
-        relations_interest: [false, Validators.required],
-        graduation_tract: ['', Validators.required]
+        telephone: [details.telephone, Validators.required],
+        recreation_interest: [details.recreation_interest, Validators.required],
+        sport_interest: [details.sport_interest, Validators.required],
+        relations_interest: [details.relations_interest, Validators.required],
+        graduation_tract: [details.graduation_tract, Validators.required]
       });
-      return;
-    }
-
-    this.form = this.formBuilder.group({
-      telephone: [details.telephone, Validators.required],
-      recreation_interest: [details.recreation_interest, Validators.required],
-      sport_interest: [details.sport_interest, Validators.required],
-      relations_interest: [details.relations_interest, Validators.required],
-      graduation_tract: [details.graduation_tract, Validators.required]
     });
   }
 
