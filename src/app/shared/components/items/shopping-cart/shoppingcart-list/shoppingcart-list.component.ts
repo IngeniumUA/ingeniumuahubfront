@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {CartService} from '../../../../../core/services/shop/cart/cart.service';
+import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {ITransaction} from '../../../../models/items/products/cart';
 import {ProductComponent} from '../../products/product/product.component';
 import {IProductItem} from '../../../../models/items/products/products';
-import {ItemI} from '../../../../models/items/ItemI';
 import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
+import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 
 @Component({
   selector: 'app-shoppingcart-list',
@@ -22,7 +22,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 })
 export class ShoppingcartListComponent implements OnInit {
   transactions: ITransaction[][] = [];
-  items: ItemI[] = [];
+  items: ItemLimitedI[] = [];
   paymentErrors: HttpErrorResponse[] = [];
   budget: number = 0;
 
@@ -45,7 +45,7 @@ export class ShoppingcartListComponent implements OnInit {
     this.cartEmpty = !this.cartService.hasTransactions();
   }
 
-  SetProductCount(source: ItemI, product: IProductItem, count: number): void {
+  SetProductCount(source: ItemLimitedI, product: IProductItem, count: number): void {
     this.cartService.setProductCount(source, product, count);
     this.SetTransactions();
   }

@@ -1,8 +1,8 @@
 import {IProductItem} from './products';
-import {ItemI} from '../ItemI';
+import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 
 export interface ITransaction {
-  source_item: ItemI
+  source_item: ItemLimitedI
   product: IProductItem
   count: number
 }

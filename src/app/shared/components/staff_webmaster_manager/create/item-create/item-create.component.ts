@@ -4,11 +4,13 @@ import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} 
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {Observable, of} from 'rxjs';
-import {StaffItemService} from '../../../../../core/services/staff/items/staff_item_router';
-import {StaffItemCreateI} from '../../../../models/staff/staff_item_details';
 import {first} from 'rxjs/operators';
 import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
-import {PromoTypes} from '../../../../models/items/promo';
+import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
+import {ItemWideInI} from "@ingenium/app/shared/models/item/itemwideI";
+import {PromoItemInI, PromoItemTypes} from "@ingenium/app/shared/models/item/promoI";
+import {EventItemInI} from "@ingenium/app/shared/models/item/eventI";
+import {ShopItemInI} from "@ingenium/app/shared/models/item/shopI";
 
 @Component({
   selector: 'app-item-create',
@@ -29,7 +31,7 @@ import {PromoTypes} from '../../../../models/items/promo';
 export class ItemCreateComponent implements OnInit {
 
   $itemtype: Observable<string | null> = of('none'); // none, event, shop, promo
-  itemTypes: string[] = ['none', 'event', 'shop', 'promo'];
+  itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem'];
   itemTypeControl = new FormControl<string>('none');
 
   itemCreateForm = this.formBuilder.group({
@@ -68,56 +70,61 @@ export class ItemCreateComponent implements OnInit {
   @Output() FinishedCreating = new EventEmitter<boolean>();
 
   constructor(private formBuilder: FormBuilder,
-              private staffItemService: StaffItemService) {
+              private staffItemService: ItemWideService) {
   }
 
   ngOnInit() {
     this.$itemtype = this.itemTypeControl.valueChanges;
   }
 
-  parseEventForm(itemType: string) {
+  parseEventForm(itemType: string): EventItemInI | null {
     if (itemType !== this.itemTypes[1]) {
       return null;
     }
     return {
-      start_date: this.eventCreateForm.controls['eventStartDate'].value,
-      end_date: this.eventCreateForm.controls['eventEndDate'].value,
-      location: this.eventCreateForm.controls['eventLocation'].value,
+      derived_type_enum: "eventitem",
 
-      display_mixin: {
-        color: this.eventCreateForm.controls['color'].value,
-        follow_through_link: this.eventCreateForm.controls['followThroughLink'].value,
-        image_square: this.eventCreateForm.controls['imageSquare'].value,
-        image_landscape: this.eventCreateForm.controls['imageLandscape'].value,
-        preview_description: this.eventCreateForm.controls['previewDescription'].value,
+      event_start: this.eventCreateForm.controls['eventStartDate'].value!,
+      event_end: this.eventCreateForm.controls['eventEndDate'].value!,
+      // location: this.eventCreateForm.controls['eventLocation'].value,
+
+      display: {
+        color: this.eventCreateForm.controls['color'].value!,
+        follow_through_link: this.eventCreateForm.controls['followThroughLink'].value!,
+        image_square: this.eventCreateForm.controls['imageSquare'].value!,
+        image_landscape: this.eventCreateForm.controls['imageLandscape'].value!,
+        preview_description: this.eventCreateForm.controls['previewDescription'].value!,
       }
     };
   }
 
-  parseShopForm(itemType: string) {
+  parseShopForm(itemType: string): ShopItemInI | null {
     if (itemType !== this.itemTypes[2]) {
       return null;
     }
+    // TODO Refactoring ...
     return null;
   }
 
-  parsePromoForm(itemType: string) {
+  parsePromoForm(itemType: string): PromoItemInI | null {
     if (itemType !== this.itemTypes[3]) {
       return null;
     }
-    return {
-      display_from_date: this.promoCreateForm.controls['displayFromDate'].value,
-      display_until_date: this.promoCreateForm.controls['displayUntilDate'].value,
-      type: this.promoCreateForm.controls['promoType'].value,
-
-      display_mixin: {
-        color: this.promoCreateForm.controls['color'].value,
-        follow_through_link: this.promoCreateForm.controls['followThroughLink'].value,
-        image_square: this.promoCreateForm.controls['imageSquare'].value,
-        image_landscape: this.promoCreateForm.controls['imageLandscape'].value,
-        preview_description: this.promoCreateForm.controls['previewDescription'].value,
-      }
-    };
+    // TODO Refactoring ...
+    return null;
+    // return {
+    //   display_from_date: this.promoCreateForm.controls['displayFromDate'].value,
+    //   display_until_date: this.promoCreateForm.controls['displayUntilDate'].value,
+    //   type: this.promoCreateForm.controls['promoType'].value,
+    //
+    //   display_mixin: {
+    //     color: this.promoCreateForm.controls['color'].value,
+    //     follow_through_link: this.promoCreateForm.controls['followThroughLink'].value,
+    //     image_square: this.promoCreateForm.controls['imageSquare'].value,
+    //     image_landscape: this.promoCreateForm.controls['imageLandscape'].value,
+    //     preview_description: this.promoCreateForm.controls['previewDescription'].value,
+    //   }
+    // };
   }
 
 
@@ -131,14 +138,18 @@ export class ItemCreateComponent implements OnInit {
 
     this.loading = true;
 
-    const createObject: StaffItemCreateI = {
+    const event = this.parseEventForm(itemType);
+    const promo = this.parsePromoForm(itemType);
+    const shop = this.parseShopForm(itemType);
+
+    const derivedType = event !== null ? event: promo !== null ? promo: shop;
+    const createObject: ItemWideInI = {
       item: {
-        name: this.itemCreateForm.controls['itemName'].value,
-        description: this.itemCreateForm.controls['itemDescription'].value
+        name: this.itemCreateForm.controls['itemName'].value!,
+        description: this.itemCreateForm.controls['itemDescription'].value!,
+        availability: null
       },
-      event: this.parseEventForm(itemType),
-      promo: this.parsePromoForm(itemType),
-      shop: this.parseShopForm(itemType)
+      derived_type: derivedType
     };
 
     this.staffItemService.createItem(createObject).pipe(
@@ -157,5 +168,5 @@ export class ItemCreateComponent implements OnInit {
     this.form_error = err.message;
   }
 
-  protected readonly PromoTypes = PromoTypes;
+  protected readonly PromoTypes = PromoItemTypes;
 }

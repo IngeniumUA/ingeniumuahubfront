@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {MatRadioModule} from '@angular/material/radio';
-import {HubUserPersonalDetailsI} from '@ingenium/app/shared/models/user';
+import {HubUserPersonalDetailsI} from '@ingenium/app/shared/models/user/user';
 import {AccountService} from '@ingenium/app/core/services/user/account/account.service';
 import {first} from 'rxjs/operators';
 import {Store} from "@ngxs/store";
@@ -49,6 +49,13 @@ export class AccountInfoComponent implements OnInit {
               private toastr: ToastrService) {
 
     this.email = this.store.selectSnapshot(UserState.getEmail);
+    this.form = this.formBuilder.group({
+      telephone: ['', Validators.required],
+      recreation_interest: [false, Validators.required],
+      sport_interest: [false, Validators.required],
+      relations_interest: [false, Validators.required],
+      graduation_tract: ['', Validators.required]
+    });
   }
 
 
@@ -57,26 +64,25 @@ export class AccountInfoComponent implements OnInit {
   }
 
   loadFieldsFromStore() {
-    const details = this.store.selectSnapshot(UserState.userDetails);
-    if (!details) {
-      return;
-    }
+    this.accountService.getAccount().subscribe(details => {
+      if (!details) {
+        return;
+      }
 
-    this.form = this.formBuilder.group({
-      voornaam: [details.voornaam, Validators.required],
-      achternaam: [details.achternaam, Validators.required],
-      telefoonnummer: [details.telefoonnummer, Validators.required],
-      gemeente: [details.gemeente, Validators.required],
-      adres: [details.adres, Validators.required],
-      huisnummer: [details.huisnummer, Validators.required],
-      sport_interesse: [details.sport_interesse, Validators.required],
-      doop_interesse: [details.doop_interesse, Validators.required],
-      afstudeerrichting: [details.afstudeerrichting, Validators.required]
+      this.form = this.formBuilder.group({
+        telephone: [details.telephone, Validators.required],
+        recreation_interest: [details.recreation_interest, Validators.required],
+        sport_interest: [details.sport_interest, Validators.required],
+        relations_interest: [details.relations_interest, Validators.required],
+        graduation_tract: [details.graduation_tract, Validators.required]
+      });
     });
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.form.controls; }
+  get f() {
+    return this.form.controls;
+  }
 
   onSubmit() {
     if (this.loading) return;
@@ -90,15 +96,13 @@ export class AccountInfoComponent implements OnInit {
 
     this.loading = true;
     const personalDetails: HubUserPersonalDetailsI = {
-      voornaam: this.form.controls['voornaam'].value,
-      achternaam: this.form.controls['achternaam'].value,
-      telefoonnummer: this.form.controls['telefoonnummer'].value,
-      gemeente: this.form.controls['gemeente'].value,
-      adres: this.form.controls['adres'].value,
-      huisnummer: this.form.controls['huisnummer'].value,
-      sport_interesse: this.form.controls['sport_interesse'].value,
-      doop_interesse: this.form.controls['doop_interesse'].value,
-      afstudeerrichting: this.form.controls['afstudeerrichting'].value,
+      given_name: '',
+      last_name: '',
+      telephone: this.form.controls['telephone'].value,
+      recreation_interest: this.form.controls['recreation_interest'].value,
+      sport_interest: this.form.controls['sport_interest'].value,
+      relations_interest: this.form.controls['relations_interest'].value,
+      graduation_tract: this.form.controls['graduation_tract'].value,
     };
 
     this.accountService.updatePersonalDetails(personalDetails).pipe(first()).subscribe({

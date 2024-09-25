@@ -1,5 +1,5 @@
 .button {
-  @apply inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md transition-colors;
+  @apply inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md transition-colors no-underline;
 
   &.button-lg {
     @apply px-6 py-3;
@@ -57,7 +57,7 @@
     @apply border-blue-900 text-blue-900 bg-transparent;
 
     &.active {
-      @apply bg-blue-950 text-white border-blue-950;
+      @apply bg-blue-950 text-white border-blue-950 focus:outline-blue-950;
     }
 
     &:hover {

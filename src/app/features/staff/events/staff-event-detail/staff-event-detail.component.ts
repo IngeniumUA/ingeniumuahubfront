@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {EventItemDetailI} from '../../../../shared/models/items/events';
-import {EventService} from '../../../../core/services/items/events/event.service';
+import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
+import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 
 @Component({
   selector: 'app-staff-event-detail',
@@ -10,11 +10,11 @@ import {EventService} from '../../../../core/services/items/events/event.service
   styleUrls: ['./staff-event-detail.component.css'],
 })
 export class StaffEventDetailComponent implements OnInit {
-  event$?: Observable<EventItemDetailI>;
+  event$?: Observable<ItemWideI>;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private eventService: EventService) {
+              private itemWideService: ItemWideService) {
   }
 
   ngOnInit() {
@@ -28,6 +28,6 @@ export class StaffEventDetailComponent implements OnInit {
   }
 
   SetEvent(id: string): void {
-    this.event$ = this.eventService.getEvent(id);
+    this.event$ = this.itemWideService.getItem(id);
   }
 }

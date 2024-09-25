@@ -1,8 +1,8 @@
 import {afterNextRender, Injectable} from '@angular/core';
 import {IProductItem, ProductMetaI} from '../../../../shared/models/items/products/products';
-import {ItemI} from '../../../../shared/models/items/ItemI';
 import {ITransaction} from '../../../../shared/models/items/products/cart';
 import {HttpErrorResponse} from '@angular/common/http';
+import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 
 interface IAbstractTransaction {
   sourceItemName: string  // TODO Change to source item_id
@@ -16,7 +16,7 @@ interface IAbstractTransaction {
 })
 export class CartService {
   transactionArray: IAbstractTransaction[] = [];
-  sourceArray: ItemI[] = [];
+  sourceArray: ItemLimitedI[] = [];
   paymentErrorArray: HttpErrorResponse[] = [];
 
   // Initialization --------------------------------
@@ -41,7 +41,7 @@ export class CartService {
       return 0;
     });
   }
-  private transactionsIncludes(source: ItemI, product?: IProductItem): boolean {
+  private transactionsIncludes(source: ItemLimitedI, product?: IProductItem): boolean {
     const boolMap = this.transactionArray.map((value) => {
       const sourceEquality = value.sourceItemName === source.name;
 
@@ -55,7 +55,7 @@ export class CartService {
 
     return boolMap.includes(true);
   }
-  private getTransactionIndex(source: ItemI, product: IProductItem): number {
+  private getTransactionIndex(source: ItemLimitedI, product: IProductItem): number {
     const boolMap = this.transactionArray.map(value => {
       return (value.sourceItemName === source.name) &&
         (value.product.name === product.name) &&
@@ -66,9 +66,9 @@ export class CartService {
     return boolMap.indexOf(true);
   }
 
-  private addIfMissing(source: ItemI): void {
+  private addIfMissing(source: ItemLimitedI): void {
     // Match on item.uuid instead of item because .includes doesn't catch it otherwise
-    if (!this.sourceArray.map((item) => item.uuid).includes(source.uuid)) {
+    if (!this.sourceArray.map((item) => item.id).includes(source.id)) {
       this.sourceArray.push(source);
       this.updateLocalStorage();
       return;
@@ -84,13 +84,13 @@ export class CartService {
     };
   }
 
-  getSource(source_name: string): ItemI {
+  getSource(source_name: string): ItemLimitedI {
     const boolArray: boolean[] = this.sourceArray.map((value) => {return value.name === source_name;});
     const sourceIndex: number = boolArray.indexOf(true);
     return this.sourceArray.at(sourceIndex)!;
   }
 
-  private getSourceIndex(source: ItemI): number {
+  private getSourceIndex(source: ItemLimitedI): number {
     const boolArray: boolean[] = this.sourceArray.map((value) => {return value.name === source.name;});
     if (boolArray.includes(true)) {
       return boolArray.indexOf(true);
@@ -99,7 +99,7 @@ export class CartService {
   }
 
   // Public --------------------------------
-  public getUsedItems(): ItemI[] {
+  public getUsedItems(): ItemLimitedI[] {
     return this.sourceArray;
   }
 
@@ -107,7 +107,7 @@ export class CartService {
     return this.transactionArray.length > 0;
   }
 
-  public getCurrentTransactions(source?: ItemI, product?: IProductItem): ITransaction[] {
+  public getCurrentTransactions(source?: ItemLimitedI, product?: IProductItem): ITransaction[] {
     const boolMap = this.transactionArray.map((value) => {
       if (source === undefined) return true;
 
@@ -130,14 +130,14 @@ export class CartService {
     });
   }
 
-  public getProductCount(source: ItemI, product: IProductItem): number {
+  public getProductCount(source: ItemLimitedI, product: IProductItem): number {
     if (!this.transactionsIncludes(source, product)) return 0;
 
     const transactionIndex = this.getTransactionIndex(source, product);
     return this.transactionArray.at(transactionIndex)!.count;
   }
 
-  public setProductCount(source: ItemI, product: IProductItem, count: number): void {
+  public setProductCount(source: ItemLimitedI, product: IProductItem, count: number): void {
     if (count < 1) {
       this.removeProduct(source, product);
       return;
@@ -164,7 +164,7 @@ export class CartService {
     this.updateLocalStorage();
   }
 
-  public removeProduct(source: ItemI, product: IProductItem): void {
+  public removeProduct(source: ItemLimitedI, product: IProductItem): void {
     const transactionIndex = this.getTransactionIndex(source, product);
     this.transactionArray.splice(transactionIndex, 1);
     this.updateLocalStorage();

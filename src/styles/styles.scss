@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "default";
 @import 'ngx-toastr/toastr';
 @import "staff_styles";
 @import "button";
@@ -32,7 +33,7 @@ html, body, app-root {
   @apply w-full overflow-x-hidden h-full block text-gray-900;
 }
 
-app-public-routing {
+app-template-wrapper {
   @apply flex flex-col h-full overflow-x-hidden;
 }
 
@@ -118,14 +119,6 @@ h4 {
 
 p {
   @apply leading-6 text-gray-600;
-}
-
-a {
-  color: var(--secondblue)
-}
-
-span {
-  color: var(--mainblue)
 }
 
 // Ingenium Container

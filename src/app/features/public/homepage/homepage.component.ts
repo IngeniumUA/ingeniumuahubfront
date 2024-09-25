@@ -1,7 +1,7 @@
 import {afterNextRender, Component} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
-import {EventService} from '@ingenium/app/core/services/items/events/event.service';
+import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 
 @Component({
   selector: 'app-homepage',
