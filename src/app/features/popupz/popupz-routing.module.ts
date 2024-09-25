@@ -4,6 +4,9 @@ import {PopupzHomeComponent} from "@ingenium/app/features/popupz/popupz-home/pop
 import {PopupzAllergiesComponent} from "@ingenium/app/features/popupz/popupz-allergies/popupz-allergies.component";
 import {PopupzTemplateComponent} from "@ingenium/app/features/popupz/popupz-template.component";
 import {PopupzMenuComponent} from "@ingenium/app/features/popupz/popupz-menu/popupz-menu.component";
+import {
+  PopupzPublicTrackerComponent
+} from "@ingenium/app/features/popupz/popupz-public-tracker/popupz-public-tracker.component";
 
 const routes: Routes = [
   {
@@ -25,8 +28,12 @@ const routes: Routes = [
       {
         path: 'allergies',
         component: PopupzAllergiesComponent
-      }
+      },
     ]
+  },
+  {
+    path: 'public-tracker',
+    component: PopupzPublicTrackerComponent
   }
 ];
 
