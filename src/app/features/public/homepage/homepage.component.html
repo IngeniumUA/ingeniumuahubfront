@@ -49,7 +49,8 @@
   <section class="ingenium-container" aria-labelledby="recommendations-title">
     <h2 id="recommendations-title" class="text-white mb-4">Uitgelicht</h2>
 
-    <ng-container *ngIf="(this.homePageRec$ | async) as eventsRec; else noEventsAvailable">
+    @let eventsRec = (this.homePageRec$ | async);
+    @if (eventsRec && eventsRec.length > 0) {
       <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
         <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" *ngFor="let recsys_item of eventsRec" />
       </div>
@@ -62,26 +63,31 @@
           </svg>
         </a>
       </div>
-    </ng-container>
-
-    <ng-template #noEventsAvailable>
+    } @else {
       <p class="text-white text-lg w-full">Geen aanbevelingen, check onze social media!</p>
-    </ng-template>
+    }
   </section>
 
   <section class="ingenium-container" aria-labelledby="jobs-title">
     <h2 id="jobs-title" class="text-white mb-4">Vacatures</h2>
 
-    <app-promo-list [promoType]="'vacature'" [queryLimit]="8" />
+    @let recsysItems = (this.recsysItems$ | async);
+    @if (recsysItems && recsysItems.length > 0) {
+      @for (item of recsysItems; track item.name) {
+        <app-rec-sys-item-preview [recsysItem]="item" />
+      }
 
-    <div class="text-center mt-4">
-      <a class="button button-outline-white button-lg uppercase" [routerLink]="['/vacature']">
-        Alle vacatures
-        <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-      </a>
-    </div>
+      <div class="text-center mt-4">
+        <a class="button button-outline-white button-lg uppercase" [routerLink]="['/vacature']">
+          Alle vacatures
+          <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </div>
+    } @else {
+      <p class="text-white text-lg w-full">Er zijn momenteel geen vacatures beschikbaar.</p>
+    }
   </section>
 </main>
 
