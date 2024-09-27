@@ -13,3 +13,19 @@
     }
   }
 }
+
+.popupz-product-item {
+  @apply flex flex-col items-center border-2 border-gray-100 p-4;
+
+  .popupz-product-item__title {
+    @apply font-medium text-lg;
+  }
+
+  .popupz-product-item__price {
+    @apply font-medium;
+  }
+
+  .popupz-product-item__options {
+    @apply flex gap-x-2;
+  }
+}
