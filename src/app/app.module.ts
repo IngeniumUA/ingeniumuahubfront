@@ -2,11 +2,11 @@ import {APP_INITIALIZER, ErrorHandler, NgModule, isDevMode} from '@angular/core'
 import { Router } from "@angular/router";
 import {NgOptimizedImage} from '@angular/common';
 import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
-import {NgxsAfterBootstrap, NgxsModule, StateContext} from '@ngxs/store';
+import {NgxsModule} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import * as Sentry from "@sentry/angular";
 
-import {User, UserState} from './core/store';
+import {UserState} from './core/store';
 
 import {AppComponent} from './app.component';
 import {PublicHeaderComponent} from './core/layout/public/header/public-header.component';
@@ -117,8 +117,4 @@ export function storageFactory() : OAuthStorage {
         provideHttpClient(withFetch()),
         provideHttpClient(withInterceptorsFromDi()),
     ] })
-export class AppModule implements NgxsAfterBootstrap {
-  ngxsAfterBootstrap(ctx: StateContext<any>): void {
-    ctx.dispatch(new User.FetchUserDetails());
-  }
-}
+export class AppModule {}

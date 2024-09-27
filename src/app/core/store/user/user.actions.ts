@@ -18,8 +18,8 @@ export namespace User {
     static readonly type = '[User] Fetch browser token';
   }
 
-  export class FetchUserDetails {
-    static readonly type =  '[User] Fetch User Details';
+  export class GetRoles {
+    static readonly type = '[User] Get Roles';
   }
 
   export class Logout {

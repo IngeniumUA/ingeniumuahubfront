@@ -3,10 +3,10 @@ import {Observable, of} from 'rxjs';
 import {MatTableModule} from '@angular/material/table';
 import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {RolesService} from '@ingenium/app/core/services/user/roles.service';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
+import {Store} from "@ngxs/store";
 
 @Component({
   selector: 'app-item-table',
@@ -24,12 +24,10 @@ import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 export class ItemTableComponent implements OnInit {
 
   @Input() itemTypeInput: string | null = null;
-  userRoles$ = this.roleService.getRoles();
+  userRoles$: Observable<UserRolesI|null> = this.store.select(state => state.user.roles);
   items$: Observable<ItemWideI[]> = of([]);
 
-  constructor(private itemService: ItemWideService,
-              private roleService: RolesService) {
-  }
+  constructor(private itemService: ItemWideService, private store: Store) {}
 
   ngOnInit() {
     this.items$ = this.itemService.getItems();

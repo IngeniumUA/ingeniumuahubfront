@@ -48,7 +48,7 @@ export class AccountInfoComponent implements OnInit {
               private store: Store,
               private toastr: ToastrService) {
 
-    this.email = this.store.selectSnapshot(UserState.getEmail);
+    this.email = this.store.selectSnapshot(UserState.email);
     this.form = this.formBuilder.group({
       telephone: ['', Validators.required],
       recreation_interest: [false, Validators.required],

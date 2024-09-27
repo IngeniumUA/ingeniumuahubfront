@@ -5,6 +5,9 @@ import {User} from './user.actions';
 import {CartService} from "@ingenium/app/core/services/shop/cart/cart.service";
 import {Router} from "@angular/router";
 import {OAuthService} from "angular-oauth2-oidc";
+import {HttpClient} from "@angular/common/http";
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
+import {apiEnviroment} from "@ingenium/environments/environment";
 
 @State<UserStateModel>({
   name: 'user',
@@ -19,7 +22,8 @@ import {OAuthService} from "angular-oauth2-oidc";
 @Injectable()
 export class UserState {
 
-  constructor(private cartService: CartService, private router: Router, private oauthService: OAuthService) {}
+  constructor(private cartService: CartService, private router: Router, private oauthService: OAuthService,
+              private httpClient: HttpClient) {}
 
   /**
    * Selectors
@@ -31,7 +35,7 @@ export class UserState {
   }
 
   @Selector()
-  static getEmail(state: UserStateModel) {
+  static email(state: UserStateModel) {
     return state.email;
   }
 
@@ -46,7 +50,7 @@ export class UserState {
   }
 
   @Selector()
-  static getRoles(state: UserStateModel) {
+  static roles(state: UserStateModel) {
     return state.roles;
   }
 
@@ -57,6 +61,15 @@ export class UserState {
   @Action(User.Login)
   loginUser(_ctx: StateContext<UserStateModel>, action: User.Login) {
     this.oauthService.initLoginFlow(action.destinationPath);
+  }
+
+  @Action(User.GetRoles)
+  getRoles(ctx: StateContext<UserStateModel>) {
+    this.httpClient.get<UserRolesI>(`${apiEnviroment.apiUrl}account/roles`).subscribe((roles: UserRolesI|null) => {
+      ctx.patchState({
+        roles,
+      });
+    });
   }
 
   @Action(User.RefreshToken)
@@ -70,9 +83,13 @@ export class UserState {
       return;
     }
 
+    // Set required auth parameters
     const token = this.oauthService.getAccessToken();
     const email = this.oauthService.getIdentityClaims()['email'];
     ctx.dispatch(new User.SetAuthData(token, email));
+
+    // Request user roles
+    ctx.dispatch(new User.GetRoles());
   }
 
   @Action(User.SetAuthData)

@@ -1,16 +1,16 @@
 import {inject} from '@angular/core';
-import { Router } from '@angular/router';
-import {tap} from 'rxjs';
-import {RolesService} from '../services/user/roles.service';
+import {RedirectCommand, Router} from '@angular/router';
+import {Store} from "@ngxs/store";
+import {UserState} from "@ingenium/app/core/store";
 
 
 export const staffGuard = () => {
+  const store = inject(Store);
   const router = inject(Router);
 
-  const rolesService = inject(RolesService);
-  return rolesService.isStaff.pipe(
-    tap((value) => {
-      return !value ? router.navigate(['/home']) : true;
-    }
-    ));
+  if (store.selectSnapshot(UserState.roles)?.is_staff) {
+    return true;
+  }
+
+  return new RedirectCommand(router.parseUrl('/'));
 };
