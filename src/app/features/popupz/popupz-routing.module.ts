@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {PopupzHomeComponent} from "@ingenium/app/features/popupz/popupz-home/popupz-home.component";
 import {PopupzAllergiesComponent} from "@ingenium/app/features/popupz/popupz-allergies/popupz-allergies.component";
 import {PopupzTemplateComponent} from "@ingenium/app/features/popupz/popupz-template.component";
 import {PopupzMenuComponent} from "@ingenium/app/features/popupz/popupz-menu/popupz-menu.component";
@@ -15,7 +14,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PopupzHomeComponent
+        redirectTo: 'menu',
       },
       {
         path: 'menu',
