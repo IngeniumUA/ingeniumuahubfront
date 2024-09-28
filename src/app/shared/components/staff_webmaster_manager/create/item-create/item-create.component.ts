@@ -29,8 +29,7 @@ import {ShopItemInI} from "@ingenium/app/shared/models/item/shopI";
   standalone: true
 })
 export class ItemCreateComponent implements OnInit {
-
-  $itemtype: Observable<string | null> = of('none'); // none, event, shop, promo
+  $itemType: Observable<string | null> = of('none'); // none, event, shop, promo
   itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem'];
   itemTypeControl = new FormControl<string>('none');
 
@@ -74,7 +73,7 @@ export class ItemCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.$itemtype = this.itemTypeControl.valueChanges;
+    this.$itemType = this.itemTypeControl.valueChanges;
   }
 
   parseEventForm(itemType: string): EventItemInI | null {

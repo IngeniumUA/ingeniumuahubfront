@@ -9,18 +9,17 @@ import {ProductStatsI} from '../../../shared/models/stats/productStats';
   providedIn: 'root'
 })
 export class StaffProductBlueprintService {
-  constructor(private httpClient: HttpClient) {
-  }
+  apiUrl = apiEnviroment.apiUrl + 'blueprint';
 
-  apiUrl = apiEnviroment.apiUrl + 'staff/blueprint';
+  constructor(private httpClient: HttpClient) { }
 
   public getProductBlueprint(blueprint_id: string): Observable<StaffProductBlueprintI> {
-    return this.httpClient.get<StaffProductBlueprintI>(this.apiUrl + '/' + blueprint_id.toString());
+    return this.httpClient.get<StaffProductBlueprintI>(`${this.apiUrl}/${blueprint_id}`);
   }
 
   public getProductBlueprints(offset: number = 0, count: number = 50,
-    source_item_id: string | null = null,
-    origin_item_id: string | null = null): Observable<StaffProductBlueprintI[]> {
+    source_item_id: number | null = null,
+    origin_item_id: number | null = null): Observable<StaffProductBlueprintI[]> {
     let query_str = '?offset=' + offset.toString() + '&limit=' + count.toString();
     if (source_item_id !== null) {
       query_str += '&source_item_id='+source_item_id;
@@ -38,12 +37,12 @@ export class StaffProductBlueprintService {
   }
 
   public putProductBlueprint(product_id: number, product_obj: StaffProductBlueprintI): Observable<StaffProductBlueprintI> {
-    return this.httpClient.put<StaffProductBlueprintI>(this.apiUrl + '/' + product_id.toString(), product_obj);
+    return this.httpClient.put<StaffProductBlueprintI>(`${this.apiUrl}/${product_id}`, product_obj);
   }
 
   public getProductBlueprintStats(offset: number = 0, count: number = 50,
-    source_item_id: string | null = null,
-    origin_item_id: string | null = null): Observable<ProductStatsI[]> {
+    source_item_id: number | null = null,
+    origin_item_id: number | null = null): Observable<ProductStatsI[]> {
     let query_str = '?offset=' + offset.toString() + '&limit=' + count.toString();
     if (source_item_id !== null) {
       query_str += '&source_item_id='+source_item_id;
@@ -52,7 +51,6 @@ export class StaffProductBlueprintService {
       query_str += '&origin_item_id='+origin_item_id;
     }
 
-    return this.httpClient.get<ProductStatsI[]>(
-      this.apiUrl + '/stats' + query_str);
+    return this.httpClient.get<ProductStatsI[]>(`${this.apiUrl}/stats${query_str}`);
   }
 }

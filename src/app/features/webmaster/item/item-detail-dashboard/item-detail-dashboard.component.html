@@ -1,22 +1,22 @@
 <ng-container *ngIf="this.$itemDetail | async as item">
 <section class="staffSection">
-  <app-staff-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)"></app-staff-item-detail>
+  <app-staff-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)" />
 </section>
 
 <ng-container *ngIf="item.derived_type.derived_type_enum !== 'promoitem'">
 <section class="staffSection">
   <h1>Product Blueprints</h1>
-  <app-product-blueprint-dashboard [itemId]="itemId"></app-product-blueprint-dashboard>
+  <app-product-blueprint-dashboard [item]="item.item" />
 </section>
 
 <section class="staffSection">
-  <app-checkout-and-transaction-dashboard [item_id]="this.itemId"></app-checkout-and-transaction-dashboard>
+  <app-checkout-and-transaction-dashboard [item_id]="this.itemId" />
 </section>
 
 <section class="staffSection">
   <h2>Add Checkout</h2>
   <ng-container  *ngIf="addingCheckout">
-    <app-create-checkout [item_id]="this.itemId" (checkoutCreated)="refetchTable($event)"></app-create-checkout>
+    <app-create-checkout [item_id]="this.itemId" (checkoutCreated)="refetchTable($event)" />
     <button class="button button-primary w-1/6 button-inline"
             (click)="ToggleAddingCheckout()">
       Cancel

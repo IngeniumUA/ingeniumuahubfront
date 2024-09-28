@@ -12,6 +12,7 @@ import {
 import {ProductStatsI} from '../../../../models/stats/productStats';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
+import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 
 @Component({
   selector: 'app-product-blueprint-dashboard',
@@ -30,8 +31,7 @@ import {RouterLink} from '@angular/router';
   standalone: true
 })
 export class ProductBlueprintDashboardComponent implements OnInit {
-
-  @Input() itemId!: string;
+  @Input() item!: ItemI;
   $productBlueprint: Observable<StaffProductBlueprintI[]> = of([]);
   $productBlueprintStats: Observable<ProductStatsI[]> = of([]);
 
@@ -39,10 +39,9 @@ export class ProductBlueprintDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.$productBlueprintStats = this.staffProductService.getProductBlueprintStats(0, 50, this.itemId);  // source_item
-    this.$productBlueprint = this.staffProductService.getProductBlueprints(0, 50, this.itemId);  // source_item
+    this.$productBlueprintStats = this.staffProductService.getProductBlueprintStats(0, 50, this.item.id);  // source_item
+    this.$productBlueprint = this.staffProductService.getProductBlueprints(0, 50, this.item.id);  // source_item
   }
-
 
   addingNew: boolean = false;
   ToggleAddNew() {
@@ -51,8 +50,8 @@ export class ProductBlueprintDashboardComponent implements OnInit {
 
   NewProduct() {
     this.addingNew = false;
-    this.$productBlueprintStats = this.staffProductService.getProductBlueprintStats(0, 50, this.itemId);  // source_item
-    this.$productBlueprint = this.staffProductService.getProductBlueprints(0, 50, this.itemId);  // source_item
+    this.$productBlueprintStats = this.staffProductService.getProductBlueprintStats(0, 50, this.item.id);  // source_item
+    this.$productBlueprint = this.staffProductService.getProductBlueprints(0, 50, this.item.id);  // source_item
   }
 
 }
