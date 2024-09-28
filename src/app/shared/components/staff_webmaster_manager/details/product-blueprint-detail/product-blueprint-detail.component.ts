@@ -7,6 +7,7 @@ import {ProductMetaI} from '../../../../models/items/products/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
 import {PricePolicyComponentCreateComponent} from '../../create/price-policy/price-policy-component-create.component';
 import {PricePolicyI} from '../../../../models/price_policy';
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -38,7 +39,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
 
     ngOnInit() {
       this.blueprintForm = this.formBuilder.group({
-        available: [this.productBlueprint.available, Validators.required],
+        available: [this.productBlueprint.availability.available, Validators.required],
         name: [this.productBlueprint.name, Validators.required],
         description: [this.productBlueprint.description],
         max_total: [this.productBlueprint.max_total, [Validators.required, Validators.min(1)]],
@@ -77,10 +78,14 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.handleFormError(error);
         return;  }
 
+      const availability: AvailabilityCompositionI = {
+        available: this.blueprintForm.controls['available'].value,
+        disabled: this.productBlueprint.availability.disabled,
+      }
+
       const product: StaffProductBlueprintI = {
         id: this.productBlueprint.id,
-        available: this.blueprintForm.controls['available'].value,
-        disabled: this.productBlueprint.disabled,
+        availability: availability,
         date_created: this.productBlueprint.date_created,
         origin_item_id: this.productBlueprint.origin_item_id,
         source_item_ids: this.productBlueprint.source_item_ids,

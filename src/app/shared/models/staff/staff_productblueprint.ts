@@ -1,10 +1,12 @@
 import {ProductMetaI} from '../items/products/products';
 import {PricePolicyI} from '../price_policy';
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
 
 export interface StaffProductBlueprintI {
   id: number
-  available: boolean
-  disabled: boolean
+
+  availability: AvailabilityCompositionI
+
   date_created: string
   origin_item_id: string
   source_item_ids: string[]
