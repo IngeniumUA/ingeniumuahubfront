@@ -15,6 +15,9 @@ export class PricePolicyService {
   public getPricePolicies(blueprint_id: number): Observable<PricePolicyI[]> {
     return this.httpClient.get<PricePolicyI[]>(`${this.apiUrl}?blueprint_id=${blueprint_id}`);
   }
+  public putPricePolicy(price_policy: PricePolicyI): Observable<PricePolicyI> {
+    return this.httpClient.put<PricePolicyI>(`${this.apiUrl}${price_policy.id}`, price_policy);
+  }
   public deleteItem(pricePolicyId: number): void {
     this.httpClient.delete(`${this.apiUrl}${pricePolicyId}`);
   }

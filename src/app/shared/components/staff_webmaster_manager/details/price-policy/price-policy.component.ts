@@ -6,6 +6,7 @@ import {DatePipe, NgIf} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {debounceTime, delay} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
 
 @Component({
   selector: 'app-price-policy',
@@ -34,13 +35,13 @@ export class PricePolicyComponent implements OnInit {
   form_error: string | null = null;
   loading: boolean = false;
   ngOnInit() {
-    const hasUpdateFields = this.pricePolicy.update_fields !== null;
-    const productName = hasUpdateFields ? this.pricePolicy.update_fields!['product_name']: null;
+    // const hasUpdateFields = this.pricePolicy.update_fields !== null;
+    // const productName = hasUpdateFields ? this.pricePolicy.update_fields!['product_name']: null;
 
     this.pricePolicyForm = this.formBuilder.group({
       priceControl: [this.pricePolicy.price, Validators.required],
-      productNameControl: [productName],
-      alwaysAvailableControl: [this.pricePolicy.always_available],
+      productNameControl: [this.pricePolicy.name],
+      alwaysAvailableControl: [this.pricePolicy.always_display],
       allowInvalidAccessControl: [this.pricePolicy.allow_invalid_access]
     });
 
@@ -76,7 +77,7 @@ export class PricePolicyComponent implements OnInit {
   }
 
   public UpdateContent(content: any) {
-    this.pricePolicy.access_policy.content = content;
+    // this.pricePolicy.access_policy.content = content;
 
     if (this.pricePolicyForm.invalid) {
       const error: Error = Error('Invalid form');
@@ -93,21 +94,24 @@ export class PricePolicyComponent implements OnInit {
   public SavePricePolicy() {
     const update_fields: { [key: string]: any } = {};
 
-    const productNameControlValue = this.pricePolicyForm.get('productNameControl')!.value;
-    const productName = productNameControlValue === '' ? null: productNameControlValue;
-
-    if (productName !== null) {
-      update_fields['product_name'] = productName;
-    }
-
     // TODO remove update fields if empty
 
+    const availability: AvailabilityCompositionI = {
+        available: true,
+        disabled: false
+    }
+
     const pricePolicy: PricePolicyI = {
+      id: this.pricePolicy.id,
+      product_blueprint_id: this.pricePolicy.product_blueprint_id,
+      availability: availability,
+
+      name: this.pricePolicyForm.get('productNameControl')!.value,
       price: this.pricePolicyForm.controls['priceControl'].value,
-      always_available: this.pricePolicyForm.controls['alwaysAvailableControl'].value,
+      always_display: this.pricePolicyForm.controls['alwaysAvailableControl'].value,
       allow_invalid_access: this.pricePolicyForm.controls['allowInvalidAccessControl'].value,
-      update_fields: update_fields,
-      access_policy: this.pricePolicy.access_policy
+      // update_fields: update_fields,
+      // access_policy: this.pricePolicy.access_policy
     };
     this.UpdatePricePolicyEvent.emit(pricePolicy);
   }

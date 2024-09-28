@@ -130,11 +130,15 @@ export class ProductBlueprintDetailComponent implements OnInit {
     }
 
     public UpdatePricePolicy(pricePolicyObj: PricePolicyI, index: number) {
-      if (this.productBlueprint.price_policies.length <= index) {
-        console.log('this.productBlueprint.price_policies.length <= index');
-        return;
-      }
-      // TODO put operation here
+      this.pricePolicyService.putPricePolicy(pricePolicyObj).pipe(
+      first()).subscribe({
+        next: () => {
+          this.getPricePolicies()
+        },
+        error: error => {
+          this.handleFormError(error);
+        }
+      });
       // this.productBlueprint.price_policies[index] = pricePolicyObj;
     }
 
@@ -148,7 +152,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
         first()).subscribe({
         next: () => {
-          // TODO Query policies
+          this.getPricePolicies()
         },
         error: error => {
           this.handleFormError(error);
