@@ -45,13 +45,14 @@ export class ProductBlueprintDetailComponent implements OnInit {
         max_total: [this.productBlueprint.max_total, [Validators.required, Validators.min(1)]],
         max_individual: [this.productBlueprint.max_individual, [Validators.required, Validators.min(1)]],
         max_per_checkout: [this.productBlueprint.max_per_checkout, [Validators.required, Validators.min(1)]],
-        product_ordering: [this.productBlueprint.product_ordering, [Validators.required]],
+        product_ordering: [this.productBlueprint.ordering, [Validators.required]],
       });
 
       this.productMetaForm = this.formBuilder.group({
-        categorie: [this.productBlueprint.product_meta.categorie],
-        group: [this.productBlueprint.product_meta.group],
-        upon_completion: [this.productBlueprint.product_meta.upon_completion === null ? '': JSON.stringify(this.productBlueprint.product_meta.upon_completion[0])]
+        categorie: [this.productBlueprint.product_blueprint_metadata.categorie],
+        group: [this.productBlueprint.product_blueprint_metadata.group],
+        upon_completion: ['']
+        // todo upon_completion: [this.productBlueprint.product_blueprint_metadata.upon_completion === null ? '': JSON.stringify(this.productBlueprint.product_blueprint_metadata.upon_completion[0])]
       });
     }
 
@@ -60,8 +61,8 @@ export class ProductBlueprintDetailComponent implements OnInit {
     onSubmit() {
       // Check if valid guardclause
       if (this.productMetaForm.invalid) {
-        const error: Error = Error('Invalid form');
-        this.handleFormError(error);
+        const error: Error = Error('Invalid Metadata form');
+        this.handleFormError(this.productMetaForm.error);
         return;  }
 
       const upon_completion_form: string = this.productMetaForm.controls['upon_completion'].value;
@@ -69,12 +70,12 @@ export class ProductBlueprintDetailComponent implements OnInit {
         group: this.productMetaForm.controls['group'].value,
         categorie: this.productMetaForm.controls['categorie'].value,
         upon_completion: upon_completion_form === '' ? null: [JSON.parse(upon_completion_form)],
-        popupz_opties: this.productBlueprint.product_meta.popupz_opties
+        popupz_opties: this.productBlueprint.product_blueprint_metadata.popupz_opties
       };
 
       // Check if valid guardclause
       if (this.blueprintForm.invalid) {
-        const error: Error = Error('Invalid form');
+        const error: Error = Error('Invalid Blueprint form');
         this.handleFormError(error);
         return;  }
 
@@ -97,11 +98,11 @@ export class ProductBlueprintDetailComponent implements OnInit {
         max_individual: this.blueprintForm.controls['max_individual'].value,
         max_per_checkout: this.blueprintForm.controls['max_per_checkout'].value,
 
-        product_ordering: this.blueprintForm.controls['product_ordering'].value,
+        ordering: this.blueprintForm.controls['product_ordering'].value,
 
         price_policies: this.productBlueprint.price_policies,
 
-        product_meta: productMeta,
+        product_blueprint_metadata: productMeta
       };
       this.updateProduct.emit(product);
     }

@@ -48,7 +48,7 @@
   </form>
 </section>
 
-<section *ngIf="(productBlueprint.product_meta !== null)">
+<section *ngIf="(productBlueprint.product_blueprint_metadata !== null)">
   <h4>Product Meta</h4>
   <form [formGroup]="productMetaForm">
     <table>
@@ -96,6 +96,7 @@
           (click)="onSubmit()">
     <span class="text-white">Update</span>
   </button>
+  <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
 </section>
 
 <ng-template #addNewPolicy>
