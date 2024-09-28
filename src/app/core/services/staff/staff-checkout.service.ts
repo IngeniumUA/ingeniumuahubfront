@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {apiEnviroment} from '../../../../environments/environment';
+import {apiEnviroment} from '@ingenium/environments/environment';
 import {StatusStatsI} from '../../../shared/models/stats/transactionStats';
 import {StaffCheckoutI, StaffCheckoutPatchI, StaffCreateCheckoutI} from '../../../shared/models/staff/staff_checkout';
 
@@ -12,7 +12,7 @@ export class StaffCheckoutService {
   constructor(private httpClient: HttpClient) {
   }
 
-  apiUrl = apiEnviroment.apiUrl + 'staff/checkout';
+  apiUrl = apiEnviroment.apiUrl + 'checkout';
 
   public getCheckouts(offset: number = 0, count: number = 50,
     item: string | null = null,
@@ -56,7 +56,7 @@ export class StaffCheckoutService {
     }
 
     return this.httpClient.get<StatusStatsI>(
-      this.apiUrl + '/stats' + query_str);
+      this.apiUrl + '/group_by' + query_str);
   }
 
   public patchCheckout(checkout_id: string, patchObj: StaffCheckoutPatchI): Observable<StaffCheckoutI> {
