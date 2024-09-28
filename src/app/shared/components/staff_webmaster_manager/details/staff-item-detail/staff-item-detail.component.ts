@@ -42,7 +42,7 @@ export class StaffItemDetailComponent implements OnInit{
               private datePipe: DatePipe) {
   }
   ngOnInit() {
-    this.isEventItem = isEventItem(this.item.derived_type);
+    this.isEventItem = this.item.derived_type.derived_type_enum === "eventitem"
     this.isShopItem = this.item.derived_type.derived_type_enum === "shopitem";
     this.isPromoItem = this.item.derived_type.derived_type_enum === "promoitem";
 

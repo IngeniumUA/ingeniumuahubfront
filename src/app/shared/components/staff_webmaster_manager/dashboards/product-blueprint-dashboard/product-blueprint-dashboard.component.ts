@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable, of} from 'rxjs';
 import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
 import {StaffProductBlueprintService} from '../../../../../core/services/staff/staff-productblueprint-service';
@@ -9,7 +9,7 @@ import {
 import {
   ProductBlueprintCreateComponent
 } from '../../create/product-blueprint-create/product-blueprint-create.component';
-import {ProductStatsI} from '../../../../models/stats/productStats';
+import {GroupByModelI, ProductStatsI} from '../../../../models/stats/productStats';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
@@ -26,14 +26,15 @@ import {ItemI} from "@ingenium/app/shared/models/item/itemI";
     ProductBlueprintCreateComponent,
     DatePipe,
     MatTableModule,
-    RouterLink
+    RouterLink,
+    JsonPipe
   ],
   standalone: true
 })
 export class ProductBlueprintDashboardComponent implements OnInit {
   @Input() item!: ItemI;
   $productBlueprint: Observable<StaffProductBlueprintI[]> = of([]);
-  $productBlueprintStats: Observable<ProductStatsI[]> = of([]);
+  $productBlueprintStats: Observable<GroupByModelI> = of();
 
   constructor(private staffProductService: StaffProductBlueprintService) {
   }
