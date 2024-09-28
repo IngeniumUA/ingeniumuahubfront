@@ -8,10 +8,19 @@ export interface IProductGroup {
   products: IProductItem[];
 }
 
+export interface CheckoutTrackerConfigI {
+  status_queue: number[]
+  disabled_on_status: number
+}
+
+export interface UponCompletionMetaI {
+  track_checkout: CheckoutTrackerConfigI | null
+}
+
 export interface ProductMetaI {
   group: string;
   categorie: string;
-  upon_completion: object[] | null;
+  upon_completion: UponCompletionMetaI | null;
   popupz_opties: string | null;
 }
 

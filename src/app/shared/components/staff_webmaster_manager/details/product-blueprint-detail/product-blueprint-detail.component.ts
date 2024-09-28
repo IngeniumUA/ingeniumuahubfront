@@ -3,7 +3,7 @@ import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblue
 import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ProductMetaI} from '../../../../models/items/products/products';
+import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/items/products/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
 import {PricePolicyComponentCreateComponent} from '../../create/price-policy/price-policy-component-create.component';
 import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
@@ -57,10 +57,14 @@ export class ProductBlueprintDetailComponent implements OnInit {
         product_ordering: [this.productBlueprint.ordering, [Validators.required]],
       });
 
+      // Temporary "bool" for toggling checkout_tracking
+      const tracking_checkout = !(this.productBlueprint.product_blueprint_metadata?.upon_completion?.track_checkout == null)
+
       this.productMetaForm = this.formBuilder.group({
         categorie: [this.productBlueprint.product_blueprint_metadata.categorie],
         group: [this.productBlueprint.product_blueprint_metadata.group],
-        upon_completion: ['']
+        upon_completion: [''],
+        track_checkout: [tracking_checkout]
         // todo upon_completion: [this.productBlueprint.product_blueprint_metadata.upon_completion === null ? '': JSON.stringify(this.productBlueprint.product_blueprint_metadata.upon_completion[0])]
       });
     }
@@ -74,11 +78,22 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.handleFormError(this.productMetaForm.error);
         return;  }
 
-      const upon_completion_form: string = this.productMetaForm.controls['upon_completion'].value;
+
+      const track_checkout: boolean = this.productMetaForm.controls['track_checkout'].value;
+      const checkout_config: CheckoutTrackerConfigI = {
+        status_queue: [1, 2, 3],
+        disabled_on_status: 3
+      }
+      const upon_completion_filled: UponCompletionMetaI = {
+        track_checkout: checkout_config
+      }
+      const upon_completion = track_checkout ? upon_completion_filled: null;
+
+
       const productMeta: ProductMetaI = {
         group: this.productMetaForm.controls['group'].value,
         categorie: this.productMetaForm.controls['categorie'].value,
-        upon_completion: upon_completion_form === '' ? null: [JSON.parse(upon_completion_form)],
+        upon_completion: upon_completion,
         popupz_opties: this.productBlueprint.product_blueprint_metadata.popupz_opties
       };
 
