@@ -1,13 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
-import {DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ProductMetaI} from '../../../../models/items/products/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
 import {PricePolicyComponentCreateComponent} from '../../create/price-policy/price-policy-component-create.component';
-import {PricePolicyI} from '../../../../models/price_policy';
+import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
+import {Observable, of} from "rxjs";
+import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -22,7 +25,8 @@ import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availab
     ReactiveFormsModule,
     NgIf,
     PricePolicyComponent,
-    PricePolicyComponentCreateComponent
+    PricePolicyComponentCreateComponent,
+    AsyncPipe
   ],
   standalone: true
 })
@@ -30,7 +34,10 @@ export class ProductBlueprintDetailComponent implements OnInit {
     @Input() productBlueprint!: StaffProductBlueprintI;
     @Output() updateProduct = new EventEmitter<StaffProductBlueprintI>();
 
-    constructor(private formBuilder: FormBuilder) {
+    $pricePolicies: Observable<PricePolicyI[]> = of([]);
+
+    constructor(private formBuilder: FormBuilder,
+                private pricePolicyService: PricePolicyService) {
     }
 
     blueprintForm: any;
@@ -38,6 +45,8 @@ export class ProductBlueprintDetailComponent implements OnInit {
     form_error: string | null = null;
 
     ngOnInit() {
+      this.getPricePolicies()
+
       this.blueprintForm = this.formBuilder.group({
         available: [this.productBlueprint.availability.available, Validators.required],
         name: [this.productBlueprint.name, Validators.required],
@@ -100,7 +109,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
 
         ordering: this.blueprintForm.controls['product_ordering'].value,
 
-        price_policies: this.productBlueprint.price_policies,
+        price_policies: [],
 
         product_blueprint_metadata: productMeta
       };
@@ -111,12 +120,22 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.form_error = err.message;
     }
 
+
+    /*
+      *  Price policy code
+     */
+
+    public getPricePolicies() {
+      this.$pricePolicies = this.pricePolicyService.getPricePolicies(this.productBlueprint.id);
+    }
+
     public UpdatePricePolicy(pricePolicyObj: PricePolicyI, index: number) {
       if (this.productBlueprint.price_policies.length <= index) {
         console.log('this.productBlueprint.price_policies.length <= index');
         return;
       }
-      this.productBlueprint.price_policies[index] = pricePolicyObj;
+      // TODO put operation here
+      // this.productBlueprint.price_policies[index] = pricePolicyObj;
     }
 
     addingNewPricePolicy: boolean = false;
@@ -124,9 +143,20 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.addingNewPricePolicy = !this.addingNewPricePolicy;
     }
 
-    public AddPricyPolicy(pricePolicyObj: PricePolicyI) {
-      this.productBlueprint.price_policies.push(pricePolicyObj);
-      this.addingNewPricePolicy = false;
+    public AddPricyPolicy(pricePolicyObj: PricePolicyInI) {
+      // Post for price policy object
+      this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
+        first()).subscribe({
+        next: () => {
+          // TODO Query policies
+        },
+        error: error => {
+          this.handleFormError(error);
+        }
+      });
+
+      // this.productBlueprint.price_policies.push(pricePolicyObj);
+      // this.addingNewPricePolicy = false;
     }
 
     public RemovePricePolicy(i: number) {

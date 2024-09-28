@@ -44,31 +44,31 @@ export class PricePolicyComponent implements OnInit {
       allowInvalidAccessControl: [this.pricePolicy.allow_invalid_access]
     });
 
-    this.pricePolicyForm.valueChanges.pipe(
-      delay(500),
-      distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
-      debounceTime(500)
-    ).subscribe(() => {
-      const update_fields: { [key: string]: any } = {};
-
-      const productNameControlValue = this.pricePolicyForm.get('productNameControl')!.value;
-      const productName = productNameControlValue === '' ? null: productNameControlValue;
-
-      if (productName !== null) {
-        update_fields['product_name'] = productName;
-      }
-
-      // TODO remove update fields if empty
-
-      const pricePolicy: PricePolicyI = {
-        price: this.pricePolicyForm.controls['priceControl'].value,
-        always_available: this.pricePolicyForm.controls['alwaysAvailableControl'].value,
-        allow_invalid_access: this.pricePolicyForm.controls['allowInvalidAccessControl'].value,
-        update_fields: update_fields,
-        access_policy: this.pricePolicy.access_policy
-      };
-      this.UpdatePricePolicyEvent.emit(pricePolicy);
-    });
+    // this.pricePolicyForm.valueChanges.pipe(
+    //   delay(500),
+    //   distinctUntilChanged((prev, next) => prev.emailControl === next.emailControl),
+    //   debounceTime(500)
+    // ).subscribe(() => {
+    //   const update_fields: { [key: string]: any } = {};
+    //
+    //   const productNameControlValue = this.pricePolicyForm.get('productNameControl')!.value;
+    //   const productName = productNameControlValue === '' ? null: productNameControlValue;
+    //
+    //   if (productName !== null) {
+    //     update_fields['product_name'] = productName;
+    //   }
+    //
+    //   // TODO remove update fields if empty
+    //
+    //   const pricePolicy: PricePolicyI = {
+    //     price: this.pricePolicyForm.controls['priceControl'].value,
+    //     always_available: this.pricePolicyForm.controls['alwaysAvailableControl'].value,
+    //     allow_invalid_access: this.pricePolicyForm.controls['allowInvalidAccessControl'].value,
+    //     update_fields: update_fields,
+    //     access_policy: this.pricePolicy.access_policy
+    //   };
+    //   this.UpdatePricePolicyEvent.emit(pricePolicy);
+    // });
   }
 
   handleFormError(err: Error) {
@@ -88,5 +88,27 @@ export class PricePolicyComponent implements OnInit {
 
   public RemovePricePolicy() {
     this.RemovePricePolicyEvent.emit();
+  }
+
+  public SavePricePolicy() {
+    const update_fields: { [key: string]: any } = {};
+
+    const productNameControlValue = this.pricePolicyForm.get('productNameControl')!.value;
+    const productName = productNameControlValue === '' ? null: productNameControlValue;
+
+    if (productName !== null) {
+      update_fields['product_name'] = productName;
+    }
+
+    // TODO remove update fields if empty
+
+    const pricePolicy: PricePolicyI = {
+      price: this.pricePolicyForm.controls['priceControl'].value,
+      always_available: this.pricePolicyForm.controls['alwaysAvailableControl'].value,
+      allow_invalid_access: this.pricePolicyForm.controls['allowInvalidAccessControl'].value,
+      update_fields: update_fields,
+      access_policy: this.pricePolicy.access_policy
+    };
+    this.UpdatePricePolicyEvent.emit(pricePolicy);
   }
 }

@@ -1,9 +1,10 @@
-import {Component, EventEmitter, Output} from '@angular/core';
-import {PricePolicyI} from '../../../../models/price_policy';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {NgForOf} from '@angular/common';
+import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availability_composition";
 
 @Component({
   selector: 'app-price-policy-create',
@@ -19,7 +20,8 @@ import {NgForOf} from '@angular/common';
 })
 export class PricePolicyComponentCreateComponent {
 
-  @Output() UpdatePricePolicyEvent = new EventEmitter<PricePolicyI>();
+  @Input() product_blueprint_id!: number;
+  @Output() CreatePricePolicyEvent = new EventEmitter<PricePolicyInI>();
 
   methods = ['allow_deny_list'];
 
@@ -40,18 +42,25 @@ export class PricePolicyComponentCreateComponent {
       return;
     }
 
-    const pricePolicy: PricePolicyI = {
-      price: this.form.controls['price'].value!,
-      access_policy: {
-        method: this.form.controls['method'].value!,
-        content: {}
-      },
+    const availability: AvailabilityCompositionInI = {
+      available: true,
+      disabled: false
+    }
+
+    const pricePolicy: PricePolicyInI = {
+      name: "",
+      product_blueprint_id: this.product_blueprint_id,
+      price_eu: this.form.controls['price'].value!,
+      // access_policy: {
+      //   method: this.form.controls['method'].value!,
+      //   content: {}
+      // },
       allow_invalid_access: false,
-      always_available: false,
-      update_fields: null
+      always_display: false,
+      availability: availability
     };
 
-    this.UpdatePricePolicyEvent.emit(pricePolicy);
+    this.CreatePricePolicyEvent.emit(pricePolicy);
   }
 
   handleFormError(err: Error) {
