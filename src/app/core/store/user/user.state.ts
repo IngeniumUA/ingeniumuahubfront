@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Action, Selector, State, StateContext} from '@ngxs/store';
+import {Action, NgxsOnInit, Selector, State, StateContext} from '@ngxs/store';
 import {UserStateModel} from './user.model';
 import {User} from './user.actions';
 import {CartService} from "@ingenium/app/core/services/shop/cart/cart.service";
@@ -8,6 +8,8 @@ import {OAuthService} from "angular-oauth2-oidc";
 import {HttpClient} from "@angular/common/http";
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 import {apiEnviroment} from "@ingenium/environments/environment";
+import {catchError, of} from "rxjs";
+import {map} from "rxjs/operators";
 
 @State<UserStateModel>({
   name: 'user',
@@ -20,10 +22,14 @@ import {apiEnviroment} from "@ingenium/environments/environment";
   },
 })
 @Injectable()
-export class UserState {
+export class UserState implements NgxsOnInit {
 
   constructor(private cartService: CartService, private router: Router, private oauthService: OAuthService,
               private httpClient: HttpClient) {}
+
+  ngxsOnInit(ctx: StateContext<any>) {
+    ctx.dispatch(new User.FetchAuthTokenFromStorage());
+  }
 
   /**
    * Selectors
@@ -65,11 +71,31 @@ export class UserState {
 
   @Action(User.GetRoles)
   getRoles(ctx: StateContext<UserStateModel>) {
-    this.httpClient.get<UserRolesI>(`${apiEnviroment.apiUrl}account/roles`).subscribe((roles: UserRolesI|null) => {
-      ctx.patchState({
-        roles,
+    const emptyRoles: UserRolesI = {
+      is_manager: false,
+        is_webmaster: false,
+        is_staff: false,
+        is_lid: false,
+    };
+
+    this.httpClient.get<UserRolesI>(`${apiEnviroment.apiUrl}account/roles`)
+      .pipe(
+        map((roles: UserRolesI|null) => roles),
+        catchError((_) => {
+          return of(null);
+        })
+      )
+      .subscribe((roles: UserRolesI|null) => {
+        if (roles === null) {
+          ctx.patchState({
+            roles: emptyRoles,
+          })
+        }
+
+        ctx.patchState({
+          roles
+        })
       });
-    });
   }
 
   @Action(User.RefreshToken)

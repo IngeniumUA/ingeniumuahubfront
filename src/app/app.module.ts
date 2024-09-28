@@ -1,12 +1,12 @@
 import {APP_INITIALIZER, ErrorHandler, NgModule, isDevMode} from '@angular/core';
-import { Router } from "@angular/router";
+import {Router} from "@angular/router";
 import {NgOptimizedImage} from '@angular/common';
 import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
 import {NgxsModule} from '@ngxs/store';
 import {NgxsReduxDevtoolsPluginModule} from '@ngxs/devtools-plugin';
 import * as Sentry from "@sentry/angular";
 
-import {UserState} from './core/store';
+import {CartState, UserState} from './core/store';
 
 import {AppComponent} from './app.component';
 import {PublicHeaderComponent} from './core/layout/public/header/public-header.component';
@@ -47,74 +47,79 @@ import {PromoListComponent} from './shared/components/items/item/promo-list/prom
 import {OAuthModule, OAuthStorage} from "angular-oauth2-oidc";
 
 // Storage factory for OAuthModule
-export function storageFactory() : OAuthStorage {
+export function storageFactory(): OAuthStorage {
   console.log('storageFactory')
   return localStorage
 }
 
-@NgModule({ declarations: [
-        AppComponent,
-        HomepageComponent,
-        NotfoundpageComponent,
-        PublicRoutingComponent,
-        CloudComponent,
-        EventDatePipe,
-        GroupnamePipe,
-        ContactComponent,
-        CardRedirectComponent,
-        CreditsComponent,
-        PopupzComponent,
-        PopupzorderComponent,
-        PopupzorderStaffComponent,
-        GalabalComponent,
-    ],
-    exports: [
-        EventDatePipe,
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        PublicHeaderComponent,
-        PublicFooterComponent,
-        UnderConstructionComponent,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        CardComponent,
-        ReactiveFormsModule,
-        MatRadioModule,
-        MatButtonModule,
-        RecSysItemPreviewComponent,
-        PartnerBalkComponent,
-        PartnerDumpComponent,
-        BrowserAnimationsModule,
-        ToastrModule.forRoot(),
-        PartnerGridComponent,
-        PromoListComponent,
-        NgOptimizedImage,
-        OAuthModule.forRoot(),
-        NgxsModule.forRoot([UserState], {
-            developmentMode: isDevMode(),
-        }),
-        NgxsReduxDevtoolsPluginModule.forRoot({
-            disabled: !isDevMode(),
-        })], providers: [
-        {
-            provide: ErrorHandler,
-            useValue: Sentry.createErrorHandler({
-                showDialog: false,
-            }),
-        }, {
-            provide: Sentry.TraceService,
-            deps: [Router],
-        },
-        {
-            provide: APP_INITIALIZER,
-            useFactory: () => () => { },
-            deps: [Sentry.TraceService],
-            multi: true,
-        },
-        { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
-        { provide: OAuthStorage, useFactory: storageFactory },
-        provideClientHydration(),
-        provideHttpClient(withFetch()),
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
-export class AppModule {}
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomepageComponent,
+    NotfoundpageComponent,
+    PublicRoutingComponent,
+    CloudComponent,
+    EventDatePipe,
+    GroupnamePipe,
+    ContactComponent,
+    CardRedirectComponent,
+    CreditsComponent,
+    PopupzComponent,
+    PopupzorderComponent,
+    PopupzorderStaffComponent,
+    GalabalComponent,
+  ],
+  exports: [
+    EventDatePipe,
+  ],
+  bootstrap: [AppComponent],
+  imports: [BrowserModule,
+    PublicHeaderComponent,
+    PublicFooterComponent,
+    UnderConstructionComponent,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    CardComponent,
+    ReactiveFormsModule,
+    MatRadioModule,
+    MatButtonModule,
+    RecSysItemPreviewComponent,
+    PartnerBalkComponent,
+    PartnerDumpComponent,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    PartnerGridComponent,
+    PromoListComponent,
+    NgOptimizedImage,
+    OAuthModule.forRoot(),
+    NgxsModule.forRoot([UserState, CartState], {
+      developmentMode: isDevMode(),
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot({
+      disabled: !isDevMode(),
+    })], providers: [
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: false,
+      }),
+    }, {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+      },
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
+    {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
+    {provide: OAuthStorage, useFactory: storageFactory},
+    provideClientHydration(),
+    provideHttpClient(withFetch()),
+    provideHttpClient(withInterceptorsFromDi()),
+  ]
+})
+export class AppModule {
+}

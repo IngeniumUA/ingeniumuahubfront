@@ -2,15 +2,26 @@ import {inject} from '@angular/core';
 import {RedirectCommand, Router} from '@angular/router';
 import {Store} from "@ngxs/store";
 import {UserState} from "@ingenium/app/core/store";
+import {catchError, Observable, of, skipWhile} from "rxjs";
+import {map} from "rxjs/operators";
+import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 
-export const staffGuard = () => {
+export const staffGuard = () : Observable<boolean|RedirectCommand> => {
   const store = inject(Store);
   const router = inject(Router);
 
-  if (store.selectSnapshot(UserState.roles)?.is_staff) {
-    return true;
-  }
+  return store.select(UserState.roles)
+    .pipe(
+      skipWhile(roles => !roles), // Wait when roles is null
+      map((roles: UserRolesI|null): boolean|RedirectCommand => {
+        if (roles?.is_staff) {
+          return true;
+        }
 
-  return new RedirectCommand(router.parseUrl('/'));
+        return new RedirectCommand(router.parseUrl('/'));
+      }), catchError((_) => {
+        return of(new RedirectCommand(router.parseUrl('/')));
+      })
+    );
 };
