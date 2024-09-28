@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable, of, shareReplay} from 'rxjs';
 import {IProductCategorie, IProductItem} from '../../../../shared/models/items/products/products';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '../../../../../environments/environment';
@@ -71,7 +71,7 @@ export class ProductsService {
   constructor(private httpClient: HttpClient) { }
 
   getProducts(itemID: string): Observable<IProductItem[]> {
-    return this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + 'interact/product/' + itemID);
+    return this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + 'item/products/' + itemID).pipe(shareReplay());
   }
 
   getProductWithCart(_itemId: string): Observable<IProductCategorie[]> {
