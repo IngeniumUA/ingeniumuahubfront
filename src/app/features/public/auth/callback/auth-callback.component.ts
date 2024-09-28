@@ -32,7 +32,8 @@ export class AuthCallbackComponent implements OnInit {
       this.store.dispatch(new User.SetAuthData(
         this.oauthService.getAccessToken(),
         claims['email'],
-      ))
+      ));
+      this.store.dispatch(new User.GetRoles());
 
       this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
     } catch (error) {
