@@ -47,3 +47,17 @@ export interface IProductItem {
   max_count: number;
   product_meta: ProductMetaI;
 }
+
+export enum PaymentProviderEnum {
+  Dev = 1,
+  Kassa = 2,
+  Free = 3,
+  Stripe = 4,
+}
+
+export interface CheckoutIdI {
+  checkout_id: string
+  payment_provider_payment_id: string,
+  payment_provider: PaymentProviderEnum
+}
+

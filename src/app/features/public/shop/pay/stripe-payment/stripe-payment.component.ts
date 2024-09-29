@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOptions} from "@stripe/stripe-js";
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
-import {CheckoutIdI, PaymentService} from "../../../../../core/services/shop/payment/payment.service";
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
+import {CheckoutIdI} from "@ingenium/app/shared/models/items/products/products";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -13,7 +13,6 @@ import {Router} from "@angular/router";
 export class StripePaymentComponent implements OnInit {
 
   constructor(    private formBuilder: FormBuilder,
-                  private paymentService: PaymentService,
                   private stripeService: StripeService,
                   private router: Router) {
   }

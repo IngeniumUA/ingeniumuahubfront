@@ -1,4 +1,4 @@
-import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
+import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 
 export namespace CartActions {
   export class AddToCart {
@@ -26,5 +26,6 @@ export namespace CartActions {
 
   export class Checkout {
     static readonly type = '[Cart] Checkout';
+    constructor(public payment_provider: PaymentProviderEnum) {}
   }
 }

@@ -1,7 +1,7 @@
 import {Action, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
 import {Injectable} from "@angular/core";
-import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
+import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 import {HttpClient} from "@angular/common/http";
 import {removeItem} from "@ngxs/store/operators";
 
@@ -9,6 +9,7 @@ import {removeItem} from "@ngxs/store/operators";
   name: 'cart',
   defaults: {
     products: [],
+    paymentProvider: PaymentProviderEnum.Stripe
   },
 })
 @Injectable()
@@ -22,6 +23,11 @@ export class CartState implements NgxsOnInit {
         products: JSON.parse(localStorageState),
       })
     }
+  }
+
+  @Selector()
+  static getPaymentProvider(state: CartStateModel): PaymentProviderEnum {
+    return state.paymentProvider;
   }
 
   @Selector()
@@ -71,7 +77,7 @@ export class CartState implements NgxsOnInit {
   }
 
   @Action(CartActions.Checkout)
-  checkout(ctx: StateContext<CartStateModel>) {
-    return this.httpClient.post('/api/checkout', ctx.getState().products);
+  checkout(_ctx: StateContext<CartStateModel>, _action: CartActions.Checkout) {
+    // ...
   }
 }
