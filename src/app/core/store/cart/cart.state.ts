@@ -2,6 +2,8 @@ import {Action, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
 import {Injectable} from "@angular/core";
 import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
+import {HttpClient} from "@angular/common/http";
+import {removeItem} from "@ngxs/store/operators";
 
 @State<CartStateModel>({
   name: 'cart',
@@ -11,7 +13,7 @@ import {IProductItem} from "@ingenium/app/shared/models/items/products/products"
 })
 @Injectable()
 export class CartState implements NgxsOnInit {
-  constructor() {}
+  constructor(private httpClient: HttpClient) {}
 
   ngxsOnInit(ctx: StateContext<CartStateModel>): void {
     const localStorageState = window.localStorage.getItem('cart-products');
@@ -55,8 +57,21 @@ export class CartState implements NgxsOnInit {
     ctx.dispatch(new CartActions.StoreInLocalStorage());
   }
 
+  @Action(CartActions.RemoveFromCart)
+  removeFromCart(ctx: StateContext<CartStateModel>, action: CartActions.RemoveFromCart) {
+    ctx.patchState({
+      products: removeItem<IProductItem>(action.itemIndex)(ctx.getState().products)
+    });
+    ctx.dispatch(new CartActions.StoreInLocalStorage());
+  }
+
   @Action(CartActions.StoreInLocalStorage)
   storeInLocalStorage(ctx: StateContext<CartStateModel>) {
     window.localStorage.setItem('cart-products', JSON.stringify(ctx.getState().products));
+  }
+
+  @Action(CartActions.Checkout)
+  checkout(ctx: StateContext<CartStateModel>) {
+    return this.httpClient.post('/api/checkout', ctx.getState().products);
   }
 }

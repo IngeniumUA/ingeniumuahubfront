@@ -9,9 +9,7 @@ export namespace CartActions {
 
   export class RemoveFromCart {
     static readonly type = '[Cart] Remove from Cart';
-
-    constructor(public productId: string) {
-    }
+    constructor(public itemIndex: number) {}
   }
 
   export class ClearCart {
@@ -22,14 +20,11 @@ export namespace CartActions {
     static readonly type = '[Cart] Fetch Cart';
   }
 
-  export class SetCart {
-    static readonly type = '[Cart] Set Cart';
-
-    constructor(public cart: any) {}
-  }
-
   export class StoreInLocalStorage {
     static readonly type = '[Cart] Store InLocal Storage';
-    constructor() {}
+  }
+
+  export class Checkout {
+    static readonly type = '[Cart] Checkout';
   }
 }
