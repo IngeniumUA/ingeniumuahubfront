@@ -7,7 +7,9 @@ export interface StaffProductBlueprintI {
 
   availability: AvailabilityCompositionI
 
-  date_created: string
+  created_timestamp: string
+  last_update_timestamp: string
+
   origin_item_id: string
   source_item_ids: string[]
   product_blueprint_pools: number[]

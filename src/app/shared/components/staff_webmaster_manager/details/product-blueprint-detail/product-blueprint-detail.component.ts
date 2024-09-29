@@ -69,8 +69,6 @@ export class ProductBlueprintDetailComponent implements OnInit {
       });
     }
 
-    get f() { return this.blueprintForm.controls; }
-
     onSubmit() {
       // Check if valid guardclause
       if (this.productMetaForm.invalid) {
@@ -111,7 +109,8 @@ export class ProductBlueprintDetailComponent implements OnInit {
       const product: StaffProductBlueprintI = {
         id: this.productBlueprint.id,
         availability: availability,
-        date_created: this.productBlueprint.date_created,
+        created_timestamp: this.productBlueprint.created_timestamp,
+        last_update_timestamp: this.productBlueprint.last_update_timestamp,
         origin_item_id: this.productBlueprint.origin_item_id,
         source_item_ids: this.productBlueprint.source_item_ids,
         product_blueprint_pools: this.productBlueprint.product_blueprint_pools,

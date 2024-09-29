@@ -1,7 +1,7 @@
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 export interface UserI {
-  uuid: string
+  user_uuid: string
 
   email: string
   disabled: boolean
