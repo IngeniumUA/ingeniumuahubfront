@@ -9,7 +9,7 @@ import {
 import {
   ProductBlueprintCreateComponent
 } from '../../create/product-blueprint-create/product-blueprint-create.component';
-import {GroupByModelI, ProductStatsI} from '../../../../models/stats/productStats';
+import {GroupByModelI} from '../../../../models/stats/productStats';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";

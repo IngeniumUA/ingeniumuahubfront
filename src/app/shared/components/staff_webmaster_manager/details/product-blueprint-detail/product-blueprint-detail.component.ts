@@ -75,7 +75,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
       // Check if valid guardclause
       if (this.productMetaForm.invalid) {
         const error: Error = Error('Invalid Metadata form');
-        this.handleFormError(this.productMetaForm.error);
+        this.handleFormError(error);
         return;  }
 
 
@@ -144,7 +144,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.$pricePolicies = this.pricePolicyService.getPricePolicies(this.productBlueprint.id);
     }
 
-    public UpdatePricePolicy(pricePolicyObj: PricePolicyI, index: number) {
+    public UpdatePricePolicy(pricePolicyObj: PricePolicyI) {
       this.pricePolicyService.putPricePolicy(pricePolicyObj).pipe(
       first()).subscribe({
         next: () => {

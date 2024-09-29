@@ -1,4 +1,3 @@
-import {AccessPolicyI} from './staff/staff_access_policy';
 import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availability_composition";
 
 export interface PricePolicyI {

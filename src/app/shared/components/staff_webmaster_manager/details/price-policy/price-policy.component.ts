@@ -4,8 +4,6 @@ import {AccessPolicyDetailComponent} from '../access-policy/access-policy-detail
 import {AllowDenyListComponent} from '../access-policy/access_policies/allow-deny-list/allow-deny-list.component';
 import {DatePipe, NgIf} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {debounceTime, delay} from 'rxjs';
-import {distinctUntilChanged} from 'rxjs/operators';
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
 
 @Component({
@@ -76,25 +74,23 @@ export class PricePolicyComponent implements OnInit {
     this.form_error = err.message;
   }
 
-  public UpdateContent(content: any) {
-    // this.pricePolicy.access_policy.content = content;
-
-    if (this.pricePolicyForm.invalid) {
-      const error: Error = Error('Invalid form');
-      this.handleFormError(error);
-      return;  }
-
-    this.UpdatePricePolicyEvent.emit(this.pricePolicy);
-  }
+  // public UpdateContent(content: any) {
+  //   // this.pricePolicy.access_policy.content = content;
+  //
+  //   if (this.pricePolicyForm.invalid) {
+  //     const error: Error = Error('Invalid form');
+  //     this.handleFormError(error);
+  //     return;  }
+  //
+  //   this.UpdatePricePolicyEvent.emit(this.pricePolicy);
+  // }
 
   public RemovePricePolicy() {
     this.RemovePricePolicyEvent.emit();
   }
 
   public SavePricePolicy() {
-    const update_fields: { [key: string]: any } = {};
-
-    // TODO remove update fields if empty
+    // todo const update_fields: { [key: string]: any } = {};
 
     const availability: AvailabilityCompositionI = {
         available: true,

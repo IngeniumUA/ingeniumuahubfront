@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
+import {PricePolicyInI} from '../../../../models/price_policy';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {apiEnviroment} from '../../../../environments/environment';
+import {apiEnviroment} from '@ingenium/environments/environment';
 import {StaffProductBlueprintI} from '../../../shared/models/staff/staff_productblueprint';
-import {GroupByModelI, ProductStatsI} from '../../../shared/models/stats/productStats';
+import {GroupByModelI} from '../../../shared/models/stats/productStats';
 
 @Injectable({
   providedIn: 'root'
