@@ -13,10 +13,6 @@ const routes: Routes = [
     component: PopupzTemplateComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'menu',
-      },
-      {
         path: 'menu',
         component: PopupzMenuComponent
       },
@@ -27,6 +23,11 @@ const routes: Routes = [
       {
         path: 'allergies',
         component: PopupzAllergiesComponent
+      },
+      {
+        path: '',
+        redirectTo: 'menu',
+        pathMatch: 'full'
       },
     ]
   },

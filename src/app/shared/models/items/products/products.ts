@@ -24,13 +24,26 @@ export interface ProductMetaI {
   popupz_opties: string | null;
 }
 
+export interface IPricePolicy {
+  id: number;
+  name: string;
+  price: number,
+  availability: {
+    available: boolean;
+    disabled: boolean;
+  }
+}
+
 export interface IProductItem {
   id: number;
-  product_blueprint_id: number;
-  product_blueprint_name: string | null
-  ordering: number
   name: string;
-  price_eu: number;
+  description: string;
+  ordering: number;
+  blueprint_id: number;
+  origin_item_id: number;
+  date_generated: string;
+  price_policy: IPricePolicy;
+  note: string|null;
   max_count: number;
   product_meta: ProductMetaI;
 }

@@ -1,4 +1,6 @@
-<div class="alert alert-warning alert-border" role="alert" *ngIf="this.cartEmpty">
+@let products = (products$ | async);
+
+<div class="alert alert-warning alert-border" role="alert" *ngIf="products?.length === 0">
   <div class="flex">
     <div class="flex-shrink-0">
       <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -13,14 +15,13 @@
   </div>
 </div>
 
-<section class="transaction space-y-2" *ngFor="let item of this.items; index as i">
-  <h3>{{ item.name }}</h3>
-  <ng-container *ngFor="let transaction of this.transactions[i]">
-    <app-product [onInitValue]="this.transaction.count" [product]="this.transaction.product"
-                 [primaryColorFull]="'var(--mainblue)'"
-                 (countEvent)="this.SetProductCount(transaction.source_item, transaction.product, $event)" />
-  </ng-container>
-</section>
+<ul>
+  @for (product of products; track $index) {
+    <li>
+      <app-product [product]="product" [primaryColorFull]="'var(--mainblue)'"/>
+    </li>
+  }
+</ul>
 
 <section *ngIf="this.paymentErrors.length > 0" class="transaction space-y-2">
     <p class="error-message" *ngFor="let error of this.paymentErrors">{{ error.error.detail['error_statement_nl'] }}</p>
@@ -36,4 +37,5 @@
   </a>
 </div>
 
-<span class="mt-2 block font-bold">Totaal: &euro; {{ this.budget }}</span>
+@let totalPrice = (totalPrice$ | async);
+<span class="mt-2 block font-bold">Totaal: &euro; {{ totalPrice }}</span>

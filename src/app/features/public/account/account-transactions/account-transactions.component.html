@@ -23,7 +23,7 @@
         <dt>Producten</dt>
         <dd>
           <ul class="list-disc list-inside">
-            <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro;&nbsp;{{ transaction.product.price_eu }}</span></li>
+            <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_policy.price > 0">- &euro;&nbsp;{{ transaction.product.price_policy.price }}</span></li>
           </ul>
         </dd>
 
@@ -63,7 +63,7 @@
           <dd>{{ transaction.date_complete | date:'d MMM y, H:mm' }}</dd>
 
           <dt>Product</dt>
-          <dd>{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro;&nbsp;{{ transaction.product.price_eu }}</span></dd>
+          <dd>{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_policy.price > 0">- &euro;&nbsp;{{ transaction.product.price_policy.price }}</span></dd>
 
           <dt>Totaal bedrag</dt>
           <dd>&euro; {{ transaction.amount }}</dd>

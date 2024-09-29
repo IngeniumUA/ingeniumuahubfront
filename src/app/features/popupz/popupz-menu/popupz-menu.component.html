@@ -5,23 +5,28 @@
 </nav>
 
 <main class="ingenium-container mt-6">
+  @let products = ($products | async);
   <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-    <li class="popupz-product-item">
-      <p class="popupz-product-item__title">Bicky Burger</p>
-      <p class="popupz-product-item__price">€ 3,50</p>
+    @for (product of products; track product.id) {
+      <li class="popupz-product-item">
+        <p class="popupz-product-item__title">{{ product.name }}</p>
+        <p class="popupz-product-item__price">€ {{ product.price_policy.price }}</p>
 
-      <form action="#" class="w-full">
-        <div class="form-field">
-          <label for="">Saus</label>
-          <select name="" id="">
-            <option value="mayo">Mayo</option>
-            <option value="ketchup">Ketchup</option>
-            <option value="curry">Curry</option>
-          </select>
-        </div>
+        <form action="#" class="w-full space-y-4">
+          <div class="form-field">
+            <label for="">Saus</label>
+            <select name="" id="">
+              <option value="mayo">Mayo</option>
+              <option value="ketchup">Ketchup</option>
+              <option value="curry">Curry</option>
+            </select>
+          </div>
 
-        <button type="button" class="button button-primary button-sm">Toevoegen</button>
-      </form>
-    </li>
+          <div class="form-field">
+            <button type="button" class="button button-primary button-sm button-full" (click)="addToCard(product)">Toevoegen</button>
+          </div>
+        </form>
+      </li>
+    }
   </ul>
 </main>

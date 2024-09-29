@@ -1,9 +1,10 @@
+import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
+
 export namespace CartActions {
   export class AddToCart {
     static readonly type = '[Cart] Add to Cart';
 
-    constructor(public productId: string) {
-    }
+    constructor(public product: IProductItem) {}
   }
 
   export class RemoveFromCart {
@@ -24,7 +25,11 @@ export namespace CartActions {
   export class SetCart {
     static readonly type = '[Cart] Set Cart';
 
-    constructor(public cart: any) {
-    }
+    constructor(public cart: any) {}
+  }
+
+  export class StoreInLocalStorage {
+    static readonly type = '[Cart] Store InLocal Storage';
+    constructor() {}
   }
 }
