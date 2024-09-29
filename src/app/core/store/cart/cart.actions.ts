@@ -11,17 +11,17 @@ export namespace CartActions {
     static readonly type = '[Cart] Remove from Cart';
     constructor(public itemIndex: number) {}
   }
-
-  export class ClearCart {
-    static readonly type = '[Cart] Clear Cart';
-  }
-
   export class FetchCart {
     static readonly type = '[Cart] Fetch Cart';
   }
 
   export class StoreInLocalStorage {
     static readonly type = '[Cart] Store InLocal Storage';
+  }
+
+  export class SetPaymentMethod {
+    static readonly type = '[Cart] Set Payment Method';
+    constructor(public payment_provider: PaymentProviderEnum) { }
   }
 
   export class Checkout {

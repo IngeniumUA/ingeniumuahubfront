@@ -2,7 +2,6 @@ import {Action, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
 import {Injectable} from "@angular/core";
 import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
-import {HttpClient} from "@angular/common/http";
 import {removeItem} from "@ngxs/store/operators";
 
 @State<CartStateModel>({
@@ -14,7 +13,7 @@ import {removeItem} from "@ngxs/store/operators";
 })
 @Injectable()
 export class CartState implements NgxsOnInit {
-  constructor(private httpClient: HttpClient) {}
+  constructor() {}
 
   ngxsOnInit(ctx: StateContext<CartStateModel>): void {
     const localStorageState = window.localStorage.getItem('cart-products');
@@ -27,6 +26,7 @@ export class CartState implements NgxsOnInit {
 
   @Selector()
   static getPaymentProvider(state: CartStateModel): PaymentProviderEnum {
+    console.log(state);
     return state.paymentProvider;
   }
 
@@ -79,6 +79,14 @@ export class CartState implements NgxsOnInit {
   @Action(CartActions.StoreInLocalStorage)
   storeInLocalStorage(ctx: StateContext<CartStateModel>) {
     window.localStorage.setItem('cart-products', JSON.stringify(ctx.getState().products));
+  }
+
+  @Action(CartActions.SetPaymentMethod)
+  setPaymentMethod(ctx: StateContext<CartStateModel>, action: CartActions.SetPaymentMethod) {
+    console.log('Setting payment method to:', action.payment_provider);
+    ctx.patchState({
+      paymentProvider: action.payment_provider
+    });
   }
 
   @Action(CartActions.Checkout)
