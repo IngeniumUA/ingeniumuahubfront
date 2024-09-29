@@ -1,9 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOptions} from "@stripe/stripe-js";
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
-import {CheckoutIdI, PaymentService} from "../../../../../core/services/shop/payment/payment.service";
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
+import {CheckoutIdI} from "@ingenium/app/shared/models/items/products/products";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -13,7 +13,6 @@ import {Router} from "@angular/router";
 export class StripePaymentComponent implements OnInit {
 
   constructor(    private formBuilder: FormBuilder,
-                  private paymentService: PaymentService,
                   private stripeService: StripeService,
                   private router: Router) {
   }
@@ -22,7 +21,6 @@ export class StripePaymentComponent implements OnInit {
 
   ngOnInit() {
     this.elementsOptions.clientSecret = this.checkoutId.checkout_id
-
   }
 
   elementsOptions: StripeElementsOptions = {
@@ -38,6 +36,7 @@ export class StripePaymentComponent implements OnInit {
     if (this.paying) {
       alert("Je bent al aan het betalen!");
     }
+
     if (this.paymentElementForm.valid) {
       this.paying = true;
       this.stripeService.confirmPayment({
@@ -86,7 +85,7 @@ export class StripePaymentComponent implements OnInit {
           });
       } else {
           // If no status was not handled in previous cases we display error
-          alert( 'Er is iets foutgegaan!' );
+          alert('Er is iets foutgegaan!');
       }
   }
 

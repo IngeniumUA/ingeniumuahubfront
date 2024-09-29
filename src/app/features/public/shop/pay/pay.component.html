@@ -1,16 +1,21 @@
-<app-layout-public-header></app-layout-public-header>
+<app-layout-public-header [light_theme]="true" />
+<main class="ingenium-container flex flex-col h-full">
+  <h1 class="white-section-title white-section-title-large white-section-title-blue">Betalen</h1>
+  <p>Van zodra je bestelling is doorgestuurd kan je de betaling uitvoeren.</p>
 
-<section [ngClass]="{'checkout-desktop': (this.isMobile | async)}">
-  <!-- Checkout Aanvragen van API
-  <app-checkout-display></app-checkout-display>
-  -->
-</section>
-
-<ng-container *ngIf="this.devPayment">
-  <button (click)="this.doDevPayment()" class="button button-primary">Betalen (development)</button>
-</ng-container>
-
-<ng-container *ngIf="this.stripePayment">
-  <app-stripe-payment [checkoutId]="this.checkoutId"></app-stripe-payment>
-</ng-container>
-
+  @if (loading) {
+    <app-loading-indicator [isLoading]="true" class="flex-1" />
+  } @else {
+    @if (devPayment) {
+      <form action="#">
+        <div class="form-field">
+          <button (click)="this.doDevPayment()" class="button button-primary">Betalen (development)</button>
+        </div>
+      </form>
+    } @else if (stripePayment) {
+      <app-stripe-payment [checkoutId]="this.checkoutId" />
+    } @else {
+      <p>Oeps, er ging precies iets mis!</p>
+    }
+  }
+</main>
