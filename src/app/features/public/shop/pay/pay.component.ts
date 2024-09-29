@@ -42,19 +42,6 @@ export class PayComponent implements OnInit {
         this.router.navigateByUrl('/shop/checkout');
       })
     ).subscribe();
-
-    /*this.paymentService.getCheckoutID().pipe(first()).subscribe({
-      next: (value) => {
-
-      },
-      error: error => {
-        this.cartService.clearPaymentErrors();
-        if (error instanceof HttpErrorResponse) {
-          this.cartService.insertPaymentError(error);
-        }
-        this.router.navigateByUrl('/shop/checkout');
-      }}
-    );*/
   }
 
   setupDev() {

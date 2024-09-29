@@ -41,6 +41,11 @@ export class CartState implements NgxsOnInit {
     return state.products;
   }
 
+  @Selector()
+  static getProductCount(state: CartStateModel): number {
+    return state.products.length;
+  }
+
   // =======================================
 
   @Action(CartActions.FetchCart)

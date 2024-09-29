@@ -16,10 +16,8 @@ export interface InteractionI {
 
 export interface TransactionI {
   interaction: InteractionI
-  product: IProductItem
-  count: number
-  amount: number
-  date_complete: string
+  purchased_product: IProductItem
+  note: string
 }
 
 @Injectable({

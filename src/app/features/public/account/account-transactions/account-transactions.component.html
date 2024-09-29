@@ -23,11 +23,11 @@
         <dt>Producten</dt>
         <dd>
           <ul class="list-disc list-inside">
-            <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_policy.price > 0">- &euro;&nbsp;{{ transaction.product.price_policy.price }}</span></li>
+            <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.purchased_product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.purchased_product.price_policy.price > 0">- &euro;&nbsp;{{ transaction.purchased_product.price_policy.price }}</span></li>
           </ul>
         </dd>
 
-        <dt>Totaal bedrag</dt>
+        <dt>Bedrag</dt>
         <dd>&euro; {{ trackedItem.checkout.amount }}</dd>
       </dl>
 
@@ -59,22 +59,24 @@
           <dt>Evenement</dt>
           <dd>{{ transaction.interaction.item_name }}</dd>
 
-          <dt>Datum</dt>
-          <dd>{{ transaction.date_complete | date:'d MMM y, H:mm' }}</dd>
+          <!--<dt>Datum</dt>
+          <dd>{{ transaction.date_complete | date:'d MMM y, H:mm' }}</dd>-->
 
           <dt>Product</dt>
-          <dd>{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_policy.price > 0">- &euro;&nbsp;{{ transaction.product.price_policy.price }}</span></dd>
+          <dd>{{ transaction.purchased_product.name }}</dd>
 
-          <dt>Totaal bedrag</dt>
-          <dd>&euro; {{ transaction.amount }}</dd>
+          @if (transaction.purchased_product.price_policy.price > 0) {
+            <dt>Bedrag</dt>
+            <dd>&euro; {{ transaction.purchased_product.price_policy.price }}</dd>
+          }
         </dl>
-        <button (click)="toggleQrCodeVisible(transaction)" type="button" class="button button-outline-blue button-sm button-full">
+        <!--<button (click)="toggleQrCodeVisible(transaction)" type="button" class="button button-outline-blue button-sm button-full">
           {{ qrCodeVisible[transaction.interaction.uuid] ? 'Verberg QR Code' : 'Toon QR Code' }}
           <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" stroke-linecap="round" stroke-linejoin="round"></path>
             <path d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
-        </button>
+        </button>-->
 
         <div *ngIf="qrCodeVisible[transaction.interaction.uuid]" class="transaction-card-qr">
           <img [src]="qrCode[transaction.interaction.uuid]" alt="QR Code voor deze aankoop">

@@ -7,6 +7,7 @@ import {Observable, of} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {Store} from "@ngxs/store";
 import {CartActions} from "@ingenium/app/core/store";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-popupz-menu',
@@ -23,7 +24,7 @@ export class PopupzMenuComponent {
   $products: Observable<IProductItem[]> = of([]);
   itemName = "Pop-Up Z";
 
-  constructor(private httpClient: HttpClient, private store: Store) {
+  constructor(private httpClient: HttpClient, private store: Store, private toastrService: ToastrService) {
     this.getProducts();
   }
 
@@ -33,5 +34,6 @@ export class PopupzMenuComponent {
 
   addToCard(product: IProductItem) {
     this.store.dispatch(new CartActions.AddToCart(product));
+    this.toastrService.success('Het product werd toevergevoegd aan uw winkelmandje.');
   }
 }
