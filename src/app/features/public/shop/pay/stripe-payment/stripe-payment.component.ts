@@ -21,7 +21,6 @@ export class StripePaymentComponent implements OnInit {
 
   ngOnInit() {
     this.elementsOptions.clientSecret = this.checkoutId.checkout_id
-
   }
 
   elementsOptions: StripeElementsOptions = {
@@ -37,6 +36,7 @@ export class StripePaymentComponent implements OnInit {
     if (this.paying) {
       alert("Je bent al aan het betalen!");
     }
+
     if (this.paymentElementForm.valid) {
       this.paying = true;
       this.stripeService.confirmPayment({
@@ -85,7 +85,7 @@ export class StripePaymentComponent implements OnInit {
           });
       } else {
           // If no status was not handled in previous cases we display error
-          alert( 'Er is iets foutgegaan!' );
+          alert('Er is iets foutgegaan!');
       }
   }
 

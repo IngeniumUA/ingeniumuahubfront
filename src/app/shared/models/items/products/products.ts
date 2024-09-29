@@ -61,3 +61,6 @@ export interface CheckoutIdI {
   payment_provider: PaymentProviderEnum
 }
 
+export interface CheckoutResponseI {
+  checkout: CheckoutIdI
+}
