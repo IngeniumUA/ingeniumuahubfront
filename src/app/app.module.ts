@@ -35,8 +35,6 @@ import {UnderConstructionComponent} from './shared/components/under-construction
 import {ContactComponent} from './features/public/info/contact/contact.component';
 import {CardRedirectComponent} from './features/public/card-redirect/card-redirect.component';
 import {CreditsComponent} from './features/public/info/credits/credits.component';
-import {PopupzComponent} from './features/public/popupz/popupz.component';
-import {PopupzorderComponent} from './features/public/popupz/popupzorder/popupzorder.component';
 import {PopupzorderStaffComponent} from './features/public/popupz/popupzorder-staff/popupzorder-staff.component';
 import {ToastrModule} from 'ngx-toastr';
 import {PartnerBalkComponent} from './shared/components/partners/partner-balk/partner-balk.component';
@@ -64,8 +62,6 @@ export function storageFactory(): OAuthStorage {
     ContactComponent,
     CardRedirectComponent,
     CreditsComponent,
-    PopupzComponent,
-    PopupzorderComponent,
     PopupzorderStaffComponent,
     GalabalComponent,
   ],

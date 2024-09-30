@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Action, NgxsOnInit, Selector, State, StateContext} from '@ngxs/store';
 import {UserStateModel} from './user.model';
 import {User} from './user.actions';
-import {CartService} from "@ingenium/app/core/services/shop/cart/cart.service";
 import {Router} from "@angular/router";
 import {OAuthService} from "angular-oauth2-oidc";
 import {HttpClient} from "@angular/common/http";
@@ -10,6 +9,7 @@ import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {catchError, of} from "rxjs";
 import {map} from "rxjs/operators";
+import {CartActions} from "@ingenium/app/core/store";
 
 @State<UserStateModel>({
   name: 'user',
@@ -24,7 +24,7 @@ import {map} from "rxjs/operators";
 @Injectable()
 export class UserState implements NgxsOnInit {
 
-  constructor(private cartService: CartService, private router: Router, private oauthService: OAuthService,
+  constructor(private router: Router, private oauthService: OAuthService,
               private httpClient: HttpClient) {}
 
   ngxsOnInit(ctx: StateContext<any>) {
@@ -137,7 +137,7 @@ export class UserState implements NgxsOnInit {
       cardDetails: null,
     });
 
-    this.cartService.clear();
+    ctx.dispatch(new CartActions.ClearCart());
     this.oauthService.revokeTokenAndLogout();
     this.router.navigate(['/']);
   }

@@ -57,8 +57,8 @@ export class CartService {
 
     return boolMap.includes(true);
   }
-  private getTransactionIndex(source: ItemLimitedI, product: IProductItem): number {
-    const boolMap = this.transactionArray.map(value => {
+  private getTransactionIndex(_source: ItemLimitedI, _product: IProductItem): number {
+    const boolMap = this.transactionArray.map(_value => {
       return false;
 
       /*return (value.sourceItemName === source.name) &&
