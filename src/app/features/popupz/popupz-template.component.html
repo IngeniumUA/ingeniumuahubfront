@@ -3,7 +3,7 @@
     <app-layout-public-header [light_theme]="true" />
 
     <nav id="popupz-menu">
-      <a routerLink="/popupz/menu" routerLinkActive="active" class="menu-item" [attr.aria-expanded]="foodMenuExpanded" aria-controls="popup-food-menu">Menu</a>
+      <a routerLink="/popupz/menu/" routerLinkActive="active" class="menu-item" [attr.aria-expanded]="foodMenuExpanded" aria-controls="popup-food-menu">Menu</a>
       <a routerLink="/popupz/allergies" routerLinkActive="active" class="menu-item">Allergenen</a>
 
       @let productCount = (this.productCount$ | async);

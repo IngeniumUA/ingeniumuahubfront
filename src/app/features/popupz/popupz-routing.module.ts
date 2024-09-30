@@ -19,7 +19,8 @@ const routes: Routes = [
     children: [
       {
         path: 'menu',
-        component: PopupzMenuComponent
+        redirectTo: 'menu/',
+        pathMatch: 'full'
       },
       {
         path: 'menu/:category',
@@ -31,7 +32,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'menu',
+        redirectTo: 'menu/',
         pathMatch: 'full'
       },
     ]

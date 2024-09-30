@@ -1,11 +1,10 @@
 <nav id="popupz-food-menu">
-  <a routerLink="/popupz/menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="menu-item">Alles</a>
+  <a routerLink="/popupz/menu/" [ngClass]="{ 'active': this.category === '' }" class="menu-item">Alles</a>
   <a routerLink="/popupz/menu/food" routerLinkActive="active" class="menu-item">Eten</a>
   <a routerLink="/popupz/menu/drinks" routerLinkActive="active" class="menu-item">Dranken</a>
 </nav>
 
 <main class="ingenium-container mt-6">
-  @let products = ($products | async);
   <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     @for (product of products; track product.id) {
       <li class="popupz-product-item">
