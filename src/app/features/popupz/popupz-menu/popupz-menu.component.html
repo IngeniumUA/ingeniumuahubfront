@@ -6,14 +6,14 @@
 
 <main class="ingenium-container mt-6">
   @let products = ($products | async);
-  <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+  <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     @for (product of products; track product.id) {
       <li class="popupz-product-item">
         <p class="popupz-product-item__title">{{ product.name }}</p>
         <p class="popupz-product-item__price">€ {{ product.price_policy.price }}</p>
 
         <form action="#" class="w-full mt-4">
-          <div class="form-field mb-4" *ngIf="true">
+          <div class="form-field mb-4" *ngIf="forceSauceOn.includes(product.name)">
             <label for="sauceSelection">Saus</label>
             <select (input)="changeSauce($event, product.id)" id="sauceSelection">
               <option value="" selected>Selecteer een optie...</option>
