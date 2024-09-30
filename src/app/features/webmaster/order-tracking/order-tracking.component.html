@@ -21,7 +21,7 @@
         <dt class="text-sm text-gray-500 mt-3">Producten</dt>
         <dd>
           <ul class="list-disc list-inside">
-            <li *ngFor="let transaction of trackedItem.checkout.transactions" class="text-sm">{{ transaction.product.name }}</li>
+            <li *ngFor="let transaction of trackedItem.checkout.transactions" class="text-sm">{{ transaction.purchased_product.name }}</li>
           </ul>
         </dd>
       </dl>

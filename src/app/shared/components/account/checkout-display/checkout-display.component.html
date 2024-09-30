@@ -3,7 +3,7 @@
   <p>{{ checkout.date_completed | date }}</p>
   <ul class="list-disc list-inside">
     <li *ngFor="let transaction of this.checkout.transactions">
-      {{ transaction.count }}x {{ transaction.product.name }} &mdash; &euro; {{ transaction.amount }}
+      {{ transaction.purchased_product.name }} &mdash; &euro; {{ transaction.purchased_product.price_policy.price }}
     </li>
   </ul>
 
