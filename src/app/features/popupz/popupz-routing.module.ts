@@ -15,6 +15,7 @@ const routes: Routes = [
   {
     path: '',
     component: PopupzTemplateComponent,
+    canActivate: [staffGuard],
     children: [
       {
         path: 'menu',
