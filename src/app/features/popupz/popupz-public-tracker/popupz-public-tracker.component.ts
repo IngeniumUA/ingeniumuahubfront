@@ -51,7 +51,7 @@ export class PopupzPublicTrackerComponent implements AfterViewInit, OnDestroy {
   }
 
   getOrders() {
-    this.httpClient.get<PublicOrderTrackerI[]>(`${apiEnviroment.apiUrl}checkout/tracker`)
+    this.httpClient.get<PublicOrderTrackerI[]>(`${apiEnviroment.apiUrl}order_tracking`)
       .pipe(
         take(1),
         map((data: PublicOrderTrackerI[]) => {

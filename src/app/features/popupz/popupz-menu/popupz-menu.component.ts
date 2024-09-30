@@ -27,7 +27,7 @@ export class PopupzMenuComponent {
   $products: Observable<IProductItem[]> = of([]);
   itemName = "Pop-Up Z";
 
-  forceSauceOn: string = "Durum Kebab";
+  forceSauceOn: string[] = ["Durum Kebab", "Durum Falafel"];
   sauceSelection: {[key:number]:string} = {};
   sauceOptions = ['Look', 'Mayo', 'Andalouse', 'Mamout', 'Ketchup'];
 
@@ -50,7 +50,7 @@ export class PopupzMenuComponent {
   }
 
   addToCard(product: IProductItem) {
-    if (this.forceSauceOn === product.name) {
+    if (this.forceSauceOn.includes(product.name)) {
       if (!this.sauceSelection[product.id]) {
         this.toastrService.error('Gelieve een saus te selecteren.');
         return;
