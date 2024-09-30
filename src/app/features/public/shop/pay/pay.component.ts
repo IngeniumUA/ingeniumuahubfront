@@ -7,6 +7,7 @@ import {CartActions, CartState} from "@ingenium/app/core/store";
 import {CheckoutIdI, CheckoutResponseI, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 import {map} from "rxjs/operators";
 import {catchError} from "rxjs";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-page',
@@ -17,9 +18,9 @@ export class PayComponent implements OnInit {
   checkoutId!: CheckoutIdI;
   loading = true;
   stripePayment = false;
-  devPayment = false;
 
-  constructor(private store: Store, private httpClient: HttpClient, private router: Router) {}
+  constructor(private store: Store, private httpClient: HttpClient, private router: Router,
+              private toastrService: ToastrService) {}
 
   ngOnInit() {
     // Redirect if our cart is empty
@@ -47,14 +48,11 @@ export class PayComponent implements OnInit {
     this.store.dispatch(new CartActions.ClearCart());
   }
 
-  setupDev() {
-    this.devPayment = true;
-  }
-
   processCheckoutResponse(checkout: CheckoutIdI) {
     switch (checkout.payment_provider) {
       case PaymentProviderEnum.Dev:
-        this.setupDev();
+        this.toastrService.success('Development payment successful');
+        this.router.navigateByUrl('/account/transactions');
         break;
 
       case PaymentProviderEnum.Free:
@@ -62,6 +60,7 @@ export class PayComponent implements OnInit {
         break;
 
       case PaymentProviderEnum.Kassa:
+        this.toastrService.success('De bestelling is gelukt, zorg dat de betaling aan de kassa wordt voldaan!');
         this.router.navigateByUrl('/shop/confirm');
         break;
 
@@ -73,18 +72,5 @@ export class PayComponent implements OnInit {
     this.checkoutId = checkout;
     this.loading = false;
     return checkout;
-  }
-
-  doDevPayment() {
-    this.httpClient.get(apiEnviroment.apiUrl + 'webhook/payment/dev/' + this.checkoutId.checkout_id)
-      .pipe(
-        map((_: any) => {
-          this.loading = false;
-          this.router.navigateByUrl('/account/transactions');
-        }),
-        catchError((_): any => {
-          this.router.navigateByUrl('/shop/checkout');
-        })
-      ).subscribe();
   }
 }

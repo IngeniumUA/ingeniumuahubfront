@@ -18,25 +18,33 @@
     <article *ngFor="let trackedItem of trackedItems; trackBy: getCheckoutId" class="transaction-card">
       <dl>
         <dt>Bestellingnummer</dt>
-        <dd>{{ trackedItem.id }}</dd>
+        <dd class="font-bold">{{ trackedItem.id }}</dd>
 
-        <dt>Producten</dt>
+        <!--<dt>Producten</dt>
         <dd>
           <ul class="list-disc list-inside">
             <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.purchased_product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.purchased_product.price_policy.price > 0">- &euro;&nbsp;{{ transaction.purchased_product.price_policy.price }}</span></li>
           </ul>
-        </dd>
+        </dd>-->
 
         <dt>Bedrag</dt>
         <dd>&euro; {{ trackedItem.checkout.amount }}</dd>
       </dl>
 
       <div class="badge" [ngClass]="{
-          'badge-red': trackedItem.tracker_status === 1,
-          'badge-green animate-bounce': trackedItem.tracker_status === 2
+          'badge-red': trackedItem.checkout_tracker_status === TrackerStatusEnum.Pending,
+          'badge-green animate-bounce': trackedItem.checkout_tracker_status === TrackerStatusEnum.Ready
         }">
         <span class="sr-only">Bestelling status</span>
-        {{ trackedItem.tracker_status === 1 ? 'In behandeling' : 'Klaar' }}
+        @if (trackedItem.checkout_tracker_status === TrackerStatusEnum.Pending) {
+          In behandeling
+        } @else if (trackedItem.checkout_tracker_status === TrackerStatusEnum.Ready) {
+          Klaar
+        } @else if (trackedItem.checkout_tracker_status === TrackerStatusEnum.Finished) {
+          Afgehaald
+        } @else {
+          Onbekend
+        }
       </div>
     </article>
   </div>
@@ -56,8 +64,8 @@
     } @else {
       <article *ngFor="let transaction of transactions" class="transaction-card">
         <dl>
-          <dt>Evenement</dt>
-          <dd>{{ transaction.interaction.item_name }}</dd>
+          <!--<dt>Evenement</dt>
+          <dd>{{ transaction.interaction.item_name }}</dd>-->
 
           <!--<dt>Datum</dt>
           <dd>{{ transaction.date_complete | date:'d MMM y, H:mm' }}</dd>-->
@@ -65,10 +73,8 @@
           <dt>Product</dt>
           <dd>{{ transaction.purchased_product.name }}</dd>
 
-          @if (transaction.purchased_product.price_policy.price > 0) {
-            <dt>Bedrag</dt>
-            <dd>&euro; {{ transaction.purchased_product.price_policy.price }}</dd>
-          }
+          <dt>Bedrag</dt>
+          <dd>{{ transaction.purchased_product.price_policy.price === 0 ? 'Gratis' : '&euro; ' + transaction.purchased_product.price_policy.price }}</dd>
         </dl>
         <!--<button (click)="toggleQrCodeVisible(transaction)" type="button" class="button button-outline-blue button-sm button-full">
           {{ qrCodeVisible[transaction.interaction.uuid] ? 'Verberg QR Code' : 'Toon QR Code' }}
