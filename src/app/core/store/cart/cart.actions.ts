@@ -19,6 +19,10 @@ export namespace CartActions {
     static readonly type = '[Cart] Store InLocal Storage';
   }
 
+  export class ClearCart {
+    static readonly type = '[Cart] Clear Cart';
+  }
+
   export class SetPaymentMethod {
     static readonly type = '[Cart] Set Payment Method';
     constructor(public payment_provider: PaymentProviderEnum) { }

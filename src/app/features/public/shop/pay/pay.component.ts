@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {Router} from '@angular/router';
 import {Store} from "@ngxs/store";
-import {CartState} from "@ingenium/app/core/store";
+import {CartActions, CartState} from "@ingenium/app/core/store";
 import {CheckoutIdI, CheckoutResponseI, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 import {map} from "rxjs/operators";
 import {catchError} from "rxjs";
@@ -42,6 +42,9 @@ export class PayComponent implements OnInit {
         this.router.navigateByUrl('/shop/checkout');
       })
     ).subscribe();
+
+    // Clear the cart
+    this.store.dispatch(new CartActions.ClearCart());
   }
 
   setupDev() {

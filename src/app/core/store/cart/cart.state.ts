@@ -81,6 +81,14 @@ export class CartState implements NgxsOnInit {
     window.localStorage.setItem('cart-products', JSON.stringify(ctx.getState().products));
   }
 
+  @Action(CartActions.ClearCart)
+  clearCart(ctx: StateContext<CartStateModel>) {
+    ctx.patchState({
+      products: []
+    });
+    ctx.dispatch(new CartActions.StoreInLocalStorage());
+  }
+
   @Action(CartActions.SetPaymentMethod)
   setPaymentMethod(ctx: StateContext<CartStateModel>, action: CartActions.SetPaymentMethod) {
     console.log('Setting payment method to:', action.payment_provider);
