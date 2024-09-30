@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute, RouterLink, RouterLinkActive} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
-import {Observable, of} from "rxjs";
-import {AsyncPipe, NgIf} from "@angular/common";
+import {take} from "rxjs";
+import {AsyncPipe, NgClass, NgIf} from "@angular/common";
 import {Store} from "@ngxs/store";
 import {CartActions} from "@ingenium/app/core/store";
 import {ToastrService} from "ngx-toastr";
 import {FormsModule} from "@angular/forms";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-popupz-menu',
@@ -18,25 +19,49 @@ import {FormsModule} from "@angular/forms";
     RouterLinkActive,
     AsyncPipe,
     FormsModule,
-    NgIf
+    NgIf,
+    NgClass
   ],
   templateUrl: './popupz-menu.component.html',
   styleUrl: './popupz-menu.component.scss'
 })
 export class PopupzMenuComponent {
-  $products: Observable<IProductItem[]> = of([]);
+  allProducts: IProductItem[] = [];
+  products: IProductItem[] = [];
   itemName = "Pop-Up Z";
+
+  category: string|undefined = undefined;
 
   forceSauceOn: string[] = ["Durum Kebab", "Durum Falafel"];
   sauceSelection: {[key:number]:string} = {};
   sauceOptions = ['Look', 'Mayo', 'Andalouse', 'Mamout', 'Ketchup'];
 
-  constructor(private httpClient: HttpClient, private store: Store, private toastrService: ToastrService) {
+  constructor(private httpClient: HttpClient, private store: Store, private toastrService: ToastrService,
+              private route: ActivatedRoute) {
+    this.route.params.subscribe(params => {
+        this.category = params['category'];
+        this.products = this.filterProducts(this.allProducts);
+    });
+
     this.getProducts();
   }
 
   getProducts() {
-    this.$products = this.httpClient.get<IProductItem[]>(`${apiEnviroment.apiUrl}item/products/${this.itemName}`);
+    this.httpClient.get<IProductItem[]>(`${apiEnviroment.apiUrl}item/products/${this.itemName}`)
+        .pipe(
+            take(1),
+            map(products => {
+              this.allProducts = products;
+              this.products = this.filterProducts(products);
+            })
+        )
+        .subscribe();
+  }
+
+  filterProducts(products: IProductItem[]) {
+    return products.filter((product: IProductItem): boolean => {
+      return this.category === undefined || this.category === "" || product.product_meta.categorie === this.category;
+    });
   }
 
   changeSauce(event: any, productId: number) {
