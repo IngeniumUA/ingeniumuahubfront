@@ -12,13 +12,14 @@
         <p class="popupz-product-item__title">{{ product.name }}</p>
         <p class="popupz-product-item__price">€ {{ product.price_policy.price }}</p>
 
-        <form action="#" class="w-full space-y-4">
-          <div class="form-field">
-            <label for="">Saus</label>
-            <select name="" id="">
-              <option value="mayo">Mayo</option>
-              <option value="ketchup">Ketchup</option>
-              <option value="curry">Curry</option>
+        <form action="#" class="w-full mt-4">
+          <div class="form-field mb-4" *ngIf="true">
+            <label for="sauceSelection">Saus</label>
+            <select (input)="changeSauce($event, product.id)" id="sauceSelection">
+              <option value="" selected>Selecteer een optie...</option>
+              @for (sauce of sauceOptions; track $index) {
+                <option [value]="sauce">{{ sauce }}</option>
+              }
             </select>
           </div>
 

@@ -9,7 +9,7 @@
     }
 
     .cart-list-product__price {
-      @apply font-bold text-black;
+      @apply font-bold text-black mt-1.5;
     }
 
     .cart-list-product__content {
@@ -23,6 +23,10 @@
       button {
         @apply text-black hover:text-gray-600;
       }
+    }
+
+    .cart-list-product__options {
+      @apply text-gray-500 text-sm;
     }
   }
 }

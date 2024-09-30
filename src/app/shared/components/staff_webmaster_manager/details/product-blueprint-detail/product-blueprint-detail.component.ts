@@ -92,7 +92,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
         group: this.productMetaForm.controls['group'].value,
         categorie: this.productMetaForm.controls['categorie'].value,
         upon_completion: upon_completion,
-        popupz_opties: this.productBlueprint.product_blueprint_metadata.popupz_opties
+        other_meta_data: this.productBlueprint.product_blueprint_metadata.other_meta_data
       };
 
       // Check if valid guardclause

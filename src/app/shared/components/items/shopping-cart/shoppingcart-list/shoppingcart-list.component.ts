@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import {ITransaction} from '../../../../models/items/products/cart';
 import {ProductComponent} from '../../products/product/product.component';
 import {IProductItem, PaymentProviderEnum} from '../../../../models/items/products/products';
@@ -25,6 +25,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     AsyncPipe,
     ReactiveFormsModule,
     FormsModule,
+    KeyValuePipe,
   ],
   standalone: true
 })

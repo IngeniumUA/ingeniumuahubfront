@@ -15,10 +15,15 @@
     @for (order of orders; track order.id) {
       <article class="flex flex-col p-4 rounded border border-blue-900">
         <span class="text-xl font-bold">#{{ order.id }}</span>
-        <ul class="list-disc list-inside space-y-1 my-2 flex-1">
+        <ul class="list-decimal list-inside space-y-1 my-2 flex-1">
           @for (transaction of order.checkout.transactions; track $index) {
             <li>
-              {{ transaction.purchased_product.name }} <!--<span class="font-semibold" *ngIf="transaction.product.product_meta.popupz_opties">&mdash; {{ transaction.product.product_meta.popupz_opties }}</span>-->
+              {{ transaction.purchased_product.name }}
+              <ul *ngIf="transaction.purchased_product.product_meta" class="ml-6 list-disc list-inside">
+                <li *ngFor="let meta of transaction.purchased_product.product_meta.other_meta_data | keyvalue">
+                  <span class="capitalize font-light">{{ meta.key }}</span>: <span class="font-bold">{{ meta.value}}</span>
+                </li>
+              </ul>
             </li>
           }
         </ul>

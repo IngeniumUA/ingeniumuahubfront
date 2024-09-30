@@ -2,17 +2,17 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {catchError, interval, Subscription, take} from "rxjs";
 import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from "@ingenium/app/shared/models/tracker";
 import {HttpClient} from "@angular/common/http";
-import {Store} from "@ngxs/store";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
-import {NgForOf, NgIf} from "@angular/common";
+import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-popupz-staff-display',
   standalone: true,
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    KeyValuePipe
   ],
   templateUrl: './popupz-staff-display.component.html',
   styleUrl: './popupz-staff-display.component.scss'
@@ -22,7 +22,7 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
   filter: HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum.All;
   orders: HubCheckoutTrackerI[] = [];
 
-  constructor(private httpClient: HttpClient, private store: Store) {}
+  constructor(private httpClient: HttpClient) {}
 
   ngOnInit() {
     this.getOrders();

@@ -19,9 +19,9 @@ export interface UponCompletionMetaI {
 
 export interface ProductMetaI {
   group: string;
-  categorie: string;
+  categorie: string; // Food / drinks
   upon_completion: UponCompletionMetaI | null;
-  popupz_opties: string | null;
+  other_meta_data: {[key:string]:string};
 }
 
 export interface IPricePolicy {
