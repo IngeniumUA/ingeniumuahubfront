@@ -6,6 +6,10 @@ import {PopupzMenuComponent} from "@ingenium/app/features/popupz/popupz-menu/pop
 import {
   PopupzPublicTrackerComponent
 } from "@ingenium/app/features/popupz/popupz-public-tracker/popupz-public-tracker.component";
+import {
+  PopupzStaffDisplayComponent
+} from "@ingenium/app/features/popupz/popupz-staff-display/popupz-staff-display.component";
+import {staffGuard} from "@ingenium/app/core/guards/staff.guard";
 
 const routes: Routes = [
   {
@@ -34,6 +38,11 @@ const routes: Routes = [
   {
     path: 'public-tracker',
     component: PopupzPublicTrackerComponent
+  },
+  {
+    path: 'staff',
+    component: PopupzStaffDisplayComponent,
+    canActivate: [staffGuard]
   }
 ];
 

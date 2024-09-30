@@ -1,0 +1,38 @@
+<div class="mx-auto container p-4">
+  <div class="grid grid-cols-4 items-center mb-4">
+    <h1 class="white-section-title white-section-title-blue col-span-3">Bestellingen</h1>
+    <div class="">
+      <div class="form-field">
+        <select class="select" (change)="filterOrders($event)">
+          <option value="10">Alle bestellingen</option>
+          <option value="1">Nieuwe bestellingen</option>
+          <option value="2">Klaar voor afhaling</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    @for (order of orders; track order.id) {
+      <article class="flex flex-col p-4 rounded border border-blue-900">
+        <span class="text-xl font-bold">#{{ order.id }}</span>
+        <ul class="list-disc list-inside space-y-1 my-2 flex-1">
+          @for (transaction of order.checkout.transactions; track $index) {
+            <li>
+              {{ transaction.purchased_product.name }} <!--<span class="font-semibold" *ngIf="transaction.product.product_meta.popupz_opties">&mdash; {{ transaction.product.product_meta.popupz_opties }}</span>-->
+            </li>
+          }
+        </ul>
+        <button type="button" class="button button-primary button-sm w-full button-inline" (click)="increaseStatus(order)">
+          @switch (order.checkout_tracker_status) {
+            @case (HubCheckoutTrackerStatusEnum.Pending) {
+              Klaar voor afhaling
+            }
+            @case (HubCheckoutTrackerStatusEnum.Ready) {
+              Markeer afgehaald
+            }
+          }
+        </button>
+      </article>
+    }
+  </div>
+</div>

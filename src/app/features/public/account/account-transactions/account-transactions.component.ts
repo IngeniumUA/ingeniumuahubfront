@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AccountService, TransactionI} from '../../../../core/services/user/account/account.service';
 import {exhaustMap, Observable, Subscription, timer} from 'rxjs';
 import {TrackerService} from '@ingenium/app/core/services/user/tracker.service';
-import {HubCheckoutTrackerI, TrackerStatusEnum} from '@ingenium/app/shared/models/tracker';
+import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from '@ingenium/app/shared/models/tracker';
 import QRCode from 'qrcode';
 
 @Component({
@@ -68,5 +68,5 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     this.trackerSubscription.unsubscribe();
   }
 
-  protected readonly TrackerStatusEnum = TrackerStatusEnum;
+  protected readonly TrackerStatusEnum = HubCheckoutTrackerStatusEnum;
 }
