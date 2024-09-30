@@ -10,11 +10,13 @@
   <main class="flex-auto overflow-auto">
     <div class="grid grid-cols-3 h-full">
       <!-- IN PROGRESS -->
-      <ul class="grid grid-cols-5 text-3xl text-gray-800 text-center py-4 overflow-auto h-full" aria-labelledby="inprogresstitle" #inprogress>
+      <ul class="grid grid-cols-5 text-3xl text-gray-800 text-center py-4 overflow-auto h-full auto-rows-min" aria-labelledby="inprogresstitle" #inprogress>
         <li *ngFor="let order of inProgressOrders">{{ order.id }}</li>
+          <li *ngFor="let order of inProgressOrders">{{ order.id }}</li>
+
       </ul>
 
-      <ul class="col-span-2 grid grid-cols-5 text-3xl text-gray-800 text-center py-4 overflow-auto h-full border-l-4 border-blue-900" aria-labelledby="donetitle" #completed>
+      <ul class="col-span-2 grid grid-cols-5 text-3xl text-gray-800 text-center py-4 overflow-auto h-full border-l-4 border-blue-900 auto-rows-min" aria-labelledby="donetitle" #completed>
         <li *ngFor="let order of doneOrders">{{ order.id }}</li>
       </ul>
     </div>
