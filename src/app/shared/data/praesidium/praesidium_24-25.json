@@ -79,12 +79,12 @@
           {
             "name": "Lennart Willems",
             "functie": "Feest",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LennartWillems.webp"
           },
           {
             "name": "Niels Selleslagh",
             "functie": "Feest",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NielsSelleslagh.webp"
           }
         ]
       },
@@ -111,7 +111,7 @@
           {
             "name": "Sigfried Seldeslachts",
             "functie": "Webmaster",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SigfriedSeldeslachts.webp"
           }
         ]
       },
@@ -122,12 +122,12 @@
           {
             "name": "Jona Vandormael",
             "functie": "Public Relations",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonaVandormael.webp"
           },
           {
             "name": "Ailee Louise Van Hauwaert",
             "functie": "Public Relations",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/AileeLouiseVanHauwaert.webp"
           }
         ],
         "button": {
@@ -153,7 +153,7 @@
           {
             "name": "Pauline Kricfalusi",
             "functie": "Ab-actis & Scriptor",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/PaulineKricfalusi.webp"
           }
         ]
       },
@@ -164,12 +164,12 @@
           {
             "name": "Sam Morbee",
             "functie": "Sport",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SamMorbee.webp"
           },
           {
             "name": "Wesley Van Bladel",
             "functie": "Sport",
-            "image": ""
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WesleyVanBladel.webp"
           }
         ]
       },

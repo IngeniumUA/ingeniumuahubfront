@@ -40,7 +40,7 @@ export class StaffUserDetailComponent {
     if (this.groupControl.value === null) {
       return;
     }
-    this.staffGroupService.AddUserToGroup(this.groupControl.value, this.userDetail.uuid).subscribe({
+    this.staffGroupService.AddUserToGroup(this.groupControl.value, this.userDetail.user_uuid).subscribe({
       next: () => {
         this.refetchUserEvent.emit(true);
       },
@@ -51,7 +51,7 @@ export class StaffUserDetailComponent {
   }
 
   RemoveFromGroup(group_id: number) {
-    this.staffGroupService.RemoveUserFromGroup(group_id, this.userDetail.uuid).subscribe({
+    this.staffGroupService.RemoveUserFromGroup(group_id, this.userDetail.user_uuid).subscribe({
       next: () => {
         this.refetchUserEvent.emit(true);
       },

@@ -12,4 +12,6 @@ import {NgIf} from "@angular/common";
 })
 export class LoadingIndicatorComponent {
   @Input() isLoading: boolean = false;
+  @Input() title: string = 'Even geduld aub';
+  @Input() message: string = 'Jouw verzoek wordt verwerkt';
 }

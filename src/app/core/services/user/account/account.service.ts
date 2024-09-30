@@ -16,10 +16,8 @@ export interface InteractionI {
 
 export interface TransactionI {
   interaction: InteractionI
-  product: IProductItem
-  count: number
-  amount: number
-  date_complete: string
+  purchased_product: IProductItem
+  note: string
 }
 
 @Injectable({
@@ -43,7 +41,7 @@ export class AccountService {
   }
 
   public linkCard(card_uuid: string): Observable<CardLimitedI> {
-    return this.httpClient.get<CardLimitedI>(apiEnviroment.apiUrl + 'item/card/' + card_uuid, {});
+    return this.httpClient.get<CardLimitedI>(apiEnviroment.apiUrl + 'account/card/' + card_uuid, {});
   }
 
   public getTransactions(): Observable<TransactionI[]> {

@@ -1,14 +1,12 @@
-<ng-container *ngIf="this.internalLink else externalLink">
+@if (this.internalLink) {
   <a [routerLink]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
     <ng-container *ngTemplateOutlet="cardContent" />
   </a>
-</ng-container>
-
-<ng-template #externalLink>
-  <a [href]=this.recsysItem.follow_through_link class="event-card-link-wrapper">
+} @else {
+  <a [href]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
     <ng-container *ngTemplateOutlet="cardContent" />
   </a>
-</ng-template>
+}
 
 <ng-template #cardContent>
   <article class="event-card" [style]=CardStyle()>

@@ -1,4 +1,4 @@
-import {TransactionI} from '../../../../core/services/user/account/account.service';
+import {TransactionI} from '@ingenium/app/core/services/user/account/account.service';
 
 export interface CheckoutI {
   id: string

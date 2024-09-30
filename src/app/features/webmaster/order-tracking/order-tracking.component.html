@@ -21,13 +21,13 @@
         <dt class="text-sm text-gray-500 mt-3">Producten</dt>
         <dd>
           <ul class="list-disc list-inside">
-            <li *ngFor="let transaction of trackedItem.checkout.transactions" class="text-sm">{{ transaction.product.name }}</li>
+            <li *ngFor="let transaction of trackedItem.checkout.transactions" class="text-sm">{{ transaction.purchased_product.name }}</li>
           </ul>
         </dd>
       </dl>
 
       <button class="button button-danger button-small button-sm button-full block mt-4" (click)="nextStatus(trackedItem)">
-        Markeer {{ trackedItem.tracker_status === 1 ? 'klaar voor afhaal' : 'afgehaald' }}
+        Markeer {{ trackedItem.checkout_tracker_status === 1 ? 'klaar voor afhaal' : 'afgehaald' }}
       </button>
     </article>
   </div>

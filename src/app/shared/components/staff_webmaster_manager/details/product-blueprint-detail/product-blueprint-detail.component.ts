@@ -1,12 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
-import {DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ProductMetaI} from '../../../../models/items/products/products';
+import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/items/products/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
 import {PricePolicyComponentCreateComponent} from '../../create/price-policy/price-policy-component-create.component';
-import {PricePolicyI} from '../../../../models/price_policy';
+import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
+import {Observable, of} from "rxjs";
+import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -21,7 +25,8 @@ import {PricePolicyI} from '../../../../models/price_policy';
     ReactiveFormsModule,
     NgIf,
     PricePolicyComponent,
-    PricePolicyComponentCreateComponent
+    PricePolicyComponentCreateComponent,
+    AsyncPipe
   ],
   standalone: true
 })
@@ -29,7 +34,10 @@ export class ProductBlueprintDetailComponent implements OnInit {
     @Input() productBlueprint!: StaffProductBlueprintI;
     @Output() updateProduct = new EventEmitter<StaffProductBlueprintI>();
 
-    constructor(private formBuilder: FormBuilder) {
+    $pricePolicies: Observable<PricePolicyI[]> = of([]);
+
+    constructor(private formBuilder: FormBuilder,
+                private pricePolicyService: PricePolicyService) {
     }
 
     blueprintForm: any;
@@ -37,51 +45,72 @@ export class ProductBlueprintDetailComponent implements OnInit {
     form_error: string | null = null;
 
     ngOnInit() {
+      this.getPricePolicies()
+
       this.blueprintForm = this.formBuilder.group({
-        available: [this.productBlueprint.available, Validators.required],
+        available: [this.productBlueprint.availability.available, Validators.required],
         name: [this.productBlueprint.name, Validators.required],
         description: [this.productBlueprint.description],
         max_total: [this.productBlueprint.max_total, [Validators.required, Validators.min(1)]],
         max_individual: [this.productBlueprint.max_individual, [Validators.required, Validators.min(1)]],
         max_per_checkout: [this.productBlueprint.max_per_checkout, [Validators.required, Validators.min(1)]],
-        product_ordering: [this.productBlueprint.product_ordering, [Validators.required]],
+        product_ordering: [this.productBlueprint.ordering, [Validators.required]],
       });
+
+      // Temporary "bool" for toggling checkout_tracking
+      const tracking_checkout = !(this.productBlueprint.product_blueprint_metadata?.upon_completion?.track_checkout == null)
 
       this.productMetaForm = this.formBuilder.group({
-        categorie: [this.productBlueprint.product_meta.categorie],
-        group: [this.productBlueprint.product_meta.group],
-        upon_completion: [this.productBlueprint.product_meta.upon_completion === null ? '': JSON.stringify(this.productBlueprint.product_meta.upon_completion[0])]
+        categorie: [this.productBlueprint.product_blueprint_metadata.categorie],
+        group: [this.productBlueprint.product_blueprint_metadata.group],
+        upon_completion: [''],
+        track_checkout: [tracking_checkout]
+        // todo upon_completion: [this.productBlueprint.product_blueprint_metadata.upon_completion === null ? '': JSON.stringify(this.productBlueprint.product_blueprint_metadata.upon_completion[0])]
       });
     }
-
-    get f() { return this.blueprintForm.controls; }
 
     onSubmit() {
       // Check if valid guardclause
       if (this.productMetaForm.invalid) {
-        const error: Error = Error('Invalid form');
+        const error: Error = Error('Invalid Metadata form');
         this.handleFormError(error);
         return;  }
 
-      const upon_completion_form: string = this.productMetaForm.controls['upon_completion'].value;
+
+      const track_checkout: boolean = this.productMetaForm.controls['track_checkout'].value;
+      const checkout_config: CheckoutTrackerConfigI = {
+        status_queue: [1, 2, 3],
+        disabled_on_status: 3
+      }
+      const upon_completion_filled: UponCompletionMetaI = {
+        track_checkout: checkout_config
+      }
+      const upon_completion = track_checkout ? upon_completion_filled: null;
+
+
       const productMeta: ProductMetaI = {
         group: this.productMetaForm.controls['group'].value,
         categorie: this.productMetaForm.controls['categorie'].value,
-        upon_completion: upon_completion_form === '' ? null: [JSON.parse(upon_completion_form)],
-        popupz_opties: this.productBlueprint.product_meta.popupz_opties
+        upon_completion: upon_completion,
+        other_meta_data: this.productBlueprint.product_blueprint_metadata.other_meta_data
       };
 
       // Check if valid guardclause
       if (this.blueprintForm.invalid) {
-        const error: Error = Error('Invalid form');
+        const error: Error = Error('Invalid Blueprint form');
         this.handleFormError(error);
         return;  }
 
+      const availability: AvailabilityCompositionI = {
+        available: this.blueprintForm.controls['available'].value,
+        disabled: this.productBlueprint.availability.disabled,
+      }
+
       const product: StaffProductBlueprintI = {
         id: this.productBlueprint.id,
-        available: this.blueprintForm.controls['available'].value,
-        disabled: this.productBlueprint.disabled,
-        date_created: this.productBlueprint.date_created,
+        availability: availability,
+        created_timestamp: this.productBlueprint.created_timestamp,
+        last_update_timestamp: this.productBlueprint.last_update_timestamp,
         origin_item_id: this.productBlueprint.origin_item_id,
         source_item_ids: this.productBlueprint.source_item_ids,
         product_blueprint_pools: this.productBlueprint.product_blueprint_pools,
@@ -92,11 +121,11 @@ export class ProductBlueprintDetailComponent implements OnInit {
         max_individual: this.blueprintForm.controls['max_individual'].value,
         max_per_checkout: this.blueprintForm.controls['max_per_checkout'].value,
 
-        product_ordering: this.blueprintForm.controls['product_ordering'].value,
+        ordering: this.blueprintForm.controls['product_ordering'].value,
 
-        price_policies: this.productBlueprint.price_policies,
+        price_policies: [],
 
-        product_meta: productMeta,
+        product_blueprint_metadata: productMeta
       };
       this.updateProduct.emit(product);
     }
@@ -105,12 +134,26 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.form_error = err.message;
     }
 
-    public UpdatePricePolicy(pricePolicyObj: PricePolicyI, index: number) {
-      if (this.productBlueprint.price_policies.length <= index) {
-        console.log('this.productBlueprint.price_policies.length <= index');
-        return;
-      }
-      this.productBlueprint.price_policies[index] = pricePolicyObj;
+
+    /*
+      *  Price policy code
+     */
+
+    public getPricePolicies() {
+      this.$pricePolicies = this.pricePolicyService.getPricePolicies(this.productBlueprint.id);
+    }
+
+    public UpdatePricePolicy(pricePolicyObj: PricePolicyI) {
+      this.pricePolicyService.putPricePolicy(pricePolicyObj).pipe(
+      first()).subscribe({
+        next: () => {
+          this.getPricePolicies()
+        },
+        error: error => {
+          this.handleFormError(error);
+        }
+      });
+      // this.productBlueprint.price_policies[index] = pricePolicyObj;
     }
 
     addingNewPricePolicy: boolean = false;
@@ -118,9 +161,20 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.addingNewPricePolicy = !this.addingNewPricePolicy;
     }
 
-    public AddPricyPolicy(pricePolicyObj: PricePolicyI) {
-      this.productBlueprint.price_policies.push(pricePolicyObj);
-      this.addingNewPricePolicy = false;
+    public AddPricyPolicy(pricePolicyObj: PricePolicyInI) {
+      // Post for price policy object
+      this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
+        first()).subscribe({
+        next: () => {
+          this.getPricePolicies()
+        },
+        error: error => {
+          this.handleFormError(error);
+        }
+      });
+
+      // this.productBlueprint.price_policies.push(pricePolicyObj);
+      // this.addingNewPricePolicy = false;
     }
 
     public RemovePricePolicy(i: number) {

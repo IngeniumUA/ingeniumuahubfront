@@ -22,7 +22,7 @@
 </section>
 </form>
 
-<ng-container *ngIf="(this.$itemtype | async ) as itemType">
+<ng-container *ngIf="(this.$itemType | async ) as itemType">
 <form [formGroup]="eventCreateForm">
 <section *ngIf="itemType === 'eventitem'" class="flex flex-col gap-1 w-1/3">
   Eventsection

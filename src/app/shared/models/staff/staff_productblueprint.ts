@@ -1,11 +1,15 @@
 import {ProductMetaI} from '../items/products/products';
 import {PricePolicyI} from '../price_policy';
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
 
 export interface StaffProductBlueprintI {
   id: number
-  available: boolean
-  disabled: boolean
-  date_created: string
+
+  availability: AvailabilityCompositionI
+
+  created_timestamp: string
+  last_update_timestamp: string
+
   origin_item_id: string
   source_item_ids: string[]
   product_blueprint_pools: number[]
@@ -16,9 +20,9 @@ export interface StaffProductBlueprintI {
   max_individual: number
   max_per_checkout: number
 
-  product_ordering: number
+  ordering: number
 
   price_policies: PricePolicyI[]
 
-  product_meta: ProductMetaI
+  product_blueprint_metadata: ProductMetaI
 }

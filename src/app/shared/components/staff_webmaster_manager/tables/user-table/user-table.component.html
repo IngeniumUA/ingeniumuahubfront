@@ -44,7 +44,7 @@
             <input class="w-3/4" type="text" placeholder="UUID" [formControlName]="'uuidControl'">
           </div>
         </th>
-        <td mat-cell *matCellDef="let user"><a [routerLink]="[user.uuid]"> {{ user.uuid }} </a></td>
+        <td mat-cell *matCellDef="let user"><a [routerLink]="[user.user_uuid]"> {{ user.user_uuid }} </a></td>
       </ng-container>
 
       <ng-container matColumnDef="email">
@@ -79,12 +79,12 @@
 
       <ng-container matColumnDef="is_manager">
         <th mat-header-cell *matHeaderCellDef>Manager</th>
-        <td mat-cell *matCellDef="let user"> {{ user.is_manager }} </td>
+        <td mat-cell *matCellDef="let user"> {{ user.manager }} </td>
       </ng-container>
 
       <ng-container matColumnDef="last_login">
         <th mat-header-cell *matHeaderCellDef>Last Login</th>
-        <td mat-cell *matCellDef="let user"> {{ user.last_login | date: 'dd/MM/yyyy h:mm:ss' }} </td>
+        <td mat-cell *matCellDef="let user"> {{ user.last_update_timestamp | date: 'dd/MM/yyyy h:mm:ss' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="modified_at">

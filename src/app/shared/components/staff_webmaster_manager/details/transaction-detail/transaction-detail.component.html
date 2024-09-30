@@ -73,7 +73,7 @@
           <select formControlName="productControl">
             <option [ngValue]="transaction.product" disabled selected>{{ transaction.product.name }} {{ transaction.amount }}</option>
             <option *ngFor="let product of products" [ngValue]="product">
-              {{ product.product_blueprint_name }} € {{ product.price_eu }}
+              {{ product.name }} € {{ product.price_policy.price }}
             </option>
           </select>
         </ng-container>

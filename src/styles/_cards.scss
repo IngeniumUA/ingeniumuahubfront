@@ -31,7 +31,7 @@
 }
 
 .event-card-link-wrapper {
-  @apply block h-full w-full transition-all;
+  @apply block h-full w-full transition-all no-underline;
 
   &:hover {
     @apply scale-105;
