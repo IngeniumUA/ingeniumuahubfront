@@ -54,6 +54,11 @@
         <dd>&euro; {{ totalPrice$ | async }}</dd>
       </dl>
 
+      <div class="form-field mt-2">
+        <label for="remarks">Opmerkingen <span class="sr-only">Dit veld kan je invullen indien je een opmerking wil toevoegen.</span></label>
+        <textarea name="remarks" id="remarks" rows="3" class="w-full resize-none" (change)="onNoteAreaChanged($event)"></textarea>
+      </div>
+
       @let allowStaffCheckout = (allowStaffCheckout$ | async);
       <div class="form-field form-field-checkbox mt-4" *ngIf="allowStaffCheckout">
         <input id="staffCheckout" type="checkbox" [checked]="allowStaffCheckout" (change)="onStaffCheckoutClicked($event)">

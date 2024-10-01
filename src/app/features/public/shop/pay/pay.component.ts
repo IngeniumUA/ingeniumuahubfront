@@ -32,7 +32,8 @@ export class PayComponent implements OnInit {
 
     // Request the checkout ID.
     this.httpClient.post<CheckoutResponseI>(`${apiEnviroment.apiUrl}cart/checkout?requested_payment_provider=${paymentProvider.valueOf()}`, {
-      products: this.store.selectSnapshot(CartState.getProducts)
+      products: this.store.selectSnapshot(CartState.getProducts),
+      checkout_note: this.store.selectSnapshot(CartState.getCheckoutNote),
     }).pipe(
       map((result: CheckoutResponseI) => this.processCheckoutResponse(result.checkout)),
       catchError((_): any => {

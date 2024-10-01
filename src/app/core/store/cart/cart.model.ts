@@ -2,5 +2,6 @@ import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/ite
 
 export interface CartStateModel {
   products: IProductItem[];
-  paymentProvider: PaymentProviderEnum
+  paymentProvider: PaymentProviderEnum,
+  checkoutNote: string;
 }
