@@ -40,8 +40,8 @@ export class PublicHeaderComponent {
   @Output() isToggleEmitter = new EventEmitter<boolean>();
 
   constructor(private store: Store, private oauthService: OAuthService, protected router: Router) {
-    this.email$ = store.select(UserState.getEmail);
-    this.roles$ = store.select(UserState.getRoles);
+    this.email$ = store.select(UserState.email);
+    this.roles$ = store.select(UserState.roles);
     this.isAuth$ = store.select(UserState.isAuthenticated);
   }
 

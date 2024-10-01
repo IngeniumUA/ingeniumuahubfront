@@ -16,9 +16,7 @@ export class ProductsToCategoriesPipe implements PipeTransform {
     // We sort the products beforehand and then construct the Groups and Categories later on
     // As the order is preserved by reducing the products ( see Data Structures and Algorithms course )
     const sortedProducts = products.sort(
-      (lhs, rhs) => rhs.product_ordering - lhs.product_ordering);
-
-    console.log(sortedProducts);
+      (lhs, rhs) => rhs.ordering - lhs.ordering);
 
     // This is typescript wizardy
     // From this website https://sylhare.github.io/2022/03/08/Reduce-in-typescript.html

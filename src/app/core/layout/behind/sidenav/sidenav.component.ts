@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {AsyncPipe, NgClass, NgIf} from '@angular/common';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {RolesService} from '../../../services/user/roles.service';
 import {Observable} from 'rxjs';
+import {Store} from "@ngxs/store";
 
 @Component({
   selector: 'app-sidenav',
@@ -21,10 +21,8 @@ import {Observable} from 'rxjs';
 export class SidenavComponent {
   @Input() isSidenav: boolean = true;
 
-  isWebmaster$: Observable<boolean> = this.rolesService.isWebmaster;
-  isManager$: Observable<boolean> = this.rolesService.isManager;
+  isWebmaster$: Observable<boolean> = this.store.select(state => state.user.roles.is_webmaster);
+  isManager$: Observable<boolean> = this.store.select(state => state.user.roles.is_manager);
 
-  constructor(private rolesService: RolesService
-  ) {
-  }
+  constructor(private store: Store) {}
 }

@@ -10,7 +10,8 @@
     <tr><th>Available</th><td>
       <input type="checkbox" formControlName="available"/>
     </td></tr>
-    <tr><th>Date Created</th><td>{{ productBlueprint.date_created | date }}</td></tr>
+    <tr><th>Date Created</th><td>{{ productBlueprint.created_timestamp | date }}</td></tr>
+    <tr><th>Last Updated</th><td>{{ productBlueprint.last_update_timestamp | date }}</td></tr>
     <tr><th>Origin Item ID</th><td><a [routerLink]="['/web/item/' + productBlueprint.origin_item_id]" >{{ productBlueprint.origin_item_id }}</a></td></tr>
 
     <tr><th>Name</th><td>
@@ -48,7 +49,7 @@
   </form>
 </section>
 
-<section *ngIf="(productBlueprint.product_meta !== null)">
+<section *ngIf="(productBlueprint.product_blueprint_metadata !== null)">
   <h4>Product Meta</h4>
   <form [formGroup]="productMetaForm">
     <table>
@@ -72,6 +73,10 @@
           <input type="text" formControlName="upon_completion" placeholder=""/>
         </label>
       </td></tr>
+
+      <tr><th>Track Checkout</th><td>
+        <input type="checkbox" formControlName="track_checkout"/>
+      </td></tr>
       </tbody>
     </table>
   </form>
@@ -79,9 +84,12 @@
 
 <section>
   <h4>Price Policies</h4>
-  <div class="mb-2 p-0.5 border-2 rounded-md border-blue-900" *ngFor="let pricePolicy of productBlueprint.price_policies; index as i">
-    <app-price-policy (RemovePricePolicyEvent)="RemovePricePolicy(i)" (UpdatePricePolicyEvent)="this.UpdatePricePolicy($event, i)" [pricePolicy]="pricePolicy"></app-price-policy>
-  </div>
+  <ng-container *ngIf="($pricePolicies | async) as pricePolicies">
+    <div class="mb-2 p-0.5 border-2 rounded-md border-blue-900" *ngFor="let pricePolicy of pricePolicies; index as i">
+      <app-price-policy (RemovePricePolicyEvent)="RemovePricePolicy(i)" (UpdatePricePolicyEvent)="this.UpdatePricePolicy($event)" [pricePolicy]="pricePolicy"></app-price-policy>
+    </div>
+  </ng-container>
+
   <ng-container *ngIf="!addingNewPricePolicy else addNewPolicy">
     <button class="button button-primary w-1/3 button-inline"
             (click)="ToggleAddNew()">
@@ -96,10 +104,11 @@
           (click)="onSubmit()">
     <span class="text-white">Update</span>
   </button>
+  <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
 </section>
 
 <ng-template #addNewPolicy>
   <section class="border-2 border-blue-900 rounded-md">
-    <app-price-policy-create (UpdatePricePolicyEvent)="AddPricyPolicy($event)"></app-price-policy-create>
+    <app-price-policy-create [product_blueprint_id]="productBlueprint.id" (CreatePricePolicyEvent)="AddPricyPolicy($event)"></app-price-policy-create>
   </section>
 </ng-template>

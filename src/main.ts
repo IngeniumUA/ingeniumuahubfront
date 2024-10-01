@@ -20,7 +20,9 @@ Sentry.init({
   environment: apiEnviroment.name,
 });
 
-enableProdMode();
+if (apiEnviroment.name !== 'development') {
+  enableProdMode();
+}
 platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .then((_success) => console.log('Bootstrap success'))

@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RecSysPreviewI} from '../../../../models/items/recsys_interfaces';
+import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
 import {DatePipe, NgClass, NgIf, NgStyle, NgTemplateOutlet} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {ColordbrgbaPipe} from '../../../../pipes/item/colorpipe.pipe';
+import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';
 
 @Component({
   selector: 'app-rec-sys-item-preview',
@@ -29,7 +29,7 @@ export class RecSysItemPreviewComponent implements OnInit {
     ngOnInit() {
       this.isLandscape = this.recsysItem.image_square === null || this.recsysItem.image_square === '';
       this.image = this.isLandscape ? this.recsysItem.image_landscape: this.recsysItem.image_square;
-      this.internalLink = !this.recsysItem.follow_through_link.startsWith('https://');
+      this.internalLink = this.recsysItem.follow_through_link.match('^https?:\\/\\/') === null;
     }
 
     TextColor() {

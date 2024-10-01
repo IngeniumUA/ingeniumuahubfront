@@ -24,15 +24,21 @@
 
 <section>
     <h3 class="text-blue-900">Access Policy</h3>
-    <ng-container *ngIf="pricePolicy.access_policy.method === 'allow_deny_list'">
-        <app-allow-deny-list (UpdateAccessPolicy)="UpdateContent($event)" [access_policy_content]="pricePolicy.access_policy.content" [access_policy_method]="pricePolicy.access_policy.method"></app-allow-deny-list>
-    </ng-container>
+<!--    <ng-container *ngIf="pricePolicy.access_policy.method === 'allow_deny_list'">-->
+<!--        <app-allow-deny-list (UpdateAccessPolicy)="UpdateContent($event)" [access_policy_content]="pricePolicy.access_policy.content" [access_policy_method]="pricePolicy.access_policy.method"></app-allow-deny-list>-->
+<!--    </ng-container>-->
 </section>
 
 <section>
-    <h3 class="text-blue-900">Remove Pricepolicy</h3>
+  <h3 class="text-blue-900">Remove Pricepolicy</h3>
+  <span>
     <button class="button button-primary button-inline"
-            (click)="RemovePricePolicy()">
+            (click)="SavePricePolicy()">
+        <span class="text-white">Save</span>
+    </button>
+    <button class="button button-primary button-inline"
+                (click)="RemovePricePolicy()">
         <span class="text-white">Remove</span>
     </button>
+  </span>
 </section>

@@ -7,3 +7,8 @@ export interface ProductStatsI {
     product_name: string
     reduce_stats: ProductReduceStatsI
 }
+
+export interface GroupByModelI {
+  x: number[]
+  y: object
+}

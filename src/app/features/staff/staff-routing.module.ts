@@ -5,6 +5,8 @@ import {StaffEventListComponent} from './events/staff-event-list/staff-event-lis
 import {StaffEventDetailComponent} from './events/staff-event-detail/staff-event-detail.component';
 import {FunctionsComponent} from './functions/functions.component';
 import {StaffUseFullQRComponent} from './payment-code/staff-usefull-q-r.component';
+import {FoodOrdersComponent} from "@ingenium/app/features/staff/popupz/food-orders/food-orders.component";
+import {DrinkOrdersComponent} from "@ingenium/app/features/staff/popupz/drink-orders/drink-orders.component";
 
 
 const routes: Routes = [
@@ -14,9 +16,11 @@ const routes: Routes = [
       {path: 'event', component: StaffEventListComponent},
       {path: 'event/:id', component: StaffEventDetailComponent},
       {path: 'functions', component: FunctionsComponent},
-      {path: 'qr', component: StaffUseFullQRComponent}
+      {path: 'qr', component: StaffUseFullQRComponent},
     ]
   },
+  {path: 'old/food', component: FoodOrdersComponent},
+  {path: 'old/drinks', component: DrinkOrdersComponent},
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

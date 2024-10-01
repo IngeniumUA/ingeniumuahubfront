@@ -1,7 +1,7 @@
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
 
 export function isEventItem(object: any): object is EventItemI {
-  return 'eventitem' in object && "event_start" in object && "event_end" in object;
+  return object.derived_type_enum === "eventitem";
 }
 
 export interface EventItemInI {

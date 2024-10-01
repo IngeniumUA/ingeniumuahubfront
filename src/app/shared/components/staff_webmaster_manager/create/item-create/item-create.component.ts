@@ -29,8 +29,7 @@ import {ShopItemInI} from "@ingenium/app/shared/models/item/shopI";
   standalone: true
 })
 export class ItemCreateComponent implements OnInit {
-
-  $itemtype: Observable<string | null> = of('none'); // none, event, shop, promo
+  $itemType: Observable<string | null> = of('none'); // none, event, shop, promo
   itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem'];
   itemTypeControl = new FormControl<string>('none');
 
@@ -74,13 +73,21 @@ export class ItemCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.$itemtype = this.itemTypeControl.valueChanges;
+    this.$itemType = this.itemTypeControl.valueChanges;
   }
 
   parseEventForm(itemType: string): EventItemInI | null {
     if (itemType !== this.itemTypes[1]) {
       return null;
     }
+
+    const imageSquareControlValue: string = this.eventCreateForm.controls['imageSquare'].value!;
+    const imageSquareValue = imageSquareControlValue === "" ? null : imageSquareControlValue;
+
+    const imageLandscapeControlValue: string = this.eventCreateForm.controls['imageLandscape'].value!;
+    const imageLandscapeValue = imageLandscapeControlValue === "" ? null : imageLandscapeControlValue;
+
+
     return {
       derived_type_enum: "eventitem",
 
@@ -91,8 +98,8 @@ export class ItemCreateComponent implements OnInit {
       display: {
         color: this.eventCreateForm.controls['color'].value!,
         follow_through_link: this.eventCreateForm.controls['followThroughLink'].value!,
-        image_square: this.eventCreateForm.controls['imageSquare'].value!,
-        image_landscape: this.eventCreateForm.controls['imageLandscape'].value!,
+        image_square: imageSquareValue,
+        image_landscape: imageLandscapeValue,
         preview_description: this.eventCreateForm.controls['previewDescription'].value!,
       }
     };

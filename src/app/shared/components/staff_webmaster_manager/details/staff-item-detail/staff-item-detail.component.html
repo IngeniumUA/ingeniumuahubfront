@@ -62,7 +62,7 @@
   <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 1)" [displayMixin]="this.item.derived_type.display"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="this.item.derived_type as promoItem">
+<section *ngIf="this.isPromoItem">
   <h2>Promo Item</h2>
   <form [formGroup]="itemForm">
     <table>
@@ -84,13 +84,13 @@
       </tr>
       <tr>
         <th>Type</th>
-        <td>{{ promoItem }}</td>
+        <td>{{ this.item.derived_type }}</td>
       </tr>
       </tbody>
     </table>
   </form>
   <br>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 2)" [displayMixin]="promoItem.display"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 2)" [displayMixin]="this.item.derived_type.display"></app-display-mixin-detail>
 </section>
 
 <section>

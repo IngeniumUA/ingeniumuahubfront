@@ -10,7 +10,7 @@ import {StaffCardDetailI} from '../../../../shared/models/staff/staff_card_detai
 export class StaffCardService {
   constructor(private httpClient: HttpClient) { }
 
-  apiUrl = apiEnviroment.apiUrl + 'staff/card';
+  apiUrl = apiEnviroment.apiUrl + 'item/card';
 
   public getCards(offset: number = 0, count: number = 50,
     user: string | null = null,
@@ -30,8 +30,8 @@ export class StaffCardService {
     if (user !== null) {
       query_str += '&user=' + user.toString();
     }
-    return this.httpClient.get<StaffCardDetailI[]>
-    (this.apiUrl + query_str);
+
+    return this.httpClient.get<StaffCardDetailI[]>(this.apiUrl + query_str);
   }
   public getCardStats(offset: number = 0, count: number = 50,
     user: string | null = null,
@@ -51,17 +51,17 @@ export class StaffCardService {
     if (user !== null) {
       query_str += '&user=' + user.toString();
     }
-    return this.httpClient.get<any>
-    (this.apiUrl + '/stats' + query_str);
+
+    return this.httpClient.get<any>(this.apiUrl + query_str);
   }
 
 
 
-  public getCard(CardId: string): Observable<StaffCardDetailI> {
-    return this.httpClient.get<StaffCardDetailI>(this.apiUrl + '/' + CardId);
+  public getCard(cardId: string): Observable<StaffCardDetailI> {
+    return this.httpClient.get<StaffCardDetailI>(`${this.apiUrl}/${cardId}`);
   }
-  public updateCard(CardId: string, Card_obj: StaffCardDetailI): Observable<StaffCardDetailI> {
-    return this.httpClient.put<StaffCardDetailI>(this.apiUrl + '/' + CardId, Card_obj);
+  public updateCard(cardId: string, cardObj: StaffCardDetailI): Observable<StaffCardDetailI> {
+    return this.httpClient.put<StaffCardDetailI>(`${this.apiUrl}/${cardId}`, cardObj);
   }
 
   public UnlinkCard(card: StaffCardDetailI): Observable<StaffCardDetailI> {

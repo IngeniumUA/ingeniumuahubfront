@@ -48,7 +48,14 @@ export class AccountInfoComponent implements OnInit {
               private store: Store,
               private toastr: ToastrService) {
 
-    this.email = this.store.selectSnapshot(UserState.getEmail);
+    this.email = this.store.selectSnapshot(UserState.email);
+    this.form = this.formBuilder.group({
+      telephone: ['', Validators.required],
+      recreation_interest: [false, Validators.required],
+      sport_interest: [false, Validators.required],
+      relations_interest: [false, Validators.required],
+      graduation_tract: ['', Validators.required]
+    });
   }
 
 
@@ -57,32 +64,18 @@ export class AccountInfoComponent implements OnInit {
   }
 
   loadFieldsFromStore() {
-    const details = this.store.selectSnapshot(UserState.userDetails);
-    if (!details) {
-      this.form = this.formBuilder.group({
-        //voornaam: [Validators.required],
-        //achternaam: [Validators.required],
-        telefoonnummer: ['', Validators.required],
-        //gemeente: [details.gemeente, Validators.required],
-        //adres: [details.adres, Validators.required],
-        //huisnummer: [details.huisnummer, Validators.required],
-        sport_interesse: [false, Validators.required],
-        doop_interesse: [false, Validators.required],
-        //afstudeerrichting: [details.afstudeerrichting, Validators.required]
-      });
-      return;
-    }
+    this.accountService.getAccount().subscribe(details => {
+      if (!details) {
+        return;
+      }
 
-    this.form = this.formBuilder.group({
-      //voornaam: [details.voornaam, Validators.required],
-      //achternaam: [details.achternaam, Validators.required],
-      telefoonnummer: [details.telefoonnummer, Validators.required],
-      //gemeente: [details.gemeente, Validators.required],
-      //adres: [details.adres, Validators.required],
-      //huisnummer: [details.huisnummer, Validators.required],
-      sport_interesse: [details.sport_interesse, Validators.required],
-      doop_interesse: [details.doop_interesse, Validators.required],
-      //afstudeerrichting: [details.afstudeerrichting, Validators.required]
+      this.form = this.formBuilder.group({
+        telephone: [details.telephone, Validators.required],
+        recreation_interest: [details.recreation_interest, Validators.required],
+        sport_interest: [details.sport_interest, Validators.required],
+        relations_interest: [details.relations_interest, Validators.required],
+        graduation_tract: [details.graduation_tract, Validators.required]
+      });
     });
   }
 
@@ -103,21 +96,13 @@ export class AccountInfoComponent implements OnInit {
 
     this.loading = true;
     const personalDetails: HubUserPersonalDetailsI = {
-      voornaam: '',
-      achternaam: '',
-      //voornaam: this.form.controls['voornaam'].value,
-      //achternaam: this.form.controls['achternaam'].value,
-      telefoonnummer: this.form.controls['telefoonnummer'].value,
-      gemeente: '',
-      adres: '',
-      huisnummer: '',
-      //gemeente: this.form.controls['gemeente'].value,
-      //adres: this.form.controls['adres'].value,
-      //huisnummer: this.form.controls['huisnummer'].value,
-      sport_interesse: this.form.controls['sport_interesse'].value,
-      doop_interesse: this.form.controls['doop_interesse'].value,
-      afstudeerrichting: '',
-      //afstudeerrichting: this.form.controls['afstudeerrichting'].value,
+      given_name: '',
+      last_name: '',
+      telephone: this.form.controls['telephone'].value,
+      recreation_interest: this.form.controls['recreation_interest'].value,
+      sport_interest: this.form.controls['sport_interest'].value,
+      relations_interest: this.form.controls['relations_interest'].value,
+      graduation_tract: this.form.controls['graduation_tract'].value,
     };
 
     this.accountService.updatePersonalDetails(personalDetails).pipe(first()).subscribe({

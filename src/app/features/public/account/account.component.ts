@@ -13,6 +13,6 @@ export class AccountComponent {
   roles$: Observable<UserRolesI|null>;
 
   constructor(private store: Store) {
-    this.roles$ = this.store.select(UserState.getRoles);
+    this.roles$ = this.store.select(UserState.roles);
   }
 }

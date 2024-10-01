@@ -17,11 +17,11 @@
           Aankopen
         </a>
 
-        <div *ngIf="(roles$ | async) as roles">
-          <a [routerLink]="['/man']" *ngIf="roles.is_manager">Manager</a>
-          <a [routerLink]="['/web']" *ngIf="roles.is_webmaster">Webmaster</a>
-          <a [routerLink]="['/staff']" *ngIf="roles.is_staff">Staff</a>
-        </div>
+        <ng-container *ngIf="(roles$ | async) as roles">
+          <a [routerLink]="['/man']" routerLinkActive="nav-item-active" *ngIf="roles.is_manager">Manager</a>
+          <a [routerLink]="['/web']" routerLinkActive="nav-item-active" *ngIf="roles.is_webmaster">Webmaster</a>
+          <a [routerLink]="['/staff']" routerLinkActive="nav-item-active" *ngIf="roles.is_staff">Staff</a>
+        </ng-container>
       </nav>
     </aside>
 

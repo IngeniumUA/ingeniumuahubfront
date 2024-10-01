@@ -8,20 +8,59 @@ export interface IProductGroup {
   products: IProductItem[];
 }
 
+export interface CheckoutTrackerConfigI {
+  status_queue: number[]
+  disabled_on_status: number
+}
+
+export interface UponCompletionMetaI {
+  track_checkout: CheckoutTrackerConfigI | null
+}
+
 export interface ProductMetaI {
   group: string;
-  categorie: string;
-  upon_completion: object[] | null;
-  popupz_opties: string | null;
+  categorie: string; // Food / drinks
+  upon_completion: UponCompletionMetaI | null;
+  other_meta_data: {[key:string]:string};
+}
+
+export interface IPricePolicy {
+  id: number;
+  name: string;
+  price: number,
+  availability: {
+    available: boolean;
+    disabled: boolean;
+  }
 }
 
 export interface IProductItem {
   id: number;
-  product_blueprint_id: number;
-  product_blueprint_name: string | null
-  product_ordering: number
   name: string;
-  price_eu: number;
+  description: string;
+  ordering: number;
+  blueprint_id: number;
+  origin_item_id: number;
+  date_generated: string;
+  price_policy: IPricePolicy;
+  note: string|null;
   max_count: number;
   product_meta: ProductMetaI;
+}
+
+export enum PaymentProviderEnum {
+  Dev = 1,
+  Kassa = 2,
+  Free = 3,
+  Stripe = 4,
+}
+
+export interface CheckoutIdI {
+  checkout_id: string
+  payment_provider_payment_id: string,
+  payment_provider: PaymentProviderEnum
+}
+
+export interface CheckoutResponseI {
+  checkout: CheckoutIdI
 }

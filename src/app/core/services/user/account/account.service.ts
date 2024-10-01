@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
-import {HubAccountData, HubUserPersonalDetailsI} from '../../../../shared/models/user/user';
+import {HubUserPersonalDetailsI} from '../../../../shared/models/user/user';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {CardLimitedI} from '@ingenium/app/shared/models/card';
@@ -16,10 +16,8 @@ export interface InteractionI {
 
 export interface TransactionI {
   interaction: InteractionI
-  product: IProductItem
-  count: number
-  amount: number
-  date_complete: string
+  purchased_product: IProductItem
+  note: string
 }
 
 @Injectable({
@@ -28,19 +26,12 @@ export interface TransactionI {
 export class AccountService {
   constructor(private httpClient: HttpClient) { }
 
-  public getAccount(): Observable<HubAccountData> {
-    return this.httpClient.get<HubAccountData>(apiEnviroment.apiUrl + 'user/account/');
+  public getAccount(): Observable<HubUserPersonalDetailsI> {
+    return this.httpClient.get<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + 'account');
   }
 
-  // Extra Account Details
-  public getAccountDetails(details: HubUserPersonalDetailsI): Observable<HubUserPersonalDetailsI> {
-    return this.httpClient.post<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + 'user/account/personal', details);
-  }
-  public createAccountDetails(details: HubUserPersonalDetailsI): Observable<HubUserPersonalDetailsI> {
-    return this.httpClient.post<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + 'user/account/personal', details);
-  }
   public updatePersonalDetails(details: HubUserPersonalDetailsI): Observable<HubUserPersonalDetailsI> {
-    return this.httpClient.post<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + 'user/account/personal', details);
+    return this.httpClient.put<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + 'account', details);
   }
 
   // -----
@@ -50,7 +41,7 @@ export class AccountService {
   }
 
   public linkCard(card_uuid: string): Observable<CardLimitedI> {
-    return this.httpClient.get<CardLimitedI>(apiEnviroment.apiUrl + 'item/card/' + card_uuid, {});
+    return this.httpClient.get<CardLimitedI>(apiEnviroment.apiUrl + '/card/' + card_uuid);
   }
 
   public getTransactions(): Observable<TransactionI[]> {
