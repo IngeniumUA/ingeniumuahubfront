@@ -16,7 +16,7 @@ export class HomepageComponent {
   constructor(private eventService: EventService, private promoService: PromoService) {
     afterNextRender(() => { // Without this in pre-rendering we would get outdated data from the server
       this.homePageRec$ = this.eventService.getEventsList();
-      this.recsysItems$ = this.promoService.getPromosList(8, 0, 'vacature');
+      this.recsysItems$ = this.promoService.getPromosList(8, 0);
     });
   }
 }
