@@ -25,9 +25,7 @@ export class CardRedirectComponent implements OnInit {
     }
 
     // Submit card to backend
-    this.accountService.linkCard(card_uuid!).pipe(
-      first()).subscribe({
-
+    this.accountService.linkCard(card_uuid!).pipe(first()).subscribe({
       next: (response: CardLimitedI) => {
         // User was added to lid
         const notification = this.HandleSuccesResponse(response);
@@ -58,6 +56,7 @@ export class CardRedirectComponent implements OnInit {
       } else if (status_code == 500) {
         return response.error['detail']['Error'];
       }
+
       return 'Ongekende Server Error!';
     }
     // If the response is not a HTTPResponse we throw unknown error

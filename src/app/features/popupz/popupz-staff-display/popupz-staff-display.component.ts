@@ -4,7 +4,10 @@ import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from "@ingenium/app/s
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
-import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
+import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {TransactionI} from "@ingenium/app/core/services/user/account/account.service";
+import {FormsModule} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-popupz-staff-display',
@@ -12,7 +15,9 @@ import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
   imports: [
     NgForOf,
     NgIf,
-    KeyValuePipe
+    KeyValuePipe,
+    FormsModule,
+    NgClass
   ],
   templateUrl: './popupz-staff-display.component.html',
   styleUrl: './popupz-staff-display.component.scss'
@@ -20,9 +25,11 @@ import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
 export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
   interval!: Subscription
   filter: HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum.All;
+  filterDrinks: boolean = false;
   orders: HubCheckoutTrackerI[] = [];
+  loading: boolean = false;
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private toastrService: ToastrService) {}
 
   ngOnInit() {
     this.getOrders();
@@ -31,6 +38,7 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
     this.interval = interval(5000)
       .pipe()
       .subscribe(() => {
+        this.loading = true;
         this.getOrders();
       });
   }
@@ -48,6 +56,11 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
             // Filter orders based on status
             return this.filter === HubCheckoutTrackerStatusEnum.All || order.checkout_tracker_status === this.filter;
           });
+
+          setTimeout(() => {
+            this.loading = false;
+          }, 600);
+
           return data;
         }),
         catchError((error) => {
@@ -68,6 +81,11 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
             // Immediately remove order from list
             this.orders = this.orders.filter((o) => o.id !== checkout.id);
           }
+
+          this.toastrService.success(`De status van ${order.id} is aangepast!`, 'Gelukt!',  {
+            timeOut: 1500,
+          });
+
           return checkout;
         }),
         catchError((error) => {
@@ -85,6 +103,30 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
 
     // Parse as number and then as HubCheckoutTrackerStatusEnum
     this.filter = parseInt(value) as HubCheckoutTrackerStatusEnum;
+    this.getOrders();
+  }
+
+  isFood(transaction: TransactionI) {
+    if (!this.filterDrinks) return true;
+    return transaction.purchased_product.product_meta.categorie === 'food';
+  }
+
+  orderContainsFood(order: HubCheckoutTrackerI) {
+    return order.checkout.transactions.some((transaction) => {
+      return this.isFood(transaction);
+    });
+  }
+
+  getButtonTextForStatus(status: HubCheckoutTrackerStatusEnum) {
+    if (this.loading) return 'Nieuwe data...';
+    switch (status) {
+      case HubCheckoutTrackerStatusEnum.Pending:
+        return 'Klaar voor afhaling';
+      case HubCheckoutTrackerStatusEnum.Ready:
+        return 'Markeer afgehaald';
+      default:
+        return 'Onbekende status';
+    }
   }
 
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;
