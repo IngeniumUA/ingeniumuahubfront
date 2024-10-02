@@ -62,5 +62,6 @@ export interface CheckoutIdI {
 }
 
 export interface CheckoutResponseI {
-  checkout: CheckoutIdI
+  checkout: CheckoutIdI,
+  tracker_id: number,
 }

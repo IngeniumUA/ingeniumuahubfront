@@ -5,6 +5,8 @@ import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
 import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
+import {TransactionI} from "@ingenium/app/core/services/user/account/account.service";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-popupz-staff-display',
@@ -12,7 +14,8 @@ import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
   imports: [
     NgForOf,
     NgIf,
-    KeyValuePipe
+    KeyValuePipe,
+    FormsModule
   ],
   templateUrl: './popupz-staff-display.component.html',
   styleUrl: './popupz-staff-display.component.scss'
@@ -20,6 +23,7 @@ import {KeyValuePipe, NgForOf, NgIf} from "@angular/common";
 export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
   interval!: Subscription
   filter: HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum.All;
+  filterDrinks: boolean = false;
   orders: HubCheckoutTrackerI[] = [];
 
   constructor(private httpClient: HttpClient) {}
@@ -85,6 +89,17 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
 
     // Parse as number and then as HubCheckoutTrackerStatusEnum
     this.filter = parseInt(value) as HubCheckoutTrackerStatusEnum;
+  }
+
+  isFood(transaction: TransactionI) {
+    if (!this.filterDrinks) return true;
+    return transaction.purchased_product.product_meta.categorie === 'food';
+  }
+
+  orderContainsFood(order: HubCheckoutTrackerI) {
+    return order.checkout.transactions.some((transaction) => {
+      return this.isFood(transaction);
+    });
   }
 
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;

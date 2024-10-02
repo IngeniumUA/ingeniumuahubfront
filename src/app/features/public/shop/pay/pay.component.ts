@@ -35,7 +35,7 @@ export class PayComponent implements OnInit {
       products: this.store.selectSnapshot(CartState.getProducts),
       checkout_note: this.store.selectSnapshot(CartState.getCheckoutNote),
     }).pipe(
-      map((result: CheckoutResponseI) => this.processCheckoutResponse(result.checkout)),
+      map((result: CheckoutResponseI) => this.processCheckoutResponse(result)),
       catchError((_): any => {
         //this.cartService.clearPaymentErrors();
         //if (error instanceof HttpErrorResponse) {
@@ -49,10 +49,18 @@ export class PayComponent implements OnInit {
     this.store.dispatch(new CartActions.ClearCart());
   }
 
-  processCheckoutResponse(checkout: CheckoutIdI) {
-    switch (checkout.payment_provider) {
+  processCheckoutResponse(response: CheckoutResponseI) {
+    switch (response.checkout.payment_provider) {
       case PaymentProviderEnum.Dev:
-        this.toastrService.success('Development payment successful');
+        // TODO: change this so it isn't hardcoded
+        if (Number.isInteger(response.tracker_id)) {
+          this.toastrService.success(`Het volgnummer is ${response.tracker_id}`, 'Bestelling gelukt!', {
+            timeOut: 10000,
+          });
+          this.router.navigateByUrl('/popupz/menu/');
+          break;
+        }
+
         this.router.navigateByUrl('/account/transactions');
         break;
 
@@ -61,6 +69,15 @@ export class PayComponent implements OnInit {
         break;
 
       case PaymentProviderEnum.Kassa:
+        // TODO: change this so it isn't hardcoded
+        if (Number.isInteger(response.tracker_id)) {
+          this.toastrService.success(`Het volgnummer is ${response.tracker_id}`, 'Bestelling gelukt!', {
+            timeOut: 10000,
+          });
+          this.router.navigateByUrl('/popupz/menu/');
+          break;
+        }
+
         this.toastrService.success('De bestelling is gelukt, zorg dat de betaling aan de kassa wordt voldaan!');
         this.router.navigateByUrl('/shop/confirm');
         break;
@@ -70,8 +87,8 @@ export class PayComponent implements OnInit {
         break;
     }
 
-    this.checkoutId = checkout;
+    this.checkoutId = response.checkout;
     this.loading = false;
-    return checkout;
+    return response;
   }
 }
