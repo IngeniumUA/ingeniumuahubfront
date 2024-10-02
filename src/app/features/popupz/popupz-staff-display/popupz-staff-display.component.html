@@ -37,15 +37,11 @@
           <span class="text-sm underline">Opmerking:</span>
           <span class="font-bold mb-4">{{ order.checkout.note }}</span>
         }
-        <button type="button" class="button button-primary button-sm w-full button-inline" (click)="increaseStatus(order)">
-          @switch (order.checkout_tracker_status) {
-            @case (HubCheckoutTrackerStatusEnum.Pending) {
-              Klaar voor afhaling
-            }
-            @case (HubCheckoutTrackerStatusEnum.Ready) {
-              Markeer afgehaald
-            }
-          }
+        <button type="button" class="button button-sm w-full button-inline"
+                [ngClass]="{ 'button-danger': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready,
+                             'button-primary': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending }"
+                (click)="increaseStatus(order)" [disabled]="loading">
+          {{ getButtonTextForStatus(order.checkout_tracker_status) }}
         </button>
       </article>
     }
