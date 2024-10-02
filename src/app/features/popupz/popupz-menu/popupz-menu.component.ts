@@ -32,7 +32,7 @@ export class PopupzMenuComponent {
 
   category: string|undefined = undefined;
 
-  forceSauceOn: string[] = ["Durum Kebab", "Durum Falafel", "Falafel pita"];
+  forceSauceOn: string[] = ["Durum Kebab", "Durum Falafel", "Falafel"];
   sauceSelection: {[key:number]:string} = {};
   sauceOptions = ['Look', 'Mayo', 'Andalouse', 'Mamout', 'Ketchup'];
 
