@@ -59,7 +59,7 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
 
           setTimeout(() => {
             this.loading = false;
-          }, 600);
+          }, 250);
 
           return data;
         }),
