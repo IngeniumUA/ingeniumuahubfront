@@ -28,6 +28,6 @@ export class PromoListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.recsysItems$ = this.promoService.getPromosList(this.queryLimit, 0, this.promoType);
+    this.recsysItems$ = this.promoService.getPromosList(this.queryLimit, 0);
   }
 }

@@ -15,13 +15,13 @@ export class PromoService {
 
   apiUrl = apiEnviroment.apiUrl + 'item/promo/';
 
-  public getPromosList(limit: number, offset: number, type: string | null): Observable<RecSysPreviewI[]> {
+  public getPromosList(limit: number, offset: number): Observable<RecSysPreviewI[]> {
     // Specifically fetches events for use as a preview
     // IE Homepage or events page
-    let query_str = '?offset=' + offset.toString() + '&limit=' + limit.toString();
-    if (type !== null) {
-      query_str += '&type='+type;
-    }
+    const query_str = '?offset=' + offset.toString() + '&limit=' + limit.toString();
+    // if (type !== null) {
+    //   query_str += '&type='+type;
+    // }
     return this.httpClient.get<RecSysPreviewI[]>(this.apiUrl + 'list' + query_str);
   }
 

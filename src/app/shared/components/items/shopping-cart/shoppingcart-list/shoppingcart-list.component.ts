@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
 import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
-import {ITransaction} from '../../../../models/items/products/cart';
-import {ProductComponent} from '../../products/product/product.component';
-import {IProductItem, PaymentProviderEnum} from '../../../../models/items/products/products';
+import {ITransaction} from '@ingenium/app/shared/models/items/products/cart';
+import {ProductComponent} from '@ingenium/app/shared/components/items/products/product/product.component';
+import {IProductItem, PaymentProviderEnum} from '@ingenium/app/shared/models/items/products/products';
 import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
@@ -38,11 +37,9 @@ export class ShoppingcartListComponent implements OnInit {
   items: ItemLimitedI[] = [];
   paymentErrors: HttpErrorResponse[] = [];
 
-  constructor(private store: Store, private cartService: CartService) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
-    this.paymentErrors = this.cartService.getCurrentPaymentErrors();
-
     // Temporary, should be moved elsewhere
     if (this.store.selectSnapshot(UserState.roles)?.is_manager) {
       this.store.dispatch(new CartActions.SetPaymentMethod(PaymentProviderEnum.Kassa));
@@ -60,5 +57,10 @@ export class ShoppingcartListComponent implements OnInit {
     } else {
       this.store.dispatch(new CartActions.SetPaymentMethod(PaymentProviderEnum.Stripe));
     }
+  }
+
+  onNoteAreaChanged(event: Event) {
+    const note = (event.target as HTMLInputElement).value;
+    this.store.dispatch(new CartActions.SetCheckoutNote(note));
   }
 }

@@ -1,9 +1,13 @@
 <div class="mx-auto container p-4">
-  <div class="grid grid-cols-4 items-center mb-4">
-    <h1 class="white-section-title white-section-title-blue col-span-3">Bestellingen</h1>
-    <div class="">
+  <div class="grid grid-cols-3 items-center mb-4">
+    <h1 class="white-section-title white-section-title-blue col-span-2">Bestellingen</h1>
+    <div class="flex flex-row space-x-4 items-center justify-end">
+      <div class="form-field form-field-checkbox">
+        <input id="onlyFoodCheckbox" type="checkbox" [(ngModel)]="filterDrinks">
+        <label for="onlyFoodCheckbox">Alleen eten</label>
+      </div>
       <div class="form-field">
-        <select class="select" (change)="filterOrders($event)">
+        <select class="select" (change)="filterOrders($event)" style="margin-top:0;">
           <option value="10">Alle bestellingen</option>
           <option value="1">Nieuwe bestellingen</option>
           <option value="2">Klaar voor afhaling</option>
@@ -13,29 +17,31 @@
   </div>
   <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
     @for (order of orders; track order.id) {
-      <article class="flex flex-col p-4 rounded border border-blue-900">
+      <article class="flex flex-col p-4 rounded border border-blue-900" *ngIf="orderContainsFood(order)">
         <span class="text-xl font-bold">#{{ order.id }}</span>
-        <ul class="list-decimal list-inside space-y-1 my-2 flex-1">
+        <ul class="list-disc list-inside space-y-1 my-2 flex-1">
           @for (transaction of order.checkout.transactions; track $index) {
-            <ul>
-              {{ transaction.purchased_product.name }}
-              <ul *ngIf="transaction.purchased_product.product_meta" class="ml-6 list-disc list-inside">
-                <li *ngFor="let meta of transaction.purchased_product.product_meta.other_meta_data | keyvalue">
-                  <span class="capitalize font-light">{{ meta.key }}</span>: <span class="font-bold">{{ meta.value}}</span>
-                </li>
-              </ul>
-            </ul>
+            @if (isFood(transaction)) {
+              <li>
+                {{ transaction.purchased_product.name }}
+                <ul *ngIf="transaction.purchased_product.product_meta" class="ml-6 list-disc list-inside">
+                  <li *ngFor="let meta of transaction.purchased_product.product_meta.other_meta_data | keyvalue">
+                    <span class="capitalize font-light">{{ meta.key }}</span>: <span class="font-bold">{{ meta.value }}</span>
+                  </li>
+                </ul>
+              </li>
+            }
           }
         </ul>
-        <button type="button" class="button button-primary button-sm w-full button-inline" (click)="increaseStatus(order)">
-          @switch (order.checkout_tracker_status) {
-            @case (HubCheckoutTrackerStatusEnum.Pending) {
-              Klaar voor afhaling
-            }
-            @case (HubCheckoutTrackerStatusEnum.Ready) {
-              Markeer afgehaald
-            }
-          }
+        @if (order.checkout.note !== null && order.checkout.note !== '') {
+          <span class="text-sm underline">Opmerking:</span>
+          <span class="font-bold mb-4">{{ order.checkout.note }}</span>
+        }
+        <button type="button" class="button button-sm w-full button-inline"
+                [ngClass]="{ 'button-danger': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready,
+                             'button-primary': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending }"
+                (click)="increaseStatus(order)" [disabled]="loading">
+          {{ getButtonTextForStatus(order.checkout_tracker_status) }}
         </button>
       </article>
     }

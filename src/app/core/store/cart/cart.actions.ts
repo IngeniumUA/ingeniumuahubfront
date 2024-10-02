@@ -28,6 +28,11 @@ export namespace CartActions {
     constructor(public payment_provider: PaymentProviderEnum) { }
   }
 
+  export class SetCheckoutNote {
+    static readonly type = '[Cart] Set Checkout Note';
+    constructor(public note: string) { }
+  }
+
   export class Checkout {
     static readonly type = '[Cart] Checkout';
     constructor(public payment_provider: PaymentProviderEnum) {}

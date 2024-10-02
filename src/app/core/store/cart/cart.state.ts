@@ -8,7 +8,8 @@ import {removeItem} from "@ngxs/store/operators";
   name: 'cart',
   defaults: {
     products: [],
-    paymentProvider: PaymentProviderEnum.Stripe
+    paymentProvider: PaymentProviderEnum.Stripe,
+    checkoutNote: ''
   },
 })
 @Injectable()
@@ -29,6 +30,12 @@ export class CartState implements NgxsOnInit {
     console.log(state);
     return state.paymentProvider;
   }
+
+  @Selector()
+  static getCheckoutNote(state: CartStateModel): string {
+    return state.checkoutNote;
+  }
+
 
   @Selector()
   static getTotalPrice(state: CartStateModel): number {
@@ -94,6 +101,13 @@ export class CartState implements NgxsOnInit {
     console.log('Setting payment method to:', action.payment_provider);
     ctx.patchState({
       paymentProvider: action.payment_provider
+    });
+  }
+
+  @Action(CartActions.SetCheckoutNote)
+  setCheckoutNote(ctx: StateContext<CartStateModel>, action: CartActions.SetCheckoutNote) {
+    ctx.patchState({
+      checkoutNote: action.note
     });
   }
 
