@@ -3,8 +3,6 @@ import {Observable, of} from 'rxjs';
 import {MatTableModule} from '@angular/material/table';
 import {AsyncPipe, DatePipe, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
-import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 import {Store} from "@ngxs/store";
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
