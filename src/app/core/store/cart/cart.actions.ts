@@ -11,6 +11,13 @@ export namespace CartActions {
     static readonly type = '[Cart] Remove from Cart';
     constructor(public itemIndex: number) {}
   }
+
+  export class ReduceProductQuantity {
+    static readonly type = '[Cart] Reduce Quantity';
+    // We'll use the full product, for future proofing (e.g. deleting only with same options)
+    constructor(public product: IProductItem) {}
+  }
+
   export class FetchCart {
     static readonly type = '[Cart] Fetch Cart';
   }
