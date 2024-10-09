@@ -88,7 +88,7 @@ export class CartState implements NgxsOnInit {
     // Find products in the cart with the same id
     // Using findIndex is easier, but we may need all the indexes in the future
     const foundIndexes = ctx.getState().products.reduce((acc, product, index, _) => {
-      if (product.id === action.product.id) {
+      if (product.id === action.product.id && product.price_policy.id === action.product.price_policy.id) {
         acc.push(index);
       }
       return acc;
