@@ -18,6 +18,10 @@
         type="number" value="0"
         [ngStyle]="StyleInput()">
     </form>
+
+    <button (click)="TryIncreaseCount()"
+            [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
+            [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
   </ng-container>
 </div>
 
