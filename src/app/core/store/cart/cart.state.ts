@@ -83,6 +83,21 @@ export class CartState implements NgxsOnInit {
     ctx.dispatch(new CartActions.StoreInLocalStorage());
   }
 
+  @Action(CartActions.ReduceProductQuantity)
+  reduceProductQuantity(ctx: StateContext<CartStateModel>, action: CartActions.ReduceProductQuantity) {
+    // Find products in the cart with the same id
+    // Using findIndex is easier, but we may need all the indexes in the future
+    const foundIndexes = ctx.getState().products.reduce((acc, product, index, _) => {
+      if (product.id === action.product.id) {
+        acc.push(index);
+      }
+      return acc;
+    }, [] as number[]);
+    if (foundIndexes.length <= 0) return;
+
+    ctx.dispatch(new CartActions.RemoveFromCart(foundIndexes[0]));
+  }
+
   @Action(CartActions.StoreInLocalStorage)
   storeInLocalStorage(ctx: StateContext<CartStateModel>) {
     window.localStorage.setItem('cart-products', JSON.stringify(ctx.getState().products));
