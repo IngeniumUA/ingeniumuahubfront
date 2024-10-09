@@ -14,7 +14,6 @@ export namespace CartActions {
 
   export class ReduceProductQuantity {
     static readonly type = '[Cart] Reduce Quantity';
-    // We'll use the full product, for future proofing (e.g. deleting only with same options)
     constructor(public product: IProductItem) {}
   }
 
