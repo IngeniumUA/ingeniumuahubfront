@@ -11,8 +11,8 @@
         PaymentType:
         <select formControlName="paymentProvider">
           <option [ngValue]="null" disabled selected>Kies PaymentProvidor</option>
-          <option *ngFor="let paymentProvidor of paymentProvidors" [ngValue]="paymentProvidor">
-            {{ paymentProvidor }}
+          <option *ngFor="let paymentProvider of paymentProviders | keyvalue" [ngValue]="paymentProvider.value">
+            {{ paymentProvider.key }}
           </option>
         </select>
       </label>
@@ -22,42 +22,16 @@
       <h3>Transactions</h3>
       <ng-container *ngFor="let control of this.transactions().controls; let i=index">
         <div [formGroup]="GetControl(control)" class="my-4 py-2 border-t border-gray-400 flex flex-row gap-2">
-
           <span>
           Product:
           <ng-container *ngIf="(this.products$ | async) as products else loadingProducts">
             <select formControlName="productControl">
               <option [ngValue]="null" disabled selected>Kies Product</option>
               <option *ngFor="let product of products" [ngValue]="product">
-                {{ product.name }} {{ product }}
+                {{ product.name }} {{ product.price_policy.name }} {{ product.price_policy.price }}
               </option>
             </select>
-
-            <span>
-            Price policy
-            <select formControlName="pricePolicyControl">
-
-            </select>
-
-<!--              <ng-container *ngIf="(GetPricePolicyQuery(i) | async) as pricePolicies else loadingPricePolicies">-->
-<!--              <select formControlName="pricePolicyControl">-->
-<!--                <option [ngValue]="null" disabled selected>Kies Price</option>-->
-<!--                <option *ngFor="let pricePolicy of pricePolicies" [ngValue]="pricePolicy.id">-->
-<!--                  {{ pricePolicy.name }} {{ pricePolicy.price }}-->
-<!--                </option>-->
-<!--              </select>-->
-<!--            </ng-container>-->
-          </span>
           </ng-container>
-          </span>
-
-
-
-          <span>
-            <label>
-              Count (WIP! Not working)
-              <input formControlName="countControl" type="number">
-            </label>
           </span>
 
           <span>
