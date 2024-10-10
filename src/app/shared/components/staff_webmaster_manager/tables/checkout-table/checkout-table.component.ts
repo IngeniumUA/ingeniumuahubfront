@@ -45,7 +45,7 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
   constructor(private staffCheckoutService: StaffCheckoutService) {
   }
   @Input() user_id: string | null = null;
-  @Input() item_id: string | null = null;
+  @Input() item_id: number | null = null;
   @Input() loadDataEvent: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 

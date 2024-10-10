@@ -10,14 +10,16 @@ import {
   Validators
 } from '@angular/forms';
 import {AsyncPipe, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {StaffProductService} from '../../../../../core/services/staff/staff-product.service';
 import {Observable, of} from 'rxjs';
 import {IProductItem} from '../../../../models/items/products/products';
 import {ValidityOptions} from '../../../../models/items/validity';
 import {HttpErrorResponse} from '@angular/common/http';
-import {StaffCheckoutService} from '../../../../../core/services/staff/staff-checkout.service';
-import {StaffCreateCheckoutI} from '../../../../models/staff/staff_checkout';
-import {StaffCreateTransactionI} from '../../../../models/staff/staff_transaction';
+import {StaffCheckoutService} from '@ingenium/app/core/services/staff/staff-checkout.service';
+import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
+import {PricePolicyI} from "@ingenium/app/shared/models/price_policy";
+import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
+import {TransactionInI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {CheckoutInI} from "@ingenium/app/shared/models/checkout/checkoutModels";
 
 
 @Component({
@@ -36,7 +38,7 @@ import {StaffCreateTransactionI} from '../../../../models/staff/staff_transactio
 })
 export class CreateCheckoutComponent implements OnInit {
 
-  @Input() item_id: string | null = null;
+  @Input() item_id: number | null = null;
   @Output() checkoutCreated = new EventEmitter<boolean>();
 
   loading = false;
@@ -78,8 +80,9 @@ export class CreateCheckoutComponent implements OnInit {
   }
 
   constructor(private formBuilder: FormBuilder,
-                private staffProductService: StaffProductService,
-                private staffCheckoutService: StaffCheckoutService) {
+                private staffProductService: StaffProductBlueprintService,
+                private staffCheckoutService: StaffCheckoutService,
+              private pricePolicyService: PricePolicyService) {
   }
 
   public transactions(): FormArray {
@@ -101,7 +104,13 @@ export class CreateCheckoutComponent implements OnInit {
       'validityControl': [{value: validityDefault, disabled: !this.forceEnabled()}],
       'countControl': [1, [Validators.required, Validators.min(1)]]
     });
+    transactionGroup.controls['productControl'].valueChanges.subscribe((value) => {
+    })
     this.transactions().push(transactionGroup);
+  }
+
+  public GetPricePolicyQuery(transactionIndex: number): Observable<PricePolicyI[]> {
+    return this.pricePolicyService.getPricePolicies();
   }
 
   public SubmitForm() {
@@ -131,10 +140,11 @@ export class CreateCheckoutComponent implements OnInit {
 
     const transactions = this.parseTransactionFormArray(userValue);
 
-    const checkoutObj: StaffCreateCheckoutI = {
-      user: userValue,
-      payment_providor: paymentProvidorValue,
-      transactions: transactions
+    const checkoutObj: CheckoutInI = {
+      user_email: userValue,
+      payment_provider: paymentProvidorValue,
+      transactions: transactions,
+      note: null
     };
 
     this.staffCheckoutService.createCheckout(checkoutObj, forceCreate, sendMail, createMissingUser).subscribe(
@@ -166,7 +176,7 @@ export class CreateCheckoutComponent implements OnInit {
     return control as FormGroup;
   }
 
-  parseTransactionFormArray(userValue: string): StaffCreateTransactionI[] {
+  parseTransactionFormArray(userValue: string): TransactionInI[] {
     const transactionArray = this.transactions();
     const abstractControls = transactionArray.controls;
     const formGroups = abstractControls.map((abstactControl) => {
@@ -177,16 +187,17 @@ export class CreateCheckoutComponent implements OnInit {
     });
   }
 
-  parseTransactionFormGroup(userValue: string, formGroup: FormGroup): StaffCreateTransactionI {
+  parseTransactionFormGroup(userValue: string, formGroup: FormGroup): TransactionInI {
     const productControl: IProductItem = formGroup.controls['productControl'].value;
     const validityControl: number = formGroup.controls['validityControl'].value;
     const countControl: number = formGroup.controls['countControl'].value;
     return {
-      user: userValue,
+      user_email: userValue,
       item_id: this.item_id!,
-      product: productControl,
+      product_blueprint_id: productControl.blueprint_id,
+      price_policy_id: productControl.price_policy.id,
       validity: validityControl,
-      count: countControl
+      status: 1
     };
   }
 

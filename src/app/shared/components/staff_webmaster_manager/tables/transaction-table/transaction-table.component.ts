@@ -46,7 +46,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   constructor(private staffTransactionService: StaffTransactionService,
               private datePipe: DatePipe) {
   }
-  @Input() item_id: string | null = null;
+  @Input() item_id: number | null = null;
   @Input() user_id: string | null = null;
   @Input() checkout_id: string | null = null;
   @Input() loadDataEvent: boolean = false;

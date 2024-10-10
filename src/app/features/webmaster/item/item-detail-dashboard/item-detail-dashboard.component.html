@@ -10,13 +10,13 @@
 </section>
 
 <section class="staffSection">
-  <app-checkout-and-transaction-dashboard [item_id]="this.itemId" />
+  <app-checkout-and-transaction-dashboard [item_id]="item.item.id" />
 </section>
 
 <section class="staffSection">
   <h2>Add Checkout</h2>
   <ng-container  *ngIf="addingCheckout">
-    <app-create-checkout [item_id]="this.itemId" (checkoutCreated)="refetchTable($event)" />
+    <app-create-checkout [item_id]="item.item.id" (checkoutCreated)="refetchTable($event)" />
     <button class="button button-primary w-1/6 button-inline"
             (click)="ToggleAddingCheckout()">
       Cancel

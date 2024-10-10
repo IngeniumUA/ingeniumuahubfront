@@ -18,7 +18,7 @@ export class ItemDetailDashboardComponent implements OnInit {
 
   addingCheckout: boolean = false;
 
-  itemId!: string;
+  itemId!: number | string;
 
   constructor(private itemWideService: ItemWideService,
               private staffProductService: StaffProductBlueprintService,
