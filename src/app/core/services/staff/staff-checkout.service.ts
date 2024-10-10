@@ -3,7 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {StatusStatsI} from '../../../shared/models/stats/transactionStats';
-import {StaffCheckoutI, StaffCheckoutPatchI, StaffCreateCheckoutI} from '../../../shared/models/staff/staff_checkout';
+import {StaffCheckoutI, StaffCheckoutPatchI} from '../../../shared/models/staff/staff_checkout';
+import {CheckoutInI} from "@ingenium/app/shared/models/checkout/checkoutModels";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class StaffCheckoutService {
   apiUrl = apiEnviroment.apiUrl + 'checkout';
 
   public getCheckouts(offset: number = 0, count: number = 50,
-    item: string | null = null,
+    item: number | null = null,
     user_id: string | null = null,
     status: string | null = null,
     user_email: string | null = null,
@@ -42,7 +43,7 @@ export class StaffCheckoutService {
   }
 
   public getCheckoutStats(
-    item: string | null = null,
+    item: number | null = null,
     user_id: string | null = null): Observable<StatusStatsI> {
     let query_str = '?';
     if (item !== null) {
@@ -75,7 +76,7 @@ export class StaffCheckoutService {
     return this.httpClient.get<boolean>(this.apiUrl + '/email/' + checkout_id);
   }
 
-  public createCheckout(checkoutObj: StaffCreateCheckoutI, forceCreate: boolean = false, sendMail: boolean = false, createMissingUser: boolean = false): Observable<StaffCheckoutI> {
+  public createCheckout(checkoutObj: CheckoutInI, forceCreate: boolean = false, sendMail: boolean = false, createMissingUser: boolean = false): Observable<StaffCheckoutI> {
     const createParams = '?force_create=' + String(forceCreate) + '&send_mail=' + String(sendMail) + '&create_user_if_none=' + String(createMissingUser);
     return this.httpClient.post<StaffCheckoutI>(this.apiUrl + createParams, checkoutObj);
   }
