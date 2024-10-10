@@ -9,9 +9,9 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import {AsyncPipe, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {AsyncPipe, KeyValuePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {Observable, of} from 'rxjs';
-import {IProductItem} from '../../../../models/items/products/products';
+import {IProductItem, PaymentProviderEnum} from '../../../../models/items/products/products';
 import {ValidityOptions} from '../../../../models/items/validity';
 import {HttpErrorResponse} from '@angular/common/http';
 import {StaffCheckoutService} from '@ingenium/app/core/services/staff/staff-checkout.service';
@@ -32,7 +32,8 @@ import {CheckoutInI} from "@ingenium/app/shared/models/checkout/checkoutModels";
     NgForOf,
     AsyncPipe,
     NgIf,
-    NgStyle
+    NgStyle,
+    KeyValuePipe
   ],
   standalone: true
 })
@@ -46,7 +47,7 @@ export class CreateCheckoutComponent implements OnInit {
 
   products$: Observable<IProductItem[]> = of();
 
-  paymentProvidors = ['free', 'stripe (wip)', 'kassa'];
+  paymentProviders = PaymentProviderEnum;
 
 
   formError: string | null = null;
@@ -101,8 +102,7 @@ export class CreateCheckoutComponent implements OnInit {
     const validityDefault = this.forceEnabled() ? null: 'Kies Validity'; // Validity 2 is invalid
     const transactionGroup = this.formBuilder.group({
       'productControl': ['Kies Product', Validators.required],
-      'validityControl': [{value: validityDefault, disabled: !this.forceEnabled()}],
-      'countControl': [1, [Validators.required, Validators.min(1)]]
+      'validityControl': [{value: validityDefault, disabled: !this.forceEnabled()}]
     });
     transactionGroup.controls['productControl'].valueChanges.subscribe((value) => {
     })
@@ -190,7 +190,6 @@ export class CreateCheckoutComponent implements OnInit {
   parseTransactionFormGroup(userValue: string, formGroup: FormGroup): TransactionInI {
     const productControl: IProductItem = formGroup.controls['productControl'].value;
     const validityControl: number = formGroup.controls['validityControl'].value;
-    const countControl: number = formGroup.controls['countControl'].value;
     return {
       user_email: userValue,
       item_id: this.item_id!,
