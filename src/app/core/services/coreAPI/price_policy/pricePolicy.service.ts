@@ -20,8 +20,8 @@ export class PricePolicyService {
   public putPricePolicy(price_policy: PricePolicyI): Observable<PricePolicyI> {
     return this.httpClient.put<PricePolicyI>(`${this.apiUrl}${price_policy.id}`, price_policy);
   }
-  public deleteItem(pricePolicyId: number): void {
-    this.httpClient.delete(`${this.apiUrl}${pricePolicyId}`);
+  public deletePricePolicy(pricePolicyId: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}${pricePolicyId}`);
   }
   public createPricePolicy(pricePolicyIn: PricePolicyInI): Observable<PricePolicyI> {
     return this.httpClient.post<PricePolicyI>(this.apiUrl, pricePolicyIn);

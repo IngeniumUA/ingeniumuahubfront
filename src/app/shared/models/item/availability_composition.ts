@@ -3,6 +3,8 @@ import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/acce
 export interface AvailabilityCompositionI {
   disabled: boolean
   available: boolean
+  dynamic_policy_type: AccessPolicyEnum | null
+  dynamic_policy_content: string | null
 }
 
 export interface AvailabilityCompositionInI {

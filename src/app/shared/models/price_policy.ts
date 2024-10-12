@@ -5,7 +5,7 @@ import {
 
 export interface PricePolicyI {
   id: number
-  name: string
+  name: string | null
   price: number
 
   product_blueprint_id: number

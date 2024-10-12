@@ -35,9 +35,6 @@ import {
   ItemCreateComponent
 } from '../../shared/components/staff_webmaster_manager/create/item-create/item-create.component';
 import {
-  AccessPolicyDetailComponent
-} from '../../shared/components/staff_webmaster_manager/details/access-policy/access-policy-detail/access-policy-detail.component';
-import {
   ProductBlueprintDashboardComponent
 } from '../../shared/components/staff_webmaster_manager/dashboards/product-blueprint-dashboard/product-blueprint-dashboard.component';
 import {
@@ -89,7 +86,6 @@ import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
         ProductBlueprintDashboardComponent,
         CardTableComponent,
         TransactionTableComponent,
-        AccessPolicyDetailComponent,
         ItemCreateComponent,
         ProductBlueprintCreateComponent,
         ProductBlueprintDetailComponent,
