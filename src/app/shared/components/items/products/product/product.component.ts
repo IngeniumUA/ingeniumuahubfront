@@ -50,13 +50,21 @@ export class ProductComponent implements OnInit, OnDestroy {
     // Get count field and detect valuechange, then subscribe to every change
     this.formSubscription = this.productForm.get('count')?.valueChanges
       .subscribe((value: number | null) => {
-        value = value ?? 0; // If null, set to 0
+        // Take either 0 if lower, or max_count if higher
+        value = Math.max(0, Math.min(value ?? 0, this.product.max_count));
 
-        if (value < 0) {
-          this.PatchInputValue(0);
-        }
-        if (this.product.max_count < value) {
-          this.PatchInputValue(this.product.max_count);
+        // Get the current product quantity and the difference between the given value
+        const currentQuantity = this.store.selectSignal(CartState.getProductQuantity(this.product, true))()
+        const delta = currentQuantity - value;
+        if (delta === 0) return; // Don't do anything if it's equal
+
+        // When our delta is smaller, we have requested more than are in our cart
+        if (delta < 0) {
+          this.store.dispatch(new CartActions.AddToCart(this.product, Math.abs(delta)));
+
+        // When our delta is larger, there are more in our cart than requested
+        } else if (delta > 0) {
+          this.store.dispatch(new CartActions.ReduceProductQuantity(this.product, Math.abs(delta)));
         }
       });
   }

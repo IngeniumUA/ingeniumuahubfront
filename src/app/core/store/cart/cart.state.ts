@@ -80,13 +80,16 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.AddToCart)
   addToCart(ctx: StateContext<CartStateModel>, action: CartActions.AddToCart) {
-    // Create a copy of the product
-    const product = structuredClone(action.product);
+    const productsToAdd: IProductItem[] = [];
+    while (action.count > 0) {
+      productsToAdd.push(structuredClone(action.product));
+      action.count--;
+    }
 
     ctx.patchState({
       products: [
         ...ctx.getState().products,
-        product
+        ...productsToAdd
       ]
     });
 
@@ -113,7 +116,12 @@ export class CartState implements NgxsOnInit {
     }, [] as number[]);
     if (foundIndexes.length <= 0) return;
 
-    ctx.dispatch(new CartActions.RemoveFromCart(foundIndexes[0]));
+    let countToRemove = Math.min(foundIndexes.length, action.count);
+    while (countToRemove > 0) {
+      ctx.dispatch(new CartActions.RemoveFromCart(foundIndexes[
+        --countToRemove
+      ]));
+    }
   }
 
   @Action(CartActions.StoreInLocalStorage)
@@ -131,7 +139,6 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.SetPaymentMethod)
   setPaymentMethod(ctx: StateContext<CartStateModel>, action: CartActions.SetPaymentMethod) {
-    console.log('Setting payment method to:', action.payment_provider);
     ctx.patchState({
       paymentProvider: action.payment_provider
     });
@@ -144,8 +151,4 @@ export class CartState implements NgxsOnInit {
     });
   }
 
-  @Action(CartActions.Checkout)
-  checkout(_ctx: StateContext<CartStateModel>, _action: CartActions.Checkout) {
-    // ...
-  }
 }

@@ -4,7 +4,7 @@ export namespace CartActions {
   export class AddToCart {
     static readonly type = '[Cart] Add to Cart';
 
-    constructor(public product: IProductItem) {}
+    constructor(public product: IProductItem, public count: number = 1) {}
   }
 
   export class RemoveFromCart {
@@ -14,7 +14,7 @@ export namespace CartActions {
 
   export class ReduceProductQuantity {
     static readonly type = '[Cart] Reduce Quantity';
-    constructor(public product: IProductItem) {}
+    constructor(public product: IProductItem, public count: number = 1) {}
   }
 
   export class FetchCart {

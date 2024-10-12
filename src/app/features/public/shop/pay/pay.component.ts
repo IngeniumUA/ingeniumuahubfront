@@ -47,6 +47,7 @@ export class PayComponent implements OnInit {
 
     // Clear the cart
     this.store.dispatch(new CartActions.ClearCart());
+    this.store.dispatch(new CartActions.SetCheckoutNote(''));
   }
 
   processCheckoutResponse(response: CheckoutResponseI) {
