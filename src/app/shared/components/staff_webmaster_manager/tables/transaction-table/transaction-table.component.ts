@@ -21,7 +21,7 @@ import {CurrencyPipe} from '../../../../pipes/currency.pipe';
 import {ValidityOptions} from '../../../../models/items/validity';
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
-import {TransactionI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
 
 @Component({

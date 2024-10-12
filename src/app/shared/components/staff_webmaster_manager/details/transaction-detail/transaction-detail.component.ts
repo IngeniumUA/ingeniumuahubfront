@@ -6,7 +6,7 @@ import {StatusOptions} from '../../../../models/items/status';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {IProductItem} from '../../../../models/items/products/products';
-import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
 import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
 

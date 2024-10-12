@@ -5,7 +5,7 @@ import {apiEnviroment} from '@ingenium/environments/environment';
 import {StatusStatsI} from "@ingenium/app/shared/models/stats/transactionStats";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
-import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 

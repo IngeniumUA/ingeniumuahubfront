@@ -1,4 +1,4 @@
-import {TransactionInI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionInI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 
 export interface CheckoutI {

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {TransactionLimitedI} from '../../../../core/services/user/account/account.service';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
 @Component({
   selector: 'app-transaction-display',
   templateUrl: './transaction-display.component.html',
