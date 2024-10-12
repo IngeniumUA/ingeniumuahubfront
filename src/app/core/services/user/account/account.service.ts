@@ -14,7 +14,7 @@ export interface InteractionI {
   user_id: string
 }
 
-export interface TransactionI {
+export interface TransactionLimitedI {
   interaction: InteractionI
   purchased_product: IProductItem
   note: string
@@ -44,7 +44,7 @@ export class AccountService {
     return this.httpClient.get<CardLimitedI>(apiEnviroment.apiUrl + 'card/' + card_uuid);
   }
 
-  public getTransactions(): Observable<TransactionI[]> {
-    return this.httpClient.get<TransactionI[]>(apiEnviroment.apiUrl + 'account/transactions');
+  public getTransactions(): Observable<TransactionLimitedI[]> {
+    return this.httpClient.get<TransactionLimitedI[]>(apiEnviroment.apiUrl + 'account/transactions');
   }
 }

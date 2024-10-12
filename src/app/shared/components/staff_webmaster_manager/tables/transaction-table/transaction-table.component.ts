@@ -10,9 +10,7 @@ import {
 } from '@angular/core';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import {StaffTransactionService} from '../../../../../core/services/staff/staff-transaction.service';
-import {StaffTransactionI} from '../../../../models/staff/staff_transaction';
-import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle, TitleCasePipe} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
@@ -21,6 +19,10 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
 import {ValidityOptions} from '../../../../models/items/validity';
+import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
+import {TransactionI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
 
 @Component({
   selector: 'app-transaction-table',
@@ -38,12 +40,14 @@ import {ValidityOptions} from '../../../../models/items/validity';
     NgClass,
     NgStyle,
     ReactiveFormsModule,
-    CurrencyPipe
+    CurrencyPipe,
+    KeyValuePipe,
+    TitleCasePipe
   ],
   standalone: true
 })
 export class TransactionTableComponent implements AfterViewInit, OnChanges, OnInit {
-  constructor(private staffTransactionService: StaffTransactionService,
+  constructor(private transactionService: TransactionService,
               private datePipe: DatePipe) {
   }
   @Input() item_id: number | null = null;
@@ -52,11 +56,19 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   @Input() loadDataEvent: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed'];
-  statusStats$!: Observable<StatusStatsI>;
-  selectedStatus: string = 'All';
+  statusColumns = [
+    PaymentStatusEnum.all,
+    PaymentStatusEnum.successful,
+    PaymentStatusEnum.cancelled,
+    PaymentStatusEnum.failed,
+    PaymentStatusEnum.pending,
+    PaymentStatusEnum.refunded,
+  ]
 
-  transactionData$: Observable<StaffTransactionI[]> = of([]);
+  statusStats$!: Observable<StatusStatsI>;
+  selectedStatus: number | PaymentStatusEnum = 0;
+
+  transactionData$: Observable<TransactionI[]> = of([]);
 
   blob!: Blob;
 
@@ -77,7 +89,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   }
 
   GetDisplayedColumns(): string[] {
-    const columns = ['interaction_id', 'amount', 'status', 'product', 'validity', 'date_completed', 'date_created'];
+    const columns = ['interaction_id', 'amount', 'product_blueprint', 'status', 'validity', 'completed_timestamp', 'created_timestamp'];
 
     // Add if not Input()
     if (this.item_id === null) {
@@ -87,7 +99,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
       columns.splice(columns.indexOf('interaction_id'), 0, 'user');
     }
     if (this.checkout_id === null) {
-      columns.splice(0, 0, 'checkout_id');
+      columns.splice(0, 0, 'checkout_uuid');
     }
 
     return columns;
@@ -121,7 +133,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   }
 
   LoadData(pageEvent: PageEvent | null = null) {
-    const status = this.selectedStatus === 'All' ? null: this.selectedStatus;
+    const status = this.selectedStatus === 0 ? null: this.selectedStatus;
 
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
@@ -130,78 +142,94 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     const validityControlValue = this.searchForm.get('validityControl')!.value;
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
-    const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
+    const interactionQuery = interactionIdControlValue === '' || interactionIdControlValue === null ? null: parseInt(interactionIdControlValue);
     const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
-    const validityQuery = validityControlValue === '' ? null: validityControlValue;
+    const validityQuery = validityControlValue === '' || validityControlValue === null ? null: parseInt(validityControlValue);
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
-    this.transactionData$ = this.staffTransactionService.getTransactions(
-      pageIndex * pageSize, pageSize, this.item_id, this.user_id, this.checkout_id, status,
-      emailQuery, interactionQuery, productNameQuery, validityQuery);
+    this.transactionData$ = this.transactionService.queryTransactions(
+      pageIndex * pageSize, pageSize,
+      this.item_id, this.user_id, interactionQuery,
+      status,
+      null, // TODO Validity
+      null, null,
+      productNameQuery,
+      null,
+      null);
 
     // Transactionstats
-    this.statusStats$ = this.staffTransactionService.getTransactionStats(this.item_id, this.user_id, this.checkout_id,
-      status, emailQuery, interactionQuery, productNameQuery, validityQuery);
+    this.statusStats$ = this.transactionService.transactionCountGroupByStatus(
+      this.item_id, this.user_id, interactionQuery,
+      status,
+      validityQuery,
+      null, null,
+      productNameQuery,
+      null,
+      null);
   }
 
-  SwitchStatusFilter(status: string) {
+  SwitchStatusFilter(status: number) {
     this.selectedStatus = status;
     this.LoadData();
   }
 
-  StatusToStats(status: string, statsObject: StatusStatsI): number {
-    if (status === 'All') {
-      return statsObject.ALL;
+  StatusToStats(status: number, statsObject: StatusStatsI): number {
+    if (status === 0) {  // '0' is all
+      return statsObject["0"];
     }
-    if (status === 'Successful') {
-      return statsObject.SUCCESSFUL;
+    else if (status === PaymentStatusEnum.successful) {
+      return statsObject[PaymentStatusEnum.successful];
     }
-    if (status === 'Failed') {
-      return statsObject.FAILED;
+    else if (status === PaymentStatusEnum.failed) {
+      return statsObject[PaymentStatusEnum.failed];
     }
-    if (status === 'Cancelled' || status === 'Refunded') {
-      return statsObject.CANCELLED;
+    else if (status === PaymentStatusEnum.cancelled
+      || status === PaymentStatusEnum.refunded
+      || status === PaymentStatusEnum.partially_refunded) {
+      return statsObject[PaymentStatusEnum.cancelled] + statsObject[PaymentStatusEnum.refunded] + statsObject[PaymentStatusEnum.partially_refunded];
     }
-    if (status === 'Pending' || status === 'Refund_pending') {
-      return statsObject.PENDING;
+    else if (status === PaymentStatusEnum.pending  || status === PaymentStatusEnum.refund_pending) {
+      return statsObject[PaymentStatusEnum.pending] + statsObject[PaymentStatusEnum.refund_pending];
     }
     return 0;
   }
 
-  StyleClassFromStatus(status: string): string {
-    if (status === 'SUCCESSFUL') {
+  StyleClassFromStatus(status: number): string {
+    if (status === PaymentStatusEnum.successful) {
       return 'SUCCESSFUL-text';
-    } else if (status === 'PENDING' || status === 'REFUND_PENDING') {
+    } else if (status === PaymentStatusEnum.pending || status === PaymentStatusEnum.refund_pending) {
       return 'PENDING-text';
-    } else if (status === 'CANCELLED' || status === 'REFUNDED') {
+    } else if (status === PaymentStatusEnum.cancelled
+      || status === PaymentStatusEnum.refunded
+      || status === PaymentStatusEnum.partially_refunded) {
       return 'CANCELLED-text';
-    } else if (status === 'FAILED') {
+    } else if (status === PaymentStatusEnum.failed) {
       return 'FAILED-text';
     }
     return '';
   }
 
-  StyleClassFromValidity(validity: string): string {
-    if (validity === 'valid') {
+  StyleClassFromValidity(validity: number): string {
+    if (validity === ValidityEnum.valid) {
       return 'SUCCESSFUL-text';
-    } else if (validity === 'invalid') {
+    } else if (validity === ValidityEnum.invalid) {
       return 'PENDING-text';
-    } else if (validity === 'consumed') {
+    } else if (validity === ValidityEnum.consumed) {
       return 'CANCELLED-text';
-    } else if (validity === 'manually_verified') {
+    } else if (validity === ValidityEnum.manually_verified) {
       return 'CANCELLED-text';
-    } else if (validity === 'forbidden') {
+    } else if (validity === ValidityEnum.forbidden) {
       return 'FAILED-text';
     }
     return '';
   }
 
   DownloadData() {
-    const status = this.selectedStatus === 'All' ? null: this.selectedStatus;
+    const status = 0 ? null: this.selectedStatus;
 
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
@@ -210,16 +238,21 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     const validityControlValue = this.searchForm.get('validityControl')!.value;
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
-    const interactionQuery = interactionIdControlValue === '' ? null: interactionIdControlValue;
+    const interactionQuery = interactionIdControlValue === '' || interactionIdControlValue === null ? null: parseInt(interactionIdControlValue);
     const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
-    const validityQuery = validityControlValue === '' ? null: validityControlValue;
+    const validityQuery = validityControlValue === '' || validityControlValue === null ? null: parseInt(validityControlValue);
 
     const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
     'product_id', 'product_name', 'amount', 'transaction_status',
       'date_created', 'date_completed', 'validity', 'currency', 'payment_provider']
 
-    this.staffTransactionService.getTransactionsExport(fields, this.item_id, this.user_id, this.checkout_id, status,
-      emailQuery, interactionQuery, productNameQuery, validityQuery).subscribe((data) => {
+    this.transactionService.getTransactionsExport(fields, this.item_id, this.user_id, interactionQuery,
+      this.selectedStatus,
+      validityQuery,
+      null, null,
+      productNameQuery,
+      null,
+      null).subscribe((data) => {
       const date = new Date();
       const pipedDate = this.datePipe.transform(date, 'dd-MM-yyyy');
 
@@ -240,4 +273,6 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   }
 
   protected readonly ValidityOptions = ValidityOptions;
+  protected readonly PaymentStatusEnum = PaymentStatusEnum;
+  protected readonly ValidityEnum = ValidityEnum;
 }

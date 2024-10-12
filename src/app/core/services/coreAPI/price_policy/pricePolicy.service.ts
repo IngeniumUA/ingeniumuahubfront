@@ -13,7 +13,7 @@ export class PricePolicyService {
   apiUrl = apiEnviroment.apiUrl + 'blueprint/price_policy/';
 
   public getPricePolicies(blueprint_id: number | null = null): Observable<PricePolicyI[]> {
-    const queryStr = blueprint_id === null ? "" : `$?blueprint_id=${blueprint_id}`
+    const queryStr = blueprint_id === null ? "" : `?blueprint_id=${blueprint_id}`
 
     return this.httpClient.get<PricePolicyI[]>(`${this.apiUrl}${queryStr}`);
   }
