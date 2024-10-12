@@ -4,9 +4,9 @@
   <section>
     <ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
       <ng-container *ngIf="data.event as event; else loading">
-        <section class="event-banner">
-          <img src='{{event.derived_type.display.image_landscape}}' alt="" aria-hidden="true">
-        </section>
+        <div>
+          <img src='{{event.derived_type.display.image_landscape}}' alt="" aria-hidden="true" class="max-h-full sm:max-h-64 md:max-h-72 w-full mx-auto">
+        </div>
 
         <nav role="tablist" class="categorie-section" [ngStyle]="{'background-color': (event.derived_type.display.color | colordbrgba: 1) }">
           <button class="categorie-button"
@@ -25,20 +25,19 @@
           <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
             <h3>{{ product_group.group_name }}</h3>
             <div class="products">
-              <ng-container *ngFor="let product of this.product_group.products">
-                <app-product [onInitValue]="this.GetCurrentProductCount(event, product)"
-                             [product]="product"
+              @for (product of this.product_group.products; track product.id) {
+                <app-product [product]="product"
                              [primaryColorFull]="(event.derived_type.display.color | colordbrgba: 1)"
                              [primaryColorHalf]="(event.derived_type.display.color | colordbrgba: 0.5)"
-                             [itemId]="this.eventId"
-                             (countEvent)="this.SetProductCount(event, product, $event)" />
-              </ng-container>
+                             [itemId]="this.eventId" />
+              }
             </div>
           </div>
         </section>
 
         <div class="order-section flex flex-row gap-3">
-          <button [disabled]="this.isCartEmpty" class="button button-primary" [routerLink]="['/shop/checkout']">Checkout</button>
+          @let productCount = (this.isCartEmpty$ | async);
+          <button [disabled]="productCount && productCount <= 0" class="button button-primary" [routerLink]="['/shop/checkout']">Checkout</button>
         </div>
 
         <div class="description-section">
