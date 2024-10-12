@@ -36,7 +36,7 @@ export class ItemTableComponent implements OnInit {
   public GetDisplayedColumns(roles: UserRolesI): string[] {
     const displayed_columns = ['name', 'available', 'disabled', 'created_at', 'modified_at'];
     if (roles.is_manager || roles.is_webmaster) {
-      displayed_columns.splice(0, 0, 'uuid'); // TODO Add 'disabled' here
+      displayed_columns.splice(0, 0, 'id'); // TODO Add 'disabled' here
     }
     return displayed_columns;
   }

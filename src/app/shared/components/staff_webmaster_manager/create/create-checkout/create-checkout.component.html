@@ -11,8 +11,8 @@
         PaymentType:
         <select formControlName="paymentProvider">
           <option [ngValue]="null" disabled selected>Kies PaymentProvidor</option>
-          <option *ngFor="let paymentProvider of paymentProviders | keyvalue" [ngValue]="paymentProvider.value">
-            {{ paymentProvider.key }}
+          <option *ngFor="let paymentProvider of paymentProviders" [ngValue]="paymentProvider">
+            {{ PaymentProviderEnum[paymentProvider] }}
           </option>
         </select>
       </label>
