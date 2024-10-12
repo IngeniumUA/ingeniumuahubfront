@@ -38,11 +38,11 @@ export class CheckoutDetailComponent implements OnInit {
     }
     this.checkout_id = id;
 
-    this.FetchData();
+    this.LoadData();
   }
 
 
-  public FetchData(patchedTransaction: boolean = false) {
+  public LoadData(patchedTransaction: boolean = false) {
     this.loading = true;
     this.checkoutDetail$ = this.checkoutService.getCheckout(this.checkout_id);
     this.transactions$ = this.staffTransactionService.getTransactions(0, 100, null, null, this.checkout_id);
@@ -67,7 +67,7 @@ export class CheckoutDetailComponent implements OnInit {
     const forceRefund = true; // TODO Place this param in a form
     this.checkoutService.refundCheckout(this.checkout_id, forceRefund).subscribe(
       (_checkout) => {
-        this.FetchData();
+        this.LoadData();
         this.successMessage = 'Refund started!';
       },
       (error: Error) => {

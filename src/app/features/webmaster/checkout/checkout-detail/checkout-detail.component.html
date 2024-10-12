@@ -45,6 +45,12 @@
     <button class="button button-primary w-1/6 button-inline"
             [disabled]="this.loading"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            (click)="LoadData()">
+      Refresh</button>
+
+    <button class="button button-primary w-1/6 button-inline"
+            [disabled]="this.loading"
+            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="Patch()">
       Update</button>
 
@@ -75,7 +81,7 @@
   <h1 class="text-blue-900">Edit transactions</h1>
   <ng-container *ngIf="(transactions$ | async) as transactions else loadingData">
   <ng-container *ngFor="let transaction of  transactions">
-  <app-transaction-detail (PatchedTransaction)="FetchData(true)"
+  <app-transaction-detail (PatchedTransaction)="LoadData(true)"
                           [transaction]="transaction"></app-transaction-detail>
   </ng-container>
   </ng-container>
