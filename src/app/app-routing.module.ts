@@ -58,11 +58,11 @@ const routes: Routes = [
     ]},
 
   //** Popupz **//
-  {
+  /*{
     path: 'popupz',
     loadChildren: () => import('src/app/features/popupz/popupz.module').then(x => x.PopupzModule),
   },
-  { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },
+  { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },*/
 
   //** Employee **//
 

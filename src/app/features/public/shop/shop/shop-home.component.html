@@ -4,6 +4,8 @@
   <h1 class="white-section-title white-section-title-blue white-section-title-large">Shop</h1>
   <p>Hier kan je de producten van Ingenium bekijken en bestellen.</p>
 
+  <a [routerLink]="'/shop/checkout'">Winkelwagen</a>
+
   <section *ngIf="this.shopitems$ | async as shopItems; else noShopItems">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" *ngIf="shopItems.length > 0">
       <app-rec-sys-item-preview [recsysItem]="item" *ngFor="let item of shopItems" />

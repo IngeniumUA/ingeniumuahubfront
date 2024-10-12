@@ -1,9 +1,11 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {IProductItem} from '../../../../models/items/products/products';
 import {NgIf, NgStyle} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Subject, takeUntil} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {Router} from '@angular/router';
+import {Store} from "@ngxs/store";
+import {CartActions, CartState} from "@ingenium/app/core/store";
 
 @Component({
   selector: 'app-product',
@@ -19,63 +21,74 @@ import {Router} from '@angular/router';
 export class ProductComponent implements OnInit, OnDestroy {
   @Input() product!: IProductItem;
   @Input() itemId: string | null = null;
-  @Input() onInitValue: number = 0;
   @Input() primaryColorFull!: string;
   @Input() primaryColorHalf!: string;
-  @Output() countEvent: EventEmitter<number> = new EventEmitter<number>();
 
-  productHint: string | null = null;
-
+  formSubscription: Subscription|undefined;
   productForm = this.formBuilder.group({
     count: [0, Validators.min(0)]
   });
+
   constructor(private formBuilder: FormBuilder,
+              private store: Store,
               private router: Router) {
   }
+
   ngOnInit() {
     // Set max validator dynamically because it depends on product interface (which needs to be loaded)
     this.productForm.get('count')?.addValidators(Validators.max(this.product.max_count));
 
-    // Set initial value (which is saved in parent component
-    this.productForm.patchValue({
-      count: this.onInitValue
-    });
-
-    // Form input correction
+    this.SetQuantityFromStore();
     this.ValueChangePipeline();
+  }
+
+  ngOnDestroy() {
+    this.formSubscription?.unsubscribe();
   }
 
   ValueChangePipeline() {
     // Get count field and detect valuechange, then subscribe to every change
-    this.productForm.get('count')?.valueChanges.pipe(
-      takeUntil(this.ngUnsubscribe)) // Unsubscribe behaviour
+    this.formSubscription = this.productForm.get('count')?.valueChanges
       .subscribe((value: number | null) => {
-        value = value ?? 0; // If null, set to 0
+        // Take either 0 if lower, or max_count if higher
+        value = Math.max(0, Math.min(value ?? 0, this.product.max_count));
 
-        this.countEvent.emit(value); // Emit Value
+        // Get the current product quantity and the difference between the given value
+        const currentQuantity = this.store.selectSignal(CartState.getProductQuantity(this.product, true))()
+        const delta = currentQuantity - value;
+        if (delta === 0) return; // Don't do anything if it's equal
 
-        if (value < 0) { // Set to 0 if value is negative
-          this.productForm.patchValue({
-            count: 0
-          });}
-        if (this.product.max_count < value) { // Set to max_count if value is higher
-          this.productForm.patchValue({
-            count: this.product.max_count
-          });}
-      }
-      );
+        // When our delta is smaller, we have requested more than are in our cart
+        if (delta < 0) {
+          this.store.dispatch(new CartActions.AddToCart(this.product, Math.abs(delta)));
+
+        // When our delta is larger, there are more in our cart than requested
+        } else if (delta > 0) {
+          this.store.dispatch(new CartActions.ReduceProductQuantity(this.product, Math.abs(delta)));
+        }
+      });
   }
 
-  TryIncreaseCount(): void {
-    this.productForm.patchValue({
-      count: (this.productForm.get('count')!.value ?? 0) + 1
-    });
+  TryIncreaseCount()  {
+    this.store.dispatch(new CartActions.AddToCart(this.product));
+    this.SetQuantityFromStore();
   }
 
-  TryDecreaseCount(): void {
-    this.productForm.patchValue({
-      count: (this.productForm.get('count')!.value ?? 0) - 1
-    });
+  TryDecreaseCount()  {
+    this.store.dispatch(new CartActions.ReduceProductQuantity(this.product));
+    this.SetQuantityFromStore();
+  }
+
+  SetQuantityFromStore() {
+    // We can use an observer. However, that may cause issues cuz we're also listening to the value changes from the
+    // input field.
+    this.PatchInputValue(
+      this.store.selectSignal(CartState.getProductQuantity(this.product, true))()
+    );
+  }
+
+  PatchInputValue(count: number = 0) {
+    this.productForm.patchValue({ count });
   }
 
   StyleInput() {
@@ -87,12 +100,6 @@ export class ProductComponent implements OnInit, OnDestroy {
     return {'text-decoration' :'underline 2px solid gray',
       '-webkit-text-decoration-color': 'gray',
       '-webkit-text-decoration-thickness': '3px'};
-  }
-
-  private ngUnsubscribe = new Subject<void>();
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
   }
 
   ToLogin() {
