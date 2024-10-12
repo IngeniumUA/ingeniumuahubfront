@@ -2,13 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
-import {IProductCategorie, IProductGroup, IProductItem} from '@ingenium/app/shared/models/items/products/products';
+import {IProductCategorie, IProductGroup} from '@ingenium/app/shared/models/items/products/products';
 import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {map} from 'rxjs/operators';
-import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
 import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {Store} from "@ngxs/store";
+import {CartState} from "@ingenium/app/core/store";
 
 
 @Component({
@@ -17,16 +18,9 @@ import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
   styleUrls: ['./event-detail.component.scss']
 })
 export class EventDetailComponent implements OnInit {
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private layoutService: LayoutService,
-              private eventService: EventService,
-              private cartService: CartService,
-              private productService: ProductsService) {
-  }
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  isCartEmpty: boolean = !this.cartService.hasTransactions();
+  isCartEmpty$: Observable<number>;
   // Event Info and Deco
   eventId!: string;
   event$!: Observable<ItemWideLimitedI>;
@@ -35,6 +29,15 @@ export class EventDetailComponent implements OnInit {
   productCategories$!: Observable<IProductCategorie[]>;
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentProductGroups!: Observable<IProductGroup[]>;
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private layoutService: LayoutService,
+              private eventService: EventService,
+              private productService: ProductsService,
+              store: Store) {
+    this.isCartEmpty$ = store.select(CartState.getProductCount);
+  }
 
   ngOnInit() {
     // Fetch ID
@@ -76,6 +79,7 @@ export class EventDetailComponent implements OnInit {
     }));
     this.currentProductCategorieIndex$.next(index);
   }
+
   currentCategorie$(): Observable<string | null> {
     return this.productCategories$.pipe(map((productGroups) => {
       if (productGroups.length == 0) {
@@ -83,17 +87,5 @@ export class EventDetailComponent implements OnInit {
       }
       return productGroups[this.currentProductCategorieIndex$.value].categorie_name;
     }));
-  }
-
-  GetCurrentProductCount(item: ItemWideLimitedI, product: IProductItem): number {
-    return this.cartService.getProductCount(item.item, product);
-  }
-  SetProductCount(item: ItemWideLimitedI, product: IProductItem, count: number) {
-    this.cartService.setProductCount(item.item, product, count);
-    this.isCartEmpty = !this.cartService.hasTransactions();
-  }
-
-  ToLogin() {
-    this.router.navigateByUrl('/login?next=/event/'+ this.eventId);
   }
 }

@@ -1,4 +1,4 @@
-import {Action, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
+import {Action, createSelector, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
 import {Injectable} from "@angular/core";
 import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
@@ -51,6 +51,24 @@ export class CartState implements NgxsOnInit {
   @Selector()
   static getProductCount(state: CartStateModel): number {
     return state.products.length;
+  }
+
+
+  /**
+   * Get the quantity of the product in the cart.
+   * @param product the product you which to check
+   * @param checkPricePolicy true if you should match on price policy too. Default = false
+   */
+  static getProductQuantity(product: IProductItem, checkPricePolicy: boolean = false) {
+    return createSelector([CartState], (state: CartStateModel): number => {
+      return state.products.filter((p) => {
+        const isSameProduct = p.id === product.id;
+        if (checkPricePolicy) {
+          return isSameProduct && p.price_policy.id === product.price_policy.id;
+        }
+        return isSameProduct;
+      }).length;
+    });
   }
 
   // =======================================
