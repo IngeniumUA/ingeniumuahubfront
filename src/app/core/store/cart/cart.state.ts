@@ -139,7 +139,6 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.SetPaymentMethod)
   setPaymentMethod(ctx: StateContext<CartStateModel>, action: CartActions.SetPaymentMethod) {
-    console.log('Setting payment method to:', action.payment_provider);
     ctx.patchState({
       paymentProvider: action.payment_provider
     });
