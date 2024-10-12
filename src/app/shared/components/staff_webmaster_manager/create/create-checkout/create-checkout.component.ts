@@ -47,8 +47,10 @@ export class CreateCheckoutComponent implements OnInit {
 
   products$: Observable<IProductItem[]> = of();
 
-  paymentProviders = PaymentProviderEnum;
-
+  paymentProviders = [
+    PaymentProviderEnum.Free,
+    PaymentProviderEnum.Kassa
+  ];
 
   formError: string | null = null;
   successMessage: string | null = null;
@@ -67,6 +69,9 @@ export class CreateCheckoutComponent implements OnInit {
   );
 
   ngOnInit() {
+    // TODO if is debug
+    this.paymentProviders.push(PaymentProviderEnum.Dev)
+
     this.products$ = this.staffProductService.getProducts(0, 50, this.item_id);
     this.checkoutForm.controls['forceCreateControl'].valueChanges.subscribe((forceCreateValue) => {
       this.transactions().controls.forEach((abstract) => {
@@ -201,4 +206,5 @@ export class CreateCheckoutComponent implements OnInit {
   }
 
   protected readonly ValidityOptions = ValidityOptions;
+  protected readonly PaymentProviderEnum = PaymentProviderEnum;
 }
