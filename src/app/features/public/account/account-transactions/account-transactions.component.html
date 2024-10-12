@@ -84,8 +84,8 @@
           </svg>
         </button>-->
 
-        <div *ngIf="qrCodeVisible[transaction.interaction.uuid]" class="transaction-card-qr">
-          <img [src]="qrCode[transaction.interaction.uuid]" alt="QR Code voor deze aankoop">
+        <div *ngIf="qrCodeVisible[transaction.interaction.interaction_uuid]" class="transaction-card-qr">
+          <img [src]="qrCode[transaction.interaction.interaction_uuid]" alt="QR Code voor deze aankoop">
         </div>
       </article>
     }

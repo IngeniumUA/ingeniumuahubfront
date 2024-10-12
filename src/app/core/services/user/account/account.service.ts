@@ -8,10 +8,19 @@ import {IProductItem} from '@ingenium/app/shared/models/items/products/products'
 import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
 
 export interface InteractionI {
-  id: number
+  interaction_id: number
+  interaction_uuid: string
+
+  item_id: number
   item_name: string
-  uuid: string
-  user_id: string
+
+  user_uuid: string
+  user_email: string
+
+  interaction_type: number
+
+  last_updated_timestamp: string
+  created_timestamp: string
 }
 
 export interface TransactionLimitedI {

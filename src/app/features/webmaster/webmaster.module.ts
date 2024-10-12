@@ -60,6 +60,7 @@ import {
 import {
   OrderTrackingComponent
 } from '@ingenium/app/features/webmaster/order-tracking/order-tracking.component';
+import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
 
 
 @NgModule({
@@ -75,27 +76,28 @@ import {
     CheckoutDetailComponent,
     OrderTrackingComponent
   ],
-  imports: [
-    CommonModule,
-    WebmasterRoutingModule,
-    SidenavComponent,
-    GroupTableComponent,
-    PublicHeaderComponent,
-    UserTableComponent,
-    ItemTableComponent,
-    StaffItemDetailComponent,
-    StaffUserDetailComponent,
-    ProductBlueprintDashboardComponent,
-    CardTableComponent,
-    TransactionTableComponent,
-    AccessPolicyDetailComponent,
-    ItemCreateComponent,
-    ProductBlueprintCreateComponent,
-    ProductBlueprintDetailComponent,
-    CheckoutAndTransactionDashboardComponent,
-    CreateCheckoutComponent,
-    TransactionDetailComponent
-  ], providers: [
+    imports: [
+        CommonModule,
+        WebmasterRoutingModule,
+        SidenavComponent,
+        GroupTableComponent,
+        PublicHeaderComponent,
+        UserTableComponent,
+        ItemTableComponent,
+        StaffItemDetailComponent,
+        StaffUserDetailComponent,
+        ProductBlueprintDashboardComponent,
+        CardTableComponent,
+        TransactionTableComponent,
+        AccessPolicyDetailComponent,
+        ItemCreateComponent,
+        ProductBlueprintCreateComponent,
+        ProductBlueprintDetailComponent,
+        CheckoutAndTransactionDashboardComponent,
+        CreateCheckoutComponent,
+        TransactionDetailComponent,
+        CurrencyPipe
+    ], providers: [
     DatePipe
   ]
 })

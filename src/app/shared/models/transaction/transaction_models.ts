@@ -27,3 +27,10 @@ export interface TransactionI {
   purchased_product: IProductItem
   note: string | null
 }
+
+export interface TransactionPatchI {
+  validity: string | null
+  user: string | null
+  user_uuid: string | null
+  product_blueprint_id: number | null
+}

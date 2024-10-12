@@ -1,14 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {StaffTransactionI, StaffTransactionPatchI} from '../../../../models/staff/staff_transaction';
 import {AsyncPipe, DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors} from '@angular/forms';
 import {ValidityOptions} from '../../../../models/items/validity';
 import {StatusOptions} from '../../../../models/items/status';
 import {HttpErrorResponse} from '@angular/common/http';
-import {StaffTransactionService} from '../../../../../core/services/staff/staff-transaction.service';
 import {Observable, of} from 'rxjs';
 import {IProductItem} from '../../../../models/items/products/products';
-import {StaffProductService} from '../../../../../core/services/staff/staff-product.service';
+import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
+import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -25,7 +25,7 @@ import {StaffProductService} from '../../../../../core/services/staff/staff-prod
   standalone: true
 })
 export class TransactionDetailComponent implements OnInit {
-  @Input() transaction!: StaffTransactionI;
+  @Input() transaction!: TransactionI;
   @Output() PatchedTransaction = new EventEmitter<boolean>();
 
   formError: string | null = null;
@@ -36,17 +36,17 @@ export class TransactionDetailComponent implements OnInit {
   transactionForm!: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private transactionService: StaffTransactionService,
-              private staffProductService: StaffProductService) {
+              private transactionService: TransactionService,
+              private blueprintService: StaffProductBlueprintService) {
   }
 
   ngOnInit() {
-    this.products$ = this.staffProductService.getProducts(0, 50, this.transaction.interaction.item_id);
+    this.products$ = this.blueprintService.getProducts(0, 50, this.transaction.interaction.item_id);
     this.transactionForm = this.fb.group({
       'userEmailControl': [this.transaction.interaction.user_email],
       'validityControl': [this.transaction.validity],
-      'statusControl': [{value: this.transaction.status, disabled: !this.forceEnabled()}],
-      'productControl': [this.transaction.product],
+      'statusControl': [{value: this.transaction.transaction_status, disabled: !this.forceEnabled()}],
+      'productControl': [this.transaction.purchased_product.name],
       'noteControl': [this.transaction.note],
       'forcePatchControl': [false]
     });
@@ -76,25 +76,25 @@ export class TransactionDetailComponent implements OnInit {
     // Only add value to patch object if it is different from input
     const patchValidity = validityControlValue !== this.transaction.validity ? validityControlValue : null;
     const patchUserEmail = userControlValue !== this.transaction.interaction.user_email ? userControlValue : null;
-    const patchProduct = productControlValue !== this.transaction.product ? productControlValue : null;
+    const patchProduct = productControlValue !== this.transaction.purchased_product.name ? productControlValue : null;
     //const patchNote = noteValue !== this.transaction.note ? noteValue: null;
 
-    const patchObject: StaffTransactionPatchI = {
+    const patchObject: TransactionPatchI = {
       validity: patchValidity,
       user: patchUserEmail,
-      user_id: null,
-      product: patchProduct
+      user_uuid: null,
+      product_blueprint_id: patchProduct.product_blueprint_id
     };
 
-    if (patchObject.validity === null && patchObject.user === null && patchObject.user_id === null &&
-        patchObject.product === null) {
+    if (patchObject.validity === null && patchObject.user === null && patchObject.user_uuid === null &&
+        patchObject.product_blueprint_id === null) {
       this.successMessage = 'Geen verandering!';
       this.loading = false;
       return;
     }
 
-    this.transactionService.patchTransaction(this.transaction.interaction.id, patchObject, true).subscribe(
-      (transaction: StaffTransactionI) => {
+    this.transactionService.patchTransaction(this.transaction.interaction.interaction_id, patchObject, true).subscribe(
+      (transaction: TransactionI) => {
         this.transaction = transaction;
         this.successMessage = 'Transaction Patched!';
         this.PatchedTransaction.emit(true);
@@ -112,7 +112,7 @@ export class TransactionDetailComponent implements OnInit {
     this.formError = null;
 
     this.loading = true;
-    this.transactionService.emailTransaction(this.transaction.interaction.id).subscribe(
+    this.transactionService.emailTransaction(this.transaction.interaction.interaction_id).subscribe(
       (succes) => {
         if (succes) {
           this.successMessage = 'Email sent!';

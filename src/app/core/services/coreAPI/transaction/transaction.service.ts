@@ -5,7 +5,7 @@ import {apiEnviroment} from '@ingenium/environments/environment';
 import {StatusStatsI} from "@ingenium/app/shared/models/stats/transactionStats";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
-import {TransactionI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transaction_models";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 
@@ -105,5 +105,13 @@ export class TransactionService {
 
     const params = new URLSearchParams(removeNull(param));
     return this.httpClient.get<Blob>(`${this.apiUrl}/export?${params.toString()}`, httpOptions);
+  }
+
+  public patchTransaction(interaction_id: number, patchObj: TransactionPatchI, forcePatch: boolean = false) {
+    return this.httpClient.patch<TransactionI>(`${this.apiUrl}/${interaction_id}?force_patch=${String(forcePatch)}`, patchObj);
+  }
+
+  public emailTransaction(interaction_id: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${this.apiUrl}/email/${String(interaction_id)}`);
   }
 }
