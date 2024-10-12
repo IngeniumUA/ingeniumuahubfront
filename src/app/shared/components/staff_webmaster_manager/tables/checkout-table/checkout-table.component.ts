@@ -13,13 +13,15 @@ import {debounceTime, delay, Observable, of} from 'rxjs';
 import {StatusStatsI} from '../../../../models/stats/transactionStats';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
-import {StaffCheckoutService} from '../../../../../core/services/staff/staff-checkout.service';
-import {StaffCheckoutI, StaffCheckoutPatchI} from '../../../../models/staff/staff_checkout';
-import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
+import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/checkout/checkoutModels";
+import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
+import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 
 @Component({
   selector: 'app-checkout-table',
@@ -36,24 +38,33 @@ import {CurrencyPipe} from '../../../../pipes/currency.pipe';
     ReactiveFormsModule,
     NgClass,
     RouterLink,
-    CurrencyPipe
+    CurrencyPipe,
+    KeyValuePipe,
+    TitleCasePipe
   ],
   standalone: true
 })
 export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit {
 
-  constructor(private staffCheckoutService: StaffCheckoutService) {
+  constructor(private checkoutService: CheckoutService) {
   }
   @Input() user_id: string | null = null;
   @Input() item_id: number | null = null;
   @Input() loadDataEvent: boolean = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  statusFilters: string[] = ['All', 'Successful', 'Cancelled', 'Pending', 'Failed'];
+  statusColumns = [
+    PaymentStatusEnum.all,
+    PaymentStatusEnum.successful,
+    PaymentStatusEnum.cancelled,
+    PaymentStatusEnum.failed,
+    PaymentStatusEnum.pending,
+    PaymentStatusEnum.refunded,
+  ]
   statusStats$!: Observable<StatusStatsI>;
-  selectedStatus: string = 'All';
+  selectedStatus: number | PaymentStatusEnum = 0;
 
-  checkoutData$: Observable<StaffCheckoutI[]> = of([]);
+  checkoutData$: Observable<CheckoutI[]> = of([]);
 
   searchForm = new FormGroup({
     idControl: new FormControl(''),
@@ -61,8 +72,10 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
   });
 
   GetDisplayedColumns(): string[] {
-    const columns = ['checkout_id', 'amount', 'status', 'payment_providor', 'date_completed', 'date_created'];
+    const columns = ['checkout_uuid', 'amount', 'status', 'payment_provider', 'completed_timestamp', 'created_timestamp'];
 
+    // Don't display user column if user is input into this component
+    // For example when viewing all checkouts for a user
     if (this.user_id === null) {
       columns.splice(columns.indexOf('amount'), 0, 'user');
     }
@@ -107,7 +120,7 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
   }
 
   LoadData(pageEvent: PageEvent | null = null) {
-    const status = this.selectedStatus === 'All' ? null: this.selectedStatus;
+    const status = this.selectedStatus === 0 ? null: this.selectedStatus;
 
     // Form parsing
     const emailControlValue = this.searchForm.get('emailControl')!.value;
@@ -121,56 +134,60 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
-    this.checkoutData$ = this.staffCheckoutService.getCheckouts(
+    this.checkoutData$ = this.checkoutService.queryCheckouts(
       pageIndex * pageSize, pageSize, this.item_id, this.user_id, status,
       emailQuery, checkoutIdQuery);
 
     // Transactionstats
-    this.statusStats$ = this.staffCheckoutService.getCheckoutStats(this.item_id, this.user_id);
+    this.statusStats$ = this.checkoutService.checkoutCountGroupByStatus(this.item_id, this.user_id);
   }
 
-  SwitchStatusFilter(status: string) {
+  SwitchStatusFilter(status: number) {
     this.selectedStatus = status;
     this.LoadData();
   }
 
-  StatusToStats(status: string, statsObject: StatusStatsI): number {
-    if (status === 'All') {
-      return statsObject.ALL;
+  StatusToStats(status: number, statsObject: StatusStatsI): number {
+    if (status === 0) {  // '0' is all
+      return statsObject[PaymentStatusEnum.all];
     }
-    if (status === 'Successful') {
-      return statsObject.SUCCESSFUL;
+    else if (status === PaymentStatusEnum.successful) {
+      return statsObject[PaymentStatusEnum.successful];
     }
-    if (status === 'Failed') {
-      return statsObject.FAILED;
+    else if (status === PaymentStatusEnum.failed) {
+      return statsObject[PaymentStatusEnum.failed];
     }
-    if (status === 'Cancelled' || status === 'Refunded') {
-      return statsObject.CANCELLED;
+    else if (status === PaymentStatusEnum.cancelled
+      || status === PaymentStatusEnum.refunded
+      || status === PaymentStatusEnum.partially_refunded) {
+      return statsObject[PaymentStatusEnum.cancelled] + statsObject[PaymentStatusEnum.refunded] + statsObject[PaymentStatusEnum.partially_refunded];
     }
-    if (status === 'Pending' || status === 'Refund_pending') {
-      return statsObject.PENDING;
+    else if (status === PaymentStatusEnum.pending  || status === PaymentStatusEnum.refund_pending) {
+      return statsObject[PaymentStatusEnum.pending] + statsObject[PaymentStatusEnum.refund_pending];
     }
     return 0;
   }
 
-  StyleClassFromStatus(status: string): string {
-    if (status === 'SUCCESSFUL') {
+  StyleClassFromStatus(status: number): string {
+    if (status === PaymentStatusEnum.successful) {
       return 'SUCCESSFUL-text';
-    } else if (status === 'PENDING' || status === 'REFUND_PENDING') {
+    } else if (status === PaymentStatusEnum.pending || status === PaymentStatusEnum.refund_pending) {
       return 'PENDING-text';
-    } else if (status === 'CANCELLED' || status === 'REFUNDED') {
+    } else if (status === PaymentStatusEnum.cancelled
+      || status === PaymentStatusEnum.refunded
+      || status === PaymentStatusEnum.partially_refunded) {
       return 'CANCELLED-text';
-    } else if (status === 'FAILED') {
+    } else if (status === PaymentStatusEnum.failed) {
       return 'FAILED-text';
     }
     return '';
   }
 
-  CancelCheckout(checkout_id: string) {
-    const patchObj: StaffCheckoutPatchI = {
-      status: 'CANCELLED'
+  CancelCheckout(checkout_uuid: string) {
+    const patchObj: CheckoutPatchI = {
+      checkout_status: PaymentStatusEnum.cancelled
     };
-    this.staffCheckoutService.patchCheckout(checkout_id, patchObj).subscribe({
+    this.checkoutService.patchCheckout(checkout_uuid, patchObj).subscribe({
       next: () => {
         // Refetch data on complete
         // This could replace the specific checkout in data
@@ -182,4 +199,7 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
       }
     });
   }
+
+  protected readonly PaymentStatusEnum = PaymentStatusEnum;
+  protected readonly PaymentProviderEnum = PaymentProviderEnum;
 }
