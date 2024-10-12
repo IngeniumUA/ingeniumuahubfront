@@ -11,7 +11,7 @@
     <tbody>
     <tr>
       <th>Checkout ID</th>
-      <td>{{ checkout.id }}</td>
+      <td>{{ checkout.checkout_uuid }}</td>
     </tr>
     <tr>
       <th>User</th>
@@ -19,23 +19,23 @@
     </tr>
     <tr>
       <th>Amount</th>
-      <td>{{ checkout.currency }} {{ checkout.amount }} </td>
+      <td>{{ String(checkout.amount) | currencypipe: 'EUR' }} </td>
     </tr>
     <tr>
       <th>Status</th>
-      <td>{{ checkout.status }}</td>
+      <td>{{ PaymentStatusEnum[checkout.checkout_status] }}</td>
     </tr>
     <tr>
       <th>Payment providor</th>
-      <td>{{ checkout.payment_providor }}</td>
+      <td>{{ PaymentProviderEnum[checkout.payment_provider] }}</td>
     </tr>
     <tr>
       <th>Date Created</th>
-      <td>{{ checkout.date_created | date: 'long' }}</td>
+      <td>{{ checkout.created_timestamp | date: 'long' }}</td>
     </tr>
     <tr>
       <th>Date Completed</th>
-      <td>{{ checkout.date_completed | date: 'long' }}</td>
+      <td>{{ checkout.completed_timestamp | date: 'long' }}</td>
     </tr>
 
     </tbody>

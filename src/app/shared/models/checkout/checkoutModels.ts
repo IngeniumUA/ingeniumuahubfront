@@ -1,4 +1,5 @@
 import {TransactionInI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 
 export interface CheckoutI {
   checkout_uuid: string
@@ -10,6 +11,8 @@ export interface CheckoutI {
 
   amount: number
   note: string | null
+
+  checkout_status: PaymentStatusEnum
 
   completed_timestamp: string | null
   last_updated_timestamp: string

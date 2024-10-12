@@ -53,7 +53,19 @@ export class CheckoutService {
     return this.httpClient.get<StatusStatsI>(`${this.apiUrl}/group_by?${params.toString()}`);
   }
 
+  public getCheckout(checkout_uuid: string): Observable<CheckoutI> {
+    return this.httpClient.get<CheckoutI>(`${this.apiUrl}/${checkout_uuid}`);
+  }
+
   public patchCheckout(checkout_id: string, patchObj: CheckoutPatchI) {
     return this.httpClient.patch<CheckoutI>(this.apiUrl + '/' + checkout_id, patchObj);
+  }
+
+  public emailCheckout(checkout_uuid: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${this.apiUrl}/email/${checkout_uuid}`);
+  }
+
+  public refundCheckout(checkout_uuid: string, forceRefund: boolean = false): Observable<CheckoutI> {
+    return this.httpClient.patch<CheckoutI>(`${this.apiUrl}/refund/${checkout_uuid}?force_refund=${String(forceRefund)}`, {});
   }
 }
