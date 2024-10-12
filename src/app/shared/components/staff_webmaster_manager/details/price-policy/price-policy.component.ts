@@ -93,8 +93,8 @@ export class PricePolicyComponent implements OnInit {
     // todo const update_fields: { [key: string]: any } = {};
 
     const availability: AvailabilityCompositionI = {
-        available: true,
-        disabled: false
+      available: true,
+      disabled: false
     }
 
     const pricePolicy: PricePolicyI = {
