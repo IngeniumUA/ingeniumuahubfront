@@ -18,7 +18,7 @@ import {StaffCheckoutService} from '@ingenium/app/core/services/staff/staff-chec
 import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
 import {PricePolicyI} from "@ingenium/app/shared/models/price_policy";
 import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
-import {TransactionInI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionInI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {CheckoutInI} from "@ingenium/app/shared/models/checkout/checkoutModels";
 
 

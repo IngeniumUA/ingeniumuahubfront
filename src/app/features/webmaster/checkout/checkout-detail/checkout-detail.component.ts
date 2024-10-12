@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CheckoutI} from "@ingenium/app/shared/models/checkout/checkoutModels";
-import {TransactionI} from "@ingenium/app/shared/models/transaction/transaction_models";
+import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";

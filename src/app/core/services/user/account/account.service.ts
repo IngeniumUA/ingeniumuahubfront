@@ -1,33 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HubUserPersonalDetailsI} from '../../../../shared/models/user/user';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {CardLimitedI} from '@ingenium/app/shared/models/card';
-import {IProductItem} from '@ingenium/app/shared/models/items/products/products';
 import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
-
-export interface InteractionI {
-  interaction_id: number
-  interaction_uuid: string
-
-  item_id: number
-  item_name: string
-
-  user_uuid: string
-  user_email: string
-
-  interaction_type: number
-
-  last_updated_timestamp: string
-  created_timestamp: string
-}
-
-export interface TransactionLimitedI {
-  interaction: InteractionI
-  purchased_product: IProductItem
-  note: string
-}
+import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
 
 @Injectable({
   providedIn: 'root'

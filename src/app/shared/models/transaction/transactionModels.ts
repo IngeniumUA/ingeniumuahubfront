@@ -1,7 +1,7 @@
-import {InteractionI} from "@ingenium/app/core/services/user/account/account.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
 import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
+import {InteractionI, InteractionLimitedI} from "@ingenium/app/shared/models/interaction/interactionModels";
 
 export interface TransactionInI {
   user_email: string;
@@ -33,4 +33,10 @@ export interface TransactionPatchI {
   user: string | null
   user_uuid: string | null
   product_blueprint_id: number | null
+}
+
+export interface TransactionLimitedI {
+  interaction: InteractionLimitedI
+  purchased_product: IProductItem
+  note: string
 }
