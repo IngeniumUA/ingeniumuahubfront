@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AccountService, TransactionI} from '../../../../core/services/user/account/account.service';
+import {AccountService, TransactionLimitedI} from '../../../../core/services/user/account/account.service';
 import {exhaustMap, Observable, Subscription, timer} from 'rxjs';
 import {TrackerService} from '@ingenium/app/core/services/user/tracker.service';
 import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from '@ingenium/app/shared/models/tracker';
@@ -16,7 +16,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
 
   lastUpdate: Date = new Date();
   trackerSubscription: Subscription = new Subscription();
-  transactions$: Observable<TransactionI[]> = this.accountService.getTransactions();
+  transactions$: Observable<TransactionLimitedI[]> = this.accountService.getTransactions();
   trackedItems: HubCheckoutTrackerI[] = [];
 
   qrCode: {[key:string]:string} = {};
@@ -36,7 +36,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  async createQrCode(transaction: TransactionI) {
+  async createQrCode(transaction: TransactionLimitedI) {
     try {
       this.qrCode[transaction.interaction.uuid] = await QRCode.toDataURL(transaction.interaction.uuid, {
         color: {
@@ -50,7 +50,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleQrCodeVisible(transaction: TransactionI) {
+  toggleQrCodeVisible(transaction: TransactionLimitedI) {
     console.log(this.qrCode[transaction.interaction.uuid]);
 
     if (this.qrCode[transaction.interaction.uuid] === undefined) {

@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {TransactionI} from '../../../../core/services/user/account/account.service';
+import {TransactionLimitedI} from '../../../../core/services/user/account/account.service';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
 @Component({
   selector: 'app-transaction-display',
@@ -14,6 +14,6 @@ import {DatePipe, NgForOf, NgIf} from '@angular/common';
 })
 export class TransactionDisplayComponent {
 
-  @Input() transaction!: TransactionI;
+  @Input() transaction!: TransactionLimitedI;
 
 }
