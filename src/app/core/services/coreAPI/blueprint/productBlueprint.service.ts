@@ -2,8 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/checkout/checkoutModels";
-import {StatusStatsI} from "@ingenium/app/shared/models/stats/transactionStats";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 import {

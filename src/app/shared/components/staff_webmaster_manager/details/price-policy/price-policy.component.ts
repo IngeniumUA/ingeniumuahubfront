@@ -3,7 +3,7 @@ import {PricePolicyI} from '../../../../models/price_policy';
 import {AllowDenyListComponent} from '../access-policy/access_policies/allow-deny-list/allow-deny-list.component';
 import {DatePipe, NgIf, TitleCasePipe} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AccessPolicyI, AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
 import {AccessPolicyEnum, CastToMemberOfGroupPipe} from "@ingenium/app/shared/models/access_policies/access_policies";
 
 @Component({
