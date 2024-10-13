@@ -230,7 +230,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   }
 
   DownloadData() {
-    const status = 0 ? null: this.selectedStatus;
+    const status = this.selectedStatus === 0 ? null: this.selectedStatus;
 
     // Form parsing
     // const emailControlValue = this.searchForm.get('emailControl')!.value;
