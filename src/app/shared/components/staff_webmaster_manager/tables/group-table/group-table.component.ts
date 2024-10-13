@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {StaffGroupService} from '../../../../../core/services/staff/group/staff-group.service';
+import {GroupService} from '../../../../../core/services/coreAPI/group/group.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable} from 'rxjs';
 import {GroupI} from '../../../../models/group/HubGroup';
@@ -16,7 +16,7 @@ import {GroupI} from '../../../../models/group/HubGroup';
   standalone: true
 })
 export class GroupTableComponent {
-  constructor(private staffGroupService: StaffGroupService) {
+  constructor(private staffGroupService: GroupService) {
   }
 
   groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();

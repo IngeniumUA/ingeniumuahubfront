@@ -3,19 +3,25 @@ import {Observable} from 'rxjs';
 import {GroupI} from '../../../../shared/models/group/HubGroup';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
+import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 @Injectable({
   providedIn: 'root'
 })
-export class StaffGroupService {
+export class GroupService {
 
   constructor(private httpClient: HttpClient) {
   }
 
   apiUrl = apiEnviroment.apiUrl + 'group';
 
-  public GetGroupsList(): Observable<GroupI[]> {
-    return this.httpClient.get<GroupI[]>(this.apiUrl);
+  public GetGroupsList(user_uuid: string | null = null, academicYear: string | null = null): Observable<GroupI[]> {
+    const param = {
+      user_uuid: user_uuid,
+      academic_year: academicYear
+    }
+    const params = new URLSearchParams(removeNull(param));
+    return this.httpClient.get<GroupI[]>(`${this.apiUrl}?${params.toString()}`);
   }
 
   public AddUserToGroup(group_id: string, user_id: string): Observable<GroupI[]> {

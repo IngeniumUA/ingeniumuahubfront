@@ -4,7 +4,7 @@ import {FormArray, FormControl, ReactiveFormsModule, Validators} from '@angular/
 import {AccessPolicyEnum, AllowDenyListI} from '../../../../../../models/access_policies/access_policies';
 import {Observable} from "rxjs";
 import {GroupI} from "@ingenium/app/shared/models/group/HubGroup";
-import {StaffGroupService} from "@ingenium/app/core/services/staff/group/staff-group.service";
+import {GroupService} from "@ingenium/app/core/services/coreAPI/group/group.service";
 
 @Component({
   selector: 'app-allow-deny-list',
@@ -32,7 +32,7 @@ export class AllowDenyListComponent implements OnInit {
     whitelistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([]);
     blacklistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([]);
 
-    constructor(private staffGroupService: StaffGroupService) {
+    constructor(private staffGroupService: GroupService) {
     }
 
     ngOnInit() {
