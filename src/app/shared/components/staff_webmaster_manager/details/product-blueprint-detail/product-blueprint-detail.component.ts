@@ -11,7 +11,6 @@ import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availab
 import {Observable, of} from "rxjs";
 import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
 import {first} from "rxjs/operators";
-import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/access_policies";
 
 @Component({
   selector: 'app-product-blueprint-detail',
