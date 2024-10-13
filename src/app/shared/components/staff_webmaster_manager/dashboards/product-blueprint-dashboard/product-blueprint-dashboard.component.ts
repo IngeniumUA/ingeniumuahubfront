@@ -1,14 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable, of} from 'rxjs';
-import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
 import {
   ProductBlueprintDetailComponent
 } from '../../details/product-blueprint-detail/product-blueprint-detail.component';
 import {
   ProductBlueprintCreateComponent
 } from '../../create/product-blueprint-create/product-blueprint-create.component';
-import {GroupByModelI} from '../../../../models/stats/productStats';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";

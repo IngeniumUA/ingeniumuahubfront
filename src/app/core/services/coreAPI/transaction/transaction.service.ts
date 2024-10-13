@@ -74,7 +74,7 @@ export class TransactionService {
     return this.httpClient.get<StatusStatsI>(`${this.apiUrl}/group_by?${params.toString()}`);
   }
 
-  public getTransactionsExport(fields: string[],
+  public getTransactionsExport( // TODO fields: string[],
                                item: number | null = null,
                                user: string | null = null,
                                interaction_id: number | null,
@@ -86,7 +86,6 @@ export class TransactionService {
                                price_policy_id: number | null,
                                price_policy: string | null = null): Observable<Blob> {
     const param = {
-      // TODO Fields
       item: item,
       user: user,
       interaction_id: interaction_id,

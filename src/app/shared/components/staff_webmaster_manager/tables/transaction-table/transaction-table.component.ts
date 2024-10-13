@@ -137,12 +137,12 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     const status = this.selectedStatus === 0 ? null: this.selectedStatus;
 
     // Form parsing
-    const emailControlValue = this.searchForm.get('emailControl')!.value;
+    // const emailControlValue = this.searchForm.get('emailControl')!.value;
     const interactionIdControlValue = this.searchForm.get('idControl')!.value;
     const productNameControlValue = this.searchForm.get('productNameControl')!.value;
     const validityControlValue = this.searchForm.get('validityControl')!.value;
 
-    const emailQuery = emailControlValue === '' ? null: emailControlValue;
+    // const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const interactionQuery = interactionIdControlValue === '' || interactionIdControlValue === null ? null: parseInt(interactionIdControlValue);
     const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
     const validityQuery = validityControlValue === '' || validityControlValue === null ? null: parseInt(validityControlValue);
@@ -233,22 +233,22 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     const status = 0 ? null: this.selectedStatus;
 
     // Form parsing
-    const emailControlValue = this.searchForm.get('emailControl')!.value;
+    // const emailControlValue = this.searchForm.get('emailControl')!.value;
     const interactionIdControlValue = this.searchForm.get('idControl')!.value;
     const productNameControlValue = this.searchForm.get('productNameControl')!.value;
     const validityControlValue = this.searchForm.get('validityControl')!.value;
 
-    const emailQuery = emailControlValue === '' ? null: emailControlValue;
+    // const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const interactionQuery = interactionIdControlValue === '' || interactionIdControlValue === null ? null: parseInt(interactionIdControlValue);
     const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
     const validityQuery = validityControlValue === '' || validityControlValue === null ? null: parseInt(validityControlValue);
 
-    const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
-    'product_id', 'product_name', 'amount', 'transaction_status',
-      'date_created', 'date_completed', 'validity', 'currency', 'payment_provider']
+    // const fields: string[] = ['id', 'user_email', 'item_name', 'user_voornaam', 'user_achternaam',
+    // 'product_id', 'product_name', 'amount', 'transaction_status',
+    //   'date_created', 'date_completed', 'validity', 'currency', 'payment_provider']
 
-    this.transactionService.getTransactionsExport(fields, this.item_id, this.user_id, interactionQuery,
-      this.selectedStatus,
+    this.transactionService.getTransactionsExport(this.item_id, this.user_id, interactionQuery,
+      status,
       validityQuery,
       null, null,
       productNameQuery,

@@ -27,13 +27,13 @@
 
 <section>
     <h3 class="text-blue-900">Access Policy</h3>
-      <ng-container *ngIf="pricePolicy.availability.dynamic_policy_type == AccessPolicyEnum.always_available || pricePolicy.availability.dynamic_policy_type === null">
+      <ng-container *ngIf="pricePolicy.availability.dynamic_policy_type === AccessPolicyEnum.always_available || pricePolicy.availability.dynamic_policy_type === null">
         Always available
       </ng-container>
       <ng-container *ngIf="pricePolicy.availability.dynamic_policy_type !== null">
         <h4>{{ AccessPolicyEnum[pricePolicy.availability.dynamic_policy_type] | titlecase }}</h4>
       </ng-container>
-      <ng-container *ngIf="pricePolicy.availability.dynamic_policy_type == AccessPolicyEnum.member_of_group">
+      <ng-container *ngIf="pricePolicy.availability.dynamic_policy_type === AccessPolicyEnum.member_of_group">
           <app-allow-deny-list (UpdateAccessPolicy)="UpdateContent($event)"
                                [access_policy_content]="pricePolicy.availability.dynamic_policy_content?.access_policy_config | castToMemberOfGroup"
                                [access_policy_method]="pricePolicy.availability.dynamic_policy_type"></app-allow-deny-list>

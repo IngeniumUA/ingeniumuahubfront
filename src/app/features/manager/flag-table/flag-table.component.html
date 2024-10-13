@@ -10,7 +10,7 @@
     </span>
     <span>
       Value:
-      @if (flag.name == "Base payment provider") {
+      @if (flag.name === "Base payment provider") {
         {{ PaymentProviderEnum[$any(flag.value)["payment_provider_enum"]] }}
       } @else {
         {{ flag.value | json }}

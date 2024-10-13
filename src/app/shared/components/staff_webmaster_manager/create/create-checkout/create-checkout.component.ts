@@ -15,8 +15,6 @@ import {IProductItem, PaymentProviderEnum} from '../../../../models/items/produc
 import {ValidityOptions} from '../../../../models/items/validity';
 import {HttpErrorResponse} from '@angular/common/http';
 import {StaffCheckoutService} from '@ingenium/app/core/services/staff/staff-checkout.service';
-import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
-import {PricePolicyI} from "@ingenium/app/shared/models/price_policy";
 import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
 import {TransactionInI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {CheckoutInI} from "@ingenium/app/shared/models/checkout/checkoutModels";
@@ -87,8 +85,7 @@ export class CreateCheckoutComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
                 private staffProductService: StaffProductBlueprintService,
-                private staffCheckoutService: StaffCheckoutService,
-              private pricePolicyService: PricePolicyService) {
+                private staffCheckoutService: StaffCheckoutService) {
   }
 
   public transactions(): FormArray {
@@ -109,13 +106,9 @@ export class CreateCheckoutComponent implements OnInit {
       'productControl': ['Kies Product', Validators.required],
       'validityControl': [{value: validityDefault, disabled: !this.forceEnabled()}]
     });
-    transactionGroup.controls['productControl'].valueChanges.subscribe((value) => {
+    transactionGroup.controls['productControl'].valueChanges.subscribe(() => {
     })
     this.transactions().push(transactionGroup);
-  }
-
-  public GetPricePolicyQuery(transactionIndex: number): Observable<PricePolicyI[]> {
-    return this.pricePolicyService.getPricePolicies();
   }
 
   public SubmitForm() {
