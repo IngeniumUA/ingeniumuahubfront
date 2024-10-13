@@ -2,15 +2,14 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
-import {StaffCardService} from '../../../../../core/services/staff/items/staff_card_router';
+import {StaffCardService} from '@ingenium/app/core/services/staff/items/staff_card_router';
 import {CardTypes, StaffCardDetailI} from '../../../../models/staff/staff_card_detail';
 import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {LayoutService} from '../../../../../core/services/layout/layout.service';
+import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {ValidityOptions} from '../../../../models/items/validity';
 
 @Component({
   selector: 'app-card-table',
@@ -68,6 +67,10 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Label popups are breaking something frontend related, just remove them
+    // In some cases the paginator is undefined ? We check if it is defined
+    if (this.paginator === undefined) {
+      return;
+    }
     const paginatorIntl = this.paginator._intl;
     paginatorIntl.itemsPerPageLabel = '';
     paginatorIntl.nextPageLabel = '';
@@ -108,7 +111,5 @@ export class CardTableComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-  protected readonly ValidityOptions = ValidityOptions;
   protected readonly CardTypes = CardTypes;
 }
