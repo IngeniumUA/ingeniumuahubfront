@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {apiEnviroment} from '@ingenium/environments/environment';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {FlagService} from "@ingenium/app/core/services/coreAPI/flag/flag.service";
 
 interface FlagI {
   id: number
@@ -17,30 +16,23 @@ interface FlagI {
 export class FlagTableComponent {
 
   loading: boolean = false;
+  addingFlag: boolean = false
 
-  constructor(private httpClient: HttpClient) {
+  flags$: Observable<FlagI[]> = of([])
+
+  constructor(private flagService: FlagService) {
   }
 
-  $checkoutsEnabled: Observable<FlagI> = this.httpClient.get<FlagI>(apiEnviroment.apiUrl + 'flag?name=checkouts_enabled');
-
-  public toggleCheckoutEnable(flagObj: FlagI) {
-    this.loading = true;
-
-    // Syntax is -> value = condition ? v_true: v_false
-    // @ts-expect-error I don't know cuz I did not write this...
-    const flagValue = flagObj.value["checkouts_enabled"] == 1 ? {"checkouts_enabled": 0}: {"checkouts_enabled": 1};
-
-    const putFlag: FlagI = {
-      id: flagObj.id,
-      name: flagObj.name,
-      value: flagValue,
-    };
-
-    this.$checkoutsEnabled = this.httpClient.put<FlagI>(
-      apiEnviroment.apiUrl + 'manager/flag?name=checkouts_enabled',
-      putFlag
-    );
-    this.loading = false;
+  LoadData() {
+    this.flags$ = this.flagService.queryFlags();
   }
 
+  ToggleAddingFlag() {
+    this.addingFlag = !this.addingFlag
+  }
+
+  FlagCreated() {
+    this.addingFlag = false;
+    this.LoadData()
+  }
 }

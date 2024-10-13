@@ -1,17 +1,34 @@
 <section class="staffSection">
-    <h2>Toggle Checkout</h2>
+    <h2>Flags</h2>
     <br>
 
-    <ng-container *ngIf="$checkoutsEnabled | async as checkoutsFlag">
-      Name: {{ checkoutsFlag.name }}
+  @for (flag of this.flags$ | async; track flag.id) {
+    <span>
+      HubFlag
+      {{ flag.id }}
+      {{ flag.name }}
+    </span>
+    <span>
+      {{ flag.value }}
+    </span>
+  }
+
+  <section class="mt-2">
+    <h2>Add Flag</h2>
+    <ng-container  *ngIf="addingFlag else addFlagButton">
+      <app-create-group (groupCreated)="FlagCreated()" />
       <br>
-      Current: {{ checkoutsFlag.value }}
-        <br>
-        <button class="button button-primary w-1/6 button-inline"
-                [disabled]="this.loading"
-                [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
-                (click)="toggleCheckoutEnable(checkoutsFlag)">
-            <span class="text-white">{{ this.loading ? "Toggling .." : "Toggle" }}</span>
-        </button>
+      <button class="button button-primary w-1/6 button-inline"
+              (click)="ToggleAddingFlag()">
+        Cancel
+      </button>
     </ng-container>
+  </section>
 </section>
+
+<ng-template #addFlagButton>
+  <button class="button button-primary w-1/6 button-inline"
+          (click)="ToggleAddingFlag()">
+    Add
+  </button>
+</ng-template>
