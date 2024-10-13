@@ -109,4 +109,6 @@ export class ProductComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/login?next=/event/'+ this.itemId);
     }
   }
+
+  protected readonly postMessage = postMessage;
 }

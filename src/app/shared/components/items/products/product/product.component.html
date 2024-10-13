@@ -1,5 +1,11 @@
 <div [style]="{'background-color': this.primaryColorHalf}">
-  <h5>{{ product.name }}</h5>
+  <h5>
+    @if (product.price_policy.name !== null) {
+      {{ product.price_policy.name }}
+    } @else {
+      {{ product.name }}
+    }
+  </h5>
 
   <ng-container *ngIf="this.product.max_count > 0; else notAvailable">
     <ng-container *ngIf="this.product.price_policy.price > 0">
@@ -26,15 +32,13 @@
 </div>
 
 <ng-template #notAvailable>
-  <ng-container *ngIf="product.max_count === -1">
+  @if (product.max_count === -1) {
     <p>Sold out!</p>
-  </ng-container>
-  <ng-container *ngIf="product.max_count === -2">
+  } @else if (product.max_count === -2) {
     <p>Al gekocht!</p>
-  </ng-container>
-  <ng-container *ngIf="product.max_count === -3">
+  } @else if (product.max_count === -3) {
     <button class="product-to-login"
             [ngStyle]="{'background-color': this.primaryColorFull}"
             (click)="ToLogin()">Login vereist!</button>
-  </ng-container>
+  }
 </ng-template>
