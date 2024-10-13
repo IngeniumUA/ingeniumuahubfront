@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {FlagService} from "@ingenium/app/core/services/coreAPI/flag/flag.service";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 
 interface FlagI {
   id: number
@@ -13,12 +14,16 @@ interface FlagI {
   templateUrl: './flag-table.component.html',
   styleUrls: ['./flag-table.component.css']
 })
-export class FlagTableComponent {
+export class FlagTableComponent implements OnInit {
 
   loading: boolean = false;
   addingFlag: boolean = false
 
   flags$: Observable<FlagI[]> = of([])
+
+  ngOnInit() {
+    this.LoadData()
+  }
 
   constructor(private flagService: FlagService) {
   }
@@ -35,4 +40,6 @@ export class FlagTableComponent {
     this.addingFlag = false;
     this.LoadData()
   }
+
+  protected readonly PaymentProviderEnum = PaymentProviderEnum;
 }

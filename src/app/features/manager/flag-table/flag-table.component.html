@@ -2,14 +2,19 @@
     <h2>Flags</h2>
     <br>
 
-  @for (flag of this.flags$ | async; track flag.id) {
+  @for (flag of (this.flags$ | async); track flag.id) {
     <span>
-      HubFlag
-      {{ flag.id }}
-      {{ flag.name }}
+      HubFlag<br>
+      Id:{{ flag.id }}<br>
+      Name: {{ flag.name }}<br>
     </span>
     <span>
-      {{ flag.value }}
+      Value:
+      @if (flag.name == "Base payment provider") {
+        {{ PaymentProviderEnum[$any(flag.value)["payment_provider_enum"]] }}
+      } @else {
+        {{ flag.value | json }}
+      }
     </span>
   }
 

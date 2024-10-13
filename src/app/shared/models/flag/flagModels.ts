@@ -5,7 +5,7 @@ export interface FlagInI {
 export interface FlagI {
   id: number
   name: string
-  value: object
+  value: { [key: string]: string }
 }
 
 export interface FlagPatchI {
