@@ -5,9 +5,9 @@
     <ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
       <ng-container *ngIf="data.event as event; else loading">
         <div>
-          <ng-container *ngIf="event.derived_type.display.image_landscape !== null">
-            <img src='{{event.derived_type.display.image_landscape}}' alt="" aria-hidden="true" class="max-h-full sm:max-h-64 md:max-h-72 w-full mx-auto">
-          </ng-container>
+<!--          <ng-container *ngIf="event.derived_type.display.image_landscape !== null">-->
+<!--            <img src='{{event.derived_type.display.image_landscape}}' alt="" aria-hidden="true" class="max-h-full sm:max-h-64 md:max-h-72 w-full mx-auto">-->
+<!--          </ng-container>-->
           <ng-container *ngIf="event.derived_type.display.image_square !== null">
             <img src='{{event.derived_type.display.image_square}}' alt="" aria-hidden="true" class="max-h-full mx-auto">
           </ng-container>
