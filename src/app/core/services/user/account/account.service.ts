@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HubUserPersonalDetailsI} from '../../../../shared/models/user/user';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {CardLimitedI} from '@ingenium/app/shared/models/card';
 import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
 import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {AccountI} from "@ingenium/app/shared/models/user/accountI";
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +13,12 @@ import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/trans
 export class AccountService {
   constructor(private httpClient: HttpClient) { }
 
-  public getAccount(): Observable<HubUserPersonalDetailsI> {
-    return this.httpClient.get<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + 'account');
+  public getAccount(): Observable<AccountI> {
+    return this.httpClient.get<AccountI>(apiEnviroment.apiUrl + 'account');
   }
 
-  public updatePersonalDetails(details: HubUserPersonalDetailsI): Observable<HubUserPersonalDetailsI> {
-    return this.httpClient.put<HubUserPersonalDetailsI>(apiEnviroment.apiUrl + 'account', details);
+  public updatePersonalDetails(details: AccountI): Observable<AccountI> {
+    return this.httpClient.put<AccountI>(apiEnviroment.apiUrl + 'account', details);
   }
 
   // -----

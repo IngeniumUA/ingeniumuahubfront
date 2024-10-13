@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {apiEnviroment} from '../../../../environments/environment';
-import {UserI} from '../../../shared/models/user/userI';
+import {UserI, UserWideI} from '../../../shared/models/user/userI';
 
 @Injectable({
   providedIn: 'root'
@@ -88,6 +88,11 @@ export class StaffUserService {
   public getUser(userId: string): Observable<UserI> {
     return this.httpClient.get<UserI>(this.apiUrl + '/' + userId);
   }
+
+  public getUserWide(userUUID: string): Observable<UserWideI> {
+    return this.httpClient.get<UserWideI>(`${this.apiUrl}/wide/${userUUID}`);
+  }
+
   public createUser(user_obj: UserI): Observable<UserI> {
     return this.httpClient.post<UserI>(this.apiUrl, user_obj);
   }
