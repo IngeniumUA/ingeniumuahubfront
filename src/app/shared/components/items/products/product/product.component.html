@@ -1,9 +1,13 @@
 <div [style]="{'background-color': this.primaryColorHalf}">
   <h5>
-    @if (product.price_policy.name !== null) {
-      {{ product.price_policy.name }}
-    } @else {
+    @if (product.price_policy === null) {
       {{ product.name }}
+    } @else {
+      @if (product.price_policy.name !== null) {
+        {{ product.price_policy.name }}
+      } @else {
+        {{ product.name }}
+      }
     }
   </h5>
 
