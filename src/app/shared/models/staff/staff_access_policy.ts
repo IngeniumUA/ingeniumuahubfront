@@ -6,8 +6,3 @@ export interface StaffAccessPolicyI {
   name: string
   description: string
 }
-
-export interface AccessPolicyI {
-  method: string
-  content: object
-}

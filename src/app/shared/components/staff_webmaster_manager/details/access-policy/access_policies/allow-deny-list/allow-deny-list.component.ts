@@ -37,6 +37,7 @@ export class AllowDenyListComponent implements OnInit {
 
     ngOnInit() {
       // Parse content as correct interface ( allows for typehints )
+      console.log(this.access_policy_content)
       const whitelist = this.access_policy_content === null ? []: this.access_policy_content['whitelist'];
       const blacklist = this.access_policy_content === null ? []: this.access_policy_content['blacklist'];
 
@@ -87,7 +88,7 @@ export class AllowDenyListComponent implements OnInit {
 
     ValueChange() {
       if (!(this.blacklistGroupsForm.length > 0)) {
-        this.parsedPolicyContent.blacklist = null;
+        this.parsedPolicyContent.blacklist = [];
       } else {
         const blacklist: number[] = [];
         for (let i =0;i< this.blacklistGroupsForm.length;i++) {
@@ -99,7 +100,7 @@ export class AllowDenyListComponent implements OnInit {
         this.parsedPolicyContent.blacklist = blacklist;
       }
       if (!(this.whitelistGroupsForm.length > 0)) {
-        this.parsedPolicyContent.whitelist = null;
+        this.parsedPolicyContent.whitelist = [];
       } else {
         const whitelist: number[] = [];
         for (let i =0;i< this.whitelistGroupsForm.length;i++) {
@@ -110,6 +111,7 @@ export class AllowDenyListComponent implements OnInit {
         }
         this.parsedPolicyContent.whitelist = whitelist;
       }
+      console.log(this.parsedPolicyContent)
       this.UpdateAccessPolicy.emit(this.parsedPolicyContent);
     }
 }
