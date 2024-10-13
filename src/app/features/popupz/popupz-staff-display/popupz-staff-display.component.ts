@@ -5,9 +5,9 @@ import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {TransactionI} from "@ingenium/app/core/services/user/account/account.service";
 import {FormsModule} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
+import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
 
 @Component({
   selector: 'app-popupz-staff-display',
@@ -106,7 +106,7 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
     this.getOrders();
   }
 
-  isFood(transaction: TransactionI) {
+  isFood(transaction: TransactionLimitedI) {
     if (!this.filterDrinks) return true;
     return transaction.purchased_product.product_meta.categorie === 'food';
   }

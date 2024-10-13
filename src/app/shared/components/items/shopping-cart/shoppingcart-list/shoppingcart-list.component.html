@@ -23,7 +23,9 @@
       @for (product of products; track $index) {
         <li class="cart-list-product">
           <div class="cart-list-product__content">
-            <p class="cart-list-product__title">{{ product.name }}</p>
+            <p class="cart-list-product__title">
+              {{ product.name}}@if (product.price_policy.name !== null) {: {{ product.price_policy.name }}}
+            </p>
             <ul *ngIf="product.product_meta.other_meta_data" class="cart-list-product__options">
               <li *ngFor="let meta of product.product_meta.other_meta_data | keyvalue">
                 <span class="capitalize">{{ meta.key }}</span>: <span>{{ meta.value}}</span>

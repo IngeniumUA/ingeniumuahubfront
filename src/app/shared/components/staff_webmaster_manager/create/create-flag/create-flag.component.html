@@ -1,0 +1,15 @@
+<form [formGroup]="form">
+  <span>
+    Name
+    <label class="hubformfield-white">
+      <input type="text" formControlName="name" placeholder="Flag name"/>
+    </label>
+  </span>
+  <br>
+  <button class="button button-primary w-1/6 button-inline"
+          [disabled]="this.loading"
+          [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+          (click)="onSubmit()">
+    <span class="text-white">{{ this.loading ? "Processing .." : "Create" }}</span>
+  </button>
+</form>

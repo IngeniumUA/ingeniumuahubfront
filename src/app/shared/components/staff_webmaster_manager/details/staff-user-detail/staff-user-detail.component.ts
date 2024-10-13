@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs';
-import {UserI} from '../../../../models/user/userI';
+import { UserWideI} from '../../../../models/user/userI';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {GroupI} from '../../../../models/group/HubGroup';
-import {StaffGroupService} from '../../../../../core/services/staff/group/staff-group.service';
+import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
 import {MatTableModule} from '@angular/material/table';
 
 @Component({
@@ -27,20 +27,20 @@ import {MatTableModule} from '@angular/material/table';
 })
 export class StaffUserDetailComponent {
 
-  constructor(private staffGroupService: StaffGroupService) {
+  constructor(private groupService: GroupService) {
   }
 
-  @Input() userDetail!: UserI;
+  @Input() userDetail!: UserWideI;
   @Output() refetchUserEvent = new EventEmitter<boolean>();
 
-  $groups: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
+  $groups: Observable<GroupI[]> = this.groupService.GetGroupsList(null, null);
   groupControl = new FormControl<string>('');
 
   AddToGroup() {
     if (this.groupControl.value === null) {
       return;
     }
-    this.staffGroupService.AddUserToGroup(this.groupControl.value, this.userDetail.user_uuid).subscribe({
+    this.groupService.AddUserToGroup(this.groupControl.value, this.userDetail.user_uuid).subscribe({
       next: () => {
         this.refetchUserEvent.emit(true);
       },
@@ -51,7 +51,7 @@ export class StaffUserDetailComponent {
   }
 
   RemoveFromGroup(group_id: number) {
-    this.staffGroupService.RemoveUserFromGroup(group_id, this.userDetail.user_uuid).subscribe({
+    this.groupService.RemoveUserFromGroup(group_id, this.userDetail.user_uuid).subscribe({
       next: () => {
         this.refetchUserEvent.emit(true);
       },

@@ -11,8 +11,8 @@
         PaymentType:
         <select formControlName="paymentProvider">
           <option [ngValue]="null" disabled selected>Kies PaymentProvidor</option>
-          <option *ngFor="let paymentProvidor of paymentProvidors" [ngValue]="paymentProvidor">
-            {{ paymentProvidor }}
+          <option *ngFor="let paymentProvider of paymentProviders" [ngValue]="paymentProvider">
+            {{ PaymentProviderEnum[paymentProvider] }}
           </option>
         </select>
       </label>
@@ -28,17 +28,10 @@
             <select formControlName="productControl">
               <option [ngValue]="null" disabled selected>Kies Product</option>
               <option *ngFor="let product of products" [ngValue]="product">
-                {{ product.name }} {{ product.price_policy.price }}
+                {{ product.name }} {{ product.price_policy.name }} {{ product.price_policy.price }}
               </option>
             </select>
           </ng-container>
-          </span>
-
-          <span>
-            <label>
-              Count
-              <input formControlName="countControl" type="number">
-            </label>
           </span>
 
           <span>
@@ -95,4 +88,8 @@
 
 <ng-template #loadingProducts>
   Loading products
+</ng-template>
+
+<ng-template #loadingPricePolicies>
+  Loading price policies
 </ng-template>

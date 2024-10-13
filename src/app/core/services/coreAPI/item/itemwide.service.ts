@@ -20,7 +20,7 @@ export class ItemWideService {
     }
     return this.httpClient.get<ItemWideI[]>(this.apiUrl + queryParams);
   }
-  public getItem(itemId: string): Observable<ItemWideI> {
+  public getItem(itemId: string | number): Observable<ItemWideI> {
     return this.httpClient.get<ItemWideI>(`${this.apiUrl}/${itemId}`);
   }
   public deleteItem(itemId: number): void {

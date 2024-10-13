@@ -1,4 +1,4 @@
-import {TransactionI} from '@ingenium/app/core/services/user/account/account.service';
+import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
 
 export interface CheckoutI {
   id: string
@@ -10,5 +10,5 @@ export interface CheckoutI {
 
   note: string | null
 
-  transactions: TransactionI[]
+  transactions: TransactionLimitedI[]
 }

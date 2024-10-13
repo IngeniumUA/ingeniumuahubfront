@@ -1,4 +1,4 @@
-import {Action, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
+import {Action, createSelector, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
 import {Injectable} from "@angular/core";
 import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
@@ -53,6 +53,24 @@ export class CartState implements NgxsOnInit {
     return state.products.length;
   }
 
+
+  /**
+   * Get the quantity of the product in the cart.
+   * @param product the product you which to check
+   * @param checkPricePolicy true if you should match on price policy too. Default = false
+   */
+  static getProductQuantity(product: IProductItem, checkPricePolicy: boolean = false) {
+    return createSelector([CartState], (state: CartStateModel): number => {
+      return state.products.filter((p) => {
+        const isSameProduct = p.id === product.id;
+        if (checkPricePolicy) {
+          return isSameProduct && p.price_policy.id === product.price_policy.id;
+        }
+        return isSameProduct;
+      }).length;
+    });
+  }
+
   // =======================================
 
   @Action(CartActions.FetchCart)
@@ -62,13 +80,16 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.AddToCart)
   addToCart(ctx: StateContext<CartStateModel>, action: CartActions.AddToCart) {
-    // Create a copy of the product
-    const product = structuredClone(action.product);
+    const productsToAdd: IProductItem[] = [];
+    while (action.count > 0) {
+      productsToAdd.push(structuredClone(action.product));
+      action.count--;
+    }
 
     ctx.patchState({
       products: [
         ...ctx.getState().products,
-        product
+        ...productsToAdd
       ]
     });
 
@@ -81,6 +102,26 @@ export class CartState implements NgxsOnInit {
       products: removeItem<IProductItem>(action.itemIndex)(ctx.getState().products)
     });
     ctx.dispatch(new CartActions.StoreInLocalStorage());
+  }
+
+  @Action(CartActions.ReduceProductQuantity)
+  reduceProductQuantity(ctx: StateContext<CartStateModel>, action: CartActions.ReduceProductQuantity) {
+    // Find products in the cart with the same id
+    // Using findIndex is easier, but we may need all the indexes in the future
+    const foundIndexes = ctx.getState().products.reduce((acc, product, index, _) => {
+      if (product.id === action.product.id && product.price_policy.id === action.product.price_policy.id) {
+        acc.push(index);
+      }
+      return acc;
+    }, [] as number[]);
+    if (foundIndexes.length <= 0) return;
+
+    let countToRemove = Math.min(foundIndexes.length, action.count);
+    while (countToRemove > 0) {
+      ctx.dispatch(new CartActions.RemoveFromCart(foundIndexes[
+        --countToRemove
+      ]));
+    }
   }
 
   @Action(CartActions.StoreInLocalStorage)
@@ -98,7 +139,6 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.SetPaymentMethod)
   setPaymentMethod(ctx: StateContext<CartStateModel>, action: CartActions.SetPaymentMethod) {
-    console.log('Setting payment method to:', action.payment_provider);
     ctx.patchState({
       paymentProvider: action.payment_provider
     });
@@ -111,8 +151,4 @@ export class CartState implements NgxsOnInit {
     });
   }
 
-  @Action(CartActions.Checkout)
-  checkout(_ctx: StateContext<CartStateModel>, _action: CartActions.Checkout) {
-    // ...
-  }
 }

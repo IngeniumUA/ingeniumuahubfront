@@ -19,7 +19,7 @@ export class StaffTransactionService {
   }
 
   public getTransactions(offset: number = 0, count: number = 50,
-    item_id: string | null = null,
+    item_id: number | null = null,
     user_id: string | null = null,
     checkout_id: string | null = null,
     status: string | null = null,
@@ -58,7 +58,7 @@ export class StaffTransactionService {
   }
 
   public getTransactionStats(
-    item_id: string | null = null,
+    item_id: number | null = null,
     user_id: string | null = null,
     checkout_id: string | null = null,
     status: string | null = null,
@@ -101,7 +101,7 @@ export class StaffTransactionService {
   }
 
   public getTransactionsExport(fields: string[],
-    item_id: string | null = null,
+    item_id: number | null = null,
     user_id: string | null = null,
     checkout_id: string | null = null,
     status: string | null = null,

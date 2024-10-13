@@ -13,9 +13,8 @@
 
       <section>
         <ng-container *ngFor="let product of (this.products$ | async)">
-          <app-product [onInitValue]="this.GetCurrentProductCount(shop.item, product)" [product]="product"
-                       [primaryColorFull]="(shop.derived_type.display.color | colordbrgba: 1)" [primaryColorHalf]="(shop.derived_type.display.color | colordbrgba: 0.5)"
-                       (countEvent)="this.SetProductCount(shop.item, product, $event)" />
+          <app-product [product]="product"
+                       [primaryColorFull]="(shop.derived_type.display.color | colordbrgba: 1)" [primaryColorHalf]="(shop.derived_type.display.color | colordbrgba: 0.5)" />
         </ng-container>
       </section>
 

@@ -11,6 +11,7 @@ import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availab
 import {Observable, of} from "rxjs";
 import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
 import {first} from "rxjs/operators";
+import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/access_policies";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -104,6 +105,8 @@ export class ProductBlueprintDetailComponent implements OnInit {
       const availability: AvailabilityCompositionI = {
         available: this.blueprintForm.controls['available'].value,
         disabled: this.productBlueprint.availability.disabled,
+        dynamic_policy_type: null,
+        dynamic_policy_content: null
       }
 
       const product: StaffProductBlueprintI = {
@@ -138,7 +141,6 @@ export class ProductBlueprintDetailComponent implements OnInit {
     /*
       *  Price policy code
      */
-
     public getPricePolicies() {
       this.$pricePolicies = this.pricePolicyService.getPricePolicies(this.productBlueprint.id);
     }
@@ -153,7 +155,6 @@ export class ProductBlueprintDetailComponent implements OnInit {
           this.handleFormError(error);
         }
       });
-      // this.productBlueprint.price_policies[index] = pricePolicyObj;
     }
 
     addingNewPricePolicy: boolean = false;
@@ -161,23 +162,32 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.addingNewPricePolicy = !this.addingNewPricePolicy;
     }
 
-    public AddPricyPolicy(pricePolicyObj: PricePolicyInI) {
+    public AddPricePolicy(pricePolicyObj: PricePolicyInI) {
       // Post for price policy object
       this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
         first()).subscribe({
         next: () => {
-          this.getPricePolicies()
+          this.getPricePolicies();
+          this.ToggleAddNew();
+          this.form_error = null
         },
         error: error => {
           this.handleFormError(error);
         }
       });
-
-      // this.productBlueprint.price_policies.push(pricePolicyObj);
-      // this.addingNewPricePolicy = false;
     }
 
-    public RemovePricePolicy(i: number) {
-      this.productBlueprint.price_policies.splice(i, 1);
+    public RemovePricePolicy(pricePolicy: PricePolicyI) {
+      // Post for price policy object
+      this.pricePolicyService.deletePricePolicy(pricePolicy.id).pipe(
+        first()).subscribe({
+        next: () => {
+          this.getPricePolicies();
+          this.form_error = null
+        },
+        error: error => {
+          this.handleFormError(error);
+        }
+      });
     }
 }

@@ -35,9 +35,6 @@ import {
   ItemCreateComponent
 } from '../../shared/components/staff_webmaster_manager/create/item-create/item-create.component';
 import {
-  AccessPolicyDetailComponent
-} from '../../shared/components/staff_webmaster_manager/details/access-policy/access-policy-detail/access-policy-detail.component';
-import {
   ProductBlueprintDashboardComponent
 } from '../../shared/components/staff_webmaster_manager/dashboards/product-blueprint-dashboard/product-blueprint-dashboard.component';
 import {
@@ -60,6 +57,7 @@ import {
 import {
   OrderTrackingComponent
 } from '@ingenium/app/features/webmaster/order-tracking/order-tracking.component';
+import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
 
 
 @NgModule({
@@ -75,27 +73,27 @@ import {
     CheckoutDetailComponent,
     OrderTrackingComponent
   ],
-  imports: [
-    CommonModule,
-    WebmasterRoutingModule,
-    SidenavComponent,
-    GroupTableComponent,
-    PublicHeaderComponent,
-    UserTableComponent,
-    ItemTableComponent,
-    StaffItemDetailComponent,
-    StaffUserDetailComponent,
-    ProductBlueprintDashboardComponent,
-    CardTableComponent,
-    TransactionTableComponent,
-    AccessPolicyDetailComponent,
-    ItemCreateComponent,
-    ProductBlueprintCreateComponent,
-    ProductBlueprintDetailComponent,
-    CheckoutAndTransactionDashboardComponent,
-    CreateCheckoutComponent,
-    TransactionDetailComponent
-  ], providers: [
+    imports: [
+        CommonModule,
+        WebmasterRoutingModule,
+        SidenavComponent,
+        GroupTableComponent,
+        PublicHeaderComponent,
+        UserTableComponent,
+        ItemTableComponent,
+        StaffItemDetailComponent,
+        StaffUserDetailComponent,
+        ProductBlueprintDashboardComponent,
+        CardTableComponent,
+        TransactionTableComponent,
+        ItemCreateComponent,
+        ProductBlueprintCreateComponent,
+        ProductBlueprintDetailComponent,
+        CheckoutAndTransactionDashboardComponent,
+        CreateCheckoutComponent,
+        TransactionDetailComponent,
+        CurrencyPipe
+    ], providers: [
     DatePipe
   ]
 })

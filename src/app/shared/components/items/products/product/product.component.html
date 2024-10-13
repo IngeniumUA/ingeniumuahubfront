@@ -1,5 +1,15 @@
 <div [style]="{'background-color': this.primaryColorHalf}">
-  <h5>{{ product.name }}</h5>
+  <h5>
+    @if (product.price_policy === null) {
+      {{ product.name }}
+    } @else {
+      @if (product.price_policy.name !== null) {
+        {{ product.price_policy.name }}
+      } @else {
+        {{ product.name }}
+      }
+    }
+  </h5>
 
   <ng-container *ngIf="this.product.max_count > 0; else notAvailable">
     <ng-container *ngIf="this.product.price_policy.price > 0">
@@ -18,19 +28,21 @@
         type="number" value="0"
         [ngStyle]="StyleInput()">
     </form>
+
+    <button (click)="TryIncreaseCount()"
+            [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
+            [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
   </ng-container>
 </div>
 
 <ng-template #notAvailable>
-  <ng-container *ngIf="product.max_count === -1">
+  @if (product.max_count === -1) {
     <p>Sold out!</p>
-  </ng-container>
-  <ng-container *ngIf="product.max_count === -2">
+  } @else if (product.max_count === -2) {
     <p>Al gekocht!</p>
-  </ng-container>
-  <ng-container *ngIf="product.max_count === -3">
+  } @else if (product.max_count === -3) {
     <button class="product-to-login"
             [ngStyle]="{'background-color': this.primaryColorFull}"
             (click)="ToLogin()">Login vereist!</button>
-  </ng-container>
+  }
 </ng-template>

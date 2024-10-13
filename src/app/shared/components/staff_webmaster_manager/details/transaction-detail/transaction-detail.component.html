@@ -13,7 +13,7 @@
             <tbody>
             <tr>
                 <th>Interaction ID</th>
-                <td>{{ transaction.interaction.id }}</td>
+                <td>{{ transaction.interaction.interaction_id }}</td>
             </tr>
             <tr>
                 <th>Item</th>
@@ -21,19 +21,33 @@
             </tr>
             <tr>
                 <th>Amount</th>
-                <td>{{ transaction.currency }} {{ transaction.amount }} </td>
+                <td>{{ transaction.purchased_product.price_policy.price }} </td>
             </tr>
             <tr>
                 <th>Checkout</th>
-                <td>{{ transaction.checkout_id }}</td>
+                <td>{{ transaction.checkout_uuid }}</td>
             </tr>
             <tr>
                 <th>Date Created</th>
-                <td>{{ transaction.date_created | date: 'long' }}</td>
+                <td>{{ transaction.created_timestamp | date: 'long' }}</td>
             </tr>
             <tr>
                 <th>Date Completed</th>
-                <td>{{ transaction.date_completed | date: 'long' }}</td>
+                <td>{{ transaction.completed_timestamp | date: 'long' }}</td>
+            </tr>
+
+            <tr>
+              <th>Product Blueprint</th>
+              <td>{{ transaction.product_blueprint_name }}</td>
+            </tr>
+            <tr>
+              <th>Price Policy</th>
+              <td>
+                @if (transaction.purchased_product.price_policy.name !== null) {
+                  {{ transaction.purchased_product.price_policy.name }}
+                } @else {
+                  {{ transaction.price_policy_id }}
+                }</td>
             </tr>
 
             </tbody>
@@ -51,7 +65,7 @@
         Validity:
         <select formControlName="validityControl">
           <option selected [value]="this.transaction.validity">{{ transaction.validity }}</option>
-          <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.name" style="color: var(--mainblue)">
+          <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
               {{ validity.name }}
           </option>
         </select>
@@ -71,7 +85,7 @@
         Product:
         <ng-container *ngIf="(this.products$ | async) as products else loadingProducts">
           <select formControlName="productControl">
-            <option [ngValue]="transaction.product" disabled selected>{{ transaction.product.name }} {{ transaction.amount }}</option>
+            <option [ngValue]="transaction.purchased_product" disabled selected>{{ transaction.purchased_product.name }} {{ transaction.purchased_product.price_policy.price }}</option>
             <option *ngFor="let product of products" [ngValue]="product">
               {{ product.name }} € {{ product.price_policy.price }}
             </option>

@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AccountService, TransactionI} from '../../../../core/services/user/account/account.service';
+import {AccountService} from '../../../../core/services/user/account/account.service';
 import {exhaustMap, Observable, Subscription, timer} from 'rxjs';
 import {TrackerService} from '@ingenium/app/core/services/user/tracker.service';
 import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from '@ingenium/app/shared/models/tracker';
 import QRCode from 'qrcode';
+import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
 
 @Component({
   selector: 'app-account-transactions',
@@ -16,7 +17,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
 
   lastUpdate: Date = new Date();
   trackerSubscription: Subscription = new Subscription();
-  transactions$: Observable<TransactionI[]> = this.accountService.getTransactions();
+  transactions$: Observable<TransactionLimitedI[]> = this.accountService.getTransactions();
   trackedItems: HubCheckoutTrackerI[] = [];
 
   qrCode: {[key:string]:string} = {};
@@ -36,9 +37,9 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  async createQrCode(transaction: TransactionI) {
+  async createQrCode(transaction: TransactionLimitedI) {
     try {
-      this.qrCode[transaction.interaction.uuid] = await QRCode.toDataURL(transaction.interaction.uuid, {
+      this.qrCode[transaction.interaction.interaction_uuid] = await QRCode.toDataURL(transaction.interaction.interaction_uuid, {
         color: {
           dark: '#00053D',
           light: '#FFF',
@@ -50,14 +51,14 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleQrCodeVisible(transaction: TransactionI) {
-    console.log(this.qrCode[transaction.interaction.uuid]);
+  toggleQrCodeVisible(transaction: TransactionLimitedI) {
+    console.log(this.qrCode[transaction.interaction.interaction_uuid]);
 
-    if (this.qrCode[transaction.interaction.uuid] === undefined) {
+    if (this.qrCode[transaction.interaction.interaction_uuid] === undefined) {
       this.createQrCode(transaction);
     }
 
-    this.qrCodeVisible[transaction.interaction.uuid] = !this.qrCodeVisible[transaction.interaction.uuid];
+    this.qrCodeVisible[transaction.interaction.interaction_uuid] = !this.qrCodeVisible[transaction.interaction.interaction_uuid];
   }
 
   getCheckoutId(_index: number, item: HubCheckoutTrackerI) {

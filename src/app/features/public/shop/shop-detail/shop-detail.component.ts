@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {LayoutService} from '../../../../core/services/layout/layout.service';
-import {CartService} from '../../../../core/services/shop/cart/cart.service';
-import {ProductsService} from '../../../../core/services/shop/products/products.service';
+import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
+import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
+import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
-import {IProductItem} from '../../../../shared/models/items/products/products';
+import {IProductItem} from '@ingenium/app/shared/models/items/products/products';
 import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
-import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 
 @Component({
   selector: 'app-page',
@@ -55,13 +54,5 @@ export class ShopDetailComponent implements OnInit {
         return of(err);
       }));
     this.products$ = this.productService.getProducts(id).pipe(shareReplay());
-  }
-
-  GetCurrentProductCount(item: ItemLimitedI, product: IProductItem): number {
-    return this.cartService.getProductCount(item, product);
-  }
-  SetProductCount(item: ItemLimitedI, product: IProductItem, count: number) {
-    this.cartService.setProductCount(item, product, count);
-    this.isCartEmpty = !this.cartService.hasTransactions();
   }
 }

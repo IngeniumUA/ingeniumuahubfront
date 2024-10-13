@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable, of} from 'rxjs';
 import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
-import {StaffProductBlueprintService} from '../../../../../core/services/staff/staff-productblueprint-service';
 import {
   ProductBlueprintDetailComponent
 } from '../../details/product-blueprint-detail/product-blueprint-detail.component';
@@ -13,6 +12,8 @@ import {GroupByModelI} from '../../../../models/stats/productStats';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
+import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
+import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 
 @Component({
   selector: 'app-product-blueprint-dashboard',
@@ -33,15 +34,15 @@ import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 })
 export class ProductBlueprintDashboardComponent implements OnInit {
   @Input() item!: ItemI;
-  $productBlueprint: Observable<StaffProductBlueprintI[]> = of([]);
-  $productBlueprintStats: Observable<GroupByModelI> = of();
+  $productBlueprint: Observable<[]> = of([]);
 
-  constructor(private staffProductService: StaffProductBlueprintService) {
+  constructor(private productBlueprintService: ProductBlueprintService) {
   }
 
   ngOnInit() {
-    this.$productBlueprintStats = this.staffProductService.getProductBlueprintStats(0, 50, this.item.id);  // source_item
-    this.$productBlueprint = this.staffProductService.getProductBlueprints(0, 50, this.item.id);  // source_item
+    this.$productBlueprint = this.productBlueprintService.queryProductTable(this.item.id,
+      this.item.id,
+      PaymentStatusEnum.successful);  // source_item
   }
 
   addingNew: boolean = false;
@@ -51,8 +52,9 @@ export class ProductBlueprintDashboardComponent implements OnInit {
 
   NewProduct() {
     this.addingNew = false;
-    this.$productBlueprintStats = this.staffProductService.getProductBlueprintStats(0, 50, this.item.id);  // source_item
-    this.$productBlueprint = this.staffProductService.getProductBlueprints(0, 50, this.item.id);  // source_item
+    this.$productBlueprint = this.productBlueprintService.queryProductTable(this.item.id,
+      this.item.id,
+      PaymentStatusEnum.successful);  // source_item
   }
 
 }

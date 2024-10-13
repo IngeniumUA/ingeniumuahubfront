@@ -11,7 +11,7 @@
     <tbody>
     <tr>
       <th>Checkout ID</th>
-      <td>{{ checkout.id }}</td>
+      <td>{{ checkout.checkout_uuid }}</td>
     </tr>
     <tr>
       <th>User</th>
@@ -19,29 +19,35 @@
     </tr>
     <tr>
       <th>Amount</th>
-      <td>{{ checkout.currency }} {{ checkout.amount }} </td>
+      <td>{{ String(checkout.amount) | currencypipe: 'EUR' }} </td>
     </tr>
     <tr>
       <th>Status</th>
-      <td>{{ checkout.status }}</td>
+      <td>{{ PaymentStatusEnum[checkout.checkout_status] }}</td>
     </tr>
     <tr>
       <th>Payment providor</th>
-      <td>{{ checkout.payment_providor }}</td>
+      <td>{{ PaymentProviderEnum[checkout.payment_provider] }}</td>
     </tr>
     <tr>
       <th>Date Created</th>
-      <td>{{ checkout.date_created | date: 'long' }}</td>
+      <td>{{ checkout.created_timestamp | date: 'long' }}</td>
     </tr>
     <tr>
       <th>Date Completed</th>
-      <td>{{ checkout.date_completed | date: 'long' }}</td>
+      <td>{{ checkout.completed_timestamp | date: 'long' }}</td>
     </tr>
 
     </tbody>
   </table>
 
   <div class="my-4 flex flex-row gap-3">
+    <button class="button button-primary w-1/6 button-inline"
+            [disabled]="this.loading"
+            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            (click)="LoadData()">
+      Refresh</button>
+
     <button class="button button-primary w-1/6 button-inline"
             [disabled]="this.loading"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
@@ -75,7 +81,7 @@
   <h1 class="text-blue-900">Edit transactions</h1>
   <ng-container *ngIf="(transactions$ | async) as transactions else loadingData">
   <ng-container *ngFor="let transaction of  transactions">
-  <app-transaction-detail (PatchedTransaction)="FetchData(true)"
+  <app-transaction-detail (PatchedTransaction)="LoadData(true)"
                           [transaction]="transaction"></app-transaction-detail>
   </ng-container>
   </ng-container>

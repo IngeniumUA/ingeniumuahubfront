@@ -2,7 +2,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
-import {StaffUserService} from '../../../../../core/services/staff/staff-user-service';
+import {StaffUserService} from '@ingenium/app/core/services/staff/staff-user-service';
 import {UserI} from '../../../../models/user/userI';
 import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
@@ -12,7 +12,7 @@ import {distinctUntilChanged} from 'rxjs/operators';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {GroupI} from '../../../../models/group/HubGroup';
-import {StaffGroupService} from '../../../../../core/services/staff/group/staff-group.service';
+import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
 
 @Component({
   selector: 'app-user-table',
@@ -37,7 +37,7 @@ import {StaffGroupService} from '../../../../../core/services/staff/group/staff-
 export class UserTableComponent implements OnInit, AfterViewInit {
   userData$: Observable<UserI[]> = of([]);
   userStats$: Observable<number> = of(0);
-  groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
+  groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList(null, null);
   usersExport$: Observable<Blob> = of();
 
   blob!: Blob;
@@ -57,7 +57,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
   constructor(private datePipe: DatePipe,
               private staffUserService: StaffUserService,
-              private staffGroupService: StaffGroupService) {
+              private staffGroupService: GroupService) {
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

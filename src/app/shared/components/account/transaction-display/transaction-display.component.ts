@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {TransactionI} from '../../../../core/services/user/account/account.service';
 import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
 @Component({
   selector: 'app-transaction-display',
   templateUrl: './transaction-display.component.html',
@@ -14,6 +14,6 @@ import {DatePipe, NgForOf, NgIf} from '@angular/common';
 })
 export class TransactionDisplayComponent {
 
-  @Input() transaction!: TransactionI;
+  @Input() transaction!: TransactionLimitedI;
 
 }

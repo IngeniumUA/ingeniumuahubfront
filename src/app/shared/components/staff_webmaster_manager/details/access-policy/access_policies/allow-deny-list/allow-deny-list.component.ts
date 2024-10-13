@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {FormArray, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AllowDenyListI} from '../../../../../../models/access_policies/access_policies';
+import {AccessPolicyEnum, AllowDenyListI} from '../../../../../../models/access_policies/access_policies';
 import {Observable} from "rxjs";
 import {GroupI} from "@ingenium/app/shared/models/group/HubGroup";
-import {StaffGroupService} from "@ingenium/app/core/services/staff/group/staff-group.service";
+import {GroupService} from "@ingenium/app/core/services/coreAPI/group/group.service";
 
 @Component({
   selector: 'app-allow-deny-list',
@@ -21,8 +21,8 @@ import {StaffGroupService} from "@ingenium/app/core/services/staff/group/staff-g
 })
 export class AllowDenyListComponent implements OnInit {
 
-    @Input() access_policy_content!: {[index: string]:any};
-    @Input() access_policy_method: string | undefined;
+    @Input() access_policy_content!: AllowDenyListI | null;
+    @Input() access_policy_method!: AccessPolicyEnum;
     @Output() UpdateAccessPolicy = new EventEmitter<AllowDenyListI>;
 
   groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
@@ -32,14 +32,18 @@ export class AllowDenyListComponent implements OnInit {
     whitelistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([]);
     blacklistGroupsForm: FormArray<FormControl> = new FormArray<FormControl>([]);
 
-    constructor(private staffGroupService: StaffGroupService) {
+    constructor(private staffGroupService: GroupService) {
     }
 
     ngOnInit() {
       // Parse content as correct interface ( allows for typehints )
+      console.log(this.access_policy_content)
+      const whitelist = this.access_policy_content === null ? []: this.access_policy_content['whitelist'];
+      const blacklist = this.access_policy_content === null ? []: this.access_policy_content['blacklist'];
+
       this.parsedPolicyContent = {
-        whitelist: this.access_policy_content['whitelist'],
-        blacklist: this.access_policy_content['blacklist'],
+        whitelist: whitelist,
+        blacklist: blacklist,
       };
       // Adding existing groups to forms
       if (this.parsedPolicyContent.whitelist !== null && this.parsedPolicyContent.whitelist !== undefined) {
@@ -84,7 +88,7 @@ export class AllowDenyListComponent implements OnInit {
 
     ValueChange() {
       if (!(this.blacklistGroupsForm.length > 0)) {
-        this.parsedPolicyContent.blacklist = null;
+        this.parsedPolicyContent.blacklist = [];
       } else {
         const blacklist: number[] = [];
         for (let i =0;i< this.blacklistGroupsForm.length;i++) {
@@ -96,7 +100,7 @@ export class AllowDenyListComponent implements OnInit {
         this.parsedPolicyContent.blacklist = blacklist;
       }
       if (!(this.whitelistGroupsForm.length > 0)) {
-        this.parsedPolicyContent.whitelist = null;
+        this.parsedPolicyContent.whitelist = [];
       } else {
         const whitelist: number[] = [];
         for (let i =0;i< this.whitelistGroupsForm.length;i++) {
@@ -107,6 +111,7 @@ export class AllowDenyListComponent implements OnInit {
         }
         this.parsedPolicyContent.whitelist = whitelist;
       }
+      console.log(this.parsedPolicyContent)
       this.UpdateAccessPolicy.emit(this.parsedPolicyContent);
     }
 }

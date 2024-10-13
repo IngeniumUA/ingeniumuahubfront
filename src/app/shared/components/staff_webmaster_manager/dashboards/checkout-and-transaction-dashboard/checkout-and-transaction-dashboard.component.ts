@@ -18,7 +18,7 @@ import {NgClass, NgIf, NgStyle} from '@angular/common';
 })
 export class CheckoutAndTransactionDashboardComponent {
 
-  @Input() item_id: string | null = null;
+  @Input() item_id: number | null = null;
   @Input() user_id: string | null = null;
   @Input() loadDataEvent: boolean = false;
 

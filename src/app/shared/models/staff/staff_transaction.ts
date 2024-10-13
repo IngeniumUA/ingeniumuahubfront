@@ -37,11 +37,3 @@ export interface StaffTransactionPatchI {
   user_id: string | null
   product: IProductItem | null
 }
-
-export interface StaffCreateTransactionI {
-  user: string
-  item_id: string
-  product: IProductItem
-  validity: number
-  count: number
-}

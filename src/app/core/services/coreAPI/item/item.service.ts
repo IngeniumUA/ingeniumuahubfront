@@ -10,16 +10,16 @@ import {ItemI, ItemInI} from "@ingenium/app/shared/models/item/itemI";
 export class ItemService {
   constructor(private httpClient: HttpClient) { }
 
-  apiUrl = apiEnviroment.apiUrl + 'item/';
+  apiUrl = apiEnviroment.apiUrl + 'item';
 
   public getItems(): Observable<ItemI[]> {
     return this.httpClient.get<ItemI[]>(this.apiUrl);
   }
   public getItem(itemId: string): Observable<ItemI> {
-    return this.httpClient.get<ItemI>(this.apiUrl + itemId);
+    return this.httpClient.get<ItemI>(this.apiUrl + "/" + itemId);
   }
   public deleteItem(itemId: string): void {
-    this.httpClient.delete(this.apiUrl + itemId);
+    this.httpClient.delete(this.apiUrl + "/" + itemId);
   }
   public createItem(itemData: ItemInI): void {
     this.httpClient.post(this.apiUrl, itemData);

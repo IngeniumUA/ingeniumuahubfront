@@ -12,14 +12,16 @@ export class PricePolicyService {
 
   apiUrl = apiEnviroment.apiUrl + 'blueprint/price_policy/';
 
-  public getPricePolicies(blueprint_id: number): Observable<PricePolicyI[]> {
-    return this.httpClient.get<PricePolicyI[]>(`${this.apiUrl}?blueprint_id=${blueprint_id}`);
+  public getPricePolicies(blueprint_id: number | null = null): Observable<PricePolicyI[]> {
+    const queryStr = blueprint_id === null ? "" : `?blueprint_id=${blueprint_id}`
+
+    return this.httpClient.get<PricePolicyI[]>(`${this.apiUrl}${queryStr}`);
   }
   public putPricePolicy(price_policy: PricePolicyI): Observable<PricePolicyI> {
     return this.httpClient.put<PricePolicyI>(`${this.apiUrl}${price_policy.id}`, price_policy);
   }
-  public deleteItem(pricePolicyId: number): void {
-    this.httpClient.delete(`${this.apiUrl}${pricePolicyId}`);
+  public deletePricePolicy(pricePolicyId: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.apiUrl}${pricePolicyId}`);
   }
   public createPricePolicy(pricePolicyIn: PricePolicyInI): Observable<PricePolicyI> {
     return this.httpClient.post<PricePolicyI>(this.apiUrl, pricePolicyIn);
