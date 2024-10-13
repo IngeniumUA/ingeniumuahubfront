@@ -75,6 +75,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   searchForm = new FormGroup({
     idControl: new FormControl(''),
     emailControl: new FormControl(''),
+    pricePolicyNameControl: new FormControl(''),
     productNameControl: new FormControl(''),
     validityControl: new FormControl('')
   });
@@ -89,7 +90,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   }
 
   GetDisplayedColumns(): string[] {
-    const columns = ['interaction_id', 'amount', 'product_blueprint', 'status', 'validity', 'completed_timestamp', 'created_timestamp'];
+    const columns = ['interaction_id', 'amount', 'product_blueprint', 'price_policy', 'status', 'validity', 'completed_timestamp', 'created_timestamp'];
 
     // Add if not Input()
     if (this.item_id === null) {
@@ -155,8 +156,8 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
       pageIndex * pageSize, pageSize,
       this.item_id, this.user_id, interactionQuery,
       status,
-      null, // TODO Validity
-      null, null,
+      validityQuery,
+      this.checkout_id, null,
       productNameQuery,
       null,
       null);
@@ -166,7 +167,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
       this.item_id, this.user_id, interactionQuery,
       status,
       validityQuery,
-      null, null,
+      this.checkout_id, null,
       productNameQuery,
       null,
       null);

@@ -14,7 +14,7 @@ export interface TransactionInI {
 
 export interface TransactionI {
   interaction: InteractionI
-  completed_timestamp: string
+  completed_timestamp: string | null
   created_timestamp: string
 
   transaction_status: PaymentStatusEnum
@@ -22,6 +22,9 @@ export interface TransactionI {
 
   product_blueprint_id: number
   price_policy_id: number
+
+  product_blueprint_name: string
+
   checkout_uuid: string
 
   purchased_product: IProductItem
@@ -39,4 +42,5 @@ export interface TransactionLimitedI {
   interaction: InteractionLimitedI
   purchased_product: IProductItem
   note: string
+  completed_timestamp: string | null
 }

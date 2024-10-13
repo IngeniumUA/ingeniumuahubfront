@@ -64,17 +64,24 @@
     } @else {
       <article *ngFor="let transaction of transactions" class="transaction-card">
         <dl>
-          <!--<dt>Evenement</dt>
-          <dd>{{ transaction.interaction.item_name }}</dd>-->
-
-          <!--<dt>Datum</dt>
-          <dd>{{ transaction.date_complete | date:'d MMM y, H:mm' }}</dd>-->
+          <dt>Evenement</dt>
+          <dd>{{ transaction.interaction.item_name }}</dd>
+<!--          <dt>Datum</dt>-->
+<!--          <dd>{{ transaction.item.derived_item | date:'d MMM y, H:mm' }}</dd>-->
 
           <dt>Product</dt>
-          <dd>{{ transaction.purchased_product.name }}</dd>
+          <dd>
+            {{ transaction.purchased_product.name}}@if (transaction.purchased_product.price_policy.name !== null) {: {{ transaction.purchased_product.price_policy.name }}}
+          </dd>
 
           <dt>Bedrag</dt>
           <dd>{{ transaction.purchased_product.price_policy.price === 0 ? 'Gratis' : '&euro; ' + transaction.purchased_product.price_policy.price }}</dd>
+
+          @if (transaction.completed_timestamp !== null) {
+            <dt>Betaald op:</dt>
+            <dd>{{ transaction.completed_timestamp | date:'d MMM y, H:mm' }}</dd>
+          }
+
         </dl>
         <button (click)="toggleQrCodeVisible(transaction)" type="button" class="button button-outline-blue button-sm button-full">
           {{ qrCodeVisible[transaction.interaction.interaction_uuid] ? 'Verberg QR Code' : 'Toon QR Code' }}

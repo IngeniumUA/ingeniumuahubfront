@@ -46,7 +46,7 @@ export class TransactionDetailComponent implements OnInit {
       'userEmailControl': [this.transaction.interaction.user_email],
       'validityControl': [this.transaction.validity],
       'statusControl': [{value: this.transaction.transaction_status, disabled: !this.forceEnabled()}],
-      'productControl': [this.transaction.purchased_product.name],
+      'productControl': [this.transaction.purchased_product],
       'noteControl': [this.transaction.note],
       'forcePatchControl': [false]
     });
