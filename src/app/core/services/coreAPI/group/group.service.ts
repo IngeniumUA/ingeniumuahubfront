@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
-import {GroupI} from '../../../../shared/models/group/HubGroup';
+import {GroupI, GroupInI} from '../../../../shared/models/group/HubGroup';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
@@ -30,5 +30,9 @@ export class GroupService {
 
   public RemoveUserFromGroup(group_id: number, user_id: string): Observable<GroupI[]> {
     return this.httpClient.post<GroupI[]>(`${this.apiUrl}/remove/${group_id}/${user_id}`,'');
+  }
+
+  public postGroup(groupObj: GroupInI): Observable<GroupI> {
+    return this.httpClient.post<GroupI>(`${this.apiUrl}`, groupObj);
   }
 }
