@@ -1,5 +1,6 @@
 import {TransactionInI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 
 export interface CheckoutI {
   checkout_uuid: string
@@ -29,4 +30,10 @@ export interface CheckoutInI {
 
 export interface CheckoutPatchI {
   checkout_status: number
+}
+
+export interface CheckoutSmollI {
+  checkout_uuid: string
+  client_secret: string
+  payment_provider: PaymentProviderEnum
 }

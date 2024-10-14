@@ -3,7 +3,7 @@ import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOpt
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
-import {CheckoutIdI} from "@ingenium/app/shared/models/items/products/products";
+import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -17,10 +17,10 @@ export class StripePaymentComponent implements OnInit {
                   private router: Router) {
   }
 
-  @Input() checkoutId!: CheckoutIdI;
+  @Input() checkout!: CheckoutSmollI;
 
   ngOnInit() {
-    this.elementsOptions.clientSecret = this.checkoutId.checkout_id
+    this.elementsOptions.clientSecret = this.checkout.client_secret
   }
 
   elementsOptions: StripeElementsOptions = {
