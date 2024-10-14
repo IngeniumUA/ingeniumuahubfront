@@ -75,8 +75,8 @@
         Status:
         <select formControlName="statusControl">
             <option [ngValue]="null">Status</option>
-            <option *ngFor="let status of StatusOptions" [ngValue]="status.value" style="color: var(--mainblue)">
-                {{ status.name }}
+            <option *ngFor="let status of PaymentStatusList" [ngValue]="status" style="color: var(--mainblue)">
+                {{ PaymentStatusEnum[status] }}
             </option>
         </select>
         </div>

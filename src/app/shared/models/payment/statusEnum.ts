@@ -12,3 +12,13 @@ export enum PaymentStatusEnum {
   refunded = 6,
   partially_refunded = 7
 }
+
+export const PaymentStatusList = [
+  PaymentStatusEnum.successful,
+  PaymentStatusEnum.cancelled,
+  PaymentStatusEnum.failed,
+  PaymentStatusEnum.pending,
+  PaymentStatusEnum.refund_pending,
+  PaymentStatusEnum.refunded,
+  PaymentStatusEnum.partially_refunded,
+]
