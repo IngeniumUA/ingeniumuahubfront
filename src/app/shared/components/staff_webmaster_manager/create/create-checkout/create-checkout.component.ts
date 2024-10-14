@@ -12,12 +12,12 @@ import {
 import {AsyncPipe, KeyValuePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {Observable, of} from 'rxjs';
 import {IProductItem, PaymentProviderEnum} from '../../../../models/items/products/products';
-import {ValidityOptions} from '../../../../models/items/validity';
 import {HttpErrorResponse} from '@angular/common/http';
 import {StaffCheckoutService} from '@ingenium/app/core/services/staff/staff-checkout.service';
 import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
 import {TransactionInI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {CheckoutInI} from "@ingenium/app/shared/models/checkout/checkoutModels";
+import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
 
 
 @Component({
@@ -198,6 +198,7 @@ export class CreateCheckoutComponent implements OnInit {
     };
   }
 
-  protected readonly ValidityOptions = ValidityOptions;
   protected readonly PaymentProviderEnum = PaymentProviderEnum;
+  protected readonly ValidityList = ValidityList;
+  protected readonly ValidityEnum = ValidityEnum;
 }

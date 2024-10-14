@@ -38,8 +38,8 @@
           Validity:
           <select formControlName="validityControl">
             <option [ngValue]="null" selected>Kies Validity</option>
-            <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
-              {{ validity.name }}
+            <option *ngFor="let validity of ValidityList" [ngValue]="validity" style="color: var(--mainblue)">
+              {{ ValidityEnum[validity] }}
             </option>
           </select>
           </span>
