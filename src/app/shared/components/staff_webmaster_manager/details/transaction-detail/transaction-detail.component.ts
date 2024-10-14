@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AsyncPipe, DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors} from '@angular/forms';
-import {ValidityOptions} from '../../../../models/items/validity';
 import {StatusOptions} from '../../../../models/items/status';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
@@ -9,6 +8,7 @@ import {IProductItem} from '../../../../models/items/products/products';
 import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
 import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
+import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -149,6 +149,7 @@ export class TransactionDetailComponent implements OnInit {
     return this.transactionForm.controls['forcePatchControl'].value;
   }
 
-  protected readonly ValidityOptions = ValidityOptions;
   protected readonly StatusOptions = StatusOptions;
+  protected readonly ValidityList = ValidityList;
+  protected readonly ValidityEnum = ValidityEnum;
 }

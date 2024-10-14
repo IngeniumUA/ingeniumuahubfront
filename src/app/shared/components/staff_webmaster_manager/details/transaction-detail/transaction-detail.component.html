@@ -65,8 +65,8 @@
         Validity:
         <select formControlName="validityControl">
           <option selected [value]="this.transaction.validity">{{ transaction.validity }}</option>
-          <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
-              {{ validity.name }}
+          <option *ngFor="let validity of ValidityList" [ngValue]="validity" style="color: var(--mainblue)">
+              {{ ValidityEnum[validity] }}
           </option>
         </select>
         </div>
