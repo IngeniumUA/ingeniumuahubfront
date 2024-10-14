@@ -4,10 +4,12 @@ import {apiEnviroment} from '@ingenium/environments/environment';
 import {Router} from '@angular/router';
 import {Store} from "@ngxs/store";
 import {CartActions, CartState} from "@ingenium/app/core/store";
-import {CheckoutIdI, CheckoutResponseI, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 import {map} from "rxjs/operators";
 import {catchError} from "rxjs";
 import {ToastrService} from "ngx-toastr";
+import {CartSuccessI} from "@ingenium/app/shared/models/cart/cartModels";
+import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
 
 @Component({
   selector: 'app-page',
@@ -15,7 +17,7 @@ import {ToastrService} from "ngx-toastr";
   styleUrls: ['./pay.component.css']
 })
 export class PayComponent implements OnInit {
-  checkoutId!: CheckoutIdI;
+  checkout!: CheckoutSmollI;
   loading = true;
   stripePayment = false;
 
@@ -31,16 +33,17 @@ export class PayComponent implements OnInit {
     const paymentProvider = this.store.selectSnapshot(CartState.getPaymentProvider);
 
     // Request the checkout ID.
-    this.httpClient.post<CheckoutResponseI>(`${apiEnviroment.apiUrl}cart/checkout?requested_payment_provider=${paymentProvider.valueOf()}`, {
+    this.httpClient.post<CartSuccessI>(`${apiEnviroment.apiUrl}cart/checkout?requested_payment_provider=${paymentProvider.valueOf()}`, {
       products: this.store.selectSnapshot(CartState.getProducts),
       checkout_note: this.store.selectSnapshot(CartState.getCheckoutNote),
     }).pipe(
-      map((result: CheckoutResponseI) => this.processCheckoutResponse(result)),
+      map((result: CartSuccessI) => this.processCheckoutResponse(result)),
       catchError((_): any => {
-        //this.cartService.clearPaymentErrors();
-        //if (error instanceof HttpErrorResponse) {
-        //  this.cartService.insertPaymentError(error);
-        //}
+        // // todo this.store.clearPaymentErrors();
+        // if (err instanceof HttpErrorResponse) {
+        //  const cartFailed: CartFailedI = err.error["detail"];
+        //  // todo this.store.setPaymentErrors(-
+        // }
         this.router.navigateByUrl('/shop/checkout');
       })
     ).subscribe();
@@ -50,7 +53,7 @@ export class PayComponent implements OnInit {
     this.store.dispatch(new CartActions.SetCheckoutNote(''));
   }
 
-  processCheckoutResponse(response: CheckoutResponseI) {
+  processCheckoutResponse(response: CartSuccessI) {
     switch (response.checkout.payment_provider) {
       case PaymentProviderEnum.Dev:
         // TODO: change this so it isn't hardcoded
@@ -58,7 +61,7 @@ export class PayComponent implements OnInit {
           this.toastrService.success(`Het volgnummer is ${response.tracker_id}`, 'Bestelling gelukt!', {
             timeOut: 10000,
           });
-          this.router.navigateByUrl('/popupz/menu/');
+          this.router.navigateByUrl('/account/transactions/');
           break;
         }
 
@@ -88,7 +91,7 @@ export class PayComponent implements OnInit {
         break;
     }
 
-    this.checkoutId = response.checkout;
+    this.checkout = response.checkout;
     this.loading = false;
     return response;
   }
