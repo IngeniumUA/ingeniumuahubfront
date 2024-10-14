@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
-import {ITransaction} from '@ingenium/app/shared/models/items/products/cart';
 import {ProductComponent} from '@ingenium/app/shared/components/items/products/product/product.component';
 import {IProductItem, PaymentProviderEnum} from '@ingenium/app/shared/models/items/products/products';
 import {RouterLink} from '@angular/router';
@@ -33,7 +32,6 @@ export class ShoppingcartListComponent implements OnInit {
   totalPrice$: Observable<number> = this.store.select(CartState.getTotalPrice);
   allowStaffCheckout$ = this.store.select(UserState.roles).pipe(map(roles => roles && roles.is_manager));
 
-  transactions: ITransaction[][] = [];
   items: ItemLimitedI[] = [];
   paymentErrors: HttpErrorResponse[] = [];
 
