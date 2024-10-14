@@ -64,7 +64,7 @@
             <input type="text" placeholder="Email" [formControlName]="'emailControl'">
           </div>
         </th>
-        <td mat-cell *matCellDef="let transaction"><a [routerLink]="['../../user/'+transaction.interaction.user_id ]">
+        <td mat-cell *matCellDef="let transaction"><a [routerLink]="['../../user/'+transaction.interaction.user_uuid ]">
           <ng-container *ngIf="transaction.interaction.user_email !== null">{{ transaction.interaction.user_email }}</ng-container>
           <ng-container *ngIf="transaction.interaction.user_email === null">{{ transaction.interaction.user_uuid }}</ng-container>
         </a></td>
@@ -109,7 +109,7 @@
       <ng-container matColumnDef="price_policy">
         <th mat-header-cell *matHeaderCellDef>
           <div>
-            Product
+            Price Policy
             <input type="text" placeholder="Price Policy Name" [formControlName]="'pricePolicyNameControl'">
           </div>
         </th>
@@ -129,8 +129,8 @@
           <div>Validity
           <select formControlName="validityControl">
             <option [ngValue]="null">Validity</option>
-            <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
-              {{ validity.name }}
+            <option *ngFor="let validity of ValidityList" [ngValue]="validity" style="color: var(--mainblue)">
+              {{ ValidityEnum[validity] }}
             </option>
           </select>
           </div>

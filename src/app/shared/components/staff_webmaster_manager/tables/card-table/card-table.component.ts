@@ -2,14 +2,15 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
-import {StaffCardService} from '@ingenium/app/core/services/staff/items/staff_card_router';
-import {CardTypes, StaffCardDetailI} from '../../../../models/staff/staff_card_detail';
+import {CardTypes} from '../../../../models/staff/staff_card_detail';
 import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {CardService} from "@ingenium/app/core/services/coreAPI/item/derived_services/card.service";
+import {CardItemWideI} from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
   selector: 'app-card-table',
@@ -32,8 +33,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  cardStats$: Observable<any> = of();
-  cards$: Observable<StaffCardDetailI[]> = of([]);
+  cards$: Observable<CardItemWideI[]> = of([]);
   isMobile$ = this.layoutService.isMobile;
 
   searchForm = new FormGroup({
@@ -43,12 +43,12 @@ export class CardTableComponent implements OnInit, AfterViewInit {
   });
 
   GetDisplayedColumns(): string[] {
-    return ['id', 'academic_year', 'card_type',
-      'card_nr', 'user', 'linked_date', 'last_edited', 'card_item',
+    return ['id', 'card_type',
+      'card_nr', 'user', 'last_edited', 'card_item',
       'unlink_button'];
   }
 
-  constructor(private cardService: StaffCardService,
+  constructor(private cardService: CardService,
               private layoutService: LayoutService) {
   }
 
@@ -86,30 +86,31 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     const cardNrControl = this.searchForm.get('cardNrControl')!.value;
 
     const userQuery = userControlValue === '' ? null: userControlValue;
-    const cardTypeQuery = cardTypeControl === '' ? null: cardTypeControl;
+    const cardTypeQuery = cardTypeControl === '' || cardTypeControl === null ? null: parseInt(cardTypeControl);
     const cardNrQuery = cardNrControl === '' ? null: cardNrControl;
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
-    this.cardStats$ = this.cardService.getCardStats(pageIndex * pageSize, pageSize, userQuery, cardTypeQuery, cardNrQuery, null);
-    this.cards$ = this.cardService.getCards(pageIndex * pageSize, pageSize, userQuery, cardTypeQuery, cardNrQuery, null);
+    this.cards$ = this.cardService.queryCards(pageIndex * pageSize, pageSize,
+      userQuery, cardTypeQuery, cardNrQuery);
   }
 
   DownloadData() {
 
   }
 
-  UnlinkCard(card: StaffCardDetailI) {
-    this.cardService.UnlinkCard(card).subscribe({
-      next: () => {
-        this.LoadData();
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    });
+  UnlinkCard(// todo card: StaffCardDetailI
+    ) {
+    // this.cardService.UnlinkCard(card).subscribe({
+    //   next: () => {
+    //     this.LoadData();
+    //   },
+    //   error: (err: any) => {
+    //     console.log(err);
+    //   }
+    // });
   }
   protected readonly CardTypes = CardTypes;
 }

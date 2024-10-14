@@ -65,8 +65,8 @@
         Validity:
         <select formControlName="validityControl">
           <option selected [value]="this.transaction.validity">{{ transaction.validity }}</option>
-          <option *ngFor="let validity of ValidityOptions" [ngValue]="validity.value" style="color: var(--mainblue)">
-              {{ validity.name }}
+          <option *ngFor="let validity of ValidityList" [ngValue]="validity" style="color: var(--mainblue)">
+              {{ ValidityEnum[validity] }}
           </option>
         </select>
         </div>
@@ -75,8 +75,8 @@
         Status:
         <select formControlName="statusControl">
             <option [ngValue]="null">Status</option>
-            <option *ngFor="let status of StatusOptions" [ngValue]="status.value" style="color: var(--mainblue)">
-                {{ status.name }}
+            <option *ngFor="let status of PaymentStatusList" [ngValue]="status" style="color: var(--mainblue)">
+                {{ PaymentStatusEnum[status] }}
             </option>
         </select>
         </div>

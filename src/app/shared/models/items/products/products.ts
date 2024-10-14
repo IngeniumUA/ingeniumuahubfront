@@ -26,7 +26,7 @@ export interface ProductMetaI {
 
 export interface IPricePolicy {
   id: number;
-  name: string;
+  name: string | null;
   price: number,
   availability: {
     available: boolean;
@@ -53,15 +53,4 @@ export enum PaymentProviderEnum {
   Kassa = 2,
   Free = 3,
   Stripe = 4,
-}
-
-export interface CheckoutIdI {
-  checkout_id: string
-  payment_provider_payment_id: string,
-  payment_provider: PaymentProviderEnum
-}
-
-export interface CheckoutResponseI {
-  checkout: CheckoutIdI,
-  tracker_id: number,
 }

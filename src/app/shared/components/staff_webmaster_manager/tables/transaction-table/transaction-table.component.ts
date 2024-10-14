@@ -18,11 +18,10 @@ import {StatusStatsI} from '../../../../models/stats/transactionStats';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
-import {ValidityOptions} from '../../../../models/items/validity';
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
 import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
-import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
+import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
 
 @Component({
   selector: 'app-transaction-table',
@@ -273,7 +272,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     });
   }
 
-  protected readonly ValidityOptions = ValidityOptions;
   protected readonly PaymentStatusEnum = PaymentStatusEnum;
   protected readonly ValidityEnum = ValidityEnum;
+  protected readonly ValidityList = ValidityList;
 }

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
-import {CartService} from '@ingenium/app/core/services/shop/cart/cart.service';
 import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {IProductItem} from '@ingenium/app/shared/models/items/products/products';
@@ -19,13 +18,13 @@ export class ShopDetailComponent implements OnInit {
               private router: Router,
               private layoutService: LayoutService,
               private shopService: ShopService,
-              private cartService: CartService,
               private productService: ProductsService) {
   }
 
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  isCartEmpty: boolean = !this.cartService.hasTransactions();
+  isCartEmpty: boolean = false;
+
   // Event Info and Deco
   shopItem$?: Observable<ItemWideLimitedI>;
   shopError$!: Observable<any>;
