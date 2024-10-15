@@ -4,6 +4,10 @@ import {Injectable} from "@angular/core";
 import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 import {removeItem} from "@ngxs/store/operators";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import structuredClone from '@ungap/structured-clone';
+
 @State<CartStateModel>({
   name: 'cart',
   defaults: {
