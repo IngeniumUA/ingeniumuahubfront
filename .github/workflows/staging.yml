@@ -35,6 +35,7 @@ jobs:
         with:
           environment: staging
           sourcemaps: 'dist/ingeniumuahubfront/browser'
+          ignore_missing: true
 
       - name: Remove source maps
         run: rm -f dist/ingeniumuahubfront/browser/*.map
