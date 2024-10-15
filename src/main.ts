@@ -18,6 +18,7 @@ Sentry.init({
   tracePropagationTargets: ["localhost", /^https:\/\/ingeniumua\.be\/api/, /^https:\/\/hub\.dev\.ingeniumua\.be\/api/],
   enabled: apiEnviroment.name !== 'development',
   environment: apiEnviroment.name,
+  release: apiEnviroment.versions.revision,
 });
 
 if (apiEnviroment.name !== 'development') {

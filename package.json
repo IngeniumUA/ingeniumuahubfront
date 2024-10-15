@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "build-revision-file": "ts-node -O '{\"module\": \"commonjs\"}' git.version.ts",
     "build": "ng build",
     "build:staging": "ng build --configuration staging",
     "watch": "ng serve --watch --configuration development",

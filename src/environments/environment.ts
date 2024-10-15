@@ -1,4 +1,5 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
+import { versions } from "@ingenium/environments/versions";
 
 const OAuthConfig: AuthConfig = {
   issuer: 'https://sso.ingeniumua.be/realms/ingeniumua',
@@ -15,4 +16,5 @@ export const apiEnviroment = {
   name: 'production',
   apiUrl: 'https://hub.ingeniumua.be/api/v1/',
   oauthConfig: OAuthConfig,
+  versions: versions
 };

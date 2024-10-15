@@ -24,7 +24,7 @@ jobs:
         run: npm run lint
 
       - name: Build
-        run: npm run build
+        run: npm run build-revision-file && npm run build
 
       - name: Create Sentry release
         uses: getsentry/action-release@v1

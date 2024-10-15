@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {apiEnviroment} from "@ingenium/environments/environment";
 
 @Component({
   selector: 'app-page',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./credits.component.scss']
 })
 export class CreditsComponent {
-
+  revision: string = apiEnviroment.versions.revision;
 }
