@@ -26,6 +26,22 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: production
+          sourcemaps: 'dist/ingeniumuahubfront/browser'
+
+      - name: Remove source maps
+        run: rm -f dist/ingeniumuahubfront/browser/*.map
+
+      - name: Copy 3rdpartylicenses.txt to browser folder
+        run: cp dist/ingeniumuahubfront/3rdpartylicenses.txt dist/ingeniumuahubfront/browser
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
