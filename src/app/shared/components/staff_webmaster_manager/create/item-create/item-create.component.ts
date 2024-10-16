@@ -11,6 +11,12 @@ import {ItemWideInI} from "@ingenium/app/shared/models/item/itemwideI";
 import {PromoItemInI, PromoItemTypes} from "@ingenium/app/shared/models/item/promoI";
 import {EventItemInI} from "@ingenium/app/shared/models/item/eventI";
 import {ShopItemInI} from "@ingenium/app/shared/models/item/shopI";
+import {
+  CardItemInI,
+  CardMembershipEnum,
+  CardMembershipEnumList,
+  CardTypeEnum, CardTypeEnumList
+} from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
   selector: 'app-item-create',
@@ -30,7 +36,7 @@ import {ShopItemInI} from "@ingenium/app/shared/models/item/shopI";
 })
 export class ItemCreateComponent implements OnInit {
   $itemType: Observable<string | null> = of('none'); // none, event, shop, promo
-  itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem'];
+  itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem', 'carditem'];
   itemTypeControl = new FormControl<string>('none');
 
   itemCreateForm = this.formBuilder.group({
@@ -43,7 +49,7 @@ export class ItemCreateComponent implements OnInit {
     eventEndDate: ['', Validators.required],
     eventLocation: ['', Validators.required],
 
-    color: ['', [Validators.required, Validators.maxLength(9), Validators.minLength(9)]],
+    color: ['', [Validators.required]],
     followThroughLink: ['', Validators.required],
     imageSquare: [''],
     imageLandscape: [''],
@@ -55,12 +61,27 @@ export class ItemCreateComponent implements OnInit {
     displayUntilDate: ['', Validators.required],
     promoType: ['promo type', Validators.required],
 
-    color: ['', [Validators.required, Validators.maxLength(9), Validators.minLength(9)]],
+    color: ['', [Validators.required]],
     followThroughLink: ['', Validators.required],
     imageSquare: [''],
     imageLandscape: [''],
     previewDescription: [''],
   });
+
+  shopCreateForm = this.formBuilder.group({
+    color: ['', [Validators.required]],
+    followThroughLink: ['', Validators.required],
+    imageSquare: [''],
+    imageLandscape: [''],
+    previewDescription: [''],
+  });
+
+  cardCreateForm = this.formBuilder.group({
+    source_item_id: [0, [Validators.required]],
+    member_type: [CardMembershipEnum.lid, Validators.required],
+    card_type: [CardTypeEnum.qr_code_v1, Validators.required],
+    card_uuid: ['', Validators.required]
+  })
 
   form_error: string | null = null;
   loading: boolean = false;
@@ -87,7 +108,6 @@ export class ItemCreateComponent implements OnInit {
     const imageLandscapeControlValue: string = this.eventCreateForm.controls['imageLandscape'].value!;
     const imageLandscapeValue = imageLandscapeControlValue === "" ? null : imageLandscapeControlValue;
 
-
     return {
       derived_type_enum: "eventitem",
 
@@ -109,8 +129,24 @@ export class ItemCreateComponent implements OnInit {
     if (itemType !== this.itemTypes[2]) {
       return null;
     }
-    // TODO Refactoring ...
-    return null;
+
+    const imageSquareControlValue: string = this.shopCreateForm.controls['imageSquare'].value!;
+    const imageSquareValue = imageSquareControlValue === "" ? null : imageSquareControlValue;
+
+    const imageLandscapeControlValue: string = this.shopCreateForm.controls['imageLandscape'].value!;
+    const imageLandscapeValue = imageLandscapeControlValue === "" ? null : imageLandscapeControlValue;
+
+    return {
+      derived_type_enum: "shopitem",
+
+      display: {
+        color: this.shopCreateForm.controls['color'].value!,
+        follow_through_link: this.shopCreateForm.controls['followThroughLink'].value!,
+        image_square: imageSquareValue,
+        image_landscape: imageLandscapeValue,
+        preview_description: this.shopCreateForm.controls['previewDescription'].value!,
+      }
+    };
   }
 
   parsePromoForm(itemType: string): PromoItemInI | null {
@@ -134,6 +170,17 @@ export class ItemCreateComponent implements OnInit {
     // };
   }
 
+  public parseCardForm(itemType: string): null | CardItemInI {
+    if (itemType !== this.itemTypes[4]) {
+      return null;
+    }
+    return {
+      source_item_id: this.cardCreateForm.controls['source_item_id'].value!,
+      member_type: this.cardCreateForm.controls['member_type'].value!,
+      card_type: this.cardCreateForm.controls['card_type'].value!,
+      card_uuid: this.cardCreateForm.controls['card_uuid'].value!,
+    }
+  }
 
   onSubmit(itemType: string) {
     // Check if valid guardclause
@@ -148,8 +195,9 @@ export class ItemCreateComponent implements OnInit {
     const event = this.parseEventForm(itemType);
     const promo = this.parsePromoForm(itemType);
     const shop = this.parseShopForm(itemType);
+    const card = this.parseCardForm(itemType);
 
-    const derivedType = event !== null ? event: promo !== null ? promo: shop;
+    const derivedType = event !== null ? event: promo !== null ? promo: shop !== null ? shop: card;
     const createObject: ItemWideInI = {
       item: {
         name: this.itemCreateForm.controls['itemName'].value!,
@@ -176,4 +224,8 @@ export class ItemCreateComponent implements OnInit {
   }
 
   protected readonly PromoTypes = PromoItemTypes;
+  protected readonly CardMembershipEnumList = CardMembershipEnumList;
+  protected readonly CardMembershipEnum = CardMembershipEnum;
+  protected readonly CardTypeEnumList = CardTypeEnumList;
+  protected readonly CardTypeEnum = CardTypeEnum;
 }
