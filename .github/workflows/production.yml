@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Download Sentry CLI
+        run: curl -sL https://sentry.io/get-cli/ | bash
+
       - name: Install dependencies
         run: npm install
 
@@ -26,16 +29,19 @@ jobs:
       - name: Build
         run: npm run build-revision-file && npm run build
 
-      - name: Create Sentry release
-        uses: getsentry/action-release@v1
+      - name: Inject debug ID's
+        run: sentry-cli sourcemaps inject dist/ingeniumuahubfront/browser
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: ${{ vars.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: production
-          sourcemaps: 'dist/ingeniumuahubfront/browser'
-          ignore_missing: true
+
+      - name: Upload sourcemaps to Sentry
+        run: sentry-cli sourcemaps upload --release ${{ github.sha }} dist/ingeniumuahubfront/browser
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
       - name: Remove source maps
         run: rm -f dist/ingeniumuahubfront/browser/*.map
