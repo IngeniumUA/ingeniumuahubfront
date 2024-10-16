@@ -13,7 +13,7 @@ export class CardService {
   constructor(private httpClient: HttpClient) {
   }
 
-  apiUrl = apiEnviroment.apiUrl + 'item/card';
+  apiUrl = apiEnviroment.apiUrl + 'item/wide/card';
 
   public queryCards(offset: number = 0, count: number = 50,
                     user: string | null = null, cardType: number | null = null, cardName: string | null = null
