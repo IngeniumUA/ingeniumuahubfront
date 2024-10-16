@@ -39,17 +39,16 @@ export class RecSysItemPreviewComponent implements OnInit {
 
     CardStyle(): object {
       const colorPipe = new ColordbrgbaPipe();
-      // TODO This is ugly, need to lookup more on how objects are created to make better
       if (this.small) {
         return {
           'background': colorPipe.transform(this.recsysItem.color, 1),
-          'border': 'solid 2px rgb(0, 0, 0)',
+          'border': `solid 2px ${colorPipe.transform(this.recsysItem.color, 0.5)}`,
           'max-width': '10rem'
         };
       } else {
         return {
           'background': colorPipe.transform(this.recsysItem.color, 1),
-          'border': 'solid 2px rgb(0, 0, 0)'
+          'border': `solid 2px ${colorPipe.transform(this.recsysItem.color, 0.5)}`
         };
       }
 

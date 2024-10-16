@@ -2,6 +2,7 @@ import {ItemI, ItemInI, ItemLimitedI} from "@ingenium/app/shared/models/item/ite
 import {PromoItemI, PromoItemInI, PromoItemLimitedI} from "@ingenium/app/shared/models/item/promoI";
 import {EventItemI, EventItemInI, EventItemLimitedI} from "@ingenium/app/shared/models/item/eventI";
 import {ShopItemI, ShopItemInI, ShopItemLimitedI} from "@ingenium/app/shared/models/item/shopI";
+import {CardItemInI} from "@ingenium/app/shared/models/item/cardI";
 
 export interface ItemWideLimitedI {
   item: ItemLimitedI
@@ -10,7 +11,7 @@ export interface ItemWideLimitedI {
 
 export interface ItemWideInI {
   item: ItemInI
-  derived_type: EventItemInI | ShopItemInI | PromoItemInI | null
+  derived_type: EventItemInI | ShopItemInI | PromoItemInI | CardItemInI | null
 }
 
 export interface ItemWideI {
