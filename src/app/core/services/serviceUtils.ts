@@ -1,6 +1,10 @@
 export function removeNull<T>(obj: T | any): T | any {
   Object.keys(obj).forEach((key) => {
-    if (obj[key] && typeof obj[key] === 'object') {
+    // Delete if the value is null or undefined
+    if (obj[key] == null) {
+      delete obj[key];
+    }
+    else if (obj[key] && typeof obj[key] === 'object') {
       // Recursively call removeNull for nested objects
       removeNull(obj[key]);
     }
@@ -10,10 +14,6 @@ export function removeNull<T>(obj: T | any): T | any {
     }
     // If the object is an empty object, delete the key
     else if (Object.keys(obj[key]).length === 0) {
-      delete obj[key];
-    }
-    // Delete if the value is null or undefined
-    else if (obj[key] == null) {
       delete obj[key];
     }
   })
