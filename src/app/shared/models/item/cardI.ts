@@ -45,6 +45,7 @@ export interface CardItemWideI {
 }
 
 export interface CardItemInI {
+  derived_type_enum: "carditem"
   source_item_id: number
   member_type: number
   card_type: number
