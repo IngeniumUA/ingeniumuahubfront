@@ -1,11 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {AsyncPipe, NgClass, NgIf} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AsyncPipe, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {AccountService} from '../../../../core/services/user/account/account.service';
-import {first} from 'rxjs/operators';
 import {Observable} from "rxjs";
-import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
+import {CardItemWideLimitedI, CardMembershipEnum} from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
   selector: 'app-card',
@@ -16,7 +15,8 @@ import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
     NgIf,
     AsyncPipe,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    TitleCasePipe
   ],
   standalone: true
 })
@@ -29,7 +29,7 @@ export class CardComponent implements OnInit {
               private accountService: AccountService) {
   }
 
-  $card: Observable<CardItemI> | null = null;
+  $card: Observable<CardItemWideLimitedI> | null = null;
   success_notification: string | null = null;
   failed_notification: string | null = null;
 
@@ -45,57 +45,6 @@ export class CardComponent implements OnInit {
       }
     }
   }
-
-  public cardClicked() {
-    if (!this.is_lid) {
-      this.router.navigate(['/shop']);
-      return;
-    }
-  }
-
-
-  submitted: boolean = false;
   loading: boolean = false;
-  form_error: string | null = null;
-  form = this.formBuilder.group({
-    uuid: ['', Validators.required]
-  });
-
-  get f() {
-    return this.form.controls;
-  }
-
-  public onSubmit() {
-    // Check if valid guardclause
-    if (this.form.invalid) {
-      const error: Error = Error('Foutieve code ingevuld');
-      this.handleFormError(error);
-      return;
-    }
-
-    this.loading = true;
-    this.form_error = null;
-    this.accountService.linkCard(this.form.controls['uuid'].value!).pipe(
-      first()).subscribe({
-      next: () => {
-        // Emit via output instead of reloading page
-        window.location.reload();
-      },
-      error: error => {
-        this.loading = false;
-
-        // Get response status code
-        if (error.status && error.status === 406) {
-          this.form_error = "Deze kaart kon niet gekoppeld worden. Mogelijks is de code fout of is deze al gekoppeld met een ander account.";
-        } else {
-          this.handleFormError(error);
-        }
-      }
-    });
-  }
-
-  handleFormError(err: Error) {
-    this.form_error = err.message;
-  }
-
+  protected readonly CardMembershipEnum = CardMembershipEnum;
 }

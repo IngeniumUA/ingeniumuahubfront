@@ -2,32 +2,18 @@
   <h2 class="white-section-title">Jouw lidkaart</h2>
   <p>Met je lidkaart krijg je toegang tot alle voordelen van onze vereniging. Heb je nog geen lidkaart? Koop er dan snel eentje!</p>
 
-  @if ($card | async; as card) {
+  @if ($card | async; as item) {
     <div class="lidkaart-card">
       <div class="lidkaart-wrapper">
-        <img src="{{ card.display.image_landscape }}" alt="card">
+        <img src="{{ item.derived_type.display.image_landscape }}" alt="card">
       </div>
-      <p>{{ card.card_uuid }}</p>
+      <p><span class="font-bold">{{ CardMembershipEnum[item.derived_type.member_type] | titlecase }}: </span>{{ item.item.name }}</p>
       <span *ngIf="failed_notification !== null" class="error-message">{{ failed_notification }}</span>
       <span *ngIf="success_notification !== null" class="success-message">{{ success_notification}}</span>
     </div>
   } @else {
     <div class="alert alert-info mb-4">
-      <p class="alert-text">Het lijkt erop dat je nog geen lidkaart hebt gekoppeld. Je kan de <span class="font-bold">QR-code op de achterkant van je kaart scannen</span> of als je <span class="font-bold">online een kaart kocht</span> de code ervan onderaan invullen.</p>
+      <p class="alert-text">Het lijkt erop dat je nog geen lidkaart hebt gekoppeld. Je kan de <span class="font-bold">QR-code op de achterkant van je kaart scannen</span></p>
     </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-2">
-      <div class="form-field" [ngClass]="{ 'is-invalid': (f['uuid'].errors && submitted) || form_error }">
-        <label for="card-uuid">Vul je code in</label>
-        <input id="card-uuid" type="text" formControlName="uuid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
-
-        <!-- Error messages -->
-        <ul *ngIf="form_error" class="field-error-message-list" id="phoneNumber-errors">
-          <li>{{ form_error }}</li>
-        </ul>
-      </div>
-      <div class="form-field">
-        <button class="button button-primary button-sm" type="submit" [disabled]="loading">Koppelen</button>
-      </div>
-    </form>
   }
 </section>

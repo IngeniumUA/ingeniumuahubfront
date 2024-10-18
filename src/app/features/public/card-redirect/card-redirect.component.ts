@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AccountService} from '../../../core/services/user/account/account.service';
 import {first} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
-import {CardLimitedI} from '../../../shared/models/card';
+import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
   selector: 'app-card-redirect',
@@ -26,7 +26,7 @@ export class CardRedirectComponent implements OnInit {
 
     // Submit card to backend
     this.accountService.linkCard(card_uuid!).pipe(first()).subscribe({
-      next: (response: CardLimitedI) => {
+      next: (response: CardItemWideLimitedI) => {
         // User was added to lid
         const notification = this.HandleSuccesResponse(response);
         this.router.navigateByUrl('/account' + '?card_notification=s_'+notification);
@@ -42,7 +42,7 @@ export class CardRedirectComponent implements OnInit {
     this.router.navigateByUrl('/account/card');
   }
 
-  HandleSuccesResponse(_response: CardLimitedI): string {
+  HandleSuccesResponse(_response: CardItemWideLimitedI): string {
     return 'Kaart gelinkt!';
   }
 
