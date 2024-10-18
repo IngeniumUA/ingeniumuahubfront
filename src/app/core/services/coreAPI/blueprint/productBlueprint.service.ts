@@ -26,9 +26,7 @@ export class ProductBlueprintService {
       origin_item_id: origin_item_id,
       transaction_status: transaction_status
     }
-    console.log(param)
     const params = new URLSearchParams(removeNull(param));
-    console.log(params)
     return this.httpClient.get<[]>(`${this.apiUrl}/table?${params.toString()}`);
   }
 
