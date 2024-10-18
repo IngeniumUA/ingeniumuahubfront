@@ -16,7 +16,7 @@ export class UserService {
 
   public queryUsers(offset: number = 0, count: number = 50,
                     user: string | null = null,
-                    groups: number[] = []
+                    groups: number[] | null = null
   ): Observable<UserI[]> {
     const param = {
       offset: offset,
@@ -28,7 +28,7 @@ export class UserService {
     return this.httpClient.get<UserI[]>(`${this.apiUrl}?${params.toString()}`);
   }
 
-  public getUserCount(user: string | null = null, groups: number[] = []
+  public getUserCount(user: string | null = null, groups: number[] | null = null
   ): Observable<number> {
     const param = {
       user: user,

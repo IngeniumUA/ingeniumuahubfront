@@ -107,7 +107,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     const uuidQuery = uuidControlValue === '' ? null: uuidControlValue;
     const userQuery = uuidQuery !== null ? uuidQuery : emailQuery;
 
-    const groupsQueries: number[] = (groupControlValuesFiltered.length < 0) ? []: groupControlValuesFiltered;
+    const groupsQueries: number[] | null = (groupControlValuesFiltered.length < 0) ? null: groupControlValuesFiltered;
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
