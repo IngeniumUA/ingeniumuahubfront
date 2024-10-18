@@ -12,10 +12,6 @@ export function removeNull<T>(obj: T | any): T | any {
     else if (Array.isArray(obj[key]) && obj[key].length === 0) {
       delete obj[key];
     }
-    // If the object is an empty object, delete the key
-    else if (Object.keys(obj[key]).length === 0) {
-      delete obj[key];
-    }
   })
   return obj;
 }
