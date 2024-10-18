@@ -29,6 +29,8 @@ export interface CardItemI {
   derived_type_enum: "carditem"
 
   source_item_id: number
+  source_item_name: string
+
   member_type: number
   card_type: number
 

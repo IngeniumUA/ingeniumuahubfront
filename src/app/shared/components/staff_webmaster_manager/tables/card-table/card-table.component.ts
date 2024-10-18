@@ -1,16 +1,19 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
-import {CardTypes} from '../../../../models/staff/staff_card_detail';
 import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {CardService} from "@ingenium/app/core/services/coreAPI/item/derived_services/card.service";
-import {CardItemWideI} from "@ingenium/app/shared/models/item/cardI";
+import {
+  CardItemWideI, CardMembershipEnum,
+  CardMembershipEnumList,
+  CardTypeEnum,
+  CardTypeEnumList
+} from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
   selector: 'app-card-table',
@@ -25,7 +28,8 @@ import {CardItemWideI} from "@ingenium/app/shared/models/item/cardI";
     MatProgressSpinnerModule,
     AsyncPipe,
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    TitleCasePipe
   ],
   standalone: true
 })
@@ -34,22 +38,21 @@ export class CardTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   cards$: Observable<CardItemWideI[]> = of([]);
-  isMobile$ = this.layoutService.isMobile;
 
   searchForm = new FormGroup({
     userControl: new FormControl(''),
     cardTypeControl: new FormControl(''),
+    cardMembershipTypeControl: new FormControl(''),
     cardNrControl: new FormControl('')
   });
 
   GetDisplayedColumns(): string[] {
-    return ['id', 'card_type',
+    return ['id', 'card_type', 'membership_type',
       'card_nr', 'user', 'last_edited', 'card_item',
       'unlink_button'];
   }
 
-  constructor(private cardService: CardService,
-              private layoutService: LayoutService) {
+  constructor(private cardService: CardService) {
   }
 
   ngOnInit() {
@@ -112,5 +115,9 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     //   }
     // });
   }
-  protected readonly CardTypes = CardTypes;
+
+  protected readonly CardTypeEnum = CardTypeEnum;
+  protected readonly CardTypeEnumList = CardTypeEnumList;
+  protected readonly CardMembershipEnumList = CardMembershipEnumList;
+  protected readonly CardMembershipEnum = CardMembershipEnum;
 }
