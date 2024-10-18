@@ -2,7 +2,6 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
-import {StaffUserService} from '@ingenium/app/core/services/staff/staff-user-service';
 import {UserI} from '../../../../models/user/userI';
 import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
@@ -13,6 +12,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {GroupI} from '../../../../models/group/HubGroup';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
+import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
   selector: 'app-user-table',
@@ -56,7 +56,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private datePipe: DatePipe,
-              private staffUserService: StaffUserService,
+              private userService: UserService,
               private staffGroupService: GroupService) {
   }
 
@@ -105,6 +105,8 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const uuidQuery = uuidControlValue === '' ? null: uuidControlValue;
+    const userQuery = uuidQuery !== null ? uuidQuery : emailQuery;
+
     const groupsQueries: number[] = (groupControlValuesFiltered.length < 0) ? []: groupControlValuesFiltered;
 
     // Page behaviour
@@ -112,10 +114,10 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Data
-    this.userData$ = this.staffUserService.getUsers(pageIndex * pageSize, pageSize, uuidQuery, emailQuery, groupsQueries);
+    this.userData$ = this.userService.queryUsers(pageIndex * pageSize, pageSize, userQuery, groupsQueries);
 
     // Stats
-    this.userStats$ = this.staffUserService.getUserStats(pageIndex * pageSize, pageSize, uuidQuery, emailQuery, groupsQueries);
+    this.userStats$ = this.userService.getUserCount(userQuery, groupsQueries);
   }
 
   DownloadData() {
@@ -128,11 +130,12 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const uuidQuery = uuidControlValue === '' ? null: uuidControlValue;
+    const userQuery = uuidQuery !== null ? uuidQuery : emailQuery;
     const groupsQueries: number[] = (groupControlValuesFiltered.length < 0) ? []: groupControlValuesFiltered;
 
-    const fields: string[] = ['uuid', 'email', 'voornaam', 'achternaam', 'telefoonnummer', 'last_login', 'last_edited'];
+    // const fields: string[] = ['uuid', 'email', 'voornaam', 'achternaam', 'telefoonnummer', 'last_login', 'last_edited'];
 
-    this.usersExport$ = this.staffUserService.getUsersExport(fields, uuidQuery, emailQuery, groupsQueries);
+    this.usersExport$ = this.userService.getUsersExport(userQuery, groupsQueries);
     this.usersExport$.pipe(
 
     ).subscribe((data) => {

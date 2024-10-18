@@ -23,7 +23,7 @@ import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/acce
 export class PricePolicyComponentCreateComponent {
 
   @Input() product_blueprint_id!: number;
-  @Output() CreatePricePolicyEvent = new EventEmitter<PricePolicyInI>();
+  @Output() CreatePricePolicyEvent = new EventEmitter<PricePolicyInI | null>();
 
   methods = [AccessPolicyEnum.always_available, AccessPolicyEnum.member_of_group];
 
@@ -35,6 +35,10 @@ export class PricePolicyComponentCreateComponent {
     method: [AccessPolicyEnum.always_available, Validators.required]
   });
   form_error: string | null = null;
+
+  Cancel() {
+    this.CreatePricePolicyEvent.emit(null);
+  }
 
   onSubmit() {
     // Check if valid guardclause

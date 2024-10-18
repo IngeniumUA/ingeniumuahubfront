@@ -29,4 +29,14 @@ export class CardService {
     const params = new URLSearchParams(removeNull(param));
     return this.httpClient.get<CardItemWideI[]>(`${this.apiUrl}?${params.toString()}`);
   }
+
+  public unlinkCard(card_id: number): Observable<CardItemWideI> {
+    const patchModel = {
+      derived_type: {
+        derived_type_enum: 'carditem',
+        user: null
+      }
+    }
+    return this.httpClient.patch<CardItemWideI>(`${this.apiUrl}/${card_id}`, patchModel);
+  }
 }

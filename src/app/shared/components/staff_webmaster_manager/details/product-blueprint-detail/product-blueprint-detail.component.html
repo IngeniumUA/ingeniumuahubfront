@@ -80,6 +80,13 @@
       </tbody>
     </table>
   </form>
+
+  <h2 class="text-blue-900">Update Product</h2>
+  <button class="button button-primary button-inline"
+          (click)="onSubmit()">
+    <span class="text-white">Update</span>
+  </button>
+  <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
 </section>
 
 <section>
@@ -96,15 +103,6 @@
       <span class="text-white">Add New</span>
     </button>
   </ng-container>
-</section>
-
-<section>
-  <h2 class="text-blue-900">Update Product</h2>
-  <button class="button button-primary button-inline"
-          (click)="onSubmit()">
-    <span class="text-white">Update</span>
-  </button>
-  <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
 </section>
 
 <ng-template #addNewPolicy>

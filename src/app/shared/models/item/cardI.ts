@@ -1,5 +1,5 @@
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
-import {ItemI} from "@ingenium/app/shared/models/item/itemI";
+import {ItemI, ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 
 export enum CardMembershipEnum {
   lid= 1,
@@ -21,6 +21,17 @@ export const CardTypeEnumList = [
 
 export interface CardItemLimitedI {
   derived_type_enum: "carditem"
+
+  source_item_name: string
+  source_item_id: number
+
+  card_uuid: string
+  user_uuid: string | null
+  user_email: string | null
+
+  member_type: CardMembershipEnum
+  card_type: CardTypeEnum
+
   display: DisplayCompositionI
 
 }
@@ -29,6 +40,8 @@ export interface CardItemI {
   derived_type_enum: "carditem"
 
   source_item_id: number
+  source_item_name: string
+
   member_type: number
   card_type: number
 
@@ -45,8 +58,14 @@ export interface CardItemWideI {
 }
 
 export interface CardItemInI {
+  derived_type_enum: "carditem"
   source_item_id: number
   member_type: number
   card_type: number
   card_uuid: string
+}
+
+export interface CardItemWideLimitedI {
+  item: ItemLimitedI
+  derived_type: CardItemLimitedI
 }

@@ -17,6 +17,7 @@ import {
   CardMembershipEnumList,
   CardTypeEnum, CardTypeEnumList
 } from "@ingenium/app/shared/models/item/cardI";
+import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availability_composition";
 
 @Component({
   selector: 'app-item-create',
@@ -175,6 +176,7 @@ export class ItemCreateComponent implements OnInit {
       return null;
     }
     return {
+      derived_type_enum: "carditem",
       source_item_id: this.cardCreateForm.controls['source_item_id'].value!,
       member_type: this.cardCreateForm.controls['member_type'].value!,
       card_type: this.cardCreateForm.controls['card_type'].value!,
@@ -198,11 +200,20 @@ export class ItemCreateComponent implements OnInit {
     const card = this.parseCardForm(itemType);
 
     const derivedType = event !== null ? event: promo !== null ? promo: shop !== null ? shop: card;
+
+    // Temp hardcode to set availability on a card obj to True
+    const availability: AvailabilityCompositionInI | null = card === null ? null: {
+      available: true,
+      disabled: null,
+      dynamic_policy_type: null,
+      dynamic_policy_content: null
+    }
+
     const createObject: ItemWideInI = {
       item: {
         name: this.itemCreateForm.controls['itemName'].value!,
         description: this.itemCreateForm.controls['itemDescription'].value!,
-        availability: null
+        availability: availability
       },
       derived_type: derivedType
     };
