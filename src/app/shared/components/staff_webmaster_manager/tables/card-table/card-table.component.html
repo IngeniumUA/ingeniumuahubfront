@@ -91,7 +91,7 @@
       <ng-container matColumnDef="unlink_button">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let card">
-            <button *ngIf="card.derived_type.user_uuid !== null" (click)="UnlinkCard()" class="hubbutton-blue" style="background-color: var(--error-red)">Unlink</button>
+            <button *ngIf="card.derived_type.user_uuid !== null" (click)="UnlinkCard(card.item.id)" class="hubbutton-blue" style="background-color: var(--error-red)">Unlink</button>
         </td>
       </ng-container>
 

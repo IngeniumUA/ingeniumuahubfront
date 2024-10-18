@@ -104,16 +104,16 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   }
 
-  UnlinkCard(// todo card: StaffCardDetailI
+  UnlinkCard(card_id: number
     ) {
-    // this.cardService.UnlinkCard(card).subscribe({
-    //   next: () => {
-    //     this.LoadData();
-    //   },
-    //   error: (err: any) => {
-    //     console.log(err);
-    //   }
-    // });
+    this.cardService.unlinkCard(card_id).subscribe({
+      next: () => {
+        this.LoadData();
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
   }
 
   protected readonly CardTypeEnum = CardTypeEnum;
