@@ -1,10 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {AsyncPipe, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {AccountService} from '../../../../core/services/user/account/account.service';
 import {Observable} from "rxjs";
 import {CardItemWideLimitedI, CardMembershipEnum} from "@ingenium/app/shared/models/item/cardI";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-card',
@@ -23,10 +24,9 @@ import {CardItemWideLimitedI, CardMembershipEnum} from "@ingenium/app/shared/mod
 export class CardComponent implements OnInit {
   @Input() is_lid: boolean = false;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              private formBuilder: FormBuilder,
-              private accountService: AccountService) {
+  constructor(private route: ActivatedRoute,
+              private accountService: AccountService,
+              private toastrService: ToastrService) {
   }
 
   $card: Observable<CardItemWideLimitedI> | null = null;
@@ -40,8 +40,10 @@ export class CardComponent implements OnInit {
     if (notification != null) {
       if (notification.startsWith('s')) {
         this.success_notification = notification.slice(2);
+        this.toastrService.success('Card linking failed! :(');
       } else if (notification.startsWith('f')) {
         this.failed_notification = notification.slice(2);
+        this.toastrService.error('Card Linked! :)');
       }
     }
   }
