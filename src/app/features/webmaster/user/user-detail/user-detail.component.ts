@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {StaffUserService} from '../../../../core/services/staff/staff-user-service';
 import {Observable} from 'rxjs';
 import {UserWideI} from '../../../../shared/models/user/userI';
+import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
   selector: 'app-user-detail',
@@ -11,7 +11,7 @@ import {UserWideI} from '../../../../shared/models/user/userI';
 })
 export class UserDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private staffUserService: StaffUserService) {
+  constructor(private route: ActivatedRoute, private userService: UserService) {
   }
 
   $userDetail!: Observable<UserWideI>;
@@ -27,13 +27,13 @@ export class UserDetailComponent implements OnInit {
     }
     this.user_id = id;
 
-    this.$userDetail = this.staffUserService.getUserWide(this.user_id);
+    this.$userDetail = this.userService.getUserWide(this.user_id);
   }
 
   RefetchUser(refetchUser: boolean) {
     if (!refetchUser) {
       return;
     }
-    this.$userDetail = this.staffUserService.getUserWide(this.user_id);
+    this.$userDetail = this.userService.getUserWide(this.user_id);
   }
 }
