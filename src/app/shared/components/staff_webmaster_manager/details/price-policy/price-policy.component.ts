@@ -35,6 +35,7 @@ export class PricePolicyComponent implements OnInit {
   loading: boolean = false;
   ngOnInit() {
     this.pricePolicyForm = this.formBuilder.group({
+      availableControl: [this.pricePolicy.availability.available, Validators.required],
       priceControl: [this.pricePolicy.price, Validators.required],
       productNameControl: [this.pricePolicy.name],
       alwaysAvailableControl: [this.pricePolicy.always_display],
@@ -57,13 +58,6 @@ export class PricePolicyComponent implements OnInit {
   }
 
   public SavePricePolicy() {
-    const availability: AvailabilityCompositionI = {
-      available: true,
-      disabled: false,
-      dynamic_policy_type: this.pricePolicy.availability.dynamic_policy_type,
-      dynamic_policy_content: this.pricePolicy.availability.dynamic_policy_content
-    }
-
     if (this.pricePolicyForm.invalid) {
       const error: Error = Error('Invalid form');
       this.handleFormError(error);
@@ -71,6 +65,15 @@ export class PricePolicyComponent implements OnInit {
 
     const nameControlValue: string | null = this.pricePolicyForm.get('productNameControl')!.value
     const name = nameControlValue === null || nameControlValue === '' ? null: nameControlValue;
+
+    const availableControlValue: boolean = this.pricePolicyForm.get('availableControl')!.value
+
+    const availability: AvailabilityCompositionI = {
+      available: availableControlValue,
+      disabled: false,
+      dynamic_policy_type: this.pricePolicy.availability.dynamic_policy_type,
+      dynamic_policy_content: this.pricePolicy.availability.dynamic_policy_content
+    }
 
     const pricePolicy: PricePolicyI = {
       id: this.pricePolicy.id,

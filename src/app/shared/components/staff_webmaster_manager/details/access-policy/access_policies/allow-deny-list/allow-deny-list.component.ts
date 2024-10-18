@@ -37,7 +37,6 @@ export class AllowDenyListComponent implements OnInit {
 
     ngOnInit() {
       // Parse content as correct interface ( allows for typehints )
-      console.log(this.access_policy_content)
       const whitelist = this.access_policy_content === null ? []: this.access_policy_content['whitelist'];
       const blacklist = this.access_policy_content === null ? []: this.access_policy_content['blacklist'];
 

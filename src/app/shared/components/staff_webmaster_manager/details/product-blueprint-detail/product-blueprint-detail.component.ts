@@ -161,7 +161,12 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.addingNewPricePolicy = !this.addingNewPricePolicy;
     }
 
-    public AddPricePolicy(pricePolicyObj: PricePolicyInI) {
+    public AddPricePolicy(pricePolicyObj: PricePolicyInI | null) {
+      if (pricePolicyObj === null) {
+        this.ToggleAddNew()
+        return
+      }
+
       // Post for price policy object
       this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
         first()).subscribe({
