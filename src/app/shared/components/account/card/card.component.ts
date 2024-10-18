@@ -40,10 +40,10 @@ export class CardComponent implements OnInit {
     if (notification != null) {
       if (notification.startsWith('s')) {
         this.success_notification = notification.slice(2);
-        this.toastrService.success('Card linking failed! :(');
+        this.toastrService.success('Membership Added! :D');
       } else if (notification.startsWith('f')) {
         this.failed_notification = notification.slice(2);
-        this.toastrService.error('Card Linked! :)');
+        this.toastrService.error('Card linking failed! :(');
       }
     }
   }
