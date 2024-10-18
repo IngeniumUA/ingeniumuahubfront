@@ -175,6 +175,7 @@ export class ItemCreateComponent implements OnInit {
       return null;
     }
     return {
+      derived_type_enum: "carditem",
       source_item_id: this.cardCreateForm.controls['source_item_id'].value!,
       member_type: this.cardCreateForm.controls['member_type'].value!,
       card_type: this.cardCreateForm.controls['card_type'].value!,
