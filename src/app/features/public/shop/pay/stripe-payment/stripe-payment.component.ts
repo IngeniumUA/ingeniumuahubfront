@@ -35,23 +35,25 @@ export class StripePaymentComponent implements OnInit {
   stripePay() {
     if (this.paying) {
       alert("Je bent al aan het betalen!");
+      return
     }
 
-    if (this.paymentElementForm.valid) {
-      this.paying = true;
-      this.stripeService.confirmPayment({
-        elements: this.paymentElement.elements,
-        redirect: 'if_required',
-        confirmParams: {
-          return_url: 'https://ingeniumua.be/shop/confirm'
-        }
-      }).subscribe((result) => {
-        this.paying = false;
-        this.handleStripeResponse(result);
-      });
-    } else {
-      // TODO Loading code
+    if (!this.paymentElementForm.valid) {
+      alert("Er is iets fout gegaan, probeer het opnieuw!")
+      throw new Error(this.paymentElementForm.errors?.toString());
     }
+
+    this.paying = true;
+    this.stripeService.confirmPayment({
+      elements: this.paymentElement.elements,
+      redirect: 'if_required',
+      confirmParams: {
+        return_url: 'https://ingeniumua.be/shop/confirm'
+      }
+    }).subscribe((result) => {
+      this.paying = false;
+      this.handleStripeResponse(result);
+    });
   }
 
   handleStripeResponse(result: PaymentIntentResult | PaymentIntentOrSetupIntentResult) {
