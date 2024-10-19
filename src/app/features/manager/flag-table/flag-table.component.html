@@ -12,7 +12,7 @@
       Value:
       @if (flag.name === "Base payment provider") {
         {{ PaymentProviderEnum[$any(flag.value)["payment_provider_enum"]] }}
-      } @else if (flag.name == "Running Environment") {
+      } @else if (flag.name === "Running Environment") {
         {{ $any(flag.value)["environment_enum"] }}
       } @else {
         {{ flag.value | json }}
