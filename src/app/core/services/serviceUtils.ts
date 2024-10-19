@@ -5,12 +5,13 @@ export function removeNull<T>(obj: T | any): T | any {
       delete obj[key];
     }
     else if (obj[key] && typeof obj[key] === 'object') {
-      // Recursively call removeNull for nested objects
-      removeNull(obj[key]);
-    }
-    // If the object is an empty array, delete the key
-    else if (Array.isArray(obj[key]) && obj[key].length === 0) {
-      delete obj[key];
+      // If the object is an empty array, delete the key
+      if (Array.isArray(obj[key]) && obj[key].length === 0) {
+        delete obj[key];
+      } else {
+        // Recursively call removeNull for nested objects
+        removeNull(obj[key]);
+      }
     }
   })
   return obj;
