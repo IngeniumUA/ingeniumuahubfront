@@ -165,4 +165,20 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   RemoveGroupField(index: number) {
     this.searchForm.controls['groupsControl'].removeAt(index);
   }
+
+  fileChange(event: any): void {
+    let fileList: FileList = event.target.files;
+
+    if (fileList.length < 1) {
+      return;
+    }
+
+    let file: File = fileList[0];
+    let formData:FormData = new FormData();
+    formData.append('uploadFile', file, file.name)
+
+    this.userService.importUsers(formData, 5).subscribe(() => {
+
+    })
+  }
 }

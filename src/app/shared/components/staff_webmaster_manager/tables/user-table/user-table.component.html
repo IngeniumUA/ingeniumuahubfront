@@ -1,4 +1,9 @@
 <section>
+  <h2>Import users</h2>
+  <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".xlsx">
+</section>
+
+<section>
   <ng-container *ngIf="this.groups$ | async as groups">
 
   <h2>User Table</h2>
