@@ -167,14 +167,14 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   }
 
   fileChange(event: any): void {
-    let fileList: FileList = event.target.files;
+    const fileList: FileList = event.target.files;
 
     if (fileList.length < 1) {
       return;
     }
 
-    let file: File = fileList[0];
-    let formData:FormData = new FormData();
+    const file: File = fileList[0];
+    const formData:FormData = new FormData();
     formData.append('uploadFile', file, file.name)
 
     this.userService.importUsers(formData, 5).subscribe(() => {
