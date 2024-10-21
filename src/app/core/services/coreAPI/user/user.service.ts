@@ -63,15 +63,6 @@ export class UserService {
       add_to_group: group_id
     }
     const params = new URLSearchParams(removeNull(param));
-
-    let headers = new Headers();
-    /** In Angular 5, including the header Content-Type can invalidate your request */
-    // headers.append('Content-Type', 'multipart/form-data');
-    // headers.append('Accept', 'application/json');
-    // const httpOptions: object = {
-    //   headers: headers
-    // };
-
     return this.httpClient.post<boolean>(`${this.apiUrl}/import?${params.toString()}`, file);
   }
 }
