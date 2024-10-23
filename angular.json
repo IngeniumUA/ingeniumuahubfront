@@ -37,7 +37,7 @@
             "scripts": [],
             "browser": "src/main.ts",
             "server": "src/main.server.ts",
-            "prerender": false,
+            "prerender": true,
             "ssr": false
           },
           "configurations": {
@@ -61,7 +61,7 @@
             },
             "staging": {
               "extractLicenses": true,
-              "prerender": false,
+              "prerender": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
