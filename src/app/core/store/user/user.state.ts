@@ -73,9 +73,9 @@ export class UserState implements NgxsOnInit {
   getRoles(ctx: StateContext<UserStateModel>) {
     const emptyRoles: UserRolesI = {
       is_manager: false,
-        is_webmaster: false,
-        is_staff: false,
-        is_lid: false,
+      is_webmaster: false,
+      is_staff: false,
+      is_lid: false,
     };
 
     this.httpClient.get<UserRolesI>(`${apiEnviroment.apiUrl}account/roles`)
@@ -89,12 +89,12 @@ export class UserState implements NgxsOnInit {
         if (roles === null) {
           ctx.patchState({
             roles: emptyRoles,
-          })
+          });
         }
 
         ctx.patchState({
           roles
-        })
+        });
       });
   }
 
