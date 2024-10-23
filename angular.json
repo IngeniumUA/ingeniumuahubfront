@@ -37,7 +37,10 @@
             "scripts": [],
             "browser": "src/main.ts",
             "server": "src/main.server.ts",
-            "prerender": true,
+            "prerender": {
+              "discoverRoutes": false,
+              "routesFile": "prerender-routes.txt"
+            },
             "ssr": false
           },
           "configurations": {
@@ -61,7 +64,10 @@
             },
             "staging": {
               "extractLicenses": true,
-              "prerender": true,
+              "prerender": {
+                "discoverRoutes": false,
+                "routesFile": "prerender-routes.txt"
+              },
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
