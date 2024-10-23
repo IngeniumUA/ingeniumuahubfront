@@ -1,3 +1,5 @@
+@let isAuth = (isAuth$ | async);
+
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
 <a class="accessibility-go-to-content" [href]="router.url.split('#')[0] + '#main-content'">Naar de inhoud</a>
 <!-- NAVIGATION -->
@@ -70,26 +72,27 @@
         <!-- Profile dropdown -->
         <div class="relative ml-3">
           <div>
-            <!-- Profile dropdown button -->
-            <button *ngIf="isAuth$ | async" (click)="setAccountDropdown(!accountDropdownOpen)" [attr.aria-expanded]="accountDropdownOpen" type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" aria-haspopup="true" id="profile-menu-button">
-              <span class="hidden md:inline">Profiel <span aria-hidden="true" class="text-white ml-2 text-xs">&#9660;</span></span>
-              <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-            </button>
-
-            <!-- Login button -->
-            <button *ngIf="(isAuth$ | async) === false" (click)="Login()" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" title="Aanmelden">
-              <span class="hidden md:inline">Aanmelden</span>
-              <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-            </button>
+            @if (isAuth) {
+              <!-- Profile dropdown button -->
+              <button (click)="setAccountDropdown(!accountDropdownOpen)" [attr.aria-expanded]="accountDropdownOpen" type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" aria-haspopup="true" id="profile-menu-button">
+                <span class="hidden md:inline">Profiel <span aria-hidden="true" class="text-white ml-2 text-xs">&#9660;</span></span>
+                <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            } @else {
+              <!-- Login button -->
+              <button (click)="Login()" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" title="Aanmelden">
+                <span class="hidden md:inline">Aanmelden</span>
+                <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            }
           </div>
 
           <!-- Profile dropdown menu -->
-          <div *ngIf="accountDropdownOpen && (isAuth$ | async)" class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
-
+          <div *ngIf="accountDropdownOpen && isAuth" class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
             <a routerLink="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
             <a routerLink="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 
