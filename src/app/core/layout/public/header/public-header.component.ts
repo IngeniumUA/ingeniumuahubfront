@@ -54,7 +54,13 @@ export class PublicHeaderComponent {
   }
 
   ToggleNavDropdown() {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
+    // If internalToggle is False we want to emit the toggle event out of the component
+    // This is used on the staff pages when on mobile devices
+    if (this.internalToggle) {
+      this.mobileMenuOpen = !this.mobileMenuOpen;
+    } else {
+      this.isToggleEmitter.emit(true);
+    }
   }
 
   setAccountDropdown(b: boolean) {
