@@ -1,4 +1,6 @@
 /
+/events
+/shop
 /info
 /info/relations
 /info/praesidium

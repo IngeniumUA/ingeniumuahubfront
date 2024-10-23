@@ -16,7 +16,7 @@ export class ShopService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getShopsList(): Observable<HttpState<RecSysPreviewI[]>> {
+  public getShopItems(): Observable<HttpState<RecSysPreviewI[]>> {
     return ItemService.makeRecSysRequestWithHttpState(this.httpClient, this.apiUrl + 'list');
   }
 
