@@ -3,6 +3,7 @@ import {Store} from "@ngxs/store";
 import {OAuthService} from "angular-oauth2-oidc";
 import {User} from "@ingenium/app/core/store";
 import {Router} from "@angular/router";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-page',
@@ -29,13 +30,16 @@ export class AuthCallbackComponent implements OnInit {
       }
 
       const claims = this.oauthService.getIdentityClaims();
+
+      // When the user is authenticated, set the auth data in the store
       this.store.dispatch(new User.SetAuthData(
         this.oauthService.getAccessToken(),
         claims['email'],
-      ));
-      this.store.dispatch(new User.GetRoles());
-
-      this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
+      )).pipe(first()).subscribe(() => {
+        // When the user data is set, get the user roles
+        this.store.dispatch(new User.GetRoles());
+        this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
+      });
     } catch (error) {
       console.error(error)
       this.failure = true

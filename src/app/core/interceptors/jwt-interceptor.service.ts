@@ -93,7 +93,7 @@ export class JWTInterceptor implements HttpInterceptor {
         this.isRefreshing = false;
 
         // If any error occurs, simply logout the user
-        this.store.dispatch(new User.Logout);
+        this.store.dispatch(new User.Logout(true));
 
         // Continue throwing error
         return throwError(() => error);
