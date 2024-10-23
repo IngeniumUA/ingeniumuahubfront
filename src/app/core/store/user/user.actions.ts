@@ -24,5 +24,8 @@ export namespace User {
 
   export class Logout {
     static readonly type = '[User] Logout';
+
+    constructor(public authError: boolean = false) {
+    }
   }
 }

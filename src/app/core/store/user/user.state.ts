@@ -128,7 +128,7 @@ export class UserState implements NgxsOnInit {
   }
 
   @Action(User.Logout)
-  logout(ctx: StateContext<UserStateModel>) {
+  logout(ctx: StateContext<UserStateModel>, action: User.Logout) {
     ctx.setState({
       token: null,
       email: null,
@@ -137,8 +137,14 @@ export class UserState implements NgxsOnInit {
       cardDetails: null,
     });
 
+    const queryParams = new URLSearchParams();
+    queryParams.set('has_error', String(action.authError));
+
     ctx.dispatch(new CartActions.ClearCart());
-    this.oauthService.revokeTokenAndLogout();
+    this.oauthService.revokeTokenAndLogout({
+      client_id: apiEnviroment.oauthConfig.clientId,
+      redirect_uri: apiEnviroment.oauthConfig.postLogoutRedirectUri + `?${queryParams.toString()}`,
+    });
     this.router.navigate(['/']);
   }
 }

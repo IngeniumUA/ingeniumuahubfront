@@ -136,15 +136,20 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     const status = this.selectedStatus === 0 ? null: this.selectedStatus;
 
     // Form parsing
-    // const emailControlValue = this.searchForm.get('emailControl')!.value;
+    const emailControlValue = this.searchForm.get('emailControl')!.value;
     const interactionIdControlValue = this.searchForm.get('idControl')!.value;
     const productNameControlValue = this.searchForm.get('productNameControl')!.value;
+    const pricePolicyNameControlValue = this.searchForm.get('pricePolicyNameControl')!.value;
     const validityControlValue = this.searchForm.get('validityControl')!.value;
 
-    // const emailQuery = emailControlValue === '' ? null: emailControlValue;
+    const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const interactionQuery = interactionIdControlValue === '' || interactionIdControlValue === null ? null: parseInt(interactionIdControlValue);
     const productNameQuery = productNameControlValue === '' ? null: productNameControlValue;
     const validityQuery = validityControlValue === '' || validityControlValue === null ? null: parseInt(validityControlValue);
+    const pricePolicyQuery = pricePolicyNameControlValue === '' ? null: pricePolicyNameControlValue;
+
+    // User
+    const userQuery = this.user_id !== null ? this.user_id : emailQuery;
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
@@ -153,13 +158,13 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     // Transaction fetching
     this.transactionData$ = this.transactionService.queryTransactions(
       pageIndex * pageSize, pageSize,
-      this.item_id, this.user_id, interactionQuery,
+      this.item_id, userQuery, interactionQuery,
       status,
       validityQuery,
       this.checkout_id, null,
       productNameQuery,
       null,
-      null);
+      pricePolicyQuery);
 
     // Transactionstats
     this.statusStats$ = this.transactionService.transactionCountGroupByStatus(
