@@ -3,6 +3,7 @@ import {Observable, of} from 'rxjs';
 import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
+import {HttpState} from "@ingenium/app/shared/models/httpState";
 
 @Component({
   selector: 'app-homepage',
@@ -10,7 +11,7 @@ import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_ser
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent {
-  homePageRec$: Observable<RecSysPreviewI[]> = of([]);
+  homePageRec$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: false, data: [], error: null});
   recsysItems$: Observable<RecSysPreviewI[]> = of();
 
   constructor(private eventService: EventService, private promoService: PromoService) {

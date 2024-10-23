@@ -14,4 +14,8 @@ export class LoadingIndicatorComponent {
   @Input() isLoading: boolean = false;
   @Input() title: string = 'Even geduld aub';
   @Input() message: string = 'Jouw verzoek wordt verwerkt';
+
+  @Input() isErrored: boolean = false;
+  @Input() errorTitle: string = 'Er is iets fout gegaan';
+  @Input() errorMessage: string = 'Probeer het later nog eens';
 }
