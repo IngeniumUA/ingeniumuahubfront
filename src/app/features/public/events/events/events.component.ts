@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import {Observable} from 'rxjs';
-import {LayoutService} from '../../../../core/services/layout/layout.service';
-import {RecSysPreviewI} from '../../../../shared/models/items/recsys_interfaces';
+import {Component, Inject, PLATFORM_ID} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
+import {HttpState} from "@ingenium/app/shared/models/httpState";
+import {isPlatformBrowser} from "@angular/common";
 
 @Component({
   selector: 'app-page',
@@ -10,8 +11,11 @@ import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_ser
   styleUrls: ['./events.component.scss']
 })
 export class EventsComponent {
-  events$: Observable<RecSysPreviewI[]> = this.eventService.getEventsList();
-  isMobile$: Observable<boolean> = this.layoutService.isMobile;
+  events$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: true, data: [], error: null});
 
-  constructor(private eventService: EventService, private layoutService: LayoutService) {}
+  constructor(@Inject(PLATFORM_ID) platformId: any, eventService: EventService) {
+    if (isPlatformBrowser(platformId)) {
+      this.events$ = eventService.getEventsList();
+    }
+  }
 }

@@ -5,7 +5,7 @@ import {apiEnviroment} from '@ingenium/environments/environment';
 import {StatusStatsI} from "@ingenium/app/shared/models/stats/transactionStats";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
-import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 
@@ -106,7 +106,7 @@ export class TransactionService {
     return this.httpClient.get<Blob>(`${this.apiUrl}/export?${params.toString()}`, httpOptions);
   }
 
-  public patchTransaction(interaction_id: number, patchObj: TransactionPatchI, forcePatch: boolean = false) {
+  public patchTransaction(interaction_id: number, patchObj: any, forcePatch: boolean = false) {
     return this.httpClient.patch<TransactionI>(`${this.apiUrl}/${interaction_id}?force_patch=${String(forcePatch)}`, patchObj);
   }
 

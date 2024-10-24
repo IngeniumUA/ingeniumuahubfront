@@ -109,7 +109,14 @@ export function storageFactory(): OAuthStorage {
       multi: true,
     },
     {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
-    {provide: OAuthStorage, useFactory: storageFactory},
+    {
+      provide: OAuthStorage, useFactory: () => {
+        if (typeof localStorage !== 'undefined') {
+          return localStorage;
+        }
+        return null;
+      }
+    },
     provideClientHydration(),
     provideHttpClient(withFetch()),
     provideHttpClient(withInterceptorsFromDi()),

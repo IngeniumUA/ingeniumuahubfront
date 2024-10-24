@@ -3,8 +3,8 @@ import { versions } from "@ingenium/environments/versions";
 
 const OAuthConfig: AuthConfig = {
   issuer: 'https://sso.ingeniumua.be/realms/ingeniumua',
-  redirectUri: window.location.origin + '/auth/callback',
-  postLogoutRedirectUri: window.location.origin + '/auth/logout',
+  redirectUri: 'https://ingeniumua.be/auth/callback',
+  postLogoutRedirectUri: 'https://ingeniumua.be/auth/logout',
   clientId: 'ingeniumwebsite',
   responseType: 'code',
   scope: 'openid profile email',

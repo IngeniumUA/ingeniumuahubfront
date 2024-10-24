@@ -4,6 +4,8 @@ import {Observable, shareReplay} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {HttpState} from "@ingenium/app/shared/models/httpState";
+import {ItemService} from "@ingenium/app/core/services/coreAPI/item/item.service";
 
 
 @Injectable({
@@ -15,10 +17,8 @@ export class EventService {
 
   apiUrl = apiEnviroment.apiUrl + 'item/event/';
 
-  public getEventsList(): Observable<RecSysPreviewI[]> {
-    // Specifically fetches events for use as a preview
-    // IE Homepage or events page
-    return this.httpClient.get<RecSysPreviewI[]>(this.apiUrl + 'list');
+  public getEventsList(): Observable<HttpState<RecSysPreviewI[]>> {
+    return ItemService.makeRecSysRequestWithHttpState(this.httpClient, this.apiUrl + 'list');
   }
 
   public getEvents(): Observable<ItemWideLimitedI[]> {

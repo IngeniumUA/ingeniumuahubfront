@@ -49,10 +49,10 @@
   <section class="ingenium-container" aria-labelledby="recommendations-title">
     <h2 id="recommendations-title" class="text-white mb-4">Uitgelicht</h2>
 
-    @let eventsRec = (this.homePageRec$ | async);
-    @if (eventsRec && eventsRec.length > 0) {
+    @let events = (this.homePageRec$ | async);
+    @if (events && (events?.data?.length ?? 0) > 0) {
       <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
-        <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" *ngFor="let recsys_item of eventsRec" />
+        <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" *ngFor="let recsys_item of events.data" />
       </div>
 
       <div class="text-center mt-4">
@@ -95,7 +95,7 @@
 <section class="bg-white partner-section">
   <h1 class="max-w-full text-center text-blue-900">Met dank aan onze partners</h1>
   <!--<app-partner-balk></app-partner-balk>-->
-  <app-partner-grid></app-partner-grid>
+  <app-partner-grid />
 </section>
 
 <app-layout-public-footer />

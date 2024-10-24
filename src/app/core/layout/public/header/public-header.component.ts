@@ -70,4 +70,14 @@ export class PublicHeaderComponent {
   setInfoDropdown(b: boolean) {
     this.infoDropdownOpen = b;
   }
+
+  hasAnyRole(roles: UserRolesI|null): boolean {
+    if (roles === null) {
+      return false;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return Object.keys(roles).some((key): boolean => roles[key]);
+  }
 }

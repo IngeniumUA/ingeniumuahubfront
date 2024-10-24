@@ -6,24 +6,19 @@
   <h1 class="white-section-title white-section-title-blue white-section-title-large">Evenementen</h1>
   <p>TD's en andere evenementen kan je op deze pagina vinden.</p>
 
-  <section *ngIf="this.events$ | async as events; else no_events">
-    <div *ngIf="events.length > 0 else no_events" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <app-rec-sys-item-preview [recsysItem]="event" *ngFor="let event of events" />
+  @let events = this.events$ | async;
+  @if (events && (events.loading || events.error)) {
+    <app-loading-indicator [isLoading]="events.loading" [isErrored]="events.error !== null"
+                           [title]="'Evenementen aan het laden'" [message]="'Evenementen worden opgehaald'" />
+  } @else if (events && (events.data?.length ?? 0) > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      @for (event of events.data; track event.name) {
+        <app-rec-sys-item-preview [recsysItem]="event" />
+      }
     </div>
-  </section>
-
-  <ng-template #no_events>
+  } @else {
     <div class="alert alert-info alert-border">
       <p class="text-sm text-blue-700">Er staat momenteel geen evenementen online</p>
     </div>
-  </ng-template>
-
-  <!--
-  <section [ngClass]="{'mobile': (this.isMobile$ | async)}">
-    <h1>Toekomstig</h1>
-    <div class="event-list">
-      Todo
-    </div>
-  </section>
-  -->
+  }
 </main>

@@ -4,11 +4,12 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors} from '@an
 import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {IProductItem} from '../../../../models/items/products/products';
-import {TransactionI, TransactionPatchI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
 import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
 import {PaymentStatusEnum, PaymentStatusList} from "@ingenium/app/shared/models/payment/statusEnum";
+import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -51,7 +52,6 @@ export class TransactionDetailComponent implements OnInit {
       'forcePatchControl': [false]
     });
   }
-
   public Patch() {
     this.loading = true;
     this.formError = null;
@@ -67,33 +67,39 @@ export class TransactionDetailComponent implements OnInit {
     const validityControlValue = this.transactionForm.controls['validityControl'].value;
     const userControlValue = this.transactionForm.controls['userEmailControl'].value;
     //const statusControlValue = this.transactionForm.controls['statusControl'].value;
-    //const noteControlValue = this.transactionForm.controls['noteControl'].value;
-    const productControlValue = this.transactionForm.controls['productControl'].value;
-
-    // Quick check for none ( more space efficient on DB )
-    //const noteValue = noteControlValue === '' ? null: noteControlValue;
+    // const productControlValue = this.transactionForm.controls['productControl'].value;
+    // const pricePolicyControlValue
 
     // Only add value to patch object if it is different from input
     const patchValidity = validityControlValue !== this.transaction.validity ? validityControlValue : null;
-    const patchUserEmail = userControlValue !== this.transaction.interaction.user_email ? userControlValue : null;
-    const patchProduct = productControlValue !== this.transaction.purchased_product.name ? productControlValue : null;
-    //const patchNote = noteValue !== this.transaction.note ? noteValue: null;
+    const patchUserValue = userControlValue !== this.transaction.interaction.user_email ? userControlValue : null;
 
-    const patchObject: TransactionPatchI = {
+
+    const interactionPatch = patchUserValue ? {'user': patchUserValue} : null;
+    const patchObject: {[key: string] : any}  = {
       validity: patchValidity,
-      user: patchUserEmail,
-      user_uuid: null,
-      product_blueprint_id: patchProduct.product_blueprint_id
+      interaction: interactionPatch
     };
 
-    if (patchObject.validity === null && patchObject.user === null && patchObject.user_uuid === null &&
-        patchObject.product_blueprint_id === null) {
+    const patchObjectFiltered = removeNull(patchObject)
+
+    // Quick check for none ( more space efficient on DB )
+    const noteControlValue = this.transactionForm.controls['noteControl'].value;
+    const noteValue = noteControlValue === '' ? null: noteControlValue;
+    const patchNote = noteValue !== this.transaction.note;
+    if (patchNote) {
+      patchObjectFiltered['note'] = noteValue
+    }
+
+    if (patchValidity === null && patchUserValue === null && patchUserValue === this.transaction.note) {
       this.successMessage = 'Geen verandering!';
       this.loading = false;
       return;
     }
 
-    this.transactionService.patchTransaction(this.transaction.interaction.interaction_id, patchObject, true).subscribe(
+    const forcePatchValue: boolean = this.transactionForm.controls['forcePatchControl'].value;
+
+    this.transactionService.patchTransaction(this.transaction.interaction.interaction_id, patchObjectFiltered, forcePatchValue).subscribe(
       (transaction: TransactionI) => {
         this.transaction = transaction;
         this.successMessage = 'Transaction Patched!';

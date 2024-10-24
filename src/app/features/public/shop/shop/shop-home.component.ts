@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
-import {Observable} from 'rxjs';
+import {Component, Inject, PLATFORM_ID} from '@angular/core';
+import {Observable, of} from 'rxjs';
 import {RecSysPreviewI} from '../../../../shared/models/items/recsys_interfaces';
-import {LayoutService} from '../../../../core/services/layout/layout.service';
 import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";
+import {Store} from "@ngxs/store";
+import {CartState} from "@ingenium/app/core/store";
+import {HttpState} from "@ingenium/app/shared/models/httpState";
+import {isPlatformBrowser} from "@angular/common";
 
 @Component({
   selector: 'app-page',
@@ -10,9 +13,12 @@ import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_serv
   styleUrls: ['./shop-home.component.scss']
 })
 export class ShopHomeComponent {
-  shopitems$: Observable<RecSysPreviewI[]> = this.shopService.getShopsList();
-  isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  constructor(private shopService: ShopService,
-              private layoutService: LayoutService) {
+  shopItems$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: true, data: [], error: null});
+  cartCount$: Observable<number> = this.store.select(CartState.getProductCount);
+
+  constructor(@Inject(PLATFORM_ID) platformId: any, private shopService: ShopService, private store: Store) {
+    if (isPlatformBrowser(platformId)) {
+      this.shopItems$ = this.shopService.getShopItems();
+    }
   }
 }
