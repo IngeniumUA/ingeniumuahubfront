@@ -4,6 +4,7 @@ import {OAuthService} from "angular-oauth2-oidc";
 import {User} from "@ingenium/app/core/store";
 import {Router} from "@angular/router";
 import {first} from "rxjs/operators";
+import {captureException} from "@sentry/angular";
 
 @Component({
   selector: 'app-page',
@@ -15,7 +16,6 @@ export class AuthCallbackComponent implements OnInit {
   constructor(private store: Store, private oauthService: OAuthService, private router: Router) {}
 
   ngOnInit() {
-    console.log(this.oauthService.clientId)
     this.tryLogin();
   }
 
@@ -25,8 +25,7 @@ export class AuthCallbackComponent implements OnInit {
       const token = this.oauthService.getAccessToken()
 
       if (!success || !token) {
-        this.failure = true
-        return
+        throw new Error("No token or success received from endpoint!");
       }
 
       const claims = this.oauthService.getIdentityClaims();
@@ -41,7 +40,8 @@ export class AuthCallbackComponent implements OnInit {
         this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
       });
     } catch (error) {
-      console.error(error)
+      captureException(error);
+      console.error(error);
       this.failure = true
     }
   }
