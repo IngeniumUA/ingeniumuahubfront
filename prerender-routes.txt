@@ -13,4 +13,4 @@
 /info/praesidium/18-19
 /info/clublied
 /info/contact
-/credits
+/info/credits
