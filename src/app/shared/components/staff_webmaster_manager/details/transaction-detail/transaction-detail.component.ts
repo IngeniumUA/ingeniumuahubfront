@@ -9,6 +9,7 @@ import {TransactionService} from "@ingenium/app/core/services/coreAPI/transactio
 import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
 import {PaymentStatusEnum, PaymentStatusList} from "@ingenium/app/shared/models/payment/statusEnum";
+import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 @Component({
   selector: 'app-transaction-detail',
@@ -75,17 +76,19 @@ export class TransactionDetailComponent implements OnInit {
 
 
     const interactionPatch = patchUserValue ? {'user': patchUserValue} : null;
-    let patchObject: {[key: string] : any}  = {
+    const patchObject: {[key: string] : any}  = {
       validity: patchValidity,
       interaction: interactionPatch
     };
+
+    const patchObjectFiltered = removeNull(patchObject)
 
     // Quick check for none ( more space efficient on DB )
     const noteControlValue = this.transactionForm.controls['noteControl'].value;
     const noteValue = noteControlValue === '' ? null: noteControlValue;
     const patchNote = noteValue !== this.transaction.note;
     if (patchNote) {
-      patchObject['note'] = patchNote
+      patchObjectFiltered['note'] = noteValue
     }
 
     if (patchValidity === null && patchUserValue === null && patchUserValue === this.transaction.note) {
@@ -96,7 +99,7 @@ export class TransactionDetailComponent implements OnInit {
 
     const forcePatchValue: boolean = this.transactionForm.controls['forcePatchControl'].value;
 
-    this.transactionService.patchTransaction(this.transaction.interaction.interaction_id, patchObject, forcePatchValue).subscribe(
+    this.transactionService.patchTransaction(this.transaction.interaction.interaction_id, patchObjectFiltered, forcePatchValue).subscribe(
       (transaction: TransactionI) => {
         this.transaction = transaction;
         this.successMessage = 'Transaction Patched!';
