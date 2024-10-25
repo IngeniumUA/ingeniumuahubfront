@@ -44,7 +44,6 @@
         "categorieName": "Business Relations",
         "categorieDescription": "Onze Business Relations onderhouden het contact met onze partnerbedrijven.\nWil je als bedrijf graag eens polsen hoe een partnership met ons er uit zou zien?\nOns team staat voor je klaar!",
         "praesidia": [
-
           {
             "name": "Yorben Joosen",
             "functie": "Business Relations",
@@ -170,6 +169,11 @@
             "name": "Wesley Van Bladel",
             "functie": "Sport",
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WesleyVanBladel.webp"
+          },
+          {
+            "name": "Hadis Bas",
+            "functie": "Sport",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/HadisBas.webp"
           }
         ]
       },
@@ -235,6 +239,23 @@
           "text": "Cloud",
           "url": "/cloud"
         }
+      }
+    ]
+  },
+  {
+    "groupName": "Ondersteuning",
+    "groupDescription": "De mensen die deze rol vervullen zijn van groot belang, ook al maken ze geen deel uit van het Praesidium.",
+    "categories": [
+      {
+        "categorieName": "Media",
+        "categorieDescription": "",
+        "praesidia": [
+          {
+            "name": "Janie De Coster",
+            "functie": "Media",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JanieDeCoster.webp"
+          }
+        ]
       }
     ]
   }
