@@ -40,7 +40,6 @@ export class CartState implements NgxsOnInit {
     return state.checkoutNote;
   }
 
-
   @Selector()
   static getTotalPrice(state: CartStateModel): number {
     return state.products

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {Action, NgxsOnInit, Selector, State, StateContext} from '@ngxs/store';
 import {UserStateModel} from './user.model';
 import {User} from './user.actions';
@@ -10,6 +10,7 @@ import {apiEnviroment} from "@ingenium/environments/environment";
 import {catchError, of} from "rxjs";
 import {map} from "rxjs/operators";
 import {CartActions} from "@ingenium/app/core/store";
+import {isPlatformServer} from "@angular/common";
 
 @State<UserStateModel>({
   name: 'user',
@@ -25,7 +26,7 @@ import {CartActions} from "@ingenium/app/core/store";
 export class UserState implements NgxsOnInit {
 
   constructor(private router: Router, private oauthService: OAuthService,
-              private httpClient: HttpClient) {}
+              private httpClient: HttpClient, @Inject(PLATFORM_ID) private platformId: any) {}
 
   ngxsOnInit(ctx: StateContext<any>) {
     ctx.dispatch(new User.FetchAuthTokenFromStorage());
@@ -66,6 +67,15 @@ export class UserState implements NgxsOnInit {
 
   @Action(User.Login)
   loginUser(_ctx: StateContext<UserStateModel>, action: User.Login) {
+    if (isPlatformServer(this.platformId)) return;
+
+    // Check if the current host matches the environment, if not redirect
+    if (window.location.host !== apiEnviroment.appHost) {
+      console.log("Not at correct address for logging in.");
+      window.location.href = `${window.location.protocol}//${apiEnviroment.appHost}/auth/login?dest=${action.destinationPath}`;
+      return;
+    }
+
     this.oauthService.initLoginFlow(action.destinationPath);
   }
 

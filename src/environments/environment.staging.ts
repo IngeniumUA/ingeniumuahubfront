@@ -14,6 +14,7 @@ const OAuthConfig: AuthConfig = {
 export const apiEnviroment = {
   name: 'staging',
   apiUrl: 'https://hub.dev.ingeniumua.be/api/v1/',
+  appHost: 'dev.ingeniumua.be',
   oauthConfig: OAuthConfig,
   versions: versions
 };
