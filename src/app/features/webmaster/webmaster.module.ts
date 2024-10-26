@@ -58,6 +58,9 @@ import {
   OrderTrackingComponent
 } from '@ingenium/app/features/webmaster/order-tracking/order-tracking.component';
 import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
+import {
+    InteractionTableComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 
 
 @NgModule({
@@ -92,7 +95,8 @@ import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
         CheckoutAndTransactionDashboardComponent,
         CreateCheckoutComponent,
         TransactionDetailComponent,
-        CurrencyPipe
+        CurrencyPipe,
+        InteractionTableComponent
     ], providers: [
     DatePipe
   ]

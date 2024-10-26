@@ -10,6 +10,9 @@ import {isEventItem} from '@ingenium/app/shared/models/item/eventI';
 import {AsCardItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 import {RouterLink} from "@angular/router";
 import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item/cardI";
+import {
+  InteractionTableComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 
 @Component({
   selector: 'app-staff-item-detail',
@@ -24,7 +27,8 @@ import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item
     ReactiveFormsModule,
     MatInputModule,
     AsCardItemWide,
-    RouterLink
+    RouterLink,
+    InteractionTableComponent
   ],
   standalone: true,
   providers: [DatePipe]
