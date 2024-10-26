@@ -2,10 +2,7 @@ import {
   AfterViewInit,
   Component,
   Input,
-  OnChanges,
   OnInit,
-  SimpleChange,
-  SimpleChanges,
   ViewChild
 } from '@angular/core';
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
@@ -52,7 +49,7 @@ import {RouterLink} from "@angular/router";
   templateUrl: './interaction-table.component.html',
   styleUrl: './interaction-table.component.scss'
 })
-export class InteractionTableComponent implements AfterViewInit, OnChanges, OnInit {
+export class InteractionTableComponent implements AfterViewInit, OnInit {
   constructor(private interactionService: InteractionService) {
   }
 
@@ -105,14 +102,14 @@ export class InteractionTableComponent implements AfterViewInit, OnChanges, OnIn
     );
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    const loadData: SimpleChange = changes['loadDataEvent'];
-    if (loadData.previousValue !== loadData.currentValue) {
-      // When previous value was 'loading' and now 'loading' has switched off
-      // Then we can reload our own data as well
-      this.LoadData();
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   const loadData: SimpleChange = changes['loadDataEvent'];
+  //   if (loadData.previousValue !== loadData.currentValue) {
+  //     // When previous value was 'loading' and now 'loading' has switched off
+  //     // Then we can reload our own data as well
+  //     this.LoadData();
+  //   }
+  // }
 
   ngAfterViewInit() {
     // Label popups are breaking something frontend related, just remove them
