@@ -20,8 +20,7 @@
       <!-- id Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> Card uuid </th>
-        <td mat-cell *matCellDef="let card"> {{ card.derived_type.card_uuid }}</td>
-        <!--<td mat-cell *matCellDef="let item"><a [routerLink]="[item.item.uuid]"> {{ item.item.uuid }}</a></td>-->
+        <td mat-cell *matCellDef="let card"> <a [routerLink]="[card.item.id]"> {{ card.derived_type.card_uuid }} </a></td>
       </ng-container>
 
       <ng-container matColumnDef="card_type">

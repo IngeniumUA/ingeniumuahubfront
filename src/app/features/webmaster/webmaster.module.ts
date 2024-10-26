@@ -13,18 +13,18 @@ import {PublicHeaderComponent} from '../../core/layout/public/header/public-head
 import {
   UserTableComponent
 } from '../../shared/components/staff_webmaster_manager/tables/user-table/user-table.component';
-import { ItemDashboardComponent } from './item/item-dashboard/item-dashboard.component';
+import { ItemsOverviewPageComponent } from './item/item-dashboard/items-overview-page.component';
 import {
   ItemTableComponent
 } from '../../shared/components/staff_webmaster_manager/tables/item-table/item-table.component';
-import { ItemDetailDashboardComponent } from './item/item-detail-dashboard/item-detail-dashboard.component';
+import { ItemDashboardPageComponent } from './item/item-detail-dashboard/item-dashboard-page.component';
 import {
   StaffItemDetailComponent
 } from '../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
 import {
   StaffUserDetailComponent
 } from '../../shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
-import { CardDashboardComponent } from './item/card-dashboard/card-dashboard.component';
+import { CardsPageComponent } from './item/card-dashboard/cards-page.component';
 import {
   CardTableComponent
 } from '../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
@@ -58,6 +58,9 @@ import {
   OrderTrackingComponent
 } from '@ingenium/app/features/webmaster/order-tracking/order-tracking.component';
 import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
+import {
+    InteractionTableComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 
 
 @NgModule({
@@ -66,9 +69,9 @@ import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
     UsersListComponent,
     UserDetailComponent,
     GroupListComponent,
-    ItemDashboardComponent,
-    ItemDetailDashboardComponent,
-    CardDashboardComponent,
+    ItemsOverviewPageComponent,
+    ItemDashboardPageComponent,
+    CardsPageComponent,
     ProductWebmasterPageComponent,
     CheckoutDetailComponent,
     OrderTrackingComponent
@@ -92,7 +95,8 @@ import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
         CheckoutAndTransactionDashboardComponent,
         CreateCheckoutComponent,
         TransactionDetailComponent,
-        CurrencyPipe
+        CurrencyPipe,
+        InteractionTableComponent
     ], providers: [
     DatePipe
   ]

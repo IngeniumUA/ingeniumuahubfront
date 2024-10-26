@@ -20,7 +20,6 @@ export class CheckoutService {
                         item: number | null = null,
                         user: string | null = null,
                         status: PaymentStatusEnum | null = null,
-                        user_email: string | null = null,
                         checkout_id: string | null = null): Observable<CheckoutI[]> {
     const param = {
       offset: offset,
@@ -28,7 +27,6 @@ export class CheckoutService {
       item: item,
       user: user,
       checkout_status: status,
-      user_email: user_email,
       checkout_uuid: checkout_id
     }
     const params = new URLSearchParams(removeNull(param));

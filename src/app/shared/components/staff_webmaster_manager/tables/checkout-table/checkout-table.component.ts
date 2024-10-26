@@ -129,14 +129,17 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const checkoutIdQuery = checkoutIdControlValue === '' ? null: checkoutIdControlValue;
 
+    // User
+    const userQuery = this.user_id !== null ? this.user_id : emailQuery;
+
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
     this.checkoutData$ = this.checkoutService.queryCheckouts(
-      pageIndex * pageSize, pageSize, this.item_id, this.user_id, status,
-      emailQuery, checkoutIdQuery);
+      pageIndex * pageSize, pageSize, this.item_id, userQuery, status,
+      checkoutIdQuery);
 
     // Transactionstats
     this.statusStats$ = this.checkoutService.checkoutCountGroupByStatus(this.item_id, this.user_id);

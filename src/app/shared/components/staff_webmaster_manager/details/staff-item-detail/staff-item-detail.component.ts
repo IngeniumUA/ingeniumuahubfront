@@ -6,7 +6,13 @@ import {MatInputModule} from '@angular/material/input';
 import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
-import { isEventItem } from '@ingenium/app/shared/models/item/eventI';
+import {isEventItem} from '@ingenium/app/shared/models/item/eventI';
+import {AsCardItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
+import {RouterLink} from "@angular/router";
+import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item/cardI";
+import {
+  InteractionTableComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 
 @Component({
   selector: 'app-staff-item-detail',
@@ -19,7 +25,10 @@ import { isEventItem } from '@ingenium/app/shared/models/item/eventI';
     DatePipe,
     NgForOf,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    AsCardItemWide,
+    RouterLink,
+    InteractionTableComponent
   ],
   standalone: true,
   providers: [DatePipe]
@@ -33,6 +42,7 @@ export class StaffItemDetailComponent implements OnInit{
   isEventItem: boolean = false;
   isShopItem: boolean = false;
   isPromoItem: boolean = false;
+  isCardItem: boolean = false;
 
   form_error: string | null = null;
   loading: boolean = false;
@@ -45,6 +55,7 @@ export class StaffItemDetailComponent implements OnInit{
     this.isEventItem = this.item.derived_type.derived_type_enum === "eventitem"
     this.isShopItem = this.item.derived_type.derived_type_enum === "shopitem";
     this.isPromoItem = this.item.derived_type.derived_type_enum === "promoitem";
+    this.isCardItem = this.item.derived_type.derived_type_enum === "carditem";
 
     // Setting up form
     this.itemForm = this.formBuilder.group({
@@ -62,25 +73,20 @@ export class StaffItemDetailComponent implements OnInit{
     }
 
     // Promo
-    if (this.isPromoItem) {
-      this.itemForm.addControl('displayFromDate', new FormControl(
-        // this.datePipe.transform(this.item.derived_type.display_from_date, 'yyyy-MM-ddThh:mm')
-      ));
-      this.itemForm.addControl('displayUntilDate', new FormControl(
-        // this.datePipe.transform(this.item.derived_type.display_until_date, 'yyyy-MM-ddThh:mm')
-      ));
-    }
+    // if (this.isPromoItem) {
+    //
+    // }
   }
 
   onSubmit(): void {
     // Check if valid guardclause
     if (this.itemForm.invalid) {
       const error: Error = Error('Form error');
-      console.log(error);
       this.handleFormError(error);
       return;  }
 
     this.loading = true;
+
     // The underlying components always send updated information in their fields up to the parent
     // When we send the formdata to the parent here, alle data is as seen on the page
 
@@ -90,10 +96,14 @@ export class StaffItemDetailComponent implements OnInit{
     this.item.item.availability.disabled = this.itemForm.controls['disabled'].value;
     this.item.item.name = this.itemForm.controls['name'].value;
     this.item.item.description = this.itemForm.controls['description'].value;
-    // if (this.isEventItem) {
-    //   this.item.event_item.start_date = this.itemForm.controls['start_date'].value;
-    //   this.item.event_item.end_date = this.itemForm.controls['end_date'].value;
-    // }
+    if (this.isEventItem) {
+      this.item.derived_type = {
+        derived_type_enum: 'eventitem',
+        display: this.item.derived_type.display,
+        event_start: this.itemForm.controls['start_date'].value,
+        event_end: this.itemForm.controls['end_date'].value
+      };
+    }
     // if (this.isPromoItem) {
     //   this.item.promo_item.display_from_date = this.itemForm.controls['displayFromDate'].value;
     //   this.item.promo_item.display_until_date = this.itemForm.controls['displayUntilDate'].value;
@@ -122,4 +132,7 @@ export class StaffItemDetailComponent implements OnInit{
       this.item.derived_type.display = displaymixin_obj;
     }
   }
+
+  protected readonly CardTypeEnum = CardTypeEnum;
+  protected readonly CardMembershipEnum = CardMembershipEnum;
 }

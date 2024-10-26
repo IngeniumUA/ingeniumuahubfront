@@ -39,4 +39,12 @@ export class CardService {
     }
     return this.httpClient.patch<CardItemWideI>(`${this.apiUrl}/${card_id}`, patchModel);
   }
+
+  public getCard(item_id: number): Observable<CardItemWideI> {
+    return this.httpClient.get<CardItemWideI>(`${this.apiUrl}/${item_id}`);
+  }
+
+  public putCard(item_id: number, putModel: CardItemWideI): Observable<CardItemWideI> {
+    return this.httpClient.put<CardItemWideI>(`${this.apiUrl}/${item_id}`, putModel);
+  }
 }
