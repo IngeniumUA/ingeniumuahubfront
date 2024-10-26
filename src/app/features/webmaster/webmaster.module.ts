@@ -13,18 +13,18 @@ import {PublicHeaderComponent} from '../../core/layout/public/header/public-head
 import {
   UserTableComponent
 } from '../../shared/components/staff_webmaster_manager/tables/user-table/user-table.component';
-import { ItemDashboardComponent } from './item/item-dashboard/item-dashboard.component';
+import { ItemsOverviewPage } from './item/item-dashboard/items-overview-page.component';
 import {
   ItemTableComponent
 } from '../../shared/components/staff_webmaster_manager/tables/item-table/item-table.component';
-import { ItemDetailDashboardComponent } from './item/item-detail-dashboard/item-detail-dashboard.component';
+import { ItemDashboardPage } from './item/item-detail-dashboard/item-dashboard-page.component';
 import {
   StaffItemDetailComponent
 } from '../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
 import {
   StaffUserDetailComponent
 } from '../../shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
-import { CardDashboardComponent } from './item/card-dashboard/card-dashboard.component';
+import { CardsPage } from './item/card-dashboard/cards-page.component';
 import {
   CardTableComponent
 } from '../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
@@ -66,9 +66,9 @@ import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
     UsersListComponent,
     UserDetailComponent,
     GroupListComponent,
-    ItemDashboardComponent,
-    ItemDetailDashboardComponent,
-    CardDashboardComponent,
+    ItemsOverviewPage,
+    ItemDashboardPage,
+    CardsPage,
     ProductWebmasterPageComponent,
     CheckoutDetailComponent,
     OrderTrackingComponent

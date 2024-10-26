@@ -1,27 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {StaffProductBlueprintI} from '../../../../shared/models/staff/staff_productblueprint';
-import {StaffProductBlueprintService} from '../../../../core/services/staff/staff-productblueprint-service';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 
 @Component({
   selector: 'app-item-detail-dashboard',
-  templateUrl: './item-detail-dashboard.component.html',
-  styleUrls: ['./item-detail-dashboard.component.css']
+  templateUrl: './item-dashboard-page.component.html',
+  // styleUrls: ['./item-dashboard-page.component.css']
 })
-export class ItemDetailDashboardComponent implements OnInit {
+export class ItemDashboardPage implements OnInit {
 
   $itemDetail: Observable<ItemWideI| null> = of(null);
-  $productBlueprint: Observable<StaffProductBlueprintI[]> = of([]);
 
   addingCheckout: boolean = false;
 
   itemId!: number | string;
 
   constructor(private itemWideService: ItemWideService,
-              private staffProductService: StaffProductBlueprintService,
               private route: ActivatedRoute) {
   }
 

@@ -93,6 +93,10 @@
   <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 2)" [displayMixin]="this.item.derived_type.display"></app-display-mixin-detail>
 </section>
 
+<section *ngIf="this.isCardItem">
+  TODO Card item form here!
+</section>
+
 <section>
   <h2>Update Item</h2>
 
