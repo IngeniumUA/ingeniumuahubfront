@@ -71,18 +71,6 @@
       </thead>
       <tbody>
       <tr>
-        <th>Display From Date</th>
-        <td><label class="hubformfield-white">
-          <input type="datetime-local" formControlName="displayFromDate"/>
-        </label></td>
-      </tr>
-      <tr>
-        <th>Display Until Date</th>
-        <td><label class="hubformfield-white">
-          <input type="datetime-local" formControlName="displayUntilDate"/>
-        </label></td>
-      </tr>
-      <tr>
         <th>Type</th>
         <td>{{ this.item.derived_type }}</td>
       </tr>
@@ -94,7 +82,47 @@
 </section>
 
 <section *ngIf="this.isCardItem">
-  TODO Card item form here!
+  <ng-container *ngIf="this.item | asCardItemWide as cardItemWide">
+  <h2>Card Item</h2>
+  <table>
+    <thead>
+    <tr><th scope="col"></th><th scope="col">Card Item:</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th>Source item</th>
+      <td><a [routerLink]="'../' + cardItemWide.derived_type.source_item_id">
+        {{ cardItemWide.derived_type.source_item_name }}</a></td>
+    </tr>
+    <tr>
+      <th>Card UUID</th>
+      <td>
+      {{ cardItemWide.derived_type.card_uuid }}
+      </td>
+    </tr>
+    <tr>
+      <th>Card type</th>
+      <td>{{ CardTypeEnum[cardItemWide.derived_type.card_type] }}</td>
+    </tr>
+    <tr>
+      <th>Member type</th>
+      <td>{{ CardMembershipEnum[cardItemWide.derived_type.member_type] }}</td>
+    </tr>
+    <tr>
+      <th>Linked User</th>
+      <td>
+        @if (cardItemWide.derived_type.user_uuid === null) {
+          Unlinked
+        } @else {
+          <a [routerLink]="'../user/' + cardItemWide.derived_type.user_uuid">
+            {{ cardItemWide.derived_type.user_email }}
+          </a>
+        }
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  </ng-container>
 </section>
 
 <section>

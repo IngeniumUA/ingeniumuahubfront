@@ -7,6 +7,9 @@ import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
 import {isEventItem} from '@ingenium/app/shared/models/item/eventI';
+import {AsCardItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
+import {RouterLink} from "@angular/router";
+import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
   selector: 'app-staff-item-detail',
@@ -19,7 +22,9 @@ import {isEventItem} from '@ingenium/app/shared/models/item/eventI';
     DatePipe,
     NgForOf,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    AsCardItemWide,
+    RouterLink
   ],
   standalone: true,
   providers: [DatePipe]
@@ -65,12 +70,7 @@ export class StaffItemDetailComponent implements OnInit{
 
     // Promo
     if (this.isPromoItem) {
-      this.itemForm.addControl('displayFromDate', new FormControl(
-        // this.datePipe.transform(this.item.derived_type.display_from_date, 'yyyy-MM-ddThh:mm')
-      ));
-      this.itemForm.addControl('displayUntilDate', new FormControl(
-        // this.datePipe.transform(this.item.derived_type.display_until_date, 'yyyy-MM-ddThh:mm')
-      ));
+
     }
   }
 
@@ -128,4 +128,7 @@ export class StaffItemDetailComponent implements OnInit{
       this.item.derived_type.display = displaymixin_obj;
     }
   }
+
+  protected readonly CardTypeEnum = CardTypeEnum;
+  protected readonly CardMembershipEnum = CardMembershipEnum;
 }
