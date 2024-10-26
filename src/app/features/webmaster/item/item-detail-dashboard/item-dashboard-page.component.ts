@@ -9,7 +9,7 @@ import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide
   templateUrl: './item-dashboard-page.component.html',
   // styleUrls: ['./item-dashboard-page.component.css']
 })
-export class ItemDashboardPage implements OnInit {
+export class ItemDashboardPageComponent implements OnInit {
 
   $itemDetail: Observable<ItemWideI| null> = of(null);
 

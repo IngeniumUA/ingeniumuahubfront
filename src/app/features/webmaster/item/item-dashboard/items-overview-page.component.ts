@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './items-overview-page.component.html',
   // styleUrls: ['./item-dashboard.component.css']
 })
-export class ItemsOverviewPage {
+export class ItemsOverviewPageComponent {
 
   addingNew: boolean = false;
   ToggleAddNew() {

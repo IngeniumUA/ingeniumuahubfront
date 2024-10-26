@@ -73,9 +73,9 @@ export class StaffItemDetailComponent implements OnInit{
     }
 
     // Promo
-    if (this.isPromoItem) {
-
-    }
+    // if (this.isPromoItem) {
+    //
+    // }
   }
 
   onSubmit(): void {
