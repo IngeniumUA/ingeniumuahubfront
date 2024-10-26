@@ -37,7 +37,7 @@
             User<input class="w-3/4" type="text" placeholder="User" [formControlName]="'userControl'"></div>
           </th>
           <td mat-cell *matCellDef="let interaction">
-            <a [routerLink]="'../user/' + interaction.user_uuid">{{ interaction.user_email }}</a>
+            <a [routerLink]="'../../user/' + interaction.user_uuid">{{ interaction.user_email }}</a>
           </td>
         </ng-container>
 

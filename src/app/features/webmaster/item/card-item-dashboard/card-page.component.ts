@@ -10,6 +10,9 @@ import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide
 import {CardService} from "@ingenium/app/core/services/coreAPI/item/derived_services/card.service";
 import {ActivatedRoute} from "@angular/router";
 import {AsItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
+import {
+  InteractionTableComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 
 @Component({
   selector: 'app-card-item-dashboard',
@@ -19,7 +22,8 @@ import {AsItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
     NgIf,
     StaffItemDetailComponent,
     AsItemWide,
-    AsItemWide
+    AsItemWide,
+    InteractionTableComponent
   ],
   templateUrl: './card-page.component.html',
   // styleUrl: './card-item-dashboard.component.css'

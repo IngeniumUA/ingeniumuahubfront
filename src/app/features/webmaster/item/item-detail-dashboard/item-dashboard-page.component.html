@@ -32,8 +32,12 @@
   </section>
 }
 
-@if (item.derived_type.derived_type_enum !== 'carditem') {
-  TODO: Interactions dashboard
+@if (item.derived_type.derived_type_enum === 'carditem'
+     || item.derived_type.derived_type_enum === 'promoitem'
+     || item.derived_type.derived_type_enum === 'linkitem') {
+  <section class="staffSection">
+    <app-interaction-table [item_id]="this.item.item.id"></app-interaction-table>
+  </section>
 }
 
 <section class="staffSection">
