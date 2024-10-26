@@ -23,7 +23,7 @@ export class InteractionService {
     const param = {
       offset: offset,
       limit: count,
-      interaction_id: interaction_id,
+      interaction_identifier: interaction_id,
       user: user,
       item: item
     }
@@ -36,7 +36,7 @@ export class InteractionService {
                              item: string | null = null
   ): Observable<number> {
     const param = {
-      interaction_id: interaction_id,
+      interaction_identifier: interaction_id,
       user: user,
       item: item
     }
