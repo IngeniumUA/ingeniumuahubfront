@@ -20,6 +20,16 @@
         </td>
       </tr>
       <tr>
+        <th>SSO UUID</th>
+        <td>
+          @if (userDetail.sso_uuid) {
+            {{ userDetail.sso_uuid }}
+          } @else {
+            TODO: Button "sync with keycloak"
+          }
+        </td>
+      </tr>
+      <tr>
         <th>Last Edited</th>
         <td>{{ userDetail.last_update_timestamp | date: 'long' }} </td>
       </tr>
