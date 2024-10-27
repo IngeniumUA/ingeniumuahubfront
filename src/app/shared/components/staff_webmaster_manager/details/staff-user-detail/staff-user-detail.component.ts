@@ -8,6 +8,7 @@ import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {GroupI} from '../../../../models/group/HubGroup';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
 import {MatTableModule} from '@angular/material/table';
+import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
   selector: 'app-staff-user-detail',
@@ -27,7 +28,8 @@ import {MatTableModule} from '@angular/material/table';
 })
 export class StaffUserDetailComponent {
 
-  constructor(private groupService: GroupService) {
+  constructor(private groupService: GroupService,
+              private userService: UserService) {
   }
 
   @Input() userDetail!: UserWideI;
@@ -35,6 +37,10 @@ export class StaffUserDetailComponent {
 
   $groups: Observable<GroupI[]> = this.groupService.GetGroupsList(null, null);
   groupControl = new FormControl<string>('');
+
+  syncWithKeycloak() {
+    this.userService.syncWithKeycloak(this.userDetail.user_uuid).subscribe()
+  }
 
   AddToGroup() {
     if (this.groupControl.value === null) {

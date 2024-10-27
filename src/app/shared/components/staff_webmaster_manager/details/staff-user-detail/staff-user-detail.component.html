@@ -25,7 +25,7 @@
           @if (userDetail.sso_uuid) {
             {{ userDetail.sso_uuid }}
           } @else {
-            TODO: Button "sync with keycloak"
+            <button class="button button-primary button-inline" (click)="syncWithKeycloak()">Synchronise</button>
           }
         </td>
       </tr>

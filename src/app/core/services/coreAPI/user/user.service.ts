@@ -14,6 +14,10 @@ export class UserService {
 
   apiUrl = apiEnviroment.apiUrl + 'user';
 
+  public syncWithKeycloak(user: string): Observable<UserI> {
+    return this.httpClient.post<any>(`${apiEnviroment.apiUrl}user/sync_with_keycloak/${user}`, {});
+  }
+
   public queryUsers(offset: number = 0, count: number = 50,
                     user: string | null = null,
                     groups: number[] | null = null
