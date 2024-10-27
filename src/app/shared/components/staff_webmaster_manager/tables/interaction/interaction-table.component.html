@@ -5,17 +5,17 @@
     <button class="button button-primary button-inline" (click)="DownloadData()">Download</button>
   </section>
 
-  <ng-container *ngIf="(this.interactionData$ | async) as userTable else loading">
-  <ng-container *ngIf="this.interactionCount$ | async as userCount else noItems">
+  <ng-container *ngIf="(this.interactionData$ | async) as interactionTable else loading">
+  <ng-container *ngIf="this.interactionCount$ | async as interactionCount">
     <mat-paginator
-      [length]="userCount"
+      [length]="interactionCount"
       [pageSize]="100"
       (page)="LoadData($event)"
       showFirstLastButtons
       aria-label="Select which interactions">
     </mat-paginator>
 
-    <table mat-table [dataSource]="userTable" class="mat-elevation-z8">
+    <table mat-table [dataSource]="interactionTable" class="mat-elevation-z8">
       <form [formGroup]="this.columnSearchForm">
         <ng-container matColumnDef="interaction_id">
           <th mat-header-cell *matHeaderCellDef><div>
@@ -60,14 +60,11 @@
 
         <tr mat-header-row *matHeaderRowDef="GetDisplayedColumns()"></tr>
         <tr mat-row *matRowDef="let row; columns: GetDisplayedColumns();"></tr>
-
       </form>
     </table>
   </ng-container>
   </ng-container>
 </section>
-
-<ng-template #noItems>Nothing to display</ng-template>
 
 <ng-template #loading>
   <div class="spinner-container">
