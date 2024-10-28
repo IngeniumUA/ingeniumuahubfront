@@ -79,11 +79,11 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
 
     // Transaction fetching
     this.interactionData$ = this.interactionService.queryInteractions(
-      pageIndex * pageSize, pageSize,
-      this.item_id, this.user_id);
+      pageIndex * pageSize, pageSize, null,
+      this.user_id, this.item_id);
 
     // Transactionstats
-    this.interactionCount$ = this.interactionService.getInteractionCount(this.item_id, this.user_id)
+    this.interactionCount$ = this.interactionService.getInteractionCount(null, this.user_id, this.item_id)
   }
 
   DownloadData() {

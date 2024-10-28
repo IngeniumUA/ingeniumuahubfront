@@ -20,6 +20,19 @@
         </td>
       </tr>
       <tr>
+        <th>SSO UUID</th>
+        <td>
+          @if (userDetail.sso_uuid) {
+            {{ userDetail.sso_uuid }}
+          } @else {
+            <form [formGroup]="this.userPatchForm">
+              <input class="w-3/4" type="text" placeholder="sso_uuid" [formControlName]="'ssoUuidControl'">
+            </form>
+            <button class="button button-primary button-inline" (click)="patchUser()">Synchronise</button>
+          }
+        </td>
+      </tr>
+      <tr>
         <th>Last Edited</th>
         <td>{{ userDetail.last_update_timestamp | date: 'long' }} </td>
       </tr>

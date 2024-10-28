@@ -18,7 +18,7 @@ export class InteractionService {
   public queryInteractions(offset: number = 0, count: number = 50,
                            interaction_id: number | null = null,
                            user: string | null = null,
-                           item: string | null = null
+                           item: string | number | null = null
   ): Observable<InteractionI[]> {
     const param = {
       offset: offset,
@@ -33,7 +33,7 @@ export class InteractionService {
 
   public getInteractionCount(interaction_id: number | null = null,
                              user: string | null = null,
-                             item: string | null = null
+                             item: string | number | null = null
   ): Observable<number> {
     const param = {
       interaction_identifier: interaction_id,

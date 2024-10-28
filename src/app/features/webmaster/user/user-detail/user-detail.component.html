@@ -13,3 +13,12 @@
 <section>
   <app-interaction-table [user_id]="this.user_id"></app-interaction-table>
 </section>
+
+<section>
+  @if (!this.showCards) {
+    <button class="button button-primary button-inline" (click)="toggleShowCards()">Toon gelinkte kaarten</button>
+  } @else {
+    <app-card-table [userUUID]="this.user_id"></app-card-table>
+    <button class="button button-primary button-inline" (click)="toggleShowCards()">Verberg Tabel</button>
+  }
+</section>

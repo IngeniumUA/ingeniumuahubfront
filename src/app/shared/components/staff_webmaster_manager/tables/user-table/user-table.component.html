@@ -31,7 +31,7 @@
     </section>
 
   <ng-container *ngIf="(this.userData$ | async) as userTable else loading">
-    <ng-container *ngIf="this.userStats$ | async as userCount else noItems">
+    <ng-container *ngIf="this.userStats$ | async as userCount">
     <mat-paginator
       [length]="userCount"
       [pageSize]="100"
@@ -102,14 +102,10 @@
 
     </form>
     </table>
-
-    <ng-container *ngIf="userTable.length !== 0 else noItems"></ng-container>
   </ng-container>
   </ng-container>
   </ng-container>
 </section>
-
-<ng-template #noItems>Nothing to display</ng-template>
 
 <ng-template #loading>
   <div class="spinner-container">

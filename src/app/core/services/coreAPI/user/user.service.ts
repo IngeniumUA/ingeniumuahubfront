@@ -14,6 +14,10 @@ export class UserService {
 
   apiUrl = apiEnviroment.apiUrl + 'user';
 
+  public syncWithKeycloak(user: string): Observable<UserI> {
+    return this.httpClient.post<any>(`${apiEnviroment.apiUrl}user/sync_with_keycloak/${user}`, {});
+  }
+
   public queryUsers(offset: number = 0, count: number = 50,
                     user: string | null = null,
                     groups: number[] | null = null
@@ -40,6 +44,10 @@ export class UserService {
 
   public getUserWide(userUUID: string): Observable<UserWideI> {
     return this.httpClient.get<UserWideI>(`${this.apiUrl}/wide/${userUUID}`);
+  }
+
+  public patchWide(userUUID: string, patch_obj: any): Observable<UserWideI> {
+    return this.httpClient.patch<UserWideI>(`${this.apiUrl}/wide/${userUUID}`, patch_obj);
   }
 
   public getUsersExport( // fields: string[],

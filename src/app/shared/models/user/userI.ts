@@ -4,7 +4,10 @@ import {GroupI} from "@ingenium/app/shared/models/group/HubGroup";
 import {AccountI} from "@ingenium/app/shared/models/user/accountI";
 
 export interface UserI {
+  // PRIVATE model for user information
+
   user_uuid: string
+  sso_uuid: string | null
 
   email: string
   disabled: boolean
@@ -19,7 +22,10 @@ export interface UserI {
 }
 
 export interface UserWideI {
+  // PRIVATE model for user information, including prefetched groups and account info
+
   user_uuid: string
+  sso_uuid: string | null
 
   email: string
   disabled: boolean

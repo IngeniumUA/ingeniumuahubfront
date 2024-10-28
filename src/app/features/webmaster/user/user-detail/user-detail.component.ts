@@ -16,6 +16,13 @@ export class UserDetailComponent implements OnInit {
 
   $userDetail!: Observable<UserWideI>;
   user_id!: string;
+
+  showCards: boolean = false;
+
+  toggleShowCards(): void {
+    this.showCards = !this.showCards;
+  }
+
   ngOnInit() {
     // Fetch ID
     const id: string | null = this.route.snapshot.paramMap.get('id');

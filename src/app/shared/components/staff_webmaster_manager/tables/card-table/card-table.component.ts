@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AsyncPipe, DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
@@ -34,8 +34,8 @@ import {
   standalone: true
 })
 export class CardTableComponent implements OnInit, AfterViewInit {
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @Input() userUUID: string | null = null;
 
   cards$: Observable<CardItemWideI[]> = of([]);
 
@@ -88,9 +88,12 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     const cardTypeControl = this.searchForm.get('cardTypeControl')!.value;
     const cardNrControl = this.searchForm.get('cardNrControl')!.value;
 
-    const userQuery = userControlValue === '' ? null: userControlValue;
+    const emailQuery = userControlValue === '' ? null: userControlValue;
     const cardTypeQuery = cardTypeControl === '' || cardTypeControl === null ? null: parseInt(cardTypeControl);
     const cardNrQuery = cardNrControl === '' ? null: cardNrControl;
+
+    // User
+    const userQuery = this.userUUID !== null ? this.userUUID : emailQuery;
 
     // Page behaviour
     const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
