@@ -5,8 +5,6 @@
 <!--</section>-->
 
 <section>
-  <ng-container *ngIf="this.groups$ | async as groups">
-
   <h2>User Table</h2>
 
   <section class="top-query-form">
@@ -17,9 +15,11 @@
       <div class="flex flex-row w-12" *ngFor="let control of searchForm.controls['groupsControl'].controls; index as i">
           <select [formControl]="control">
             <option [ngValue]="null">Choose group</option>
-            <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
-              {{ group.name }}
-            </option>
+            <ng-container *ngIf="(this.groups$ | async) as groups else loading">
+              <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
+                {{ group.name }}
+              </option>
+            </ng-container>
           </select>
         <button class="font-bold" (click)="RemoveGroupField(i)">Remove</button>
       </div>
@@ -101,8 +101,8 @@
       </ng-container>
 
       <ng-container matColumnDef="modified_at">
-        <th mat-header-cell *matHeaderCellDef>Last Edited</th>
-        <td mat-cell *matCellDef="let user"> {{ user.last_updated_timestamp | date: 'dd/MM/yyyy h:mm:ss' }} </td>
+        <th mat-header-cell *matHeaderCellDef>Created</th>
+        <td mat-cell *matCellDef="let user"> {{ user.created_timestamp | date: 'dd/MM/yyyy h:mm:ss' }} </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="GetDisplayedColumns()"></tr>
@@ -110,7 +110,6 @@
 
     </form>
     </table>
-  </ng-container>
   </ng-container>
   </ng-container>
 </section>
