@@ -11,6 +11,7 @@
       [length]="interactionCount"
       [pageSize]="100"
       (page)="LoadData($event)"
+      [pageIndex]="this.pageIndex"
       showFirstLastButtons
       aria-label="Select which interactions">
     </mat-paginator>

@@ -69,6 +69,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
 
   transactionData$: Observable<TransactionI[]> = of([]);
 
+  pageIndex: number = 0
   blob!: Blob;
 
   searchForm = new FormGroup({
@@ -152,12 +153,12 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     const userQuery = this.user_id !== null ? this.user_id : emailQuery;
 
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
     this.transactionData$ = this.transactionService.queryTransactions(
-      pageIndex * pageSize, pageSize,
+      this.pageIndex * pageSize, pageSize,
       this.item_id, userQuery, interactionQuery,
       status,
       validityQuery,

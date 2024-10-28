@@ -22,6 +22,7 @@
     <mat-paginator
       [length]="StatusToStats(this.selectedStatus, statusStats)"
       [pageSize]="100"
+      [pageIndex]="this.pageIndex"
       (page)="LoadData($event)"
       showFirstLastButtons
       aria-label="Select which cards">

@@ -66,6 +66,7 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
 
   checkoutData$: Observable<CheckoutI[]> = of([]);
 
+  pageIndex: number = 0
   searchForm = new FormGroup({
     idControl: new FormControl(''),
     emailControl: new FormControl('')
@@ -133,12 +134,12 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
     const userQuery = this.user_id !== null ? this.user_id : emailQuery;
 
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
     this.checkoutData$ = this.checkoutService.queryCheckouts(
-      pageIndex * pageSize, pageSize, this.item_id, userQuery, status,
+      this.pageIndex * pageSize, pageSize, this.item_id, userQuery, status,
       checkoutIdQuery);
 
     // Transactionstats

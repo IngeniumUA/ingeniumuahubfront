@@ -39,6 +39,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
 
   cards$: Observable<CardItemWideI[]> = of([]);
 
+  pageIndex: number = 0
   searchForm = new FormGroup({
     userControl: new FormControl(''),
     cardTypeControl: new FormControl(''),
@@ -96,10 +97,10 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     const userQuery = this.userUUID !== null ? this.userUUID : emailQuery;
 
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
-    this.cards$ = this.cardService.queryCards(pageIndex * pageSize, pageSize,
+    this.cards$ = this.cardService.queryCards(this.pageIndex * pageSize, pageSize,
       userQuery, cardTypeQuery, cardNrQuery);
   }
 

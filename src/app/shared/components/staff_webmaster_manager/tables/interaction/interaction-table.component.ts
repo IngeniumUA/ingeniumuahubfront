@@ -65,6 +65,7 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
     return ['interaction_id', 'user', 'item', 'interaction_type', 'last_updated_timestamp', 'created_timestamp'];
   }
 
+  pageIndex: number = 0;
   columnSearchForm = new FormGroup({
     idControl: new FormControl(''),
     userControl: new FormControl(''),
@@ -74,12 +75,12 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
 
   LoadData(pageEvent: PageEvent | null = null) {
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
     this.interactionData$ = this.interactionService.queryInteractions(
-      pageIndex * pageSize, pageSize, null,
+      this.pageIndex * pageSize, pageSize, null,
       this.user_id, this.item_id);
 
     // Transactionstats
