@@ -42,6 +42,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
   blob!: Blob;
 
+  pageIndex: number = 0
   columnSearchForm = new FormGroup({
     uuidControl: new FormControl(''),
     emailControl: new FormControl(''),
@@ -110,11 +111,11 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     const groupsQueries: number[] | null = (groupControlValuesFiltered.length < 0) ? null: groupControlValuesFiltered;
 
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Data
-    this.userData$ = this.userService.queryUsers(pageIndex * pageSize, pageSize, userQuery, groupsQueries).pipe(first());
+    this.userData$ = this.userService.queryUsers(this.pageIndex * pageSize, pageSize, userQuery, groupsQueries).pipe(first());
 
     // Stats
     this.userStats$ = this.userService.getUserCount(userQuery, groupsQueries).pipe(first());
