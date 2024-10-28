@@ -46,6 +46,10 @@ export class UserService {
     return this.httpClient.get<UserWideI>(`${this.apiUrl}/wide/${userUUID}`);
   }
 
+  public patchWide(userUUID: string, patch_obj: any): Observable<UserWideI> {
+    return this.httpClient.patch<UserWideI>(`${this.apiUrl}/wide/${userUUID}`, patch_obj);
+  }
+
   public getUsersExport( // fields: string[],
                         user: string | null = null,
                         groups: number[] = []):

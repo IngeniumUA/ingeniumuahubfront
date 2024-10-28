@@ -25,7 +25,10 @@
           @if (userDetail.sso_uuid) {
             {{ userDetail.sso_uuid }}
           } @else {
-            <button class="button button-primary button-inline" (click)="syncWithKeycloak()">Synchronise</button>
+            <form [formGroup]="this.userPatchForm">
+              <input class="w-3/4" type="text" placeholder="sso_uuid" [formControlName]="'ssoUuidControl'">
+            </form>
+            <button class="button button-primary button-inline" (click)="patchUser()">Synchronise</button>
           }
         </td>
       </tr>

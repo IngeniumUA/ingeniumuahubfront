@@ -4,7 +4,7 @@ import { UserWideI} from '../../../../models/user/userI';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {GroupI} from '../../../../models/group/HubGroup';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
 import {MatTableModule} from '@angular/material/table';
@@ -37,6 +37,30 @@ export class StaffUserDetailComponent {
 
   $groups: Observable<GroupI[]> = this.groupService.GetGroupsList(null, null);
   groupControl = new FormControl<string>('');
+
+  userPatchForm = new FormGroup({
+    ssoUuidControl: new FormControl("", Validators.required)
+  })
+
+  patchUser() {
+    const sso_uuid = this.userPatchForm.get('ssoUuidControl')!.value;
+    if (sso_uuid === null) {
+      return
+    }
+    const patch_obj ={
+      sso_uuid: sso_uuid
+    }
+    this.userService.patchWide(this.userDetail.user_uuid, patch_obj).subscribe(
+      {
+        next: () => {
+          this.refetchUserEvent.emit(true);
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      }
+    )
+  }
 
   syncWithKeycloak() {
     this.userService.syncWithKeycloak(this.userDetail.user_uuid).subscribe()
