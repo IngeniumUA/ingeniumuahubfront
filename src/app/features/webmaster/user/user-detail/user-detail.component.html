@@ -10,11 +10,11 @@
   <app-checkout-and-transaction-dashboard [user_id]="this.user_id"></app-checkout-and-transaction-dashboard>
 </section>
 
-<section>
+<section class="staffSection">
   <app-interaction-table [user_id]="this.user_id"></app-interaction-table>
 </section>
 
-<section>
+<section class="staffSection">
   @if (!this.showCards) {
     <button class="button button-primary button-inline" (click)="toggleShowCards()">Toon gelinkte kaarten</button>
   } @else {

@@ -7,7 +7,7 @@ import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {distinctUntilChanged} from 'rxjs/operators';
+import {distinctUntilChanged, first} from 'rxjs/operators';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {GroupI} from '../../../../models/group/HubGroup';
@@ -52,7 +52,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   });
 
   GetDisplayedColumns(): string[] {
-    return ['uuid', 'email', 'password_set', 'lid', 'is_staff', 'is_manager', 'last_login', 'modified_at'];
+    return ['uuid', 'sso_uuid', 'email', 'lid', 'is_staff', 'is_manager', 'last_login', 'modified_at'];
   }
 
   constructor(private datePipe: DatePipe,
@@ -114,10 +114,10 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Data
-    this.userData$ = this.userService.queryUsers(pageIndex * pageSize, pageSize, userQuery, groupsQueries);
+    this.userData$ = this.userService.queryUsers(pageIndex * pageSize, pageSize, userQuery, groupsQueries).pipe(first());
 
     // Stats
-    this.userStats$ = this.userService.getUserCount(userQuery, groupsQueries);
+    this.userStats$ = this.userService.getUserCount(userQuery, groupsQueries).pipe(first());
   }
 
   DownloadData() {

@@ -1,7 +1,8 @@
-<section>
-  <h2>Import users</h2>
-  <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".xlsx">
-</section>
+<!--  TODO-->
+<!--<section>-->
+<!--  <h2>Import users</h2>-->
+<!--  <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".xlsx">-->
+<!--</section>-->
 
 <section>
   <ng-container *ngIf="this.groups$ | async as groups">
@@ -52,6 +53,18 @@
         <td mat-cell *matCellDef="let user"><a [routerLink]="[user.user_uuid]"> {{ user.user_uuid }} </a></td>
       </ng-container>
 
+      <ng-container matColumnDef="sso_uuid">
+        <th mat-header-cell *matHeaderCellDef>
+          <div>
+            SSO uuid
+            <input type="text" placeholder="sso_uuid" [formControlName]="'ssoUuidControl'">
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let user">
+          {{ user.email }}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef>
           <div>
@@ -60,13 +73,8 @@
           </div>
         </th>
         <td mat-cell *matCellDef="let user">
-            {{ user.email }}
+          <a [routerLink]="[user.user_uuid]">{{user.email}}</a>
         </td>
-      </ng-container>
-
-      <ng-container matColumnDef="password_set">
-        <th mat-header-cell *matHeaderCellDef>Password Set</th>
-        <td mat-cell *matCellDef="let user">{{ user.password_set }}</td>
       </ng-container>
 
       <ng-container matColumnDef="lid">
