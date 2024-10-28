@@ -37,6 +37,10 @@ export class ProductBlueprintDashboardComponent implements OnInit {
   constructor(private productBlueprintService: ProductBlueprintService) {
   }
 
+  calcTotal(input: []): number {
+    return input.reduce((acc, blueprintStat: any) => acc + blueprintStat.transaction_count, 0);
+  }
+
   ngOnInit() {
     this.$productBlueprint = this.productBlueprintService.queryProductTable(this.item.id,
       this.item.id,
