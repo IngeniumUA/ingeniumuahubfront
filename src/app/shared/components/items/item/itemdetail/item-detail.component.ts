@@ -7,15 +7,15 @@ import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 
 @Component({
   selector: 'app-itemdetail',
-  templateUrl: './itemdetail.component.html',
-  styleUrls: ['./itemdetail.component.css'],
+  templateUrl: './item-detail.component.html',
+  styleUrls: ['./item-detail.component.css'],
   standalone: true,
   imports: [
     NgIf,
     AsyncPipe
   ]
 })
-export class ItemdetailComponent implements OnInit {
+export class ItemDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private itemService: ItemService) {
   }
