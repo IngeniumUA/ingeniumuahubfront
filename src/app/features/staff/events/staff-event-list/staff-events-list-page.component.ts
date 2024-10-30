@@ -4,11 +4,11 @@ import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 
 @Component({
-  selector: 'app-staff-event-list',
-  templateUrl: './staff-event-list.component.html',
-  styleUrls: ['./staff-event-list.component.css']
+  selector: 'app-staff-events-list',
+  templateUrl: './staff-events-list-page.component.html',
+  styleUrls: ['./staff-events-list-page.component.css']
 })
-export class StaffEventListComponent {
+export class StaffEventsListPageComponent {
 
   events$: Observable<ItemWideI[]> = this.eventsService.getItems(50, 0, "eventitem");
 

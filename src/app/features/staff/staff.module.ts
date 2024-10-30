@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { StaffComponent } from './staff.component';
 import {SidenavComponent} from '@ingenium/app/core/layout/behind/sidenav/sidenav.component';
 import {StaffRoutingModule} from './staff-routing.module';
-import { StaffEventListComponent } from './events/staff-event-list/staff-event-list.component';
-import { StaffEventDetailComponent } from './events/staff-event-detail/staff-event-detail.component';
+import { StaffEventsListPageComponent } from './events/staff-event-list/staff-events-list-page.component';
+import { StaffEventPageComponent } from './events/staff-event-detail/staff-event-page.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-edit.component';
 import { FunctionsComponent } from './functions/functions.component';
@@ -27,8 +27,8 @@ import { StaffUseFullQRComponent } from './payment-code/staff-usefull-q-r.compon
   ],
   declarations: [
     StaffComponent,
-    StaffEventListComponent,
-    StaffEventDetailComponent,
+    StaffEventsListPageComponent,
+    StaffEventPageComponent,
     FunctionsComponent,
     DrinkOrdersComponent,
     FoodOrdersComponent,
