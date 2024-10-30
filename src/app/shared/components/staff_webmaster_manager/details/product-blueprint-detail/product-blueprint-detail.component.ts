@@ -104,6 +104,8 @@ export class ProductBlueprintDetailComponent implements OnInit {
       const availability: AvailabilityCompositionI = {
         available: this.blueprintForm.controls['available'].value,
         disabled: this.productBlueprint.availability.disabled,
+        available_from: null,
+        available_until: null,
         dynamic_policy_type: null,
         dynamic_policy_content: null
       }

@@ -1,7 +1,7 @@
 <ng-container *ngIf="$itemDetail | async as item">
 
 <section class="staffSection">
-  <app-staff-item-detail [item]="item | asItemWide" (itemUpdate)="this.UpdateItem($event)" />
+  <app-item-detail [item]="item | asItemWide" (itemUpdate)="this.UpdateItem($event)" />
 </section>
 
 <section>

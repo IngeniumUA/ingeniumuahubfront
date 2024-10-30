@@ -7,6 +7,8 @@ export interface AccessPolicyI {
 export interface AvailabilityCompositionI {
   disabled: boolean
   available: boolean
+  available_from: string | null
+  available_until: string | null
   dynamic_policy_type: AccessPolicyEnum | null
   dynamic_policy_content: AccessPolicyI | null
 }

@@ -71,6 +71,8 @@ export class PricePolicyComponent implements OnInit {
     const availability: AvailabilityCompositionI = {
       available: availableControlValue,
       disabled: false,
+      available_from: null,
+      available_until: null,
       dynamic_policy_type: this.pricePolicy.availability.dynamic_policy_type,
       dynamic_policy_content: this.pricePolicy.availability.dynamic_policy_content
     }

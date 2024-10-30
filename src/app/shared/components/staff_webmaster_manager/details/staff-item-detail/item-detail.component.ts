@@ -13,11 +13,15 @@ import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item
 import {
   InteractionTableComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
+import {
+  AvailabilityMixinDetailComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 
 @Component({
-  selector: 'app-staff-item-detail',
-  templateUrl: './staff-item-detail.component.html',
-  styleUrls: ['./staff-item-detail.component.css'],
+  selector: 'app-item-detail',
+  templateUrl: './item-detail.component.html',
+  styleUrls: ['./item-detail.component.css'],
   imports: [
     NgIf,
     DisplayMixinDetailComponent,
@@ -28,12 +32,13 @@ import {
     MatInputModule,
     AsCardItemWide,
     RouterLink,
-    InteractionTableComponent
+    InteractionTableComponent,
+    AvailabilityMixinDetailComponent
   ],
   standalone: true,
   providers: [DatePipe]
 })
-export class StaffItemDetailComponent implements OnInit{
+export class ItemDetailComponent implements OnInit{
 
   @Input() item!: ItemWideI;
   @Input() editing: boolean = false;
@@ -131,6 +136,9 @@ export class StaffItemDetailComponent implements OnInit{
     if (derived_type === 2) {
       this.item.derived_type.display = displaymixin_obj;
     }
+  }
+  UpdateAvailability(availabilityObj: AvailabilityCompositionI): void {
+    this.item.item.availability = availabilityObj;
   }
 
   protected readonly CardTypeEnum = CardTypeEnum;

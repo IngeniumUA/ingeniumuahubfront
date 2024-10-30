@@ -4,14 +4,14 @@ import {ItemtableComponent} from '../../../shared/components/items/item/itemtabl
 import {ManagerItemsDashboardComponent} from './items-dashboard/manager-items-dashboard.component';
 import {ManagerItemsRoutingModule} from './manager-items-routing.module';
 import {ItemlogComponent} from '../../../shared/components/logs/itemlogs/itemlog.component';
-import {ItemDetailComponent} from '../../../shared/components/items/item/itemdetail/item-detail.component';
+import {ManagerItemDetailComponent} from '../../../shared/components/items/item/itemdetail/manager-item-detail.component';
 
 @NgModule({
   imports: [
     CommonModule,
     ManagerItemsRoutingModule,
     ItemtableComponent,
-    ItemDetailComponent,
+    ManagerItemDetailComponent,
     ItemlogComponent,
   ],
   declarations: [

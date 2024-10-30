@@ -19,8 +19,8 @@ import {
 } from '../../shared/components/staff_webmaster_manager/tables/item-table/item-table.component';
 import { ItemDashboardPageComponent } from './item/item-detail-dashboard/item-dashboard-page.component';
 import {
-  StaffItemDetailComponent
-} from '../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
+  ItemDetailComponent
+} from '../../shared/components/staff_webmaster_manager/details/staff-item-detail/item-detail.component';
 import {
   UserDetailComponent
 } from '../../shared/components/staff_webmaster_manager/details/staff-user-detail/user-detail.component';
@@ -84,7 +84,7 @@ import {
         PublicHeaderComponent,
         UserTableComponent,
         ItemTableComponent,
-        StaffItemDetailComponent,
+        ItemDetailComponent,
         UserDetailComponent,
         ProductBlueprintDashboardComponent,
         CardTableComponent,
