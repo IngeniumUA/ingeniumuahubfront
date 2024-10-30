@@ -22,6 +22,7 @@ import {
 } from "@angular/material/table";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {RouterLink} from "@angular/router";
+import {InteractionTypeEnum} from "@ingenium/app/shared/models/interaction/interactionTypeEnum";
 
 @Component({
   selector: 'app-interaction-table',
@@ -125,4 +126,6 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
     paginatorIntl.firstPageLabel = '';
     paginatorIntl.lastPageLabel = '';
   }
+
+  protected readonly InteractionTypeEnum = InteractionTypeEnum;
 }
