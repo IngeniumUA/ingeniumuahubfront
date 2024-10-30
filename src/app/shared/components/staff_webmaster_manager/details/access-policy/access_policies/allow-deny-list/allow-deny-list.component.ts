@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {FormArray, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AccessPolicyEnum, AllowDenyListI} from '../../../../../../models/access_policies/access_policies';
+import {AccessPolicyEnum, AllowDenyListI} from '../../../../../../models/access_policies/accessPolicyI';
 import {Observable} from "rxjs";
-import {GroupI} from "@ingenium/app/shared/models/group/HubGroup";
+import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
 import {GroupService} from "@ingenium/app/core/services/coreAPI/group/group.service";
 
 @Component({

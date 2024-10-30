@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {AccountI} from "@ingenium/app/shared/models/user/accountI";
 import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
 

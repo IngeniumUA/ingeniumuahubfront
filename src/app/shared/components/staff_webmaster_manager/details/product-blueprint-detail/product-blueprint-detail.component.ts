@@ -1,16 +1,16 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
 import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/items/products/products';
+import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/product/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
 import {PricePolicyComponentCreateComponent} from '../../create/price-policy/price-policy-component-create.component';
 import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
-import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import {Observable, of} from "rxjs";
 import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
 import {first} from "rxjs/operators";
+import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -31,8 +31,8 @@ import {first} from "rxjs/operators";
   standalone: true
 })
 export class ProductBlueprintDetailComponent implements OnInit {
-    @Input() productBlueprint!: StaffProductBlueprintI;
-    @Output() updateProduct = new EventEmitter<StaffProductBlueprintI>();
+    @Input() productBlueprint!: ProductBlueprintI;
+    @Output() updateProduct = new EventEmitter<ProductBlueprintI>();
 
     $pricePolicies: Observable<PricePolicyI[]> = of([]);
 
@@ -108,14 +108,14 @@ export class ProductBlueprintDetailComponent implements OnInit {
         dynamic_policy_content: null
       }
 
-      const product: StaffProductBlueprintI = {
+      const product: ProductBlueprintI = {
         id: this.productBlueprint.id,
         availability: availability,
         created_timestamp: this.productBlueprint.created_timestamp,
         last_update_timestamp: this.productBlueprint.last_update_timestamp,
         origin_item_id: this.productBlueprint.origin_item_id,
         source_item_ids: this.productBlueprint.source_item_ids,
-        product_blueprint_pools: this.productBlueprint.product_blueprint_pools,
+        product_blueprint_pool_ids: this.productBlueprint.product_blueprint_pool_ids,
         name: this.blueprintForm.controls['name'].value,
         description: this.blueprintForm.controls['description'].value,
 

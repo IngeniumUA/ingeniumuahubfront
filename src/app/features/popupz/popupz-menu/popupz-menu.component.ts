@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {ActivatedRoute, RouterLink, RouterLinkActive} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
-import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
+import {ProductOutI} from "@ingenium/app/shared/models/product/products";
 import {take} from "rxjs";
 import {AsyncPipe, NgClass, NgIf} from "@angular/common";
 import {Store} from "@ngxs/store";
@@ -26,8 +26,8 @@ import {map} from "rxjs/operators";
   styleUrl: './popupz-menu.component.scss'
 })
 export class PopupzMenuComponent {
-  allProducts: IProductItem[] = [];
-  products: IProductItem[] = [];
+  allProducts: ProductOutI[] = [];
+  products: ProductOutI[] = [];
   itemName = "Pop-Up Z";
 
   category: string|undefined = undefined;
@@ -47,7 +47,7 @@ export class PopupzMenuComponent {
   }
 
   getProducts() {
-    this.httpClient.get<IProductItem[]>(`${apiEnviroment.apiUrl}item/products/${this.itemName}`)
+    this.httpClient.get<ProductOutI[]>(`${apiEnviroment.apiUrl}item/products/${this.itemName}`)
         .pipe(
             take(1),
             map(products => {
@@ -58,8 +58,8 @@ export class PopupzMenuComponent {
         .subscribe();
   }
 
-  filterProducts(products: IProductItem[]) {
-    return products.filter((product: IProductItem): boolean => {
+  filterProducts(products: ProductOutI[]) {
+    return products.filter((product: ProductOutI): boolean => {
       return this.category === undefined || this.category === "" || product.product_meta.categorie === this.category;
     });
   }
@@ -74,7 +74,7 @@ export class PopupzMenuComponent {
     this.sauceSelection[productId] = event.target.value;
   }
 
-  addToCard(product: IProductItem) {
+  addToCard(product: ProductOutI) {
     if (this.forceSauceOn.includes(product.name)) {
       if (!this.sauceSelection[product.id]) {
         this.toastrService.error('Gelieve een saus te selecteren.');

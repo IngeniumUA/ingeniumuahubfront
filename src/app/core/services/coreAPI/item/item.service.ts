@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, Observable, of, startWith} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {ItemI, ItemInI} from "@ingenium/app/shared/models/item/itemI";
-import {RecSysPreviewI} from "@ingenium/app/shared/models/items/recsys_interfaces";
+import {RecSysPreviewI} from "@ingenium/app/shared/models/item/recsysI";
 import {map} from "rxjs/operators";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {captureException} from "@sentry/angular";

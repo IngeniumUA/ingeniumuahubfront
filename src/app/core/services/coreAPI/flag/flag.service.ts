@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {FlagI, FlagInI, FlagPatchI} from "@ingenium/app/shared/models/flag/flagModels";
+import {FlagI, FlagInI, FlagPatchI} from "@ingenium/app/shared/models/flag/hubFlagI";
 
 @Injectable({
   providedIn: 'root'

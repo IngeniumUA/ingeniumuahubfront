@@ -1,6 +1,6 @@
-import {TransactionInI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {TransactionInI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 
 export interface CheckoutI {
   checkout_uuid: string

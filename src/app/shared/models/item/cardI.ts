@@ -1,4 +1,4 @@
-import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
+import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 import {ItemI, ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 
 export enum CardMembershipEnum {

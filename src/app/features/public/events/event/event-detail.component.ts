@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
-import {IProductCategorie, IProductGroup} from '@ingenium/app/shared/models/items/products/products';
+import {ProductCategoryI, ProductGroupI} from '@ingenium/app/shared/models/product/products';
 import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {map} from 'rxjs/operators';
 import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
@@ -26,9 +26,9 @@ export class EventDetailComponent implements OnInit {
   event$!: Observable<ItemWideLimitedI>;
   eventError$!: Observable<any>;
 
-  productCategories$!: Observable<IProductCategorie[]>;
+  productCategories$!: Observable<ProductCategoryI[]>;
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  currentProductGroups!: Observable<IProductGroup[]>;
+  currentProductGroups!: Observable<ProductGroupI[]>;
 
   constructor(private route: ActivatedRoute,
               private router: Router,

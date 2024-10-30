@@ -1,9 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {StaffProductBlueprintService} from '@ingenium/app/core/services/staff/staff-productblueprint-service';
 import {first} from 'rxjs/operators';
 import {DatePipe, NgIf, NgStyle} from '@angular/common';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
+import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
+import {ProductBlueprintInI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
 
 @Component({
   selector: 'app-product-blueprint-create',
@@ -24,7 +25,7 @@ export class ProductBlueprintCreateComponent {
 
   productBlueprintForm = this.formBuilder.group({
     name: ['', Validators.required],
-    description: [''],
+    description: ['', Validators.required],
     max_total: [0, [Validators.required, Validators.min(1)]],
     max_individual: [0, [Validators.required, Validators.min(1)]],
     max_per_checkout: [0, [Validators.required, Validators.min(1)]],
@@ -33,7 +34,8 @@ export class ProductBlueprintCreateComponent {
   form_error: string | null = null;
   loading: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private staffProductService: StaffProductBlueprintService) { }
+  constructor(private formBuilder: FormBuilder,
+              private productBlueprintService: ProductBlueprintService) { }
 
   get f() { return this.productBlueprintForm.controls; }
 
@@ -46,10 +48,10 @@ export class ProductBlueprintCreateComponent {
 
     this.loading = true;
 
-    const product = {
+    const product: ProductBlueprintInI = {
       origin_item_id: this.originItem.id,
-      name: this.productBlueprintForm.controls['name'].value,
-      description: this.productBlueprintForm.controls['description'].value,
+      name: this.productBlueprintForm.controls['name'].value!,
+      description: this.productBlueprintForm.controls['description'].value!,
 
       max_total: this.productBlueprintForm.controls['max_total'].value,
       max_individual: this.productBlueprintForm.controls['max_individual'].value,
@@ -57,13 +59,15 @@ export class ProductBlueprintCreateComponent {
 
       ordering: this.productBlueprintForm.controls['ordering'].value,
 
-      product_meta: null,
-
-      disabled: false,
-      available: true,
+      availability: {
+        available: false,
+        disabled: null,
+        dynamic_policy_type: null,
+        dynamic_policy_content: null
+      },
     };
 
-    this.staffProductService.post(product).pipe(
+    this.productBlueprintService.postProductBlueprint(product).pipe(
       first()).subscribe({
       next: () => {
         this.FinishedCreating.emit(true);

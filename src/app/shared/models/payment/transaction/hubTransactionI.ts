@@ -1,7 +1,7 @@
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
-import {IProductItem} from "@ingenium/app/shared/models/items/products/products";
-import {InteractionI, InteractionLimitedI} from "@ingenium/app/shared/models/interaction/interactionModels";
+import {ValidityEnum} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {ProductOutI} from "@ingenium/app/shared/models/product/products";
+import {InteractionI, InteractionLimitedI} from "@ingenium/app/shared/models/interaction/hubInteractionI";
 
 export interface TransactionInI {
   user_email: string;
@@ -27,7 +27,7 @@ export interface TransactionI {
 
   checkout_uuid: string
 
-  purchased_product: IProductItem
+  purchased_product: ProductOutI
   note: string | null
 }
 
@@ -40,7 +40,7 @@ export interface TransactionPatchI {
 
 export interface TransactionLimitedI {
   interaction: InteractionLimitedI
-  purchased_product: IProductItem
+  purchased_product: ProductOutI
   note: string
   completed_timestamp: string | null
 }

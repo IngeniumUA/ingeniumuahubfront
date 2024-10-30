@@ -4,8 +4,8 @@ import {Observable} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {StatusStatsI} from "@ingenium/app/shared/models/stats/transactionStats";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {ValidityEnum} from "@ingenium/app/shared/models/transaction/validityEnum";
-import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {ValidityEnum} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 

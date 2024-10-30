@@ -8,7 +8,7 @@ import {
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {InteractionI} from "@ingenium/app/shared/models/interaction/interactionModels";
+import {InteractionI} from "@ingenium/app/shared/models/interaction/hubInteractionI";
 import {InteractionService} from "@ingenium/app/core/services/coreAPI/interaction.service";
 import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
 import {

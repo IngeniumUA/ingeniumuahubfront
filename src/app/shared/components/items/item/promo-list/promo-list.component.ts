@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {RecSysItemPreviewComponent} from '../../recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import {Observable, of} from 'rxjs';
-import {RecSysPreviewI} from '../../../../models/items/recsys_interfaces';
+import {RecSysPreviewI} from '../../../../models/item/recsysI';
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
 
 @Component({

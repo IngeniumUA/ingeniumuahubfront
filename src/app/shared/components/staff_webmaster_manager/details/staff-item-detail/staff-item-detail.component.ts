@@ -5,7 +5,7 @@ import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angula
 import {MatInputModule} from '@angular/material/input';
 import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
-import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
+import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 import {isEventItem} from '@ingenium/app/shared/models/item/eventI';
 import {AsCardItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 import {RouterLink} from "@angular/router";

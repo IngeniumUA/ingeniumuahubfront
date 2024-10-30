@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgForOf, NgIf, NgStyle} from '@angular/common';
-import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
+import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 
 interface FormField {
   name: string

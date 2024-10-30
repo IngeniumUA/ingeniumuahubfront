@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {Observable, of, shareReplay} from 'rxjs';
-import {IProductCategorie, IProductItem} from '../../../../shared/models/items/products/products';
+import {ProductCategoryI, ProductOutI} from '../../../../shared/models/product/products';
 import {HttpClient} from '@angular/common/http';
-import {apiEnviroment} from '../../../../../environments/environment';
+import {apiEnviroment} from '@ingenium/environments/environment';
 
 /*
 const TESTpopUpZ: IProductGroup[] = [
@@ -70,11 +70,11 @@ export class ProductsService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getProducts(itemID: string): Observable<IProductItem[]> {
-    return this.httpClient.get<IProductItem[]>(apiEnviroment.apiUrl + 'item/products/' + itemID).pipe(shareReplay());
+  getProducts(itemID: string): Observable<ProductOutI[]> {
+    return this.httpClient.get<ProductOutI[]>(apiEnviroment.apiUrl + 'item/products/' + itemID).pipe(shareReplay());
   }
 
-  getProductWithCart(_itemId: string): Observable<IProductCategorie[]> {
+  getProductWithCart(_itemId: string): Observable<ProductCategoryI[]> {
     // TODO return this.httpClient.post<IProductCategorie[]>(apiEnviroment.apiUrl + "interact/product/" + itemID)
     return of([]);
   }

@@ -1,4 +1,4 @@
-import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
+import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 
 export interface CartSuccessI {
   checkout: CheckoutSmollI

@@ -3,7 +3,7 @@ import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angula
 import {first} from "rxjs/operators";
 import {NgStyle} from "@angular/common";
 import {FlagService} from "@ingenium/app/core/services/coreAPI/flag/flag.service";
-import {FlagInI} from "@ingenium/app/shared/models/flag/flagModels";
+import {FlagInI} from "@ingenium/app/shared/models/flag/hubFlagI";
 
 @Component({
   selector: 'app-create-flag',

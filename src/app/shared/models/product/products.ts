@@ -1,11 +1,11 @@
-export interface IProductCategorie {
+export interface ProductCategoryI {
   categorie_name: string,
-  product_groups: IProductGroup[],
+  product_groups: ProductGroupI[],
 }
 
-export interface IProductGroup {
+export interface ProductGroupI {
   group_name: string,
-  products: IProductItem[];
+  products: ProductOutI[];
 }
 
 export interface CheckoutTrackerConfigI {
@@ -24,7 +24,7 @@ export interface ProductMetaI {
   other_meta_data: {[key:string]:string};
 }
 
-export interface IPricePolicy {
+export interface PricePolicyI {
   id: number;
   name: string | null;
   price: number,
@@ -34,7 +34,7 @@ export interface IPricePolicy {
   }
 }
 
-export interface IProductItem {
+export interface ProductOutI {
   id: number;
   name: string;
   description: string;
@@ -42,7 +42,7 @@ export interface IProductItem {
   blueprint_id: number;
   origin_item_id: number;
   date_generated: string;
-  price_policy: IPricePolicy;
+  price_policy: PricePolicyI;
   note: string|null;
   max_count: number;
   product_meta: ProductMetaI;

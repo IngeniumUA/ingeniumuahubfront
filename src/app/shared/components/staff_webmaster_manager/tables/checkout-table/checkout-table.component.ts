@@ -18,10 +18,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
-import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/checkout/checkoutModels";
+import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 
 @Component({
   selector: 'app-checkout-table',

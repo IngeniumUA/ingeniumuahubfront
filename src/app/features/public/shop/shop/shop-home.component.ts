@@ -1,6 +1,6 @@
 import {Component, Inject, PLATFORM_ID} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {RecSysPreviewI} from '../../../../shared/models/items/recsys_interfaces';
+import {RecSysPreviewI} from '../../../../shared/models/item/recsysI';
 import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";
 import {Store} from "@ngxs/store";
 import {CartState} from "@ingenium/app/core/store";

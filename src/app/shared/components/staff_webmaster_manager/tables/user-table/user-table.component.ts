@@ -10,7 +10,7 @@ import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Val
 import {distinctUntilChanged, first} from 'rxjs/operators';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {GroupI} from '../../../../models/group/HubGroup';
+import {GroupI} from '../../../../models/group/hubGroupI';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 

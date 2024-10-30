@@ -1,5 +1,5 @@
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
-import {GroupI} from "@ingenium/app/shared/models/group/HubGroup";
+import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
 
 import {AccountI} from "@ingenium/app/shared/models/user/accountI";
 

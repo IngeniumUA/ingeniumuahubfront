@@ -1,4 +1,4 @@
-import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/access_policies";
+import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/accessPolicyI";
 
 export interface AccessPolicyI {
   access_policy_config: object

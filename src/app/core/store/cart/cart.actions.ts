@@ -1,10 +1,10 @@
-import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {ProductOutI, PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 
 export namespace CartActions {
   export class AddToCart {
     static readonly type = '[Cart] Add to Cart';
 
-    constructor(public product: IProductItem, public count: number = 1) {}
+    constructor(public product: ProductOutI, public count: number = 1) {}
   }
 
   export class RemoveFromCart {
@@ -14,7 +14,7 @@ export namespace CartActions {
 
   export class ReduceProductQuantity {
     static readonly type = '[Cart] Reduce Quantity';
-    constructor(public product: IProductItem, public count: number = 1) {}
+    constructor(public product: ProductOutI, public count: number = 1) {}
   }
 
   export class FetchCart {

@@ -8,6 +8,7 @@ import {
   ProductBlueprintI,
   ProductBlueprintInI
 } from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
+import {ProductOutI} from "@ingenium/app/shared/models/product/products";
 
 
 @Injectable({
@@ -53,5 +54,19 @@ export class ProductBlueprintService {
 
   public putProductBlueprint(product_blueprint_id: number, putObj: ProductBlueprintI) {
     return this.httpClient.put<ProductBlueprintI>(`${this.apiUrl}/${String(product_blueprint_id)}`, putObj);
+  }
+
+  public queryProducts(offset: number = 0, count: number = 50,
+                       source_item_id: number | null = null,
+                       origin_item_id: number | null = null): Observable<ProductOutI[]> {
+    const param = {
+      offset: offset,
+      limit: count,
+      source_item_id: source_item_id,
+      origin_item_id: origin_item_id,
+    }
+    const params = new URLSearchParams(removeNull(param));
+
+    return this.httpClient.get<ProductOutI[]>(`${this.apiUrl}/products?${params.toString()}`);
   }
 }

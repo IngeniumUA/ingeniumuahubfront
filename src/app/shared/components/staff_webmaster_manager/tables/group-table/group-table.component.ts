@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {GroupService} from '../../../../../core/services/coreAPI/group/group.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable} from 'rxjs';
-import {GroupI} from '../../../../models/group/HubGroup';
+import {GroupI} from '../../../../models/group/hubGroupI';
 import {
   CreateCheckoutComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-checkout/create-checkout.component";
