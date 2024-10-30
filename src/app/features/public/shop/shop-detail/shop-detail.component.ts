@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
-import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
+import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
 import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {ProductOutI} from '@ingenium/app/shared/models/product/products';
 import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";

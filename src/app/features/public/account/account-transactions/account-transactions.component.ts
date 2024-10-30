@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AccountService} from '../../../../core/services/user/account/account.service';
+import {AccountService} from '../../../../core/services/coreAPI/user/account.service';
 import {exhaustMap, Observable, Subscription, timer} from 'rxjs';
-import {TrackerService} from '@ingenium/app/core/services/user/tracker.service';
+import {UserTrackerService} from '@ingenium/app/core/services/coreAPI/user/user-tracker.service';
 import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from '@ingenium/app/shared/models/tracker';
 import QRCode from 'qrcode';
 import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
@@ -13,7 +13,7 @@ import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transacti
 })
 export class AccountTransactionsComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService,
-              private trackerService: TrackerService) {}
+              private trackerService: UserTrackerService) {}
 
   lastUpdate: Date = new Date();
   trackerSubscription: Subscription = new Subscription();

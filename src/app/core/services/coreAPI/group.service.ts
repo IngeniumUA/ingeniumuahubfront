@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
-import {GroupI, GroupInI} from '../../../../shared/models/group/hubGroupI';
+import {GroupI, GroupInI} from '../../../shared/models/group/hubGroupI';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";

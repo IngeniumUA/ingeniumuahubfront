@@ -11,7 +11,7 @@ import {distinctUntilChanged, first} from 'rxjs/operators';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {GroupI} from '../../../../models/group/hubGroupI';
-import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
+import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({

@@ -7,7 +7,6 @@ import { StaffEventsListPageComponent } from './events/staff-event-list/staff-ev
 import { StaffEventPageComponent } from './events/staff-event-detail/staff-event-page.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { StaffEventEditComponent } from './events/staff-event-edit/staff-event-edit.component';
-import { FunctionsComponent } from './functions/functions.component';
 import { DrinkOrdersComponent } from './popupz/drink-orders/drink-orders.component';
 import { FoodOrdersComponent } from './popupz/food-orders/food-orders.component';
 import {PublicHeaderComponent} from '@ingenium/app/core/layout/public/header/public-header.component';
@@ -29,7 +28,6 @@ import { StaffUseFullQRComponent } from './payment-code/staff-usefull-q-r.compon
     StaffComponent,
     StaffEventsListPageComponent,
     StaffEventPageComponent,
-    FunctionsComponent,
     DrinkOrdersComponent,
     FoodOrdersComponent,
     StaffUseFullQRComponent

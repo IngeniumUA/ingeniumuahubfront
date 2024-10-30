@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {ProductCategoryI, ProductGroupI} from '@ingenium/app/shared/models/product/products';
-import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
+import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
 import {map} from 'rxjs/operators';
 import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";

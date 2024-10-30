@@ -20,8 +20,6 @@ export class AccountService {
     return this.httpClient.put<AccountI>(apiEnviroment.apiUrl + 'account', details);
   }
 
-  // -----
-
   public getCard() {
     return this.httpClient.get<CardItemWideLimitedI>(apiEnviroment.apiUrl + 'account/card');
   }

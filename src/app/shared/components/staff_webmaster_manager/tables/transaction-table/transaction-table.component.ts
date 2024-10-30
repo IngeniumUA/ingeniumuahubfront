@@ -19,7 +19,7 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
+import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
 import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
 

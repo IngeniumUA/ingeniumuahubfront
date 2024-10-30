@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {GroupService} from '../../../../../core/services/coreAPI/group/group.service';
+import {GroupService} from '../../../../../core/services/coreAPI/group.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable} from 'rxjs';
 import {GroupI} from '../../../../models/group/hubGroupI';

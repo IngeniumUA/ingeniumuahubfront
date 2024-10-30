@@ -8,7 +8,7 @@ import {PricePolicyComponentCreateComponent} from '../../create/price-policy/pri
 import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import {Observable, of} from "rxjs";
-import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
+import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/blueprint/pricePolicy.service";
 import {first} from "rxjs/operators";
 import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
 

@@ -5,7 +5,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {ProductOutI} from '../../../../models/product/products';
 import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
-import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
+import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
 import {PaymentStatusEnum, PaymentStatusList} from "@ingenium/app/shared/models/payment/statusEnum";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";

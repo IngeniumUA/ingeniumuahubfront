@@ -4,8 +4,8 @@ import {Observable, of} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CheckoutI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
-import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
-import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
+import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/checkout.service";
+import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 

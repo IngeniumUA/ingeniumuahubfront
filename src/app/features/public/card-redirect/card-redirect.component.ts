@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AccountService} from '../../../core/services/user/account/account.service';
+import {AccountService} from '../../../core/services/coreAPI/user/account.service';
 import {first} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";

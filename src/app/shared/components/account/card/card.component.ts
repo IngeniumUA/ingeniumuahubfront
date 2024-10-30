@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {AsyncPipe, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
-import {AccountService} from '../../../../core/services/user/account/account.service';
+import {AccountService} from '../../../../core/services/coreAPI/user/account.service';
 import {Observable} from "rxjs";
 import {CardItemWideLimitedI, CardMembershipEnum} from "@ingenium/app/shared/models/item/cardI";
 import {ToastrService} from "ngx-toastr";

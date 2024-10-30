@@ -16,7 +16,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {TransactionInI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {CheckoutInI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
-import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
+import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/checkout.service";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 
 

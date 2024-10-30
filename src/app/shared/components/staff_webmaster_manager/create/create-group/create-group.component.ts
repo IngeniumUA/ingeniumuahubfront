@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import {GroupService} from "@ingenium/app/core/services/coreAPI/group/group.service";
+import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
 import {GroupInI} from "@ingenium/app/shared/models/group/hubGroupI";
 import {NgStyle} from "@angular/common";
 

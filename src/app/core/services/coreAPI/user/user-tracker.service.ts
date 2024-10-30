@@ -8,7 +8,7 @@ import {HubCheckoutTrackerI} from "@ingenium/app/shared/models/tracker";
 @Injectable({
   providedIn: 'root'
 })
-export class TrackerService {
+export class UserTrackerService {
   constructor(private httpClient: HttpClient) {}
 
   apiUrl = apiEnviroment.apiUrl + 'account/trackers';
