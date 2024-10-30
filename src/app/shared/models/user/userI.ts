@@ -26,6 +26,8 @@ export interface UserWideI {
 
   user_uuid: string
   sso_uuid: string | null
+  first_name: string | null
+  last_name: string | null
 
   email: string
   disabled: boolean

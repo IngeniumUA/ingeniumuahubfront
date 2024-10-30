@@ -5,11 +5,11 @@ import {UserWideI} from '../../../../shared/models/user/userI';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
-  selector: 'app-user-detail',
-  templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.css']
+  selector: 'app-user-detail-page',
+  templateUrl: './user-detail-page.component.html',
+  styleUrls: ['./user-detail-page.component.css']
 })
-export class UserDetailComponent implements OnInit {
+export class UserDetailPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private userService: UserService) {
   }

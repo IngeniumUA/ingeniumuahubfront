@@ -4,7 +4,7 @@ import { WebmasterComponent } from './webmaster.component';
 import {WebmasterRoutingModule} from './webmaster-routing.module';
 import {SidenavComponent} from '../../core/layout/behind/sidenav/sidenav.component';
 import { UsersListComponent } from './user/users-list/users-list.component';
-import { UserDetailComponent } from './user/user-detail/user-detail.component';
+import { UserDetailPageComponent } from './user/user-detail/user-detail-page.component';
 import { GroupListComponent } from './user/group-list/group-list.component';
 import {
   GroupTableComponent
@@ -22,8 +22,8 @@ import {
   StaffItemDetailComponent
 } from '../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
 import {
-  StaffUserDetailComponent
-} from '../../shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
+  UserDetailComponent
+} from '../../shared/components/staff_webmaster_manager/details/staff-user-detail/user-detail.component';
 import { CardsPageComponent } from './item/card-dashboard/cards-page.component';
 import {
   CardTableComponent
@@ -67,7 +67,7 @@ import {
   declarations: [
     WebmasterComponent,
     UsersListComponent,
-    UserDetailComponent,
+    UserDetailPageComponent,
     GroupListComponent,
     ItemsOverviewPageComponent,
     ItemDashboardPageComponent,
@@ -85,7 +85,7 @@ import {
         UserTableComponent,
         ItemTableComponent,
         StaffItemDetailComponent,
-        StaffUserDetailComponent,
+        UserDetailComponent,
         ProductBlueprintDashboardComponent,
         CardTableComponent,
         TransactionTableComponent,

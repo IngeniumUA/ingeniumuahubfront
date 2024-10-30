@@ -11,9 +11,9 @@ import {MatTableModule} from '@angular/material/table';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
-  selector: 'app-staff-user-detail',
-  templateUrl: './staff-user-detail.component.html',
-  styleUrls: ['./staff-user-detail.component.css'],
+  selector: 'app-user-detail',
+  templateUrl: './user-detail.component.html',
+  styleUrls: ['./user-detail.component.css'],
   imports: [
     NgForOf,
     MatFormFieldModule,
@@ -26,7 +26,7 @@ import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service
   ],
   standalone: true
 })
-export class StaffUserDetailComponent {
+export class UserDetailComponent {
 
   constructor(private groupService: GroupService,
               private userService: UserService) {
