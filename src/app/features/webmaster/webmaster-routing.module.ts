@@ -13,6 +13,9 @@ import {OrderTrackingComponent} from '@ingenium/app/features/webmaster/order-tra
 import {
   CardPageComponent
 } from "@ingenium/app/features/webmaster/item/card-item-dashboard/card-page.component";
+import {
+  MediabucketFileListPageComponent
+} from "@ingenium/app/features/webmaster/mediabucket-file-list-page/mediabucket-file-list-page.component";
 
 
 const routes: Routes = [
@@ -29,7 +32,8 @@ const routes: Routes = [
       {path: 'product/:id', component: ProductWebmasterPageComponent},
       // {path: 'checkout',},
       {path: 'checkout/:id', component: CheckoutDetailComponent},
-      {path: 'tracking/:id', component: OrderTrackingComponent}
+      {path: 'tracking/:id', component: OrderTrackingComponent},
+      {path: 'file/media', component: MediabucketFileListPageComponent},
     ]
   },
 ];
