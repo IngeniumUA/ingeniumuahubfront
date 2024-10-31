@@ -1,16 +1,28 @@
 <section>
   <h3>Availability mixin</h3>
   <form [formGroup]="form">
-    <h4>Available</h4>
-    <td><input type="checkbox" formControlName="available"/></td>
-    <br>
-    <th>Availability Dates</th>
-    <label class="hubformfield-white">
-      <input type="datetime-local" formControlName="available_from"/>
-    </label>
-    <label class="hubformfield-white">
-      <input type="datetime-local" formControlName="available_until"/>
-    </label>
+    <table>
+      <tbody>
+        <tr>
+          <th>Available</th>
+          <td><input type="checkbox" formControlName="available"/></td>
+        </tr>
+        <tr>
+          <th>Available From</th>
+          <td>
+            <label class="hubformfield-white">
+              <input type="datetime-local" formControlName="available_from"/>
+            </label>
+          </td>
+          <th>Available Until</th>
+          <td>
+            <label class="hubformfield-white">
+              <input type="datetime-local" formControlName="available_until"/>
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </form>
 </section>
 

@@ -2,35 +2,39 @@
 <section *ngIf="this.item.item as itemModel">
   <h2>Core Item</h2>
   <form [formGroup]="itemForm">
-    <table>
-      <thead>
-        <tr><th scope="col"></th><th scope="col">Item:</th></tr>
-      </thead>
-      <tbody>
-        <tr><th>ID</th><td>{{ itemModel.id }}</td></tr>
-        <tr>
-          <th>Name</th>
-          <td><label class="hubformfield-white">
-              <input type="text" formControlName="name" placeholder="Placeholder"/>
-          </label></td>
-        </tr>
-        <app-availability-mixin-detail
-          (availabilityUpdated)="this.UpdateAvailability($event)"
-          [availability]="this.item.item.availability"
-        ></app-availability-mixin-detail>
-<!--        <tr>-->
-<!--          <th>Available</th>-->
-<!--          <td><input type="checkbox" formControlName="available"/></td>-->
-<!--        </tr>-->
-        <tr><th>Created At</th><td>{{ itemModel.created_timestamp | date: 'medium' }}</td></tr>
-        <tr><th>Modified At</th><td>{{ itemModel.last_update_timestamp | date: 'medium' }}</td></tr>
-      </tbody>
-    </table>
-    <h4><b>Description</b></h4>
-    <mat-form-field>
-      <mat-label></mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
+    <span>
+      <table>
+        <thead>
+          <tr><th scope="col"></th><th scope="col">Item:</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>ID</th><td>{{ itemModel.id }}</td></tr>
+          <tr>
+            <th>Name</th>
+            <td><label class="hubformfield-white">
+                <input type="text" formControlName="name" placeholder="Placeholder"/>
+            </label></td>
+          </tr>
+          <tr><th>Created At</th><td>{{ itemModel.created_timestamp | date: 'medium' }}</td></tr>
+          <tr><th>Modified At</th><td>{{ itemModel.last_update_timestamp | date: 'medium' }}</td></tr>
+        </tbody>
+      </table>
+    </span>
+
+    <span>
+      <app-availability-mixin-detail
+        (availabilityUpdated)="this.UpdateAvailability($event)"
+        [availability]="this.item.item.availability"
+      ></app-availability-mixin-detail>
+    </span>
+
+    <span>
+      <h3>Description Mixin</h3>
+      <mat-form-field>
+        <mat-label></mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+    </span>
   </form>
 </section>
 
