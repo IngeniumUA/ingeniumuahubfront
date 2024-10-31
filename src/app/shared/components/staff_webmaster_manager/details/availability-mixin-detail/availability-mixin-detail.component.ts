@@ -29,8 +29,16 @@ export class AvailabilityMixinDetailComponent implements OnInit {
       available_until: new FormControl(this.availability.available_until)
     });
 
-    this.form.valueChanges.subscribe((val: any) => {
-      this.availabilityUpdated.emit(val);
+    this.form.valueChanges.subscribe((val: AvailabilityCompositionI) => {
+      const putModel: AvailabilityCompositionI = {
+        available: val.available,
+        available_from: val.available_from === '' ? null : val.available_from,
+        available_until: val.available_until === '' ? null : val.available_until,
+        disabled: false,
+        dynamic_policy_type: this.availability.dynamic_policy_type,
+        dynamic_policy_content: this.availability.dynamic_policy_content
+      }
+      this.availabilityUpdated.emit(putModel);
     });
   }
 }

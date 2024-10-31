@@ -14,14 +14,14 @@
               <input type="text" formControlName="name" placeholder="Placeholder"/>
           </label></td>
         </tr>
-<!--        <app-availability-mixin-detail-->
-<!--          (availabilityUpdated)="this.UpdateAvailability($event)"-->
-<!--          [availability]="this.item.item.availability"-->
-<!--        ></app-availability-mixin-detail>-->
-        <tr>
-          <th>Available</th>
-          <td><input type="checkbox" formControlName="available"/></td>
-        </tr>
+        <app-availability-mixin-detail
+          (availabilityUpdated)="this.UpdateAvailability($event)"
+          [availability]="this.item.item.availability"
+        ></app-availability-mixin-detail>
+<!--        <tr>-->
+<!--          <th>Available</th>-->
+<!--          <td><input type="checkbox" formControlName="available"/></td>-->
+<!--        </tr>-->
         <tr><th>Created At</th><td>{{ itemModel.created_timestamp | date: 'medium' }}</td></tr>
         <tr><th>Modified At</th><td>{{ itemModel.last_update_timestamp | date: 'medium' }}</td></tr>
       </tbody>
