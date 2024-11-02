@@ -24,6 +24,10 @@ export class GroupService {
     return this.httpClient.get<GroupI[]>(`${this.apiUrl}?${params.toString()}`);
   }
 
+  public getGroupTable(): Observable<[]> {
+    return this.httpClient.get<[]>(`${this.apiUrl}/table`);
+  }
+
   public AddUserToGroup(group_id: string, user_id: string): Observable<GroupI[]> {
     return this.httpClient.post<GroupI[]>(`${this.apiUrl}/add/${group_id}/${user_id}`, '');
   }

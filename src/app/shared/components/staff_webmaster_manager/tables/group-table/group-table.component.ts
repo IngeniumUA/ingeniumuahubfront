@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import {GroupService} from '../../../../../core/services/coreAPI/group.service';
+import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable} from 'rxjs';
-import {GroupI} from '../../../../models/group/hubGroupI';
 import {
   CreateCheckoutComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-checkout/create-checkout.component";
@@ -28,10 +27,10 @@ export class GroupTableComponent {
   }
 
   addingGroup: boolean = false
-  groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
+  groups$: Observable<[]> = this.staffGroupService.getGroupTable();
 
-  LoadData() {
-   this.groups$ = this.staffGroupService.GetGroupsList();
+  loadData() {
+   this.groups$ = this.staffGroupService.getGroupTable();
   }
 
   ToggleAddingGroup() {
@@ -40,6 +39,6 @@ export class GroupTableComponent {
 
   GroupCreated() {
     this.addingGroup = false;
-    this.LoadData()
+    this.loadData()
   }
 }
