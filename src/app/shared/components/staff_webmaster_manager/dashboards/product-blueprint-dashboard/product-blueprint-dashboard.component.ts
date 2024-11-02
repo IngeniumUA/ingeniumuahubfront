@@ -41,10 +41,14 @@ export class ProductBlueprintDashboardComponent implements OnInit {
     return input.reduce((acc, blueprintStat: any) => acc + blueprintStat.transaction_count, 0);
   }
 
-  ngOnInit() {
+  loadData() {
     this.$productBlueprint = this.productBlueprintService.queryProductTable(this.item.id,
       this.item.id,
       PaymentStatusEnum.successful);  // source_item
+  }
+
+  ngOnInit() {
+    this.loadData()
   }
 
   addingNew: boolean = false;

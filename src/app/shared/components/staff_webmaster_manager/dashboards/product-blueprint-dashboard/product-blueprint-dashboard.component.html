@@ -30,8 +30,14 @@
 </section>
 
 <ng-template #awaitAddNew>
-    <button class="button button-primary w-1/3 button-inline"
+  <span class="flex flex-row gap-3">
+    <button class="button button-primary button-inline"
             (click)="ToggleAddNew()">
         <span class="text-white">Add New</span>
     </button>
+    <button class="button button-primary button-inline"
+            (click)="loadData()">
+      <span class="text-white">Refresh</span>
+    </button>
+  </span>
 </ng-template>
