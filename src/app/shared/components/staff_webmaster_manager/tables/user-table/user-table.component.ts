@@ -46,6 +46,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   columnSearchForm = new FormGroup({
     uuidControl: new FormControl(''),
     emailControl: new FormControl(''),
+    ssoUuidControl: new FormControl(''),
   });
 
   searchForm = new FormGroup({
