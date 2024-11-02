@@ -1,19 +1,27 @@
 <h1>Payments</h1>
 
-<section class="table-selector">
-  <button [ngClass]="StyleFromTablename('checkouts')" class="table-name" (click)="SetTable('checkouts')">Checkouts</button>
-  <button [ngClass]="StyleFromTablename('transactions')" class="table-name" (click)="SetTable('transactions')">Transactions</button>
-  <button [ngClass]="StyleFromTablename('refunds')" class="table-name" (click)="SetTable('refunds')">Refunds</button>
-</section>
+<!--<section class="mb-4">-->
+<!--  <h2>Graph</h2>-->
+<!--  WIP!-->
+<!--</section>-->
 
 <section>
-  <ng-container *ngIf="selectedTable === 'transactions'">
-    <app-transaction-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-transaction-table>
-  </ng-container>
-  <ng-container *ngIf="selectedTable === 'checkouts'">
-    <app-checkout-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-checkout-table>
-  </ng-container>
-  <ng-container *ngIf="selectedTable === 'refunds'">
-    Uh, nee, stop it
-  </ng-container>
+  <h2>Table</h2>
+  <section class="table-selector">
+    <button [ngClass]="StyleFromTablename('checkouts')" class="table-name" (click)="SetTable('checkouts')">Checkouts</button>
+    <button [ngClass]="StyleFromTablename('transactions')" class="table-name" (click)="SetTable('transactions')">Transactions</button>
+    <button [ngClass]="StyleFromTablename('refunds')" class="table-name" (click)="SetTable('refunds')">Refunds</button>
+  </section>
+
+  <section>
+    <ng-container *ngIf="selectedTable === 'transactions'">
+      <app-transaction-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-transaction-table>
+    </ng-container>
+    <ng-container *ngIf="selectedTable === 'checkouts'">
+      <app-checkout-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-checkout-table>
+    </ng-container>
+    <ng-container *ngIf="selectedTable === 'refunds'">
+      Uh, nee, stop it
+    </ng-container>
+  </section>
 </section>
