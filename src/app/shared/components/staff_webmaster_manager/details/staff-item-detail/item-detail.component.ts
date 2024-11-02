@@ -21,7 +21,7 @@ import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availab
 @Component({
   selector: 'app-item-detail',
   templateUrl: './item-detail.component.html',
-  styleUrls: ['./item-detail.component.css'],
+  styleUrls: ['./item-detail.component.scss'],
   imports: [
     NgIf,
     DisplayMixinDetailComponent,
