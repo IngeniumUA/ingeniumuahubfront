@@ -1,7 +1,7 @@
 import {Action, createSelector, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
 import {Injectable} from "@angular/core";
-import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {ProductOutI, PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {removeItem} from "@ngxs/store/operators";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -47,7 +47,7 @@ export class CartState implements NgxsOnInit {
   }
 
   @Selector()
-  static getProducts(state: CartStateModel): IProductItem[] {
+  static getProducts(state: CartStateModel): ProductOutI[] {
     return state.products;
   }
 
@@ -62,7 +62,7 @@ export class CartState implements NgxsOnInit {
    * @param product the product you which to check
    * @param checkPricePolicy true if you should match on price policy too. Default = false
    */
-  static getProductQuantity(product: IProductItem, checkPricePolicy: boolean = false) {
+  static getProductQuantity(product: ProductOutI, checkPricePolicy: boolean = false) {
     return createSelector([CartState], (state: CartStateModel): number => {
       return state.products.filter((p) => {
         const isSameProduct = p.id === product.id;
@@ -83,7 +83,7 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.AddToCart)
   addToCart(ctx: StateContext<CartStateModel>, action: CartActions.AddToCart) {
-    const productsToAdd: IProductItem[] = [];
+    const productsToAdd: ProductOutI[] = [];
     while (action.count > 0) {
       productsToAdd.push(structuredClone(action.product));
       action.count--;
@@ -102,7 +102,7 @@ export class CartState implements NgxsOnInit {
   @Action(CartActions.RemoveFromCart)
   removeFromCart(ctx: StateContext<CartStateModel>, action: CartActions.RemoveFromCart) {
     ctx.patchState({
-      products: removeItem<IProductItem>(action.itemIndex)(ctx.getState().products)
+      products: removeItem<ProductOutI>(action.itemIndex)(ctx.getState().products)
     });
     ctx.dispatch(new CartActions.StoreInLocalStorage());
   }

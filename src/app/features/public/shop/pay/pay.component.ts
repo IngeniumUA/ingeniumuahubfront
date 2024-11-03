@@ -4,12 +4,12 @@ import {apiEnviroment} from '@ingenium/environments/environment';
 import {Router} from '@angular/router';
 import {Store} from "@ngxs/store";
 import {CartActions, CartState} from "@ingenium/app/core/store";
-import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {map} from "rxjs/operators";
 import {catchError} from "rxjs";
 import {ToastrService} from "ngx-toastr";
-import {CartSuccessI} from "@ingenium/app/shared/models/cart/cartModels";
-import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
+import {CartSuccessI} from "@ingenium/app/shared/models/cart/cartI";
+import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 
 @Component({
   selector: 'app-page',

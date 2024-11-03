@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {StaffProductBlueprintI} from '../../../../shared/models/staff/staff_productblueprint';
-import {StaffProductBlueprintService} from '../../../../core/services/staff/staff-productblueprint-service';
 import {ActivatedRoute} from '@angular/router';
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
+import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
+import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 
 @Component({
   selector: 'app-product-webmaster-page',
@@ -12,12 +12,12 @@ import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide
 })
 export class ProductWebmasterPageComponent implements OnInit {
 
-  productBlueprint$!: Observable<StaffProductBlueprintI>;
+  productBlueprint$!: Observable<ProductBlueprintI>;
 
-  productId!: string;
+  productId!: number;
 
   constructor(private itemWideService: ItemWideService,
-              private staffProductService: StaffProductBlueprintService,
+              private productBlueprintService: ProductBlueprintService,
               private route: ActivatedRoute) {
   }
 
@@ -30,12 +30,12 @@ export class ProductWebmasterPageComponent implements OnInit {
       // TODO Handle error
       return;
     }
-    this.productId = id;
+    this.productId = parseInt(id);
 
-    this.productBlueprint$ = this.staffProductService.getProductBlueprint(this.productId);
+    this.productBlueprint$ = this.productBlueprintService.getProductBlueprint(this.productId);
   }
 
-  public UpdateProduct(product_obj: StaffProductBlueprintI) {
-    this.productBlueprint$ = this.staffProductService.putProductBlueprint(product_obj.id, product_obj);
+  public UpdateProduct(product_obj: ProductBlueprintI) {
+    this.productBlueprint$ = this.productBlueprintService.putProductBlueprint(product_obj.id, product_obj);
   }
 }

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
+import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {DatePipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';

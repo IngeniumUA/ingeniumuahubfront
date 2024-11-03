@@ -11,6 +11,7 @@
       [length]="interactionCount"
       [pageSize]="100"
       (page)="LoadData($event)"
+      [pageIndex]="this.pageIndex"
       showFirstLastButtons
       aria-label="Select which interactions">
     </mat-paginator>
@@ -45,12 +46,12 @@
           <th mat-header-cell *matHeaderCellDef><div>
             Interaction Type<input class="w-3/4" type="text" placeholder="UUID" [formControlName]="'interactionTypeControl'"></div>
           </th>
-          <td mat-cell *matCellDef="let interaction">{{ interaction.interaction_type }}</td>
+          <td mat-cell *matCellDef="let interaction">{{ InteractionTypeEnum[interaction.interaction_type] }}</td>
         </ng-container>
 
         <ng-container matColumnDef="last_updated_timestamp">
           <th mat-header-cell *matHeaderCellDef>Last updated</th>
-          <td mat-cell *matCellDef="let interaction">{{ interaction.last_updated_timestamp | date: 'dd/MM/yyyy h:mm:ss' }}</td>
+          <td mat-cell *matCellDef="let interaction">{{ interaction.last_update_timestamp | date: 'dd/MM/yyyy h:mm:ss' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="created_timestamp">

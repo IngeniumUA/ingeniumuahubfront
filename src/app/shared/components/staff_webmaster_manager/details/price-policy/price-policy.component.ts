@@ -3,8 +3,8 @@ import {PricePolicyI} from '../../../../models/price_policy';
 import {AllowDenyListComponent} from '../access-policy/access_policies/allow-deny-list/allow-deny-list.component';
 import {DatePipe, NgIf, TitleCasePipe} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
-import {AccessPolicyEnum, CastToMemberOfGroupPipe} from "@ingenium/app/shared/models/access_policies/access_policies";
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
+import {AccessPolicyEnum, CastToMemberOfGroupPipe} from "@ingenium/app/shared/models/access_policies/accessPolicyI";
 
 @Component({
   selector: 'app-price-policy',
@@ -71,6 +71,8 @@ export class PricePolicyComponent implements OnInit {
     const availability: AvailabilityCompositionI = {
       available: availableControlValue,
       disabled: false,
+      available_from: null,
+      available_until: null,
       dynamic_policy_type: this.pricePolicy.availability.dynamic_policy_type,
       dynamic_policy_content: this.pricePolicy.availability.dynamic_policy_content
     }

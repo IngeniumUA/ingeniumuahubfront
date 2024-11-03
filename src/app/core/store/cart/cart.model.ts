@@ -1,7 +1,7 @@
-import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {ProductOutI, PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 
 export interface CartStateModel {
-  products: IProductItem[];
+  products: ProductOutI[];
   paymentProvider: PaymentProviderEnum,
   checkoutNote: string;
 }

@@ -4,8 +4,8 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {NgForOf, TitleCasePipe} from '@angular/common';
-import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availability_composition";
-import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/access_policies";
+import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
+import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/accessPolicyI";
 
 @Component({
   selector: 'app-price-policy-create',

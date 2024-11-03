@@ -10,8 +10,8 @@ import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Val
 import {distinctUntilChanged, first} from 'rxjs/operators';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {GroupI} from '../../../../models/group/HubGroup';
-import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
+import {GroupI} from '../../../../models/group/hubGroupI';
+import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
@@ -46,6 +46,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   columnSearchForm = new FormGroup({
     uuidControl: new FormControl(''),
     emailControl: new FormControl(''),
+    ssoUuidControl: new FormControl(''),
   });
 
   searchForm = new FormGroup({

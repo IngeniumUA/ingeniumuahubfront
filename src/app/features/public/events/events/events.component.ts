@@ -1,6 +1,6 @@
 import {Component, Inject, PLATFORM_ID} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
+import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {isPlatformBrowser} from "@angular/common";

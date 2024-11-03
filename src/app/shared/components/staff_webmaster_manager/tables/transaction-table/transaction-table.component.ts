@@ -19,9 +19,9 @@ import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
-import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
-import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
+import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
+import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
+import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
 
 @Component({
   selector: 'app-transaction-table',
@@ -69,6 +69,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
 
   transactionData$: Observable<TransactionI[]> = of([]);
 
+  pageIndex: number = 0
   blob!: Blob;
 
   searchForm = new FormGroup({
@@ -152,12 +153,12 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     const userQuery = this.user_id !== null ? this.user_id : emailQuery;
 
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
     this.transactionData$ = this.transactionService.queryTransactions(
-      pageIndex * pageSize, pageSize,
+      this.pageIndex * pageSize, pageSize,
       this.item_id, userQuery, interactionQuery,
       status,
       validityQuery,

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Observable} from 'rxjs';
-import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
+import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import { PromoService } from '@ingenium/app/core/services/coreAPI/item/derived_services/promo.service';
 

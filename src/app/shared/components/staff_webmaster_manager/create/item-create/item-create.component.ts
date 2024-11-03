@@ -17,7 +17,7 @@ import {
   CardMembershipEnumList,
   CardTypeEnum, CardTypeEnumList
 } from "@ingenium/app/shared/models/item/cardI";
-import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availability_composition";
+import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 
 @Component({
   selector: 'app-item-create',

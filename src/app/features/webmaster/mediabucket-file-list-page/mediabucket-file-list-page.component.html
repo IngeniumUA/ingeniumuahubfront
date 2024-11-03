@@ -1,0 +1,8 @@
+<section class="staffSection">
+  <h1>Files hosted on the MediaBucket</h1>
+
+  <ng-container *ngIf="$fileNames | async as fileNames">
+    <ul *ngFor="let fileName of fileNames">{{fileName}}</ul>
+  </ng-container>
+
+</section>

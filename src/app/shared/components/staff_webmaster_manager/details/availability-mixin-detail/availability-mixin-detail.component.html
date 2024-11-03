@@ -1,0 +1,30 @@
+<section class="mt-1">
+  <h3 class="text-blue-900">Availability mixin</h3>
+  <form [formGroup]="form">
+    <table>
+      <tbody>
+        <tr>
+          <th>Available</th>
+          <td><input type="checkbox" formControlName="available"/></td>
+        </tr>
+        <tr>
+          <th>Available From</th>
+          <td>
+            <label class="hubformfield-white">
+              <input type="datetime-local" formControlName="available_from"/>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <th>Available Until</th>
+          <td>
+            <label class="hubformfield-white">
+              <input type="datetime-local" formControlName="available_until"/>
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</section>
+

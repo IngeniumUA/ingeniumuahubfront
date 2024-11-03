@@ -18,10 +18,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
-import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/checkout/checkoutModels";
-import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
+import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
+import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/checkout.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 
 @Component({
   selector: 'app-checkout-table',
@@ -66,6 +66,7 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
 
   checkoutData$: Observable<CheckoutI[]> = of([]);
 
+  pageIndex: number = 0
   searchForm = new FormGroup({
     idControl: new FormControl(''),
     emailControl: new FormControl('')
@@ -133,12 +134,12 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
     const userQuery = this.user_id !== null ? this.user_id : emailQuery;
 
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
     this.checkoutData$ = this.checkoutService.queryCheckouts(
-      pageIndex * pageSize, pageSize, this.item_id, userQuery, status,
+      this.pageIndex * pageSize, pageSize, this.item_id, userQuery, status,
       checkoutIdQuery);
 
     // Transactionstats

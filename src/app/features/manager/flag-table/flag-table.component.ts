@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {FlagService} from "@ingenium/app/core/services/coreAPI/flag/flag.service";
-import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {FlagService} from "@ingenium/app/core/services/coreAPI/flag.service";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 
 interface FlagI {
   id: number

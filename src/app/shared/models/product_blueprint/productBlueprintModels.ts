@@ -1,8 +1,9 @@
 import {
   AvailabilityCompositionI,
   AvailabilityCompositionInI
-} from "@ingenium/app/shared/models/item/availability_composition";
+} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import {PricePolicyI} from "@ingenium/app/shared/models/price_policy";
+import {ProductMetaI} from "@ingenium/app/shared/models/product/products";
 
 export interface ProductBlueprintInI {
   name: string
@@ -17,9 +18,6 @@ export interface ProductBlueprintInI {
   ordering: number | null
 
   origin_item_id: number
-  source_item_ids: number | null
-
-  product_blueprint_metadata: object | null
 }
 
 export interface ProductBlueprintI {
@@ -27,7 +25,7 @@ export interface ProductBlueprintI {
   name: string
   description: string
 
-  last_updated_timestamp: string
+  last_update_timestamp: string
   created_timestamp: string
 
   availability: AvailabilityCompositionI
@@ -39,8 +37,9 @@ export interface ProductBlueprintI {
   ordering: number
 
   origin_item_id: number
-  source_item_ids: number
+  source_item_ids: number[]
 
-  price_policies: PricePolicyI
-  product_blueprint_metadata: object
+  product_blueprint_pool_ids: number[]
+  price_policies: PricePolicyI[]
+  product_blueprint_metadata: ProductMetaI
 }

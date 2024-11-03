@@ -4,14 +4,14 @@ import { Routes, RouterModule } from '@angular/router';
 import {ManagerItemsDashboardComponent} from './items-dashboard/manager-items-dashboard.component';
 import {ItemtableComponent} from '../../../shared/components/items/item/itemtable/itemtable.component';
 import {ItemlogComponent} from '../../../shared/components/logs/itemlogs/itemlog.component';
-import {ItemdetailComponent} from '../../../shared/components/items/item/itemdetail/itemdetail.component';
+import {ManagerItemDetailComponent} from '../../../shared/components/items/item/itemdetail/manager-item-detail.component';
 
 
 const routes: Routes = [
   {path: '', component: ManagerItemsDashboardComponent},
   {path: 'list', component: ItemtableComponent},
   {path: 'log', component: ItemlogComponent},
-  {path: ':id', component: ItemdetailComponent}
+  {path: ':id', component: ManagerItemDetailComponent}
   // logs
 ];
 

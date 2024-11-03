@@ -1,4 +1,4 @@
-import {DisplayCompositionI} from "@ingenium/app/shared/models/item/display_composition";
+import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 
 export interface PromoType {
   name: string
