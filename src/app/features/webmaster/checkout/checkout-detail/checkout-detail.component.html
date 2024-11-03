@@ -1,6 +1,7 @@
 <section class="staffSection">
   <h1 class="text-blue-900">Checkout Detail</h1>
-  <table *ngIf="(checkoutDetail$ | async) as checkout else loadingData">
+  <ng-container *ngIf="(checkoutDetail$ | async) as checkout else loadingData">
+  <table>
     <thead>
     <tr>
       <th scope="col"></th>
@@ -55,7 +56,7 @@
       Update</button>
 
     <button class="button button-primary w-1/6 button-inline"
-            [disabled]="this.loading"
+            [disabled]="this.loading || checkout.checkout_status != PaymentStatusEnum.successful"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="Refund()">
       Refund</button>
@@ -66,6 +67,7 @@
             (click)="SendEmail()">
       Send Email</button>
   </div>
+  </ng-container>
 
   <span *ngIf="formError !== null" class="error-message">{{ formError }}</span>
   <span *ngIf="successMessage !== null" class="success-message">{{ successMessage }}</span>
