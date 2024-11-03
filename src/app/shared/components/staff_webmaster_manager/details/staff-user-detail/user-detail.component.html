@@ -61,9 +61,9 @@
 </section>
 
 
-<section *ngIf="userDetail.account">
+<section>
   <h2>User Detail</h2>
-  <table>
+  <table *ngIf="userDetail.account else noAccount">
     <thead>
     <tr>
       <th scope="col"></th>
@@ -103,6 +103,9 @@
   </table>
 </section>
 
+<ng-template #noAccount>
+  No account information set.
+</ng-template>
 
 <section>
   <h2>Groups</h2>
