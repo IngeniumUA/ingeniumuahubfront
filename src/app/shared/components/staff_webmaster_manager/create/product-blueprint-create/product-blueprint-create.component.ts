@@ -61,7 +61,7 @@ export class ProductBlueprintCreateComponent {
 
       availability: {
         available: false,
-        disabled: null,
+        disabled: false,
         dynamic_policy_type: null,
         dynamic_policy_content: null
       },

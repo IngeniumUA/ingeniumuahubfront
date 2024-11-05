@@ -8,6 +8,7 @@ import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/check
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-checkout-detail',
@@ -26,7 +27,8 @@ export class CheckoutDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private checkoutService: CheckoutService,
-              private staffTransactionService: TransactionService) {
+              private staffTransactionService: TransactionService,
+              private toastrService: ToastrService) {
   }
 
   ngOnInit() {
@@ -59,7 +61,7 @@ export class CheckoutDetailComponent implements OnInit {
 
   public Patch() {
     this.loading = true;
-    this.formError = 'Not Implemented';
+    this.toastrService.error('Not Implemented');
     this.loading = false;
   }
 
@@ -72,7 +74,7 @@ export class CheckoutDetailComponent implements OnInit {
     this.checkoutService.refundCheckout(this.checkout_id, forceRefund).subscribe(
       (_checkout) => {
         this.LoadData();
-        this.successMessage = 'Refund started!';
+        this.toastrService.success('Refund Started');
       },
       (error: Error) => {
         this.handleError(error);
@@ -88,9 +90,9 @@ export class CheckoutDetailComponent implements OnInit {
     this.checkoutService.emailCheckout(this.checkout_id).subscribe(
       (succes) => {
         if (succes) {
-          this.successMessage = 'Email sent!';
+          this.toastrService.success('Email sent!');
         } else {
-          this.formError = 'Email not sent :§';
+          this.toastrService.error('Email not sent :§');
         }
       },
       (error) => {
