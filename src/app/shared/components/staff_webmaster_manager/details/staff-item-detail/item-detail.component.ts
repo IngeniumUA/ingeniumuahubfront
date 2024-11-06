@@ -66,8 +66,6 @@ export class ItemDetailComponent implements OnInit{
     this.itemForm = this.formBuilder.group({
       name: [this.item.item.name, [Validators.required, ValidURLCharacters()]],
       description: [this.item.item.description],
-      available: [this.item.item.availability.available, Validators.required],
-      disabled: [this.item.item.availability.disabled, Validators.required],
     });
     // Adding event if required
     if (isEventItem(this.item.derived_type)) {
@@ -95,10 +93,8 @@ export class ItemDetailComponent implements OnInit{
     // The underlying components always send updated information in their fields up to the parent
     // When we send the formdata to the parent here, alle data is as seen on the page
 
-    // This manually assignign all fields is not great code
+    // This manually assigning all fields is not great code
     // So, to be changed later
-    this.item.item.availability.available = this.itemForm.controls['available'].value;
-    this.item.item.availability.disabled = this.itemForm.controls['disabled'].value;
     this.item.item.name = this.itemForm.controls['name'].value;
     this.item.item.description = this.itemForm.controls['description'].value;
     if (this.isEventItem) {
