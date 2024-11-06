@@ -3,6 +3,7 @@ import {RecSysItemPreviewComponent} from '../../items/recsys/rec-sys-item-previe
 import {AsyncPipe, NgForOf} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
+import {PartnerService} from "@ingenium/app/core/services/coreAPI/partner.service";
 
 interface PartnerDisplay {
   name: string
@@ -22,9 +23,10 @@ interface PartnerDisplay {
 })
 export class PartnerGridComponent {
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private partnerService: PartnerService) {
   }
 
+  partnerLogos$: Observable<string[]> = this.partnerService.getCurrentPartnerLogos()
   // partners: Observable<RecSysPreviewI[]> = this.httpClient.get<RecSysPreviewI[]>("/assets/temp_partner_config/partners.json");
 
   partners: Observable<PartnerDisplay[]> = of([
