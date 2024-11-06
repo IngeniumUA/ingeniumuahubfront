@@ -56,7 +56,7 @@
       Update</button>
 
     <button class="button button-primary w-1/6 button-inline"
-            [disabled]="this.loading || checkout.checkout_status != PaymentStatusEnum.successful"
+            [disabled]="this.loading || checkout.checkout_status !== PaymentStatusEnum.successful"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="Refund()">
       Refund</button>
