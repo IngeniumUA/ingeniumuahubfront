@@ -8,14 +8,17 @@ import {
 } from '@angular/common/http';
 import {catchError, Observable, switchMap, throwError} from 'rxjs';
 
-import {Router} from '@angular/router';
 import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Injectable()
 export class JWTInterceptor implements HttpInterceptor {
   private isRefreshing: boolean = false;
-  constructor(private store: Store, private router: Router) { }
+  constructor(private store: Store,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService) { }
 
   /**
    * Intercepts the request and adds the JWT token to the header if the user is logged in
@@ -45,7 +48,8 @@ export class JWTInterceptor implements HttpInterceptor {
         // Check if error is 403 (forbidden)
         if (error instanceof HttpErrorResponse && !request.url.includes('auth/login') && error.status === 403) {
           // If forbidden is found, route to home
-          this.router.navigate(['/']);
+          this.pageTrackService.addToTree('home')
+          this.navCtrl.navigateRoot('/home').then()
         }
 
         // Else continuing throwing error

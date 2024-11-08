@@ -1,10 +1,9 @@
-import {Action, createSelector, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
+import {Action,createSelector, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
 import {Injectable} from "@angular/core";
 import {IProductItem, PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 import {removeItem} from "@ngxs/store/operators";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import structuredClone from '@ungap/structured-clone';
 
@@ -123,7 +122,7 @@ export class CartState implements NgxsOnInit {
     while (countToRemove > 0) {
       ctx.dispatch(new CartActions.RemoveFromCart(foundIndexes[
         --countToRemove
-      ]));
+        ]));
     }
   }
 

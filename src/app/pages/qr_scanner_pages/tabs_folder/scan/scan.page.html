@@ -1,0 +1,40 @@
+<div class="standardBackground">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        QR-scanner
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+</div>
+
+<ion-content [fullscreen]="true">
+  <div class="square"></div>
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+    <ion-fab-button (click)="ReturnToHome()">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="scan">
+    <div class="standardBackground">
+      <ion-list [inset]="true" mode="ios" lines="full">
+        <ion-item>
+          <ion-select label="Event" placeholder="Selecteer een evenement" interface="alert" [(ngModel)]="selectedItem" (ionChange)="onItemSelection($event)">
+            <ion-select-option *ngFor="let event of this.events" [value]="event">{{event}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+    <ion-button expand="block" shape="round" (click)="SetBlueprints()" [disabled]="!actualEventSelected" >Deselecteer blueprints</ion-button>
+
+    <div *ngIf="this.showChooseEvent">
+    <h1 class="error">
+      Kies eerst een evenement!
+    </h1>
+    </div>
+
+  </div>
+
+</ion-content>

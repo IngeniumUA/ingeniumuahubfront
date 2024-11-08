@@ -8,6 +8,8 @@ import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/chec
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-checkout-detail',
@@ -26,7 +28,14 @@ export class CheckoutDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private checkoutService: CheckoutService,
-              private staffTransactionService: TransactionService) {
+              private staffTransactionService: TransactionService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   ngOnInit() {

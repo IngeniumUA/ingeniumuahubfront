@@ -26,7 +26,8 @@ import {isPlatformServer} from "@angular/common";
 export class UserState implements NgxsOnInit {
 
   constructor(private router: Router, private oauthService: OAuthService,
-              private httpClient: HttpClient, @Inject(PLATFORM_ID) private platformId: any) {}
+              private httpClient: HttpClient,
+              @Inject(PLATFORM_ID) private platformId: any) { }
 
   ngxsOnInit(ctx: StateContext<any>) {
     ctx.dispatch(new User.FetchAuthTokenFromStorage());
@@ -68,13 +69,6 @@ export class UserState implements NgxsOnInit {
   @Action(User.Login)
   loginUser(_ctx: StateContext<UserStateModel>, action: User.Login) {
     if (isPlatformServer(this.platformId)) return;
-
-    // Check if the current host matches the environment, if not redirect
-    if (window.location.host !== apiEnviroment.appHost) {
-      console.log("Not at correct address for logging in.");
-      window.location.href = `${window.location.protocol}//${apiEnviroment.appHost}/auth/login?dest=${action.destinationPath}`;
-      return;
-    }
 
     this.oauthService.initLoginFlow(action.destinationPath);
   }
@@ -127,6 +121,7 @@ export class UserState implements NgxsOnInit {
     // Request user roles
     ctx.dispatch(new User.GetRoles());
   }
+
 
   @Action(User.SetAuthData)
   setAuthData(ctx: StateContext<UserStateModel>, action: User.SetAuthData) {

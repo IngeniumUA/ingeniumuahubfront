@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {IProductCategorie, IProductGroup} from '@ingenium/app/shared/models/items/products/products';
 import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {map} from 'rxjs/operators';
 import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {Store} from "@ngxs/store";
@@ -30,22 +31,29 @@ export class EventDetailComponent implements OnInit {
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentProductGroups!: Observable<IProductGroup[]>;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private layoutService: LayoutService,
+  constructor(private layoutService: LayoutService,
               private eventService: EventService,
               private productService: ProductsService,
-              store: Store) {
+              store: Store,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
     this.isCartEmpty$ = store.select(CartState.getProductCount);
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
-
   ngOnInit() {
     // Fetch ID
-    const id: string | null = this.route.snapshot.paramMap.get('id');
+    const thisUrl: string = currentPage
+    let id: string | null = thisUrl.replace("sub/event/", "").replace("sub/events/", "")
+    id = encodeURIComponent(id)
+    if (id === thisUrl) {id = null}
 
     // If ID is null
     if (id === null) {
-      this.router.navigateByUrl('/events');
+      this.gotoPage('sub/events')
       return;
     }
 
@@ -68,7 +76,7 @@ export class EventDetailComponent implements OnInit {
     this.eventError$ = this.event$.pipe(
       ignoreElements(),
       catchError((err) => {
-        this.router.navigateByUrl('/event');
+        this.gotoPage('sub/events')
         return of(err);
       }));
   }
@@ -88,4 +96,10 @@ export class EventDetailComponent implements OnInit {
       return productGroups[this.currentProductCategorieIndex$.value].categorie_name;
     }));
   }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
+  }
+
 }

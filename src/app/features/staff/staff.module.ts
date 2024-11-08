@@ -12,19 +12,21 @@ import { DrinkOrdersComponent } from './popupz/drink-orders/drink-orders.compone
 import { FoodOrdersComponent } from './popupz/food-orders/food-orders.component';
 import {PublicHeaderComponent} from '@ingenium/app/core/layout/public/header/public-header.component';
 import { StaffUseFullQRComponent } from './payment-code/staff-usefull-q-r.component';
+import {IonicModule} from "@ionic/angular";
 
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    StaffRoutingModule,
-    SidenavComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    StaffEventEditComponent,
-    PublicHeaderComponent
-  ],
+    imports: [
+        CommonModule,
+        StaffRoutingModule,
+        SidenavComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        StaffEventEditComponent,
+        PublicHeaderComponent,
+        IonicModule
+    ],
   declarations: [
     StaffComponent,
     StaffEventListComponent,

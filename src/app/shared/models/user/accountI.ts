@@ -7,3 +7,8 @@ export interface AccountI {
   relations_interest: boolean,
   graduation_tract: string,
 }
+
+export interface WalletI {
+  google_wallet_link: string
+  apple_wallet_link: string
+}

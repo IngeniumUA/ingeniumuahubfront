@@ -12,18 +12,44 @@ import {webmasterGuard} from './core/guards/webmaster.guard';
 import {managerGuard} from './core/guards/manager.guard';
 import {TemplatePageTitleStrategy} from "@ingenium/app/shared/others/PageTitleStrategy";
 
-
 const routes: Routes = [
+  {
+    path: 'tabs',
+    loadChildren: () => import('./pages/qr_scanner_pages/tabs_folder/tabs/tabs.module').then(m => m.TabsPageModule)
+  },
+  {
+    path: 'prices',
+    loadChildren: () => import('./pages/qr_scanner_pages/prices/prices.module').then(m => m.PricesPageModule)
+  },
+  {
+    path: 'result',
+    loadChildren: () => import('./pages/qr_scanner_pages/result/result.module').then(m => m.ResultPageModule)
+  },
+  {
+    path: 'blueprints',
+    loadChildren: () => import('./pages/qr_scanner_pages/blueprints/blueprints.module').then(m => m.BlueprintsPageModule)
+  },
+
   // Homepages
   {path: '', component: HomepageComponent},
   {path: 'home', redirectTo: '/', pathMatch: "full"}, // For routing to homepage (makes it easier)
-  {path: '',
+
+  {path: 'auth', redirectTo: 'sub/auth', pathMatch: "prefix"},
+  {path: 'events', redirectTo: 'sub/events', pathMatch: "prefix"},
+  {path: 'info', redirectTo: 'sub/info', pathMatch: "prefix"},
+  {path: 'shop', redirectTo: 'sub/shop', pathMatch: "prefix"},
+  {path: 'cloud', redirectTo: 'sub/cloud', pathMatch: "prefix"},
+  {path: 'account', redirectTo: 'sub/account', pathMatch: "prefix"},
+  {path: 'card/:id', redirectTo: 'sub/card/:id', pathMatch: "prefix"},
+  {path: 'sub',
     component: PublicRoutingComponent,
     children: [
       // Authentication pages
       {path: 'auth', loadChildren: () => import('@ingenium/app/features/public/auth/auth.module').then(x => x.AuthModule)},
-      {path: 'login', redirectTo: 'auth/login', pathMatch: 'full'},
-      {path: 'register', redirectTo: 'auth/register', pathMatch: 'full'},
+      {path: 'login', redirectTo: 'sub/auth/login', pathMatch: 'full'},
+      {path: 'logout', redirectTo: 'sub/auth/logout', pathMatch: 'full'},
+      {path: 'callback', redirectTo: 'sub/auth/callback', pathMatch: 'full'},
+      {path: 'register', redirectTo: 'sub/auth/register', pathMatch: 'full'},
 
       // Public event related pages
       {path: 'events', title: 'Events', loadChildren: () => import('src/app/features/public/events/event.model').then(x => x.EventModule)},
@@ -34,11 +60,12 @@ const routes: Routes = [
 
       // Info
       {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
-      {path: 'over-ons', redirectTo: 'info', pathMatch: 'full'},
-      {path: 'praesidium', redirectTo: 'info/praesidium', pathMatch: 'prefix'},
-      {path: 'partners', redirectTo: 'info/partners', pathMatch: 'full'},
-      {path: 'contact', redirectTo: 'info/contact', pathMatch: 'full'},
-      {path: 'credits', redirectTo: 'info/credits', pathMatch: 'full'},
+      {path: 'over-ons', redirectTo: 'sub/info', pathMatch: 'full'},
+      {path: 'praesidium', redirectTo: 'sub/info/praesidium', pathMatch: 'prefix'},
+      {path: 'partners', redirectTo: 'sub/info/partners', pathMatch: 'full'},
+      {path: 'contact', redirectTo: 'sub/info/contact', pathMatch: 'full'},
+      {path: 'credits', redirectTo: 'sub/info/credits', pathMatch: 'full'},
+      {path: 'licences', redirectTo: 'sub/info/licences', pathMatch: 'full'},
 
       // Cloud
       {path: 'cloud', title: 'Cloud', component: CloudComponent, canActivate: [authGuard]},
@@ -58,11 +85,11 @@ const routes: Routes = [
     ]},
 
   //** Popupz **//
-  /*{
-    path: 'popupz',
-    loadChildren: () => import('src/app/features/popupz/popupz.module').then(x => x.PopupzModule),
-  },
-  { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },*/
+  // {
+  //   path: 'popupz',
+  //   loadChildren: () => import('src/app/features/popupz/popupz.module').then(x => x.PopupzModule),
+  // },
+  // { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },
 
   //** Employee **//
 
@@ -85,8 +112,8 @@ const routes: Routes = [
 
   // Not found as last
   { path: '**', component: NotfoundpageComponent }
-];
 
+];
 @NgModule({
   imports: [BrowserModule, RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule],

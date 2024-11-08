@@ -12,18 +12,22 @@ import {
   RecSysItemPreviewComponent
 } from '../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading-indicator/loading-indicator.component";
+import {IonicModule} from "@ionic/angular";
+import {PublicFooterComponent} from "@ingenium/app/core/layout/public/footer/public-footer.component";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        EventRoutingModule,
-        ProductComponent,
-        PublicHeaderComponent,
-        ColordbrgbaPipe,
-        RecSysItemPreviewComponent,
-        LoadingIndicatorComponent
-    ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    EventRoutingModule,
+    ProductComponent,
+    PublicHeaderComponent,
+    ColordbrgbaPipe,
+    RecSysItemPreviewComponent,
+    LoadingIndicatorComponent,
+    IonicModule,
+    PublicFooterComponent
+  ],
   declarations: [
     EventsComponent,
     EventDetailComponent,

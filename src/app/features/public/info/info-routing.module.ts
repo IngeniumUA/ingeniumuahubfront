@@ -13,6 +13,7 @@ import {DoopInfoComponent} from './doop-info/doop-info.component';
 import {CantusInfoComponent} from './cantus-info/cantus-info.component';
 import {SportInfoComponent} from './sport-info/sport-info.component';
 import {PartnersInfoComponent} from './partners/partners-info.component';
+import {LicencesComponent} from "@ingenium/app/features/public/info/licences/licences.component";
 
 
 
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'startweek', title: 'Start week', component: StartweekComponent },
   { path: 'contact', title: 'Contacteer ons', component: ContactComponent },
   { path: 'credits', title: 'Credits', component: CreditsComponent },
+  { path: 'licences', title: 'Licences', component: LicencesComponent },
   { path: 'relations', title: 'Relations', component: RelationsComponent },
   { path: 'education', title: 'Education', component: EducationInfoComponent},
   { path: 'doop', title: 'Doop', component: DoopInfoComponent},

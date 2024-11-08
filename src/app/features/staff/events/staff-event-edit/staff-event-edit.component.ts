@@ -1,6 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgClass} from '@angular/common';
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 
 @Component({
@@ -18,7 +20,14 @@ export class StaffEventEditComponent implements OnInit {
   form!: FormGroup;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   ngOnInit() {

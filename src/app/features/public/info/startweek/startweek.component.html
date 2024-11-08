@@ -18,7 +18,7 @@
             <h2>Geraak je er niet of wil je meteen lid worden?</h2>
             <p>Geen probleem! je kan ook lid worden via de website, je kan je kaart dan later ontvangen ..... meer details over het ontvangen van de lidkaart</p>
             <section class="bestel">
-                <div [routerLink]="['/shop']" class="bestel-button clickable">Bestel meteen</div>
+                <div (click)="gotoPage('sub/shop')" class="bestel-button clickable cursor-pointer">Bestel meteen</div>
             </section>
         </div>
     </section>

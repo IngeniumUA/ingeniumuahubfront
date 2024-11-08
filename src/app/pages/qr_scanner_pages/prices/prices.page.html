@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Niet lid prijzen
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+    <ion-fab-button (click)="ReturnToHome()">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="Back()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="prices">
+    <ion-list [inset]="true" mode="ios" lines="full">
+      <ion-item>
+        <ion-select label="Event" placeholder="Selecteer een evenement" interface="alert" [(ngModel)]="selectedItem" (ionChange)="onItemSelection($event)">
+          <ion-select-option *ngFor="let event of this.events" [value]="event">{{event}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <p style="color: var(--ing-ion-color)">Niet-lid prijs [€]:</p>
+        <div class="right">
+          <p style="color: var(--ing-ion-color)">{{this.DisplayPrice}}</p>
+        </div>
+      </ion-item>
+    </ion-list>
+    <ion-list [inset]="true" mode="ios" lines="full">
+      <ion-item>
+        <ion-input label="Niet-lid prijs" labelPlacement="stacked" placeholder="Enter price" [(ngModel)]="InputPrice" (keyup.enter)="SetPrice()">
+        </ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="block" shape="round" (click)="SetPrice()" >Stel in</ion-button>
+    <br>
+    <ion-button expand="block" shape="round" id="confirmDeletePrices" >Verwijder prijslijst</ion-button>
+    <ion-action-sheet mode="ios" trigger="confirmDeletePrices" header="Actions" [buttons]="actionSheetButtons" (didDismiss)="clearPrices($event)"></ion-action-sheet>
+  </div>
+
+  <!-- ion-fab markup  -->
+</ion-content>

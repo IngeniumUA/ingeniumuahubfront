@@ -2,7 +2,6 @@ import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core'
 import {AsyncPipe, DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
-import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -14,6 +13,8 @@ import {
   CardTypeEnum,
   CardTypeEnumList
 } from "@ingenium/app/shared/models/item/cardI";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-card-table',
@@ -23,7 +24,6 @@ import {
     DatePipe,
     MatTableModule,
     NgIf,
-    RouterLink,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     AsyncPipe,
@@ -52,7 +52,9 @@ export class CardTableComponent implements OnInit, AfterViewInit {
       'unlink_button'];
   }
 
-  constructor(private cardService: CardService) {
+  constructor(private cardService: CardService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
 
   ngOnInit() {
@@ -108,7 +110,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
   }
 
   UnlinkCard(card_id: number
-    ) {
+  ) {
     this.cardService.unlinkCard(card_id).subscribe({
       next: () => {
         this.LoadData();
@@ -117,6 +119,11 @@ export class CardTableComponent implements OnInit, AfterViewInit {
         console.log(err);
       }
     });
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
   protected readonly CardTypeEnum = CardTypeEnum;

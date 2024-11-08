@@ -1,15 +1,15 @@
 <section>
   <ng-container  *ngIf="statusStats$ | async as statusStats">
-  <div class="flex flex-row gap-2 max-w-full mt-2 mb-2">
-    <button *ngFor="let status of statusColumns"
-            class="status-selector-button"
-            [ngClass]="status === this.selectedStatus ? 'status-button-selected': ''"
-            (click)="SwitchStatusFilter(status)"
-    >
-      <span [ngClass]="status === this.selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'">{{ PaymentStatusEnum[status] | titlecase }}</span>
-      <span class="font-bold">{{ StatusToStats(status, statusStats) }}</span>
-    </button>
-  </div>
+    <div class="flex flex-row gap-2 max-w-full mt-2 mb-2">
+      <button *ngFor="let status of statusColumns"
+              class="status-selector-button"
+              [ngClass]="status === this.selectedStatus ? 'status-button-selected': ''"
+              (click)="SwitchStatusFilter(status)"
+      >
+        <span [ngClass]="status === this.selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'">{{ PaymentStatusEnum[status] | titlecase }}</span>
+        <span class="font-bold">{{ StatusToStats(status, statusStats) }}</span>
+      </button>
+    </div>
 
   <h2>Transactions Table</h2>
 
@@ -139,7 +139,7 @@
           <p
             [ngClass]="StyleClassFromValidity(transaction.validity)"
           >{{ ValidityEnum[transaction.validity] | titlecase }}</p>
-          </td>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="completed_timestamp">

@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Instellingen
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+    <ion-fab-button (click)="ReturnToHome()">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="settings">
+    <ion-button expand="block" shape="round" (click)="SetPrices()" >Stel prijzen in</ion-button>
+    <ion-list [inset]="true" mode="ios" lines="full">
+      <ion-item>
+        <ion-toggle justify="space-between" #returnToggle (ionChange)="setAutoReturn()">Automatisch terugkeren</ion-toggle>
+      </ion-item>
+      <ion-list [inset]="true" mode="ios" lines="full">
+        <ion-item>
+          <ion-input label="Terugkeertijd" labelPlacement="stacked" value="{{'' + returnTime}}" [(ngModel)]="inputReturnTime" (keyup.enter)="setReturnTime()"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div *ngIf="showError">
+        <ion-item>
+          <ion-note style="font-size:14px" color="danger">{{this.errorText}}</ion-note>
+        </ion-item>
+      </div>
+      <ion-button expand="block" shape="round" (click)="setReturnTime()">Pas terugkeertijd aan</ion-button>
+      <ion-item>
+        <ion-toggle justify="space-between" #soundToggle (ionChange)="setDisableSound()">Mute</ion-toggle>
+      </ion-item>
+      <ion-button expand="block" shape="round" id="confirmDelete" >Verwijder opgeslagen instellingen</ion-button>
+      <ion-action-sheet mode="ios" trigger="confirmDelete" header="Actions" [buttons]="actionSheetButtons" (didDismiss)="clearSettings($event)"></ion-action-sheet>
+    </ion-list>
+    <ion-button expand="block" shape="round" id="confirmDeleteAll" >Verwijder alle gegevens</ion-button>
+    <ion-action-sheet mode="ios" trigger="confirmDeleteAll" header="Actions" [buttons]="actionSheetButtons" (didDismiss)="clearMemory($event)"></ion-action-sheet>
+  </div>
+
+</ion-content>

@@ -49,4 +49,5 @@ export class CardComponent implements OnInit {
   }
   loading: boolean = false;
   protected readonly CardMembershipEnum = CardMembershipEnum;
+
 }

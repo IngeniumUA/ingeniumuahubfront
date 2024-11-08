@@ -22,6 +22,8 @@ import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/checkout/ch
 import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-checkout-table',
@@ -46,7 +48,9 @@ import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/pr
 })
 export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit {
 
-  constructor(private checkoutService: CheckoutService) {
+  constructor(private checkoutService: CheckoutService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
   @Input() user_id: string | null = null;
   @Input() item_id: number | null = null;
@@ -201,6 +205,11 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
         console.log(err);
       }
     });
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
   protected readonly PaymentStatusEnum = PaymentStatusEnum;

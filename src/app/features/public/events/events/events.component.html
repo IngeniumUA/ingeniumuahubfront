@@ -12,9 +12,9 @@
                            [title]="'Evenementen aan het laden'" [message]="'Evenementen worden opgehaald'" />
   } @else if (events && (events.data?.length ?? 0) > 0) {
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      @for (event of events.data; track event.name) {
-        <app-rec-sys-item-preview [recsysItem]="event" />
-      }
+    @for (event of events.data; track event.name) {
+      <app-rec-sys-item-preview [recsysItem]="event" />
+    }
     </div>
   } @else {
     <div class="alert alert-info alert-border">

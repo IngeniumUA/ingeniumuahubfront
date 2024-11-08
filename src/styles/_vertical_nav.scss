@@ -3,8 +3,8 @@
 
   a {
     @apply w-full px-4 py-3 text-blue-900 hover:bg-blue-900 hover:text-white text-sm rounded inline-flex items-center
-      transition-colors ease-in-out focus-visible:ring-black focus-visible:ring-4 focus:outline-none
-      no-underline;
+    transition-colors ease-in-out focus-visible:ring-black focus-visible:ring-4 focus:outline-none
+    no-underline;
 
     svg {
       @apply mr-2 -ml-1 -mt-0.5 h-5 w-5;

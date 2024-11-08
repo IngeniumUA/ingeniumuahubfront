@@ -8,10 +8,12 @@ import {
   ProductBlueprintCreateComponent
 } from '../../create/product-blueprint-create/product-blueprint-create.component';
 import {MatTableModule} from '@angular/material/table';
-import {RouterLink} from '@angular/router';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {RouterLink} from '@angular/router';
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-product-blueprint-dashboard',
@@ -34,7 +36,9 @@ export class ProductBlueprintDashboardComponent implements OnInit {
   @Input() item!: ItemI;
   $productBlueprint: Observable<[]> = of([]);
 
-  constructor(private productBlueprintService: ProductBlueprintService) {
+  constructor(private productBlueprintService: ProductBlueprintService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
 
   ngOnInit() {
@@ -42,6 +46,7 @@ export class ProductBlueprintDashboardComponent implements OnInit {
       this.item.id,
       PaymentStatusEnum.successful);  // source_item
   }
+
 
   addingNew: boolean = false;
   ToggleAddNew() {
@@ -53,6 +58,11 @@ export class ProductBlueprintDashboardComponent implements OnInit {
     this.$productBlueprint = this.productBlueprintService.queryProductTable(this.item.id,
       this.item.id,
       PaymentStatusEnum.successful);  // source_item
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
 }

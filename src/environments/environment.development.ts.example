@@ -15,7 +15,6 @@ const OAuthConfig: AuthConfig = {
 export const apiEnviroment = {
   name: 'development',
   apiUrl: 'http://localhost:3000/api/v1/', // or for proxy '/api/v1/'
-  appHost: 'localhost:4200', // Specify port if different than 80 or 443
   oauthConfig: OAuthConfig,
   versions: versions,
 };

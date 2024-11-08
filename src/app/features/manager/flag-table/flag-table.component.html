@@ -1,24 +1,24 @@
 <section class="staffSection">
-    <h2>Flags</h2>
-    <br>
+  <h2>Flags</h2>
+  <br>
 
-  @for (flag of (this.flags$ | async); track flag.id) {
-    <span>
-      HubFlag<br>
-      Id:{{ flag.id }}<br>
-      Name: {{ flag.name }}<br>
-    </span>
-    <span>
-      Value:
-      @if (flag.name === "Base payment provider") {
-        {{ PaymentProviderEnum[$any(flag.value)["payment_provider_enum"]] }}
-      } @else if (flag.name === "Running Environment") {
-        {{ $any(flag.value)["environment_enum"] }}
-      } @else {
-        {{ flag.value | json }}
-      }
-    </span>
-  }
+@for (flag of (this.flags$ | async); track flag.id) {
+  <span>
+    HubFlag<br>
+    Id:{{ flag.id }}<br>
+    Name: {{ flag.name }}<br>
+  </span>
+  <span>
+    Value:
+    @if (flag.name === "Base payment provider") {
+      {{ PaymentProviderEnum[$any(flag.value)["payment_provider_enum"]] }}
+    } @else if (flag.name === "Running Environment") {
+      {{ $any(flag.value)["environment_enum"] }}
+    } @else {
+      {{ flag.value | json }}
+    }
+  </span>
+}
 
   <section class="mt-2">
     <h2>Add Flag</h2>

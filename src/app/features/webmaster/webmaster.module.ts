@@ -57,9 +57,10 @@ import {
 import {
   OrderTrackingComponent
 } from '@ingenium/app/features/webmaster/order-tracking/order-tracking.component';
+import {IonicModule} from "@ionic/angular";
 import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
 import {
-    InteractionTableComponent
+  InteractionTableComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 
 
@@ -76,27 +77,28 @@ import {
     CheckoutDetailComponent,
     OrderTrackingComponent
   ],
-    imports: [
-        CommonModule,
-        WebmasterRoutingModule,
-        SidenavComponent,
-        GroupTableComponent,
-        PublicHeaderComponent,
-        UserTableComponent,
-        ItemTableComponent,
-        StaffItemDetailComponent,
-        StaffUserDetailComponent,
-        ProductBlueprintDashboardComponent,
-        CardTableComponent,
-        TransactionTableComponent,
-        ItemCreateComponent,
-        ProductBlueprintCreateComponent,
-        ProductBlueprintDetailComponent,
-        CheckoutAndTransactionDashboardComponent,
-        CreateCheckoutComponent,
-        TransactionDetailComponent,
-        CurrencyPipe,
-        InteractionTableComponent
+  imports: [
+      CommonModule,
+      WebmasterRoutingModule,
+      SidenavComponent,
+      GroupTableComponent,
+      PublicHeaderComponent,
+      UserTableComponent,
+      ItemTableComponent,
+      StaffItemDetailComponent,
+      StaffUserDetailComponent,
+      ProductBlueprintDashboardComponent,
+      CardTableComponent,
+      TransactionTableComponent,
+      ItemCreateComponent,
+      ProductBlueprintCreateComponent,
+      ProductBlueprintDetailComponent,
+      CheckoutAndTransactionDashboardComponent,
+      CreateCheckoutComponent,
+      TransactionDetailComponent,
+      IonicModule,
+      CurrencyPipe,
+      InteractionTableComponent
     ], providers: [
     DatePipe
   ]

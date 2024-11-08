@@ -3,12 +3,12 @@
   <div class="flex flex-row w-12" *ngFor="let control of whitelistGroupsForm.controls; index as i">
     <!-- <input class="h-6" type="number" [formControl]="whitelistGroupsForm.controls[i]" />-->
     <ng-container *ngIf="this.groups$ | async as groups">
-    <select [formControl]="control">
-      <option [ngValue]="null">Choose group</option>
-      <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
-        {{ group.name }}
-      </option>
-    </select>
+      <select [formControl]="control">
+        <option [ngValue]="null">Choose group</option>
+        <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
+          {{ group.name }}
+        </option>
+      </select>
     </ng-container>
     <button class="font-bold" (click)="RemoveGroup(false, i)">Remove</button>
   </div>

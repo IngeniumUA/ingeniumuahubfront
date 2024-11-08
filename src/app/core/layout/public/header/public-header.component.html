@@ -1,7 +1,5 @@
 @let isAuth = (isAuth$ | async);
 
-<!-- ACCESSIBILITY BUTTON TO CONTENT -->
-<a class="accessibility-go-to-content" [href]="router.url.split('#')[0] + '#main-content'">Naar de inhoud</a>
 <!-- NAVIGATION -->
 <nav [ngClass]="{
   'nav-transparent-background': !this.background,
@@ -33,7 +31,7 @@
 
       <div class="nav-logo-wrapper">
         <!-- LOGO -->
-        <a [routerLink]="'/'" class="nav-logo-link">
+        <a class="nav-logo-link" (click)="gotoPage('home')">
           <span class="sr-only">Ingenium home pagina</span>
           <img class="h-16 w-auto" ngSrc="assets/svg/ingenium-schild.svg" alt="" aria-hidden="true" height="1024" width="1024">
         </a>
@@ -43,8 +41,8 @@
         <!-- DESKTOP MENU -->
         <div class="desktop-nav">
           <div class="flex space-x-4">
-            <a routerLink="/" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">Home</a>
-            <a routerLink="/events" routerLinkActive="nav-item-active" class="nav-item">Events</a>
+            <a (click)="gotoPage('home')" class="nav-item">Home</a>
+            <a (click)="gotoPage('sub/events')" class="nav-item">Events</a>
 
             <!-- INFO DROPDOWN -->
             <div class="relative">
@@ -53,18 +51,18 @@
               </button>
 
               <div *ngIf="infoDropdownOpen" class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="info-menu-button" tabindex="-1">
-                <a routerLink="/info" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-dropdown-item" role="menuitem">Over ons</a>
-                <a routerLink="/info/praesidium" routerLinkActive="nav-item-active" class="nav-dropdown-item" role="menuitem">Praesidium</a>
-                <a routerLink="/info/relations" routerLinkActive="nav-item-active" class="nav-dropdown-item">Partner relations</a>
-                <a routerLink="/vacatures" routerLinkActive="nav-item-active" class="nav-dropdown-item">Vacatures</a>
-                <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-dropdown-item">Clublied</a>
-                <a routerLink="/info/contact" routerLinkActive="nav-item-active" class="nav-dropdown-item">Contact</a>
+                <a (click)="gotoPage('sub/info')" class="nav-dropdown-item" role="menuitem">Over ons</a>
+                <a (click)="gotoPage('sub/info/praesidium')" class="nav-dropdown-item" role="menuitem">Praesidium</a>
+                <a (click)="gotoPage('sub/info/relations')"  class="nav-dropdown-item">Partner relations</a>
+                <a (click)="gotoPage('sub/vacatures')" class="nav-dropdown-item">Vacatures</a>
+                <a (click)="gotoPage('sub/info/clublied')" class="nav-dropdown-item">Clublied</a>
+                <a (click)="gotoPage('sub/info/contact')" class="nav-dropdown-item">Contact</a>
               </div>
             </div>
             <!-- INFO DROPDOWN END -->
 
-            <a routerLink="/shop" routerLinkActive="nav-item-active" class="nav-item">Shop</a>
-            <a routerLink="/cloud" routerLinkActive="nav-item-active" class="nav-item">Cloud</a>
+            <a (click)="gotoPage('sub/shop')" class="nav-item">Shop</a>
+            <a (click)="gotoPage('sub/cloud')" class="nav-item">Cloud</a>
           </div>
         </div>
         <!-- DESKTOP MENU END -->
@@ -73,16 +71,16 @@
         <div class="relative ml-3">
           <div>
             @if (isAuth) {
-              <!-- Profile dropdown button -->
-              <button (click)="setAccountDropdown(!accountDropdownOpen)" [attr.aria-expanded]="accountDropdownOpen" type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" aria-haspopup="true" id="profile-menu-button">
+            <!-- Profile dropdown button -->
+            <button (click)="setAccountDropdown(!accountDropdownOpen)" [attr.aria-expanded]="accountDropdownOpen" type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" aria-haspopup="true" id="profile-menu-button">
                 <span class="hidden md:inline">Profiel <span aria-hidden="true" class="text-white ml-2 text-xs">&#9660;</span></span>
                 <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
               </button>
             } @else {
-              <!-- Login button -->
-              <button (click)="Login()" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" title="Aanmelden">
+            <!-- Login button -->
+            <button (click)="Login()" class="button button-primary button-icon-only relative inline-flex items-center justify-center" [ngClass]="{ 'button-accessibility-white': !this.light_theme }" title="Aanmelden">
                 <span class="hidden md:inline">Aanmelden</span>
                 <svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -93,17 +91,17 @@
 
           <!-- Profile dropdown menu -->
           <div *ngIf="accountDropdownOpen && isAuth" class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
-            <a routerLink="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
-            <a routerLink="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
+            <a (click)="gotoPage('sub/account')" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
+            <a (click)="gotoPage('sub/account/transactions')" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 
             <button (click)="Logout()" type="button" class="nav-dropdown-item" role="menuitem">Afmelden</button>
 
             @let roles = (roles$ | async);
             @if (hasAnyRole(roles)) {
               <hr class="nav-dropdown-divider">
-              <a [routerLink]="['/man']" *ngIf="roles?.is_manager" class="nav-dropdown-item" role="menuitem">Manager</a>
-              <a [routerLink]="['/web']" *ngIf="roles?.is_webmaster" class="nav-dropdown-item" role="menuitem" >Webmaster</a>
-              <a [routerLink]="['/staff']" *ngIf="roles?.is_staff" class="nav-dropdown-item" role="menuitem" >Staff</a>
+              <a (click)="gotoPage('man')" *ngIf="roles?.is_manager" class="nav-dropdown-item" role="menuitem">Manager</a>
+              <a (click)="gotoPage('web')" *ngIf="roles?.is_webmaster" class="nav-dropdown-item" role="menuitem" >Webmaster</a>
+              <a (click)="gotoPage('staff')" *ngIf="roles?.is_staff" class="nav-dropdown-item" role="menuitem" >Staff</a>
             }
 
             <hr class="nav-dropdown-divider">
@@ -120,16 +118,16 @@
   <!-- Mobile menu -->
   <div class="mobile-nav" *ngIf="mobileMenuOpen">
     <div class="space-y-1 px-2 pb-3 pt-2">
-      <a routerLink="/" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-item">Home</a>
-      <a routerLink="/events" routerLinkActive="nav-item-active" class="nav-item">Events</a>
-      <a routerLink="/shop" routerLinkActive="nav-item-active" class="nav-item">Shop</a>
-      <a routerLink="/cloud" routerLinkActive="nav-item-active" class="nav-item">Cloud</a>
-      <a routerLink="/info" routerLinkActive="nav-item-active" [routerLinkActiveOptions]="{exact:true}" class="nav-item" role="menuitem">Over ons</a>
-      <a routerLink="/info/praesidium" routerLinkActive="nav-item-active" class="nav-item" role="menuitem">Praesidium</a>
-      <a routerLink="/info/relations" routerLinkActive="nav-item-active" class="nav-item">Partner relations</a>
-      <a routerLink="/vacatures" routerLinkActive="nav-item-active" class="nav-item">Vacatures</a>
-      <a routerLink="/info/clublied" routerLinkActive="nav-item-active" class="nav-item">Clublied</a>
-      <a routerLink="/info/contact" routerLinkActive="nav-item-active" class="nav-item">Contact</a>
+      <a (click)="gotoPage('home')" class="nav-item">Home</a>
+      <a (click)="gotoPage('sub/events')" class="nav-item">Events</a>
+      <a (click)="gotoPage('sub/shop')" class="nav-item">Shop</a>
+      <a (click)="gotoPage('sub/cloud')" class="nav-item">Cloud</a>
+      <a (click)="gotoPage('sub/info')" class="nav-item" role="menuitem">Over ons</a>
+      <a (click)="gotoPage('sub/info/praesidium')" class="nav-item" role="menuitem">Praesidium</a>
+      <a (click)="gotoPage('sub/info/relations')" class="nav-item">Partner relations</a>
+      <a (click)="gotoPage('sub/vacatures')" class="nav-item">Vacatures</a>
+      <a (click)="gotoPage('sub/info/clublied')" class="nav-item">Clublied</a>
+      <a (click)="gotoPage('sub/info/contact')" class="nav-item">Contact</a>
     </div>
   </div>
 </nav>

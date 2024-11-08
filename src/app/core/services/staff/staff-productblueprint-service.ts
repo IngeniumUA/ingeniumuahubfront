@@ -19,8 +19,8 @@ export class StaffProductBlueprintService {
   }
 
   public getProductBlueprints(offset: number = 0, count: number = 50,
-    source_item_id: number | null = null,
-    origin_item_id: number | null = null): Observable<StaffProductBlueprintI[]> {
+                              source_item_id: number | null = null,
+                              origin_item_id: number | null = null): Observable<StaffProductBlueprintI[]> {
     let query_str = '?offset=' + offset.toString() + '&limit=' + count.toString();
     if (source_item_id !== null) {
       query_str += '&source_item_id='+source_item_id;
@@ -42,8 +42,8 @@ export class StaffProductBlueprintService {
   }
 
   public getProductBlueprintStats(offset: number = 0, count: number = 50,
-    source_item_id: number | null = null,
-    origin_item_id: number | null = null): Observable<GroupByModelI> {
+                                  source_item_id: number | null = null,
+                                  origin_item_id: number | null = null): Observable<GroupByModelI> {
     let query_str = '?offset=' + offset.toString() + '&limit=' + count.toString();
     if (source_item_id !== null) {
       query_str += '&source_item_id='+source_item_id;
@@ -56,8 +56,8 @@ export class StaffProductBlueprintService {
   }
 
   public getProducts(offset: number = 0, count: number = 50,
-  source_item_id: number | null = null,
-  origin_item_id: number | null = null): Observable<IProductItem[]> {
+                     source_item_id: number | null = null,
+                     origin_item_id: number | null = null): Observable<IProductItem[]> {
     let query_str = '?offset=' + offset.toString() + '&limit=' + count.toString();
     if (source_item_id !== null) {
       query_str += '&source_item_id='+source_item_id;

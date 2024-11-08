@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {Router} from '@angular/router';
 import {Store} from "@ngxs/store";
 import {CartActions, CartState} from "@ingenium/app/core/store";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
@@ -10,6 +9,8 @@ import {catchError} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {CartSuccessI} from "@ingenium/app/shared/models/cart/cartModels";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-page',
@@ -21,13 +22,22 @@ export class PayComponent implements OnInit {
   loading = true;
   stripePayment = false;
 
-  constructor(private store: Store, private httpClient: HttpClient, private router: Router,
-              private toastrService: ToastrService) {}
+  constructor(private store: Store,
+              private httpClient: HttpClient,
+              private toastrService: ToastrService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
+  }
 
   ngOnInit() {
     // Redirect if our cart is empty
     if (this.store.selectSnapshot(CartState.getProducts).length === 0) {
-      this.router.navigateByUrl('/shop');
+      this.gotoPage('sub/shop')
     }
 
     const paymentProvider = this.store.selectSnapshot(CartState.getPaymentProvider);
@@ -44,7 +54,7 @@ export class PayComponent implements OnInit {
         //  const cartFailed: CartFailedI = err.error["detail"];
         //  // todo this.store.setPaymentErrors(-
         // }
-        this.router.navigateByUrl('/shop/checkout');
+        this.gotoPage('sub/shop/checkout');
       })
     ).subscribe();
 
@@ -61,15 +71,14 @@ export class PayComponent implements OnInit {
           this.toastrService.success(`Het volgnummer is ${response.tracker_id}`, 'Bestelling gelukt!', {
             timeOut: 10000,
           });
-          this.router.navigateByUrl('/account/transactions/');
+          this.gotoPage('/account/transactions/')
           break;
         }
-
-        this.router.navigateByUrl('/account/transactions');
+        this.gotoPage('sub/account/transactions')
         break;
 
       case PaymentProviderEnum.Free:
-        this.router.navigateByUrl('/shop/confirm');
+        this.gotoPage('sub/shop/confirm')
         break;
 
       case PaymentProviderEnum.Kassa:
@@ -78,12 +87,12 @@ export class PayComponent implements OnInit {
           this.toastrService.success(`Het volgnummer is ${response.tracker_id}`, 'Bestelling gelukt!', {
             timeOut: 10000,
           });
-          this.router.navigateByUrl('/popupz/menu/');
+          this.gotoPage('sub/popupz/menu/')
           break;
         }
 
         this.toastrService.success('De bestelling is gelukt, zorg dat de betaling aan de kassa wordt voldaan!');
-        this.router.navigateByUrl('/shop/confirm');
+        this.gotoPage('sub/shop/confirm')
         break;
 
       case PaymentProviderEnum.Stripe:
@@ -95,4 +104,10 @@ export class PayComponent implements OnInit {
     this.loading = false;
     return response;
   }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
+  }
+
 }

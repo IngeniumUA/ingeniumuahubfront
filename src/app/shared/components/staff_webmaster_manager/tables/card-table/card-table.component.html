@@ -1,5 +1,5 @@
 <section>
-  <!--  <ng-container *ngIf="this.cardStats$ | async as cardStats">-->
+<!--  <ng-container *ngIf="this.cardStats$ | async as cardStats">-->
   <h2>Kaarten table</h2>
 
   <section class="flex flex-row gap-3">
@@ -20,7 +20,7 @@
       <!-- id Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> Card uuid </th>
-        <td mat-cell *matCellDef="let card"> <a [routerLink]="[card.item.id]"> {{ card.derived_type.card_uuid }} </a></td>
+        <td mat-cell *matCellDef="let card"> <a (click)="gotoPage('web/card/' + card.item.id)"> {{ card.derived_type.card_uuid }} </a></td>
       </ng-container>
 
       <ng-container matColumnDef="card_type">
@@ -72,7 +72,7 @@
         </th>
         <td mat-cell *matCellDef="let card">
           <ng-container *ngIf="card.user_id !== 'None'">
-            <a [routerLink]="['/web/user/'+card.derived_type.user_uuid]"> {{ card.derived_type.user_email }}</a>
+            <a (click)="gotoPage('web/user/'+card.derived_type.user_uuid)" class="cursor-pointer"> {{ card.derived_type.user_email }}</a>
           </ng-container>
         </td>
       </ng-container>
@@ -84,13 +84,13 @@
 
       <ng-container matColumnDef="card_item">
         <th mat-header-cell *matHeaderCellDef> Source Card Item </th>
-        <td mat-cell *matCellDef="let card"> <a [routerLink]="['/web/item/'+card.derived_type.source_item_id]"> {{ card.derived_type.source_item_name }}</a></td>
+        <td mat-cell *matCellDef="let card"> <a (click)="gotoPage('web/item/'+card.derived_type.source_item_id)"> {{ card.derived_type.source_item_name }}</a></td>
       </ng-container>
 
       <ng-container matColumnDef="unlink_button">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let card">
-            <button *ngIf="card.derived_type.user_uuid !== null" (click)="UnlinkCard(card.item.id)" class="hubbutton-blue" style="background-color: var(--error-red)">Unlink</button>
+          <button *ngIf="card.derived_type.user_uuid !== null" (click)="UnlinkCard(card.item.id)" class="hubbutton-blue" style="background-color: var(--error-red)">Unlink</button>
         </td>
       </ng-container>
 
@@ -99,7 +99,7 @@
     </form>
     </table>
   </ng-container>
-  <!--  </ng-container>-->
+<!--  </ng-container>-->
 </section>
 <ng-template #loading>
   <div class="spinner-container">

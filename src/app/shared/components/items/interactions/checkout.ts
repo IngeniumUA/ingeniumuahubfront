@@ -8,7 +8,7 @@ export interface CheckoutI {
   currency: string
   description: string
 
-  note: string | null
+  note: string
 
   transactions: TransactionLimitedI[]
 }

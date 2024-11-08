@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {catchError, ignoreElements, Observable, of} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-vacature-display',
@@ -18,15 +19,22 @@ export class VacatureDisplayComponent implements OnInit {
   item_id!: string;
 
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private layoutService: LayoutService,
-              private promoService: PromoService) {
+  constructor(private layoutService: LayoutService,
+              private promoService: PromoService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   ngOnInit() {
     // Fetch ID
-    const id: string | null = this.route.snapshot.paramMap.get('id');
+    const thisUrl: string = currentPage
+    let id: string | null = thisUrl.replace("sub/vacature/", "").replace("sub/vacatures/", "")
+    if (id === thisUrl) {id = null}
 
     // If ID is null
     if (id === null) {
@@ -45,7 +53,8 @@ export class VacatureDisplayComponent implements OnInit {
   }
 
   IdError() {
-    this.router.navigateByUrl('/vacatures');
+    this.pageTrackService.addToTree('sub/vacatures')
+    this.navCtrl.navigateRoot('/sub/vacatures').then()
   }
 
   ImageDivClass(isMobile: boolean | null) {

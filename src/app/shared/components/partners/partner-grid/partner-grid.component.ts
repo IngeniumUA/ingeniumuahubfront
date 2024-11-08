@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {RecSysItemPreviewComponent} from '../../items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 import {AsyncPipe, NgForOf} from '@angular/common';
-import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 
 interface PartnerDisplay {
@@ -22,7 +21,7 @@ interface PartnerDisplay {
 })
 export class PartnerGridComponent {
 
-  constructor(private httpClient: HttpClient) {
+  constructor() {
   }
 
   // partners: Observable<RecSysPreviewI[]> = this.httpClient.get<RecSysPreviewI[]>("/assets/temp_partner_config/partners.json");

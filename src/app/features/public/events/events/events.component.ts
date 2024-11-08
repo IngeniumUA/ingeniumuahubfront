@@ -1,9 +1,10 @@
-import {Component, Inject, PLATFORM_ID} from '@angular/core';
+import {Component} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
-import {isPlatformBrowser} from "@angular/common";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-page',
@@ -13,9 +14,14 @@ import {isPlatformBrowser} from "@angular/common";
 export class EventsComponent {
   events$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: true, data: [], error: null});
 
-  constructor(@Inject(PLATFORM_ID) platformId: any, eventService: EventService) {
-    if (isPlatformBrowser(platformId)) {
-      this.events$ = eventService.getEventsList();
-    }
+  constructor(private eventService: EventService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.events$ = eventService.getEventsList();
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 }

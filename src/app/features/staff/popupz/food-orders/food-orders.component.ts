@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { interval, mergeMap } from 'rxjs';
 import { apiEnviroment } from 'src/environments/environment';
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-food-orders',
@@ -9,7 +11,15 @@ import { apiEnviroment } from 'src/environments/environment';
   styleUrls: ['./food-orders.component.css']
 })
 export class FoodOrdersComponent implements OnInit {
-  constructor(private httpService: HttpClient) {}
+  constructor(private httpService: HttpClient,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
+  }
   orders: any = [];
 
   ngOnInit() {

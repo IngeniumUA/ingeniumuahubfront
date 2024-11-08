@@ -3,7 +3,7 @@ import {Observable, of, shareReplay} from 'rxjs';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
-import {apiEnviroment} from '../../../../environments/environment';
+import {apiEnviroment} from '@ingenium/environments/environment';
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 

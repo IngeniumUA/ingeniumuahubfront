@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Geschiedenis
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+    <ion-fab-button (click)="ReturnToHome()">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-grid class="scroll">
+    <ion-row>
+      <ion-col class="tcol" size="auto"><div style="width: 200px">Event</div></ion-col>
+      <ion-col class="tcol" size="auto"><div style="width: 200px">Email</div></ion-col>
+      <ion-col class="tcol" size="auto"><div style="width: 180px">Aanpassingswijze</div></ion-col>
+      <ion-col class="tcol" size="auto"><div style="width: 200px">UUID</div></ion-col>
+    </ion-row>
+    <div *ngFor="let item of historyList">
+      <ion-row>
+        <ion-col size="auto"><div style="width: 200px">{{item[0]}}</div></ion-col>
+        <ion-col size="auto"><div style="width: 200px">{{item[1]}}</div></ion-col>
+        <ion-col size="auto"><div style="width: 180px">{{item[2]}}</div></ion-col>
+        <ion-col size="auto"><div style="width: 200px">{{item[3]}}</div></ion-col>
+      </ion-row>
+    </div>
+    <ion-row>
+      <ion-col class="lcol" size="auto"><div style="width: 200px"></div></ion-col>
+      <ion-col class="lcol" size="auto"><div style="width: 200px"></div></ion-col>
+      <ion-col class="lcol" size="auto"><div style="width: 180px"></div></ion-col>
+      <ion-col class="lcol" size="auto"><div style="width: 200px"></div></ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-button expand="block" shape="round" id="confirmDeleteHistory" >Verwijder geschiedenis</ion-button>
+  <ion-action-sheet mode="ios" trigger="confirmDeleteHistory" header="Actions" [buttons]="actionSheetButtons" (didDismiss)="clearHistory($event)"></ion-action-sheet>
+
+    <!-- ion-fab markup  -->
+</ion-content>

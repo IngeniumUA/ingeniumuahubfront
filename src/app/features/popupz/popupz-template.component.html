@@ -3,14 +3,14 @@
     <app-layout-public-header [light_theme]="true" />
 
     <nav id="popupz-menu">
-      <a routerLink="/popupz/menu/" routerLinkActive="active" class="menu-item" [attr.aria-expanded]="foodMenuExpanded" aria-controls="popup-food-menu">Menu</a>
-      <a routerLink="/popupz/allergies" routerLinkActive="active" class="menu-item">Allergenen</a>
+      <a (click)="gotoPage('sub/popupz/menu/')" class="menu-item cursor-pointer" [attr.aria-expanded]="foodMenuExpanded" aria-controls="popup-food-menu">Menu</a>
+      <a (click)="gotoPage('sub/popupz/allergies')" class="menu-item cursor-pointer">Allergenen</a>
 
       @let productCount = (this.productCount$ | async);
       <a routerLink="/shop/checkout" class="menu-item">Winkelwagen ({{ productCount }})</a>
 
       @if (this.isStaff$ | async) {
-        <a routerLink="/popupz/staff" class="menu-item">Staff display</a>
+      <a routerLink="/popupz/staff" class="menu-item">Staff display</a>
       }
     </nav>
   </header>

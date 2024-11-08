@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Observable} from 'rxjs';
-import { UserWideI} from '../../../../models/user/userI';
+import {UserWideI} from '@ingenium/app/shared/models/user/userI';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -35,7 +35,7 @@ export class StaffUserDetailComponent {
   @Input() userDetail!: UserWideI;
   @Output() refetchUserEvent = new EventEmitter<boolean>();
 
-  $groups: Observable<GroupI[]> = this.groupService.GetGroupsList(null, null);
+  $groups: Observable<GroupI[]> = this.groupService.GetGroupsList();
   groupControl = new FormControl<string>('');
 
   userPatchForm = new FormGroup({

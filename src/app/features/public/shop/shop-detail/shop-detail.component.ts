@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
 import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {IProductItem} from '@ingenium/app/shared/models/items/products/products';
 import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-page',
@@ -14,17 +15,21 @@ import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 })
 export class ShopDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private layoutService: LayoutService,
+  constructor(private layoutService: LayoutService,
               private shopService: ShopService,
-              private productService: ProductsService) {
+              private productService: ProductsService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   // Layout
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
   isCartEmpty: boolean = false;
-
   // Event Info and Deco
   shopItem$?: Observable<ItemWideLimitedI>;
   shopError$!: Observable<any>;
@@ -32,11 +37,13 @@ export class ShopDetailComponent implements OnInit {
 
   ngOnInit() {
     // Fetch ID
-    const id: string | null = this.route.snapshot.paramMap.get('id');
+    const thisUrl: string = currentPage
+    let id: string | null = thisUrl.replace("sub/shop/", "")
+    if (id === thisUrl) {id = null}
 
     // If ID is null
     if (id === null) {
-      this.router.navigateByUrl('/shop');
+      this.gotoPage('/sub/shop')
       return;
     }
 
@@ -49,9 +56,15 @@ export class ShopDetailComponent implements OnInit {
     this.shopError$ = this.shopItem$.pipe(
       ignoreElements(),
       catchError((err) => {
-        this.router.navigateByUrl('/home');
+        this.gotoPage('home')
         return of(err);
       }));
     this.products$ = this.productService.getProducts(id).pipe(shareReplay());
   }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
+  }
+
 }

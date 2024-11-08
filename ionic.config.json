@@ -1,0 +1,7 @@
+{
+  "name": "Ingenium app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

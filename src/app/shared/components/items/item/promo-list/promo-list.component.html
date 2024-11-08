@@ -3,7 +3,7 @@
   @for (item of recsysItems; track item.name) {
     <app-rec-sys-item-preview [recsysItem]="item" />
   }
-} @else {
+  } @else {
   <span>
     Momenteel zijn er geen
     <ng-container *ngIf="this.promoType !== null">{{ this.promoType.substring(0, 1).toUpperCase() }}{{ this.promoType.substring(1) }}s</ng-container>

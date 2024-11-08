@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {apiEnviroment} from '../../../../environments/environment';
+import {apiEnviroment} from '@ingenium/environments/environment';
 import {StaffAccessPolicyI} from '../../../shared/models/staff/staff_access_policy';
 
 @Injectable({

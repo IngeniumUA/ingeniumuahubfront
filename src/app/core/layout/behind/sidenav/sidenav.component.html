@@ -5,8 +5,8 @@
       <!-- Urls -->
       <div class="py-16 px-4 mt-0 sm:mt-8 sm:px-6 md:p-0 md:pr-12 col-span-1 md:col-span-2 w-full">
         <section *ngIf="isManager$ | async">
-          <a [routerLink]="['/man']" class="section-title">Manager</a>
-          <a [routerLink]="['/man/flag']" class="section-link">Flags</a>
+          <a (click)="gotoPage('man')" class="section-title">Manager</a>
+          <a (click)="gotoPage('man/flag')" class="section-link">Flags</a>
           <!--
           <a class="section-link">Logs</a>
           <a class="section-link">Users</a>
@@ -15,24 +15,25 @@
         </section>
 
         <section *ngIf="this.isWebmaster$ | async">
-          <a [routerLink]="['/web']" class="section-title">Webmaster</a>
-          <a [routerLink]="['/web/user']" class="section-link">Users</a>
-          <a [routerLink]="['/web/group']" class="section-link">Groups</a>
-          <a [routerLink]="['/web/item']" class="section-link">Items</a>
-          <a [routerLink]="['/web/card']" class="section-link">Lidkaarten</a>
+          <a (click)="gotoPage('web')" class="section-title">Webmaster</a>
+          <a (click)="gotoPage('web/user')" class="section-link">Users</a>
+          <a (click)="gotoPage('web/group')" class="section-link">Groups</a>
+          <a (click)="gotoPage('web/item')" class="section-link">Items</a>
+          <a (click)="gotoPage('web/card')" class="section-link">Lidkaarten</a>
           <a [href]="'https://sso.ingeniumua.be'" class="section-link">Keycloak SSO</a>
         </section>
 
         <section>
-          <a [routerLink]="['/staff']" class="section-title">Staff</a>
-          <a [routerLink]="['/staff/qr']" class="section-link">QR codes</a>
+          <a (click)="gotoPage('staff')" class="section-title">Staff</a>
+          <a (click)="gotoPage('staff/qr')" class="section-link">QR codes</a>
+          <a (click)="gotoScanner()" class="section-link">QR scanner</a>
           <a [href]="'https://vaultwarden.ingeniumua.be'" class="section-link">Vaultwarden</a>
           <!--<a [routerLink]="['/staff/event']" class="section-link">Events</a>-->
           <!--<a [routerLink]="['/staff/functions']" class="section-link">Functions</a>-->
         </section>
 
         <section id="account-section">
-          <a class="section-title" [routerLink]="['/account']">Account</a>
+          <a (click)="gotoPage('sub/account')" class="section-title">Account</a>
         </section>
       </div>
     </div>

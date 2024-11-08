@@ -22,7 +22,7 @@
           verderzetten met een compleet nieuw marketingteam. Met onze kennis en visie
           zullen er gegarandeerd nog veel succesvolle jaren aankomen.
         </p>
-        <a [routerLink]="'/info/praesidium'" class="mt-3 block button button-outline-blue button-sm">Bekijk het huidig praesidium</a>
+        <a (click)="gotoPage('sub/info/praesidium')" class="mt-3 block button button-outline-blue button-sm">Bekijk het huidig praesidium</a>
       </div>
       <img ngSrc="assets/images/wiezijnwij.png" alt="" aria-hidden="true" height="258" width="597">
     </div>
@@ -97,7 +97,7 @@
         aanspreekpunt voor eventuele vragen van eerstejaars bachelorstudenten en
         schakelstudenten.
       </p>
-      <a [routerLink]="'/cloud'" class="mt-3 block button button-outline-blue button-sm">Ingenium Cloud bezoeken</a>
+      <a (click)="gotoPage('sub/cloud')" class="mt-3 block button button-outline-blue button-sm">Ingenium Cloud bezoeken</a>
     </section>
   </div>
 

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
+import {Browser} from "@capacitor/browser";
 
 @Component({
   selector: 'app-page',
@@ -16,6 +17,7 @@ export class AuthLogoutComponent implements OnInit {
       this.store.dispatch(new User.Logout());
       return;
     }
+    Browser.close()
 
     this.loggedOut = true;
   }

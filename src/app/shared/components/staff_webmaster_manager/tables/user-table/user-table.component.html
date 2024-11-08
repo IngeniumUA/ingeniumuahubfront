@@ -1,4 +1,4 @@
-<!--  TODO-->
+<!--TODO-->
 <!--<section>-->
 <!--  <h2>Import users</h2>-->
 <!--  <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".xlsx">-->
@@ -50,7 +50,7 @@
             <input class="w-3/4" type="text" placeholder="UUID" [formControlName]="'uuidControl'">
           </div>
         </th>
-        <td mat-cell *matCellDef="let user"><a [routerLink]="[user.user_uuid]"> {{ user.user_uuid }} </a></td>
+        <td mat-cell *matCellDef="let user"><a (click)="gotoPage('web/user/'+user.user_uuid)" class="cursor-pointer"> {{ user.user_uuid }} </a></td>
       </ng-container>
 
       <ng-container matColumnDef="sso_uuid">
@@ -73,7 +73,7 @@
           </div>
         </th>
         <td mat-cell *matCellDef="let user">
-          <a [routerLink]="[user.user_uuid]">{{user.email}}</a>
+          <a (click)="gotoPage('web/user/'+user.user_uuid)">{{user.email}}</a>
         </td>
       </ng-container>
 

@@ -3,6 +3,8 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {AssignLidPayload, StaffFunctionsService} from '../../../core/services/staff/staff-functions.service';
 import {Observable, of} from 'rxjs';
 import {first} from 'rxjs/operators';
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-functions',
@@ -12,7 +14,14 @@ import {first} from 'rxjs/operators';
 export class FunctionsComponent {
 
   constructor(private formBuilder: FormBuilder,
-              private staffFuncService: StaffFunctionsService) {
+              private staffFuncService: StaffFunctionsService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   succes: boolean = false;

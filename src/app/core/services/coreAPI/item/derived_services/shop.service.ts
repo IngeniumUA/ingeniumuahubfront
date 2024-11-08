@@ -7,11 +7,11 @@ import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {ItemService} from "@ingenium/app/core/services/coreAPI/item/item.service";
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
+
   apiUrl = apiEnviroment.apiUrl + 'item/shop/';
 
   constructor(private httpClient: HttpClient) { }

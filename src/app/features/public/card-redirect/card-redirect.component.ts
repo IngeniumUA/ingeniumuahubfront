@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {AccountService} from '../../../core/services/user/account/account.service';
 import {first} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-card-redirect',
@@ -12,16 +13,23 @@ import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
 })
 export class CardRedirectComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              private accountService: AccountService) {
+  constructor(private accountService: AccountService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   ngOnInit() {
-    const card_uuid: string | null = this.route.snapshot.paramMap.get('id');
+    const card_uuid_arr: string[] = currentPage.split("/")
+    let card_uuid: string | null = card_uuid_arr[card_uuid_arr.length-1]
+    if (card_uuid === undefined) {card_uuid = null}
 
     if (card_uuid === null) {
-      this.router.navigateByUrl('home');
+      this.gotoPage('home')
     }
 
     // Submit card to backend
@@ -29,17 +37,17 @@ export class CardRedirectComponent implements OnInit {
       next: (response: CardItemWideLimitedI) => {
         // User was added to lid
         const notification = this.HandleSuccesResponse(response);
-        this.router.navigateByUrl('/account' + '?card_notification=s_'+notification);
+        this.gotoPage('sub/account' + '?card_notification=s_'+notification)
         return;
       },
       error: (error: any) => {
         const notification = this.HandleErrorResponse(error);
-        this.router.navigateByUrl('/account' + '?card_notification=f_'+notification);
+        this.gotoPage('sub/account' + '?card_notification=f_'+notification)
         return;
       }
     });
 
-    this.router.navigateByUrl('/account/card');
+    this.gotoPage('sub/account/card')
   }
 
   HandleSuccesResponse(_response: CardItemWideLimitedI): string {
@@ -56,10 +64,14 @@ export class CardRedirectComponent implements OnInit {
       } else if (status_code == 500) {
         return response.error['detail']['Error'];
       }
-
       return 'Ongekende Server Error!';
     }
     // If the response is not a HTTPResponse we throw unknown error
     return 'Ongekende Error!';
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 }

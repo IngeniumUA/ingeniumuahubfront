@@ -27,7 +27,7 @@ export class AccountService {
   }
 
   public linkCard(card_uuid: string): Observable<CardItemWideLimitedI> {
-    return this.httpClient.get<CardItemWideLimitedI>(apiEnviroment.apiUrl + 'card/' + card_uuid);
+    return this.httpClient.get<CardItemWideLimitedI>(apiEnviroment.apiUrl + 'card/' + card_uuid, {});
   }
 
   public getTransactions(): Observable<TransactionLimitedI[]> {

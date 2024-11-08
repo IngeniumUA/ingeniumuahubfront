@@ -5,6 +5,7 @@ import {User} from "@ingenium/app/core/store";
 import {Router} from "@angular/router";
 import {first} from "rxjs/operators";
 import {captureException} from "@sentry/angular";
+import {Browser} from "@capacitor/browser";
 
 @Component({
   selector: 'app-page',
@@ -17,6 +18,7 @@ export class AuthCallbackComponent implements OnInit {
 
   ngOnInit() {
     this.tryLogin();
+    Browser.close()
   }
 
   async tryLogin () {
@@ -29,8 +31,6 @@ export class AuthCallbackComponent implements OnInit {
       }
 
       const claims = this.oauthService.getIdentityClaims();
-
-      // When the user is authenticated, set the auth data in the store
       this.store.dispatch(new User.SetAuthData(
         this.oauthService.getAccessToken(),
         claims['email'],

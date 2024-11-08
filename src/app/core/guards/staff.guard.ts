@@ -14,7 +14,7 @@ export const staffGuard = () : Observable<boolean|RedirectCommand> => {
   return store.select(UserState.roles)
     .pipe(
       skipWhile(roles => !roles), // Wait when roles is null
-      timeout(3000), // Timeout after 3 seconds
+      timeout(3000), // Wait 3 seconds
       map((roles: UserRolesI|null): boolean|RedirectCommand => {
         if (roles?.is_staff) {
           return true;

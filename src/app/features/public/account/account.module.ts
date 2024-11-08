@@ -15,19 +15,21 @@ import {
   TransactionDisplayComponent
 } from '../../../shared/components/account/transaction-display/transaction-display.component';
 import {AccountInfoComponent} from '../../../shared/components/account/account-details/account-info.component';
+import {IonicModule} from "@ionic/angular";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AccountRoutingModule,
-    PublicHeaderComponent,
-    CardComponent,
-    UnderConstructionComponent,
-    CheckoutDisplayComponent,
-    TransactionDisplayComponent,
-    AccountInfoComponent,
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        AccountRoutingModule,
+        PublicHeaderComponent,
+        CardComponent,
+        UnderConstructionComponent,
+        CheckoutDisplayComponent,
+        TransactionDisplayComponent,
+        AccountInfoComponent,
+        IonicModule,
+    ],
   declarations: [
     AccountDetailsComponent,
     AccountComponent,

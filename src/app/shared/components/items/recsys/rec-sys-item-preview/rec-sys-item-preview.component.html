@@ -1,5 +1,5 @@
 @if (this.internalLink) {
-  <a [routerLink]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
+  <a (click)="gotoPage(this.recsysItem.follow_through_link)" class="event-card-link-wrapper cursor-pointer">
     <ng-container *ngTemplateOutlet="cardContent" />
   </a>
 } @else {

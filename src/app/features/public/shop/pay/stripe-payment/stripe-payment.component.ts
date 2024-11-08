@@ -2,7 +2,8 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOptions} from "@stripe/stripe-js";
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {FormBuilder} from "@angular/forms";
-import {Router} from "@angular/router";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
 
 @Component({
@@ -14,7 +15,13 @@ export class StripePaymentComponent implements OnInit {
 
   constructor(    private formBuilder: FormBuilder,
                   private stripeService: StripeService,
-                  private router: Router) {
+                  private navCtrl: NavController,
+                  private pageTrackService: PageTrackingService,
+                  private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   @Input() checkout!: CheckoutSmollI;
@@ -69,7 +76,8 @@ export class StripePaymentComponent implements OnInit {
           alert( 'Betaling Success!' );
 
           // Redirect to transactions
-          this.router.navigateByUrl('/account/transactions')
+          this.pageTrackService.addToTree('sub/account/transactions')
+          this.navCtrl.navigateRoot('/sub/account/transactions').then()
       } else if (result.paymentIntent.status === 'requires_action') {
           // Big one!
           // We sent about 35 mails over 5 months to get this issue fixed

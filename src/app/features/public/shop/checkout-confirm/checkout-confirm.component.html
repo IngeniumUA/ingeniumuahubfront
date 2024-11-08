@@ -6,5 +6,5 @@
     of stuur een berichtje via sociale media.</p>
 
   <p class="font-bold text-blue-950 text-center">Je kan je successvolle transacties ook bekijken via je
-    <a [routerLink]="['/account/transactions']">Account</a>.</p>
+    <a (click)="gotoPage('sub/account/transactions')" class="cursor-pointer">Account</a>.</p>
 </section>

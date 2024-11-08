@@ -17,8 +17,8 @@
   </div>
   <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
     @for (order of orders; track order.id) {
-      <article class="flex flex-col p-4 rounded border border-blue-900" *ngIf="orderContainsFood(order)">
-        <span class="text-xl font-bold">#{{ order.id }}</span>
+    <article class="flex flex-col p-4 rounded border border-blue-900" *ngIf="orderContainsFood(order)">
+      <span class="text-xl font-bold">#{{ order.id }}</span>
         <ul class="list-disc list-inside space-y-1 my-2 flex-1">
           @for (transaction of order.checkout.transactions; track $index) {
             @if (isFood(transaction)) {
@@ -38,10 +38,10 @@
           <span class="font-bold mb-4">{{ order.checkout.note }}</span>
         }
         <button type="button" class="button button-sm w-full button-inline"
-                [ngClass]="{ 'button-danger': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready,
-                             'button-primary': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending }"
+            [ngClass]="{ 'button-danger': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready,
+                'button-primary': order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending }"
                 (click)="increaseStatus(order)" [disabled]="loading">
-          {{ getButtonTextForStatus(order.checkout_tracker_status) }}
+        {{ getButtonTextForStatus(order.checkout_tracker_status) }}
         </button>
       </article>
     }

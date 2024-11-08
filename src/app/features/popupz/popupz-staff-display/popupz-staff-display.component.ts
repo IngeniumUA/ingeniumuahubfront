@@ -8,6 +8,8 @@ import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-popupz-staff-display',
@@ -29,7 +31,16 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
   orders: HubCheckoutTrackerI[] = [];
   loading: boolean = false;
 
-  constructor(private httpClient: HttpClient, private toastrService: ToastrService) {}
+  constructor(private httpClient: HttpClient,
+              private toastrService: ToastrService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
+  }
 
   ngOnInit() {
     this.getOrders();

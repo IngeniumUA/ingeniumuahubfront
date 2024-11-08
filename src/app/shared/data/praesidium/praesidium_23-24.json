@@ -38,11 +38,7 @@
             "functie": "Cantor",
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BryanVanhoudt.webp"
           }
-        ],
-        "button": {
-          "text": "Wat is een cantus",
-          "url": "/info/cantus"
-        }
+        ]
       },
       {
         "categorieName": "Business Relations",
@@ -94,11 +90,7 @@
             "functie": "Zedenmeester",
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NicoVerstappen.webp"
           }
-        ],
-        "button": {
-          "text": "Doop Informatie",
-          "url": "/info/doop"
-        }
+        ]
       },
       {
         "categorieName": "Webmaster",
@@ -162,11 +154,7 @@
             "functie": "Sport",
             "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/HadisBas.webp"
           }
-        ],
-        "button": {
-          "text": "Sport Info",
-          "url": "/info/sport"
-        }
+        ]
       },
       {
         "categorieName": "Ere",

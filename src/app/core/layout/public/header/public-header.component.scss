@@ -17,6 +17,7 @@ nav {
 
   .nav-item {
     @apply text-gray-300 border border-transparent hover:border-b-white hover:text-white rounded px-3.5 py-2.5 font-medium outline-none focus:ring-2 focus-visible:ring-4 ring-white transition-colors ease-in-out;
+    cursor: pointer;
 
     &.nav-item-active {
       @apply text-white border-b-white;
@@ -28,6 +29,7 @@ nav {
 
     .nav-logo-link {
       @apply flex flex-shrink-0 items-center outline-none focus-visible:ring-2 ring-white rounded-md;
+      cursor: pointer;
     }
   }
 
@@ -36,6 +38,7 @@ nav {
 
     .nav-dropdown-item {
       @apply rounded w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-950 hover:text-white outline-none ring-offset-2 focus:ring-2 focus-visible:ring-4 ring-black transition-colors ease-in-out;
+      cursor: pointer;
 
       &.nav-item-active {
         @apply bg-blue-50 hover:bg-blue-950;

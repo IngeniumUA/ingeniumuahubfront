@@ -46,6 +46,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.formSubscription?.unsubscribe();
   }
 
+
   ValueChangePipeline() {
     // Get count field and detect valuechange, then subscribe to every change
     this.formSubscription = this.productForm.get('count')?.valueChanges
@@ -62,14 +63,14 @@ export class ProductComponent implements OnInit, OnDestroy {
         if (delta < 0) {
           this.store.dispatch(new CartActions.AddToCart(this.product, Math.abs(delta)));
 
-        // When our delta is larger, there are more in our cart than requested
+          // When our delta is larger, there are more in our cart than requested
         } else if (delta > 0) {
           this.store.dispatch(new CartActions.ReduceProductQuantity(this.product, Math.abs(delta)));
         }
       });
   }
 
-  TryIncreaseCount()  {
+  TryIncreaseCount() {
     this.store.dispatch(new CartActions.AddToCart(this.product));
     this.SetQuantityFromStore();
   }

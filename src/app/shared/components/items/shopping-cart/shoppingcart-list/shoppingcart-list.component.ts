@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import {ProductComponent} from '@ingenium/app/shared/components/items/products/product/product.component';
 import {IProductItem, PaymentProviderEnum} from '@ingenium/app/shared/models/items/products/products';
-import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 import {Observable} from "rxjs";
 import {Store} from "@ngxs/store";
@@ -19,7 +20,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     NgForOf,
     ProductComponent,
     NgIf,
-    RouterLink,
     AsyncPipe,
     ReactiveFormsModule,
     FormsModule,
@@ -35,7 +35,9 @@ export class ShoppingcartListComponent implements OnInit {
   items: ItemLimitedI[] = [];
   paymentErrors: HttpErrorResponse[] = [];
 
-  constructor(private store: Store) {}
+  constructor(private store: Store,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService) {}
 
   ngOnInit() {
     // Temporary, should be moved elsewhere
@@ -61,4 +63,10 @@ export class ShoppingcartListComponent implements OnInit {
     const note = (event.target as HTMLInputElement).value;
     this.store.dispatch(new CartActions.SetCheckoutNote(note));
   }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
+  }
+
 }

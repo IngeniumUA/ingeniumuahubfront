@@ -1,0 +1,9 @@
+// For information on how to create your own theme, please see:
+// http://ionicframework.com/docs/theming/
+body.barcode-scanning-active {
+  --ion-background-color: transparent;
+}
+
+:root.barcode-scanning-active-r {
+  background-color: transparent;
+}

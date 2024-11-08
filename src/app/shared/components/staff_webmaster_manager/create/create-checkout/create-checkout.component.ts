@@ -50,6 +50,7 @@ export class CreateCheckoutComponent implements OnInit {
     PaymentProviderEnum.Kassa
   ];
 
+
   formError: string | null = null;
   successMessage: string | null = null;
 
@@ -84,8 +85,8 @@ export class CreateCheckoutComponent implements OnInit {
   }
 
   constructor(private formBuilder: FormBuilder,
-                private staffProductService: StaffProductBlueprintService,
-                private staffCheckoutService: StaffCheckoutService) {
+              private staffProductService: StaffProductBlueprintService,
+              private staffCheckoutService: StaffCheckoutService) {
   }
 
   public transactions(): FormArray {
@@ -101,7 +102,7 @@ export class CreateCheckoutComponent implements OnInit {
   }
 
   public AddTransaction() {
-    const validityDefault = this.forceEnabled() ? null: 'Kies Validity'; // Validity 2 is invalid
+    const validityDefault = this.forceEnabled() ? null : 'Kies Validity'; // Validity 2 is invalid
     const transactionGroup = this.formBuilder.group({
       'productControl': ['Kies Product', Validators.required],
       'validityControl': [{value: validityDefault, disabled: !this.forceEnabled()}]

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, RouterLink, RouterLinkActive} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
@@ -10,6 +10,8 @@ import {CartActions} from "@ingenium/app/core/store";
 import {ToastrService} from "ngx-toastr";
 import {FormsModule} from "@angular/forms";
 import {map} from "rxjs/operators";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-popupz-menu',
@@ -37,25 +39,33 @@ export class PopupzMenuComponent {
   sauceOptions = ['Look', 'Mayo', 'Andalouse', 'Mamout', 'Ketchup'];
 
   constructor(private httpClient: HttpClient, private store: Store, private toastrService: ToastrService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
     this.route.params.subscribe(params => {
-        this.category = params['category'];
-        this.products = this.filterProducts(this.allProducts);
+      this.category = params['category'];
+      this.products = this.filterProducts(this.allProducts);
     });
 
     this.getProducts();
+
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   getProducts() {
     this.httpClient.get<IProductItem[]>(`${apiEnviroment.apiUrl}item/products/${this.itemName}`)
-        .pipe(
-            take(1),
-            map(products => {
-              this.allProducts = products;
-              this.products = this.filterProducts(products);
-            })
-        )
-        .subscribe();
+      .pipe(
+        take(1),
+        map(products => {
+          this.allProducts = products;
+          this.products = this.filterProducts(products);
+        })
+      )
+      .subscribe();
   }
 
   filterProducts(products: IProductItem[]) {
@@ -95,5 +105,10 @@ export class PopupzMenuComponent {
 
     this.store.dispatch(new CartActions.AddToCart(product));
     this.toastrService.success('Het product werd toevergevoegd aan uw winkelmandje.');
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 }

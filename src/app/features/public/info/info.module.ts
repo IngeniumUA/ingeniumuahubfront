@@ -20,6 +20,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { PartnersInfoComponent } from './partners/partners-info.component';
 import {PartnerDumpComponent} from '../../../shared/components/partners/partner-dump/partner-dump.component';
 import {PartnerGridComponent} from '../../../shared/components/partners/partner-grid/partner-grid.component';
+import {IonicModule} from "@ionic/angular";
 
 
 
@@ -37,19 +38,20 @@ import {PartnerGridComponent} from '../../../shared/components/partners/partner-
     SportInfoComponent,
     PartnersInfoComponent,
   ],
-  imports: [
-    CommonModule,
-    PublicHeaderComponent,
-    InfoRoutingModule,
-    UnderConstructionComponent,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-    PartnerDumpComponent,
-    PartnerGridComponent,
-    NgOptimizedImage
-  ]
+    imports: [
+        CommonModule,
+        PublicHeaderComponent,
+        InfoRoutingModule,
+        UnderConstructionComponent,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        FormsModule,
+        ReactiveFormsModule,
+        PartnerDumpComponent,
+        PartnerGridComponent,
+        NgOptimizedImage,
+        IonicModule
+    ]
 })
 export class InfoModule { }

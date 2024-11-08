@@ -3,10 +3,10 @@
 </section>
 
 <section>
-  <h1 [routerLink]="['list']">Item Table</h1>
+  <h1 (click)="gotoPage('sub/list')" class="cursor-pointer">Item Table</h1>
   <app-itemtable></app-itemtable>
 </section>
 
 <section>
-  <h1 [routerLink]="['log']">Item logs</h1>
+  <h1 (click)="gotoPage('sub/log')" class="cursor-pointer">Item logs</h1>
 </section>

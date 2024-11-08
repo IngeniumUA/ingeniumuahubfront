@@ -155,7 +155,6 @@ export class TransactionDetailComponent implements OnInit {
     return this.transactionForm.controls['forcePatchControl'].value;
   }
 
-
   protected readonly ValidityList = ValidityList;
   protected readonly ValidityEnum = ValidityEnum;
   protected readonly PaymentStatusList = PaymentStatusList;

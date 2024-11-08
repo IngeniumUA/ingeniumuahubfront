@@ -1,14 +1,14 @@
 <nav id="popupz-food-menu">
-  <a routerLink="/popupz/menu/" [ngClass]="{ 'active': this.category === '' }" class="menu-item">Alles</a>
-  <a routerLink="/popupz/menu/food" routerLinkActive="active" class="menu-item">Eten</a>
-  <a routerLink="/popupz/menu/drinks" routerLinkActive="active" class="menu-item">Dranken</a>
+  <a (click)="gotoPage('sub/popupz/menu')" [ngClass]="{ 'active': this.category === '' }" class="menu-item cursor-pointer">Alles</a>
+  <a (click)="gotoPage('sub/popupz/menu/food')" class="menu-item cursor-pointer">Eten</a>
+  <a (click)="gotoPage('sub/popupz/menu/drinks')" class="menu-item cursor-pointer">Dranken</a>
 </nav>
 
 <main class="ingenium-container mt-6">
   <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     @for (product of products; track product.id) {
-      <li class="popupz-product-item">
-        <p class="popupz-product-item__title">{{ product.name }}</p>
+    <li class="popupz-product-item">
+      <p class="popupz-product-item__title">{{ product.name }}</p>
         <p class="popupz-product-item__price">€ {{ product.price_policy.price }}</p>
 
         <form action="#" class="w-full mt-4">

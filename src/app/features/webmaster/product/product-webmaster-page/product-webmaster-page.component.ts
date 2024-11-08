@@ -4,6 +4,8 @@ import {StaffProductBlueprintI} from '../../../../shared/models/staff/staff_prod
 import {StaffProductBlueprintService} from '../../../../core/services/staff/staff-productblueprint-service';
 import {ActivatedRoute} from '@angular/router';
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-product-webmaster-page',
@@ -18,7 +20,14 @@ export class ProductWebmasterPageComponent implements OnInit {
 
   constructor(private itemWideService: ItemWideService,
               private staffProductService: StaffProductBlueprintService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   ngOnInit() {

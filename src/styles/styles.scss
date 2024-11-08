@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @import "default";
-@import 'ngx-toastr/toastr';
 @import "staff_styles";
 @import "button";
 @import "vertical_nav";
@@ -14,6 +13,7 @@
 
 :root {
   --mainblue: rgb(0, 5, 61); /* #00053D */
+  --ion-mainblue: #4D8DFF;
   --mainblue-90: rgba(0, 5, 61, 0.9); /*rgba(10, 31, 68, 0.9);*/
   --mainwhite: #ffffff;
 
@@ -27,6 +27,8 @@
   --ingenium-grey-75: rgba(212, 219, 233, 0.75);
   --ingenium-grey-9: rgba(212, 219, 233, 0.9);
   --ingenium-purple: #4d2b88;
+
+  --ing-ion-color: #000000
 }
 
 html, body, app-root {

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
 import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
-import {RouterLink} from '@angular/router';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/items/products/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
@@ -11,6 +10,8 @@ import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availab
 import {Observable, of} from "rxjs";
 import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
 import {first} from "rxjs/operators";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -18,7 +19,6 @@ import {first} from "rxjs/operators";
   styleUrls: ['./product-blueprint-detail.component.css'],
   imports: [
     DatePipe,
-    RouterLink,
     JsonPipe,
     NgForOf,
     FormsModule,
@@ -37,7 +37,9 @@ export class ProductBlueprintDetailComponent implements OnInit {
     $pricePolicies: Observable<PricePolicyI[]> = of([]);
 
     constructor(private formBuilder: FormBuilder,
-                private pricePolicyService: PricePolicyService) {
+                private pricePolicyService: PricePolicyService,
+                private navCtrl: NavController,
+                private pageTrackService: PageTrackingService,) {
     }
 
     blueprintForm: any;
@@ -61,7 +63,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
       const tracking_checkout = !(this.productBlueprint.product_blueprint_metadata?.upon_completion?.track_checkout == null)
 
       this.productMetaForm = this.formBuilder.group({
-        categorie: [this.productBlueprint.product_blueprint_metadata.categorie],
+        ccategorie: [this.productBlueprint.product_blueprint_metadata.categorie],
         group: [this.productBlueprint.product_blueprint_metadata.group],
         upon_completion: [''],
         track_checkout: [tracking_checkout]
@@ -75,7 +77,6 @@ export class ProductBlueprintDetailComponent implements OnInit {
         const error: Error = Error('Invalid Metadata form');
         this.handleFormError(error);
         return;  }
-
 
       const track_checkout: boolean = this.productMetaForm.controls['track_checkout'].value;
       const checkout_config: CheckoutTrackerConfigI = {
@@ -139,14 +140,15 @@ export class ProductBlueprintDetailComponent implements OnInit {
 
     /*
       *  Price policy code
-     */
+    */
     public getPricePolicies() {
       this.$pricePolicies = this.pricePolicyService.getPricePolicies(this.productBlueprint.id);
     }
 
+
     public UpdatePricePolicy(pricePolicyObj: PricePolicyI) {
       this.pricePolicyService.putPricePolicy(pricePolicyObj).pipe(
-      first()).subscribe({
+        first()).subscribe({
         next: () => {
           this.getPricePolicies()
         },
@@ -161,37 +163,42 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.addingNewPricePolicy = !this.addingNewPricePolicy;
     }
 
-    public AddPricePolicy(pricePolicyObj: PricePolicyInI | null) {
-      if (pricePolicyObj === null) {
-        this.ToggleAddNew()
-        return
+  public AddPricePolicy(pricePolicyObj: PricePolicyInI | null) {
+    if (pricePolicyObj === null) {
+      this.ToggleAddNew()
+      return
+    }
+
+    // Post for price policy object
+    this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
+      first()).subscribe({
+      next: () => {
+        this.getPricePolicies();
+        this.ToggleAddNew();
+        this.form_error = null
+      },
+      error: error => {
+        this.handleFormError(error);
       }
+    });
+  }
 
-      // Post for price policy object
-      this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
-        first()).subscribe({
-        next: () => {
-          this.getPricePolicies();
-          this.ToggleAddNew();
-          this.form_error = null
-        },
-        error: error => {
-          this.handleFormError(error);
-        }
-      });
-    }
+  public RemovePricePolicy(pricePolicy: PricePolicyI) {
+    // Post for price policy object
+    this.pricePolicyService.deletePricePolicy(pricePolicy.id).pipe(
+      first()).subscribe({
+      next: () => {
+        this.getPricePolicies();
+        this.form_error = null
+      },
+      error: error => {
+        this.handleFormError(error);
+      }
+    });
+  }
 
-    public RemovePricePolicy(pricePolicy: PricePolicyI) {
-      // Post for price policy object
-      this.pricePolicyService.deletePricePolicy(pricePolicy.id).pipe(
-        first()).subscribe({
-        next: () => {
-          this.getPricePolicies();
-          this.form_error = null
-        },
-        error: error => {
-          this.handleFormError(error);
-        }
-      });
-    }
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
+  }
 }

@@ -1,0 +1,182 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Scan resultaat
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+    <ion-fab-button (click)="ReturnToHome()">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="Back()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="top" horizontal="start">
+    <ion-fab-button id="More" [disabled]="!ModalEnabled">
+      <ion-icon name="caret-down-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="result">
+    <ion-list [inset]="true" mode="ios" lines="full">
+      <ion-item>
+        <ion-label>
+          <p style="color: var(--ing-ion-color)">Item blueprint:</p>
+          <div *ngIf="UserItem.length > 20"><br>
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserBlueprint}}</p>
+            </div>
+          </div>
+          <div *ngIf="UserItem.length <= 20">
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserBlueprint}}</p>
+            </div>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p style="color: var(--ing-ion-color)">Price policy:</p>
+          <div *ngIf="UserItem.length > 20"><br>
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserPolicyName}}</p>
+            </div>
+          </div>
+          <div *ngIf="UserItem.length <= 20">
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserPolicyName}}</p>
+            </div>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <img src="{{imgPath}}" alt="Validity Image" style="width: 100%"/>
+    <div *ngIf="UserGeldigheid==='invalid'">
+      <ion-button expand="block" shape="round" id="userChangeModal">Pas tickethouder aan</ion-button>
+      <div class="left-invalid">
+        <p style="color: var(--ing-ion-color)">{{UserOwed}}</p>
+      </div>
+      <div class="right-invalid">
+        <ion-button expand="block" shape="round" (click)="InvalidValidate()">Valideer</ion-button>
+      </div>
+
+      <ion-modal #userChange trigger="userChangeModal">
+        <ng-template>
+          <ion-content [fullscreen]="true">
+
+            <ion-fab slot="fixed" vertical="top" horizontal="start">
+              <ion-fab-button (click)="closeUserChangeModal()">
+                <ion-icon name="caret-up-outline"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+
+            <div class="resultModal">
+              <ion-list [inset]="true" mode="ios" lines="full">
+                <ion-item>
+                  <ion-input label="Email" labelPlacement="stacked" placeholder="Enter email" autocomplete="email" [(ngModel)]="inputEmail" (keyup.enter)="UpdateUser()"></ion-input>
+                </ion-item>
+              </ion-list>
+              <div *ngIf="showError">
+                <ion-item>
+                  <ion-note style="font-size:14px" color="danger">{{this.errorText}}</ion-note>
+                </ion-item>
+              </div>
+              <ion-button expand="block" shape="round" (click)="UpdateUser()">Pas tickethouder aan</ion-button>
+            </div>
+
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </div>
+  </div>
+
+  <ion-modal #More trigger="More">
+    <ng-template>
+    <ion-content [fullscreen]="true">
+
+      <ion-fab slot="fixed" vertical="top" horizontal="start">
+        <ion-fab-button (click)="closeMoreModal()">
+          <ion-icon name="caret-up-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
+      <div class="resultModal">
+        <ion-list [inset]="true" mode="ios" lines="full">
+          <ion-item>
+            <p style="color: var(--ing-ion-color)">Email:</p>
+            <div class="right">
+              <p style="color: var(--ing-ion-color)">{{UserEmail}}</p>
+            </div>
+          </ion-item>
+          <ion-item>
+            <p style="color: var(--ing-ion-color)">Lidstatus:</p>
+            <div class="right">
+              <p style="color: var(--ing-ion-color)">{{UserLidstatus}}</p>
+            </div>
+          </ion-item>
+          <ion-item>
+            <p style="color: var(--ing-ion-color)">Status:</p>
+            <div class="right">
+              <p style="color: var(--ing-ion-color)">{{UserStatus}}</p>
+            </div>
+          </ion-item>
+          <ion-item>
+            <ion-label>
+              <p style="color: var(--ing-ion-color)">Item en product:</p>
+              <div *ngIf="UserItem.length > 20"><br>
+                <div class="right_big">
+                  <p style="color: var(--ing-ion-color)">{{UserItem}}</p>
+                </div>
+              </div>
+              <div *ngIf="UserItem.length <= 20">
+                <div class="right_big">
+                  <p style="color: var(--ing-ion-color)">{{UserItem}}</p>
+                </div>
+              </div>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <p style="color: var(--ing-ion-color)">Geldigheid</p>
+            <div class="right">
+              <p style="color: var(--ing-ion-color)">{{UserGeldigheid}}</p>
+            </div>
+          </ion-item>
+          <ion-item>
+            <p style="color: var(--ing-ion-color)">ID:</p>
+            <div class="right">
+              <p style="color: var(--ing-ion-color)">{{UserId}}</p>
+            </div>
+          </ion-item>
+          <ion-item>
+            <p style="color: var(--ing-ion-color)">Blueprint:</p>
+            <div class="right">
+              <p style="color: var(--ing-ion-color)">{{UserBlueprint}}</p>
+            </div>
+          </ion-item>
+          <ion-item>
+            <ion-select label="Geldigheid" placeholder="Update geldigheid" interface="popover" [interfaceOptions]="customPopoverOptions" [(ngModel)]="selectedValidity" (ionChange)="onItemSelection($event)">
+              <ion-select-option value="valid">valid</ion-select-option>
+              <ion-select-option value="invalid">invalid</ion-select-option>
+              <ion-select-option value="consumed">consumed</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+        <ion-button expand="block" shape="round" (click)="UpdateValidity()">Update</ion-button>
+      </div>
+
+    </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- ion-fab markup  -->
+</ion-content>

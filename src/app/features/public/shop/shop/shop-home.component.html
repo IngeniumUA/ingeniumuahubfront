@@ -4,10 +4,10 @@
   <div class="flex flex-row items-center">
     <div class="flex-1">
       <h1 class="white-section-title white-section-title-blue white-section-title-large">Shop</h1>
-      <p>Hier kan je de producten van Ingenium bekijken en bestellen. Evenementen kan je <a [routerLink]="'/events'">hier vinden</a>.</p>
+      <p>Hier kan je de producten van Ingenium bekijken en bestellen. Evenementen kan je <a (click)="gotoPage('sub/events')">hier vinden</a>.</p>
     </div>
     <div>
-      <a [routerLink]="'/shop/checkout'" class="button button-sm button-outline-blue">
+      <a (click)="gotoPage('sub/shop/checkout')" class="button button-sm button-outline-blue">
         Winkelwagen ({{ this.cartCount$ | async }})
       </a>
     </div>
@@ -19,9 +19,9 @@
                            [title]="'Producten aan het laden'" />
   } @else if (shopItems && (shopItems.data?.length ?? 0) > 0) {
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      @for (item of shopItems.data; track item.name) {
-        <app-rec-sys-item-preview [recsysItem]="item" />
-      }
+    @for (item of shopItems.data; track item.name) {
+      <app-rec-sys-item-preview [recsysItem]="item" />
+    }
     </div>
   } @else {
     <div class="alert alert-info alert-border">

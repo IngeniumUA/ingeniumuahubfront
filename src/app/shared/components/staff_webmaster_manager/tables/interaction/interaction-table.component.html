@@ -6,16 +6,16 @@
   </section>
 
   <ng-container *ngIf="(this.interactionData$ | async) as interactionTable else loading">
-  <ng-container *ngIf="this.interactionCount$ | async as interactionCount">
-    <mat-paginator
-      [length]="interactionCount"
+    <ng-container *ngIf="this.interactionCount$ | async as interactionCount">
+      <mat-paginator
+        [length]="interactionCount"
       [pageSize]="100"
       (page)="LoadData($event)"
       showFirstLastButtons
       aria-label="Select which interactions">
     </mat-paginator>
 
-    <table mat-table [dataSource]="interactionTable" class="mat-elevation-z8">
+      <table mat-table [dataSource]="interactionTable" class="mat-elevation-z8">
       <form [formGroup]="this.columnSearchForm">
         <ng-container matColumnDef="interaction_id">
           <th mat-header-cell *matHeaderCellDef><div>

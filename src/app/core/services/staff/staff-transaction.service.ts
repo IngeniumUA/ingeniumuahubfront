@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {apiEnviroment} from '../../../../environments/environment';
+import {apiEnviroment} from '@ingenium/environments/environment';
 import {StaffTransactionI, StaffTransactionPatchI} from '../../../shared/models/staff/staff_transaction';
 import {StatusStatsI} from '../../../shared/models/stats/transactionStats';
 

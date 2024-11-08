@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Aantallen
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+    <ion-fab-button (click)="ReturnToHome()">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="totals">
+    <ion-list [inset]="true" mode="ios" lines="full">
+      <ion-item>
+        <ion-select label="Event" placeholder="Selecteer een evenement" interface="alert" [(ngModel)]="selectedItem" (ionChange)="onItemSelection($event)">
+          <ion-select-option *ngFor="let event of this.events" [value]="event">{{event}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <ion-list [inset]="true" mode="ios" lines="full">
+      <ion-item>
+        <p style="color: var(--ing-ion-color)">Totaal aantal gescande tickets:</p>
+        <div class="right">
+          <p style="color: var(--ing-ion-color)">{{this.totalApi}}</p>
+        </div>
+      </ion-item>
+      <ion-item>
+        <p style="color: var(--ing-ion-color)">Gescande tickets op dit apparaat:</p>
+        <div class="right">
+          <p style="color: var(--ing-ion-color)">{{this.totalLocal}}</p>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>

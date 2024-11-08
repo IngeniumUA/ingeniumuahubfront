@@ -1,3 +1,11 @@
+import { RouteReuseStrategy } from '@angular/router';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import {IonicStorageModule} from "@ionic/storage-angular";
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+
 import {APP_INITIALIZER, ErrorHandler, NgModule, isDevMode} from '@angular/core';
 import {Router} from "@angular/router";
 import {NgOptimizedImage} from '@angular/common';
@@ -8,10 +16,8 @@ import * as Sentry from "@sentry/angular";
 
 import {CartState, UserState} from './core/store';
 
-import {AppComponent} from './app.component';
 import {PublicHeaderComponent} from './core/layout/public/header/public-header.component';
 import {HomepageComponent} from './features/public/homepage/homepage.component';
-import {AppRoutingModule} from './app-routing.module';
 import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
 import {NotfoundpageComponent} from './features/notfoundpage/notfoundpage.component';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -42,6 +48,7 @@ import {PartnerGridComponent} from './shared/components/partners/partner-grid/pa
 import {GalabalComponent} from './features/public/custom-pages/galabal/galabal.component';
 import {PromoListComponent} from './shared/components/items/item/promo-list/promo-list.component';
 import {OAuthModule, OAuthStorage} from "angular-oauth2-oidc";
+import {LicencesComponent} from "@ingenium/app/features/public/info/licences/licences.component";
 
 // Storage factory for OAuthModule
 export function storageFactory(): OAuthStorage {
@@ -61,17 +68,21 @@ export function storageFactory(): OAuthStorage {
     ContactComponent,
     CardRedirectComponent,
     CreditsComponent,
+    LicencesComponent,
     GalabalComponent,
   ],
   exports: [
     EventDatePipe,
   ],
   bootstrap: [AppComponent],
-  imports: [BrowserModule,
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    IonicStorageModule.forRoot(),
     PublicHeaderComponent,
     PublicFooterComponent,
     UnderConstructionComponent,
-    AppRoutingModule,
     BrowserAnimationsModule,
     CardComponent,
     ReactiveFormsModule,
@@ -91,8 +102,12 @@ export function storageFactory(): OAuthStorage {
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: !isDevMode(),
-    })], providers: [
+    }),],
+  providers: [
     {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    }, {
       provide: ErrorHandler,
       useValue: Sentry.createErrorHandler({
         showDialog: false,
@@ -103,12 +118,11 @@ export function storageFactory(): OAuthStorage {
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: () => () => {
-      },
+      useFactory: () => () => {},
       deps: [Sentry.TraceService],
       multi: true,
     },
-    {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
     {
       provide: OAuthStorage, useFactory: () => {
         if (typeof localStorage !== 'undefined') {
@@ -120,7 +134,7 @@ export function storageFactory(): OAuthStorage {
     provideClientHydration(),
     provideHttpClient(withFetch()),
     provideHttpClient(withInterceptorsFromDi()),
-  ]
+  ],
 })
-export class AppModule {
-}
+
+export class AppModule {}

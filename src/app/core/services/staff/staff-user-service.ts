@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {apiEnviroment} from '../../../../environments/environment';
-import {UserI, UserWideI} from '../../../shared/models/user/userI';
+import {apiEnviroment} from '@ingenium/environments/environment';
+import {UserI, UserWideI} from '@ingenium/app/shared/models/user/userI';
 
 @Injectable({
   providedIn: 'root'

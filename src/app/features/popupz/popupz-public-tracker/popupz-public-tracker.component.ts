@@ -10,6 +10,8 @@ interface PublicOrderTrackerI {
   id: number;
   checkout_tracker_status: HubCheckoutTrackerStatusEnum,
 }
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-popupz-public-tracker',
@@ -33,7 +35,16 @@ export class PopupzPublicTrackerComponent implements AfterViewInit, OnDestroy {
   inProgressOrders: PublicOrderTrackerI[] = [];
   doneOrders: PublicOrderTrackerI[] = [];
 
-  constructor(@Inject(Window) private readonly window: Window, private httpClient: HttpClient) {}
+  constructor(@Inject(Window) private readonly window: Window,
+              private httpClient: HttpClient,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
+  }
 
   ngAfterViewInit() {
     this.getOrders();

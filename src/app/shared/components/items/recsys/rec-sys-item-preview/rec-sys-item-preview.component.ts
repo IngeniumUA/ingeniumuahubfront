@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
-import {DatePipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
-import {RouterLink} from '@angular/router';
-import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';
+import {RecSysPreviewI} from '../../../../models/items/recsys_interfaces';
+import {DatePipe, NgClass, NgOptimizedImage, NgIf, NgStyle, NgTemplateOutlet} from '@angular/common';
+import {ColordbrgbaPipe} from '../../../../pipes/item/colorpipe.pipe';
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-rec-sys-item-preview',
@@ -12,7 +13,6 @@ import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';
   imports: [
     DatePipe,
     NgStyle,
-    RouterLink,
     ColordbrgbaPipe,
     NgIf,
     NgClass,
@@ -33,25 +33,36 @@ export class RecSysItemPreviewComponent implements OnInit {
       this.internalLink = this.recsysItem.follow_through_link.match('^https?:\\/\\/') === null;
     }
 
-    TextColor() {
-      // We could customize this
-      return 'rgb(255,255,255)';
+  TextColor() {
+    // We could customize this
+    return 'rgb(255,255,255)';
+  }
+
+  CardStyle(): object {
+    const colorPipe = new ColordbrgbaPipe();
+    if (this.small) {
+      return {
+        'background': colorPipe.transform(this.recsysItem.color, 1),
+        'border': `solid 2px ${colorPipe.transform(this.recsysItem.color, 0.5)}`,
+        'max-width': '10rem'
+      };
+    } else {
+      return {
+        'background': colorPipe.transform(this.recsysItem.color, 1),
+        'border': `solid 2px ${colorPipe.transform(this.recsysItem.color, 0.5)}`
+      };
     }
 
-    CardStyle(): object {
-      const colorPipe = new ColordbrgbaPipe();
-      if (this.small) {
-        return {
-          'background': colorPipe.transform(this.recsysItem.color, 1),
-          'border': `solid 2px ${colorPipe.transform(this.recsysItem.color, 0.5)}`,
-          'max-width': '10rem'
-        };
-      } else {
-        return {
-          'background': colorPipe.transform(this.recsysItem.color, 1),
-          'border': `solid 2px ${colorPipe.transform(this.recsysItem.color, 0.5)}`
-        };
-      }
+  }
 
+    constructor(private navCtrl: NavController,
+                private pageTrackService: PageTrackingService) {
     }
+
+    gotoPage(page: string) {
+      page = 'sub' + page
+      this.pageTrackService.addToTree(page)
+      this.navCtrl.navigateRoot('/'+page).then()
+    }
+
 }

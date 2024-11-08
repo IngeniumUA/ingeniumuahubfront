@@ -31,17 +31,17 @@
 <section>
   <h3 class="text-blue-900">Access Policy</h3>
   <h4>
-  @if (pricePolicy.availability.dynamic_policy_type === AccessPolicyEnum.always_available || pricePolicy.availability.dynamic_policy_type === null) {
-        Always available
-      } @else {
-        {{ AccessPolicyEnum[pricePolicy.availability.dynamic_policy_type] | titlecase }}
-      }
+    @if (pricePolicy.availability.dynamic_policy_type === AccessPolicyEnum.always_available || pricePolicy.availability.dynamic_policy_type === null) {
+      Always available
+    } @else {
+      {{ AccessPolicyEnum[pricePolicy.availability.dynamic_policy_type] | titlecase }}
+    }
   </h4>
 
   @if (pricePolicy.availability.dynamic_policy_type === AccessPolicyEnum.member_of_group) {
     <app-allow-deny-list (UpdateAccessPolicy)="UpdateContent($event)"
-                         [access_policy_content]="pricePolicy.availability.dynamic_policy_content?.access_policy_config | castToMemberOfGroup"
-                         [access_policy_method]="pricePolicy.availability.dynamic_policy_type"></app-allow-deny-list>
+                        [access_policy_content]="pricePolicy.availability.dynamic_policy_content?.access_policy_config | castToMemberOfGroup"
+                        [access_policy_method]="pricePolicy.availability.dynamic_policy_type"></app-allow-deny-list>
   }
 </section>
 
@@ -53,7 +53,7 @@
         <span class="text-white">Save</span>
     </button>
     <button class="button button-primary button-inline"
-                (click)="RemovePricePolicy()">
+            (click)="RemovePricePolicy()">
         <span class="text-white">Remove</span>
     </button>
   </span>

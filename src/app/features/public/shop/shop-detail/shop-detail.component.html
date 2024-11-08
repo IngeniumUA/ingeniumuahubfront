@@ -19,7 +19,7 @@
       </section>
 
       <div class="order-section">
-        <button [disabled]="this.isCartEmpty" class="button button-primary" [routerLink]="['/shop/checkout']">Checkout</button>
+        <button [disabled]="this.isCartEmpty" class="button button-primary" (click)="gotoPage('sub/shop/checkout')">Checkout</button>
       </div>
 
       <div class="description-section">

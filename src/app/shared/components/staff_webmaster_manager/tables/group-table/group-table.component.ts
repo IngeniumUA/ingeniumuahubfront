@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {GroupService} from '../../../../../core/services/coreAPI/group/group.service';
+import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
 import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {Observable} from 'rxjs';
 import {GroupI} from '../../../../models/group/HubGroup';
@@ -31,7 +31,7 @@ export class GroupTableComponent {
   groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
 
   LoadData() {
-   this.groups$ = this.staffGroupService.GetGroupsList();
+    this.groups$ = this.staffGroupService.GetGroupsList();
   }
 
   ToggleAddingGroup() {

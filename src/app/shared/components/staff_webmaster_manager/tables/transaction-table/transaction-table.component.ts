@@ -13,7 +13,6 @@ import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/pag
 import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle, TitleCasePipe} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
-import {RouterLink} from '@angular/router';
 import {StatusStatsI} from '../../../../models/stats/transactionStats';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
@@ -22,6 +21,9 @@ import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum"
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
 import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-transaction-table',
@@ -34,20 +36,22 @@ import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transactio
     MatProgressSpinnerModule,
     MatTableModule,
     NgIf,
-    RouterLink,
     NgForOf,
     NgClass,
     NgStyle,
     ReactiveFormsModule,
     CurrencyPipe,
     KeyValuePipe,
-    TitleCasePipe
+    TitleCasePipe,
+    RouterLink
   ],
   standalone: true
 })
 export class TransactionTableComponent implements AfterViewInit, OnChanges, OnInit {
   constructor(private transactionService: TransactionService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
   @Input() item_id: number | null = null;
   @Input() user_id: string | null = null;
@@ -275,6 +279,11 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
       // https://stackoverflow.com/questions/52154874/angular-6-downloading-file-from-rest-api
       // https://stackoverflow.com/questions/60730934/typescript-http-get-error-no-overload-matches-this-call
     });
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
   protected readonly PaymentStatusEnum = PaymentStatusEnum;

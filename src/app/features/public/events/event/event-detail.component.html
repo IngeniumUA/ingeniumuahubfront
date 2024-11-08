@@ -23,7 +23,7 @@
 
         <section class="title-info-section">
           <h3>{{ event.item.name }}</h3>
-          <!--<p>{{ event.item.name | date:'d MMMM' }}</p>-->
+<!--          <p>{{ event.start_date | date:'d MMMM' }}</p>-->
         </section>
 
         <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie else noProducts">
@@ -31,10 +31,10 @@
             <h3>{{ product_group.group_name }}</h3>
             <div class="products">
               @for (product of this.product_group.products; track product.id) {
-                <app-product [product]="product"
-                             [primaryColorFull]="(event.derived_type.display.color | colordbrgba: 1)"
-                             [primaryColorHalf]="(event.derived_type.display.color | colordbrgba: 0.5)"
-                             [itemId]="this.eventId" />
+              <app-product [product]="product"
+                           [primaryColorFull]="(event.derived_type.display.color | colordbrgba: 1)"
+                           [primaryColorHalf]="(event.derived_type.display.color | colordbrgba: 0.5)"
+                           [itemId]="this.eventId" />
               }
             </div>
           </div>

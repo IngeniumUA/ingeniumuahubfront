@@ -6,13 +6,13 @@
     <ng-container matColumnDef="id"
     *ngIf="displayedColumns.includes('id')">
       <th mat-header-cell *matHeaderCellDef> ID </th>
-      <td mat-cell *matCellDef="let item"><a [routerLink]="[item.id]"> {{ item.id }}</a></td>
+      <td mat-cell *matCellDef="let item"><a (click)="gotoPage('web/item/'+item.id)" class="cursor-pointer"> {{ item.id }}</a></td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let item"> <a [routerLink]="[item.id]"> {{ item.name }} </a> </td>
+      <td mat-cell *matCellDef="let item"> {{ item.name }} </td>
     </ng-container>
 
     <!-- available Column -->

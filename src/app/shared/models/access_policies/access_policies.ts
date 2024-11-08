@@ -6,8 +6,8 @@ export enum AccessPolicyEnum {
 }
 
 export interface AllowDenyListI {
-    whitelist: number[] | null
-    blacklist: number[] | null
+  whitelist: number[] | null
+  blacklist: number[] | null
 }
 
 @Pipe({

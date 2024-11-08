@@ -2,52 +2,52 @@
   <h2>Core user Obj</h2>
   <table>
     <thead>
-      <tr>
-        <th scope="col"></th>
-        <th scope="col">User:</th>
-      </tr>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">User:</th>
+    </tr>
     </thead>
 
     <tbody>
-      <tr>
-        <th>UUID</th>
-        <td>{{ userDetail.user_uuid }}</td>
-      </tr>
-      <tr>
-        <th>EMAIL</th>
-        <td>
-          {{ userDetail.email }}
-        </td>
-      </tr>
-      <tr>
-        <th>SSO UUID</th>
-        <td>
-          @if (userDetail.sso_uuid) {
-            {{ userDetail.sso_uuid }}
-          } @else {
-            <form [formGroup]="this.userPatchForm">
-              <input class="w-3/4" type="text" placeholder="sso_uuid" [formControlName]="'ssoUuidControl'">
-            </form>
-            <button class="button button-primary button-inline" (click)="patchUser()">Synchronise</button>
-          }
-        </td>
-      </tr>
-      <tr>
-        <th>Last Edited</th>
-        <td>{{ userDetail.last_update_timestamp | date: 'long' }} </td>
-      </tr>
-      <tr>
-        <th>Created At</th>
-        <td>{{ userDetail.created_timestamp | date: 'long' }}</td>
-      </tr>
-      <tr>
-        <th>Is Active</th>
-        <td>{{ !userDetail.disabled }}</td>
-      </tr>
-      <tr>
-        <th>Is Manager</th>
-        <td>{{ userDetail.manager }}</td>
-      </tr>
+    <tr>
+      <th>UUID</th>
+      <td>{{ userDetail.user_uuid }}</td>
+    </tr>
+    <tr>
+      <th>EMAIL</th>
+      <td>
+        {{ userDetail.email }}
+      </td>
+    </tr>
+    <tr>
+      <th>SSO UUID</th>
+      <td>
+        @if (userDetail.sso_uuid) {
+          {{ userDetail.sso_uuid }}
+        } @else {
+          <form [formGroup]="this.userPatchForm">
+            <input class="w-3/4" type="text" placeholder="sso_uuid" [formControlName]="'ssoUuidControl'">
+          </form>
+          <button class="button button-primary button-inline" (click)="patchUser()">Synchronise</button>
+        }
+      </td>
+    </tr>
+    <tr>
+      <th>Last Edited</th>
+      <td>{{ userDetail.last_update_timestamp | date: 'long' }} </td>
+    </tr>
+    <tr>
+      <th>Created At</th>
+      <td>{{ userDetail.created_timestamp | date: 'long' }}</td>
+    </tr>
+    <tr>
+      <th>Is Active</th>
+      <td>{{ !userDetail.disabled }}</td>
+    </tr>
+    <tr>
+      <th>Is Manager</th>
+      <td>{{ userDetail.manager }}</td>
+    </tr>
     </tbody>
   </table>
 </section>
@@ -128,15 +128,15 @@
   <div *ngIf="$groups | async as groups">
     <h3>Add to group</h3>
     <p>Selecteer de groep die je wilt en druk op de knop.</p>
-      <mat-form-field>
-        <select matNativeControl required [formControl]="groupControl">
-          <option *ngFor="let group of groups" [value]="group.id" style="color: var(--mainblue)">
-            {{ group.name }}
-          </option>
-        </select>
-      </mat-form-field>
-      <br>
-      <button class="button button-primary button-inline" (click)="AddToGroup()">Add Group</button>
+    <mat-form-field>
+      <select matNativeControl required [formControl]="groupControl">
+        <option *ngFor="let group of groups" [value]="group.id" style="color: var(--mainblue)">
+          {{ group.name }}
+        </option>
+      </select>
+    </mat-form-field>
+    <br>
+    <button class="button button-primary button-inline" (click)="AddToGroup()">Add Group</button>
   </div>
 
 </section>

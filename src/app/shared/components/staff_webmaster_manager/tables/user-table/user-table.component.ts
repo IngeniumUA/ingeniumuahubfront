@@ -3,7 +3,6 @@ import {MatTableModule} from '@angular/material/table';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {UserI} from '../../../../models/user/userI';
-import {RouterLink} from '@angular/router';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -12,6 +11,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {GroupI} from '../../../../models/group/HubGroup';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
@@ -22,7 +23,6 @@ import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service
     MatTableModule,
     AsyncPipe,
     NgIf,
-    RouterLink,
     DatePipe,
     MatPaginatorModule,
     MatProgressSpinnerModule,
@@ -57,7 +57,9 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
   constructor(private datePipe: DatePipe,
               private userService: UserService,
-              private staffGroupService: GroupService) {
+              private staffGroupService: GroupService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -180,5 +182,10 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     this.userService.importUsers(formData, 5).subscribe(() => {
 
     })
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 }

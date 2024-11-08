@@ -13,6 +13,8 @@ import {AsItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 import {
   InteractionTableComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
+import {NavController, Platform} from "@ionic/angular";
+import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-card-item-dashboard',
@@ -35,7 +37,14 @@ export class CardPageComponent implements OnInit {
 
   constructor(private itemWideService: ItemWideService,
               private cardService: CardService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,
+              private platform: Platform) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      this.pageTrackService.popFromTree()
+      this.navCtrl.navigateRoot('/'+currentPage).then()
+    });
   }
 
   ngOnInit() {

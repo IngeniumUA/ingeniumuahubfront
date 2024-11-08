@@ -1,3 +1,4 @@
+<ion-content [fullscreen]="true">
 <header class="hero">
   <picture aria-hidden="true">
     <img
@@ -34,7 +35,7 @@
           de Universiteit Antwerpen.
         </p>
         <div class="mt-4">
-          <a class="button button-outline-white button-lg uppercase" [routerLink]="['/shop']">
+          <a (click)="gotoPage('sub/shop')" class="button button-outline-white button-lg uppercase">
             Word lid
             <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -47,7 +48,7 @@
 
   <!-- Upcoming events -->
   <section class="ingenium-container" aria-labelledby="recommendations-title">
-    <h2 id="recommendations-title" class="text-white mb-4">Uitgelicht</h2>
+    <h2 id="recommendations-title" class="text-white mb-4">Onze toekomstige evenementen</h2>
 
     @let events = (this.homePageRec$ | async);
     @if (events && (events?.data?.length ?? 0) > 0) {
@@ -56,7 +57,7 @@
       </div>
 
       <div class="text-center mt-4">
-        <a class="button button-outline-white button-lg uppercase" [routerLink]="['/events']">
+        <a (click)="gotoPage('sub/events')" class="button button-outline-white button-lg uppercase">
           Alle events
           <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -77,8 +78,8 @@
         <app-rec-sys-item-preview [recsysItem]="item" />
       }
 
-      <div class="text-center mt-4">
-        <a class="button button-outline-white button-lg uppercase" [routerLink]="['/vacature']">
+    <div class="text-center mt-4">
+        <a (click)="gotoPage('sub/vacature')" class="button button-outline-white button-lg uppercase">
           Alle vacatures
           <svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -86,7 +87,7 @@
         </a>
       </div>
     } @else {
-      <p class="text-white text-lg w-full">Er zijn momenteel geen vacatures beschikbaar.</p>
+    <p class="text-white text-lg w-full">Er zijn momenteel geen vacatures beschikbaar.</p>
     }
   </section>
 </main>
@@ -95,7 +96,8 @@
 <section class="bg-white partner-section">
   <h1 class="max-w-full text-center text-blue-900">Met dank aan onze partners</h1>
   <!--<app-partner-balk></app-partner-balk>-->
-  <app-partner-grid />
+  <app-partner-grid></app-partner-grid>
 </section>
 
 <app-layout-public-footer />
+</ion-content>

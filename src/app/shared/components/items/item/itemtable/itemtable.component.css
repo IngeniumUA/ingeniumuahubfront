@@ -15,7 +15,7 @@
 }
 
 .item-table-header {
-  color: gray;
+  color: rgb(128, 128, 128);
   border-bottom: solid var(--ingenium-grey) 2px;
 }
 

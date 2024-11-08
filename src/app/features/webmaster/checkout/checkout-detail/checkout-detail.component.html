@@ -42,25 +42,25 @@
   </table>
 
   <div class="my-4 flex flex-row gap-3">
-    <button class="button button-primary w-1/6 button-inline"
+    <button class="button button-primary button-inline" style="width: fit-content"
             [disabled]="this.loading"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="LoadData()">
       Refresh</button>
 
-    <button class="button button-primary w-1/6 button-inline"
+    <button class="button button-primary button-inline" style="width: fit-content"
             [disabled]="this.loading"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="Patch()">
       Update</button>
 
-    <button class="button button-primary w-1/6 button-inline"
+    <button class="button button-primary button-inline" style="width: fit-content"
             [disabled]="this.loading"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="Refund()">
       Refund</button>
 
-    <button class="button button-primary w-1/6 button-inline"
+    <button class="button button-primary button-inline" style="width: fit-content"
             [disabled]="this.loading"
             [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="SendEmail()">
