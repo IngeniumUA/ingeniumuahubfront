@@ -11,6 +11,10 @@ import {Observable, of} from "rxjs";
 import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/blueprint/pricePolicy.service";
 import {first} from "rxjs/operators";
 import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
+import {
+  DeleteButtonComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/delete-button/delete-button.component";
+import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -26,7 +30,8 @@ import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/p
     NgIf,
     PricePolicyComponent,
     PricePolicyComponentCreateComponent,
-    AsyncPipe
+    AsyncPipe,
+    DeleteButtonComponent
   ],
   standalone: true
 })
@@ -37,7 +42,8 @@ export class ProductBlueprintDetailComponent implements OnInit {
     $pricePolicies: Observable<PricePolicyI[]> = of([]);
 
     constructor(private formBuilder: FormBuilder,
-                private pricePolicyService: PricePolicyService) {
+                private pricePolicyService: PricePolicyService,
+                private blueprintService: ProductBlueprintService) {
     }
 
     blueprintForm: any;
@@ -196,4 +202,18 @@ export class ProductBlueprintDetailComponent implements OnInit {
         }
       });
     }
+
+  deleteBlueprint(blueprintId: number) {
+      this.blueprintService.deleteProductBlueprint(blueprintId).subscribe({
+        next: (value: boolean) => {
+          if (!value) {
+            this.handleFormError(Error("API Error, could not be deleted somehow"));
+          }
+        },
+        error: (err) => {
+              this.handleFormError(err);
+        }
+        }
+      )
+  }
 }
