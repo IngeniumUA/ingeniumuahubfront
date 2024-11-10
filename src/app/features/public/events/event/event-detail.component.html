@@ -17,7 +17,9 @@
           <button class="categorie-button"
                   *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
                   (click)="this.SetProductCategorie(i)"
-                  [ngStyle]="(this.currentProductCategorieIndex$ | async) === i ? {'background-color': 'white'} : {'background-color': (event.derived_type.display.color | colordbrgba: 1)}"
+                  [ngStyle]="this.getCategoryButtonStyle(
+                  (this.currentProductCategorieIndex$ | async) === i,
+                  event.derived_type.display.color | colordbrgba: 1)"
           >{{ product_categorie.categorie_name }}</button>
         </nav>
 

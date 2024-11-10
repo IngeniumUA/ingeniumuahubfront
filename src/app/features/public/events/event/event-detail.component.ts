@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
-import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {ProductCategoryI, ProductGroupI} from '@ingenium/app/shared/models/product/products';
 import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
 import {map} from 'rxjs/operators';
@@ -10,6 +9,7 @@ import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_ser
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {Store} from "@ngxs/store";
 import {CartState} from "@ingenium/app/core/store";
+import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 
 @Component({
@@ -19,7 +19,6 @@ import {CartState} from "@ingenium/app/core/store";
 })
 export class EventDetailComponent implements OnInit {
   // Layout
-  isMobile$: Observable<boolean> = this.layoutService.isMobile;
   isCartEmpty$: Observable<number>;
   // Event Info and Deco
   eventId!: string;
@@ -32,7 +31,6 @@ export class EventDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private layoutService: LayoutService,
               private eventService: EventService,
               private productService: ProductsService,
               store: Store) {
@@ -87,5 +85,15 @@ export class EventDetailComponent implements OnInit {
       }
       return productGroups[this.currentProductCategorieIndex$.value].categorie_name;
     }));
+  }
+
+  getCategoryButtonStyle(isCurrentCategorie: boolean, backgroundColor: string): object {
+    if (isCurrentCategorie) {
+      return {'background-color': 'white', 'color': 'black', 'font-weight': 'bolder'}
+    }
+
+    return {'background-color': backgroundColor,
+      'color': calcIntensity(backgroundColor) < 180 ? 'white' : 'black',
+      'font-weight': 'bold'}
   }
 }
