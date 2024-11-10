@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import {ProductComponent} from '@ingenium/app/shared/components/items/products/product/product.component';
-import {IProductItem, PaymentProviderEnum} from '@ingenium/app/shared/models/items/products/products';
+import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
+import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
@@ -28,7 +29,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
   standalone: true
 })
 export class ShoppingcartListComponent implements OnInit {
-  products$: Observable<IProductItem[]> = this.store.select(CartState.getProducts);
+  products$: Observable<ProductOutI[]> = this.store.select(CartState.getProducts);
   totalPrice$: Observable<number> = this.store.select(CartState.getTotalPrice);
   allowStaffCheckout$ = this.store.select(UserState.roles).pipe(map(roles => roles && roles.is_manager));
 

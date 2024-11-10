@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AccountService} from '../../../core/services/user/account/account.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AccountService} from '../../../core/services/coreAPI/user/account.service';
 import {first} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
@@ -64,6 +65,7 @@ export class CardRedirectComponent implements OnInit {
       } else if (status_code == 500) {
         return response.error['detail']['Error'];
       }
+
       return 'Ongekende Server Error!';
     }
     // If the response is not a HTTPResponse we throw unknown error

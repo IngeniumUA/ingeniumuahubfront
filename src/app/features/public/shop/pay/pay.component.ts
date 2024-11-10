@@ -3,12 +3,12 @@ import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {Store} from "@ngxs/store";
 import {CartActions, CartState} from "@ingenium/app/core/store";
-import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {map} from "rxjs/operators";
 import {catchError} from "rxjs";
 import {ToastrService} from "ngx-toastr";
-import {CartSuccessI} from "@ingenium/app/shared/models/cart/cartModels";
-import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
+import {CartSuccessI} from "@ingenium/app/shared/models/cart/cartI";
+import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 

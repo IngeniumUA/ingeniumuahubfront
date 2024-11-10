@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {IProductCategorie, IProductGroup, IProductItem} from '../../models/items/products/products';
+import {ProductCategoryI, ProductGroupI, ProductOutI} from '../../models/product/products';
 import {ProductsToGroupsPipe} from './product_to_grouppipe.pipe';
 
 @Pipe({
@@ -8,9 +8,9 @@ import {ProductsToGroupsPipe} from './product_to_grouppipe.pipe';
 })
 export class ProductsToCategoriesPipe implements PipeTransform {
 
-  transform(products: IProductItem[]): IProductCategorie[] {
+  transform(products: ProductOutI[]): ProductCategoryI[] {
     // Predefine result ( should be immutably refactored later on with .map(), but that was tricky on objects
-    const result: IProductCategorie[] = [];
+    const result: ProductCategoryI[] = [];
 
     // Sorting in Descending Order ( reversed )
     // We sort the products beforehand and then construct the Groups and Categories later on
@@ -20,7 +20,7 @@ export class ProductsToCategoriesPipe implements PipeTransform {
 
     // This is typescript wizardy
     // From this website https://sylhare.github.io/2022/03/08/Reduce-in-typescript.html
-    const productsPerCategorie: [] = sortedProducts.reduce((result: any, product): IProductGroup[] => (
+    const productsPerCategorie: [] = sortedProducts.reduce((result: any, product): ProductGroupI[] => (
       {...result,
         [product.product_meta.categorie]: [...(result[product.product_meta.categorie] || []), product]
       }
@@ -30,7 +30,7 @@ export class ProductsToCategoriesPipe implements PipeTransform {
     const product_to_group = new ProductsToGroupsPipe();
     for (const categorieName in productsPerCategorie) {
       const productGroups = product_to_group.transform(productsPerCategorie[categorieName]);
-      const productCategorie: IProductCategorie = {
+      const productCategorie: ProductCategoryI = {
         categorie_name: categorieName,
         product_groups: productGroups
       };

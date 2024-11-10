@@ -9,11 +9,11 @@ import {FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Val
 import {distinctUntilChanged, first} from 'rxjs/operators';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {GroupI} from '../../../../models/group/HubGroup';
-import {GroupService} from '@ingenium/app/core/services/coreAPI/group/group.service';
+import {GroupI} from '../../../../models/group/hubGroupI';
+import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
+import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
-import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
   selector: 'app-user-table',
@@ -42,9 +42,11 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
   blob!: Blob;
 
+  pageIndex: number = 0
   columnSearchForm = new FormGroup({
     uuidControl: new FormControl(''),
     emailControl: new FormControl(''),
+    ssoUuidControl: new FormControl(''),
   });
 
   searchForm = new FormGroup({
@@ -112,11 +114,11 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     const groupsQueries: number[] | null = (groupControlValuesFiltered.length < 0) ? null: groupControlValuesFiltered;
 
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Data
-    this.userData$ = this.userService.queryUsers(pageIndex * pageSize, pageSize, userQuery, groupsQueries).pipe(first());
+    this.userData$ = this.userService.queryUsers(this.pageIndex * pageSize, pageSize, userQuery, groupsQueries).pipe(first());
 
     // Stats
     this.userStats$ = this.userService.getUserCount(userQuery, groupsQueries).pipe(first());

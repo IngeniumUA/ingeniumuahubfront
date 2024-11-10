@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
 import {
-  StaffItemDetailComponent
-} from "@ingenium/app/shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component";
+  ItemDetailComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/details/staff-item-detail/item-detail.component";
 import {Observable, of} from "rxjs";
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {CardItemWideI} from "@ingenium/app/shared/models/item/cardI";
@@ -22,7 +22,7 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
   imports: [
     AsyncPipe,
     NgIf,
-    StaffItemDetailComponent,
+    ItemDetailComponent,
     AsItemWide,
     AsItemWide,
     InteractionTableComponent

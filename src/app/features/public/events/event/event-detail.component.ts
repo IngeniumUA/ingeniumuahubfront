@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
-import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
-import {IProductCategorie, IProductGroup} from '@ingenium/app/shared/models/items/products/products';
-import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
+import {ProductCategoryI, ProductGroupI} from '@ingenium/app/shared/models/product/products';
+import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
 import {map} from 'rxjs/operators';
 import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
 import {NavController, Platform} from "@ionic/angular";
@@ -11,6 +10,7 @@ import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_ser
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {Store} from "@ngxs/store";
 import {CartState} from "@ingenium/app/core/store";
+import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 
 @Component({
@@ -20,19 +20,17 @@ import {CartState} from "@ingenium/app/core/store";
 })
 export class EventDetailComponent implements OnInit {
   // Layout
-  isMobile$: Observable<boolean> = this.layoutService.isMobile;
   isCartEmpty$: Observable<number>;
   // Event Info and Deco
   eventId!: string;
   event$!: Observable<ItemWideLimitedI>;
   eventError$!: Observable<any>;
 
-  productCategories$!: Observable<IProductCategorie[]>;
+  productCategories$!: Observable<ProductCategoryI[]>;
   currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  currentProductGroups!: Observable<IProductGroup[]>;
+  currentProductGroups!: Observable<ProductGroupI[]>;
 
-  constructor(private layoutService: LayoutService,
-              private eventService: EventService,
+  constructor(private eventService: EventService,
               private productService: ProductsService,
               store: Store,
               private navCtrl: NavController,
@@ -44,6 +42,7 @@ export class EventDetailComponent implements OnInit {
       this.navCtrl.navigateRoot('/'+currentPage).then()
     });
   }
+
   ngOnInit() {
     // Fetch ID
     const thisUrl: string = currentPage
@@ -95,6 +94,16 @@ export class EventDetailComponent implements OnInit {
       }
       return productGroups[this.currentProductCategorieIndex$.value].categorie_name;
     }));
+  }
+
+  getCategoryButtonStyle(isCurrentCategorie: boolean, backgroundColor: string): object {
+    if (isCurrentCategorie) {
+      return {'background-color': 'white', 'color': 'black', 'font-weight': 'bolder'}
+    }
+
+    return {'background-color': backgroundColor,
+      'color': calcIntensity(backgroundColor) < 180 ? 'white' : 'black',
+      'font-weight': 'bold'}
   }
 
   gotoPage(page: string) {

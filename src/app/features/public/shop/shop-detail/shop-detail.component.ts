@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
-import {ProductsService} from '@ingenium/app/core/services/shop/products/products.service';
+import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
 import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
-import {IProductItem} from '@ingenium/app/shared/models/items/products/products';
+import {ProductOutI} from '@ingenium/app/shared/models/product/products';
 import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {NavController, Platform} from "@ionic/angular";
@@ -33,7 +33,7 @@ export class ShopDetailComponent implements OnInit {
   // Event Info and Deco
   shopItem$?: Observable<ItemWideLimitedI>;
   shopError$!: Observable<any>;
-  products$: Observable<IProductItem[]> = of([]);
+  products$: Observable<ProductOutI[]> = of([]);
 
   ngOnInit() {
     // Fetch ID

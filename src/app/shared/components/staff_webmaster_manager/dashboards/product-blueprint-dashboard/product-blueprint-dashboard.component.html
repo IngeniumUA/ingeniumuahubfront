@@ -15,24 +15,29 @@
         <td mat-cell *matCellDef="let productStat"> {{ productStat.transaction_count }}</td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="['product_id', 'product_name', 'transactions_completed']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['product_id', 'product_name', 'transactions_completed'];"></tr>
-    </mat-table>
+            <tr mat-header-row *matHeaderRowDef="['product_id', 'product_name', 'transactions_completed']"></tr>
+            <tr mat-row *matRowDef="let row; columns: ['product_id', 'product_name', 'transactions_completed'];"></tr>
+        </mat-table>
+      <br><span>Total: {{ this.calcTotal(tableStats) }}</span>
   </ng-container>
 </section>
 
 <section>
-  <ng-container *ngIf="addingNew else awaitAddNew">
-    <app-product-blueprint-create (FinishedCreating)="NewProduct()" [originItem]="item"
-                                  (ToggleCreating)="ToggleAddNew()" />
-  </ng-container>
+    <ng-container *ngIf="addingNew else awaitAddNew">
+        <app-product-blueprint-create (FinishedCreating)="NewProduct()" [originItem]="item"
+                                      (ToggleCreating)="ToggleAddNew()" />
+    </ng-container>
 </section>
 
-<ng-template #noneFound>Nothing to display</ng-template>
-
 <ng-template #awaitAddNew>
-  <button class="button button-primary w-1/3 button-inline"
-          (click)="ToggleAddNew()">
-    <span class="text-white">Add New</span>
-  </button>
+  <span class="flex flex-row gap-3">
+    <button class="button button-primary button-inline"
+            (click)="ToggleAddNew()">
+        <span class="text-white">Add New</span>
+    </button>
+    <button class="button button-primary button-inline"
+            (click)="loadData()">
+      <span class="text-white">Refresh</span>
+    </button>
+  </span>
 </ng-template>

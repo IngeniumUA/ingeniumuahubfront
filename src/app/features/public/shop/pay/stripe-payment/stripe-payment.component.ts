@@ -2,9 +2,10 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOptions} from "@stripe/stripe-js";
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {FormBuilder} from "@angular/forms";
+import {Router} from "@angular/router";
+import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
-import {CheckoutSmollI} from "@ingenium/app/shared/models/checkout/checkoutModels";
 
 @Component({
   selector: 'app-stripe-payment',

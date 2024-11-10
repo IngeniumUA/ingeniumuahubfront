@@ -8,7 +8,7 @@ import {
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {InteractionI} from "@ingenium/app/shared/models/interaction/interactionModels";
+import {InteractionI} from "@ingenium/app/shared/models/interaction/hubInteractionI";
 import {InteractionService} from "@ingenium/app/core/services/coreAPI/interaction.service";
 import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
 import {
@@ -22,6 +22,7 @@ import {
 } from "@angular/material/table";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {RouterLink} from "@angular/router";
+import {InteractionTypeEnum} from "@ingenium/app/shared/models/interaction/interactionTypeEnum";
 
 @Component({
   selector: 'app-interaction-table',
@@ -65,6 +66,7 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
     return ['interaction_id', 'user', 'item', 'interaction_type', 'last_updated_timestamp', 'created_timestamp'];
   }
 
+  pageIndex: number = 0;
   columnSearchForm = new FormGroup({
     idControl: new FormControl(''),
     userControl: new FormControl(''),
@@ -74,12 +76,12 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
 
   LoadData(pageEvent: PageEvent | null = null) {
     // Page behaviour
-    const pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Transaction fetching
     this.interactionData$ = this.interactionService.queryInteractions(
-      pageIndex * pageSize, pageSize, null,
+      this.pageIndex * pageSize, pageSize, null,
       this.user_id, this.item_id);
 
     // Transactionstats
@@ -124,4 +126,6 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
     paginatorIntl.firstPageLabel = '';
     paginatorIntl.lastPageLabel = '';
   }
+
+  protected readonly InteractionTypeEnum = InteractionTypeEnum;
 }

@@ -4,7 +4,7 @@ import { WebmasterComponent } from './webmaster.component';
 import {WebmasterRoutingModule} from './webmaster-routing.module';
 import {SidenavComponent} from '../../core/layout/behind/sidenav/sidenav.component';
 import { UsersListComponent } from './user/users-list/users-list.component';
-import { UserDetailComponent } from './user/user-detail/user-detail.component';
+import { UserDetailPageComponent } from './user/user-detail/user-detail-page.component';
 import { GroupListComponent } from './user/group-list/group-list.component';
 import {
   GroupTableComponent
@@ -19,11 +19,11 @@ import {
 } from '../../shared/components/staff_webmaster_manager/tables/item-table/item-table.component';
 import { ItemDashboardPageComponent } from './item/item-detail-dashboard/item-dashboard-page.component';
 import {
-  StaffItemDetailComponent
-} from '../../shared/components/staff_webmaster_manager/details/staff-item-detail/staff-item-detail.component';
+  ItemDetailComponent
+} from '../../shared/components/staff_webmaster_manager/details/staff-item-detail/item-detail.component';
 import {
-  StaffUserDetailComponent
-} from '../../shared/components/staff_webmaster_manager/details/staff-user-detail/staff-user-detail.component';
+  UserDetailComponent
+} from '../../shared/components/staff_webmaster_manager/details/staff-user-detail/user-detail.component';
 import { CardsPageComponent } from './item/card-dashboard/cards-page.component';
 import {
   CardTableComponent
@@ -68,7 +68,7 @@ import {
   declarations: [
     WebmasterComponent,
     UsersListComponent,
-    UserDetailComponent,
+    UserDetailPageComponent,
     GroupListComponent,
     ItemsOverviewPageComponent,
     ItemDashboardPageComponent,
@@ -77,28 +77,28 @@ import {
     CheckoutDetailComponent,
     OrderTrackingComponent
   ],
-  imports: [
-      CommonModule,
-      WebmasterRoutingModule,
-      SidenavComponent,
-      GroupTableComponent,
-      PublicHeaderComponent,
-      UserTableComponent,
-      ItemTableComponent,
-      StaffItemDetailComponent,
-      StaffUserDetailComponent,
-      ProductBlueprintDashboardComponent,
-      CardTableComponent,
-      TransactionTableComponent,
-      ItemCreateComponent,
-      ProductBlueprintCreateComponent,
-      ProductBlueprintDetailComponent,
-      CheckoutAndTransactionDashboardComponent,
-      CreateCheckoutComponent,
-      TransactionDetailComponent,
-      IonicModule,
-      CurrencyPipe,
-      InteractionTableComponent
+    imports: [
+        CommonModule,
+        WebmasterRoutingModule,
+        SidenavComponent,
+        GroupTableComponent,
+        PublicHeaderComponent,
+        UserTableComponent,
+        ItemTableComponent,
+        ItemDetailComponent,
+        UserDetailComponent,
+        ProductBlueprintDashboardComponent,
+        CardTableComponent,
+        TransactionTableComponent,
+        ItemCreateComponent,
+        ProductBlueprintCreateComponent,
+        ProductBlueprintDetailComponent,
+        CheckoutAndTransactionDashboardComponent,
+        CreateCheckoutComponent,
+        TransactionDetailComponent,
+        IonicModule,
+        CurrencyPipe,
+        InteractionTableComponent
     ], providers: [
     DatePipe
   ]

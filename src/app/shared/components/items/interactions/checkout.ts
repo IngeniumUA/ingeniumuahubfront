@@ -1,4 +1,4 @@
-import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 
 export interface CheckoutI {
   id: string

@@ -1,6 +1,6 @@
 import {afterNextRender, Component} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {RecSysPreviewI} from '@ingenium/app/shared/models/items/recsys_interfaces';
+import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
 import {NavController, Platform} from "@ionic/angular";

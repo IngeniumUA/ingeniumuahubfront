@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {IProductItem} from '../../../../models/items/products/products';
+import {ProductOutI} from '../../../../models/product/products';
 import {NgIf, NgStyle} from '@angular/common';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
@@ -19,7 +19,7 @@ import {CartActions, CartState} from "@ingenium/app/core/store";
   ]
 })
 export class ProductComponent implements OnInit, OnDestroy {
-  @Input() product!: IProductItem;
+  @Input() product!: ProductOutI;
   @Input() itemId: string | null = null;
   @Input() primaryColorFull!: string;
   @Input() primaryColorHalf!: string;

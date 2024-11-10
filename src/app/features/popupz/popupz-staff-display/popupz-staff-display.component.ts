@@ -7,7 +7,7 @@ import {map} from "rxjs/operators";
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
-import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
+import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 

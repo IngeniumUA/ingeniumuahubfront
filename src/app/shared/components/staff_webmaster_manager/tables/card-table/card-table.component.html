@@ -10,6 +10,7 @@
   <mat-paginator
     [length]="600"
     [pageSize]="100"
+    [pageIndex]="this.pageIndex"
     (page)="LoadData($event)"
     showFirstLastButtons
     aria-label="Select which cards">

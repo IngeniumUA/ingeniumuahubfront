@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {retry, Subscription, switchMap, timer} from 'rxjs';
-import {StaffTrackerService} from '@ingenium/app/core/services/staff/staff-tracker.service';
 import {HubCheckoutTrackerI} from '@ingenium/app/shared/models/tracker';
+import {CheckoutTrackerService} from "@ingenium/app/core/services/coreAPI/checkoutTracker.service";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
@@ -19,7 +19,7 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
   items: HubCheckoutTrackerI[] = [];
 
   constructor(private route: ActivatedRoute,
-              private trackingService: StaffTrackerService,
+              private trackingService: CheckoutTrackerService,
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,
               private platform: Platform) {

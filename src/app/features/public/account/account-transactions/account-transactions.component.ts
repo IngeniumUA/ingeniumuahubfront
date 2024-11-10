@@ -1,9 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AccountService} from '../../../../core/services/user/account/account.service';
+import {AccountService} from '../../../../core/services/coreAPI/user/account.service';
 import {exhaustMap, Observable, Subscription, timer} from 'rxjs';
-import {TrackerService} from '@ingenium/app/core/services/user/tracker.service';
+import {UserTrackerService} from '@ingenium/app/core/services/coreAPI/user/user-tracker.service';
 import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from '@ingenium/app/shared/models/tracker';
 import QRCode from 'qrcode';
+import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 import {CapacitorHttp} from "@capacitor/core";
@@ -11,7 +12,6 @@ import {apiEnviroment} from "@ingenium/environments/environment";
 import {UserState} from "@ingenium/app/core/store";
 import {Store} from "@ngxs/store";
 import { ScreenBrightness } from '@capacitor-community/screen-brightness';
-import {TransactionLimitedI} from "@ingenium/app/shared/models/transaction/transactionModels";
 import {WalletI} from "@ingenium/app/shared/models/user/accountI";
 
 @Component({
@@ -21,7 +21,7 @@ import {WalletI} from "@ingenium/app/shared/models/user/accountI";
 })
 export class AccountTransactionsComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService,
-              private trackerService: TrackerService,
+              private trackerService: UserTrackerService,
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,
               private platform: Platform,
@@ -36,7 +36,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
 
   lastUpdate: Date = new Date();
   trackerSubscription: Subscription = new Subscription();
-  transactions$: Observable<TransactionLimitedI[]> | null = null;
+  transactions$: Observable<TransactionLimitedI[]> = this.accountService.getTransactions();
   trackedItems: HubCheckoutTrackerI[] = [];
 
   qrCode: {[key:string]:string} = {};
@@ -86,6 +86,8 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   }
 
   toggleQrCodeVisible(transaction: TransactionLimitedI) {
+    console.log(this.qrCode[transaction.interaction.interaction_uuid]);
+
     if (this.qrCode[transaction.interaction.interaction_uuid] === undefined) {
       this.createQrCode(transaction);
     }

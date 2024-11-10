@@ -11,13 +11,13 @@ import {
 } from '@angular/forms';
 import {AsyncPipe, KeyValuePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {Observable, of} from 'rxjs';
-import {IProductItem, PaymentProviderEnum} from '../../../../models/items/products/products';
+import {ProductOutI, PaymentProviderEnum} from '../../../../models/product/products';
 import {HttpErrorResponse} from '@angular/common/http';
-import {StaffCheckoutService} from '@ingenium/app/core/services/staff/staff-checkout.service';
-import {StaffProductBlueprintService} from "@ingenium/app/core/services/staff/staff-productblueprint-service";
-import {TransactionInI} from "@ingenium/app/shared/models/transaction/transactionModels";
-import {CheckoutInI} from "@ingenium/app/shared/models/checkout/checkoutModels";
-import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/transaction/validityEnum";
+import {TransactionInI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
+import {CheckoutInI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
+import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/checkout.service";
+import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 
 
 @Component({
@@ -40,16 +40,20 @@ export class CreateCheckoutComponent implements OnInit {
   @Input() item_id: number | null = null;
   @Output() checkoutCreated = new EventEmitter<boolean>();
 
+  constructor(private formBuilder: FormBuilder,
+              private productBlueprintService: ProductBlueprintService,
+              private checkoutService: CheckoutService) {
+  }
+
   loading = false;
   userNotInAPI = false;
 
-  products$: Observable<IProductItem[]> = of();
+  products$: Observable<ProductOutI[]> = of();
 
   paymentProviders = [
     PaymentProviderEnum.Free,
     PaymentProviderEnum.Kassa
   ];
-
 
   formError: string | null = null;
   successMessage: string | null = null;
@@ -71,7 +75,7 @@ export class CreateCheckoutComponent implements OnInit {
     // TODO if is debug
     this.paymentProviders.push(PaymentProviderEnum.Dev)
 
-    this.products$ = this.staffProductService.getProducts(0, 50, this.item_id);
+    this.products$ = this.productBlueprintService.queryProducts(0, 50, this.item_id);
     this.checkoutForm.controls['forceCreateControl'].valueChanges.subscribe((forceCreateValue) => {
       this.transactions().controls.forEach((abstract) => {
         const groupControl = abstract as FormGroup;
@@ -82,11 +86,6 @@ export class CreateCheckoutComponent implements OnInit {
         }
       });
     });
-  }
-
-  constructor(private formBuilder: FormBuilder,
-              private staffProductService: StaffProductBlueprintService,
-              private staffCheckoutService: StaffCheckoutService) {
   }
 
   public transactions(): FormArray {
@@ -102,7 +101,7 @@ export class CreateCheckoutComponent implements OnInit {
   }
 
   public AddTransaction() {
-    const validityDefault = this.forceEnabled() ? null : 'Kies Validity'; // Validity 2 is invalid
+    const validityDefault = this.forceEnabled() ? null: 'Kies Validity'; // Validity 2 is invalid
     const transactionGroup = this.formBuilder.group({
       'productControl': ['Kies Product', Validators.required],
       'validityControl': [{value: validityDefault, disabled: !this.forceEnabled()}]
@@ -146,7 +145,7 @@ export class CreateCheckoutComponent implements OnInit {
       note: null
     };
 
-    this.staffCheckoutService.createCheckout(checkoutObj, forceCreate, sendMail, createMissingUser).subscribe(
+    this.checkoutService.postCheckout(checkoutObj, forceCreate, sendMail, createMissingUser).subscribe(
       () => {
         this.checkoutCreated.emit(true);
       },
@@ -187,7 +186,7 @@ export class CreateCheckoutComponent implements OnInit {
   }
 
   parseTransactionFormGroup(userValue: string, formGroup: FormGroup): TransactionInI {
-    const productControl: IProductItem = formGroup.controls['productControl'].value;
+    const productControl: ProductOutI = formGroup.controls['productControl'].value;
     const validityControl: number = formGroup.controls['validityControl'].value;
     return {
       user_email: userValue,

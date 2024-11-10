@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
-import {InteractionI} from "@ingenium/app/shared/models/interaction/interactionModels";
+import {InteractionI} from "@ingenium/app/shared/models/interaction/hubInteractionI";
 
 @Injectable({
   providedIn: 'root'

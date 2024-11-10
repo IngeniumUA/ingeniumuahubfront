@@ -1,15 +1,19 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {StaffProductBlueprintI} from '../../../../models/staff/staff_productblueprint';
 import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/items/products/products';
+import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/product/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
 import {PricePolicyComponentCreateComponent} from '../../create/price-policy/price-policy-component-create.component';
 import {PricePolicyI, PricePolicyInI} from '../../../../models/price_policy';
-import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availability_composition";
+import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import {Observable, of} from "rxjs";
-import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/price_policy/pricePolicy.service";
+import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/blueprint/pricePolicy.service";
 import {first} from "rxjs/operators";
+import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
+import {
+  DeleteButtonComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/delete-button/delete-button.component";
+import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
 
@@ -26,20 +30,22 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
     NgIf,
     PricePolicyComponent,
     PricePolicyComponentCreateComponent,
-    AsyncPipe
+    AsyncPipe,
+    DeleteButtonComponent
   ],
   standalone: true
 })
 export class ProductBlueprintDetailComponent implements OnInit {
-    @Input() productBlueprint!: StaffProductBlueprintI;
-    @Output() updateProduct = new EventEmitter<StaffProductBlueprintI>();
+    @Input() productBlueprint!: ProductBlueprintI;
+    @Output() updateProduct = new EventEmitter<ProductBlueprintI>();
 
     $pricePolicies: Observable<PricePolicyI[]> = of([]);
 
     constructor(private formBuilder: FormBuilder,
                 private pricePolicyService: PricePolicyService,
                 private navCtrl: NavController,
-                private pageTrackService: PageTrackingService,) {
+                private pageTrackService: PageTrackingService,
+                private blueprintService: ProductBlueprintService) {
     }
 
     blueprintForm: any;
@@ -63,7 +69,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
       const tracking_checkout = !(this.productBlueprint.product_blueprint_metadata?.upon_completion?.track_checkout == null)
 
       this.productMetaForm = this.formBuilder.group({
-        ccategorie: [this.productBlueprint.product_blueprint_metadata.categorie],
+        categorie: [this.productBlueprint.product_blueprint_metadata.categorie],
         group: [this.productBlueprint.product_blueprint_metadata.group],
         upon_completion: [''],
         track_checkout: [tracking_checkout]
@@ -77,6 +83,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
         const error: Error = Error('Invalid Metadata form');
         this.handleFormError(error);
         return;  }
+
 
       const track_checkout: boolean = this.productMetaForm.controls['track_checkout'].value;
       const checkout_config: CheckoutTrackerConfigI = {
@@ -105,18 +112,20 @@ export class ProductBlueprintDetailComponent implements OnInit {
       const availability: AvailabilityCompositionI = {
         available: this.blueprintForm.controls['available'].value,
         disabled: this.productBlueprint.availability.disabled,
+        available_from: null,
+        available_until: null,
         dynamic_policy_type: null,
         dynamic_policy_content: null
       }
 
-      const product: StaffProductBlueprintI = {
+      const product: ProductBlueprintI = {
         id: this.productBlueprint.id,
         availability: availability,
         created_timestamp: this.productBlueprint.created_timestamp,
         last_update_timestamp: this.productBlueprint.last_update_timestamp,
         origin_item_id: this.productBlueprint.origin_item_id,
         source_item_ids: this.productBlueprint.source_item_ids,
-        product_blueprint_pools: this.productBlueprint.product_blueprint_pools,
+        product_blueprint_pool_ids: this.productBlueprint.product_blueprint_pool_ids,
         name: this.blueprintForm.controls['name'].value,
         description: this.blueprintForm.controls['description'].value,
 
@@ -140,15 +149,14 @@ export class ProductBlueprintDetailComponent implements OnInit {
 
     /*
       *  Price policy code
-    */
+     */
     public getPricePolicies() {
       this.$pricePolicies = this.pricePolicyService.getPricePolicies(this.productBlueprint.id);
     }
 
-
     public UpdatePricePolicy(pricePolicyObj: PricePolicyI) {
       this.pricePolicyService.putPricePolicy(pricePolicyObj).pipe(
-        first()).subscribe({
+      first()).subscribe({
         next: () => {
           this.getPricePolicies()
         },
@@ -163,25 +171,25 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.addingNewPricePolicy = !this.addingNewPricePolicy;
     }
 
-  public AddPricePolicy(pricePolicyObj: PricePolicyInI | null) {
-    if (pricePolicyObj === null) {
-      this.ToggleAddNew()
-      return
-    }
-
-    // Post for price policy object
-    this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
-      first()).subscribe({
-      next: () => {
-        this.getPricePolicies();
-        this.ToggleAddNew();
-        this.form_error = null
-      },
-      error: error => {
-        this.handleFormError(error);
+    public AddPricePolicy(pricePolicyObj: PricePolicyInI | null) {
+      if (pricePolicyObj === null) {
+        this.ToggleAddNew()
+        return
       }
-    });
-  }
+
+      // Post for price policy object
+      this.pricePolicyService.createPricePolicy(pricePolicyObj).pipe(
+        first()).subscribe({
+        next: () => {
+          this.getPricePolicies();
+          this.ToggleAddNew();
+          this.form_error = null
+        },
+        error: error => {
+          this.handleFormError(error);
+        }
+      });
+    }
 
   public RemovePricePolicy(pricePolicy: PricePolicyI) {
     // Post for price policy object
@@ -200,5 +208,19 @@ export class ProductBlueprintDetailComponent implements OnInit {
   gotoPage(page: string) {
     this.pageTrackService.addToTree(page)
     this.navCtrl.navigateRoot('/'+page).then()
+  }
+
+  deleteBlueprint(blueprintId: number) {
+      this.blueprintService.deleteProductBlueprint(blueprintId).subscribe({
+        next: (value: boolean) => {
+          if (!value) {
+            this.handleFormError(Error("API Error, could not be deleted somehow"));
+          }
+        },
+        error: (err) => {
+              this.handleFormError(err);
+        }
+        }
+      )
   }
 }

@@ -2,12 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {HttpErrorResponse} from '@angular/common/http';
-import {CheckoutI} from "@ingenium/app/shared/models/checkout/checkoutModels";
-import {TransactionI} from "@ingenium/app/shared/models/transaction/transactionModels";
-import {CheckoutService} from "@ingenium/app/core/services/coreAPI/checkout/checkout.service";
-import {TransactionService} from "@ingenium/app/core/services/coreAPI/transaction/transaction.service";
-import {PaymentProviderEnum} from "@ingenium/app/shared/models/items/products/products";
+import {CheckoutI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
+import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
+import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/checkout.service";
+import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
+import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {ToastrService} from "ngx-toastr";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
@@ -29,6 +30,7 @@ export class CheckoutDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private checkoutService: CheckoutService,
               private staffTransactionService: TransactionService,
+              private toastrService: ToastrService,
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,
               private platform: Platform) {
@@ -68,7 +70,7 @@ export class CheckoutDetailComponent implements OnInit {
 
   public Patch() {
     this.loading = true;
-    this.formError = 'Not Implemented';
+    this.toastrService.error('Not Implemented');
     this.loading = false;
   }
 
@@ -81,7 +83,7 @@ export class CheckoutDetailComponent implements OnInit {
     this.checkoutService.refundCheckout(this.checkout_id, forceRefund).subscribe(
       (_checkout) => {
         this.LoadData();
-        this.successMessage = 'Refund started!';
+        this.toastrService.success('Refund Started');
       },
       (error: Error) => {
         this.handleError(error);
@@ -97,9 +99,9 @@ export class CheckoutDetailComponent implements OnInit {
     this.checkoutService.emailCheckout(this.checkout_id).subscribe(
       (succes) => {
         if (succes) {
-          this.successMessage = 'Email sent!';
+          this.toastrService.success('Email sent!');
         } else {
-          this.formError = 'Email not sent :§';
+          this.toastrService.error('Email not sent :§');
         }
       },
       (error) => {

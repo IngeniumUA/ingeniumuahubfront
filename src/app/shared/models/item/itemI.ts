@@ -1,7 +1,7 @@
 import {
   AvailabilityCompositionI,
   AvailabilityCompositionInI
-} from "@ingenium/app/shared/models/item/availability_composition";
+} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 
 export interface ItemLimitedInI {
   name: string
