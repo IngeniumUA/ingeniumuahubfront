@@ -23,6 +23,7 @@ import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubT
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
 import {PageTrackingService} from "@app_services/page-tracking.service";
 import {RouterLink} from "@angular/router";
+import {NavController} from "@ionic/angular";
 
 @Component({
   selector: 'app-transaction-table',
