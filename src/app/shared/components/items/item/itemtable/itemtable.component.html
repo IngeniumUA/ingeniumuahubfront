@@ -15,8 +15,8 @@
     <ng-container *ngFor="let item of items; index as i;">
       <p class="item-table-item">[ ]</p>
       <p class="item-table-item">{{ i }}</p>
-      <p [routerLink]="[item.id]" class="item-table-item item-table-id">{{ item.id }}</p>
-      <p [routerLink]="[item.id]" class="item-table-item item-table-name">{{ item.name }}</p>
+      <p (click)="gotoPage(''+item.id)" class="item-table-item item-table-id">{{ item.id }}</p>
+      <p (click)="gotoPage(''+item.id)" class="item-table-item item-table-name">{{ item.name }}</p>
       <p class="item-table-item">{{ item.created_timestamp }}</p>
       <p class="item-table-item">...</p>
     </ng-container>

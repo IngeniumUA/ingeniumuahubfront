@@ -7,10 +7,10 @@
       <a (click)="gotoPage('sub/popupz/allergies')" class="menu-item cursor-pointer">Allergenen</a>
 
       @let productCount = (this.productCount$ | async);
-      <a routerLink="/shop/checkout" class="menu-item">Winkelwagen ({{ productCount }})</a>
+      <a (click)="gotoPage('sub/shop/checkout')" class="menu-item">Winkelwagen ({{ productCount }})</a>
 
       @if (this.isStaff$ | async) {
-      <a routerLink="/popupz/staff" class="menu-item">Staff display</a>
+      <a (click)="gotoPage('/popupz/staff')" class="menu-item">Staff display</a>
       }
     </nav>
   </header>

@@ -39,7 +39,7 @@
               </div>
             </th>
             <td mat-cell *matCellDef="let checkout">
-              <a [routerLink]="['../../checkout/'+checkout.checkout_uuid ]"> {{ checkout.checkout_uuid }} </a></td>
+              <a (click)="gotoPage('web/checkout/'+checkout.checkout_uuid )"> {{ checkout.checkout_uuid }} </a></td>
           </ng-container>
 
           <ng-container *ngIf="user_id===null" matColumnDef="user">
@@ -49,7 +49,7 @@
                 <input type="text" placeholder="Email" [formControlName]="'emailControl'">
               </div>
             </th>
-            <td mat-cell *matCellDef="let checkout"><a [routerLink]="['../../user/'+checkout.user_uuid ]">
+            <td mat-cell *matCellDef="let checkout"><a (click)="gotoPage('web/user/'+checkout.user_uuid )">
               <ng-container *ngIf="checkout.user_email !== null">{{ checkout.user_email }}</ng-container>
               <ng-container *ngIf="checkout.user_email === null">{{ checkout.user_uuid }}</ng-container>
             </a></td>

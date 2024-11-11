@@ -23,6 +23,8 @@ import {
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {RouterLink} from "@angular/router";
 import {InteractionTypeEnum} from "@ingenium/app/shared/models/interaction/interactionTypeEnum";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-interaction-table',
@@ -51,7 +53,9 @@ import {InteractionTypeEnum} from "@ingenium/app/shared/models/interaction/inter
   styleUrl: './interaction-table.component.scss'
 })
 export class InteractionTableComponent implements AfterViewInit, OnInit {
-  constructor(private interactionService: InteractionService) {
+  constructor(private interactionService: InteractionService,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
 
   @Input() item_id: number | null = null;
@@ -125,6 +129,11 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
     paginatorIntl.previousPageLabel = '';
     paginatorIntl.firstPageLabel = '';
     paginatorIntl.lastPageLabel = '';
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
   protected readonly InteractionTypeEnum = InteractionTypeEnum;

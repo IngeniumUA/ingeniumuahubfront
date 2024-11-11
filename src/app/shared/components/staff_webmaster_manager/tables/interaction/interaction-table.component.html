@@ -30,7 +30,7 @@
             Item<input class="w-3/4" type="text" placeholder="Item name" [formControlName]="'itemControl'"></div>
           </th>
           <td mat-cell *matCellDef="let interaction">
-            <a [routerLink]="'../../item/' + interaction.item_id">{{ interaction.item_name }}</a></td>
+            <a (click)="gotoPage('web/item/' + interaction.item_id)">{{ interaction.item_name }}</a></td>
         </ng-container>
 
         <ng-container matColumnDef="user">
@@ -38,7 +38,7 @@
             User<input class="w-3/4" type="text" placeholder="User" [formControlName]="'userControl'"></div>
           </th>
           <td mat-cell *matCellDef="let interaction">
-            <a [routerLink]="'../../user/' + interaction.user_uuid">{{ interaction.user_email }}</a>
+            <a (click)="gotoPage('web/user/' + interaction.user_uuid)">{{ interaction.user_email }}</a>
           </td>
         </ng-container>
 

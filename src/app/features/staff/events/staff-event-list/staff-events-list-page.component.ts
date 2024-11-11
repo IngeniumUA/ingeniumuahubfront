@@ -23,4 +23,10 @@ export class StaffEventsListPageComponent {
       this.navCtrl.navigateRoot('/'+currentPage).then()
     });
   }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
+  }
+
 }

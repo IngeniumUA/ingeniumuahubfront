@@ -44,7 +44,7 @@
 
         <div class="order-section flex flex-row gap-3">
           @let productCount = (this.isCartEmpty$ | async);
-          <button [disabled]="productCount && productCount <= 0" class="button button-primary" [routerLink]="['/shop/checkout']">Checkout</button>
+          <button [disabled]="productCount && productCount <= 0" class="button button-primary" (click)="gotoPage('sub/shop/checkout')">Checkout</button>
         </div>
 
         <div class="description-section">

@@ -17,6 +17,8 @@ import {
   AvailabilityMixinDetailComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-item-detail',
@@ -54,7 +56,9 @@ export class ItemDetailComponent implements OnInit{
   itemForm: any;
 
   constructor(private formBuilder: FormBuilder,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
   ngOnInit() {
     this.isEventItem = this.item.derived_type.derived_type_enum === "eventitem"
@@ -135,6 +139,11 @@ export class ItemDetailComponent implements OnInit{
   }
   UpdateAvailability(availabilityObj: AvailabilityCompositionI): void {
     this.item.item.availability = availabilityObj;
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
   protected readonly CardTypeEnum = CardTypeEnum;

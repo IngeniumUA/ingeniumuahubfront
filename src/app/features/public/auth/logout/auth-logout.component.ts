@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
 import {Browser} from "@capacitor/browser";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-page',
@@ -10,7 +12,9 @@ import {Browser} from "@capacitor/browser";
 export class AuthLogoutComponent implements OnInit {
   loggedOut = false;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {}
 
   ngOnInit() {
     if (this.store.selectSnapshot(UserState.isAuthenticated)) {
@@ -20,5 +24,10 @@ export class AuthLogoutComponent implements OnInit {
     Browser.close()
 
     this.loggedOut = true;
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 }
