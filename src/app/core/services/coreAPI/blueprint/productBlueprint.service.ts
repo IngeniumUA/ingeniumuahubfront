@@ -69,4 +69,8 @@ export class ProductBlueprintService {
 
     return this.httpClient.get<ProductOutI[]>(`${this.apiUrl}/products?${params.toString()}`);
   }
+
+  deleteProductBlueprint(product_blueprint_id: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${this.apiUrl}/${String(product_blueprint_id)}`);
+  }
 }
