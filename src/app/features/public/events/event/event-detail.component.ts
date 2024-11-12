@@ -10,6 +10,7 @@ import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {Store} from "@ngxs/store";
 import {CartState} from "@ingenium/app/core/store";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
+import {LayoutService} from "@ingenium/app/core/services/layout/layout.service";
 
 
 @Component({
@@ -26,11 +27,12 @@ export class EventDetailComponent implements OnInit {
   eventError$!: Observable<any>;
 
   productCategories$!: Observable<ProductCategoryI[]>;
-  currentProductCategorieIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  currentProductCategoryIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentProductGroups!: Observable<ProductGroupI[]>;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
+              protected layoutService: LayoutService,
               private eventService: EventService,
               private productService: ProductsService,
               store: Store) {
@@ -48,42 +50,41 @@ export class EventDetailComponent implements OnInit {
     }
 
     // Setup event observable and color observables
-    this.SetEvent(id);
+    this.setEvent(id);
 
-    // Setup producttable
+    // Setup product table
     const product_to_categorie = new ProductsToCategoriesPipe();
     this.productCategories$ = this.productService.getProducts(id).pipe(
       map(productArray => product_to_categorie.transform(productArray)),
       shareReplay()
     );
-    //this.productCategories$ = of([]) // this.productService.getProducts(id).pipe(shareReplay()); // https://blog.angular-university.io/angular-2-rxjs-common-pitfalls/
-    this.SetProductCategorie(0);
+    this.setProductCategory(0);
   }
 
-  SetEvent(id: string): void {
+  setEvent(id: string): void {
     this.eventId = id;
     this.event$ = this.eventService.getEvent(id).pipe();
     this.eventError$ = this.event$.pipe(
       ignoreElements(),
       catchError((err) => {
-        this.router.navigateByUrl('/event');
+        this.router.navigateByUrl('/event').then(r => {});
         return of(err);
       }));
   }
 
-  SetProductCategorie(index: number): void {
+  setProductCategory(index: number): void {
     this.currentProductGroups = this.productCategories$.pipe(map((productGroups) => {
-      return productGroups[this.currentProductCategorieIndex$.value].product_groups;
+      return productGroups[this.currentProductCategoryIndex$.value].product_groups;
     }));
-    this.currentProductCategorieIndex$.next(index);
+    this.currentProductCategoryIndex$.next(index);
   }
 
-  currentCategorie$(): Observable<string | null> {
+  currentCategory$(): Observable<string | null> {
     return this.productCategories$.pipe(map((productGroups) => {
       if (productGroups.length == 0) {
         return null;
       }
-      return productGroups[this.currentProductCategorieIndex$.value].categorie_name;
+      return productGroups[this.currentProductCategoryIndex$.value].categorie_name;
     }));
   }
 

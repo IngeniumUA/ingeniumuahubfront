@@ -3,22 +3,10 @@ section {
   margin-bottom: 1rem;
 }
 
-.event-mobile {
-
-}
-
-.event-desktop {
-  display: flex;
-  flex-direction: column;
-  margin-top: 0;
-  margin-left: 15%;
-  margin-right: 15%;
-}
-
-/* Event Image */
-.event-banner {
-  width: 100%;
-  margin: 0;
+/* Desktop version */
+.desktop {
+  max-width: 50%;
+  margin: 0 auto
 }
 
 /* Categorie bar */
