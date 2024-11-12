@@ -3,6 +3,7 @@ import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {DatePipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';
+import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 @Component({
   selector: 'app-rec-sys-item-preview',
@@ -33,9 +34,9 @@ export class RecSysItemPreviewComponent implements OnInit {
       this.internalLink = this.recsysItem.follow_through_link.match('^https?:\\/\\/') === null;
     }
 
-    TextColor() {
+    textColor() {
       // We could customize this
-      return 'rgb(255,255,255)';
+      return calcIntensity(this.recsysItem.color) < 180 ? 'white' : 'black';
     }
 
     CardStyle(): object {
