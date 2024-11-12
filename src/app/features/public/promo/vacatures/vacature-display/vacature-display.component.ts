@@ -4,6 +4,7 @@ import {catchError, ignoreElements, Observable, of} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 @Component({
   selector: 'app-vacature-display',
@@ -42,6 +43,10 @@ export class VacatureDisplayComponent implements OnInit {
         return of(err);
       })
     );
+  }
+
+  textColor(color: string) {
+    return calcIntensity(color) < 180 ? 'white' : 'black';
   }
 
   IdError() {
