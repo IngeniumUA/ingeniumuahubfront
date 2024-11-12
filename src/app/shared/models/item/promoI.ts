@@ -1,17 +1,16 @@
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 
-export interface PromoType {
-  name: string
-  value: number
+export enum PromoItemTypeEnum {
+  vacature = 1
 }
 
-export const PromoItemTypes: PromoType[] = [
-  {value: 1, name: 'vacature'},
-];
+export const PromoItemTypes = [
+  PromoItemTypeEnum.vacature
+]
 
 export interface PromoItemInI {
   derived_type_enum: "promoitem"
-  promo_type: string
+  promo_type: number
   display: DisplayCompositionI
 }
 

@@ -8,7 +8,7 @@ import {first} from 'rxjs/operators';
 import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {ItemWideInI} from "@ingenium/app/shared/models/item/itemwideI";
-import {PromoItemInI, PromoItemTypes} from "@ingenium/app/shared/models/item/promoI";
+import {PromoItemInI, PromoItemTypeEnum, PromoItemTypes} from "@ingenium/app/shared/models/item/promoI";
 import {EventItemInI} from "@ingenium/app/shared/models/item/eventI";
 import {ShopItemInI} from "@ingenium/app/shared/models/item/shopI";
 import {
@@ -58,8 +58,6 @@ export class ItemCreateComponent implements OnInit {
   });
 
   promoCreateForm = this.formBuilder.group({
-    displayFromDate: ['', Validators.required],
-    displayUntilDate: ['', Validators.required],
     promoType: ['promo type', Validators.required],
 
     color: ['', [Validators.required]],
@@ -154,21 +152,27 @@ export class ItemCreateComponent implements OnInit {
     if (itemType !== this.itemTypes[3]) {
       return null;
     }
-    // TODO Refactoring ...
-    return null;
-    // return {
-    //   display_from_date: this.promoCreateForm.controls['displayFromDate'].value,
-    //   display_until_date: this.promoCreateForm.controls['displayUntilDate'].value,
-    //   type: this.promoCreateForm.controls['promoType'].value,
-    //
-    //   display_mixin: {
-    //     color: this.promoCreateForm.controls['color'].value,
-    //     follow_through_link: this.promoCreateForm.controls['followThroughLink'].value,
-    //     image_square: this.promoCreateForm.controls['imageSquare'].value,
-    //     image_landscape: this.promoCreateForm.controls['imageLandscape'].value,
-    //     preview_description: this.promoCreateForm.controls['previewDescription'].value,
-    //   }
-    // };
+
+    const promoTypeControlValue = this.promoCreateForm.controls['promoType'].value!
+    const promoType = parseInt(promoTypeControlValue);
+
+    const imageSquareControlValue: string = this.promoCreateForm.controls['imageSquare'].value!;
+    const imageSquareValue = imageSquareControlValue === "" ? null : imageSquareControlValue;
+
+    const imageLandscapeControlValue: string = this.promoCreateForm.controls['imageLandscape'].value!;
+    const imageLandscapeValue = imageLandscapeControlValue === "" ? null : imageLandscapeControlValue;
+
+    return {
+      derived_type_enum: "promoitem",
+      promo_type: promoType,
+      display: {
+        color: this.promoCreateForm.controls['color'].value!,
+        follow_through_link: this.promoCreateForm.controls['followThroughLink'].value!,
+        image_square: imageSquareValue,
+        image_landscape: imageLandscapeValue,
+        preview_description: this.promoCreateForm.controls['previewDescription'].value!,
+      }
+    }
   }
 
   public parseCardForm(itemType: string): null | CardItemInI {
@@ -234,9 +238,10 @@ export class ItemCreateComponent implements OnInit {
     this.form_error = err.message;
   }
 
-  protected readonly PromoTypes = PromoItemTypes;
   protected readonly CardMembershipEnumList = CardMembershipEnumList;
   protected readonly CardMembershipEnum = CardMembershipEnum;
   protected readonly CardTypeEnumList = CardTypeEnumList;
   protected readonly CardTypeEnum = CardTypeEnum;
+  protected readonly PromoItemTypes = PromoItemTypes;
+  protected readonly PromoItemTypeEnum = PromoItemTypeEnum;
 }
