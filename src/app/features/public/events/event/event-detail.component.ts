@@ -67,7 +67,7 @@ export class EventDetailComponent implements OnInit {
     this.eventError$ = this.event$.pipe(
       ignoreElements(),
       catchError((err) => {
-        this.router.navigateByUrl('/event').then(r => {});
+        this.router.navigateByUrl('/event').then(_ => {});
         return of(err);
       }));
   }
