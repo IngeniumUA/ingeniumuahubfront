@@ -19,10 +19,16 @@ import {Store} from "@ngxs/store";
   ]
 })
 export class SidenavComponent {
-  @Input() isSidenav: boolean = true;
+  @Input() isSidenavInput: boolean = true;
+
+  isSideNav: boolean = true;
 
   isWebmaster$: Observable<boolean> = this.store.select(state => state.user.roles.is_webmaster);
   isManager$: Observable<boolean> = this.store.select(state => state.user.roles.is_manager);
 
   constructor(private store: Store) {}
+
+  toggleSideNav() {
+    this.isSideNav = !this.isSideNav;
+  }
 }
