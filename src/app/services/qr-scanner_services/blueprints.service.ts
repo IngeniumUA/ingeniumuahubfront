@@ -19,6 +19,11 @@ export class BlueprintsService {
         blueprintsDict = result
       }
     })
+    this.storage.get("blueprints_attendance")?.then((result) => {
+      if (result !== undefined) {
+        blueprintsDict = result
+      }
+    })
   }
 
   async getBlueprints(): Promise<string> {
@@ -56,9 +61,13 @@ export class BlueprintsService {
 
   }
 
-  dictSetter(dict: any, event: string) {
+  dictSetter(dict: any, event: string, isQRScanner: boolean = true) {
     blueprintsDict[event] = dict
-    this.storage.set("blueprints", blueprintsDict)
+    if (isQRScanner) {
+      this.storage.set("blueprints", blueprintsDict)
+    } else {
+      this.storage.set("blueprints_attendance", blueprintsDict)
+    }
   }
 
 }

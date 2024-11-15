@@ -1,0 +1,22 @@
+.handscanner {
+  position: absolute;
+  top: 25%;
+  width: 100vw;
+  height: 32%;
+  @media only screen and (min-width: 768px) {
+    width: 30vw;
+    left: 35vw;
+  }
+}
+
+.error {
+  text-align: center;
+  font-size: 40px;
+  color: #ad000d;
+  position: absolute;
+  top: 50%;
+  width: 100vw;
+  @media only screen and (min-width: 768px) {
+    width: 30vw;
+  }
+}

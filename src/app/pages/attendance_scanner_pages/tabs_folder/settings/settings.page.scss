@@ -1,0 +1,9 @@
+.settings {
+  position: absolute;
+  top: 15%;
+  width: 100vw;
+  @media only screen and (min-width: 768px) {
+    width: 30vw;
+    left: 35vw;
+  }
+}

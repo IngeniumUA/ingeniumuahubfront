@@ -1,0 +1,38 @@
+.resultModal {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+}
+
+.result {
+  position: absolute;
+  top: 15%;
+  width: 100vw;
+  @media only screen and (min-width: 768px) {
+    width: 30vw;
+    left: 35vw;
+  }
+}
+
+.right {
+  position: absolute;
+  right: 10px;
+}
+
+.right_big {
+  position: absolute;
+  right: 10px;
+  margin-top: -15px;
+}
+
+.left-invalid {
+  position: absolute;
+  width: 50%;
+  left: 2px;
+}
+
+.right-invalid {
+  position: absolute;
+  width: 50%;
+  right: 0;
+}

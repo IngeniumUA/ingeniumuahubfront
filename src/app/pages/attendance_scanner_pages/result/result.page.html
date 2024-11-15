@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Scan resultaat
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-fab slot="fixed" vertical="top" horizontal="end" [edge]="true">
+    <ion-fab-button (click)="ReturnToHome()">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="Back()">
+      <ion-icon name="arrow-back"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab slot="fixed" vertical="top" horizontal="start">
+    <ion-fab-button id="More" [disabled]="!ModalEnabled">
+      <ion-icon name="caret-down-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <div class="result">
+    <ion-list [inset]="true" mode="ios" lines="full">
+      <ion-item>
+        <ion-label>
+          <p style="color: var(--ing-ion-color)">Item blueprint:</p>
+          <div *ngIf="UserItem.length > 20"><br>
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserBlueprint}}</p>
+            </div>
+          </div>
+          <div *ngIf="UserItem.length <= 20">
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserBlueprint}}</p>
+            </div>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p style="color: var(--ing-ion-color)">Price policy:</p>
+          <div *ngIf="UserItem.length > 20"><br>
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserPolicyName}}</p>
+            </div>
+          </div>
+          <div *ngIf="UserItem.length <= 20">
+            <div class="right_big">
+              <p style="color: var(--ing-ion-color)">{{UserPolicyName}}</p>
+            </div>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <img src="{{imgPath}}" alt="Validity Image" style="width: 100%"/>
+  </div>
+
+  <!-- ion-fab markup  -->
+</ion-content>

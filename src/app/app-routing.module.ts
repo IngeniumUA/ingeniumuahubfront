@@ -30,6 +30,19 @@ const routes: Routes = [
     loadChildren: () => import('./pages/qr_scanner_pages/blueprints/blueprints.module').then(m => m.BlueprintsPageModule)
   },
 
+  {
+    path: 'tabs_attendance',
+    loadChildren: () => import('./pages/attendance_scanner_pages/tabs_folder/tabs/tabs.module').then(m => m.TabsPageModule)
+  },
+  {
+    path: 'result_attendance',
+    loadChildren: () => import('./pages/attendance_scanner_pages/result/result.module').then(m => m.ResultPageModule)
+  },
+  {
+    path: 'blueprints_attendance',
+    loadChildren: () => import('./pages/attendance_scanner_pages/blueprints/blueprints.module').then(m => m.BlueprintsPageModule)
+  },
+
   // Homepages
   {path: '', component: HomepageComponent},
   {path: 'home', redirectTo: '/', pathMatch: "full"}, // For routing to homepage (makes it easier)
