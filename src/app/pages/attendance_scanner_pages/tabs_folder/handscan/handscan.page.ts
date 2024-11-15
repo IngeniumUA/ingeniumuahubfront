@@ -62,11 +62,6 @@ export class HandscanPage {
     }
   }
 
-  public SetBlueprints(){
-    this.navCtrl.navigateRoot('/blueprints_attendance').then()
-    this.pageTrackService.addToTree("blueprints_attendance")
-  }
-
 }
 
 export let HandCode: string

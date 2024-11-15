@@ -38,10 +38,6 @@ const routes: Routes = [
     path: 'result_attendance',
     loadChildren: () => import('./pages/attendance_scanner_pages/result/result.module').then(m => m.ResultPageModule)
   },
-  {
-    path: 'blueprints_attendance',
-    loadChildren: () => import('./pages/attendance_scanner_pages/blueprints/blueprints.module').then(m => m.BlueprintsPageModule)
-  },
 
   // Homepages
   {path: '', component: HomepageComponent},

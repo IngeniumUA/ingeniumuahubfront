@@ -138,12 +138,6 @@ export class ScanPage implements OnInit{
     }
   }
 
-  public SetBlueprints(){
-    this.stopScan().then()
-    this.PageTrackService.addToTree("blueprints_attendance")
-    this.navCtrl.navigateRoot('/blueprints_attendance').then()
-  }
-
 }
 
 export let scannedQr: string
