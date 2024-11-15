@@ -27,7 +27,8 @@
         <section>
           <a (click)="gotoPage('staff')" class="section-title">Staff</a>
           <a (click)="gotoPage('staff/qr')" class="section-link">QR codes</a>
-          <a (click)="gotoScanner()" class="section-link">QR scanner</a>
+          <a (click)="gotoScanner(true)" class="section-link">Ticket scanner</a>
+          <a (click)="gotoScanner(false)" class="section-link">Aanwezigheid scanner</a>
           <a [href]="'https://vaultwarden.ingeniumua.be'" class="section-link">Vaultwarden</a>
           <!--<a [routerLink]="['/staff/event']" class="section-link">Events</a>-->
           <!--<a [routerLink]="['/staff/functions']" class="section-link">Functions</a>-->

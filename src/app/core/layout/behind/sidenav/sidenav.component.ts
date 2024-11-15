@@ -35,12 +35,18 @@ export class SidenavComponent {
     this.navCtrl.navigateRoot('/'+page).then()
   }
 
-  gotoScanner() {
+  gotoScanner(isTicketScanner: boolean) {
+    let scanner
+    if (isTicketScanner) {
+      scanner = "tabs/scan"
+    } else {
+      scanner = "tabs_attendance/scan"
+    }
     this.eventsService.getEvents().then(
       (result) => {
         if (result === "success") {
-          this.pageTrackService.addToTree("tabs/scan")
-          this.navCtrl.navigateRoot('/tabs/scan').then()
+          this.pageTrackService.addToTree(scanner)
+          this.navCtrl.navigateRoot('/' + scanner).then()
         } else {
           console.log(result)
         }
