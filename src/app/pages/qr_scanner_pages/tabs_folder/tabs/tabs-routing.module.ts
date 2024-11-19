@@ -19,6 +19,10 @@ const routes: Routes = [
         loadChildren: () => import('../handscan/handscan.module').then(m => m.HandscanPageModule)
       },
       {
+        path: 'blueprints',
+        loadChildren: () => import('../blueprints/blueprints.module').then(m => m.BlueprintsPageModule)
+      },
+      {
         path: 'settings',
         loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule)
       },

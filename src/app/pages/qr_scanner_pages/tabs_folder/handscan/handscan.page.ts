@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {IonInput, NavController, Platform} from "@ionic/angular";
 import {eventDict, selectedEvent, GetEventsService} from "@app_services/qr-scanner_services/get-events.service";
 import {currentPage, PageTrackingService, pageTree} from "@app_services/page-tracking.service";
-import {PriceDict, PricesService} from "@app_services/qr-scanner_services/prices.service";
+import {PricesService} from "@app_services/qr-scanner_services/prices.service";
 import {BlueprintsService} from "@app_services/qr-scanner_services/blueprints.service";
 
 
@@ -51,13 +51,8 @@ export class HandscanPage {
 
   public Validate() {
     HandCode = this.inputCode
-    if (Object.keys(PriceDict).length === 0 || PriceDict[eventDict[this.selectedItem]] === -1) {
-      this.pageTrackService.addToTree("prices")
-      this.navCtrl.navigateRoot('/prices').then()
-    } else {
-      this.pageTrackService.addToTree("result")
-      this.navCtrl.navigateRoot('/result').then()
-    }
+    this.pageTrackService.addToTree("result")
+    this.navCtrl.navigateRoot('/result').then()
   }
 
   public onItemSelection($selection: any) {
@@ -67,11 +62,6 @@ export class HandscanPage {
       this.showChooseEvent = false
       this.actualEventSelected = !(this.selectedItem === undefined || this.selectedItem === 'Alle evenementen');
     }
-  }
-
-  public SetBlueprints(){
-    this.navCtrl.navigateRoot('/blueprints').then()
-    this.pageTrackService.addToTree("blueprints")
   }
 
 }

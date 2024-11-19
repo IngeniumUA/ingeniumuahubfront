@@ -3,7 +3,7 @@ import {BarcodeFormat, BarcodeScanner, LensFacing, StartScanOptions} from '@capa
 import {NavController, Platform} from "@ionic/angular";
 import {eventDict, GetEventsService, selectedEvent} from "@app_services/qr-scanner_services/get-events.service";
 import {PageTrackingService, currentPage, pageTree} from "@app_services/page-tracking.service";
-import {PriceDict, PricesService} from "@app_services/qr-scanner_services/prices.service";
+import {PricesService} from "@app_services/qr-scanner_services/prices.service";
 import {BlueprintsService} from "@app_services/qr-scanner_services/blueprints.service";
 
 
@@ -103,13 +103,8 @@ export class ScanPage implements OnInit{
           this.ngZone.run(() => {
             scannedQr = result.barcode.rawValue;
             this.stopScan().then()
-            if (Object.keys(PriceDict).length === 0 || PriceDict[eventDict[this.selectedItem]] === -1 || PriceDict[eventDict[this.selectedItem]] === undefined) {
-              this.PageTrackService.addToTree("prices")
-              this.navCtrl.navigateRoot('/prices').then()
-            } else {
-              this.PageTrackService.addToTree("result")
-              this.navCtrl.navigateRoot('/result').then()
-            }
+            this.PageTrackService.addToTree("result")
+            this.navCtrl.navigateRoot('/result').then()
           })
         }
       )
@@ -143,12 +138,6 @@ export class ScanPage implements OnInit{
       this.showChooseEvent = false
       this.actualEventSelected = !(this.selectedItem === undefined || this.selectedItem === 'Alle evenementen');
     }
-  }
-
-  public SetBlueprints(){
-    this.stopScan().then()
-    this.PageTrackService.addToTree("blueprints")
-    this.navCtrl.navigateRoot('/blueprints').then()
   }
 
 }

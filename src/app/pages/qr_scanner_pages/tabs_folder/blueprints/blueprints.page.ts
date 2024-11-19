@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {currentPage, PageTrackingService, pageTree} from "@app_services/page-tracking.service";
 import {NavController, Platform} from "@ionic/angular";
 import {blueprintsDict, BlueprintsService} from "@app_services/qr-scanner_services/blueprints.service";
-import {selectedEvent} from "@app_services/qr-scanner_services/get-events.service";
+import {eventDict, GetEventsService, selectedEvent} from "@app_services/qr-scanner_services/get-events.service";
 import {StorageService} from "@app_services/qr-scanner_services/storage.service";
 
 @Component({
@@ -14,20 +14,17 @@ export class BlueprintsPage{
   public eventBlueprints: any = []
   public boxStates: any = {}
 
+  public selectedItem = selectedEvent
+  public events: any = undefined
+  public actualEventSelected: boolean = false
+  public showChooseEvent: boolean = true
+
   constructor(private navCtrl: NavController,
               private blueprintGetter: BlueprintsService,
               private storage: StorageService,
+              private eventSetter: GetEventsService,
               private pageTrackService: PageTrackingService,
               private platform: Platform) {
-    blueprintGetter.getBlueprints().then((result) => {
-      if (result === "server_error") {
-        this.pageTrackService.setTreeToRoot()
-        this.navCtrl.navigateRoot('').then()
-      } else {
-        this.eventBlueprints = Object.keys(blueprintsDict[selectedEvent])
-        this.boxStates = blueprintsDict[selectedEvent]
-      }
-    })
     this.platform.backButton.subscribeWithPriority(10, () => {
       if (pageTree[pageTree.length-2] === 'login') {
         this.ReturnToHome()
@@ -38,14 +35,40 @@ export class BlueprintsPage{
     });
   }
 
+  public ionViewWillEnter() {
+    this.setBlueprints()
+
+    this.events = Object.keys(eventDict)
+    this.selectedItem = selectedEvent
+    if (this.selectedItem !== undefined) {this.showChooseEvent = false}
+    this.actualEventSelected = !(this.selectedItem === undefined || this.selectedItem === 'Alle evenementen');
+  }
+
+  public setBlueprints() {
+    this.blueprintGetter.getBlueprints().then((result) => {
+      if (result === "server_error") {
+        this.pageTrackService.setTreeToRoot()
+        this.navCtrl.navigateRoot('').then()
+      } else {
+        this.eventBlueprints = Object.keys(blueprintsDict[selectedEvent])
+        this.boxStates = blueprintsDict[selectedEvent]
+      }
+    })
+  }
+
+  public onItemSelection($selection: any) {
+    if ( $selection != undefined) {
+      this.selectedItem = $selection.detail.value;
+      this.eventSetter.setEvent($selection.detail.value)
+      this.showChooseEvent = false
+      this.actualEventSelected = !(this.selectedItem === undefined || this.selectedItem === 'Alle evenementen');
+      this.setBlueprints()
+    }
+  }
+
   public ReturnToHome() {
     this.pageTrackService.setTreeToRoot()
     this.navCtrl.navigateRoot('').then()
-  }
-
-  public Back() {
-    this.pageTrackService.popFromTree()
-    this.navCtrl.navigateRoot('/'+currentPage).then()
   }
 
   public boxToggled() {

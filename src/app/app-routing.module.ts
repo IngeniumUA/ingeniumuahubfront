@@ -25,10 +25,10 @@ const routes: Routes = [
     path: 'result',
     loadChildren: () => import('./pages/qr_scanner_pages/result/result.module').then(m => m.ResultPageModule)
   },
-  {
-    path: 'blueprints',
-    loadChildren: () => import('./pages/qr_scanner_pages/blueprints/blueprints.module').then(m => m.BlueprintsPageModule)
-  },
+  // {
+  //   path: 'blueprints',
+  //   loadChildren: () => import('./pages/qr_scanner_pages/blueprints/blueprints.module').then(m => m.BlueprintsPageModule)
+  // },
 
   {
     path: 'tabs_attendance',
