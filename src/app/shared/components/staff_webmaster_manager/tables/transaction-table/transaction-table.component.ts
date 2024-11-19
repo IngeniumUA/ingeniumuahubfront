@@ -14,7 +14,7 @@ import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle, Titl
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
 import {RouterLink} from '@angular/router';
-import {StatusStatsI} from '../../../../models/stats/transactionStats';
+import {StatusStatsI, StatusToStats} from '../../../../models/stats/transactionStats';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
@@ -22,6 +22,7 @@ import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum"
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
 import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-transaction-table',
@@ -47,7 +48,8 @@ import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/tr
 })
 export class TransactionTableComponent implements AfterViewInit, OnChanges, OnInit {
   constructor(private transactionService: TransactionService,
-              private datePipe: DatePipe) {
+              private datePipe: DatePipe,
+              private toastrService: ToastrService) {
   }
   @Input() item_id: number | null = null;
   @Input() user_id: string | null = null;
@@ -183,25 +185,16 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     this.LoadData();
   }
 
-  StatusToStats(status: number, statsObject: StatusStatsI): number {
-    if (status === 0) {  // '0' is all
-      return statsObject["0"];
-    }
-    else if (status === PaymentStatusEnum.successful) {
-      return statsObject[PaymentStatusEnum.successful];
-    }
-    else if (status === PaymentStatusEnum.failed) {
-      return statsObject[PaymentStatusEnum.failed];
-    }
-    else if (status === PaymentStatusEnum.cancelled
-      || status === PaymentStatusEnum.refunded
-      || status === PaymentStatusEnum.partially_refunded) {
-      return statsObject[PaymentStatusEnum.cancelled] + statsObject[PaymentStatusEnum.refunded] + statsObject[PaymentStatusEnum.partially_refunded];
-    }
-    else if (status === PaymentStatusEnum.pending  || status === PaymentStatusEnum.refund_pending) {
-      return statsObject[PaymentStatusEnum.pending] + statsObject[PaymentStatusEnum.refund_pending];
-    }
-    return 0;
+  reEvaluateValidity(transaction_id: number) {
+    this.transactionService.evaluateValidity(transaction_id).pipe().subscribe({
+      next: transaction => {
+        this.toastrService.success(`Validity re-evaluated to ${ValidityEnum[transaction.validity]}`)
+        this.LoadData();
+      },
+      error: err => {
+        this.toastrService.error(err.message);
+      }
+    })
   }
 
   StyleClassFromStatus(status: number): string {
@@ -281,4 +274,5 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   protected readonly PaymentStatusEnum = PaymentStatusEnum;
   protected readonly ValidityEnum = ValidityEnum;
   protected readonly ValidityList = ValidityList;
+  protected readonly StatusToStats = StatusToStats;
 }

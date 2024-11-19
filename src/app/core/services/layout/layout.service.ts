@@ -7,7 +7,7 @@ import {map} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class LayoutService {
-  isMobile: Observable<boolean>;
+  public isMobile: Observable<boolean>;
 
   constructor(private breakpointObserver: BreakpointObserver) {
     this.isMobile = this.breakpointObserver

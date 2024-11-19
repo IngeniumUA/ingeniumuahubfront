@@ -113,4 +113,8 @@ export class TransactionService {
   public emailTransaction(interaction_id: number): Observable<boolean> {
     return this.httpClient.get<boolean>(`${this.apiUrl}/email/${String(interaction_id)}`);
   }
+
+  public evaluateValidity(interaction_id: number): Observable<TransactionI> {
+    return this.httpClient.patch<TransactionI>(`${this.apiUrl}/evaluate_validity/${String(interaction_id)}`, {});
+  }
 }
