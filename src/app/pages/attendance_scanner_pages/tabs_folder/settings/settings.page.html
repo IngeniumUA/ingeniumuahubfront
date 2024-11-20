@@ -19,22 +19,23 @@
       <ion-item>
         <ion-toggle justify="space-between" #returnToggle (ionChange)="setAutoReturn()">Automatisch terugkeren</ion-toggle>
       </ion-item>
-      <ion-list [inset]="true" mode="ios" lines="full">
-        <ion-item>
-          <ion-input label="Terugkeertijd" labelPlacement="stacked" value="{{'' + returnTime}}" [(ngModel)]="inputReturnTime" (keyup.enter)="setReturnTime()"></ion-input>
-        </ion-item>
-      </ion-list>
+      <ion-item>
+        <ion-input class="w-full sm:text-sm sm:leading-6 border-0 input" type="number" label="Terugkeertijd" labelPlacement="stacked" placeholder="Return time" [(ngModel)]="inputReturnTime" (keyup.enter)="setReturnTime()">
+          <ion-button slot="end" shape="round" (click)="setReturnTime()">Pas aan</ion-button>
+        </ion-input>
+      </ion-item>
       <div *ngIf="showError">
         <ion-item>
           <ion-note style="font-size:14px" color="danger">{{this.errorText}}</ion-note>
         </ion-item>
       </div>
-      <ion-button expand="block" shape="round" (click)="setReturnTime()">Pas terugkeertijd aan</ion-button>
       <ion-item>
         <ion-toggle justify="space-between" #soundToggle (ionChange)="setDisableSound()">Mute</ion-toggle>
       </ion-item>
-      <ion-button expand="block" shape="round" id="confirmDelete" >Verwijder opgeslagen instellingen</ion-button>
-      <ion-action-sheet mode="ios" trigger="confirmDelete" header="Actions" [buttons]="actionSheetButtons" (didDismiss)="clearSettings($event)"></ion-action-sheet>
+      <ion-item>
+        <ion-button expand="block" shape="round" id="confirmDelete" >Verwijder opgeslagen instellingen</ion-button>
+        <ion-action-sheet mode="ios" trigger="confirmDelete" header="Actions" [buttons]="actionSheetButtons" (didDismiss)="clearSettings($event)"></ion-action-sheet>
+      </ion-item>
     </ion-list>
     <ion-button expand="block" shape="round" id="confirmDeleteAll" >Verwijder alle gegevens</ion-button>
     <ion-action-sheet mode="ios" trigger="confirmDeleteAll" header="Actions" [buttons]="actionSheetButtons" (didDismiss)="clearMemory($event)"></ion-action-sheet>
