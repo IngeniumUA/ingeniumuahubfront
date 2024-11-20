@@ -18,7 +18,9 @@ import {GetEventsService} from "@app_services/qr-scanner_services/get-events.ser
   ]
 })
 export class SidenavComponent {
-  @Input() isSidenav: boolean = true;
+  @Input() isSidenavInput: boolean = true;
+
+  isSideNav: boolean = true;
 
   isWebmaster$: Observable<boolean> = this.store.select(state => state.user.roles.is_webmaster);
   isManager$: Observable<boolean> = this.store.select(state => state.user.roles.is_manager);
@@ -28,6 +30,10 @@ export class SidenavComponent {
               private pageTrackService: PageTrackingService,
               private eventsService: GetEventsService,
   ) {
+  }
+
+  toggleSideNav() {
+    this.isSideNav = !this.isSideNav;
   }
 
   gotoPage(page: string) {

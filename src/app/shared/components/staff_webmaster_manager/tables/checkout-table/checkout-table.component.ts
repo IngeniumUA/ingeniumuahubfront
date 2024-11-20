@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {debounceTime, delay, Observable, of} from 'rxjs';
-import {StatusStatsI} from '../../../../models/stats/transactionStats';
+import {StatusStatsI, StatusToStats} from '../../../../models/stats/transactionStats';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
@@ -155,27 +155,6 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
     this.LoadData();
   }
 
-  StatusToStats(status: number, statsObject: StatusStatsI): number {
-    if (status === 0) {  // '0' is all
-      return statsObject[PaymentStatusEnum.all];
-    }
-    else if (status === PaymentStatusEnum.successful) {
-      return statsObject[PaymentStatusEnum.successful];
-    }
-    else if (status === PaymentStatusEnum.failed) {
-      return statsObject[PaymentStatusEnum.failed];
-    }
-    else if (status === PaymentStatusEnum.cancelled
-      || status === PaymentStatusEnum.refunded
-      || status === PaymentStatusEnum.partially_refunded) {
-      return statsObject[PaymentStatusEnum.cancelled] + statsObject[PaymentStatusEnum.refunded] + statsObject[PaymentStatusEnum.partially_refunded];
-    }
-    else if (status === PaymentStatusEnum.pending  || status === PaymentStatusEnum.refund_pending) {
-      return statsObject[PaymentStatusEnum.pending] + statsObject[PaymentStatusEnum.refund_pending];
-    }
-    return 0;
-  }
-
   StyleClassFromStatus(status: number): string {
     if (status === PaymentStatusEnum.successful) {
       return 'SUCCESSFUL-text';
@@ -215,4 +194,5 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
 
   protected readonly PaymentStatusEnum = PaymentStatusEnum;
   protected readonly PaymentProviderEnum = PaymentProviderEnum;
+  protected readonly StatusToStats = StatusToStats;
 }

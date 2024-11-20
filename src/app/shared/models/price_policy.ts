@@ -8,9 +8,13 @@ export interface PricePolicyI {
   name: string | null
   price: number
 
+  ordering: number | null
   product_blueprint_id: number
   always_display: boolean
   allow_invalid_access: boolean
+  allow_unauthenticated_access: boolean
+  max_valid_usages: number
+
   availability: AvailabilityCompositionI
   // update_fields: { [key: string]: any } | null
 }

@@ -9,7 +9,7 @@ import {AccessPolicyEnum, CastToMemberOfGroupPipe} from "@ingenium/app/shared/mo
 @Component({
   selector: 'app-price-policy',
   templateUrl: './price-policy.component.html',
-  styleUrls: ['./price-policy.component.css'],
+  styleUrls: ['./price-policy.component.scss'],
   imports: [
     AllowDenyListComponent,
     NgIf,
@@ -38,8 +38,11 @@ export class PricePolicyComponent implements OnInit {
       availableControl: [this.pricePolicy.availability.available, Validators.required],
       priceControl: [this.pricePolicy.price, Validators.required],
       productNameControl: [this.pricePolicy.name],
+      orderingControl: [this.pricePolicy.ordering],
       alwaysAvailableControl: [this.pricePolicy.always_display],
-      allowInvalidAccessControl: [this.pricePolicy.allow_invalid_access]
+      allowInvalidAccessControl: [this.pricePolicy.allow_invalid_access],
+      allowUnauthenticatedAccessControl: [this.pricePolicy.allow_unauthenticated_access],
+      maxValidUsagesControl: [this.pricePolicy.max_valid_usages],
     });
   }
 
@@ -83,9 +86,12 @@ export class PricePolicyComponent implements OnInit {
       availability: availability,
 
       name: name,
+      ordering: parseInt(this.pricePolicyForm.get('orderingControl')!.value),
       price: this.pricePolicyForm.controls['priceControl'].value,
       always_display: this.pricePolicyForm.controls['alwaysAvailableControl'].value,
       allow_invalid_access: this.pricePolicyForm.controls['allowInvalidAccessControl'].value,
+      allow_unauthenticated_access: this.pricePolicyForm.get('allowUnauthenticatedAccessControl')!.value,
+      max_valid_usages: parseInt(this.pricePolicyForm.get('maxValidUsagesControl')!.value)
     };
     this.UpdatePricePolicyEvent.emit(pricePolicy);
   }

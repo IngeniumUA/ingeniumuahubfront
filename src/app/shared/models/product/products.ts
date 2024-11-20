@@ -24,10 +24,11 @@ export interface ProductMetaI {
   other_meta_data: {[key:string]:string};
 }
 
-export interface PricePolicyI {
+export interface PricePolicyLimitedI {
   id: number;
   name: string | null;
   price: number,
+  ordering: number
   availability: {
     available: boolean;
     disabled: boolean;
@@ -42,7 +43,7 @@ export interface ProductOutI {
   blueprint_id: number;
   origin_item_id: number;
   date_generated: string;
-  price_policy: PricePolicyI;
+  price_policy: PricePolicyLimitedI;
   note: string|null;
   max_count: number;
   product_meta: ProductMetaI;

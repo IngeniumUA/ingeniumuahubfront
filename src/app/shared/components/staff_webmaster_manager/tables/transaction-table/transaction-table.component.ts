@@ -13,7 +13,7 @@ import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/pag
 import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle, TitleCasePipe} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
-import {StatusStatsI} from '../../../../models/stats/transactionStats';
+import {StatusStatsI, StatusToStats} from '../../../../models/stats/transactionStats';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
@@ -21,6 +21,7 @@ import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum"
 import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/transaction.service";
 import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {ToastrService} from "ngx-toastr";
 import {PageTrackingService} from "@app_services/page-tracking.service";
 import {RouterLink} from "@angular/router";
 import {NavController} from "@ionic/angular";
@@ -36,20 +37,21 @@ import {NavController} from "@ionic/angular";
     MatProgressSpinnerModule,
     MatTableModule,
     NgIf,
+    RouterLink,
     NgForOf,
     NgClass,
     NgStyle,
     ReactiveFormsModule,
     CurrencyPipe,
     KeyValuePipe,
-    TitleCasePipe,
-    RouterLink
+    TitleCasePipe
   ],
   standalone: true
 })
 export class TransactionTableComponent implements AfterViewInit, OnChanges, OnInit {
   constructor(private transactionService: TransactionService,
               private datePipe: DatePipe,
+              private toastrService: ToastrService,
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,) {
   }
@@ -187,25 +189,16 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     this.LoadData();
   }
 
-  StatusToStats(status: number, statsObject: StatusStatsI): number {
-    if (status === 0) {  // '0' is all
-      return statsObject["0"];
-    }
-    else if (status === PaymentStatusEnum.successful) {
-      return statsObject[PaymentStatusEnum.successful];
-    }
-    else if (status === PaymentStatusEnum.failed) {
-      return statsObject[PaymentStatusEnum.failed];
-    }
-    else if (status === PaymentStatusEnum.cancelled
-      || status === PaymentStatusEnum.refunded
-      || status === PaymentStatusEnum.partially_refunded) {
-      return statsObject[PaymentStatusEnum.cancelled] + statsObject[PaymentStatusEnum.refunded] + statsObject[PaymentStatusEnum.partially_refunded];
-    }
-    else if (status === PaymentStatusEnum.pending  || status === PaymentStatusEnum.refund_pending) {
-      return statsObject[PaymentStatusEnum.pending] + statsObject[PaymentStatusEnum.refund_pending];
-    }
-    return 0;
+  reEvaluateValidity(transaction_id: number) {
+    this.transactionService.evaluateValidity(transaction_id).pipe().subscribe({
+      next: transaction => {
+        this.toastrService.success(`Validity re-evaluated to ${ValidityEnum[transaction.validity]}`)
+        this.LoadData();
+      },
+      error: err => {
+        this.toastrService.error(err.message);
+      }
+    })
   }
 
   StyleClassFromStatus(status: number): string {
@@ -290,4 +283,5 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   protected readonly PaymentStatusEnum = PaymentStatusEnum;
   protected readonly ValidityEnum = ValidityEnum;
   protected readonly ValidityList = ValidityList;
+  protected readonly StatusToStats = StatusToStats;
 }

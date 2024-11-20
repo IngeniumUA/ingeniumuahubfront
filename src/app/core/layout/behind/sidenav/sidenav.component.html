@@ -1,4 +1,8 @@
-<main *ngIf="this.isSidenav" class="sidenav">
+<main *ngIf="!this.isSideNav" class="bg-blue-950 h-full flex flex-col">
+  <button class="m-1 button button-primary button-inline" (click)="toggleSideNav()">></button>
+</main>
+
+<main *ngIf="this.isSidenavInput && this.isSideNav" class="sidenav">
   <div class="ingenium-container ingenium-container--no-padding-y h-full">
     <div class="flex flex-col md:flex-row h-full">
 
@@ -37,6 +41,8 @@
         <section id="account-section">
           <a (click)="gotoPage('sub/account')" class="section-title">Account</a>
         </section>
+
+        <button class="button button-primary button-inline" (click)="toggleSideNav()">Hide</button>
       </div>
     </div>
   </div>

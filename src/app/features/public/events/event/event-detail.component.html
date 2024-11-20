@@ -1,55 +1,71 @@
 <header><app-layout-public-header [light_theme]="true" /></header>
 
+@let isMobile = (layoutService.isMobile | async);
+
 <main class="ingenium-container ingenium-container--no-padding-x relative h-full">
-  <section>
+  <section [ngClass]=" !isMobile ? {'max-width': '50%', 'margin': '0 auto'}: {}">
     <ng-container *ngIf="{event: this.event$ | async, error: eventError$ | async} as data; ">
       <ng-container *ngIf="data.event as event; else loading">
-        <div>
-<!--          <ng-container *ngIf="event.derived_type.display.image_landscape !== null">-->
-<!--            <img src='{{event.derived_type.display.image_landscape}}' alt="" aria-hidden="true" class="max-h-full sm:max-h-64 md:max-h-72 w-full mx-auto">-->
-<!--          </ng-container>-->
-          <ng-container *ngIf="event.derived_type.display.image_square !== null">
-            <img src='{{event.derived_type.display.image_square}}' alt="" aria-hidden="true" class="max-h-full mx-auto">
-          </ng-container>
-        </div>
 
-        <nav role="tablist" class="categorie-section" [ngStyle]="{'background-color': (event.derived_type.display.color | colordbrgba: 1) }">
-          <button class="categorie-button"
-                  *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
-                  (click)="this.SetProductCategorie(i)"
-                  [ngStyle]="this.getCategoryButtonStyle(
-                  (this.currentProductCategorieIndex$ | async) === i,
-                  event.derived_type.display.color | colordbrgba: 1)"
-          >{{ product_categorie.categorie_name }}</button>
-        </nav>
 
-        <section class="title-info-section">
-          <h3>{{ event.item.name }}</h3>
-<!--          <p>{{ event.start_date | date:'d MMMM' }}</p>-->
-        </section>
-
-        <section class="product-section" *ngIf="(this.currentCategorie$() | async) as current_categorie else noProducts">
-          <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
-            <h3>{{ product_group.group_name }}</h3>
-            <div class="products">
-              @for (product of this.product_group.products; track product.id) {
-              <app-product [product]="product"
-                           [primaryColorFull]="(event.derived_type.display.color | colordbrgba: 1)"
-                           [primaryColorHalf]="(event.derived_type.display.color | colordbrgba: 0.5)"
-                           [itemId]="this.eventId" />
-              }
-            </div>
+          <!-- Top image -->
+          <div [ngClass]="!isMobile ? 'desktop': ''">
+            @if (event.derived_type.display.image_square !== null) {
+              <img src='{{event.derived_type.display.image_square}}' alt="" aria-hidden="true" class="max-h-full mx-auto">
+            } @else if (event.derived_type.display.image_landscape !== null) {
+              <img src='{{event.derived_type.display.image_landscape}}' alt="" aria-hidden="true" class="max-h-full sm:max-h-64 md:max-h-72 w-full mx-auto">
+            }
           </div>
-        </section>
 
-        <div class="order-section flex flex-row gap-3">
-          @let productCount = (this.isCartEmpty$ | async);
-          <button [disabled]="productCount && productCount <= 0" class="button button-primary" (click)="gotoPage('sub/shop/checkout')">Checkout</button>
-        </div>
+          <!-- Ticket Categories -->
+          <nav role="tablist" class="categorie-section"
+               [ngClass]="!isMobile ? 'desktop': ''"
+               [ngStyle]="{'background-color': (event.derived_type.display.color | colordbrgba: 1) }">
+            <button class="categorie-button"
+                    *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
+                    (click)="this.setProductCategory(i)"
+                    [ngStyle]="this.getCategoryButtonStyle(
+                    (this.currentProductCategoryIndex$ | async) === i,
+                    event.derived_type.display.color | colordbrgba: 1)"
+            >{{ product_categorie.categorie_name }}</button>
+          </nav>
 
-        <div class="description-section">
+          <!--Event Title-->
+          <section class="title-info-section" [ngClass]="!isMobile ? 'desktop': ''">
+            <h3>{{ event.item.name }}</h3>
+            <!--<p>{{ event.item.name | date:'d MMMM' }}</p>-->
+          </section>
+
+          <!--Products list-->
+          <section class="product-section"  [ngClass]="!isMobile ? 'desktop': ''"
+                   *ngIf="(this.currentCategory$() | async) as current_categorie else noProducts">
+            <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
+              <h3>{{ product_group.group_name }}</h3>
+              <div class="products">
+                @for (product of this.product_group.products; track product.id) {
+                  <app-product [product]="product"
+                               [primaryColorFull]="(event.derived_type.display.color | colordbrgba: 1)"
+                               [primaryColorHalf]="(event.derived_type.display.color | colordbrgba: 0.5)"
+                               [itemId]="this.eventId" />
+                }
+              </div>
+            </div>
+          </section>
+
+          <!--Checkout Button-->
+          <div class="order-section flex flex-row gap-3"
+               [ngClass]="!isMobile ? 'desktop': ''">
+            @let productCount = (this.isCartEmpty$ | async);
+            <button [disabled]="productCount && productCount <= 0" class="button button-primary" (click)="gotoPage('sub/shop/checkout')">Checkout</button>
+          </div>
+
+
+        <!--Description -->
+        <div class="description-section" [ngClass]="!isMobile ? 'desktop': ''">
           <p class="text-blue-900">{{ event.item.description }}</p>
         </div>
+
+
       </ng-container>
     </ng-container>
   </section>

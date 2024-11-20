@@ -3,6 +3,7 @@ import {catchError, ignoreElements, Observable, of} from 'rxjs';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
@@ -50,6 +51,10 @@ export class VacatureDisplayComponent implements OnInit {
         return of(err);
       })
     );
+  }
+
+  textColor(color: string) {
+    return calcIntensity(color) < 180 ? 'white' : 'black';
   }
 
   IdError() {

@@ -14,8 +14,15 @@
       <img [ngSrc]="this.image" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
     </div>
     <div class="content">
-      <h3 [ngStyle]="{'color': TextColor()}">{{ this.recsysItem.name }}</h3>
-      <span *ngIf="recsysItem.date !== undefined" class="date" [ngStyle]="{'color': TextColor() }">{{ this.recsysItem.date | date }}</span>
+      <h3 [ngStyle]="{'color': textColor()}">{{ this.recsysItem.name }}</h3>
+      <span *ngIf="recsysItem.date !== undefined"
+            class="date"
+            [ngStyle]="{'color': textColor() }">
+        {{ this.recsysItem.date | date }}</span>
+      <span class="font-bold"
+            *ngIf="recsysItem.preview_description !== null"
+            [ngStyle]="{'color': textColor() }">
+        {{ recsysItem.preview_description }}</span>
     </div>
   </article>
 </ng-template>

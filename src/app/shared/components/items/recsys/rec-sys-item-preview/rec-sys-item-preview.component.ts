@@ -5,6 +5,7 @@ import {RouterLink} from '@angular/router';
 import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
+import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 @Component({
   selector: 'app-rec-sys-item-preview',
@@ -34,10 +35,10 @@ export class RecSysItemPreviewComponent implements OnInit {
       this.internalLink = this.recsysItem.follow_through_link.match('^https?:\\/\\/') === null;
     }
 
-  TextColor() {
-    // We could customize this
-    return 'rgb(255,255,255)';
-  }
+    textColor() {
+      // We could customize this
+      return calcIntensity(this.recsysItem.color) < 180 ? 'white' : 'black';
+    }
 
   CardStyle(): object {
     const colorPipe = new ColordbrgbaPipe();
