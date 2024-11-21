@@ -24,6 +24,7 @@ export interface EventItemI {
   display: DisplayCompositionI
   event_start: string
   event_end: string
+  event_metadata: any
 }
 
 export interface EventItemWideI {
