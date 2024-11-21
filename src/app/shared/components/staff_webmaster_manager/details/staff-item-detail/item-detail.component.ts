@@ -6,7 +6,7 @@ import {MatInputModule} from '@angular/material/input';
 import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
-import {isEventItem} from '@ingenium/app/shared/models/item/eventI';
+import {EventItemI, isEventItem} from '@ingenium/app/shared/models/item/eventI';
 import {AsCardItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 import {RouterLink} from "@angular/router";
 import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item/cardI";
@@ -102,7 +102,8 @@ export class ItemDetailComponent implements OnInit{
         derived_type_enum: 'eventitem',
         display: this.item.derived_type.display,
         event_start: this.itemForm.controls['start_date'].value,
-        event_end: this.itemForm.controls['end_date'].value
+        event_end: this.itemForm.controls['end_date'].value,
+        event_metadata: (this.item.derived_type as EventItemI).event_metadata
       };
     }
     // if (this.isPromoItem) {
