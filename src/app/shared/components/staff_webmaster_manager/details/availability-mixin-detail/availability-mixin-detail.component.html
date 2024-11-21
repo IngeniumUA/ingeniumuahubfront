@@ -3,7 +3,11 @@
   <form [formGroup]="form">
     <table>
       <tbody>
-        <tr>
+      <tr>
+        <th>Disabled</th>
+        <td>{{ this.availability.disabled }}</td>
+      </tr>
+      <tr>
           <th>Available</th>
           <td><input type="checkbox" formControlName="available"/></td>
         </tr>
