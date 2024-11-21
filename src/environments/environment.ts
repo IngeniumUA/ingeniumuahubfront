@@ -1,6 +1,14 @@
-import { AuthConfig } from 'angular-oauth2-oidc';
-import { versions } from "@ingenium/environments/versions";
-import { Browser } from '@capacitor/browser';
+import {AuthConfig} from 'angular-oauth2-oidc';
+import {versions} from "@ingenium/environments/versions";
+import {
+  AndroidAnimation,
+  AndroidViewStyle,
+  DismissStyle,
+  InAppBrowser,
+  iOSAnimation,
+  iOSViewStyle,
+  SystemBrowserOptions
+} from '@capacitor/inappbrowser';
 
 const OAuthConfig: AuthConfig = {
   issuer: 'https://sso.ingeniumua.be/realms/ingeniumua',
@@ -23,6 +31,26 @@ export let apiEnviroment = {
   versions: versions
 };
 
-export function openUri(uri: string) {
-  Browser.open({ url: uri });
+export async function openUri(uri: string) {
+  await InAppBrowser.openInSystemBrowser({
+    url: uri,
+    options: options
+  });
+}
+
+const options: SystemBrowserOptions = {
+  android: {
+    showTitle: false,
+    hideToolbarOnScroll: true,
+    viewStyle: AndroidViewStyle.FULL_SCREEN,
+    startAnimation: AndroidAnimation.SLIDE_IN_LEFT,
+    exitAnimation: AndroidAnimation.SLIDE_OUT_RIGHT
+  },
+  iOS: {
+    closeButtonText: DismissStyle.CLOSE,
+    viewStyle: iOSViewStyle.FULL_SCREEN,
+    animationEffect: iOSAnimation.COVER_VERTICAL,
+    enableBarsCollapsing: true,
+    enableReadersMode: false
+  }
 }

@@ -5,7 +5,7 @@ import {User} from "@ingenium/app/core/store";
 import {Router} from "@angular/router";
 import {first} from "rxjs/operators";
 import {captureException} from "@sentry/angular";
-import {Browser} from "@capacitor/browser";
+import { InAppBrowser } from '@capacitor/inappbrowser';
 
 @Component({
   selector: 'app-page',
@@ -16,9 +16,9 @@ export class AuthCallbackComponent implements OnInit {
 
   constructor(private store: Store, private oauthService: OAuthService, private router: Router) {}
 
-  ngOnInit() {
-    this.tryLogin();
-    Browser.close()
+  async ngOnInit() {
+    await this.tryLogin();
+    await InAppBrowser.close();
   }
 
   async tryLogin () {

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
-import {Browser} from "@capacitor/browser";
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
+import { InAppBrowser } from '@capacitor/inappbrowser';
 
 @Component({
   selector: 'app-page',
@@ -16,12 +16,12 @@ export class AuthLogoutComponent implements OnInit {
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.store.selectSnapshot(UserState.isAuthenticated)) {
       this.store.dispatch(new User.Logout());
       return;
     }
-    Browser.close()
+    await InAppBrowser.close();
 
     this.loggedOut = true;
   }
