@@ -61,6 +61,9 @@ import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
 import {
     InteractionTableComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
+import {
+    DeleteButtonComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/delete-button/delete-button.component";
 
 
 @NgModule({
@@ -96,7 +99,8 @@ import {
         CreateCheckoutComponent,
         TransactionDetailComponent,
         CurrencyPipe,
-        InteractionTableComponent
+        InteractionTableComponent,
+        DeleteButtonComponent
     ], providers: [
     DatePipe
   ]

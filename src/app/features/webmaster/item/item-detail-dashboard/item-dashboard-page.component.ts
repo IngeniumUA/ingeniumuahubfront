@@ -3,6 +3,7 @@ import {Observable, of} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-item-detail-dashboard',
@@ -18,7 +19,8 @@ export class ItemDashboardPageComponent implements OnInit {
   itemId!: number | string;
 
   constructor(private itemWideService: ItemWideService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private toastrService: ToastrService,) {
   }
 
   ngOnInit() {
@@ -43,14 +45,19 @@ export class ItemDashboardPageComponent implements OnInit {
   disableItemBuffer: boolean = false;
   loadingDisable: boolean = false;
 
-  public DisableItem(itemId: number) {
-    if (this.disableItemBuffer) {
-      this.loadingDisable = true;
-      this.itemWideService.deleteItem(itemId);
-      this.loadingDisable = false;
-    } else {
-      this.disableItemBuffer = true;
-    }
+  public DeleteItem(itemId: number) {
+    this.itemWideService.deleteItem(itemId).subscribe({
+      next: value => {
+        if (value) {
+          this.toastrService.success('Item deleted!');
+        } else {
+          this.toastrService.error('Item could not be deleted?');
+        }
+      },
+      error: error => {
+        this.toastrService.error(`Item could not be deleted: ${error}`);
+      }
+    })
   }
 
   ToggleAddingCheckout() {
