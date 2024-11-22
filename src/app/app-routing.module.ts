@@ -11,6 +11,7 @@ import {CardRedirectComponent} from './features/public/card-redirect/card-redire
 import {webmasterGuard} from './core/guards/webmaster.guard';
 import {managerGuard} from './core/guards/manager.guard';
 import {TemplatePageTitleStrategy} from "@ingenium/app/shared/others/PageTitleStrategy";
+import {WalletRedirectComponent} from "@ingenium/app/features/public/wallet-redirect/wallet-redirect.component";
 
 
 const routes: Routes = [
@@ -45,6 +46,9 @@ const routes: Routes = [
 
       // Cardredirect
       {path: 'card/:id', component: CardRedirectComponent, canActivate: [authGuard]},
+
+      // Walletredirect
+      {path: 'wallet/:id', component: WalletRedirectComponent},
 
       // User specific pages
       {
