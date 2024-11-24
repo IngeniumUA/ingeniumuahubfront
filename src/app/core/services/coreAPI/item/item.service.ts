@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, Observable, of, startWith} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {ItemI, ItemInI} from "@ingenium/app/shared/models/item/itemI";
-import {RecSysPreviewI} from "@ingenium/app/shared/models/item/recsysI";
 import {map} from "rxjs/operators";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {captureException} from "@sentry/angular";
@@ -29,6 +28,7 @@ export class ItemService {
     this.httpClient.post(this.apiUrl, itemData);
   }
 
+  // TODO: Move this to somewhere else as it is a generic function
   public static makeRequestWithHttpState<T>(httpClient: HttpClient, path: string): Observable<HttpState<T>>  {
     return httpClient.get<T>(path)
       .pipe(
