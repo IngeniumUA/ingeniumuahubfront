@@ -1,4 +1,5 @@
 import {ProductOutI, PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
+import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
 
 export namespace CartActions {
   export class AddToCart {
@@ -39,6 +40,12 @@ export namespace CartActions {
     constructor(public note: string) { }
   }
 
+  export class AddCartErrors {
+    static readonly type = '[Cart] Add Cart Errors';
+    constructor(public errors: CartFailedI|null) {}
+  }
+
+  // TODO: Implement this action
   export class Checkout {
     static readonly type = '[Cart] Checkout';
     constructor(public payment_provider: PaymentProviderEnum) {}

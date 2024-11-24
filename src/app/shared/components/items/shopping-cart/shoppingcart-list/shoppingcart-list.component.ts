@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, JsonPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import {ProductComponent} from '@ingenium/app/shared/components/items/products/product/product.component';
 import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
 import {RouterLink} from '@angular/router';
@@ -10,6 +10,7 @@ import {Store} from "@ngxs/store";
 import {CartActions, CartState, UserState} from "@ingenium/app/core/store";
 import {map} from "rxjs/operators";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
 
 @Component({
   selector: 'app-shoppingcart-list',
@@ -24,11 +25,13 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     ReactiveFormsModule,
     FormsModule,
     KeyValuePipe,
+    JsonPipe,
   ],
   standalone: true
 })
 export class ShoppingcartListComponent implements OnInit {
   products$: Observable<ProductOutI[]> = this.store.select(CartState.getProducts);
+  failedCart$: Observable<null|CartFailedI> = this.store.select(CartState.getFailedCart);
   totalPrice$: Observable<number> = this.store.select(CartState.getTotalPrice);
   allowStaffCheckout$ = this.store.select(UserState.roles).pipe(map(roles => roles && roles.is_manager));
 
@@ -60,5 +63,16 @@ export class ShoppingcartListComponent implements OnInit {
   onNoteAreaChanged(event: Event) {
     const note = (event.target as HTMLInputElement).value;
     this.store.dispatch(new CartActions.SetCheckoutNote(note));
+  }
+
+  hasFailedProduct(product: ProductOutI, failedProducts: ProductOutI[]|undefined) {
+    if (!failedProducts) {
+      return undefined;
+    }
+
+    // Check if the product is in the failed products list and if so return the failed product
+    return failedProducts.find(failedProduct => {
+      return product.id === failedProduct.id && product.price_policy.id === failedProduct.price_policy.id;
+    });
   }
 }

@@ -1,4 +1,5 @@
 @let products = (products$ | async);
+@let failedCart = (failedCart$ | async);
 
 <div class="alert alert-warning alert-border" role="alert" *ngIf="products?.length === 0">
   <div class="flex">
@@ -32,6 +33,12 @@
               </li>
             </ul>
             <p class="cart-list-product__price">&euro; {{ product.price_policy.price }}</p>
+
+            <!-- FAILED PRODUCT -->
+            @let failedProduct = hasFailedProduct(product, failedCart?.failed_products);
+            @if (failedProduct) {
+              <p class="error-message">{{ failedProduct | json }}</p>
+            }
           </div>
 
           <div class="cart-list-product__actions">
