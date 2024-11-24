@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {MediabucketFileService} from "@ingenium/app/core/services/coreAPI/file.service";
 import {first} from "rxjs/operators";
+import {AccountService} from "@ingenium/app/core/services/coreAPI/user/account.service";
 
 @Component({
   selector: 'app-wallet-redirect',
@@ -14,7 +14,7 @@ export class WalletRedirectComponent implements OnInit{
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private fileService: MediabucketFileService) {
+              private accountService: AccountService) {
   }
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class WalletRedirectComponent implements OnInit{
       }
 
       // Get and redirect to wallet link
-      this.fileService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam, platform).pipe(first()).subscribe({
+      this.accountService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam, platform).pipe(first()).subscribe({
         next: (response) => {
           window.location.href = response
         }
