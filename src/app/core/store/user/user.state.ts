@@ -1,5 +1,5 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {Action, NgxsOnInit, Selector, State, StateContext} from '@ngxs/store';
+import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {UserStateModel} from './user.model';
 import {User} from './user.actions';
 import {Router} from "@angular/router";
@@ -23,15 +23,10 @@ import {isPlatformServer} from "@angular/common";
   },
 })
 @Injectable()
-export class UserState implements NgxsOnInit {
+export class UserState {
 
   constructor(private router: Router, private oauthService: OAuthService,
               private httpClient: HttpClient, @Inject(PLATFORM_ID) private platformId: any) {}
-
-  ngxsOnInit(ctx: StateContext<any>) {
-    ctx.dispatch(new User.FetchAuthTokenFromStorage());
-  }
-
   /**
    * Selectors
    */
@@ -114,7 +109,7 @@ export class UserState implements NgxsOnInit {
   }
 
   @Action(User.FetchAuthTokenFromStorage)
-  fetchAuthTokenFromStorage(ctx: StateContext<UserStateModel>, _action: User.FetchAuthTokenFromStorage) {
+  fetchAuthTokenFromStorage(ctx: StateContext<UserStateModel>, action: User.FetchAuthTokenFromStorage) {
     if (!this.oauthService.hasValidAccessToken()) {
       return;
     }
@@ -124,8 +119,9 @@ export class UserState implements NgxsOnInit {
     const email = this.oauthService.getIdentityClaims()['email'];
     ctx.dispatch(new User.SetAuthData(token, email));
 
-    // Request user roles
-    ctx.dispatch(new User.GetRoles());
+    if (action.shouldGetRoles) {
+      ctx.dispatch(new User.GetRoles());
+    }
   }
 
   @Action(User.SetAuthData)
