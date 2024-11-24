@@ -29,26 +29,26 @@ export class ItemService {
     this.httpClient.post(this.apiUrl, itemData);
   }
 
-  public static makeRecSysRequestWithHttpState(httpClient: HttpClient, path: string): Observable<HttpState<RecSysPreviewI[]>>  {
-    return httpClient.get<RecSysPreviewI[]>(path)
+  public static makeRequestWithHttpState<T>(httpClient: HttpClient, path: string): Observable<HttpState<T>>  {
+    return httpClient.get<T>(path)
       .pipe(
-        map((events: RecSysPreviewI[]): HttpState<RecSysPreviewI[]> => {
+        map((data: T): HttpState<T> => {
           return {
-            data: events,
+            data,
             error: null,
             loading: false,
           }
         }),
-        catchError((error): Observable<HttpState<RecSysPreviewI[]>> => {
+        catchError((error): Observable<HttpState<T>> => {
           captureException(error);
           return of({
-            data: [],
-            error: error,
+            data: null,
+            error,
             loading: false,
           })
         }),
-        startWith<HttpState<RecSysPreviewI[]>>({
-          data: [],
+        startWith<HttpState<T>>({
+          data: null,
           error: null,
           loading: true,
         })

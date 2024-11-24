@@ -11,6 +11,7 @@ import {Store} from "@ngxs/store";
 import {CartState} from "@ingenium/app/core/store";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 import {LayoutService} from "@ingenium/app/core/services/layout/layout.service";
+import {HttpState} from "@ingenium/app/shared/models/httpState";
 
 
 @Component({
@@ -23,7 +24,7 @@ export class EventDetailComponent implements OnInit {
   isCartEmpty$: Observable<number>;
   // Event Info and Deco
   eventId!: string;
-  event$!: Observable<ItemWideLimitedI>;
+  eventResponse$!: Observable<HttpState<ItemWideLimitedI>>;
   eventError$!: Observable<any>;
 
   productCategories$!: Observable<ProductCategoryI[]>;
@@ -63,8 +64,8 @@ export class EventDetailComponent implements OnInit {
 
   setEvent(id: string): void {
     this.eventId = id;
-    this.event$ = this.eventService.getEvent(id).pipe();
-    this.eventError$ = this.event$.pipe(
+    this.eventResponse$ = this.eventService.getEvent(id).pipe();
+    this.eventError$ = this.eventResponse$.pipe(
       ignoreElements(),
       catchError((err) => {
         this.router.navigateByUrl('/event').then(_ => {});
