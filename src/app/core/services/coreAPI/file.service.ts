@@ -24,7 +24,8 @@ export class MediabucketFileService {
                         end_date: string,
                         start_date: string,
                         nummer: number,
-                        locatie_naam: string): Observable<{google_wallet_link: string, apple_wallet_link: string}>{
+                        locatie_naam: string,
+                        platform: string): Observable<string>{
     const param = {
       transaction_uuid: transaction_uuid,
       banner_link: banner_link,
@@ -35,7 +36,7 @@ export class MediabucketFileService {
       locatie_naam: locatie_naam
     }
     const params = new URLSearchParams(removeNull(param));
-    return this.httpClient.get<{google_wallet_link: string, apple_wallet_link: string}>(`${this.apiUrl}/wallet?${params.toString()}`);
+    return this.httpClient.get<string>(`${this.apiUrl}/wallet/${platform}?${params.toString()}`);
   }
 
 }

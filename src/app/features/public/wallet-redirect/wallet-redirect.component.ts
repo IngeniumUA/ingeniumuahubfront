@@ -53,13 +53,9 @@ export class WalletRedirectComponent implements OnInit{
       }
 
       // Get and redirect to wallet link
-      this.fileService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam).pipe(first()).subscribe({
+      this.fileService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam, platform).pipe(first()).subscribe({
         next: (response) => {
-          if (platform === "google") {
-            window.location.href = response.google_wallet_link
-          } else {
-            window.location.href = response.apple_wallet_link
-          }
+          window.location.href = response
         }
       })
     }
