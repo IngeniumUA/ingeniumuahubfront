@@ -1,5 +1,6 @@
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 import {ValidityEnum} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {ProductOutI} from "@ingenium/app/shared/models/product/products";
 
 export interface CartSuccessI {
   checkout: CheckoutSmollI
@@ -15,7 +16,7 @@ export interface FailedProductI {
   auth_error: object
   non_auth_error: object
 
-  product: any
+  product: ProductOutI
 }
 
 export interface CartFailedI {

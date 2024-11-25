@@ -10,7 +10,7 @@ import {Store} from "@ngxs/store";
 import {CartActions, CartState, UserState} from "@ingenium/app/core/store";
 import {map} from "rxjs/operators";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
+import {CartFailedI, FailedProductI} from "@ingenium/app/shared/models/cart/cartI";
 
 @Component({
   selector: 'app-shoppingcart-list',
@@ -65,14 +65,14 @@ export class ShoppingcartListComponent implements OnInit {
     this.store.dispatch(new CartActions.SetCheckoutNote(note));
   }
 
-  hasFailedProduct(product: ProductOutI, failedProducts: ProductOutI[]|undefined) {
+  hasFailedProduct(product: ProductOutI, failedProducts: FailedProductI[]|undefined) {
     if (!failedProducts) {
       return undefined;
     }
 
     // Check if the product is in the failed products list and if so return the failed product
     return failedProducts.find(failedProduct => {
-      return product.id === failedProduct.id && product.price_policy.id === failedProduct.price_policy.id;
+      return product.id === failedProduct.product.id && product.price_policy.id === failedProduct.product.price_policy.id;
     });
   }
 }
