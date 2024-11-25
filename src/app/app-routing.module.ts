@@ -12,6 +12,7 @@ import {webmasterGuard} from './core/guards/webmaster.guard';
 import {managerGuard} from './core/guards/manager.guard';
 import {TemplatePageTitleStrategy} from "@ingenium/app/shared/others/PageTitleStrategy";
 import {WalletRedirectComponent} from "@ingenium/app/features/public/wallet-redirect/wallet-redirect.component";
+import {GalabalComponent} from "@ingenium/app/features/public/custom-pages/galabal/galabal.component";
 
 
 const routes: Routes = [
@@ -59,7 +60,12 @@ const routes: Routes = [
 
       // Promo
       {path: '', loadChildren: () => import('src/app/features/public/promo/promo.module').then(x => x.PromoModule)},
+
+
     ]},
+
+  //** Galabal **//
+  {path: 'galabal', component: GalabalComponent},
 
   //** Popupz **//
   /*{
