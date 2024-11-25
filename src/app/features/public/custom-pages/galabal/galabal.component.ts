@@ -23,7 +23,7 @@ export class GalabalComponent implements OnInit {
           window.location.href = `https://www.instagram.com/${url}`;
         }
       },
-      error: (err: Error) => {
+      error: (_: Error) => {
         window.location.href = 'https://www.instagram.com/ingeniumua/';
       }
     })
