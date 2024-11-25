@@ -15,8 +15,9 @@ export class GalabalComponent implements OnInit {
   ngOnInit() {
     this.eventService.getEvent("Ingenium%20Galabal").subscribe({
       next: item => {
-        if (item === undefined || item === null) {
+        if (item.data === undefined || item.data === null) {
           window.location.href = 'https://www.instagram.com/ingeniumua/';
+          return
         }
         const eventItem = item.data as EventItemWideI;
         const url = eventItem.derived_type.display.follow_through_link
