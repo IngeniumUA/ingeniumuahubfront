@@ -2,11 +2,16 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {first} from "rxjs/operators";
 import {AccountService} from "@ingenium/app/core/services/coreAPI/user/account.service";
+import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading-indicator/loading-indicator.component";
+import {PublicHeaderComponent} from "@ingenium/app/core/layout/public/header/public-header.component";
 
 @Component({
   selector: 'app-wallet-redirect',
   standalone: true,
-  imports: [],
+  imports: [
+    LoadingIndicatorComponent,
+    PublicHeaderComponent
+  ],
   templateUrl: './wallet-redirect.component.html',
   styleUrl: './wallet-redirect.component.css'
 })
@@ -56,6 +61,7 @@ export class WalletRedirectComponent implements OnInit{
       this.accountService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam, platform).pipe(first()).subscribe({
         next: (response) => {
           window.location.href = response
+          this.router.navigateByUrl('home')
         }
       })
     }
