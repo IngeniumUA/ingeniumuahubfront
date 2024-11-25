@@ -36,7 +36,7 @@ export class WalletRedirectComponent implements OnInit{
         if (param.startsWith("transaction_uuid=")) {
           transaction_uuid = param.replace("transaction_uuid=", "")
         } else if (param.startsWith("banner_link=")) {
-          banner_link = param.replace("banner_link=", "")
+          banner_link = decodeURI(param.replace("banner_link=", ""))
         } else if (param.startsWith("event_name=")) {
           event_name = param.replace("event_name=", "")
         } else if (param.startsWith("end_date=")) {
