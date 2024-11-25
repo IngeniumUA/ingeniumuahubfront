@@ -17,7 +17,7 @@ export class ShopService {
   constructor(private httpClient: HttpClient) { }
 
   public getShopItems(): Observable<HttpState<RecSysPreviewI[]>> {
-    return ItemService.makeRecSysRequestWithHttpState(this.httpClient, this.apiUrl + 'list');
+    return ItemService.makeRequestWithHttpState(this.httpClient, this.apiUrl + 'list');
   }
 
   public getShop(shopId: string): Observable<ItemWideLimitedI> {

@@ -11,9 +11,10 @@ export class MediabucketFileService {
   constructor(private httpClient: HttpClient) {
   }
 
-  apiUrl = apiEnviroment.apiUrl + 'file/media';
+  apiUrl = apiEnviroment.apiUrl + 'file';
 
   public listFileNames(): Observable<string[]> {
-    return this.httpClient.get<string[]>(`${this.apiUrl}/list`);
+    return this.httpClient.get<string[]>(`${this.apiUrl}/media/list`);
   }
+
 }

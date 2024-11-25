@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 
 import { EventRoutingModule } from './event-routing.module';
 import {EventsComponent} from './events/events.component';
@@ -22,7 +22,8 @@ import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading
         PublicHeaderComponent,
         ColordbrgbaPipe,
         RecSysItemPreviewComponent,
-        LoadingIndicatorComponent
+        LoadingIndicatorComponent,
+        NgOptimizedImage
     ],
   declarations: [
     EventsComponent,

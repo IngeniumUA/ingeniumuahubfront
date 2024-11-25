@@ -7,13 +7,15 @@ import {removeItem} from "@ngxs/store/operators";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import structuredClone from '@ungap/structured-clone';
+import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
 
 @State<CartStateModel>({
   name: 'cart',
   defaults: {
     products: [],
     paymentProvider: PaymentProviderEnum.Stripe,
-    checkoutNote: ''
+    checkoutNote: '',
+    failedCart: null,
   },
 })
 @Injectable()
@@ -54,6 +56,11 @@ export class CartState implements NgxsOnInit {
   @Selector()
   static getProductCount(state: CartStateModel): number {
     return state.products.length;
+  }
+
+  @Selector()
+  static getFailedCart(state: CartStateModel): null|CartFailedI {
+    return state.failedCart;
   }
 
 
@@ -151,6 +158,13 @@ export class CartState implements NgxsOnInit {
   setCheckoutNote(ctx: StateContext<CartStateModel>, action: CartActions.SetCheckoutNote) {
     ctx.patchState({
       checkoutNote: action.note
+    });
+  }
+
+  @Action(CartActions.AddCartErrors)
+  addCartErrors(ctx: StateContext<CartStateModel>, action: CartActions.AddCartErrors) {
+    ctx.patchState({
+      failedCart: action.errors
     });
   }
 

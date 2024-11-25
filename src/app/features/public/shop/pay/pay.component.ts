@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {Router} from '@angular/router';
 import {Store} from "@ngxs/store";
@@ -8,7 +8,7 @@ import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products"
 import {map} from "rxjs/operators";
 import {catchError} from "rxjs";
 import {ToastrService} from "ngx-toastr";
-import {CartSuccessI} from "@ingenium/app/shared/models/cart/cartI";
+import {CartFailedI, CartSuccessI} from "@ingenium/app/shared/models/cart/cartI";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 
 @Component({
@@ -38,19 +38,15 @@ export class PayComponent implements OnInit {
       checkout_note: this.store.selectSnapshot(CartState.getCheckoutNote),
     }).pipe(
       map((result: CartSuccessI) => this.processCheckoutResponse(result)),
-      catchError((_): any => {
-        // // todo this.store.clearPaymentErrors();
-        // if (err instanceof HttpErrorResponse) {
-        //  const cartFailed: CartFailedI = err.error["detail"];
-        //  // todo this.store.setPaymentErrors(-
-        // }
+      catchError((error): any => {
+        if (error instanceof HttpErrorResponse && error.status === 406) {
+          this.store.dispatch(new CartActions.AddCartErrors(error.error.detail as CartFailedI));
+          this.toastrService.error('Er is iets misgegaan met de bestelling, controleer de producten en probeer het opnieuw.');
+        }
+
         this.router.navigateByUrl('/shop/checkout');
       })
     ).subscribe();
-
-    // Clear the cart
-    this.store.dispatch(new CartActions.ClearCart());
-    this.store.dispatch(new CartActions.SetCheckoutNote(''));
   }
 
   processCheckoutResponse(response: CartSuccessI) {
@@ -90,6 +86,11 @@ export class PayComponent implements OnInit {
         this.stripePayment = true;
         break;
     }
+
+    // Clear the cart
+    this.store.dispatch(new CartActions.ClearCart());
+    this.store.dispatch(new CartActions.SetCheckoutNote(''));
+    this.store.dispatch(new CartActions.AddCartErrors(null));
 
     this.checkout = response.checkout;
     this.loading = false;

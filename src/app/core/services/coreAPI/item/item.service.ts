@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, Observable, of, startWith} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {ItemI, ItemInI} from "@ingenium/app/shared/models/item/itemI";
-import {RecSysPreviewI} from "@ingenium/app/shared/models/item/recsysI";
 import {map} from "rxjs/operators";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {captureException} from "@sentry/angular";
@@ -29,26 +28,27 @@ export class ItemService {
     this.httpClient.post(this.apiUrl, itemData);
   }
 
-  public static makeRecSysRequestWithHttpState(httpClient: HttpClient, path: string): Observable<HttpState<RecSysPreviewI[]>>  {
-    return httpClient.get<RecSysPreviewI[]>(path)
+  // TODO: Move this to somewhere else as it is a generic function
+  public static makeRequestWithHttpState<T>(httpClient: HttpClient, path: string): Observable<HttpState<T>>  {
+    return httpClient.get<T>(path)
       .pipe(
-        map((events: RecSysPreviewI[]): HttpState<RecSysPreviewI[]> => {
+        map((data: T): HttpState<T> => {
           return {
-            data: events,
+            data,
             error: null,
             loading: false,
           }
         }),
-        catchError((error): Observable<HttpState<RecSysPreviewI[]>> => {
+        catchError((error): Observable<HttpState<T>> => {
           captureException(error);
           return of({
-            data: [],
-            error: error,
+            data: null,
+            error,
             loading: false,
           })
         }),
-        startWith<HttpState<RecSysPreviewI[]>>({
-          data: [],
+        startWith<HttpState<T>>({
+          data: null,
           error: null,
           loading: true,
         })
