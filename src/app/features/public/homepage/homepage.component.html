@@ -73,9 +73,11 @@
 
     @let recsysItems = (this.recsysItems$ | async);
     @if (recsysItems && recsysItems.length > 0) {
-      @for (item of recsysItems; track item.name) {
-        <app-rec-sys-item-preview [recsysItem]="item" />
-      }
+      <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
+        @for (item of recsysItems; track item.name) {
+          <app-rec-sys-item-preview [recsysItem]="item" />
+        }
+      </div>
 
       <div class="text-center mt-4">
         <a class="button button-outline-white button-lg uppercase" [routerLink]="['/vacature']">
