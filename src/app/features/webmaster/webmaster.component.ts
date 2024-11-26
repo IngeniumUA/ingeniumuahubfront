@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-webmaster',
   templateUrl: './webmaster.component.html',
-  styleUrls: ['./webmaster.component.css']
+  styleUrls: ['./webmaster.component.scss']
 })
 export class WebmasterComponent {
   constructor() { }
