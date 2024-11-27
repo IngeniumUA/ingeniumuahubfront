@@ -7,14 +7,20 @@ export interface CartSuccessI {
   tracker_id: number | null
 }
 
+export interface FailedProductError {
+  // This should go in a generic exception interface somewhere
+  error_nl: string
+  error_en: string
+}
+
 export interface FailedProductI {
   index: number
 
   available: boolean
   validity: ValidityEnum
 
-  auth_error: object
-  non_auth_error: object
+  auth_error: FailedProductError | null
+  non_auth_error: FailedProductError
 
   product: ProductOutI
 }

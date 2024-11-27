@@ -11,7 +11,10 @@
 <ng-template #cardContent>
   <article class="event-card" [style]=CardStyle()>
     <div class="image">
-      <img [ngSrc]="this.image" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
+      <!-- Image might not be given (either could optionally be null), if null is passed the page breaks -->
+      @if (this.image !== null) {
+        <img [ngSrc]="this.image" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
+      }
     </div>
     <div class="content">
       <h3 [ngStyle]="{'color': textColor()}">{{ this.recsysItem.name }}</h3>

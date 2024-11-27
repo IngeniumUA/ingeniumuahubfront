@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, JsonPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
-import {ProductComponent} from '@ingenium/app/shared/components/items/products/product/product.component';
+import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
 import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -18,14 +17,13 @@ import {CartFailedI, FailedProductI} from "@ingenium/app/shared/models/cart/cart
   styleUrls: ['./shoppingcart-list.component.scss'],
   imports: [
     NgForOf,
-    ProductComponent,
     NgIf,
     RouterLink,
     AsyncPipe,
     ReactiveFormsModule,
     FormsModule,
     KeyValuePipe,
-    JsonPipe,
+
   ],
   standalone: true
 })

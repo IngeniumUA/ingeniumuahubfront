@@ -37,7 +37,18 @@
             <!-- FAILED PRODUCT -->
             @let failedProduct = hasFailedProduct(product, failedCart?.failed_products);
             @if (failedProduct) {
-              <p class="error-message">{{ failedProduct | json }}</p>
+              <p>
+                <span  class="error-message">
+                  Kan niet aangekocht worden:
+                  </span>
+                <span class="text-ingenium-grey-700 text-sm">
+                  @if (failedProduct.auth_error === null) {
+                    {{ failedProduct.non_auth_error.error_nl }}
+                  } @else {
+                    {{ failedProduct.auth_error.error_nl }}
+                  }
+                </span>
+              </p>
             }
           </div>
 
