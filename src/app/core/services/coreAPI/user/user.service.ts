@@ -63,7 +63,7 @@ export class UserService {
     };
 
     const params = new URLSearchParams(removeNull(param));
-    return this.httpClient.get<Blob>(`${this.apiUrl}/export${params.toString()}`, httpOptions);
+    return this.httpClient.get<Blob>(`${this.apiUrl}/export?${params.toString()}`, httpOptions);
   }
 
   public importUsers(file: FormData, group_id: number | null = null): Observable<boolean> {
