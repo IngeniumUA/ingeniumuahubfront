@@ -16,7 +16,7 @@ export class GalabalComponent implements OnInit {
     this.eventService.getEvent("Ingenium%20Galabal").subscribe({
       next: item => {
         if (item.data === undefined || item.data === null) {
-          window.location.href = 'https://www.instagram.com/ingeniumua/';
+          window.location.href = 'https://www.facebook.com/events/1660039801532627?acontext=%7B%22event_action_history%22%3A[]%7D';
           return
         }
         const eventItem = item.data as EventItemWideI;
@@ -28,7 +28,7 @@ export class GalabalComponent implements OnInit {
         }
       },
       error: (_: Error) => {
-        window.location.href = 'https://www.instagram.com/ingeniumua/';
+        window.location.href = 'https://www.facebook.com/events/1660039801532627?acontext=%7B%22event_action_history%22%3A[]%7D';
       }
     })
   }
