@@ -7,5 +7,35 @@
   <div class="flex flex-col items-center justify-center h-full">
     <h1>Galabal</h1>
     <h1>Der Ingenieurs</h1>
+
+<!--    <section *ngIf="(products$ | async) as products">-->
+<!--      <div *ngFor="let product of products" class="border-t-2 flex flex-row">-->
+<!--        <span class="flex flex-col">-->
+<!--          <p>-->
+<!--            @if (product.price_policy === null) {-->
+<!--              {{ product.name }}-->
+<!--            } @else {-->
+<!--              @if (product.price_policy.name !== null) {-->
+<!--                {{ product.price_policy.name }}-->
+<!--              } @else {-->
+<!--                {{ product.name }}-->
+<!--              }-->
+<!--            }-->
+<!--          </p>-->
+<!--          <p>-->
+<!--            &euro; {{ product.price_policy.price }}-->
+<!--          </p>-->
+<!--        </span>-->
+
+<!--        <span>-->
+<!--          @if (product.max_count <= 0) {-->
+<!--            <button class="border-s bg-white text-gray-700">Add To Cart</button>-->
+<!--          } @else {-->
+<!--            <p class="text-white">Sold Out</p>-->
+<!--          }-->
+<!--        </span>-->
+<!--      </div>-->
+<!--    </section>-->
+
   </div>
 </div>
