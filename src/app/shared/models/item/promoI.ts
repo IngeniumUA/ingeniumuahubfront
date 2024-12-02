@@ -1,6 +1,5 @@
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
-import {ShopItemInI} from "@ingenium/app/shared/models/item/shopI";
 
 export enum PromoItemTypeEnum {
   vacature = 1
