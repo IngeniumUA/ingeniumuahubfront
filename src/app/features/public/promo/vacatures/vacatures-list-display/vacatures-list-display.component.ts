@@ -12,7 +12,7 @@ import { PromoService } from '@ingenium/app/core/services/coreAPI/item/derived_s
 export class VacaturesListDisplayComponent {
 
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(50, 0);
+  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(50, 0, 1);
 
   constructor(private promoService: PromoService,
               private layoutService: LayoutService) {
