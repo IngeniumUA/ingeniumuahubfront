@@ -23,8 +23,8 @@ export class ItemWideService {
   public getItem(itemId: string | number): Observable<ItemWideI> {
     return this.httpClient.get<ItemWideI>(`${this.apiUrl}/${itemId}`);
   }
-  public deleteItem(itemId: number): void {
-    this.httpClient.delete(`${this.apiUrl}/${itemId}`);
+  public deleteItem(itemId: number): Observable<boolean> {
+    return this.httpClient.delete<boolean>(`${this.apiUrl}/${itemId}`);
   }
   public createItem(itemData: ItemWideInI): Observable<ItemWideI> {
     return this.httpClient.post<ItemWideI>(this.apiUrl, itemData);

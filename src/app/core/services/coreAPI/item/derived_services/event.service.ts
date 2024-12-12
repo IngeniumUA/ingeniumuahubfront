@@ -18,14 +18,14 @@ export class EventService {
   apiUrl = apiEnviroment.apiUrl + 'item/event/';
 
   public getEventsList(): Observable<HttpState<RecSysPreviewI[]>> {
-    return ItemService.makeRecSysRequestWithHttpState(this.httpClient, this.apiUrl + 'list');
+    return ItemService.makeRequestWithHttpState<RecSysPreviewI[]>(this.httpClient, this.apiUrl + 'list');
   }
 
   public getEvents(): Observable<ItemWideLimitedI[]> {
     return this.httpClient.get<ItemWideLimitedI[]>(this.apiUrl);
   }
 
-  public getEvent(eventId: string): Observable<ItemWideLimitedI> {
-    return this.httpClient.get<ItemWideLimitedI>(this.apiUrl + eventId).pipe(shareReplay());
+  public getEvent(eventId: string): Observable<HttpState<ItemWideLimitedI>> {
+    return ItemService.makeRequestWithHttpState<ItemWideLimitedI>(this.httpClient, this.apiUrl + eventId).pipe(shareReplay());
   }
 }

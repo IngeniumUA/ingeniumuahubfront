@@ -16,6 +16,7 @@ export namespace User {
 
   export class FetchAuthTokenFromStorage {
     static readonly type = '[User] Fetch browser token';
+    constructor(public shouldGetRoles: boolean = true) {}
   }
 
   export class GetRoles {
@@ -25,7 +26,6 @@ export namespace User {
   export class Logout {
     static readonly type = '[User] Logout';
 
-    constructor(public authError: boolean = false) {
-    }
+    constructor(public authError: boolean = false) {}
   }
 }

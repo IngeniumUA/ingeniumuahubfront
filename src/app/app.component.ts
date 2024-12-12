@@ -1,24 +1,31 @@
 import {NativeAudio} from "@capgo/native-audio";
 import {StorageService} from "./services/qr-scanner_services/storage.service";
 
-import {Component, NgZone} from '@angular/core';
+import {Component, NgZone, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {App, URLOpenListenerEvent} from "@capacitor/app";
 import {PageTrackingService} from "@app_services/page-tracking.service";
 import {NavController} from "@ionic/angular";
 import {OAuthService} from "angular-oauth2-oidc";
 import {apiEnviroment} from "@ingenium/environments/environment";
+import {NavigationEnd, Router} from "@angular/router";
+import {Store} from "@ngxs/store";
+import {User} from "@ingenium/app/core/store";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
-  constructor(public storage: StorageService,
+export class AppComponent implements OnInit {
+  endSubscription = new Subject();
+
+  constructor(@Inject(PLATFORM_ID) platformId: any, oauthService: OAuthService, private router: Router,
+              private store: Store,
+              public storage: StorageService,
               private zone: NgZone,
               private pageTrackService: PageTrackingService,
-              private navCtrl: NavController,
-              oauthService: OAuthService,) {
+              private navCtrl: NavController,) {
     oauthService.configure(apiEnviroment.oauthConfig);
     oauthService.loadDiscoveryDocument().then();
     this.preloadAudio().then();
@@ -74,4 +81,23 @@ export class AppComponent {
     }
   }
 
+
+  ngOnInit(): void {
+    // I think this sucks but okay
+    // Make sure that on the initial page we don't get the token if we are on the callback page
+    this.router.events
+      .pipe(
+        takeUntil(this.endSubscription)
+      )
+      .subscribe((e) => {
+        if (e instanceof NavigationEnd) {
+          // Only get the token if we are not on the callback page
+          if (e.url !== '/auth/callback') {
+            this.store.dispatch(new User.FetchAuthTokenFromStorage());
+          }
+
+          this.endSubscription.next(null);
+        }
+    });
+  }
 }

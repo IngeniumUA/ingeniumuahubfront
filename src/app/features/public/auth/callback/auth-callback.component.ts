@@ -37,7 +37,11 @@ export class AuthCallbackComponent implements OnInit {
       )).pipe(first()).subscribe(() => {
         // When the user data is set, get the user roles
         this.store.dispatch(new User.GetRoles());
-        this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
+
+        // Wait for a second
+        setTimeout(() => {
+          this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
+        }, 1000);
       });
     } catch (error) {
       captureException(error);

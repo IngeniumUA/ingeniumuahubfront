@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
+import {ToastrService} from "ngx-toastr";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
@@ -21,6 +22,8 @@ export class ItemDashboardPageComponent implements OnInit {
 
   constructor(private itemWideService: ItemWideService,
               private route: ActivatedRoute,
+              private router: Router,
+              private toastrService: ToastrService,
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,
               private platform: Platform) {
@@ -52,14 +55,20 @@ export class ItemDashboardPageComponent implements OnInit {
   disableItemBuffer: boolean = false;
   loadingDisable: boolean = false;
 
-  public DisableItem(itemId: number) {
-    if (this.disableItemBuffer) {
-      this.loadingDisable = true;
-      this.itemWideService.deleteItem(itemId);
-      this.loadingDisable = false;
-    } else {
-      this.disableItemBuffer = true;
-    }
+  public DeleteItem(itemId: number) {
+    this.itemWideService.deleteItem(itemId).subscribe({
+      next: value => {
+        if (value === null) {
+          this.toastrService.success('Item deleted!');
+          this.router.navigate(['../']);
+        } else {
+          this.toastrService.error('Item could not be deleted?');
+        }
+      },
+      error: error => {
+        this.toastrService.error(`Item could not be deleted: ${error}`);
+      }
+    })
   }
 
   ToggleAddingCheckout() {

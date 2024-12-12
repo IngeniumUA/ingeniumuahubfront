@@ -1,4 +1,5 @@
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
+import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 
 export enum PromoItemTypeEnum {
   vacature = 1
@@ -24,4 +25,9 @@ export interface PromoItemI {
   derived_type_enum: "promoitem"
   promo_type: string
   display: DisplayCompositionI
+}
+
+export interface PromoItemWideI {
+  item: ItemI
+  derived_type: PromoItemI
 }

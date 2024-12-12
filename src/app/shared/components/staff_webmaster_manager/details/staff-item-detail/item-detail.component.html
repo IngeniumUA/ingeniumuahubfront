@@ -38,7 +38,7 @@
   </form>
 </section>
 
-<section *ngIf="this.isEventItem">
+<section *ngIf="(this.isEventItem | asEventItemWide) as item">
   <h2>Event Item</h2>
   <form [formGroup]="itemForm">
     <table>
@@ -65,12 +65,12 @@
   <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 0)" [displayMixin]="this.item.derived_type.display"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="this.isShopItem">
+<section *ngIf="(this.isShopItem | asShopItemWide) as item">
   <h2>Shop Item</h2>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 1)" [displayMixin]="this.item.derived_type.display"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 1)" [displayMixin]="item.derived_type.display"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="this.isPromoItem">
+<section *ngIf="(this.isPromoItem | asPromoItemWide) as item">
   <h2>Promo Item</h2>
   <form [formGroup]="itemForm">
     <table>

@@ -11,7 +11,7 @@ export class ProductsService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getProducts(itemID: string): Observable<ProductOutI[]> {
-    return this.httpClient.get<ProductOutI[]>(apiEnviroment.apiUrl + 'item/products/' + itemID).pipe(shareReplay());
+  getProducts(item: string): Observable<ProductOutI[]> {
+    return this.httpClient.get<ProductOutI[]>(`${apiEnviroment.apiUrl}item/products/${item}`).pipe(shareReplay());
   }
 }

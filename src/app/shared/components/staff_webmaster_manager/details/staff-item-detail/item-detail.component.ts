@@ -7,7 +7,12 @@ import {ValidURLCharacters} from '../../../../validators/ValidUrlCharacters';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 import {EventItemI, isEventItem} from '@ingenium/app/shared/models/item/eventI';
-import {AsCardItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
+import {
+  AsCardItemWide,
+  AsEventItemWide,
+  AsPromoItemWide,
+  AsShopItemWide
+} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 import {RouterLink} from "@angular/router";
 import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item/cardI";
 import {
@@ -35,7 +40,10 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
     AsCardItemWide,
     RouterLink,
     InteractionTableComponent,
-    AvailabilityMixinDetailComponent
+    AvailabilityMixinDetailComponent,
+    AsShopItemWide,
+    AsPromoItemWide,
+    AsEventItemWide
   ],
   standalone: true,
   providers: [DatePipe]
@@ -50,6 +58,7 @@ export class ItemDetailComponent implements OnInit{
   isShopItem: boolean = false;
   isPromoItem: boolean = false;
   isCardItem: boolean = false;
+  isLinkItem: boolean = false;
 
   form_error: string | null = null;
   loading: boolean = false;
@@ -63,8 +72,9 @@ export class ItemDetailComponent implements OnInit{
   ngOnInit() {
     this.isEventItem = this.item.derived_type.derived_type_enum === "eventitem"
     this.isShopItem = this.item.derived_type.derived_type_enum === "shopitem";
-    this.isPromoItem = this.item.derived_type.derived_type_enum === "promoitem";
+    this.isPromoItem = this.item.derived_type.derived_type_enum === "promoitem" && "display" in this.item.derived_type;
     this.isCardItem = this.item.derived_type.derived_type_enum === "carditem";
+    this.isLinkItem = this.item.derived_type.derived_type_enum === "linkitem";
 
     // Setting up form
     this.itemForm = this.formBuilder.group({
@@ -102,13 +112,15 @@ export class ItemDetailComponent implements OnInit{
     this.item.item.name = this.itemForm.controls['name'].value;
     this.item.item.description = this.itemForm.controls['description'].value;
     if (this.isEventItem) {
-      this.item.derived_type = {
-        derived_type_enum: 'eventitem',
-        display: this.item.derived_type.display,
-        event_start: this.itemForm.controls['start_date'].value,
-        event_end: this.itemForm.controls['end_date'].value,
-        event_metadata: (this.item.derived_type as EventItemI).event_metadata
-      };
+      if ("display" in this.item.derived_type) {
+        this.item.derived_type = {
+          derived_type_enum: 'eventitem',
+          display: this.item.derived_type.display,
+          event_start: this.itemForm.controls['start_date'].value,
+          event_end: this.itemForm.controls['end_date'].value,
+          event_metadata: (this.item.derived_type as EventItemI).event_metadata
+        };
+      }
     }
     // if (this.isPromoItem) {
     //   this.item.promo_item.display_from_date = this.itemForm.controls['displayFromDate'].value;
@@ -128,14 +140,16 @@ export class ItemDetailComponent implements OnInit{
     // 0: Event
     // 1: Shop
     // 2: Promo
-    if (derived_type === 0) {
-      this.item.derived_type.display = displaymixin_obj;
-    }
-    if (derived_type === 1) {
-      this.item.derived_type.display = displaymixin_obj;
-    }
-    if (derived_type === 2) {
-      this.item.derived_type.display = displaymixin_obj;
+    if ("display" in this.item.derived_type) {
+      if (derived_type === 0) {
+        this.item.derived_type.display = displaymixin_obj;
+      }
+      if (derived_type === 1) {
+        this.item.derived_type.display = displaymixin_obj;
+      }
+      if (derived_type === 2) {
+        this.item.derived_type.display = displaymixin_obj;
+      }
     }
   }
   UpdateAvailability(availabilityObj: AvailabilityCompositionI): void {

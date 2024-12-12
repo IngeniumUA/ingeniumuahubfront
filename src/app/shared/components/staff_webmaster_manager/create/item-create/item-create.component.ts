@@ -18,6 +18,7 @@ import {
   CardTypeEnum, CardTypeEnumList
 } from "@ingenium/app/shared/models/item/cardI";
 import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
+import {LinkItemInI} from "@ingenium/app/shared/models/item/linkI";
 
 @Component({
   selector: 'app-item-create',
@@ -37,7 +38,7 @@ import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/avail
 })
 export class ItemCreateComponent implements OnInit {
   $itemType: Observable<string | null> = of('none'); // none, event, shop, promo
-  itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem', 'carditem'];
+  itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem', 'carditem', 'linkitem'];
   itemTypeControl = new FormControl<string>('none');
 
   itemCreateForm = this.formBuilder.group({
@@ -80,6 +81,11 @@ export class ItemCreateComponent implements OnInit {
     member_type: [CardMembershipEnum.lid, Validators.required],
     card_type: [CardTypeEnum.qr_code_v1, Validators.required],
     card_uuid: ['', Validators.required]
+  })
+
+  linkCreateForm = this.formBuilder.group({
+    link_identifier: [''],
+    redirect_url: ['']
   })
 
   form_error: string | null = null;
@@ -188,6 +194,20 @@ export class ItemCreateComponent implements OnInit {
     }
   }
 
+  public parseLinkForm(itemType: string): LinkItemInI | null {
+    if (itemType !== this.itemTypes[5]) {
+      return null;
+    }
+    const redirectControlValue: string | null = this.linkCreateForm.controls["redirect_url"].value!;
+    const redirectValue = redirectControlValue === "" ? null : redirectControlValue;
+
+    return {
+      derived_type_enum: 'linkitem',
+      link_identifier: this.linkCreateForm.controls["link_identifier"].value!,
+      redirect_url: redirectValue
+    }
+  }
+
   onSubmit(itemType: string) {
     // Check if valid guardclause
     if (this.itemCreateForm.invalid) {
@@ -202,8 +222,9 @@ export class ItemCreateComponent implements OnInit {
     const promo = this.parsePromoForm(itemType);
     const shop = this.parseShopForm(itemType);
     const card = this.parseCardForm(itemType);
+    const link = this.parseLinkForm(itemType);
 
-    const derivedType = event !== null ? event: promo !== null ? promo: shop !== null ? shop: card;
+    const derivedType = event !== null ? event: promo !== null ? promo: shop !== null ? shop: card !== null ? card: link;
 
     // Temp hardcode to set availability on a card obj to True
     const availability: AvailabilityCompositionInI | null = card === null ? null: {

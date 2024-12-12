@@ -5,7 +5,7 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
 @Component({
   selector: 'app-webmaster',
   templateUrl: './webmaster.component.html',
-  styleUrls: ['./webmaster.component.css']
+  styleUrls: ['./webmaster.component.scss']
 })
 export class WebmasterComponent {
   constructor(private navCtrl: NavController,

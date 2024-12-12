@@ -32,7 +32,10 @@ export class RecSysItemPreviewComponent implements OnInit {
     ngOnInit() {
       this.isLandscape = this.recsysItem.image_square === null || this.recsysItem.image_square === '';
       this.image = this.isLandscape ? this.recsysItem.image_landscape: this.recsysItem.image_square;
-      this.internalLink = this.recsysItem.follow_through_link.match('^https?:\\/\\/') === null;
+      this.internalLink = this.recsysItem.follow_through_link.match('^https?:\\/\\/|mailto:') === null;
+      if (this.recsysItem.preview_description) {
+        this.recsysItem.preview_description = '';
+      }
     }
 
     textColor() {

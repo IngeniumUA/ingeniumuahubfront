@@ -52,7 +52,10 @@ export class DisplayMixinDetailComponent implements OnInit {
       preview_description: [this.displayMixin.preview_description],
     });
 
-    this.form.valueChanges.subscribe((val: any) => {
+    this.form.valueChanges.subscribe((val: DisplayCompositionI) => {
+      // API expects either a valid URL or null for images
+      if (val.image_landscape === '') {val.image_landscape = null;}
+      if (val.image_square === '') {val.image_square = null; }
       this.displayUpdate.emit(val);
     });
   }

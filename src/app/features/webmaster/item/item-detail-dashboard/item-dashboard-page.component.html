@@ -8,6 +8,8 @@
 
 } @else if (item.derived_type.derived_type_enum === 'carditem') {
 
+} @else if (item.derived_type.derived_type_enum === 'linkitem') {
+
 } @else {
   <section class="staffSection">
     <h1>Product Blueprints</h1>
@@ -36,19 +38,13 @@
   </section>
 }
 
-@if (item.derived_type.derived_type_enum === 'carditem') {
+@if (item.derived_type.derived_type_enum === 'carditem' || item.derived_type.derived_type_enum === 'linkitem') {
   <section class="staffSection">
     <app-interaction-table [item_id]="this.item.item.id"></app-interaction-table>
   </section>
 }
 
 <section class="staffSection">
-  <p class="text-sm text-yellow-700">Don't press this by accident<br>Klik hier ni per ongeluk op</p>
-  <button class="bg-yellow-700 button button-primary button-inline"
-          (click)="DisableItem(item.item.id)"
-  >
-    <span class="text-white">{{ this.loadingDisable ? "Verwijderen ..." : "Verwijder" }}</span>
-  </button>
-  <p *ngIf="this.disableItemBuffer">Zeker?</p>
+  <app-delete-button (deleteEvent)="DeleteItem(item.item.id)"></app-delete-button>
 </section>
 </ng-container>

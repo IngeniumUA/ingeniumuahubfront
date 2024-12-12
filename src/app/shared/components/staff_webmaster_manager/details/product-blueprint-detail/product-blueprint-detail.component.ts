@@ -14,6 +14,7 @@ import {
   DeleteButtonComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/delete-button/delete-button.component";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
+import {ToastrService} from "ngx-toastr";
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
 
@@ -43,6 +44,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
                 private pricePolicyService: PricePolicyService,
+                private toastrService: ToastrService,
                 private navCtrl: NavController,
                 private pageTrackService: PageTrackingService,
                 private blueprintService: ProductBlueprintService) {
@@ -211,16 +213,17 @@ export class ProductBlueprintDetailComponent implements OnInit {
   }
 
   deleteBlueprint(blueprintId: number) {
-      this.blueprintService.deleteProductBlueprint(blueprintId).subscribe({
-        next: (value: boolean) => {
-          if (!value) {
-            this.handleFormError(Error("API Error, could not be deleted somehow"));
-          }
-        },
-        error: (err) => {
-              this.handleFormError(err);
+    this.blueprintService.deleteProductBlueprint(blueprintId).subscribe({
+      next: value => {
+        if (value) {
+          this.toastrService.success('Item deleted!');
+        } else {
+          this.toastrService.error('Item could not be deleted?');
         }
-        }
-      )
+      },
+      error: error => {
+        this.toastrService.error(`Item could not be deleted: ${error}`);
+      }
+    })
   }
 }

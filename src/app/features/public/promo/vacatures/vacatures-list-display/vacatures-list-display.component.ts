@@ -14,7 +14,7 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
 export class VacaturesListDisplayComponent {
 
   isMobile$: Observable<boolean> = this.layoutService.isMobile;
-  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(50, 0);
+  vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(50, 0, 1);
 
   constructor(private promoService: PromoService,
               private layoutService: LayoutService,

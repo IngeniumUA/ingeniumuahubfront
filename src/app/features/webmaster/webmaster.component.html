@@ -1,7 +1,7 @@
 <app-layout-public-header [internalToggle]="false" (isToggleEmitter)="ToggleSideNav()"></app-layout-public-header>
 <ion-content>
-  <div id="body" class="min-h-full" style="overflow-x: scroll">
-  <app-sidenav [isSidenavInput]="this.isSideNav"></app-sidenav>
-  <div id="webmaster-body" class="w-full"><router-outlet></router-outlet></div>
-  </div>
+<div id="body" class="min-h-full min-w-vw flex flex-row justify-around">
+  <div class="grow-0"><app-sidenav [isSidenavInput]="this.isSideNav"></app-sidenav></div>
+  <div class="grow m-1"><router-outlet></router-outlet></div>
+</div>
 </ion-content>
