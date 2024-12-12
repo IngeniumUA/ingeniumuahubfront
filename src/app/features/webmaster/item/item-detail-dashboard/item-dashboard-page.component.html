@@ -8,6 +8,8 @@
 
 } @else if (item.derived_type.derived_type_enum === 'carditem') {
 
+} @else if (item.derived_type.derived_type_enum === 'linkitem') {
+
 } @else {
   <section class="staffSection">
     <h1>Product Blueprints</h1>
@@ -36,7 +38,7 @@
   </section>
 }
 
-@if (item.derived_type.derived_type_enum === 'carditem') {
+@if (item.derived_type.derived_type_enum === 'carditem' || item.derived_type.derived_type_enum === 'linkitem') {
   <section class="staffSection">
     <app-interaction-table [item_id]="this.item.item.id"></app-interaction-table>
   </section>

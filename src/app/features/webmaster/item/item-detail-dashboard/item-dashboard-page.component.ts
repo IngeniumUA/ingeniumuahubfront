@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {ToastrService} from "ngx-toastr";
@@ -20,6 +20,7 @@ export class ItemDashboardPageComponent implements OnInit {
 
   constructor(private itemWideService: ItemWideService,
               private route: ActivatedRoute,
+              private router: Router,
               private toastrService: ToastrService,) {
   }
 
@@ -48,8 +49,9 @@ export class ItemDashboardPageComponent implements OnInit {
   public DeleteItem(itemId: number) {
     this.itemWideService.deleteItem(itemId).subscribe({
       next: value => {
-        if (value) {
+        if (value === null) {
           this.toastrService.success('Item deleted!');
+          this.router.navigate(['../']);
         } else {
           this.toastrService.error('Item could not be deleted?');
         }
