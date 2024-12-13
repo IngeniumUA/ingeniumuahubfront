@@ -9,11 +9,6 @@ import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 import { ScreenBrightness } from '@capacitor-community/screen-brightness';
 import {first} from "rxjs/operators";
-import {EventItemI} from "@ingenium/app/shared/models/item/eventI";
-import {ShopItemI} from "@ingenium/app/shared/models/item/shopI";
-import {PromoItemI} from "@ingenium/app/shared/models/item/promoI";
-import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
-import {LinkItemI} from "@ingenium/app/shared/models/item/linkI";
 
 @Component({
   selector: 'app-account-transactions',
@@ -159,10 +154,6 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     })
 
     return this.returnMsg
-  }
-
-  determineIfIsEvent(toBeDetermined: EventItemI | ShopItemI | PromoItemI | CardItemI | LinkItemI): toBeDetermined is EventItemI {
-    return !!(toBeDetermined as EventItemI).event_end;
   }
 
   gotoPage(page: string) {
