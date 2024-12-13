@@ -140,14 +140,12 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   }
 
   async getWalletLink(transaction: TransactionLimitedI, platform: string): Promise<string> {
-    let item_id: number = transaction.interaction.item_id
-
     let transaction_uuid: string = transaction.interaction.interaction_uuid
     let nummer: number = transaction.purchased_product.id
     let locatie_naam: string = "Ingenium" //TODO fix once location is implemented
 
     // Get and redirect to wallet link
-    this.accountService.getWalletLinks(transaction_uuid, item_id, nummer, locatie_naam, platform).pipe(first()).subscribe({
+    this.accountService.getWalletLinks(transaction_uuid, nummer, locatie_naam, platform).pipe(first()).subscribe({
       next: (response) => {
         this.returnMsg = response
       }
