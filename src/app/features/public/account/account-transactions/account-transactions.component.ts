@@ -167,7 +167,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
           let start_date: string = event_option.derived_type.event_start.replace(" ", "T")
 
           let transaction_uuid: string = transaction.interaction.interaction_uuid
-          let nummer: number = transaction.interaction.item_id
+          let nummer: number = transaction.purchased_product.id
           let locatie_naam: string = "Ingenium" //TODO fix once location is implemented
 
           // Get and redirect to wallet link
