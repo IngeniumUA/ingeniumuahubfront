@@ -30,24 +30,15 @@ export class WalletRedirectComponent implements OnInit{
     } else {
       const wallet_params = wallet_info.split('&')
       let transaction_uuid: string = ""
-      let banner_link: string = ""
-      let event_name: string = ""
-      let end_date: string = ""
-      let start_date: string = ""
+      let event_item_id: number = 0
       let nummer: number = 0
       let locatie_naam: string = ""
       let platform: string = ""
       for (const param of wallet_params) {
         if (param.startsWith("transaction_uuid=")) {
           transaction_uuid = param.replace("transaction_uuid=", "")
-        } else if (param.startsWith("banner_link=")) {
-          banner_link = decodeURI(param.replace("banner_link=", ""))
-        } else if (param.startsWith("event_name=")) {
-          event_name = param.replace("event_name=", "")
-        } else if (param.startsWith("end_date=")) {
-          end_date = param.replace("end_date=", "")
-        } else if (param.startsWith("start_date=")) {
-          start_date = param.replace("start_date=", "")
+        } else if (param.startsWith("event_item_id=")) {
+          event_item_id = +param.replace("event_item_id=", "")
         } else if (param.startsWith("nummer=")) {
           nummer = +param.replace("nummer=", "")
         } else if (param.startsWith("locatie_naam=")) {
@@ -58,7 +49,7 @@ export class WalletRedirectComponent implements OnInit{
       }
 
       // Get and redirect to wallet link
-      this.accountService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam, platform).pipe(first()).subscribe({
+      this.accountService.getWalletLinks(transaction_uuid, event_item_id, nummer, locatie_naam, platform).pipe(first()).subscribe({
         next: (response) => {
           window.location.href = response
           this.router.navigateByUrl('home')
