@@ -9,8 +9,6 @@ import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 import { ScreenBrightness } from '@capacitor-community/screen-brightness';
 import {first} from "rxjs/operators";
-import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
-import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {EventItemI} from "@ingenium/app/shared/models/item/eventI";
 import {ShopItemI} from "@ingenium/app/shared/models/item/shopI";
 import {PromoItemI} from "@ingenium/app/shared/models/item/promoI";
@@ -27,8 +25,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
               private trackerService: UserTrackerService,
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,
-              private platform: Platform,
-              private itemService: ItemWideService) {
+              private platform: Platform,) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.pageTrackService.popFromTree()
       this.navCtrl.navigateRoot('/'+currentPage).then()
@@ -148,35 +145,16 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   }
 
   async getWalletLink(transaction: TransactionLimitedI, platform: string): Promise<string> {
-
-    let event_option: ItemWideI
     let item_id: number = transaction.interaction.item_id
-    this.itemService.getItem(item_id).pipe(first()).subscribe({
+
+    let transaction_uuid: string = transaction.interaction.interaction_uuid
+    let nummer: number = transaction.purchased_product.id
+    let locatie_naam: string = "Ingenium" //TODO fix once location is implemented
+
+    // Get and redirect to wallet link
+    this.accountService.getWalletLinks(transaction_uuid, item_id, nummer, locatie_naam, platform).pipe(first()).subscribe({
       next: (response) => {
-        event_option = response
-        if (this.determineIfIsEvent(event_option.derived_type)) {
-          let banner_link: string | null = event_option.derived_type.display.image_landscape
-          if (banner_link === null) {
-            banner_link = event_option.derived_type.display.image_square
-          }
-          if (banner_link === null) {
-            banner_link = "https://storage.googleapis.com/ingeniumuahubbucket/hub/items/favicon.png"
-          }
-          let event_name: string = event_option.item.name
-          let end_date: string = event_option.derived_type.event_end.replace(" ", "T")
-          let start_date: string = event_option.derived_type.event_start.replace(" ", "T")
-
-          let transaction_uuid: string = transaction.interaction.interaction_uuid
-          let nummer: number = transaction.purchased_product.id
-          let locatie_naam: string = "Ingenium" //TODO fix once location is implemented
-
-          // Get and redirect to wallet link
-          this.accountService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam, platform).pipe(first()).subscribe({
-            next: (response) => {
-              this.returnMsg = response
-            }
-          })
-        }
+        this.returnMsg = response
       }
     })
 
