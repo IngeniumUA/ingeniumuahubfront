@@ -7,12 +7,15 @@ import QRCode from 'qrcode';
 import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
-import {CapacitorHttp} from "@capacitor/core";
-import {apiEnviroment} from "@ingenium/environments/environment";
-import {UserState} from "@ingenium/app/core/store";
-import {Store} from "@ngxs/store";
 import { ScreenBrightness } from '@capacitor-community/screen-brightness';
-import {WalletI} from "@ingenium/app/shared/models/user/accountI";
+import {first} from "rxjs/operators";
+import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
+import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
+import {EventItemI} from "@ingenium/app/shared/models/item/eventI";
+import {ShopItemI} from "@ingenium/app/shared/models/item/shopI";
+import {PromoItemI} from "@ingenium/app/shared/models/item/promoI";
+import {CardItemI} from "@ingenium/app/shared/models/item/cardI";
+import {LinkItemI} from "@ingenium/app/shared/models/item/linkI";
 
 @Component({
   selector: 'app-account-transactions',
@@ -25,7 +28,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,
               private platform: Platform,
-              private store: Store,) {
+              private itemService: ItemWideService) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.pageTrackService.popFromTree()
       this.navCtrl.navigateRoot('/'+currentPage).then()
@@ -123,10 +126,10 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendWalletLink(transaction: TransactionLimitedI): void {
+  sendWalletLink(transaction: TransactionLimitedI, platform: string): void {
 
     if (this.walletLinks[transaction.interaction.interaction_uuid] === undefined) {
-      this.getWalletLink(transaction).then((result) => {
+      this.getWalletLink(transaction, platform).then((result) => {
         this.walletLinks[transaction.interaction.interaction_uuid] = result
         if (this.walletLinks[transaction.interaction.interaction_uuid] !== "") {
           const link = document.createElement('a');
@@ -144,35 +147,49 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     return
   }
 
-  async getWalletLink(transaction: TransactionLimitedI): Promise<string> {
+  async getWalletLink(transaction: TransactionLimitedI, platform: string): Promise<string> {
 
-    try {
-      const options = {
-        url: apiEnviroment.apiUrl + "account/wallet/" + transaction.interaction.interaction_uuid,
-        headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`}
-      }
-      const response = await CapacitorHttp.get(options);
+    let event_option: ItemWideI
+    let item_id: number = transaction.interaction.item_id
+    this.itemService.getItem(item_id).pipe(first()).subscribe({
+      next: (response) => {
+        event_option = response
+        if (this.determineIfIsEvent(event_option.derived_type)) {
+          let banner_link: string | null = event_option.derived_type.display.image_landscape
+          if (banner_link === null) {
+            banner_link = event_option.derived_type.display.image_square
+          }
+          if (banner_link === null) {
+            banner_link = "https://storage.googleapis.com/ingeniumuahubbucket/hub/items/favicon.png"
+          }
+          let event_name: string = event_option.item.name
+          let end_date: string = event_option.derived_type.event_end.replace(" ", "T")
+          let start_date: string = event_option.derived_type.event_start.replace(" ", "T")
 
-      if (response.status === 200) {
-        let jsonResponse = await response.data as WalletI
-        if (this.platform.is("android")) {
-          this.returnMsg = jsonResponse.google_wallet_link
-        } else if (this.platform.is("ios")) {
-          this.returnMsg = jsonResponse.apple_wallet_link
+          let transaction_uuid: string = transaction.interaction.interaction_uuid
+          let nummer: number = transaction.interaction.item_id
+          let locatie_naam: string = "Ingenium" //TODO fix once location is implemented
+
+          // Get and redirect to wallet link
+          this.accountService.getWalletLinks(transaction_uuid, banner_link, event_name, end_date, start_date, nummer, locatie_naam, platform).pipe(first()).subscribe({
+            next: (response) => {
+              this.returnMsg = response
+            }
+          })
         }
-      } else {
-        this.returnMsg = ""
-        console.log(response.status)
-        console.log(JSON.stringify(response.data))
       }
-
-    } catch (error) {
-      console.log(error)
-      this.returnMsg = "server_error"
-    }
+    })
 
     return this.returnMsg
+  }
 
+  determineIfIsEvent(toBeDetermined: EventItemI | ShopItemI | PromoItemI | CardItemI | LinkItemI): toBeDetermined is EventItemI {
+    return !!(toBeDetermined as EventItemI).event_end;
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
 }
