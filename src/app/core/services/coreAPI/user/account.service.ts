@@ -34,19 +34,11 @@ export class AccountService {
   }
 
   public getWalletLinks(transaction_uuid: string,
-                        banner_link: string,
-                        event_name: string,
-                        end_date: string,
-                        start_date: string,
                         nummer: number,
                         locatie_naam: string,
                         platform: string): Observable<string>{
     const param = {
       transaction_uuid: transaction_uuid,
-      banner_link: banner_link,
-      event_name: event_name,
-      end_date: end_date,
-      start_date: start_date,
       nummer: nummer,
       locatie_naam: locatie_naam
     }
