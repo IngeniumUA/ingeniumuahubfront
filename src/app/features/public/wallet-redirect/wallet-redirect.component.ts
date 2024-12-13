@@ -30,15 +30,12 @@ export class WalletRedirectComponent implements OnInit{
     } else {
       const wallet_params = wallet_info.split('&')
       let transaction_uuid: string = ""
-      let event_item_id: number = 0
       let nummer: number = 0
       let locatie_naam: string = ""
       let platform: string = ""
       for (const param of wallet_params) {
         if (param.startsWith("transaction_uuid=")) {
           transaction_uuid = param.replace("transaction_uuid=", "")
-        } else if (param.startsWith("event_item_id=")) {
-          event_item_id = +param.replace("event_item_id=", "")
         } else if (param.startsWith("nummer=")) {
           nummer = +param.replace("nummer=", "")
         } else if (param.startsWith("locatie_naam=")) {
@@ -49,7 +46,7 @@ export class WalletRedirectComponent implements OnInit{
       }
 
       // Get and redirect to wallet link
-      this.accountService.getWalletLinks(transaction_uuid, event_item_id, nummer, locatie_naam, platform).pipe(first()).subscribe({
+      this.accountService.getWalletLinks(transaction_uuid, nummer, locatie_naam, platform).pipe(first()).subscribe({
         next: (response) => {
           window.location.href = response
           this.router.navigateByUrl('home')
