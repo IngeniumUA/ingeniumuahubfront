@@ -4,6 +4,8 @@ import {first} from "rxjs/operators";
 import {AccountService} from "@ingenium/app/core/services/coreAPI/user/account.service";
 import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading-indicator/loading-indicator.component";
 import {PublicHeaderComponent} from "@ingenium/app/core/layout/public/header/public-header.component";
+import {UserState} from "@ingenium/app/core/store";
+import {Store} from "@ngxs/store";
 
 @Component({
   selector: 'app-wallet-redirect',
@@ -19,7 +21,8 @@ export class WalletRedirectComponent implements OnInit{
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private accountService: AccountService) {
+              private accountService: AccountService,
+              private store: Store) {
   }
 
   ngOnInit() {
@@ -49,7 +52,11 @@ export class WalletRedirectComponent implements OnInit{
       this.accountService.getWalletLinks(transaction_uuid, nummer, locatie_naam, platform).pipe(first()).subscribe({
         next: (response) => {
           window.location.href = response
-          this.router.navigateByUrl('home')
+          if (this.store.selectSnapshot(UserState.isAuthenticated)) {
+            this.router.navigateByUrl('account/transactions')
+          } else {
+            this.router.navigateByUrl('home')
+          }
         }
       })
     }

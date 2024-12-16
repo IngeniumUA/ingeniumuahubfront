@@ -20,12 +20,12 @@
         <dt>Bestellingnummer</dt>
         <dd class="font-bold">{{ trackedItem.id }}</dd>
 
-<!--        <dt>Producten</dt>-->
-<!--        <dd>-->
-<!--          <ul class="list-disc list-inside">-->
-<!--            <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.product.price_eu > 0">- &euro;&nbsp;{{ transaction.product.price_eu }}</span></li>-->
-<!--          </ul>-->
-<!--        </dd>-->
+        <!--<dt>Producten</dt>
+        <dd>
+          <ul class="list-disc list-inside">
+            <li *ngFor="let transaction of trackedItem.checkout.transactions">{{ transaction.purchased_product.name }} <span class="transaction-card-product-price-tag" *ngIf="transaction.purchased_product.price_policy.price > 0">- &euro;&nbsp;{{ transaction.purchased_product.price_policy.price }}</span></li>
+          </ul>
+        </dd>-->
 
         <dt>Bedrag</dt>
         <dd>&euro; {{ trackedItem.checkout.amount }}</dd>
@@ -66,7 +66,6 @@
         <dl>
           <dt>Evenement</dt>
           <dd>{{ transaction.interaction.item_name }}</dd>
-
 <!--          <dt>Datum</dt>-->
 <!--          <dd>{{ transaction.item.derived_item | date:'d MMM y, H:mm' }}</dd>-->
 
