@@ -22,10 +22,12 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
               private platform: Platform,) {
     this.platform.backButton.subscribeWithPriority(10, () => {
       this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
+      this.navCtrl.navigateRoot('/' + currentPage).then()
     });
     this.setPlatform()
-    ScreenBrightness.getBrightness().then((result) => {this.brightness = result.brightness});
+    ScreenBrightness.getBrightness().then((result) => {
+      this.brightness = result.brightness
+    });
   }
 
   lastUpdate: Date = new Date();
@@ -33,23 +35,27 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   transactions$: Observable<TransactionLimitedI[]> = this.accountService.getTransactions();
   trackedItems: HubCheckoutTrackerI[] = [];
 
-  qrCode: {[key:string]:string} = {};
-  qrCodeVisible: {[key:string]:boolean} = {};
+  qrCode: { [key: string]: string } = {};
+  qrCodeVisible: { [key: string]: boolean } = {};
 
   platformName: string = ""
   returnMsg: string = ""
   brightness: number = 0
 
   ngOnInit() {
-    ScreenBrightness.getBrightness().then((result) => {this.brightness = result.brightness});
+    ScreenBrightness.getBrightness().then((result) => {
+      this.brightness = result.brightness
+    });
     this.transactions$ = this.accountService.getTransactions();
-    this.transactions$.subscribe({next: (transactions) => {
-      for (let transaction of transactions) {
-        if (this.qrCodeVisible[transaction.interaction.interaction_uuid] === undefined) {
-          this.qrCodeVisible[transaction.interaction.interaction_uuid] = false
+    this.transactions$.subscribe({
+      next: (transactions) => {
+        for (let transaction of transactions) {
+          if (this.qrCodeVisible[transaction.interaction.interaction_uuid] === undefined) {
+            this.qrCodeVisible[transaction.interaction.interaction_uuid] = false
+          }
         }
       }
-    }})
+    })
     this.setPlatform()
     this.trackerSubscription = timer(0, 5000).pipe(
       exhaustMap(() => this.trackerService.getTrackers())
@@ -119,7 +125,7 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   getWalletLink(transaction: TransactionLimitedI, platform: string): void {
     let transaction_uuid: string = transaction.interaction.interaction_uuid
     let nummer: number = +transaction_uuid.replace(/\D/g, "")
-    let nummer_str: string = ""+nummer
+    let nummer_str: string = "" + nummer
     nummer_str = nummer_str.split("e")[0].replace(".", "")
     nummer = +nummer_str
     let locatie_naam: string = "Ingenium" //TODO fix once location is implemented

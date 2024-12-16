@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {first} from "rxjs/operators";
 import {AccountService} from "@ingenium/app/core/services/coreAPI/user/account.service";
 import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading-indicator/loading-indicator.component";
 import {PublicHeaderComponent} from "@ingenium/app/core/layout/public/header/public-header.component";
 import {UserState} from "@ingenium/app/core/store";
 import {Store} from "@ngxs/store";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-wallet-redirect',
@@ -20,16 +22,17 @@ import {Store} from "@ngxs/store";
 export class WalletRedirectComponent implements OnInit{
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private accountService: AccountService,
-              private store: Store) {
+              private store: Store,
+              private navCtrl: NavController,
+              private pageTrackService: PageTrackingService,) {
   }
 
   ngOnInit() {
     const wallet_info: string | null = this.route.snapshot.paramMap.get('id');
 
     if (wallet_info === null) {
-      this.router.navigateByUrl('home');
+      this.gotoPage('home');
     } else {
       const wallet_params = wallet_info.split('&')
       let transaction_uuid: string = ""
@@ -53,14 +56,19 @@ export class WalletRedirectComponent implements OnInit{
         next: (response) => {
           window.location.href = response
           if (this.store.selectSnapshot(UserState.isAuthenticated)) {
-            this.router.navigateByUrl('account/transactions')
+            this.gotoPage('account/transactions')
           } else {
-            this.router.navigateByUrl('home')
+            this.gotoPage('home')
           }
         }
       })
     }
 
+  }
+
+  gotoPage(page: string) {
+    this.pageTrackService.addToTree(page)
+    this.navCtrl.navigateRoot('/'+page).then()
   }
 
 }
