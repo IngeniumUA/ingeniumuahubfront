@@ -94,6 +94,15 @@
         <div *ngIf="qrCodeVisible[transaction.interaction.interaction_uuid]" class="transaction-card-qr">
           <img [src]="qrCode[transaction.interaction.interaction_uuid]" alt="QR Code voor deze aankoop">
         </div>
+
+        <br>
+        <br>
+        <table style="width: 100%">
+          <tr>
+            <td><a tabindex="" (click)="getWalletLink(transaction, 'google')" (keyup)="getWalletLink(transaction, 'google')"><img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer"></a></td>
+            <td><a tabindex="" (click)="getWalletLink(transaction, 'apple')" (keyup)="getWalletLink(transaction, 'apple')"><img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer"></a></td>
+          </tr>
+        </table>
       </article>
     }
   </div>
