@@ -8,7 +8,6 @@ import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transacti
 import {NavController, Platform} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 import { ScreenBrightness } from '@capacitor-community/screen-brightness';
-import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-account-transactions',
@@ -38,7 +37,6 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
   qrCodeVisible: {[key:string]:boolean} = {};
 
   platformName: string = ""
-  walletLinks: {[key:string]:string} = {};
   returnMsg: string = ""
   brightness: number = 0
 
@@ -118,40 +116,27 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendWalletLink(transaction: TransactionLimitedI, platform: string): void {
-
-    if (this.walletLinks[transaction.interaction.interaction_uuid] === undefined) {
-      this.getWalletLink(transaction, platform).then((result) => {
-        this.walletLinks[transaction.interaction.interaction_uuid] = result
-        if (this.walletLinks[transaction.interaction.interaction_uuid] !== "") {
-          const link = document.createElement('a');
-          link.href = this.walletLinks[transaction.interaction.interaction_uuid];
-          link.click();
-        }
-      })
-    } else {
-      if (this.walletLinks[transaction.interaction.interaction_uuid] !== "") {
-        const link = document.createElement('a');
-        link.href = this.walletLinks[transaction.interaction.interaction_uuid];
-        link.click();
-      }
-    }
-    return
-  }
-
-  async getWalletLink(transaction: TransactionLimitedI, platform: string): Promise<string> {
+  getWalletLink(transaction: TransactionLimitedI, platform: string): void {
     let transaction_uuid: string = transaction.interaction.interaction_uuid
-    let nummer: number = transaction.purchased_product.id
+    let nummer: number = +transaction_uuid.replace(/\D/g, "")
+    let nummer_str: string = ""+nummer
+    nummer_str = nummer_str.split("e")[0].replace(".", "")
+    nummer = +nummer_str
     let locatie_naam: string = "Ingenium" //TODO fix once location is implemented
 
     // Get and redirect to wallet link
-    this.accountService.getWalletLinks(transaction_uuid, nummer, locatie_naam, platform).pipe(first()).subscribe({
-      next: (response) => {
-        this.returnMsg = response
-      }
-    })
+    let wallet_link = "sub/wallet/"
+      + "&transaction_uuid="
+      + transaction_uuid
+      + "&nummer="
+      + nummer
+      + "&locatie_naam="
+      + locatie_naam
+      + "&platform="
+      + platform
+    this.gotoPage(wallet_link)
 
-    return this.returnMsg
+    return
   }
 
   gotoPage(page: string) {

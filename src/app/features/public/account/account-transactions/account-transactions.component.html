@@ -94,11 +94,11 @@
 
         <div *ngIf="this.platformName === 'android'" style="width: 100%">
         <br>
-      <a (click)="sendWalletLink(transaction, 'google')"><img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; padding-left: 29%"></a>
+      <a (click)="getWalletLink(transaction, 'google')"><img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; padding-left: 29%"></a>
       </div>
       <div *ngIf="this.platformName === 'ios'" style="width: 100%">
       <br>
-        <a (click)="sendWalletLink(transaction, 'apple')"><img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; padding-left: 32%"></a>
+        <a (click)="getWalletLink(transaction, 'apple')"><img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; padding-left: 32%"></a>
       </div>
 
 <!--        <div *ngIf="qrCodeVisible[transaction.interaction.interaction_uuid]" class="transaction-card-qr">-->
