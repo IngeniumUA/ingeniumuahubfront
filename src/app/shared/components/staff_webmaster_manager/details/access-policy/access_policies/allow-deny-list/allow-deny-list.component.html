@@ -3,7 +3,7 @@
   <div class="flex flex-row w-12" *ngFor="let control of whitelistGroupsForm.controls; index as i">
     <!-- <input class="h-6" type="number" [formControl]="whitelistGroupsForm.controls[i]" />-->
     <ng-container *ngIf="this.groups$ | async as groups">
-    <select [formControl]="control">
+    <select [formControl]="control" class="hubformfield-white">
       <option [ngValue]="null">Choose group</option>
       <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
         {{ group.name }}
@@ -20,7 +20,7 @@
   <div class="flex flex-row w-12" *ngFor="let control of blacklistGroupsForm.controls; index as i">
     <!--<input class="h-6" type="number" [formControl]="blacklistGroupsForm.controls[i]" />-->
     <ng-container *ngIf="this.groups$ | async as groups">
-      <select [formControl]="control">
+      <select [formControl]="control" class="hubformfield-white">
         <option [ngValue]="null">Choose group</option>
         <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
           {{ group.name }}

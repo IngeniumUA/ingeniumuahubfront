@@ -5,6 +5,9 @@ import {DatePipe, NgIf, TitleCasePipe} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import {AccessPolicyEnum, CastToMemberOfGroupPipe} from "@ingenium/app/shared/models/access_policies/accessPolicyI";
+import {
+  AvailabilityMixinDetailComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 
 @Component({
   selector: 'app-price-policy',
@@ -17,7 +20,8 @@ import {AccessPolicyEnum, CastToMemberOfGroupPipe} from "@ingenium/app/shared/mo
     ReactiveFormsModule,
     DatePipe,
     CastToMemberOfGroupPipe,
-    TitleCasePipe
+    TitleCasePipe,
+    AvailabilityMixinDetailComponent
   ],
   standalone: true
 })
@@ -35,7 +39,6 @@ export class PricePolicyComponent implements OnInit {
   loading: boolean = false;
   ngOnInit() {
     this.pricePolicyForm = this.formBuilder.group({
-      availableControl: [this.pricePolicy.availability.available, Validators.required],
       priceControl: [this.pricePolicy.price, Validators.required],
       productNameControl: [this.pricePolicy.name],
       orderingControl: [this.pricePolicy.ordering],
@@ -56,6 +59,10 @@ export class PricePolicyComponent implements OnInit {
     };
   }
 
+  updateAvailability(availabilityObj: AvailabilityCompositionI): void {
+    this.pricePolicy.availability = availabilityObj;
+  }
+
   public RemovePricePolicy() {
     this.RemovePricePolicyEvent.emit(this.pricePolicy);
   }
@@ -69,21 +76,10 @@ export class PricePolicyComponent implements OnInit {
     const nameControlValue: string | null = this.pricePolicyForm.get('productNameControl')!.value
     const name = nameControlValue === null || nameControlValue === '' ? null: nameControlValue;
 
-    const availableControlValue: boolean = this.pricePolicyForm.get('availableControl')!.value
-
-    const availability: AvailabilityCompositionI = {
-      available: availableControlValue,
-      disabled: false,
-      available_from: null,
-      available_until: null,
-      dynamic_policy_type: this.pricePolicy.availability.dynamic_policy_type,
-      dynamic_policy_content: this.pricePolicy.availability.dynamic_policy_content
-    }
-
     const pricePolicy: PricePolicyI = {
       id: this.pricePolicy.id,
       product_blueprint_id: this.pricePolicy.product_blueprint_id,
-      availability: availability,
+      availability: this.pricePolicy.availability,
 
       name: name,
       ordering: parseInt(this.pricePolicyForm.get('orderingControl')!.value),
