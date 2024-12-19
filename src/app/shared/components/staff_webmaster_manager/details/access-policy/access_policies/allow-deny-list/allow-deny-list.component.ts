@@ -1,17 +1,17 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {FormArray, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AccessPolicyEnum, AllowDenyListI} from '../../../../../../models/access_policies/accessPolicyI';
+import {AllowDenyListI} from '../../../../../../models/access_policies/accessPolicyI';
 import {Observable} from "rxjs";
 import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
 import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
+import {AccessPolicyI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 
 @Component({
   selector: 'app-allow-deny-list',
   templateUrl: './allow-deny-list.component.html',
   styleUrls: ['./allow-deny-list.component.css'],
   imports: [
-    JsonPipe,
     ReactiveFormsModule,
     NgForOf,
     AsyncPipe,
@@ -22,8 +22,7 @@ import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
 export class AllowDenyListComponent implements OnInit {
 
     @Input() access_policy_content!: AllowDenyListI | null;
-    @Input() access_policy_method!: AccessPolicyEnum;
-    @Output() UpdateAccessPolicy = new EventEmitter<AllowDenyListI>;
+    @Output() UpdateAccessPolicy = new EventEmitter<AccessPolicyI>;
 
   groups$: Observable<GroupI[]> = this.staffGroupService.GetGroupsList();
 
@@ -110,7 +109,10 @@ export class AllowDenyListComponent implements OnInit {
         }
         this.parsedPolicyContent.whitelist = whitelist;
       }
-      console.log(this.parsedPolicyContent)
-      this.UpdateAccessPolicy.emit(this.parsedPolicyContent);
+
+      const dynamicPolicyContent: AccessPolicyI = {
+        access_policy_config: this.parsedPolicyContent
+      }
+      this.UpdateAccessPolicy.emit(dynamicPolicyContent);
     }
 }
