@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AccessKeyI} from "@ingenium/app/shared/models/access_policies/accessPolicyI";
 import {AccessPolicyI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ValidURLCharacters} from "@ingenium/app/shared/validators/ValidUrlCharacters";
 import {NgIf} from "@angular/common";
 
