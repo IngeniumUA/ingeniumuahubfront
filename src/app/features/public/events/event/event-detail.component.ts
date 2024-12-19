@@ -63,8 +63,11 @@ export class EventDetailComponent implements OnInit {
   }
 
   setEvent(id: string): void {
+    // Fetch access_key (if exists)
+    const accessKey: string | null = this.route.snapshot.queryParamMap.get('access_key');
+
     this.eventId = id;
-    this.eventResponse$ = this.eventService.getEvent(id).pipe();
+    this.eventResponse$ = this.eventService.getEvent(id, accessKey).pipe();
     this.eventError$ = this.eventResponse$.pipe(
       ignoreElements(),
       catchError((err) => {
