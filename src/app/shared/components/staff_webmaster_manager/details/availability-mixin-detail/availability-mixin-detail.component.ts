@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, NgZone, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AccessPolicyI, AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, TitleCasePipe} from "@angular/common";
@@ -11,7 +11,7 @@ import {
 import {
   AllowDenyListComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/access-policy/access_policies/allow-deny-list/allow-deny-list.component";
-import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {ValidityEnum} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
 import {
   AccessKeyComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/access-policy/access-key/access-key.component";
