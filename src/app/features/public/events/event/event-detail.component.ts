@@ -13,6 +13,7 @@ import {CartState} from "@ingenium/app/core/store";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 import {LayoutService} from "@ingenium/app/core/services/layout/layout.service";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -35,6 +36,7 @@ export class EventDetailComponent implements OnInit {
   constructor(private eventService: EventService,
               private productService: ProductsService,
               protected layoutService: LayoutService,
+              private route: ActivatedRoute,
               store: Store,
               private navCtrl: NavController,
               private pageTrackService: PageTrackingService,
