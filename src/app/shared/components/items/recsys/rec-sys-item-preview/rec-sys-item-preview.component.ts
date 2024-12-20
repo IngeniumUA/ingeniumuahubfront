@@ -28,14 +28,13 @@ export class RecSysItemPreviewComponent implements OnInit {
     isLandscape!: boolean;
     image!: string;
     internalLink: boolean = false;
+    description!: string;
 
     ngOnInit() {
       this.isLandscape = this.recsysItem.image_square === null || this.recsysItem.image_square === '';
       this.image = this.isLandscape ? this.recsysItem.image_landscape: this.recsysItem.image_square;
       this.internalLink = this.recsysItem.follow_through_link.match('^https?:\\/\\/|mailto:') === null;
-      if (this.recsysItem.preview_description == '') {
-        this.recsysItem.preview_description = 'New';
-      }
+      this.description = this.recsysItem.preview_description === null ? "" : this.recsysItem.preview_description;
     }
 
     textColor() {

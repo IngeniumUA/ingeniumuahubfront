@@ -1,5 +1,6 @@
 <section class="mt-1">
   <h3 class="text-blue-900">Availability mixin</h3>
+  <h4>Static Policy</h4>
   <form [formGroup]="form">
     <table>
       <tbody>
@@ -29,6 +30,27 @@
         </tr>
       </tbody>
     </table>
+
+    <h4>Dynamic Policy</h4>
+    <select formControlName="dynamic_policy_type" class="hubformfield-white">
+      <option *ngFor="let dynamicPolicy of AccessPoliciesList" [ngValue]="dynamicPolicy" style="color: var(--mainblue)">
+        {{ AccessPolicyEnum[dynamicPolicy].replace("_", " ") | titlecase }}
+      </option>
+    </select>
+
+    @switch (this.currentPolicy) {
+      @case (AccessPolicyEnum.member_of_group) {
+        <app-allow-deny-list (UpdateAccessPolicy)="updateAccessPolicy($event)"
+                             [access_policy_content]="this.availability.dynamic_policy_content?.access_policy_config | castToMemberOfGroup"></app-allow-deny-list>
+      }
+      @case (AccessPolicyEnum.access_key) {
+        <app-access-key (UpdateAccessPolicy)="updateAccessPolicy($event)"
+                        [access_policy_content]="this.availability.dynamic_policy_content?.access_policy_config | castToAccessKey"></app-access-key>
+      }
+      @default {
+        <p>No content required!</p>
+      }
+    }
   </form>
 </section>
 
