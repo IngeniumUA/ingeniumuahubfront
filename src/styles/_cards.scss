@@ -25,7 +25,6 @@
 .event-card-list {
   &:hover {
     a:not(:hover) {
-      filter: blur(2px);
     }
   }
 }
@@ -35,6 +34,5 @@
   cursor: pointer;
 
   &:hover {
-    @apply scale-105;
   }
 }

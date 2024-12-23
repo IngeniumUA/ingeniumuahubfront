@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
-import {DatePipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
-import {RouterLink} from '@angular/router';
+import {DatePipe, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
 import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
@@ -15,9 +14,7 @@ import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
   imports: [
     DatePipe,
     NgStyle,
-    ColordbrgbaPipe,
     NgIf,
-    NgClass,
     NgTemplateOutlet,
     NgOptimizedImage
   ]
