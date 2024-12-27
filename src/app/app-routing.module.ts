@@ -79,7 +79,7 @@ const routes: Routes = [
       {path: 'licences', redirectTo: 'sub/info/licences', pathMatch: 'full'},
 
       // Cloud
-      {path: 'cloud', title: 'Cloud', component: CloudComponent, canActivate: [authGuard]},
+      {path: 'cloud', title: 'Cloud', component: CloudComponent},
 
       // Cardredirect
       {path: 'card/:id', component: CardRedirectComponent, canActivate: [authGuard]},
