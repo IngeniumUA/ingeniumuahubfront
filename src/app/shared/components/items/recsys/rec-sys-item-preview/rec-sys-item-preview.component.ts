@@ -61,9 +61,11 @@ export class RecSysItemPreviewComponent implements OnInit {
     }
 
     gotoPage(page: string) {
-      page = 'sub' + page
-      this.pageTrackService.addToTree(page)
-      this.navCtrl.navigateRoot('/'+page).then()
+      if (page !== "") {
+        page = 'sub' + page
+        this.pageTrackService.addToTree(page)
+        this.navCtrl.navigateRoot('/' + page).then()
+      }
     }
 
 }
