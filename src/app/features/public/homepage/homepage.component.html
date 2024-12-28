@@ -53,7 +53,9 @@
     @let events = (this.homePageRec$ | async);
     @if (events && (events?.data?.length ?? 0) > 0) {
       <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
-        <app-rec-sys-item-preview [recsysItem]="recsys_item" class="w-full" *ngFor="let recsys_item of events.data" />
+        @for (event of events.data; track event.name) {
+          <app-rec-sys-item-preview [recsysItem]="event" />
+        }
       </div>
 
       <div class="text-center mt-4">
