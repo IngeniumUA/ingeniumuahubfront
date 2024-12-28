@@ -3,7 +3,7 @@ import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
-import { InAppBrowser } from '@capacitor/inappbrowser';
+import {Browser} from "@capacitor/browser";
 
 @Component({
   selector: 'app-page',
@@ -21,7 +21,7 @@ export class AuthLogoutComponent implements OnInit {
       this.store.dispatch(new User.Logout());
       return;
     }
-    await InAppBrowser.close();
+    await Browser.close();
 
     this.loggedOut = true;
   }
