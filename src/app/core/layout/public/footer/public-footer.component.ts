@@ -31,4 +31,9 @@ export class PublicFooterComponent {
     this.navCtrl.navigateRoot('/'+page).then()
   }
 
+  getPage() {
+    console.log("page: ")
+    console.log(location.href)
+  }
+
 }
