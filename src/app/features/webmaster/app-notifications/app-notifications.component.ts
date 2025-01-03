@@ -14,7 +14,7 @@ import {HttpClient} from "@angular/common/http";
     NgIf
   ],
   templateUrl: './app-notifications.component.html',
-  styleUrl: './app-notifications.component.css'
+  styleUrl: './app-notifications.component.scss'
 })
 export class AppNotificationsComponent implements OnInit {
 
