@@ -40,6 +40,7 @@ export class AppNotificationsComponent implements OnInit {
       this.sendBuffer = true;
       return;
     }
+    this.sendBuffer = false;
 
     // Second press sends notification
     this.sendNotification(
