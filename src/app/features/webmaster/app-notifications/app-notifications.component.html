@@ -1,0 +1,36 @@
+<section class="staffSection">
+  <h1>Send App notification</h1>
+
+  <section>
+    <form [formGroup]="notificationForm">
+      <table>
+        <tbody>
+        <tr><th>Topic</th><td>
+          <label class="hubformfield-white">
+            <input type="text" formControlName="topic" placeholder="Topic"/>
+          </label>
+        </td></tr>
+        <tr><th>Title</th><td>
+          <label class="hubformfield-white">
+            <input type="text" formControlName="title" placeholder="Title"/>
+          </label>
+        </td></tr>
+        <tr><th>Body</th><td>
+          <label class="hubformfield-white">
+            <input type="text" formControlName="body" placeholder="Body"/>
+          </label>
+        </td></tr>
+        </tbody>
+      </table>
+    </form>
+  </section>
+
+  <h2 class="text-blue-900">Send Notification</h2>
+  <button class="button button-primary button-inline"
+          (click)="onSubmit()">
+    <span class="text-white">Send</span>
+  </button>
+  <p *ngIf="this.sendBuffer" class="text-sm text-yellow-700">Zeker?</p>
+
+  <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
+</section>
