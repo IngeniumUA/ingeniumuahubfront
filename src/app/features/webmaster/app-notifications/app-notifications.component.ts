@@ -62,7 +62,8 @@ export class AppNotificationsComponent implements OnInit {
       body: body
     }
     const params = new URLSearchParams(removeNull(param));
-    this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification?`, params);
+    const result = this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification`, params);
+    console.log(result);
   }
 
 }
