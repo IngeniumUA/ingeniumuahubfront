@@ -16,6 +16,9 @@ import {
 import {
   MediabucketFileListPageComponent
 } from "@ingenium/app/features/webmaster/mediabucket-file-list-page/mediabucket-file-list-page.component";
+import {
+  AppNotificationsComponent
+} from "@ingenium/app/features/webmaster/app-notifications/app-notifications.component";
 
 
 const routes: Routes = [
@@ -34,6 +37,7 @@ const routes: Routes = [
       {path: 'checkout/:id', component: CheckoutDetailComponent},
       {path: 'tracking/:id', component: OrderTrackingComponent},
       {path: 'file/media', component: MediabucketFileListPageComponent},
+      {path: 'app_notifications', component: AppNotificationsComponent},
     ]
   },
 ];
