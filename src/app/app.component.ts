@@ -10,8 +10,9 @@ import {OAuthService} from "angular-oauth2-oidc";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {NavigationEnd, Router} from "@angular/router";
 import {Store} from "@ngxs/store";
-import {User} from "@ingenium/app/core/store";
+import {User, UserState} from "@ingenium/app/core/store";
 import {Subject, takeUntil} from "rxjs";
+import {CapacitorHttp} from "@capacitor/core";
 
 @Component({
   selector: 'app-root',
@@ -113,6 +114,7 @@ export class AppComponent implements OnInit {
     // On success, we should be able to receive notifications
     PushNotifications.addListener('registration', (token: Token) => {
       console.log('Push registration success, token: ' + token.value);
+      this.subscribe_to_topic(token.value, "all")
     });
 
     // Some issue with our setup and push will not work
@@ -135,6 +137,21 @@ export class AppComponent implements OnInit {
   gotoPage(page: string) {
     this.pageTrackService.addToTree(page)
     this.navCtrl.navigateRoot('/'+page).then()
+  }
+
+  async subscribe_to_topic(token: string, topic: string) {
+
+    try {
+      const options = {
+        url: apiEnviroment.apiUrl + "app_notification/subscribe?token=" + token + "&topic=" + topic,
+        headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`}
+      }
+      await CapacitorHttp.post(options);
+
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
 }
