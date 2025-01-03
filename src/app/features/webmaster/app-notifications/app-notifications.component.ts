@@ -29,8 +29,8 @@ export class AppNotificationsComponent implements OnInit {
   ngOnInit() {
     this.notificationForm = this.formBuilder.group({
       topic: ['all', Validators.required],
-      title: [Validators.required],
-      body: [Validators.required],
+      title: ['', Validators.required],
+      body: ['', Validators.required],
     });
   }
 
