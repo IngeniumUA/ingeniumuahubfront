@@ -1,6 +1,6 @@
 <app-layout-public-header [internalToggle]="false" (isToggleEmitter)="ToggleSideNav()"></app-layout-public-header>
 <ion-content>
-<div id="body" class="min-h-full min-w-vw flex flex-row justify-around">
+<div id="body" class="min-h-full min-w-vw flex flex-row justify-around" style="overflow-x: scroll">
   <div class="grow-0"><app-sidenav [isSidenavInput]="this.isSideNav"></app-sidenav></div>
   <div class="grow m-1"><router-outlet></router-outlet></div>
 </div>
