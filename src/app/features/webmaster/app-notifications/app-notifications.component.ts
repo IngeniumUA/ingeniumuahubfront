@@ -60,8 +60,7 @@ export class AppNotificationsComponent implements OnInit {
       title: title,
       body: body
     }
-    const result = this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification`, param);
-    result.forEach(notification => {console.log(notification)});
+    this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification`, param);
   }
 
 }
