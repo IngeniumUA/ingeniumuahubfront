@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";
-import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {HttpClient} from "@angular/common/http";
 
@@ -61,8 +60,7 @@ export class AppNotificationsComponent implements OnInit {
       title: title,
       body: body
     }
-    const params = new URLSearchParams(removeNull(param));
-    this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification?`, params);
+    this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification`, param);
   }
 
 }
