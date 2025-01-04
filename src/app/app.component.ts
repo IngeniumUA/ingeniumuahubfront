@@ -142,9 +142,14 @@ export class AppComponent implements OnInit {
   async subscribe_to_topic(token: string, topic: string) {
 
     try {
+      const param = {
+        token: token,
+        topic: topic
+      }
       const options = {
-        url: apiEnviroment.apiUrl + "app_notification/subscribe?token=" + token + "&topic=" + topic,
-        headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`}
+        url: apiEnviroment.apiUrl + "app_notification/subscribe",
+        headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`},
+        params: param
       }
       await CapacitorHttp.post(options);
 
