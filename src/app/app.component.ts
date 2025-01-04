@@ -148,8 +148,8 @@ export class AppComponent implements OnInit {
       }
       const options = {
         url: apiEnviroment.apiUrl + "app_notification/subscribe",
-        headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`},
-        params: param
+        headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`, 'Content-Type': "application/json"},
+        data: param
       }
       await CapacitorHttp.post(options);
 
