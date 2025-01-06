@@ -46,7 +46,7 @@ jobs:
           keystore_password=$(<android/password.decrypted.txt)
 
       - name: Sign dev build
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "$keystore_password" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab key0
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "$keystore_password" -keypass "$keystore_password" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab key0
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v3
