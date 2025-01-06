@@ -39,14 +39,8 @@ jobs:
           echo "${{ secrets.ANDROID_KEYSTORE }}" > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
 
-      - name: Extract password from env
-        run: |
-          echo "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" > android/password.txt.base64
-          base64 -d android/password.txt.base64 > android/password.decrypted.txt
-          keystore_password=$(<android/password.decrypted.txt)
-
       - name: Sign dev build
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "$keystore_password" -keypass "$keystore_password" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab key0
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -keypass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab key0
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v3
