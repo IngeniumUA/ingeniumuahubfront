@@ -132,7 +132,7 @@ jobs:
 
           echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > ./transporter/metadata.xml
           echo "<package xmlns=\"http://apple.com/itunes/importer\" version=\"software5.4\">" >> ./transporter/metadata.xml
-          echo "    <software_assets apple_id=\"<Your Apple ID>\" app_platform=\"ios\">" >> ./transporter/metadata.xml
+          echo "    <software_assets apple_id=\"webmaster@ingeniumua.be\" app_platform=\"ios\">" >> ./transporter/metadata.xml
           echo "        <asset type=\"bundle\">" >> ./transporter/metadata.xml
           echo "        	<data_file>" >> ./transporter/metadata.xml
           echo "                <size>$fileSize</size>" >> ./transporter/metadata.xml
