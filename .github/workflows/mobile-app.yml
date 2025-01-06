@@ -41,10 +41,9 @@ jobs:
 
       - name: Extract password from env
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/password.txt.base64
+          echo "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" > android/password.txt.base64
           base64 -d android/password.txt.base64 > android/password.decrypted.txt
           keystore_password=$(<android/password.decrypted.txt)
-          echo $keystore_password
 
       - name: Sign dev build
         run: jarsigner -keystore android/release.decrypted.jks -storepass "$keystore_password" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab key0
