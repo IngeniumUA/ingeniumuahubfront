@@ -144,4 +144,4 @@ jobs:
           echo "</package>" >> ./transporter/metadata.xml
 
           # Upload the .itmsp folder to iTunes Connect
-          /Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m upload -u "Ingenium UA" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}" -f ./transporter/itmsp_folder.itmsp -t DAV -t Signiant -k 100000 -v eXtreme
+          "./Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter" -m upload -u "Ingenium UA" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}" -f ./transporter/itmsp_folder.itmsp -t DAV -t Signiant -k 100000 -v eXtreme
