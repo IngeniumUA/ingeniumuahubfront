@@ -36,7 +36,7 @@ jobs:
 
       - name: Extract Android signing key from env
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE }"} > android/release.jks.base64
+          echo "${{ secrets.ANDROID_KEYSTORE }}" > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
 
       - name: Sign dev build
