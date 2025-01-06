@@ -127,7 +127,7 @@ jobs:
           cp ./output/App.ipa ./transporter/itmsp_folder.itmsp
 
           # Generate the metadata.xml file
-          fileSize=` stat -f %z output
+          fileSize=` stat -f %z output`
           md5Checksum=`md5 ./output/App.ipa  | cut -d "=" -f 2 | awk '{print $1}'`
 
           echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > ./transporter/metadata.xml
@@ -144,5 +144,4 @@ jobs:
           echo "</package>" >> ./transporter/metadata.xml
 
           # Upload the .itmsp folder to iTunes Connect
-          /Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m upload -u "Ingenium UA"
-          -p ${{ secrets.APPLE_DEVELOPER_PASSWORD }} -f ./transporter/itmsp_folder.itmsp -t DAV -t Signiant -k 100000 -v eXtreme
+          /Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m upload -u "Ingenium UA" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}" -f ./transporter/itmsp_folder.itmsp -t DAV -t Signiant -k 100000 -v eXtreme
