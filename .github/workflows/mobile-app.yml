@@ -117,3 +117,32 @@ jobs:
           name: app-ios
           path: output/
           retention-days: 1
+
+      - name: Upload to apple connect
+        run: |
+          # Create the .itmsp folder
+          mkdir ./transporter/itmsp_folder.itmsp
+
+          # Move your .ipa file into the .itmsp folder
+          cp ./output/App.ipa ./transporter/itmsp_folder.itmsp
+
+          # Generate the metadata.xml file
+          fileSize=` stat -f %z output
+          md5Checksum=`md5 ./output/App.ipa  | cut -d "=" -f 2 | awk '{print $1}'`
+
+          echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > ./transporter/metadata.xml
+          echo "<package xmlns=\"http://apple.com/itunes/importer\" version=\"software5.4\">" >> ./transporter/metadata.xml
+          echo "    <software_assets apple_id=\"<Your Apple ID>\" app_platform=\"ios\">" >> ./transporter/metadata.xml
+          echo "        <asset type=\"bundle\">" >> ./transporter/metadata.xml
+          echo "        	<data_file>" >> ./transporter/metadata.xml
+          echo "                <size>$fileSize</size>" >> ./transporter/metadata.xml
+          echo "                <file_name>nap.ipa</file_name>" >> ./transporter/metadata.xml
+          echo "            	  <checksum type=\"md5\">$md5Checksum</checksum>" >> ./transporter/metadata.xml
+          echo "          </data_file>" >> ./transporter/metadata.xml
+          echo "        </asset>" >> ./transporter/metadata.xml
+          echo "    </software_assets>" >> ./transporter/metadata.xml
+          echo "</package>" >> ./transporter/metadata.xml
+
+          # Upload the .itmsp folder to iTunes Connect
+          /Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m upload -u "Ingenium UA"
+          -p ${{ secrets.APPLE_DEVELOPER_PASSWORD }} -f ./transporter/itmsp_folder.itmsp -t DAV -t Signiant -k 100000 -v eXtreme
