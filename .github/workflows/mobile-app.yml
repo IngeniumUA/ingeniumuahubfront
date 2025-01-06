@@ -121,7 +121,7 @@ jobs:
       - name: Upload to apple connect
         run: |
           # Create the .itmsp folder
-          mkdir ./transporter/itmsp_folder.itmsp
+          mkdir -p ./transporter/itmsp_folder.itmsp
 
           # Move your .ipa file into the .itmsp folder
           cp ./output/App.ipa ./transporter/itmsp_folder.itmsp
