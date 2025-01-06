@@ -34,12 +34,16 @@ jobs:
         run: cd android && ./gradlew bundle
 
       - name: Extract Android signing key from env
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE }}" > android/release.jks.base64
+          echo $KEYSTORE > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
 
       - name: Sign dev build
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
+        env:
+          PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: jarsigner -keystore android/release.decrypted.jks -storepass $PASSWORD -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v3
