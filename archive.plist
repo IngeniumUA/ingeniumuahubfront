@@ -7,7 +7,7 @@
 <key>provisioningProfiles</key>
 <dict>
     <key>development.com.app.ingeniumua</key>
-    <string>GitHub App creation</string>
+    <string>Github App creation</string>
 </dict>
 </dict>
 </plist>
