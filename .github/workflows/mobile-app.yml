@@ -52,6 +52,7 @@ jobs:
   build_ios:
     runs-on: macos-13
     name: Build iOS app
+    environment: Mobile-App
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
