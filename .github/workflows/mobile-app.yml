@@ -6,6 +6,7 @@ jobs:
   build:
     name: Build AAB
     runs-on: ubuntu-latest
+    environment: Mobile-App
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
@@ -34,16 +35,12 @@ jobs:
         run: cd android && ./gradlew bundle
 
       - name: Extract Android signing key from env
-        env:
-          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
         run: |
-          echo $KEYSTORE > android/release.jks.base64
+          echo "${{ secrets.ANDROID_KEYSTORE }"} > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
 
       - name: Sign dev build
-        env:
-          PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        run: jarsigner -keystore android/release.decrypted.jks -storepass $PASSWORD -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
+        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v3
