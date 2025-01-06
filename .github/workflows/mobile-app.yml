@@ -22,10 +22,10 @@ jobs:
           node-version: 18.x
 
       - name: Install app dependencies
-        run: npm install
+        run: npm install && npm install -g @ionic/cli
 
-      - name: Build Svelte app
-        run: npm run build:static
+      - name: Build app
+        run: ionic build
 
       - name: Capacitor sync
         run: npx cap sync
