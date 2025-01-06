@@ -4,7 +4,7 @@ on:
 
 jobs:
   build:
-    name: Build APK
+    name: Build AAB
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
