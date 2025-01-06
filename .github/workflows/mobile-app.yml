@@ -120,7 +120,7 @@ jobs:
 
       - name: Upload to apple connect
         run: |
-          xcrun altool --upload-app -f ./output/App.ipa -u "webmaster@ingeniumua.be" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}"
+          xcrun altool --upload-app -t "iOS" -f ./output/App.ipa -u "webmaster@ingeniumua.be" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}"
 #          # Create the .itmsp folder
 #          mkdir -p ./transporter/itmsp_folder.itmsp
 #
