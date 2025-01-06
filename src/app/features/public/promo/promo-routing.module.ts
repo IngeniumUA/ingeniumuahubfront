@@ -2,13 +2,15 @@ import {RouterModule, Routes} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {VacatureDisplayComponent} from './vacatures/vacature-display/vacature-display.component';
 import {VacaturesListDisplayComponent} from './vacatures/vacatures-list-display/vacatures-list-display.component';
+import {NotfoundpageComponent} from "@ingenium/app/features/notfoundpage/notfoundpage.component";
 
 const routes: Routes = [
   {path: 'vacature/:id', component: VacatureDisplayComponent },
   {path: 'vacatures/:id', component: VacatureDisplayComponent },
   {path: 'vacature', component: VacaturesListDisplayComponent },
-  {path: 'vacatures', component: VacaturesListDisplayComponent }
+  {path: 'vacatures', component: VacaturesListDisplayComponent },
   // {path: ':id', component: EventDetailComponent }
+  { path: '**', component: NotfoundpageComponent }
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

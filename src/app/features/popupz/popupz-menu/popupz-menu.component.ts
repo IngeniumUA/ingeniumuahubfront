@@ -1,25 +1,21 @@
 import { Component } from '@angular/core';
-import {ActivatedRoute, RouterLink, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {ProductOutI} from "@ingenium/app/shared/models/product/products";
 import {take} from "rxjs";
-import {AsyncPipe, NgClass, NgIf} from "@angular/common";
+import {NgClass, NgIf} from "@angular/common";
 import {Store} from "@ngxs/store";
 import {CartActions} from "@ingenium/app/core/store";
 import {ToastrService} from "ngx-toastr";
 import {FormsModule} from "@angular/forms";
 import {map} from "rxjs/operators";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-popupz-menu',
   standalone: true,
   imports: [
-    RouterLink,
-    RouterLinkActive,
-    AsyncPipe,
     FormsModule,
     NgIf,
     NgClass
@@ -40,9 +36,7 @@ export class PopupzMenuComponent {
 
   constructor(private httpClient: HttpClient, private store: Store, private toastrService: ToastrService,
               private route: ActivatedRoute,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
+              private appFunctionsService: AppFunctionsService,) {
     this.route.params.subscribe(params => {
       this.category = params['category'];
       this.products = this.filterProducts(this.allProducts);
@@ -50,10 +44,7 @@ export class PopupzMenuComponent {
 
     this.getProducts();
 
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+    backButtonClicked()
   }
 
   getProducts() {
@@ -107,8 +98,5 @@ export class PopupzMenuComponent {
     this.toastrService.success('Het product werd toevergevoegd aan uw winkelmandje.');
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 }

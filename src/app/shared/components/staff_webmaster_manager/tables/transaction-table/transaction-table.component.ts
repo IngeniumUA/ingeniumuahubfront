@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {MatPaginator, MatPaginatorModule, PageEvent} from '@angular/material/paginator';
-import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, NgStyle, TitleCasePipe} from '@angular/common';
+import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
 import {StatusStatsI, StatusToStats} from '../../../../models/stats/transactionStats';
@@ -22,9 +22,7 @@ import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/tr
 import {TransactionI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
 import {ToastrService} from "ngx-toastr";
-import {PageTrackingService} from "@app_services/page-tracking.service";
-import {RouterLink} from "@angular/router";
-import {NavController} from "@ionic/angular";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-transaction-table',
@@ -37,13 +35,10 @@ import {NavController} from "@ionic/angular";
     MatProgressSpinnerModule,
     MatTableModule,
     NgIf,
-    RouterLink,
     NgForOf,
     NgClass,
-    NgStyle,
     ReactiveFormsModule,
     CurrencyPipe,
-    KeyValuePipe,
     TitleCasePipe
   ],
   standalone: true
@@ -52,8 +47,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
   constructor(private transactionService: TransactionService,
               private datePipe: DatePipe,
               private toastrService: ToastrService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
   }
   @Input() item_id: number | null = null;
   @Input() user_id: string | null = null;
@@ -275,10 +269,7 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
     });
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
   protected readonly PaymentStatusEnum = PaymentStatusEnum;
   protected readonly ValidityEnum = ValidityEnum;

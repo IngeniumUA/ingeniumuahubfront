@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
 import {AccountService} from '../../../core/services/coreAPI/user/account.service';
 import {first} from 'rxjs/operators';
 import {HttpErrorResponse} from '@angular/common/http';
 import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {currentPage} from "@app_services/page-tracking.service";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-card-redirect',
@@ -15,13 +14,8 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
 export class CardRedirectComponent implements OnInit {
 
   constructor(private accountService: AccountService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private appFunctionsService: AppFunctionsService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {
@@ -72,8 +66,5 @@ export class CardRedirectComponent implements OnInit {
     return 'Ongekende Error!';
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 }

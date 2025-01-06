@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {FlagService} from "@ingenium/app/core/services/coreAPI/flag.service";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 interface FlagI {
   id: number
@@ -24,14 +23,8 @@ export class FlagTableComponent implements OnInit {
   flags$: Observable<FlagI[]> = of([])
 
 
-  constructor(private flagService: FlagService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+  constructor(private flagService: FlagService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {

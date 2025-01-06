@@ -13,17 +13,15 @@ import {debounceTime, delay, Observable, of} from 'rxjs';
 import {StatusStatsI, StatusToStats} from '../../../../models/stats/transactionStats';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {distinctUntilChanged} from 'rxjs/operators';
-import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTableModule} from '@angular/material/table';
-import {RouterLink} from '@angular/router';
 import {CurrencyPipe} from '../../../../pipes/currency.pipe';
 import {CheckoutI, CheckoutPatchI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/checkout.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-checkout-table',
@@ -39,9 +37,7 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
     NgIf,
     ReactiveFormsModule,
     NgClass,
-    RouterLink,
     CurrencyPipe,
-    KeyValuePipe,
     TitleCasePipe
   ],
   standalone: true
@@ -49,8 +45,7 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
 export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit {
 
   constructor(private checkoutService: CheckoutService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
   }
   @Input() user_id: string | null = null;
   @Input() item_id: number | null = null;
@@ -187,10 +182,7 @@ export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit 
     });
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
   protected readonly PaymentStatusEnum = PaymentStatusEnum;
   protected readonly PaymentProviderEnum = PaymentProviderEnum;

@@ -5,9 +5,9 @@ import {UserTrackerService} from '@ingenium/app/core/services/coreAPI/user/user-
 import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from '@ingenium/app/shared/models/tracker';
 import QRCode from 'qrcode';
 import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {Platform} from "@ionic/angular";
 import { ScreenBrightness } from '@capacitor-community/screen-brightness';
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-account-transactions',
@@ -17,13 +17,9 @@ import { ScreenBrightness } from '@capacitor-community/screen-brightness';
 export class AccountTransactionsComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService,
               private trackerService: UserTrackerService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform,) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/' + currentPage).then()
-    });
+              private platform: Platform,
+              private appFunctionsService: AppFunctionsService,) {
+    backButtonClicked()
     this.setPlatform()
     ScreenBrightness.getBrightness().then((result) => {
       this.brightness = result.brightness
@@ -145,9 +141,6 @@ export class AccountTransactionsComponent implements OnInit, OnDestroy {
     return
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
 }

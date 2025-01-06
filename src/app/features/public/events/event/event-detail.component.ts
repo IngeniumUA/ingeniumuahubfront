@@ -4,8 +4,7 @@ import {ProductCategoryI, ProductGroupI} from '@ingenium/app/shared/models/produ
 import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
 import {map} from 'rxjs/operators';
 import {ProductsToCategoriesPipe} from '@ingenium/app/shared/pipes/product/product_to_categoriepipe.pipe';
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {currentPage} from "@app_services/page-tracking.service";
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {Store} from "@ngxs/store";
@@ -14,6 +13,7 @@ import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 import {LayoutService} from "@ingenium/app/core/services/layout/layout.service";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {ActivatedRoute} from "@angular/router";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 
 @Component({
@@ -38,14 +38,9 @@ export class EventDetailComponent implements OnInit {
               protected layoutService: LayoutService,
               private route: ActivatedRoute,
               store: Store,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
+              private appFunctionsService: AppFunctionsService,) {
     this.isCartEmpty$ = store.select(CartState.getProductCount);
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+    backButtonClicked()
   }
 
   ngOnInit() {
@@ -113,9 +108,6 @@ export class EventDetailComponent implements OnInit {
       'font-weight': 'bold'}
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
 }

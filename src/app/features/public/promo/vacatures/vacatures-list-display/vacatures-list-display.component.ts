@@ -3,8 +3,7 @@ import {Observable} from 'rxjs';
 import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import { PromoService } from '@ingenium/app/core/services/coreAPI/item/derived_services/promo.service';
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -17,13 +16,7 @@ export class VacaturesListDisplayComponent {
   vacatures$: Observable<RecSysPreviewI[]> = this.promoService.getPromosList(50, 0, 1);
 
   constructor(private promoService: PromoService,
-              private layoutService: LayoutService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private layoutService: LayoutService,) {
+    backButtonClicked()
   }
 }

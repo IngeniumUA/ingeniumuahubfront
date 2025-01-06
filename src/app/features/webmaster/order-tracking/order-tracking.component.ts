@@ -3,8 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {retry, Subscription, switchMap, timer} from 'rxjs';
 import {HubCheckoutTrackerI} from '@ingenium/app/shared/models/tracker';
 import {CheckoutTrackerService} from "@ingenium/app/core/services/coreAPI/checkoutTracker.service";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -19,14 +18,8 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
   items: HubCheckoutTrackerI[] = [];
 
   constructor(private route: ActivatedRoute,
-              private trackingService: CheckoutTrackerService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private trackingService: CheckoutTrackerService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {

@@ -4,8 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {ToastrService} from "ngx-toastr";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-item-detail-dashboard',
@@ -23,14 +22,8 @@ export class ItemDashboardPageComponent implements OnInit {
   constructor(private itemWideService: ItemWideService,
               private route: ActivatedRoute,
               private router: Router,
-              private toastrService: ToastrService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private toastrService: ToastrService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {

@@ -1,9 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgIf} from '@angular/common';
 import {Observable, of} from 'rxjs';
-import {
-  ProductBlueprintDetailComponent
-} from '../../details/product-blueprint-detail/product-blueprint-detail.component';
 import {
   ProductBlueprintCreateComponent
 } from '../../create/product-blueprint-create/product-blueprint-create.component';
@@ -11,9 +8,7 @@ import {MatTableModule} from '@angular/material/table';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
-import {RouterLink} from '@angular/router';
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-product-blueprint-dashboard',
@@ -21,14 +16,9 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
   styleUrls: ['./product-blueprint-dashboard.component.css'],
   imports: [
     AsyncPipe,
-    NgForOf,
     NgIf,
-    ProductBlueprintDetailComponent,
     ProductBlueprintCreateComponent,
-    DatePipe,
     MatTableModule,
-    RouterLink,
-    JsonPipe
   ],
   standalone: true
 })
@@ -37,8 +27,7 @@ export class ProductBlueprintDashboardComponent implements OnInit {
   $productBlueprint: Observable<[]> = of([]);
 
   constructor(private productBlueprintService: ProductBlueprintService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
   }
 
   calcTotal(input: []): number {
@@ -67,9 +56,6 @@ export class ProductBlueprintDashboardComponent implements OnInit {
       PaymentStatusEnum.successful);  // source_item
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
 }

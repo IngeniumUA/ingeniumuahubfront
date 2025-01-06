@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {Observable} from "rxjs";
 import {ProductOutI} from "@ingenium/app/shared/models/product/products";
 import {ProductsService} from "@ingenium/app/core/services/coreAPI/products.service";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-galabal',
@@ -12,15 +10,8 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
   styleUrls: ['./galabal.component.css']
 })
 export class GalabalComponent implements OnInit {
-  constructor(private eventService: EventService,
-              private productService: ProductsService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+  constructor(private productService: ProductsService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {

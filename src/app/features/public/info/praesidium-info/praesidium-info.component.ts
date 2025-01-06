@@ -5,8 +5,7 @@ import {PraesidiumGroupI} from "@ingenium/app/shared/models/praesidium";
 
 import praesidium from "@ingenium/app/shared/data/praesidium";
 import {Title} from "@angular/platform-browser";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -16,13 +15,8 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
 export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private titleService: Title,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private appFunctionsService: AppFunctionsService,) {
+    backButtonClicked()
   }
 
   validYears: string[] = Object.keys(praesidium); // Put newest year first
@@ -53,8 +47,5 @@ export class PraesidiumInfoComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 }

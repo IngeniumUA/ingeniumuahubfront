@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -8,13 +7,8 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
   styleUrls: ['./notfoundpage.component.css']
 })
 export class NotfoundpageComponent {
-  constructor(private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+  constructor() {
+    backButtonClicked()
   }
 
 }

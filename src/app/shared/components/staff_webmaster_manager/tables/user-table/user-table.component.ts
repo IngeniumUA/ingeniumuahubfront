@@ -12,8 +12,7 @@ import {MatInputModule} from '@angular/material/input';
 import {GroupI} from '../../../../models/group/hubGroupI';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-user-table',
@@ -60,8 +59,7 @@ export class UserTableComponent implements OnInit, AfterViewInit {
   constructor(private datePipe: DatePipe,
               private userService: UserService,
               private staffGroupService: GroupService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -186,8 +184,5 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     })
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 }

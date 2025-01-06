@@ -3,8 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {UserWideI} from '@ingenium/app/shared/models/user/userI';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-user-detail-page',
@@ -14,14 +13,8 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
 export class UserDetailPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
-              private userService: UserService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private userService: UserService,) {
+    backButtonClicked()
   }
 
   $userDetail!: Observable<UserWideI>;

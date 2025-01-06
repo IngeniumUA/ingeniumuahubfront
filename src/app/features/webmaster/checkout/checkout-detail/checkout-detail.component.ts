@@ -9,8 +9,7 @@ import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/tr
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {ToastrService} from "ngx-toastr";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-checkout-detail',
@@ -30,14 +29,8 @@ export class CheckoutDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private checkoutService: CheckoutService,
               private staffTransactionService: TransactionService,
-              private toastrService: ToastrService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private toastrService: ToastrService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {

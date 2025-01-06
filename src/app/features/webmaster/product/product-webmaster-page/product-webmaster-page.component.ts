@@ -1,11 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
-import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-product-webmaster-page',
@@ -18,16 +16,9 @@ export class ProductWebmasterPageComponent implements OnInit {
 
   productId!: number;
 
-  constructor(private itemWideService: ItemWideService,
-              private productBlueprintService: ProductBlueprintService,
-              private route: ActivatedRoute,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+  constructor(private productBlueprintService: ProductBlueprintService,
+              private route: ActivatedRoute,) {
+    backButtonClicked()
   }
 
   ngOnInit() {

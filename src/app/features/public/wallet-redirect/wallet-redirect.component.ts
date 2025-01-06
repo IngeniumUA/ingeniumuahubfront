@@ -6,8 +6,7 @@ import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading
 import {PublicHeaderComponent} from "@ingenium/app/core/layout/public/header/public-header.component";
 import {UserState} from "@ingenium/app/core/store";
 import {Store} from "@ngxs/store";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-wallet-redirect',
@@ -24,8 +23,8 @@ export class WalletRedirectComponent implements OnInit{
   constructor(private route: ActivatedRoute,
               private accountService: AccountService,
               private store: Store,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {
@@ -66,9 +65,6 @@ export class WalletRedirectComponent implements OnInit{
 
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
 }

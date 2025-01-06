@@ -9,8 +9,7 @@ import {catchError} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {CartFailedI, CartSuccessI} from "@ingenium/app/shared/models/cart/cartI";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -25,13 +24,8 @@ export class PayComponent implements OnInit {
   constructor(private store: Store,
               private httpClient: HttpClient,
               private toastrService: ToastrService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private appFunctionsService: AppFunctionsService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {
@@ -106,9 +100,6 @@ export class PayComponent implements OnInit {
     return response;
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
 }

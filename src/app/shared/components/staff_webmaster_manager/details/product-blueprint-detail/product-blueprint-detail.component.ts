@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/product/products';
 import {PricePolicyComponent} from '../price-policy/price-policy.component';
@@ -15,8 +15,7 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/delete-button/delete-button.component";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 import {ToastrService} from "ngx-toastr";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -24,7 +23,6 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
   styleUrls: ['./product-blueprint-detail.component.css'],
   imports: [
     DatePipe,
-    JsonPipe,
     NgForOf,
     FormsModule,
     ReactiveFormsModule,
@@ -45,8 +43,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
     constructor(private formBuilder: FormBuilder,
                 private pricePolicyService: PricePolicyService,
                 private toastrService: ToastrService,
-                private navCtrl: NavController,
-                private pageTrackService: PageTrackingService,
+                private appFunctionsService: AppFunctionsService,
                 private blueprintService: ProductBlueprintService) {
     }
 
@@ -207,10 +204,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
     });
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
   deleteBlueprint(blueprintId: number) {
     this.blueprintService.deleteProductBlueprint(blueprintId).subscribe({

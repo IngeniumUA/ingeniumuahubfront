@@ -5,8 +5,7 @@ import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_serv
 import {Store} from "@ngxs/store";
 import {CartState} from "@ingenium/app/core/store";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -19,18 +18,10 @@ export class ShopHomeComponent {
 
   constructor(private shopService: ShopService,
               private store: Store,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
+              private appFunctionsService: AppFunctionsService,) {
     this.shopItems$ = this.shopService.getShopItems();
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/' + currentPage).then()
-    });
+    backButtonClicked()
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 }

@@ -1,23 +1,21 @@
 import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, ViewChild} from '@angular/core';
-import {NgForOf, NgOptimizedImage} from "@angular/common";
+import {NgForOf} from "@angular/common";
 import {catchError, interval, Subscription, take} from "rxjs";
 import {HubCheckoutTrackerStatusEnum} from "@ingenium/app/shared/models/tracker";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 interface PublicOrderTrackerI {
   id: number;
   checkout_tracker_status: HubCheckoutTrackerStatusEnum,
 }
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
 
 @Component({
   selector: 'app-popupz-public-tracker',
   standalone: true,
   imports: [
-    NgOptimizedImage,
     NgForOf
   ],
   providers: [
@@ -36,14 +34,8 @@ export class PopupzPublicTrackerComponent implements AfterViewInit, OnDestroy {
   doneOrders: PublicOrderTrackerI[] = [];
 
   constructor(@Inject(Window) private readonly window: Window,
-              private httpClient: HttpClient,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private httpClient: HttpClient,) {
+    backButtonClicked()
   }
 
   ngAfterViewInit() {

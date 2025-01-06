@@ -5,8 +5,8 @@ import {catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {ProductOutI} from '@ingenium/app/shared/models/product/products';
 import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_services/shop.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {currentPage} from "@app_services/page-tracking.service";
+import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -18,13 +18,8 @@ export class ShopDetailComponent implements OnInit {
   constructor(private layoutService: LayoutService,
               private shopService: ShopService,
               private productService: ProductsService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private appFunctionsService: AppFunctionsService,) {
+    backButtonClicked()
   }
 
   // Layout
@@ -62,9 +57,6 @@ export class ShopDetailComponent implements OnInit {
     this.products$ = this.productService.getProducts(id).pipe(shareReplay());
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
 }

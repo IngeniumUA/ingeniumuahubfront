@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, NgIf, NgStyle} from '@angular/common';
 import {DisplayMixinDetailComponent} from '../display-mixin-detail/display-mixin-detail.component';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
@@ -13,17 +13,12 @@ import {
   AsPromoItemWide,
   AsShopItemWide
 } from "@ingenium/app/shared/pipes/item/itemWidePipes";
-import {RouterLink} from "@angular/router";
 import {CardMembershipEnum, CardTypeEnum} from "@ingenium/app/shared/models/item/cardI";
-import {
-  InteractionTableComponent
-} from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 import {
   AvailabilityMixinDetailComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-item-detail',
@@ -34,12 +29,9 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
     DisplayMixinDetailComponent,
     NgStyle,
     DatePipe,
-    NgForOf,
     ReactiveFormsModule,
     MatInputModule,
     AsCardItemWide,
-    RouterLink,
-    InteractionTableComponent,
     AvailabilityMixinDetailComponent,
     AsShopItemWide,
     AsPromoItemWide,
@@ -66,8 +58,7 @@ export class ItemDetailComponent implements OnInit{
 
   constructor(private formBuilder: FormBuilder,
               private datePipe: DatePipe,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
   }
   ngOnInit() {
     this.isEventItem = this.item.derived_type.derived_type_enum === "eventitem"
@@ -156,10 +147,7 @@ export class ItemDetailComponent implements OnInit{
     this.item.item.availability = availabilityObj;
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
   protected readonly CardTypeEnum = CardTypeEnum;
   protected readonly CardMembershipEnum = CardMembershipEnum;

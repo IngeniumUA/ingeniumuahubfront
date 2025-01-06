@@ -4,8 +4,9 @@ import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
-import {NavController, Platform} from "@ionic/angular";
+import {NavController} from "@ionic/angular";
 import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-vacature-display',
@@ -23,12 +24,8 @@ export class VacatureDisplayComponent implements OnInit {
   constructor(private layoutService: LayoutService,
               private promoService: PromoService,
               private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+              private pageTrackService: PageTrackingService,) {
+    backButtonClicked()
   }
 
   ngOnInit() {

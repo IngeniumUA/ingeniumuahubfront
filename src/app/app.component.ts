@@ -13,6 +13,7 @@ import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
 import {Subject, takeUntil} from "rxjs";
 import {CapacitorHttp} from "@capacitor/core";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit {
               public storage: StorageService,
               private zone: NgZone,
               private pageTrackService: PageTrackingService,
-              private navCtrl: NavController,) {
+              private navCtrl: NavController,
+              private appFunctionsService: AppFunctionsService,) {
     oauthService.configure(apiEnviroment.oauthConfig);
     oauthService.loadDiscoveryDocument().then();
     this.preloadAudio().then();
@@ -134,10 +136,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
   async subscribe_to_topic(token: string, topic: string) {
 

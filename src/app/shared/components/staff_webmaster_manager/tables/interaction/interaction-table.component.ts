@@ -21,10 +21,8 @@ import {
   MatTable
 } from "@angular/material/table";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {RouterLink} from "@angular/router";
 import {InteractionTypeEnum} from "@ingenium/app/shared/models/interaction/interactionTypeEnum";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-interaction-table',
@@ -41,7 +39,6 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
     NgIf,
     ReactiveFormsModule,
     MatProgressSpinner,
-    RouterLink,
     MatHeaderRow,
     MatHeaderRowDef,
     MatRow,
@@ -54,8 +51,7 @@ import {PageTrackingService} from "@app_services/page-tracking.service";
 })
 export class InteractionTableComponent implements AfterViewInit, OnInit {
   constructor(private interactionService: InteractionService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
   }
 
   @Input() item_id: number | null = null;
@@ -131,10 +127,7 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
     paginatorIntl.lastPageLabel = '';
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
   protected readonly InteractionTypeEnum = InteractionTypeEnum;
 }

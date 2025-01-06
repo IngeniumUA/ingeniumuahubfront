@@ -13,8 +13,7 @@ import {
   CardTypeEnum,
   CardTypeEnumList
 } from "@ingenium/app/shared/models/item/cardI";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-card-table',
@@ -54,8 +53,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private cardService: CardService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,) {
+              private appFunctionsService: AppFunctionsService,) {
   }
 
   ngOnInit() {
@@ -122,10 +120,7 @@ export class CardTableComponent implements OnInit, AfterViewInit {
     });
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
   protected readonly CardTypeEnum = CardTypeEnum;
   protected readonly CardTypeEnumList = CardTypeEnumList;

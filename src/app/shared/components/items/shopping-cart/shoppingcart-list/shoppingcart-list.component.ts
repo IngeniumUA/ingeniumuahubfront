@@ -1,10 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
-import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
 import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 import {Observable} from "rxjs";
 import {Store} from "@ngxs/store";
@@ -12,6 +9,7 @@ import {CartActions, CartState, UserState} from "@ingenium/app/core/store";
 import {map} from "rxjs/operators";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CartFailedI, FailedProductI} from "@ingenium/app/shared/models/cart/cartI";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-shoppingcart-list',
@@ -38,8 +36,7 @@ export class ShoppingcartListComponent implements OnInit {
   paymentErrors: HttpErrorResponse[] = [];
 
   constructor(private store: Store,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService) {}
+              private appFunctionsService: AppFunctionsService,) {}
 
   ngOnInit() {
     // Temporary, should be moved elsewhere
@@ -77,9 +74,6 @@ export class ShoppingcartListComponent implements OnInit {
     });
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
 }

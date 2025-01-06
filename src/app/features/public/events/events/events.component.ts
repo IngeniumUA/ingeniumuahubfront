@@ -3,8 +3,7 @@ import {Observable, of} from 'rxjs';
 import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_services/event.service";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-page',
@@ -14,14 +13,8 @@ import {currentPage, PageTrackingService} from "@app_services/page-tracking.serv
 export class EventsComponent {
   events$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: true, data: [], error: null});
 
-  constructor(private eventService: EventService,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private platform: Platform) {
+  constructor(private eventService: EventService,) {
     this.events$ = eventService.getEventsList();
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+    backButtonClicked()
   }
 }

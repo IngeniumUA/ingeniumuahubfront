@@ -1,13 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {AsyncPipe, NgClass, NgIf, NgOptimizedImage, NgStyle, NgTemplateOutlet} from '@angular/common';
+import {AsyncPipe, NgClass, NgIf, NgOptimizedImage} from '@angular/common';
 import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
 import {User, UserState} from '@ingenium/app/core/store';
-import {OAuthService} from "angular-oauth2-oidc";
 import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
-import {NavController} from "@ionic/angular";
-import {PageTrackingService} from "@app_services/page-tracking.service";
 import {Router} from "@angular/router";
+import {AppFunctionsService} from "@app_services/app-functions.service";
 
 
 @Component({
@@ -17,9 +15,7 @@ import {Router} from "@angular/router";
   standalone: true, // Allows it to be imported outside of routing
   imports: [
     NgIf,
-    NgTemplateOutlet,
     NgClass,
-    NgStyle,
     NgOptimizedImage,
     AsyncPipe,
   ],
@@ -40,10 +36,8 @@ export class PublicHeaderComponent {
   @Output() isToggleEmitter = new EventEmitter<boolean>();
 
   constructor(private store: Store,
-              private navCtrl: NavController,
-              private pageTrackService: PageTrackingService,
-              private oauthService: OAuthService,
-              protected router: Router) {
+              protected router: Router,
+              private appFunctionsService: AppFunctionsService,) {
     this.email$ = store.select(UserState.email);
     this.roles$ = store.select(UserState.roles);
     this.isAuth$ = store.select(UserState.isAuthenticated);
@@ -84,8 +78,5 @@ export class PublicHeaderComponent {
     return Object.keys(roles).some((key): boolean => roles[key]);
   }
 
-  gotoPage(page: string) {
-    this.pageTrackService.addToTree(page)
-    this.navCtrl.navigateRoot('/'+page).then()
-  }
+  gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 }

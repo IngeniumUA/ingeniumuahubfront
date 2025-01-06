@@ -2,10 +2,10 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOptions} from "@stripe/stripe-js";
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {FormBuilder} from "@angular/forms";
-import {Router} from "@angular/router";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
-import {NavController, Platform} from "@ionic/angular";
-import {currentPage, PageTrackingService} from "@app_services/page-tracking.service";
+import {NavController} from "@ionic/angular";
+import {PageTrackingService} from "@app_services/page-tracking.service";
+import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -17,12 +17,8 @@ export class StripePaymentComponent implements OnInit {
   constructor(    private formBuilder: FormBuilder,
                   private stripeService: StripeService,
                   private navCtrl: NavController,
-                  private pageTrackService: PageTrackingService,
-                  private platform: Platform) {
-    this.platform.backButton.subscribeWithPriority(10, () => {
-      this.pageTrackService.popFromTree()
-      this.navCtrl.navigateRoot('/'+currentPage).then()
-    });
+                  private pageTrackService: PageTrackingService,) {
+    backButtonClicked()
   }
 
   @Input() checkout!: CheckoutSmollI;
