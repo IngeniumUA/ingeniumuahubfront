@@ -23,7 +23,7 @@ export class ShopDetailComponent implements OnInit {
   isCartEmpty$: Observable<number>;
   // shop Info and Deco
   itemId!: string;
-  shopResponse$!: Observable<HttpState<ItemWideLimitedI>>;
+  shopItemResponse$!: Observable<HttpState<ItemWideLimitedI>>;
   shopError$!: Observable<any>;
 
   productCategories$!: Observable<ProductCategoryI[]>;
@@ -50,7 +50,7 @@ export class ShopDetailComponent implements OnInit {
     }
 
     // Setup shop observable and color observables
-    this.setshop(id);
+    this.setShop(id);
 
     // Setup product table
     const product_to_categorie = new ProductsToCategoriesPipe();
@@ -61,13 +61,13 @@ export class ShopDetailComponent implements OnInit {
     this.setProductCategory(0);
   }
 
-  setshop(id: string): void {
+  setShop(id: string): void {
     // Fetch access_key (if exists)
     const accessKey: string | null = this.route.snapshot.queryParamMap.get('access_key');
 
     this.itemId = id;
-    this.shopResponse$ = this.shopService.getShop(id, accessKey).pipe();
-    this.shopError$ = this.shopResponse$.pipe(
+    this.shopItemResponse$ = this.shopService.getShop(id, accessKey).pipe();
+    this.shopError$ = this.shopItemResponse$.pipe(
       ignoreElements(),
       catchError((err) => {
         this.router.navigateByUrl('/shop').then(_ => {});
