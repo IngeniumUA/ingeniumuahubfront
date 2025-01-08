@@ -122,28 +122,3 @@ jobs:
         run: |
           xcrun altool --validate-app -t "iOS" -f ./output/App.ipa -u "webmaster@ingeniumua.be" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}"
           xcrun altool --upload-app -t "iOS" -f ./output/App.ipa -u "webmaster@ingeniumua.be" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}"
-#          # Create the .itmsp folder
-#          mkdir -p ./transporter/itmsp_folder.itmsp
-#
-#          # Move your .ipa file into the .itmsp folder
-#          cp ./output/App.ipa ./transporter/itmsp_folder.itmsp
-#
-#          # Generate the metadata.xml file
-#          fileSize=` stat -f %z output`
-#          md5Checksum=`md5 ./output/App.ipa  | cut -d "=" -f 2 | awk '{print $1}'`
-#
-#          echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > ./transporter/metadata.xml
-#          echo "<package xmlns=\"http://apple.com/itunes/importer\" version=\"software5.4\">" >> ./transporter/metadata.xml
-#          echo "    <software_assets apple_id=\"webmaster@ingeniumua.be\" app_platform=\"ios\">" >> ./transporter/metadata.xml
-#          echo "        <asset type=\"bundle\">" >> ./transporter/metadata.xml
-#          echo "        	<data_file>" >> ./transporter/metadata.xml
-#          echo "                <size>$fileSize</size>" >> ./transporter/metadata.xml
-#          echo "                <file_name>nap.ipa</file_name>" >> ./transporter/metadata.xml
-#          echo "            	  <checksum type=\"md5\">$md5Checksum</checksum>" >> ./transporter/metadata.xml
-#          echo "          </data_file>" >> ./transporter/metadata.xml
-#          echo "        </asset>" >> ./transporter/metadata.xml
-#          echo "    </software_assets>" >> ./transporter/metadata.xml
-#          echo "</package>" >> ./transporter/metadata.xml
-#
-#          # Upload the .itmsp folder to iTunes Connect
-#          "./Applications/Xcode.app/Contents/SharedFrameworks/ContentDeliveryServices.framework/Versions/Current/itms/bin/iTMSTransporter" -m upload -u "Ingenium UA" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}" -f ./transporter/itmsp_folder.itmsp -t DAV -t Signiant -k 100000 -v eXtreme
