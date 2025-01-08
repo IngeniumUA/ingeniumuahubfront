@@ -1,0 +1,35 @@
+import rich_click as click
+
+@click.command()
+@click.option("--version", help="The version that the app gets set to")
+def setversion(version):
+    """Set the app version."""
+    with open("./android/app/build.gradle", "r") as buildfile:
+        data = buildfile.readlines()
+
+    int_version = version.replace(".", "")
+    for i in range(len(data)):
+        if data[i].startswith("        versionCode "):
+            data[i] = f"        versionCode {int_version}\n"
+        elif data[i].startswith("        versionName "):
+            data[i] = f'        versionName "{version}"\n'
+    with open("./android/app/build.gradle", "w") as buildfile:
+        for line in data:
+            buildfile.write(line)
+
+
+    with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
+        data = projfile.readlines()
+
+    for i in range(len(data)):
+        if data[i].startswith("				CURRENT_PROJECT_VERSION = "):
+            data[i] = f"				CURRENT_PROJECT_VERSION = {version};\n"
+        elif data[i].startswith("				MARKETING_VERSION = "):
+            data[i] = f'				MARKETING_VERSION = {version};\n'
+    with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
+        for line in data:
+            buildfile.write(line)
+
+
+if __name__ == "__main__":
+    setversion()
