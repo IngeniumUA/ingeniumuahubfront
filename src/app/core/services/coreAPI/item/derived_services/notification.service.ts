@@ -29,11 +29,13 @@ export class NotificationService {
     return this.httpClient.get<ItemWideLimitedI>(`${this.apiUrl}${item}`).pipe(shareReplay())
   }
 
-  public sendNotification(item: string, title: string, body: string) {
+  sendNotification(notification_item_topic: string,
+                           title: string,
+                           body: string) {
     const payload = {
       title: title,
       body: body
     }
-    return this.httpClient.post<void>(`${this.apiUrl}${item}`, payload)
+    this.httpClient.post(`${apiEnviroment.apiUrl}item/wide/notification/${notification_item_topic}/send_notification`, payload);
   }
 }

@@ -51,7 +51,7 @@ export class AppNotificationsComponent implements OnInit {
     this.sendBuffer = false;
 
     // Second press sends notification
-    this.sendNotification(
+    this.notificationService.sendNotification(
       this.notificationForm.controls['topic'].value,
       this.notificationForm.controls['title'].value,
       this.notificationForm.controls['body'].value)
@@ -59,15 +59,5 @@ export class AppNotificationsComponent implements OnInit {
 
   handleFormError(err: Error) {
     this.form_error = err.message;
-  }
-
-  private sendNotification(notification_item_topic: string,
-                          title: string,
-                          body: string) {
-    const param = {
-      title: title,
-      body: body
-    }
-    this.httpClient.post(`${apiEnviroment.apiUrl}item/wide/notification/${notification_item_topic}/send_notification`, param);
   }
 }
