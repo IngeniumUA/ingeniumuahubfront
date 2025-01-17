@@ -60,7 +60,7 @@ export class AppNotificationsComponent implements OnInit {
       title: title,
       body: body
     }
-    this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification`, param);
+    this.httpClient.post(`${apiEnviroment.apiUrl}item/notification/send_notification`, param);
   }
 
 }
