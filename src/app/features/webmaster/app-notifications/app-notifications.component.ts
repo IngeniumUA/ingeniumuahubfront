@@ -4,8 +4,9 @@ import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable, of} from "rxjs";
-import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
+import {ItemWideI, ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
+import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/derived_services/notification.service";
 
 @Component({
   selector: 'app-app-notifications',
@@ -24,10 +25,11 @@ import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePi
 export class AppNotificationsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-              private httpClient: HttpClient) {
+              private httpClient: HttpClient,
+              private notificationService: NotificationService) {
   }
 
-  notifications$: Observable<ItemWideI[]> = of([]);
+  notifications$: Observable<ItemWideLimitedI[]> = this.notificationService.queryPromo();
   notificationForm: any;
   sendBuffer: boolean = false;
   form_error: string | null = null;
