@@ -19,6 +19,13 @@ This repository contains the Ionic project for the IngeniumUA mobile App.
 ### Linter
 You can run `npm run lint` to lint the project.
 
+### Running app live on device
+During development, you can run the app on your device using `ionic cap run android -l --external` for android devices or `ionic cap run ios -l --external` for ios devices.
+<br>
+For this to work you will need to copy the environment example and remove .example from the end of the file name. This will use the development api and production keycloak.
+<br>
+If you want to run the app with live reload using the production environment, add ` --prod` to the end of the command.
+
 
 ## Building
 ### First time Building and Running
