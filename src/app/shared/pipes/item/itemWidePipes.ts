@@ -5,6 +5,7 @@ import {ShopItemWideI} from "@ingenium/app/shared/models/item/shopI";
 import {LinkItemWideI} from "@ingenium/app/shared/models/item/linkI";
 import {PromoItemWideI} from "@ingenium/app/shared/models/item/promoI";
 import {EventItemWideI} from "@ingenium/app/shared/models/item/eventI";
+import {NotificationItemWideI} from "@ingenium/app/shared/models/item/hubNotificationItemI";
 
 @Pipe({
   name: 'asItemWide',
@@ -62,6 +63,16 @@ export class AsPromoItemWide implements PipeTransform {
 })
 export class AsLinkItemWide implements PipeTransform {
   transform(inputWide: any): LinkItemWideI {
+    return inputWide
+  }
+}
+
+@Pipe({
+  name: 'asNotificationItemWide',
+  standalone: true,
+})
+export class AsNotificationItemWide implements PipeTransform {
+  transform(inputWide: any): NotificationItemWideI {
     return inputWide
   }
 }

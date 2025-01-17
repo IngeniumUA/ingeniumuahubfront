@@ -9,7 +9,7 @@ import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompo
 import {EventItemI, isEventItem} from '@ingenium/app/shared/models/item/eventI';
 import {
   AsCardItemWide,
-  AsEventItemWide,
+  AsEventItemWide, AsNotificationItemWide,
   AsPromoItemWide,
   AsShopItemWide
 } from "@ingenium/app/shared/pipes/item/itemWidePipes";
@@ -35,7 +35,8 @@ import {AppFunctionsService} from "@app_services/app-functions.service";
     AvailabilityMixinDetailComponent,
     AsShopItemWide,
     AsPromoItemWide,
-    AsEventItemWide
+    AsEventItemWide,
+    AsNotificationItemWide
   ],
   standalone: true,
   providers: [DatePipe]
@@ -51,6 +52,7 @@ export class ItemDetailComponent implements OnInit{
   isPromoItem: boolean = false;
   isCardItem: boolean = false;
   isLinkItem: boolean = false;
+  isNotificationItem: boolean = false;
 
   form_error: string | null = null;
   loading: boolean = false;
@@ -66,6 +68,7 @@ export class ItemDetailComponent implements OnInit{
     this.isPromoItem = this.item.derived_type.derived_type_enum === "promoitem" && "display" in this.item.derived_type;
     this.isCardItem = this.item.derived_type.derived_type_enum === "carditem";
     this.isLinkItem = this.item.derived_type.derived_type_enum === "linkitem";
+    this.isNotificationItem = this.item.derived_type.derived_type_enum === "notificationitem";
 
     // Setting up form
     this.itemForm = this.formBuilder.group({

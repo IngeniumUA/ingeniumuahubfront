@@ -13,7 +13,7 @@
 
   <ng-container *ngIf="this.product.max_count > 0; else notAvailable">
     <ng-container *ngIf="this.product.price_policy.price > 0">
-      <p class="whitespace-nowrap">&euro; {{ product.price_policy.price }}</p>
+      <p class="whitespace-nowrap text-black">&euro; {{ product.price_policy.price }}</p>
     </ng-container>
 
     <button (click)="TryDecreaseCount()"

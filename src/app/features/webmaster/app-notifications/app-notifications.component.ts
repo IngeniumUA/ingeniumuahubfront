@@ -1,8 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {Observable, of} from "rxjs";
+import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
+import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 
 @Component({
   selector: 'app-app-notifications',
@@ -10,7 +13,10 @@ import {HttpClient} from "@angular/common/http";
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    NgForOf,
+    AsyncPipe,
+    AsNotificationItemWide
   ],
   templateUrl: './app-notifications.component.html',
   styleUrl: './app-notifications.component.scss'
@@ -21,6 +27,7 @@ export class AppNotificationsComponent implements OnInit {
               private httpClient: HttpClient) {
   }
 
+  notifications$: Observable<ItemWideI[]> = of([]);
   notificationForm: any;
   sendBuffer: boolean = false;
   form_error: string | null = null;
@@ -52,15 +59,13 @@ export class AppNotificationsComponent implements OnInit {
     this.form_error = err.message;
   }
 
-  private sendNotification(topic: string,
+  private sendNotification(notification_item_topic: string,
                           title: string,
                           body: string) {
     const param = {
-      topic: topic,
       title: title,
       body: body
     }
-    this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification`, param);
+    this.httpClient.post(`${apiEnviroment.apiUrl}item/wide/notification/${notification_item_topic}/send_notification`, param);
   }
-
 }

@@ -22,8 +22,7 @@
         </nav>
 
         <!--Products list-->
-        <section class="product-section"
-                 *ngIf="(this.currentCategory$() | async) as current_categorie">
+        <section *ngIf="(this.currentCategory$() | async) as current_categorie">
           <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
             <h3>{{ product_group.group_name }}</h3>
             <div class="products">
