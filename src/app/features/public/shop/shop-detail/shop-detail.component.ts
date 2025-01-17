@@ -13,6 +13,7 @@ import {map} from "rxjs/operators";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 import {currentPage} from "@app_services/page-tracking.service";
 import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-page',
@@ -31,7 +32,8 @@ export class ShopDetailComponent implements OnInit {
   currentProductCategoryIndex$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   currentProductGroups!: Observable<ProductGroupI[]>;
 
-  constructor(protected layoutService: LayoutService,
+  constructor(private route: ActivatedRoute,
+              protected layoutService: LayoutService,
               private shopService: ShopService,
               private productService: ProductsService,
               private appFunctionsService: AppFunctionsService,
