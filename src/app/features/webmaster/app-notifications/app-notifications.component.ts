@@ -5,7 +5,6 @@ import {apiEnviroment} from "@ingenium/environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
-import {PromoItemTypeEnum, PromoItemTypes} from "@ingenium/app/shared/models/item/promoI";
 import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 
 @Component({
@@ -60,14 +59,13 @@ export class AppNotificationsComponent implements OnInit {
     this.form_error = err.message;
   }
 
-  private sendNotification(topic: string,
+  private sendNotification(notification_item_topic: string,
                           title: string,
                           body: string) {
     const param = {
-      topic: topic,
       title: title,
       body: body
     }
-    this.httpClient.post(`${apiEnviroment.apiUrl}item/notification/send_notification`, param);
+    this.httpClient.post(`${apiEnviroment.apiUrl}item/wide/notification/${notification_item_topic}/send_notification`, param);
   }
 }
