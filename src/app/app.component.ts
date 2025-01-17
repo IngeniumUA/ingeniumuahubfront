@@ -142,11 +142,10 @@ export class AppComponent implements OnInit {
 
     try {
       const param = {
-        token: token,
-        topic: topic
+        token: token
       }
       const options = {
-        url: apiEnviroment.apiUrl + "app_notification/subscribe",
+        url: apiEnviroment.apiUrl + "item/wide/notification/subscribe/" + topic,
         headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`, 'Content-Type': "application/json"},
         data: param
       }
