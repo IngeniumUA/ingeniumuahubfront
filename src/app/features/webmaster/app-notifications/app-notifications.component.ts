@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {apiEnviroment} from "@ingenium/environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
-import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
+import {Observable} from "rxjs";
+import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
+import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/derived_services/notification.service";
 
 @Component({
   selector: 'app-app-notifications',
@@ -24,10 +23,10 @@ import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePi
 export class AppNotificationsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-              private httpClient: HttpClient) {
+              private notificationService: NotificationService) {
   }
 
-  notifications$: Observable<ItemWideI[]> = of([]);
+  notifications$: Observable<ItemWideLimitedI[]> = this.notificationService.queryNotification();
   notificationForm: any;
   sendBuffer: boolean = false;
   form_error: string | null = null;
@@ -49,7 +48,7 @@ export class AppNotificationsComponent implements OnInit {
     this.sendBuffer = false;
 
     // Second press sends notification
-    this.sendNotification(
+    this.notificationService.sendNotification(
       this.notificationForm.controls['topic'].value,
       this.notificationForm.controls['title'].value,
       this.notificationForm.controls['body'].value)
@@ -57,15 +56,5 @@ export class AppNotificationsComponent implements OnInit {
 
   handleFormError(err: Error) {
     this.form_error = err.message;
-  }
-
-  private sendNotification(notification_item_topic: string,
-                          title: string,
-                          body: string) {
-    const param = {
-      title: title,
-      body: body
-    }
-    this.httpClient.post(`${apiEnviroment.apiUrl}item/wide/notification/${notification_item_topic}/send_notification`, param);
   }
 }
