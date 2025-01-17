@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, shareReplay} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {RecSysPreviewI} from '@ingenium/app/shared/models/item/recsysI';
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 

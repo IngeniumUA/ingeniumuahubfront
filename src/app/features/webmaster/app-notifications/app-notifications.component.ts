@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {apiEnviroment} from "@ingenium/environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
-import {ItemWideI, ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {Observable} from "rxjs";
+import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/derived_services/notification.service";
 
@@ -25,7 +23,6 @@ import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/deri
 export class AppNotificationsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-              private httpClient: HttpClient,
               private notificationService: NotificationService) {
   }
 
