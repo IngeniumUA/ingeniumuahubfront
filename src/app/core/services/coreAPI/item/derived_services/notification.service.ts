@@ -30,11 +30,11 @@ export class NotificationService {
 
   sendNotification(notification_item_topic: string,
                            title: string,
-                           body: string) {
+                           body: string): Observable<void> {
     const payload = {
       title: title,
       body: body
     }
-    this.httpClient.post(`${apiEnviroment.apiUrl}item/wide/notification/${notification_item_topic}/send_notification`, payload);
+    return this.httpClient.post<void>(`${apiEnviroment.apiUrl}item/wide/notification/${notification_item_topic}/send_notification`, payload);
   }
 }
