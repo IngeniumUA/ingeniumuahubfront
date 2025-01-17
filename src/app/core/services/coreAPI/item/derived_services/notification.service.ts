@@ -16,7 +16,7 @@ export class NotificationService {
 
   apiUrl = apiEnviroment.apiUrl + 'item/notification/';
 
-  public queryPromo(limit: number = 10, offset: number = 0): Observable<ItemWideLimitedI[]> {
+  public queryNotification(limit: number = 10, offset: number = 0): Observable<ItemWideLimitedI[]> {
     const param = {
       limit: limit,
       offset: offset
@@ -25,7 +25,7 @@ export class NotificationService {
     return this.httpClient.get<ItemWideLimitedI[]>(`${this.apiUrl}?${params.toString()}`).pipe(shareReplay())
   }
 
-  public getPromo(item: string): Observable<ItemWideLimitedI> {
+  public getNotification(item: string): Observable<ItemWideLimitedI> {
     return this.httpClient.get<ItemWideLimitedI>(`${this.apiUrl}${item}`).pipe(shareReplay())
   }
 

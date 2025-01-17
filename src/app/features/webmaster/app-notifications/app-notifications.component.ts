@@ -29,7 +29,7 @@ export class AppNotificationsComponent implements OnInit {
               private notificationService: NotificationService) {
   }
 
-  notifications$: Observable<ItemWideLimitedI[]> = this.notificationService.queryPromo();
+  notifications$: Observable<ItemWideLimitedI[]> = this.notificationService.queryNotification();
   notificationForm: any;
   sendBuffer: boolean = false;
   form_error: string | null = null;
