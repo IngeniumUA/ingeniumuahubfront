@@ -136,6 +136,23 @@
   </ng-container>
 </section>
 
+<section *ngIf="this.isNotificationItem">
+  <ng-container *ngIf="this.item | asNotificationItemWide as notificationItemWide">
+    <h2>Notification Item</h2>
+    <table>
+      <thead>
+      <tr><th scope="col"></th><th scope="col">Notification Item:</th></tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th>Notification Topic</th>
+        <td>{{ notificationItemWide.derived_type.notification_topic }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </ng-container>
+</section>
+
 <section>
   <h2>Update Item</h2>
 

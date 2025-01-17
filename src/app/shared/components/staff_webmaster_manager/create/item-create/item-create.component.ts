@@ -19,6 +19,7 @@ import {
 } from "@ingenium/app/shared/models/item/cardI";
 import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import {LinkItemInI} from "@ingenium/app/shared/models/item/linkI";
+import {NotificationItemInI} from "@ingenium/app/shared/models/item/hubNotificationItemI";
 
 @Component({
   selector: 'app-item-create',
@@ -38,7 +39,7 @@ import {LinkItemInI} from "@ingenium/app/shared/models/item/linkI";
 })
 export class ItemCreateComponent implements OnInit {
   $itemType: Observable<string | null> = of('none'); // none, event, shop, promo
-  itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem', 'carditem', 'linkitem'];
+  itemTypes: string[] = ['none', 'eventitem', 'shopitem', 'promoitem', 'carditem', 'linkitem', 'notificationitem'];
   itemTypeControl = new FormControl<string>('none');
 
   itemCreateForm = this.formBuilder.group({
@@ -86,6 +87,10 @@ export class ItemCreateComponent implements OnInit {
   linkCreateForm = this.formBuilder.group({
     link_identifier: [''],
     redirect_url: ['']
+  })
+
+  notificationCreateForm = this.formBuilder.group({
+    notification_topic: [''],
   })
 
   form_error: string | null = null;
@@ -208,6 +213,18 @@ export class ItemCreateComponent implements OnInit {
     }
   }
 
+  public parseNotificationForm(itemType: string): NotificationItemInI | null {
+    if (itemType !== this.itemTypes[6]) {
+      return null;
+    }
+    const notificationTopic: string | null = this.notificationCreateForm.controls["notification_topic"].value!;
+
+    return {
+      derived_type_enum: 'notificationitem',
+      notification_topic: notificationTopic !== null ? notificationTopic : "topic",
+    }
+  }
+
   onSubmit(itemType: string) {
     // Check if valid guardclause
     if (this.itemCreateForm.invalid) {
@@ -223,8 +240,14 @@ export class ItemCreateComponent implements OnInit {
     const shop = this.parseShopForm(itemType);
     const card = this.parseCardForm(itemType);
     const link = this.parseLinkForm(itemType);
+    const notification = this.parseNotificationForm(itemType);
 
-    const derivedType = event !== null ? event: promo !== null ? promo: shop !== null ? shop: card !== null ? card: link;
+    const derivedType = event !== null ? event:
+      promo !== null ? promo:
+      shop !== null ? shop:
+      card !== null ? card:
+      link !== null ? link:
+      notification;
 
     // Temp hardcode to set availability on a card obj to True
     const availability: AvailabilityCompositionInI | null = card === null ? null: {
