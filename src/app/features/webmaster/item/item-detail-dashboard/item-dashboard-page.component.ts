@@ -31,8 +31,6 @@ export class ItemDashboardPageComponent implements OnInit {
       return;
     }
     this.itemId = id;
-
-
     this.$itemDetail = this.itemWideService.getItem(this.itemId);
   }
 
@@ -54,5 +52,13 @@ export class ItemDashboardPageComponent implements OnInit {
         this.toastrService.error(`Item could not be deleted: ${error}`);
       }
     })
+  }
+
+  public isPaymentItem(derived_item_enum: string): boolean {
+    return derived_item_enum === "eventitem" || derived_item_enum === "shoptitem";
+  }
+
+  public isInteractionOnlyItem(derived_item_enum: string): boolean {
+    return derived_item_enum === "promoitem" || derived_item_enum === "carditem" || derived_item_enum === "notificationitem" || derived_item_enum === "linkitem";
   }
 }
