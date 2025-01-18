@@ -35,7 +35,7 @@ export class AppNotificationsComponent implements OnInit {
 
   ngOnInit() {
     this.notificationForm = this.formBuilder.group({
-      topic: ['all', Validators.required],
+      item_id: ['', Validators.required],
       title: ['', Validators.required],
       body: ['', Validators.required],
     });
@@ -51,7 +51,7 @@ export class AppNotificationsComponent implements OnInit {
 
     // Second press sends notification
     this.notificationService.sendNotification(
-      this.notificationForm.controls['topic'].value,
+      this.notificationForm.controls['item_id'].value,
       this.notificationForm.controls['title'].value,
       this.notificationForm.controls['body'].value).subscribe(
       (_) => {

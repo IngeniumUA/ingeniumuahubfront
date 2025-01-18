@@ -7,10 +7,10 @@
         <tbody>
         <tr><th>Topic</th><td>
           <ng-container *ngIf="(this.notifications$ | async) as notificationItems">
-          <select formControlName="topic" class="hubformfield-white">
-            <option [ngValue]="'all'" disabled selected>Topic</option>
+          <select formControlName="item_id" class="hubformfield-white">
+            <option [ngValue]="''" disabled selected>Topic</option>
             <option *ngFor="let itemWide of notificationItems"
-                    [ngValue]="(itemWide | asNotificationItemWide).derived_type.notification_topic"
+                    [ngValue]="(itemWide | asNotificationItemWide).item.id"
                     style="color: var(--mainblue)">
               {{ itemWide.item.name }}
             </option>
