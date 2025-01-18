@@ -1,35 +1,57 @@
 <header><app-layout-public-header [light_theme]="true" /></header>
 
-<main class="ingenium-container ingenium-container--no-padding-x relative h-full">
-  <ng-container *ngIf="{shopItem: this.shopItem$ | async, error: this.shopError$ | async} as data; ">
-    <ng-container *ngIf="data.shopItem as shop; else loading">
-      <section class="shop-banner">
-        <img src="{{shop.derived_type.display.image_landscape}}" alt="Image not working :(">
-      </section>
+@let response = (shopItemResponse$ | async);
 
-      <section class="title-info-section">
-        <h3>{{ shop.item.name }}</h3>
-      </section>
+<main class="ingenium-container relative h-full">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <section class="col-span-1 md:col-span-2">
+      @if (response && response.data !== null && !response.loading && response.error === null) {
+        <h1 class="white-section-title white-section-title-large">{{ response.data.item.name }}</h1>
+        <p>{{ response.data.item.description }}</p>
 
-      <section>
-        <ng-container *ngFor="let product of (this.products$ | async)">
-          <app-product [product]="product"
-                       [primaryColorFull]="(shop.derived_type.display.color | colordbrgba: 1)" [primaryColorHalf]="(shop.derived_type.display.color | colordbrgba: 0.5)" />
-        </ng-container>
-      </section>
+        <!-- Ticket Categories -->
+        <nav role="tablist" class="categorie-section"
+             [ngStyle]="{'background-color': (response.data.derived_type.display.color | colordbrgba: 1) }">
+          <button class="categorie-button"
+                  *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
+                  (click)="this.setProductCategory(i)"
+                  [ngStyle]="this.getCategoryButtonStyle(
+                    (this.currentProductCategoryIndex$ | async) === i,
+                    response.data.derived_type.display.color | colordbrgba: 1)"
+          >{{ product_categorie.categorie_name }}</button>
+        </nav>
 
-      <div class="order-section">
-        <button [disabled]="this.isCartEmpty" class="button button-primary" (click)="gotoPage('sub/shop/checkout')">Checkout</button>
-      </div>
+        <!--Products list-->
+        <section *ngIf="(this.currentCategory$() | async) as current_categorie">
+          <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
+            <h3>{{ product_group.group_name }}</h3>
+            <div class="products">
+              @for (product of this.product_group.products; track product.id) {
+                <app-product [product]="product"
+                             [primaryColorFull]="(response.data.derived_type.display.color | colordbrgba: 1)"
+                             [primaryColorHalf]="(response.data.derived_type.display.color | colordbrgba: 0.5)"
+                             [itemId]="this.itemId" />
+              }
+            </div>
+          </div>
+        </section>
 
-      <div class="description-section">
-        <p>{{ shop.item.description }}</p>
-      </div>
-    </ng-container>
-  </ng-container>
+        <!--Checkout Button-->
+        <div class="order-section flex flex-row gap-3">
+          @let productCount = (this.isCartEmpty$ | async);
+          <button [disabled]="productCount && productCount <= 0" class="button button-primary" (click)="gotoPage('sub/shop/checkout')">Checkout</button>
+        </div>
+      }
 
-  <ng-template #loading>
-    <app-loading-indicator [isLoading]="true" />
-  </ng-template>
+      <!-- TODO: Add skeleton loader -->
+    </section>
+    <aside>
+      @if (response && response.data !== null && !response.loading && response.error === null) {
+        @if (response.data.derived_type.display.image_square !== null) {
+          <img loading="eager" [src]="response.data.derived_type.display.image_square" alt="" aria-hidden="true"
+               class="max-w-full rounded-lg shadow-2xl" />
+        }
+      }
+    </aside>
+  </div>
 </main>
-

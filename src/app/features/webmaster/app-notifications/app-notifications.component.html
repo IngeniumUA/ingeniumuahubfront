@@ -6,9 +6,17 @@
       <table>
         <tbody>
         <tr><th>Topic</th><td>
-          <label class="hubformfield-white">
-            <input type="text" formControlName="topic" placeholder="Topic"/>
-          </label>
+          <ng-container *ngIf="(this.notifications$ | async) as notificationItems">
+          <select formControlName="item_id" class="hubformfield-white">
+            <option [ngValue]="''" disabled selected>Topic</option>
+            <option *ngFor="let itemWide of notificationItems"
+                    [ngValue]="(itemWide | asNotificationItemWide).item.id"
+                    style="color: var(--mainblue)">
+              {{ itemWide.item.name }}
+            </option>
+          </select>
+          </ng-container>
+
         </td></tr>
         <tr><th>Title</th><td>
           <label class="hubformfield-white">

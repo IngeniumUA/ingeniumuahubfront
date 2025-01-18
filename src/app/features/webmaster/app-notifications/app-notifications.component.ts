@@ -1,8 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {apiEnviroment} from "@ingenium/environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {Observable} from "rxjs";
+import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
+import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
+import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/derived_services/notification.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-app-notifications',
@@ -10,7 +13,10 @@ import {HttpClient} from "@angular/common/http";
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    NgForOf,
+    AsyncPipe,
+    AsNotificationItemWide
   ],
   templateUrl: './app-notifications.component.html',
   styleUrl: './app-notifications.component.scss'
@@ -18,16 +24,18 @@ import {HttpClient} from "@angular/common/http";
 export class AppNotificationsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-              private httpClient: HttpClient) {
+              private notificationService: NotificationService,
+              private toastrService: ToastrService) {
   }
 
+  notifications$: Observable<ItemWideLimitedI[]> = this.notificationService.queryNotification();
   notificationForm: any;
   sendBuffer: boolean = false;
   form_error: string | null = null;
 
   ngOnInit() {
     this.notificationForm = this.formBuilder.group({
-      topic: ['all', Validators.required],
+      item_id: ['', Validators.required],
       title: ['', Validators.required],
       body: ['', Validators.required],
     });
@@ -42,25 +50,19 @@ export class AppNotificationsComponent implements OnInit {
     this.sendBuffer = false;
 
     // Second press sends notification
-    this.sendNotification(
-      this.notificationForm.controls['topic'].value,
+    this.notificationService.sendNotification(
+      this.notificationForm.controls['item_id'].value,
       this.notificationForm.controls['title'].value,
-      this.notificationForm.controls['body'].value)
+      this.notificationForm.controls['body'].value).subscribe(
+      (_) => {
+        this.toastrService.success('Notification sent successfully');
+      },
+      (error: Error) => {
+        this.toastrService.error(`Notification failed to send: ${error.message}`);
+      });
   }
 
   handleFormError(err: Error) {
     this.form_error = err.message;
   }
-
-  private sendNotification(topic: string,
-                          title: string,
-                          body: string) {
-    const param = {
-      topic: topic,
-      title: title,
-      body: body
-    }
-    this.httpClient.post(`${apiEnviroment.apiUrl}app_notification/send_notification`, param);
-  }
-
 }
