@@ -63,7 +63,16 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
   interactionCount$: Observable<number> = of(0)
 
   GetDisplayedColumns(): string[] {
-    return ['interaction_id', 'user', 'item', 'interaction_type', 'last_updated_timestamp', 'created_timestamp'];
+    const columns = ['interaction_id', 'interaction_type', 'last_updated_timestamp', 'created_timestamp'];
+
+    // Add if not Input()
+    if (this.item_id === null) {
+      columns.splice(columns.indexOf('interaction_type'), 0, 'item');
+    }
+    if (this.user_id === null) {
+      columns.splice(columns.indexOf('interaction_type'), 0, 'user');
+    }
+    return columns
   }
 
   pageIndex: number = 0;
