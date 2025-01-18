@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePipes";
 import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/derived_services/notification.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-app-notifications',
@@ -23,7 +24,8 @@ import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/deri
 export class AppNotificationsComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private toastrService: ToastrService) {
   }
 
   notifications$: Observable<ItemWideLimitedI[]> = this.notificationService.queryNotification();
@@ -33,7 +35,7 @@ export class AppNotificationsComponent implements OnInit {
 
   ngOnInit() {
     this.notificationForm = this.formBuilder.group({
-      topic: ['all', Validators.required],
+      item_id: ['', Validators.required],
       title: ['', Validators.required],
       body: ['', Validators.required],
     });
@@ -49,9 +51,15 @@ export class AppNotificationsComponent implements OnInit {
 
     // Second press sends notification
     this.notificationService.sendNotification(
-      this.notificationForm.controls['topic'].value,
+      this.notificationForm.controls['item_id'].value,
       this.notificationForm.controls['title'].value,
-      this.notificationForm.controls['body'].value)
+      this.notificationForm.controls['body'].value).subscribe(
+      (_) => {
+        this.toastrService.success('Notification sent successfully');
+      },
+      (error: Error) => {
+        this.toastrService.error(`Notification failed to send: ${error.message}`);
+      });
   }
 
   handleFormError(err: Error) {
