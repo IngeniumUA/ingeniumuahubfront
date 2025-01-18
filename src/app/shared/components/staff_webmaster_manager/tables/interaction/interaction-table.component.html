@@ -20,14 +20,14 @@
       <form [formGroup]="this.columnSearchForm">
         <ng-container matColumnDef="interaction_id">
           <th mat-header-cell *matHeaderCellDef><div>
-              ID<input class="w-3/4" type="text" placeholder="ID" [formControlName]="'idControl'"></div>
+              ID<input class="w-3/4" type="text" placeholder="ID or UUID" [formControlName]="'idControl'"></div>
           </th>
           <td mat-cell *matCellDef="let interaction">{{ interaction.interaction_id }}</td>
         </ng-container>
 
         <ng-container matColumnDef="item">
           <th mat-header-cell *matHeaderCellDef><div>
-            Item<input class="w-3/4" type="text" placeholder="Item name" [formControlName]="'itemControl'"></div>
+            Item<input class="w-3/4" type="text" placeholder="Item name or ID" [formControlName]="'itemControl'"></div>
           </th>
           <td mat-cell *matCellDef="let interaction">
             <a [routerLink]="'../../item/' + interaction.item_id">{{ interaction.item_name }}</a></td>
@@ -35,7 +35,7 @@
 
         <ng-container matColumnDef="user">
           <th mat-header-cell *matHeaderCellDef><div>
-            User<input class="w-3/4" type="text" placeholder="User" [formControlName]="'userControl'"></div>
+            User<input class="w-3/4" type="text" placeholder="User email or uuid" [formControlName]="'userControl'"></div>
           </th>
           <td mat-cell *matCellDef="let interaction">
             <a [routerLink]="'../../user/' + interaction.user_uuid">{{ interaction.user_email }}</a>
@@ -44,7 +44,7 @@
 
         <ng-container matColumnDef="interaction_type">
           <th mat-header-cell *matHeaderCellDef><div>
-            Interaction Type<input class="w-3/4" type="text" placeholder="UUID" [formControlName]="'interactionTypeControl'"></div>
+            Interaction Type<input class="w-3/4" type="text" placeholder="Integer-form" [formControlName]="'interactionTypeControl'"></div>
           </th>
           <td mat-cell *matCellDef="let interaction">{{ InteractionTypeEnum[interaction.interaction_type] }}</td>
         </ng-container>
