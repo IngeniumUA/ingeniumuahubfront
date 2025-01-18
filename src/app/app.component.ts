@@ -116,7 +116,7 @@ export class AppComponent implements OnInit {
     // On success, we should be able to receive notifications
     PushNotifications.addListener('registration', (token: Token) => {
       console.log('Push registration success, token: ' + token.value);
-      this.subscribe_to_topic(token.value, "all")
+      this.subscribe_to_topic(token.value, "11")
     });
 
     // Some issue with our setup and push will not work
@@ -142,11 +142,10 @@ export class AppComponent implements OnInit {
 
     try {
       const param = {
-        token: token,
-        topic: topic
+        token: token
       }
       const options = {
-        url: apiEnviroment.apiUrl + "app_notification/subscribe",
+        url: apiEnviroment.apiUrl + "item/notification/subscribe/" + topic,
         headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`, 'Content-Type': "application/json"},
         data: param
       }
