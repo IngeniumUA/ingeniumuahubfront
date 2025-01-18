@@ -14,14 +14,33 @@
   </section>
 
   <section>
-    <ng-container *ngIf="selectedTable === 'transactions'">
-      <app-transaction-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-transaction-table>
-    </ng-container>
-    <ng-container *ngIf="selectedTable === 'checkouts'">
-      <app-checkout-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-checkout-table>
-    </ng-container>
-    <ng-container *ngIf="selectedTable === 'refunds'">
-      Uh, nee, stop it
-    </ng-container>
+    @switch (selectedTable) {
+      @case ('transactions') {
+        <app-transaction-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-transaction-table>
+      }
+      @case ('checkouts') {
+        <app-checkout-table [loadDataEvent]="loadDataEvent" [user_id]="user_id" [item_id]="item_id"></app-checkout-table>
+      }
+      @case ('refunds') {
+        Uh, nee, stop it
+      }
+    }
   </section>
+</section>
+
+<section class="mt-3 mb-1">
+  <h2>Add Checkout</h2>
+  <br>
+  @if (this.addingCheckout) {
+    <app-create-checkout [item_id]="item_id" (checkoutCreated)="refetchTable($event)" />
+    <button class="button button-primary w-1/6 button-inline"
+            (click)="ToggleAddingCheckout()">
+      Cancel
+    </button>
+  } @else {
+    <button class="button button-primary w-1/6 button-inline"
+            (click)="ToggleAddingCheckout()">
+      Add Checkout
+    </button>
+  }
 </section>

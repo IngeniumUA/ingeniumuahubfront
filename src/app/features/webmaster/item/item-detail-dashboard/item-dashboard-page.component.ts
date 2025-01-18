@@ -13,9 +13,6 @@ import {ToastrService} from "ngx-toastr";
 export class ItemDashboardPageComponent implements OnInit {
 
   $itemDetail: Observable<ItemWideI| null> = of(null);
-
-  addingCheckout: boolean = false;
-
   itemId!: number | string;
 
   constructor(private itemWideService: ItemWideService,
@@ -43,9 +40,6 @@ export class ItemDashboardPageComponent implements OnInit {
     this.$itemDetail = this.itemWideService.putItem(item.item.id, item);
   }
 
-  disableItemBuffer: boolean = false;
-  loadingDisable: boolean = false;
-
   public DeleteItem(itemId: number) {
     this.itemWideService.deleteItem(itemId).subscribe({
       next: value => {
@@ -60,13 +54,5 @@ export class ItemDashboardPageComponent implements OnInit {
         this.toastrService.error(`Item could not be deleted: ${error}`);
       }
     })
-  }
-
-  ToggleAddingCheckout() {
-    this.addingCheckout = !this.addingCheckout;
-  }
-
-  refetchTable(_reload: boolean) {
-    this.ToggleAddingCheckout();
   }
 }

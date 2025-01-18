@@ -19,23 +19,6 @@
   <section class="staffSection">
     <app-checkout-and-transaction-dashboard [item_id]="item.item.id" />
   </section>
-
-  <section class="staffSection">
-    <h2>Add Checkout</h2>
-    <ng-container  *ngIf="addingCheckout">
-      <app-create-checkout [item_id]="item.item.id" (checkoutCreated)="refetchTable($event)" />
-      <button class="button button-primary w-1/6 button-inline"
-              (click)="ToggleAddingCheckout()">
-        Cancel
-      </button>
-    </ng-container>
-    <ng-container *ngIf="!addingCheckout">
-      <button class="button button-primary w-1/6 button-inline"
-              (click)="ToggleAddingCheckout()">
-        Add Checkout
-      </button>
-    </ng-container>
-  </section>
 }
 
 @if (item.derived_type.derived_type_enum === 'carditem' || item.derived_type.derived_type_enum === 'linkitem') {
