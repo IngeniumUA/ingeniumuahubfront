@@ -3,8 +3,8 @@ import {versions} from "@ingenium/environments/versions";
 import {Browser} from "@capacitor/browser";
 
 const OAuthConfig: AuthConfig = {
-  // issuer: 'https://sso.ingeniumua.be/realms/ingeniumua',
-  issuer: 'https://sso.ingeniumua.be/realms/IngeniumTESTING',
+  issuer: 'https://sso.ingeniumua.be/realms/ingeniumua',
+  // issuer: 'https://sso.ingeniumua.be/realms/IngeniumTESTING',
   redirectUri: 'ingenium://' + 'auth/callback',
   postLogoutRedirectUri: 'ingenium://' + 'auth/logout',
   clientId: 'ingeniumapp',
@@ -17,8 +17,8 @@ const OAuthConfig: AuthConfig = {
 
 export let apiEnviroment = {
   name: 'production',
-  // apiUrl: 'https://hub.ingeniumua.be/api/v1/',
-  apiUrl: 'https://hub.dev.ingeniumua.be/api/v1/',
+  apiUrl: 'https://hub.ingeniumua.be/api/v1/',
+  // apiUrl: 'https://hub.dev.ingeniumua.be/api/v1/',
   oauthConfig: OAuthConfig,
   versions: versions
 };
