@@ -116,6 +116,7 @@ export class AppComponent implements OnInit {
     // On success, we should be able to receive notifications
     PushNotifications.addListener('registration', (token: Token) => {
       console.log('Push registration success, token: ' + token.value);
+      notification_token = token.value;
       this.subscribe_to_topic(token.value, "11")
     });
 
@@ -158,3 +159,5 @@ export class AppComponent implements OnInit {
   }
 
 }
+
+export let notification_token: string = "";

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {backButtonClicked} from "@app_services/app-functions.service";
 
 @Component({
@@ -6,14 +6,10 @@ import {backButtonClicked} from "@app_services/app-functions.service";
   templateUrl: './account-options-notifications.component.html',
   styleUrls: ['./account-options-notifications.component.scss'],
 })
-export class AccountOptionsNotificationsComponent  implements OnInit {
+export class AccountOptionsNotificationsComponent {
 
   constructor() {
     backButtonClicked()
-  }
-
-  ngOnInit() {
-    console.log("Account Options")
   }
 
 }

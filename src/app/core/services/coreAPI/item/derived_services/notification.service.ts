@@ -4,6 +4,7 @@ import {Observable, shareReplay} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
+import {notification_token} from "@ingenium/app/app.component";
 
 
 @Injectable({
@@ -34,5 +35,19 @@ export class NotificationService {
       body: body
     }
     return this.httpClient.post<void>(`${apiEnviroment.apiUrl}item/wide/notification/${item}/send_notification`, payload);
+  }
+
+  subscribe_to_topic(item: string | number): Observable<void> {
+    const payload = {
+      token: notification_token
+    }
+    return this.httpClient.post<void>(`${apiEnviroment.apiUrl}item/notification/subscribe/${item}`, payload);
+  }
+
+  unsubscribe_from_topic(item: string | number): Observable<void> {
+    const payload = {
+      token: notification_token
+    }
+    return this.httpClient.post<void>(`${apiEnviroment.apiUrl}item/notification/unsubscribe/${item}`, payload);
   }
 }

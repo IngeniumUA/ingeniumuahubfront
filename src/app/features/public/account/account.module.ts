@@ -16,6 +16,10 @@ import {
 } from '../../../shared/components/account/transaction-display/transaction-display.component';
 import {AccountInfoComponent} from '../../../shared/components/account/account-details/account-info.component';
 import {IonicModule} from "@ionic/angular";
+import {
+  AccountOptionsNotificationsComponent
+} from "@ingenium/app/features/public/account/account-options-notifications/account-options-notifications.component";
+import {NotificationsComponent} from "@ingenium/app/shared/components/account/notifications/notifications.component";
 
 @NgModule({
     imports: [
@@ -28,12 +32,14 @@ import {IonicModule} from "@ionic/angular";
         CheckoutDisplayComponent,
         TransactionDisplayComponent,
         AccountInfoComponent,
+        NotificationsComponent,
         IonicModule,
     ],
   declarations: [
     AccountDetailsComponent,
     AccountComponent,
     AccountTransactionsComponent,
+    AccountOptionsNotificationsComponent,
   ]
 })
 export class AccountModule { }
