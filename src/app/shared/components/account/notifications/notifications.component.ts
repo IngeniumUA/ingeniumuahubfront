@@ -7,6 +7,7 @@ import {AsNotificationItemWide} from "@ingenium/app/shared/pipes/item/itemWidePi
 import {NgForOf} from "@angular/common";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading-indicator/loading-indicator.component";
+import {StorageService} from "@app_services/qr-scanner_services/storage.service";
 
 @Component({
   selector: 'app-notifications',
@@ -26,10 +27,15 @@ export class NotificationsComponent  implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private toastr: ToastrService,
+              private storage: StorageService,
               private notificationService: NotificationService) { }
 
   notificationList: ItemWideLimitedI[] = [];
   loading_options = true
+
+  public ionViewWillEnter() {
+    this.ngOnInit()
+  }
 
   ngOnInit() {
     this.notificationService.queryNotification().pipe(first()).subscribe({
@@ -47,6 +53,38 @@ export class NotificationsComponent  implements OnInit {
         this.form = this.formBuilder.group(form_data);
 
         this.notificationList = final_data
+
+        this.storage.getWide("notifications_general")?.then((result) => {
+          console.log("general " + JSON.stringify(result));
+          if (result !== undefined && result !== null) {
+            let bool_result: boolean = result === "true"
+            console.log("bool " + bool_result)
+            this.form.controls["disable_notifications"].setValue(bool_result)
+            if (bool_result) {
+              for (let notification of this.notificationList) {
+                this.form.controls[""+notification.item.id].disable()
+              }
+            } else {
+              for (let notification of this.notificationList) {
+                this.form.controls[""+notification.item.id].enable()
+              }
+            }
+          }
+        })
+        this.storage.getWide("notifications")?.then((stored_notification_options) =>{
+          console.log("specific " + JSON.stringify(stored_notification_options));
+          if (stored_notification_options !== undefined && stored_notification_options !== null) {
+            stored_notification_options = JSON.parse(stored_notification_options);
+            let stored_option: keyof typeof stored_notification_options;
+            for (stored_option in stored_notification_options) {
+              for (let fetched_option of this.notificationList) {
+                if (stored_option === "" + fetched_option.item.id) {
+                  this.form.controls[stored_option].setValue(stored_notification_options[stored_option])
+                }
+              }
+            }
+          }
+        });
       }
     })
   }
@@ -85,6 +123,8 @@ export class NotificationsComponent  implements OnInit {
         notificationDetails["" + notification.item.id] = this.form.controls[""+notification.item.id].value
       }
     }
+    this.storage.setWide("notifications", JSON.stringify(notificationDetails))
+    this.storage.setWide("notifications_general", JSON.stringify(this.form.controls['disable_notifications'].value))
 
     let option: keyof typeof notificationDetails;
     if (this.form.controls['disable_notifications'].value) {
