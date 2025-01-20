@@ -39,8 +39,12 @@ If you want to run the app with live reload using the production environment, ad
 2. Run `ionic cap open android` or `ionic cap open ios`
 3. Press run on device in android studio or xcode
 
+## Using the kippietools
 ### Setting version number
-run `python setversion --version {version code like 1.1.1}`. Version code should ony contain numbers and periods.
+run `python kippietools setversion -v {version code like 1.1.1}`. Version code should ony contain numbers and periods.
+
+### Setting url of the app to switch between notification testing and release.
+run `python kippietools setmode -m {release or notificationtest}`. This only affects the android build of the app.
 
 ## Differences in development compared to website frontend
 - The use of Routerlink and Router in general is discouraged, use gotoPage from app-functions service instead.

@@ -25,6 +25,17 @@ jobs:
       - name: Install app dependencies
         run: npm install && npm install -g @ionic/cli
 
+      - name: setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10.11"
+
+      - name: install python dependencies
+        run: pip install rich-click
+
+      - name: set app mode to release
+        run: python kippietools setmode -m release
+
       - name: Build app
         run: ionic build
 
