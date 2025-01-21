@@ -42,6 +42,9 @@ If you want to run the app with live reload using the production environment, ad
 4. Press run on device in android studio or xcode
 
 ## Using the kippietools
+### Getting the curren app version
+run `python kippietools getversion`.
+
 ### Setting version number
 run `python kippietools setversion -v {version code like 1.1.1}`. Version code should ony contain numbers and periods.
 
