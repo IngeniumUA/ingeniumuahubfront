@@ -15,6 +15,7 @@ This repository contains the Ionic project for the IngeniumUA mobile App.
 ### Installation
 1. Clone the repository
 2. Run `npm install` to install the dependencies
+3. Copy the `src/environments/environment.app_development.ts.example` to `src/environments.app_development.ts` and fill in the necessary values. This file is in a `.gitignore` so it won't (and shouldn't) be commited to the repository.
 
 ### Linter
 You can run `npm run lint` to lint the project.
