@@ -33,14 +33,14 @@ jobs:
       - name: install python dependencies
         run: pip install rich-click google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
 
-      - name: set app mode to release
-        run: python kippietools setmode -m release
-
       - name: Build app
         run: npm run build
 
       - name: Capacitor sync
         run: npx cap sync
+
+      - name: set app mode to release
+        run: python kippietools setmode -m release
 
       - name: Build app bundle
         run: cd android && ./gradlew bundle
