@@ -53,12 +53,19 @@ jobs:
       - name: Sign dev build
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -keypass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
-      - name: Upload release bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-android
-          path: android/app/build/outputs/bundle/release/app-release-signed.aab
-          retention-days: 1
+      - name: Extract service account credentials from env
+        run: |
+          echo "${{ secrets.PLAY_SERVICE_ACCOUNT }}" > android/ingeniumuahub-play-console.json
+
+      - name: upload the bundle to the play console
+        run: python upload_android_bundle.py
+
+#      - name: Upload release bundle
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: app-android
+#          path: android/app/build/outputs/bundle/release/app-release-signed.aab
+#          retention-days: 1
 
   build_ios:
     runs-on: macos-14
@@ -122,12 +129,12 @@ jobs:
       - name: Assemble IPA
         run: xcodebuild archive -archivePath App.xcarchive -exportArchive -exportOptionsPlist ./archive.plist -exportPath output -allowProvisioningUpdates
 
-      - name: Upload release bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-ios
-          path: output/
-          retention-days: 1
+#      - name: Upload release bundle
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: app-ios
+#          path: output/
+#          retention-days: 1
 
       - name: Validate and Upload to apple connect
         run: |
