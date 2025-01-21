@@ -8,9 +8,10 @@ import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transacti
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-account-transactions',
-  templateUrl: './account-transactions.component.html',
-  styleUrls: ['./account-transactions.component.scss']
+    selector: 'app-account-transactions',
+    templateUrl: './account-transactions.component.html',
+    styleUrls: ['./account-transactions.component.scss'],
+    standalone: false
 })
 export class AccountTransactionsComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService,

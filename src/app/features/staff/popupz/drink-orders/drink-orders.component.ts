@@ -4,9 +4,10 @@ import { interval, mergeMap } from 'rxjs';
 import { apiEnviroment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './drink-orders.component.html',
-  styleUrls: ['./drink-orders.component.css']
+    selector: 'app-page',
+    templateUrl: './drink-orders.component.html',
+    styleUrls: ['./drink-orders.component.css'],
+    standalone: false
 })
 export class DrinkOrdersComponent implements OnInit {
   constructor(private httpService: HttpClient) {}

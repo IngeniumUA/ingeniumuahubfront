@@ -4,15 +4,14 @@ import {Observable} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-mediabucket-file-list-page',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    NgIf,
-    NgForOf
-  ],
-  templateUrl: './mediabucket-file-list-page.component.html',
-  styleUrl: './mediabucket-file-list-page.component.css'
+    selector: 'app-mediabucket-file-list-page',
+    imports: [
+        AsyncPipe,
+        NgIf,
+        NgForOf
+    ],
+    templateUrl: './mediabucket-file-list-page.component.html',
+    styleUrl: './mediabucket-file-list-page.component.css'
 })
 export class MediabucketFileListPageComponent {
 

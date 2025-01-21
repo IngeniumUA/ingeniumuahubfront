@@ -12,18 +12,17 @@ import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 
 @Component({
-  selector: 'app-transaction-detail',
-  templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.scss'],
-  imports: [
-    NgForOf,
-    ReactiveFormsModule,
-    AsyncPipe,
-    DatePipe,
-    NgIf,
-    NgStyle
-  ],
-  standalone: true
+    selector: 'app-transaction-detail',
+    templateUrl: './transaction-detail.component.html',
+    styleUrls: ['./transaction-detail.component.scss'],
+    imports: [
+        NgForOf,
+        ReactiveFormsModule,
+        AsyncPipe,
+        DatePipe,
+        NgIf,
+        NgStyle
+    ]
 })
 export class TransactionDetailComponent implements OnInit {
   @Input() transaction!: TransactionI;

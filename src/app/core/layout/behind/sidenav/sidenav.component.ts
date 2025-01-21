@@ -5,18 +5,17 @@ import {Observable} from 'rxjs';
 import {Store} from "@ngxs/store";
 
 @Component({
-  selector: 'app-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss'],
-  standalone: true,
-  imports: [
-    NgIf,
-    NgClass,
-    RouterLink,
-    AsyncPipe,
-    RouterLinkActive,
-    RouterOutlet
-  ]
+    selector: 'app-sidenav',
+    templateUrl: './sidenav.component.html',
+    styleUrls: ['./sidenav.component.scss'],
+    imports: [
+        NgIf,
+        NgClass,
+        RouterLink,
+        AsyncPipe,
+        RouterLinkActive,
+        RouterOutlet
+    ]
 })
 export class SidenavComponent {
   @Input() isSidenavInput: boolean = true;

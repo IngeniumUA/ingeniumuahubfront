@@ -24,25 +24,24 @@ import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum"
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 
 @Component({
-  selector: 'app-checkout-table',
-  templateUrl: './checkout-table.component.html',
-  styleUrls: ['./checkout-table.component.scss'],
-  imports: [
-    AsyncPipe,
-    DatePipe,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule,
-    NgClass,
-    RouterLink,
-    CurrencyPipe,
-    KeyValuePipe,
-    TitleCasePipe
-  ],
-  standalone: true
+    selector: 'app-checkout-table',
+    templateUrl: './checkout-table.component.html',
+    styleUrls: ['./checkout-table.component.scss'],
+    imports: [
+        AsyncPipe,
+        DatePipe,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatTableModule,
+        NgForOf,
+        NgIf,
+        ReactiveFormsModule,
+        NgClass,
+        RouterLink,
+        CurrencyPipe,
+        KeyValuePipe,
+        TitleCasePipe
+    ]
 })
 export class CheckoutTableComponent implements OnChanges, OnInit, AfterViewInit {
 

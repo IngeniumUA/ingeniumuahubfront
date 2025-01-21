@@ -15,18 +15,16 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component";
 
 @Component({
-  selector: 'app-card-item-dashboard',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    NgIf,
-    ItemDetailComponent,
-    AsItemWide,
-    AsItemWide,
-    InteractionTableComponent
-  ],
-  templateUrl: './card-page.component.html',
-  // styleUrl: './card-item-dashboard.component.css'
+    selector: 'app-card-item-dashboard',
+    imports: [
+        AsyncPipe,
+        NgIf,
+        ItemDetailComponent,
+        AsItemWide,
+        AsItemWide,
+        InteractionTableComponent
+    ],
+    templateUrl: './card-page.component.html'
 })
 export class CardPageComponent implements OnInit {
 

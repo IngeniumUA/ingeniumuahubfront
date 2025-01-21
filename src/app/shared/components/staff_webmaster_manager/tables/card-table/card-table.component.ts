@@ -16,22 +16,21 @@ import {
 } from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
-  selector: 'app-card-table',
-  templateUrl: './card-table.component.html',
-  styleUrls: ['./card-table.component.scss'],
-  imports: [
-    DatePipe,
-    MatTableModule,
-    NgIf,
-    RouterLink,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    AsyncPipe,
-    ReactiveFormsModule,
-    NgForOf,
-    TitleCasePipe
-  ],
-  standalone: true
+    selector: 'app-card-table',
+    templateUrl: './card-table.component.html',
+    styleUrls: ['./card-table.component.scss'],
+    imports: [
+        DatePipe,
+        MatTableModule,
+        NgIf,
+        RouterLink,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        AsyncPipe,
+        ReactiveFormsModule,
+        NgForOf,
+        TitleCasePipe
+    ]
 })
 export class CardTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -8,9 +8,10 @@ import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {isPlatformBrowser} from "@angular/common";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './shop-home.component.html',
-  styleUrls: ['./shop-home.component.scss']
+    selector: 'app-page',
+    templateUrl: './shop-home.component.html',
+    styleUrls: ['./shop-home.component.scss'],
+    standalone: false
 })
 export class ShopHomeComponent {
   shopItems$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: true, data: [], error: null});

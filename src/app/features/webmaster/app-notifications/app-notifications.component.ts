@@ -8,18 +8,17 @@ import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/deri
 import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-app-notifications',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgIf,
-    NgForOf,
-    AsyncPipe,
-    AsNotificationItemWide
-  ],
-  templateUrl: './app-notifications.component.html',
-  styleUrl: './app-notifications.component.scss'
+    selector: 'app-app-notifications',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgIf,
+        NgForOf,
+        AsyncPipe,
+        AsNotificationItemWide
+    ],
+    templateUrl: './app-notifications.component.html',
+    styleUrl: './app-notifications.component.scss'
 })
 export class AppNotificationsComponent implements OnInit {
 

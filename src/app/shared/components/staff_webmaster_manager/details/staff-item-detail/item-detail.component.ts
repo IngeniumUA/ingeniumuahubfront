@@ -24,28 +24,27 @@ import {
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 
 @Component({
-  selector: 'app-item-detail',
-  templateUrl: './item-detail.component.html',
-  styleUrls: ['./item-detail.component.scss'],
-  imports: [
-    NgIf,
-    DisplayMixinDetailComponent,
-    NgStyle,
-    DatePipe,
-    NgForOf,
-    ReactiveFormsModule,
-    MatInputModule,
-    AsCardItemWide,
-    RouterLink,
-    InteractionTableComponent,
-    AvailabilityMixinDetailComponent,
-    AsShopItemWide,
-    AsPromoItemWide,
-    AsEventItemWide,
-    AsNotificationItemWide
-  ],
-  standalone: true,
-  providers: [DatePipe]
+    selector: 'app-item-detail',
+    templateUrl: './item-detail.component.html',
+    styleUrls: ['./item-detail.component.scss'],
+    imports: [
+        NgIf,
+        DisplayMixinDetailComponent,
+        NgStyle,
+        DatePipe,
+        NgForOf,
+        ReactiveFormsModule,
+        MatInputModule,
+        AsCardItemWide,
+        RouterLink,
+        InteractionTableComponent,
+        AvailabilityMixinDetailComponent,
+        AsShopItemWide,
+        AsPromoItemWide,
+        AsEventItemWide,
+        AsNotificationItemWide
+    ],
+    providers: [DatePipe]
 })
 export class ItemDetailComponent implements OnInit{
 

@@ -7,9 +7,10 @@ import praesidium from "@ingenium/app/shared/data/praesidium";
 import {Title} from "@angular/platform-browser";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './praesidium-info.component.html',
-  styleUrls: ['./praesidium-info.component.scss']
+    selector: 'app-page',
+    templateUrl: './praesidium-info.component.html',
+    styleUrls: ['./praesidium-info.component.scss'],
+    standalone: false
 })
 export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,

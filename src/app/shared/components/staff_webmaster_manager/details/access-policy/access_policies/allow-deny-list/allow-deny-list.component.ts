@@ -8,16 +8,15 @@ import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
 import {AccessPolicyI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 
 @Component({
-  selector: 'app-allow-deny-list',
-  templateUrl: './allow-deny-list.component.html',
-  styleUrls: ['./allow-deny-list.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    NgForOf,
-    AsyncPipe,
-    NgIf
-  ],
-  standalone: true
+    selector: 'app-allow-deny-list',
+    templateUrl: './allow-deny-list.component.html',
+    styleUrls: ['./allow-deny-list.component.css'],
+    imports: [
+        ReactiveFormsModule,
+        NgForOf,
+        AsyncPipe,
+        NgIf
+    ]
 })
 export class AllowDenyListComponent implements OnInit {
 

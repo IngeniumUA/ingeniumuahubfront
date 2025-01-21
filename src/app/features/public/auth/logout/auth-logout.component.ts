@@ -3,8 +3,9 @@ import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './auth-logout.component.html',
+    selector: 'app-page',
+    templateUrl: './auth-logout.component.html',
+    standalone: false
 })
 export class AuthLogoutComponent implements OnInit {
   loggedOut = false;

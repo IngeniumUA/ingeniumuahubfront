@@ -2,9 +2,10 @@ import {Component} from '@angular/core';
 import {Store} from "@ngxs/store";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './account-details.component.html',
-  styleUrls: ['./account-details.component.css']
+    selector: 'app-page',
+    templateUrl: './account-details.component.html',
+    styleUrls: ['./account-details.component.css'],
+    standalone: false
 })
 export class AccountDetailsComponent {
 

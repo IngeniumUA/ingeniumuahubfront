@@ -5,16 +5,15 @@ import {LayoutService} from '../../../services/layout/layout.service';
 import {Observable} from 'rxjs';
 
 @Component({
-  standalone: true, // Allows it to be imported outside of routing
-  selector: 'app-layout-public-footer',
-  templateUrl: './public-footer.component.html',
-  imports: [
-    NgClass,
-    AsyncPipe,
-    RouterLink,
-    NgOptimizedImage
-  ],
-  styleUrls: ['./public-footer.component.scss']
+    selector: 'app-layout-public-footer',
+    templateUrl: './public-footer.component.html',
+    imports: [
+        NgClass,
+        AsyncPipe,
+        RouterLink,
+        NgOptimizedImage
+    ],
+    styleUrls: ['./public-footer.component.scss']
 })
 export class PublicFooterComponent {
   isMobile$: Observable<boolean> = this.layoutService.isMobile;

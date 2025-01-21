@@ -7,16 +7,15 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-checkout/create-checkout.component";
 
 @Component({
-  selector: 'app-checkout-and-transaction-dashboard',
-  templateUrl: './checkout-and-transaction-dashboard.component.html',
-  styleUrls: ['./checkout-and-transaction-dashboard.component.scss'],
-  imports: [
-    TransactionTableComponent,
-    CheckoutTableComponent,
-    NgClass,
-    CreateCheckoutComponent
-  ],
-  standalone: true
+    selector: 'app-checkout-and-transaction-dashboard',
+    templateUrl: './checkout-and-transaction-dashboard.component.html',
+    styleUrls: ['./checkout-and-transaction-dashboard.component.scss'],
+    imports: [
+        TransactionTableComponent,
+        CheckoutTableComponent,
+        NgClass,
+        CreateCheckoutComponent
+    ]
 })
 export class CheckoutAndTransactionDashboardComponent {
 

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-webmaster',
-  templateUrl: './webmaster.component.html',
-  styleUrls: ['./webmaster.component.scss']
+    selector: 'app-webmaster',
+    templateUrl: './webmaster.component.html',
+    styleUrls: ['./webmaster.component.scss'],
+    standalone: false
 })
 export class WebmasterComponent {
   constructor() { }

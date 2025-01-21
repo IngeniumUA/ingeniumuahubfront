@@ -10,9 +10,10 @@ interface FlagI {
 }
 
 @Component({
-  selector: 'app-flag-table',
-  templateUrl: './flag-table.component.html',
-  styleUrls: ['./flag-table.component.css']
+    selector: 'app-flag-table',
+    templateUrl: './flag-table.component.html',
+    styleUrls: ['./flag-table.component.css'],
+    standalone: false
 })
 export class FlagTableComponent implements OnInit {
 

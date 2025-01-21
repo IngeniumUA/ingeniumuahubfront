@@ -9,17 +9,16 @@ import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 import {ItemService} from "@ingenium/app/core/services/coreAPI/item/item.service";
 
 @Component({
-  selector: 'app-item-table',
-  templateUrl: './item-table.component.html',
-  styleUrls: ['./item-table.component.css'],
-  imports: [
-    MatTableModule,
-    NgIf,
-    RouterLink,
-    DatePipe,
-    AsyncPipe
-  ],
-  standalone: true
+    selector: 'app-item-table',
+    templateUrl: './item-table.component.html',
+    styleUrls: ['./item-table.component.css'],
+    imports: [
+        MatTableModule,
+        NgIf,
+        RouterLink,
+        DatePipe,
+        AsyncPipe
+    ]
 })
 export class ItemTableComponent implements OnInit {
 

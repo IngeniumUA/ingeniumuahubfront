@@ -8,15 +8,14 @@ import {Store} from "@ngxs/store";
 import {CartActions, CartState} from "@ingenium/app/core/store";
 
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css'],
-  standalone: true,
-  imports: [
-    NgIf,
-    NgStyle,
-    ReactiveFormsModule,
-  ]
+    selector: 'app-product',
+    templateUrl: './product.component.html',
+    styleUrls: ['./product.component.css'],
+    imports: [
+        NgIf,
+        NgStyle,
+        ReactiveFormsModule,
+    ]
 })
 export class ProductComponent implements OnInit, OnDestroy {
   @Input() product!: ProductOutI;

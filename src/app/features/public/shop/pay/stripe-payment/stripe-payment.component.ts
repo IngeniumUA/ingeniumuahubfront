@@ -6,9 +6,10 @@ import {Router} from "@angular/router";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 
 @Component({
-  selector: 'app-stripe-payment',
-  templateUrl: './stripe-payment.component.html',
-  styleUrls: ['./stripe-payment.component.css']
+    selector: 'app-stripe-payment',
+    templateUrl: './stripe-payment.component.html',
+    styleUrls: ['./stripe-payment.component.css'],
+    standalone: false
 })
 export class StripePaymentComponent implements OnInit {
 

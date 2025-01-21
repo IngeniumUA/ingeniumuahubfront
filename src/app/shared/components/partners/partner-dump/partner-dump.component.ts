@@ -7,13 +7,12 @@ interface PartnerDisplay {
 }
 
 @Component({
-  selector: 'app-partner-dump',
-  templateUrl: './partner-dump.component.html',
-  styleUrls: ['./partner-dump.component.css'],
-  imports: [
-    NgForOf
-  ],
-  standalone: true
+    selector: 'app-partner-dump',
+    templateUrl: './partner-dump.component.html',
+    styleUrls: ['./partner-dump.component.css'],
+    imports: [
+        NgForOf
+    ]
 })
 export class PartnerDumpComponent {
 

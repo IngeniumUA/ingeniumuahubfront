@@ -5,8 +5,9 @@ import {HubCheckoutTrackerI} from '@ingenium/app/shared/models/tracker';
 import {CheckoutTrackerService} from "@ingenium/app/core/services/coreAPI/checkoutTracker.service";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './order-tracking.component.html',
+    selector: 'app-page',
+    templateUrl: './order-tracking.component.html',
+    standalone: false
 })
 export class OrderTrackingComponent implements OnInit, OnDestroy {
 

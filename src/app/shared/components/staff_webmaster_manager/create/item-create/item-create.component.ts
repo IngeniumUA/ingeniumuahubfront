@@ -22,20 +22,19 @@ import {LinkItemInI} from "@ingenium/app/shared/models/item/linkI";
 import {NotificationItemInI} from "@ingenium/app/shared/models/item/hubNotificationItemI";
 
 @Component({
-  selector: 'app-item-create',
-  templateUrl: './item-create.component.html',
-  styleUrls: ['./item-create.component.css'],
-  imports: [
-    NgIf,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgForOf,
-    ReactiveFormsModule,
-    AsyncPipe,
-    NgStyle
-  ],
-  standalone: true
+    selector: 'app-item-create',
+    templateUrl: './item-create.component.html',
+    styleUrls: ['./item-create.component.css'],
+    imports: [
+        NgIf,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgForOf,
+        ReactiveFormsModule,
+        AsyncPipe,
+        NgStyle
+    ]
 })
 export class ItemCreateComponent implements OnInit {
   $itemType: Observable<string | null> = of('none'); // none, event, shop, promo

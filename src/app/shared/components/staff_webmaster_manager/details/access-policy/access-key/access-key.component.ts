@@ -6,14 +6,13 @@ import {ValidURLCharacters} from "@ingenium/app/shared/validators/ValidUrlCharac
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-access-key',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf
-  ],
-  templateUrl: './access-key.component.html',
-  styleUrl: './access-key.component.scss'
+    selector: 'app-access-key',
+    imports: [
+        ReactiveFormsModule,
+        NgIf
+    ],
+    templateUrl: './access-key.component.html',
+    styleUrl: './access-key.component.scss'
 })
 export class AccessKeyComponent implements OnInit {
   @Input() access_policy_content!: AccessKeyI | null;

@@ -5,9 +5,10 @@ import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import { PromoService } from '@ingenium/app/core/services/coreAPI/item/derived_services/promo.service';
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './vacatures-list-display.component.html',
-  styleUrls: ['./vacatures-list-display.component.scss']
+    selector: 'app-page',
+    templateUrl: './vacatures-list-display.component.html',
+    styleUrls: ['./vacatures-list-display.component.scss'],
+    standalone: false
 })
 export class VacaturesListDisplayComponent {
 

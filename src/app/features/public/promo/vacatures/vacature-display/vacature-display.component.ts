@@ -7,9 +7,10 @@ import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 @Component({
-  selector: 'app-vacature-display',
-  templateUrl: './vacature-display.component.html',
-  styleUrls: ['./vacature-display.component.scss']
+    selector: 'app-vacature-display',
+    templateUrl: './vacature-display.component.html',
+    styleUrls: ['./vacature-display.component.scss'],
+    standalone: false
 })
 export class VacatureDisplayComponent implements OnInit {
 

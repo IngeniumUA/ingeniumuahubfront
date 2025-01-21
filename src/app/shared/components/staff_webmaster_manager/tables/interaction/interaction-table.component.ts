@@ -25,30 +25,29 @@ import {RouterLink} from "@angular/router";
 import {InteractionTypeEnum} from "@ingenium/app/shared/models/interaction/interactionTypeEnum";
 
 @Component({
-  selector: 'app-interaction-table',
-  standalone: true,
-  imports: [
-    AsyncPipe,
-    FormsModule,
-    MatCell,
-    MatCellDef,
-    MatColumnDef,
-    MatHeaderCell,
-    MatPaginator,
-    MatTable,
-    NgIf,
-    ReactiveFormsModule,
-    MatProgressSpinner,
-    RouterLink,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatHeaderCellDef,
-    DatePipe
-  ],
-  templateUrl: './interaction-table.component.html',
-  styleUrl: './interaction-table.component.scss'
+    selector: 'app-interaction-table',
+    imports: [
+        AsyncPipe,
+        FormsModule,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatPaginator,
+        MatTable,
+        NgIf,
+        ReactiveFormsModule,
+        MatProgressSpinner,
+        RouterLink,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatRow,
+        MatRowDef,
+        MatHeaderCellDef,
+        DatePipe
+    ],
+    templateUrl: './interaction-table.component.html',
+    styleUrl: './interaction-table.component.scss'
 })
 export class InteractionTableComponent implements AfterViewInit, OnInit {
   constructor(private interactionService: InteractionService) {

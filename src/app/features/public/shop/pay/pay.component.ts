@@ -12,9 +12,10 @@ import {CartFailedI, CartSuccessI} from "@ingenium/app/shared/models/cart/cartI"
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './pay.component.html',
-  styleUrls: ['./pay.component.css']
+    selector: 'app-page',
+    templateUrl: './pay.component.html',
+    styleUrls: ['./pay.component.css'],
+    standalone: false
 })
 export class PayComponent implements OnInit {
   checkout!: CheckoutSmollI;

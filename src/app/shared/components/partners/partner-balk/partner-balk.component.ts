@@ -7,14 +7,13 @@ interface PartnerDisplay {
 }
 
 @Component({
-  selector: 'app-partner-balk',
-  templateUrl: './partner-balk.component.html',
-  styleUrls: ['./partner-balk.component.css'],
-  imports: [
-    NgClass,
-    NgForOf
-  ],
-  standalone: true
+    selector: 'app-partner-balk',
+    templateUrl: './partner-balk.component.html',
+    styleUrls: ['./partner-balk.component.css'],
+    imports: [
+        NgClass,
+        NgForOf
+    ]
 })
 export class PartnerBalkComponent implements OnDestroy {
 

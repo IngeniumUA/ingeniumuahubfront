@@ -7,16 +7,15 @@ import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/bluep
 import {ProductBlueprintInI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
 
 @Component({
-  selector: 'app-product-blueprint-create',
-  templateUrl: './product-blueprint-create.component.html',
-  styleUrls: ['./product-blueprint-create.component.css'],
-  imports: [
-    NgIf,
-    NgStyle,
-    ReactiveFormsModule,
-    DatePipe
-  ],
-  standalone: true
+    selector: 'app-product-blueprint-create',
+    templateUrl: './product-blueprint-create.component.html',
+    styleUrls: ['./product-blueprint-create.component.css'],
+    imports: [
+        NgIf,
+        NgStyle,
+        ReactiveFormsModule,
+        DatePipe
+    ]
 })
 export class ProductBlueprintCreateComponent {
   @Output() ToggleCreating = new EventEmitter<boolean>();

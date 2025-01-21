@@ -5,9 +5,10 @@ import {ProductOutI} from "@ingenium/app/shared/models/product/products";
 import {ProductsService} from "@ingenium/app/core/services/coreAPI/products.service";
 
 @Component({
-  selector: 'app-galabal',
-  templateUrl: './galabal.component.html',
-  styleUrls: ['./galabal.component.css']
+    selector: 'app-galabal',
+    templateUrl: './galabal.component.html',
+    styleUrls: ['./galabal.component.css'],
+    standalone: false
 })
 export class GalabalComponent {
 

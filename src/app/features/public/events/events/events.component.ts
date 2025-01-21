@@ -6,9 +6,10 @@ import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {isPlatformBrowser} from "@angular/common";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './events.component.html',
-  styleUrls: ['./events.component.scss']
+    selector: 'app-page',
+    templateUrl: './events.component.html',
+    styleUrls: ['./events.component.scss'],
+    standalone: false
 })
 export class EventsComponent {
   events$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: true, data: [], error: null});

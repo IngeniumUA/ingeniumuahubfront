@@ -6,9 +6,9 @@ import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide
 import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-item-detail-dashboard',
-  templateUrl: './item-dashboard-page.component.html',
-  // styleUrls: ['./item-dashboard-page.component.css']
+    selector: 'app-item-detail-dashboard',
+    templateUrl: './item-dashboard-page.component.html',
+    standalone: false
 })
 export class ItemDashboardPageComponent implements OnInit {
 

@@ -10,15 +10,14 @@ interface PartnerDisplay {
 }
 
 @Component({
-  selector: 'app-partner-grid',
-  templateUrl: './partner-grid.component.html',
-  styleUrls: ['./partner-grid.component.scss'],
-  imports: [
-    RecSysItemPreviewComponent,
-    NgForOf,
-    AsyncPipe
-  ],
-  standalone: true
+    selector: 'app-partner-grid',
+    templateUrl: './partner-grid.component.html',
+    styleUrls: ['./partner-grid.component.scss'],
+    imports: [
+        RecSysItemPreviewComponent,
+        NgForOf,
+        AsyncPipe
+    ]
 })
 export class PartnerGridComponent {
 

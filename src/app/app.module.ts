@@ -1,4 +1,4 @@
-import {APP_INITIALIZER, ErrorHandler, NgModule, isDevMode} from '@angular/core';
+import { ErrorHandler, NgModule, isDevMode, inject, provideAppInitializer } from '@angular/core';
 import {Router} from "@angular/router";
 import {NgOptimizedImage} from '@angular/common';
 import {BrowserModule, provideClientHydration} from '@angular/platform-browser';
@@ -101,13 +101,11 @@ export function storageFactory(): OAuthStorage {
       provide: Sentry.TraceService,
       deps: [Router],
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => () => {
-      },
-      deps: [Sentry.TraceService],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (() => () => {
+      })(inject(Sentry.TraceService));
+        return initializerFn();
+      }),
     {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
     {
       provide: OAuthStorage, useFactory: () => {

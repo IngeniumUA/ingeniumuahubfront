@@ -22,19 +22,18 @@ import {ToastrService} from "ngx-toastr";
 
 
 @Component({
-  selector: 'app-create-checkout',
-  templateUrl: './create-checkout.component.html',
-  styleUrls: ['./create-checkout.component.scss'],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgForOf,
-    AsyncPipe,
-    NgIf,
-    NgStyle,
-    KeyValuePipe
-  ],
-  standalone: true
+    selector: 'app-create-checkout',
+    templateUrl: './create-checkout.component.html',
+    styleUrls: ['./create-checkout.component.scss'],
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgForOf,
+        AsyncPipe,
+        NgIf,
+        NgStyle,
+        KeyValuePipe
+    ]
 })
 export class CreateCheckoutComponent implements OnInit {
 

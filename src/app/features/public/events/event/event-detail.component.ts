@@ -15,9 +15,10 @@ import {HttpState} from "@ingenium/app/shared/models/httpState";
 
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './event-detail.component.html',
-  styleUrls: ['./event-detail.component.scss']
+    selector: 'app-page',
+    templateUrl: './event-detail.component.html',
+    styleUrls: ['./event-detail.component.scss'],
+    standalone: false
 })
 export class EventDetailComponent implements OnInit {
   // Layout

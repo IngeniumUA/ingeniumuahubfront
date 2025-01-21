@@ -7,8 +7,9 @@ import {first} from "rxjs/operators";
 import {captureException} from "@sentry/angular";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './auth-callback.component.html',
+    selector: 'app-page',
+    templateUrl: './auth-callback.component.html',
+    standalone: false
 })
 export class AuthCallbackComponent implements OnInit {
   failure: boolean = false;

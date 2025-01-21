@@ -10,21 +10,20 @@ import {ToastrService} from "ngx-toastr";
 import {AccountI} from "@ingenium/app/shared/models/user/accountI";
 
 @Component({
-  selector: 'app-account-info',
-  templateUrl: './account-info.component.html',
-  styleUrls: ['./account-info.component.scss'],
-  imports: [
-    NgClass,
-    FormsModule,
-    ReactiveFormsModule,
-    NgStyle,
-    NgIf,
-    MatRadioModule,
-    NgForOf,
-    KeyValuePipe,
-    AsyncPipe,
-  ],
-  standalone: true
+    selector: 'app-account-info',
+    templateUrl: './account-info.component.html',
+    styleUrls: ['./account-info.component.scss'],
+    imports: [
+        NgClass,
+        FormsModule,
+        ReactiveFormsModule,
+        NgStyle,
+        NgIf,
+        MatRadioModule,
+        NgForOf,
+        KeyValuePipe,
+        AsyncPipe,
+    ]
 })
 export class AccountInfoComponent implements OnInit {
   form!: FormGroup;

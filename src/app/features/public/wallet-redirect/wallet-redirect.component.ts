@@ -8,14 +8,13 @@ import {UserState} from "@ingenium/app/core/store";
 import {Store} from "@ngxs/store";
 
 @Component({
-  selector: 'app-wallet-redirect',
-  standalone: true,
-  imports: [
-    LoadingIndicatorComponent,
-    PublicHeaderComponent
-  ],
-  templateUrl: './wallet-redirect.component.html',
-  styleUrl: './wallet-redirect.component.css'
+    selector: 'app-wallet-redirect',
+    imports: [
+        LoadingIndicatorComponent,
+        PublicHeaderComponent
+    ],
+    templateUrl: './wallet-redirect.component.html',
+    styleUrl: './wallet-redirect.component.css'
 })
 export class WalletRedirectComponent implements OnInit{
 

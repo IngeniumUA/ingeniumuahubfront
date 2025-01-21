@@ -6,9 +6,10 @@ import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_ser
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 
 @Component({
-  selector: 'app-homepage',
-  templateUrl: './homepage.component.html',
-  styleUrls: ['./homepage.component.scss']
+    selector: 'app-homepage',
+    templateUrl: './homepage.component.html',
+    styleUrls: ['./homepage.component.scss'],
+    standalone: false
 })
 export class HomepageComponent {
   homePageRec$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: false, data: [], error: null});

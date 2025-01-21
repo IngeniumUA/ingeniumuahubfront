@@ -10,17 +10,16 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-group/create-group.component";
 
 @Component({
-  selector: 'app-group-table',
-  templateUrl: './group-table.component.html',
-  styleUrls: ['./group-table.component.scss'],
-  imports: [
-    AsyncPipe,
-    NgForOf,
-    NgIf,
-    CreateCheckoutComponent,
-    CreateGroupComponent
-  ],
-  standalone: true
+    selector: 'app-group-table',
+    templateUrl: './group-table.component.html',
+    styleUrls: ['./group-table.component.scss'],
+    imports: [
+        AsyncPipe,
+        NgForOf,
+        NgIf,
+        CreateCheckoutComponent,
+        CreateGroupComponent
+    ]
 })
 export class GroupTableComponent {
   constructor(private staffGroupService: GroupService) {

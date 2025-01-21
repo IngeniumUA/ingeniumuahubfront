@@ -17,19 +17,18 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/access-policy/access-key/access-key.component";
 
 @Component({
-  selector: 'app-availability-mixin-detail',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    AllowDenyListComponent,
-    CastToMemberOfGroupPipe,
-    NgForOf,
-    AccessKeyComponent,
-    CastAccessKeyPipe,
-    TitleCasePipe
-  ],
-  templateUrl: './availability-mixin-detail.component.html',
-  styleUrl: './availability-mixin-detail.component.scss'
+    selector: 'app-availability-mixin-detail',
+    imports: [
+        ReactiveFormsModule,
+        AllowDenyListComponent,
+        CastToMemberOfGroupPipe,
+        NgForOf,
+        AccessKeyComponent,
+        CastAccessKeyPipe,
+        TitleCasePipe
+    ],
+    templateUrl: './availability-mixin-detail.component.html',
+    styleUrl: './availability-mixin-detail.component.scss'
 })
 export class AvailabilityMixinDetailComponent implements OnInit {
 

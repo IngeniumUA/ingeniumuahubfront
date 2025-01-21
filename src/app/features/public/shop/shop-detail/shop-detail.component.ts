@@ -14,9 +14,10 @@ import {map} from "rxjs/operators";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './shop-detail.component.html',
-  styleUrls: ['./shop-detail.component.scss']
+    selector: 'app-page',
+    templateUrl: './shop-detail.component.html',
+    styleUrls: ['./shop-detail.component.scss'],
+    standalone: false
 })
 export class ShopDetailComponent implements OnInit {
   // Layout

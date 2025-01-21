@@ -2,12 +2,11 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-delete-button',
-  standalone: true,
+    selector: 'app-delete-button',
     imports: [
         NgIf
     ],
-  templateUrl: './delete-button.component.html',
+    templateUrl: './delete-button.component.html'
 })
 export class DeleteButtonComponent {
 

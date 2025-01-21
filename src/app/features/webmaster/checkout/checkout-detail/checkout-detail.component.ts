@@ -11,9 +11,10 @@ import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum"
 import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-checkout-detail',
-  templateUrl: './checkout-detail.component.html',
-  styleUrls: ['./checkout-detail.component.css']
+    selector: 'app-checkout-detail',
+    templateUrl: './checkout-detail.component.html',
+    styleUrls: ['./checkout-detail.component.css'],
+    standalone: false
 })
 export class CheckoutDetailComponent implements OnInit {
 

@@ -18,23 +18,22 @@ import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/bluep
 import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-product-blueprint-detail',
-  templateUrl: './product-blueprint-detail.component.html',
-  styleUrls: ['./product-blueprint-detail.component.css'],
-  imports: [
-    DatePipe,
-    RouterLink,
-    JsonPipe,
-    NgForOf,
-    FormsModule,
-    ReactiveFormsModule,
-    NgIf,
-    PricePolicyComponent,
-    PricePolicyComponentCreateComponent,
-    AsyncPipe,
-    DeleteButtonComponent
-  ],
-  standalone: true
+    selector: 'app-product-blueprint-detail',
+    templateUrl: './product-blueprint-detail.component.html',
+    styleUrls: ['./product-blueprint-detail.component.css'],
+    imports: [
+        DatePipe,
+        RouterLink,
+        JsonPipe,
+        NgForOf,
+        FormsModule,
+        ReactiveFormsModule,
+        NgIf,
+        PricePolicyComponent,
+        PricePolicyComponentCreateComponent,
+        AsyncPipe,
+        DeleteButtonComponent
+    ]
 })
 export class ProductBlueprintDetailComponent implements OnInit {
     @Input() productBlueprint!: ProductBlueprintI;

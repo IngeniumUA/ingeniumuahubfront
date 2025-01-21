@@ -6,9 +6,10 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
 
 @Component({
-  selector: 'app-card-redirect',
-  templateUrl: './card-redirect.component.html',
-  styleUrls: ['./card-redirect.component.css']
+    selector: 'app-card-redirect',
+    templateUrl: './card-redirect.component.html',
+    styleUrls: ['./card-redirect.component.css'],
+    standalone: false
 })
 export class CardRedirectComponent implements OnInit {
 

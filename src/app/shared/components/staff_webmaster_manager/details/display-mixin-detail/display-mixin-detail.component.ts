@@ -9,16 +9,15 @@ interface FormField {
 }
 
 @Component({
-  selector: 'app-display-mixin-detail',
-  templateUrl: './display-mixin-detail.component.html',
-  styleUrls: ['./display-mixin-detail.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    NgForOf,
-    NgStyle,
-    NgIf
-  ],
-  standalone: true
+    selector: 'app-display-mixin-detail',
+    templateUrl: './display-mixin-detail.component.html',
+    styleUrls: ['./display-mixin-detail.component.css'],
+    imports: [
+        ReactiveFormsModule,
+        NgForOf,
+        NgStyle,
+        NgIf
+    ]
 })
 export class DisplayMixinDetailComponent implements OnInit {
 

@@ -6,9 +6,10 @@ import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/p
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 
 @Component({
-  selector: 'app-product-webmaster-page',
-  templateUrl: './product-webmaster-page.component.html',
-  styleUrls: ['./product-webmaster-page.component.css']
+    selector: 'app-product-webmaster-page',
+    templateUrl: './product-webmaster-page.component.html',
+    styleUrls: ['./product-webmaster-page.component.css'],
+    standalone: false
 })
 export class ProductWebmasterPageComponent implements OnInit {
 

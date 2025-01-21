@@ -7,16 +7,15 @@ import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 
 
 @Component({
-  selector: 'app-itemtable',
-  templateUrl: './itemtable.component.html',
-  styleUrls: ['./itemtable.component.css'],
-  imports: [
-    AsyncPipe,
-    NgFor,
-    RouterLink,
-    NgIf
-  ],
-  standalone: true
+    selector: 'app-itemtable',
+    templateUrl: './itemtable.component.html',
+    styleUrls: ['./itemtable.component.css'],
+    imports: [
+        AsyncPipe,
+        NgFor,
+        RouterLink,
+        NgIf
+    ]
 })
 export class ItemtableComponent implements OnInit {
   constructor(private itemService: ItemService) {

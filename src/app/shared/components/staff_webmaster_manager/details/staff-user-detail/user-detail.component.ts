@@ -11,20 +11,19 @@ import {MatTableModule} from '@angular/material/table';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
-  selector: 'app-user-detail',
-  templateUrl: './user-detail.component.html',
-  styleUrls: ['./user-detail.component.css'],
-  imports: [
-    NgForOf,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    NgIf,
-    AsyncPipe,
-    MatTableModule,
-    DatePipe
-  ],
-  standalone: true
+    selector: 'app-user-detail',
+    templateUrl: './user-detail.component.html',
+    styleUrls: ['./user-detail.component.css'],
+    imports: [
+        NgForOf,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        NgIf,
+        AsyncPipe,
+        MatTableModule,
+        DatePipe
+    ]
 })
 export class UserDetailComponent {
 

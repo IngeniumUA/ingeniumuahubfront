@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-card-dashboard',
-  templateUrl: './cards-page.component.html',
-  // styleUrls: ['./cards-page.component.css']
+    selector: 'app-card-dashboard',
+    templateUrl: './cards-page.component.html',
+    standalone: false
 })
 export class CardsPageComponent {
 

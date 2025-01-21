@@ -4,14 +4,13 @@ import {NgClass} from '@angular/common';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 
 @Component({
-  selector: 'app-staff-event-edit',
-  templateUrl: './staff-event-edit.component.html',
-  styleUrls: ['./staff-event-edit.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    NgClass
-  ],
-  standalone: true
+    selector: 'app-staff-event-edit',
+    templateUrl: './staff-event-edit.component.html',
+    styleUrls: ['./staff-event-edit.component.css'],
+    imports: [
+        ReactiveFormsModule,
+        NgClass
+    ]
 })
 export class StaffEventEditComponent implements OnInit {
   @Input() event!: ItemWideI;

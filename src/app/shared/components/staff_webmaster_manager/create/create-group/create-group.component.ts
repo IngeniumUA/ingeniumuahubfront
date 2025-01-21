@@ -6,15 +6,14 @@ import {GroupInI} from "@ingenium/app/shared/models/group/hubGroupI";
 import {NgStyle} from "@angular/common";
 
 @Component({
-  selector: 'app-create-group',
-  standalone: true,
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    NgStyle
-  ],
-  templateUrl: './create-group.component.html',
-  styleUrl: './create-group.component.css'
+    selector: 'app-create-group',
+    imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        NgStyle
+    ],
+    templateUrl: './create-group.component.html',
+    styleUrl: './create-group.component.css'
 })
 export class CreateGroupComponent {
   @Output() public groupCreated = new EventEmitter<boolean>();

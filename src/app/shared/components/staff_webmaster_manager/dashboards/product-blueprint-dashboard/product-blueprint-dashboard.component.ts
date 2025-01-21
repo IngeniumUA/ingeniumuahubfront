@@ -14,21 +14,20 @@ import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/bluep
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 
 @Component({
-  selector: 'app-product-blueprint-dashboard',
-  templateUrl: './product-blueprint-dashboard.component.html',
-  styleUrls: ['./product-blueprint-dashboard.component.css'],
-  imports: [
-    AsyncPipe,
-    NgForOf,
-    NgIf,
-    ProductBlueprintDetailComponent,
-    ProductBlueprintCreateComponent,
-    DatePipe,
-    MatTableModule,
-    RouterLink,
-    JsonPipe
-  ],
-  standalone: true
+    selector: 'app-product-blueprint-dashboard',
+    templateUrl: './product-blueprint-dashboard.component.html',
+    styleUrls: ['./product-blueprint-dashboard.component.css'],
+    imports: [
+        AsyncPipe,
+        NgForOf,
+        NgIf,
+        ProductBlueprintDetailComponent,
+        ProductBlueprintCreateComponent,
+        DatePipe,
+        MatTableModule,
+        RouterLink,
+        JsonPipe
+    ]
 })
 export class ProductBlueprintDashboardComponent implements OnInit {
   @Input() item!: ItemI;

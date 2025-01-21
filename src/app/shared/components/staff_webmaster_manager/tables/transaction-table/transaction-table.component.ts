@@ -25,26 +25,25 @@ import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/tr
 import {ToastrService} from "ngx-toastr";
 
 @Component({
-  selector: 'app-transaction-table',
-  templateUrl: './transaction-table.component.html',
-  styleUrls: ['./transaction-table.component.scss'],
-  imports: [
-    AsyncPipe,
-    DatePipe,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    NgIf,
-    RouterLink,
-    NgForOf,
-    NgClass,
-    NgStyle,
-    ReactiveFormsModule,
-    CurrencyPipe,
-    KeyValuePipe,
-    TitleCasePipe
-  ],
-  standalone: true
+    selector: 'app-transaction-table',
+    templateUrl: './transaction-table.component.html',
+    styleUrls: ['./transaction-table.component.scss'],
+    imports: [
+        AsyncPipe,
+        DatePipe,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        MatTableModule,
+        NgIf,
+        RouterLink,
+        NgForOf,
+        NgClass,
+        NgStyle,
+        ReactiveFormsModule,
+        CurrencyPipe,
+        KeyValuePipe,
+        TitleCasePipe
+    ]
 })
 export class TransactionTableComponent implements AfterViewInit, OnChanges, OnInit {
   constructor(private transactionService: TransactionService,

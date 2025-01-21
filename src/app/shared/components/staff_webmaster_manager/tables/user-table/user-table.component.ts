@@ -15,24 +15,23 @@ import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
 
 @Component({
-  selector: 'app-user-table',
-  templateUrl: './user-table.component.html',
-  styleUrls: ['./user-table.component.scss'],
-  imports: [
-    MatTableModule,
-    AsyncPipe,
-    NgIf,
-    RouterLink,
-    DatePipe,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgForOf,
-    MatFormFieldModule,
-    MatInputModule
-  ],
-  standalone: true
+    selector: 'app-user-table',
+    templateUrl: './user-table.component.html',
+    styleUrls: ['./user-table.component.scss'],
+    imports: [
+        MatTableModule,
+        AsyncPipe,
+        NgIf,
+        RouterLink,
+        DatePipe,
+        MatPaginatorModule,
+        MatProgressSpinnerModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgForOf,
+        MatFormFieldModule,
+        MatInputModule
+    ]
 })
 export class UserTableComponent implements OnInit, AfterViewInit {
   userData$: Observable<UserI[]> = of([]);

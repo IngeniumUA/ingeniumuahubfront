@@ -4,8 +4,9 @@ import {User} from "@ingenium/app/core/store";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
-  selector: 'app-page',
-  templateUrl: './auth-login.component.html',
+    selector: 'app-page',
+    templateUrl: './auth-login.component.html',
+    standalone: false
 })
 export class AuthLoginComponent implements OnInit {
   constructor(private store: Store, private route: ActivatedRoute) {}

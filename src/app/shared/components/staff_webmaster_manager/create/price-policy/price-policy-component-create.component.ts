@@ -8,17 +8,16 @@ import {AvailabilityCompositionInI} from "@ingenium/app/shared/models/item/avail
 import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/accessPolicyI";
 
 @Component({
-  selector: 'app-price-policy-create',
-  templateUrl: './price-policy-component-create.component.html',
-  styleUrls: ['./price-policy-component-create.component.css'],
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgForOf,
-    TitleCasePipe
-  ],
-  standalone: true
+    selector: 'app-price-policy-create',
+    templateUrl: './price-policy-component-create.component.html',
+    styleUrls: ['./price-policy-component-create.component.css'],
+    imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgForOf,
+        TitleCasePipe
+    ]
 })
 export class PricePolicyComponentCreateComponent {
 

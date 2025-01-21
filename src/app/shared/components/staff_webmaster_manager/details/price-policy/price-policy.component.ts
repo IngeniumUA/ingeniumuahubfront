@@ -10,20 +10,19 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 
 @Component({
-  selector: 'app-price-policy',
-  templateUrl: './price-policy.component.html',
-  styleUrls: ['./price-policy.component.scss'],
-  imports: [
-    AllowDenyListComponent,
-    NgIf,
-    FormsModule,
-    ReactiveFormsModule,
-    DatePipe,
-    CastToMemberOfGroupPipe,
-    TitleCasePipe,
-    AvailabilityMixinDetailComponent
-  ],
-  standalone: true
+    selector: 'app-price-policy',
+    templateUrl: './price-policy.component.html',
+    styleUrls: ['./price-policy.component.scss'],
+    imports: [
+        AllowDenyListComponent,
+        NgIf,
+        FormsModule,
+        ReactiveFormsModule,
+        DatePipe,
+        CastToMemberOfGroupPipe,
+        TitleCasePipe,
+        AvailabilityMixinDetailComponent
+    ]
 })
 export class PricePolicyComponent implements OnInit {
 
