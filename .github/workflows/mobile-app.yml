@@ -59,7 +59,8 @@ jobs:
 
       - name: Extract service account credentials from env
         run: |
-          echo "${{ secrets.PLAY_SERVICE_ACCOUNT }}" > ./ingeniumuahub-play-console.json
+          echo "${{ secrets.PLAY_SERVICE_ACCOUNT }}" > ./ingeniumuahub-play-console.json.base64
+          base64 -d ./ingeniumuahub-play-console.json.base64 > ./ingeniumuahub-play-console.json
 
       - name: upload the bundle to the play console
         run: python upload_android_bundle.py
