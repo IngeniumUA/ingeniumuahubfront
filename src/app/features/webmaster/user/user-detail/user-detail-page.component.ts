@@ -3,12 +3,17 @@ import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {UserWideI} from '../../../../shared/models/user/userI';
 import {UserService} from "@ingenium/app/core/services/coreAPI/user/user.service";
+import { NgIf, AsyncPipe } from '@angular/common';
+import { UserDetailComponent } from '../../../../shared/components/staff_webmaster_manager/details/staff-user-detail/user-detail.component';
+import { CheckoutAndTransactionDashboardComponent } from '../../../../shared/components/staff_webmaster_manager/dashboards/checkout-and-transaction-dashboard/checkout-and-transaction-dashboard.component';
+import { InteractionTableComponent } from '../../../../shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component';
+import { CardTableComponent } from '../../../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
 
 @Component({
     selector: 'app-user-detail-page',
     templateUrl: './user-detail-page.component.html',
     styleUrls: ['./user-detail-page.component.css'],
-    standalone: false
+    imports: [NgIf, UserDetailComponent, CheckoutAndTransactionDashboardComponent, InteractionTableComponent, CardTableComponent, AsyncPipe]
 })
 export class UserDetailPageComponent implements OnInit {
 

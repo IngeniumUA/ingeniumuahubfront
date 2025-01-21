@@ -10,16 +10,14 @@ import {AuthLogoutComponent} from "@ingenium/app/features/public/auth/logout/aut
 import {AuthLoginComponent} from "@ingenium/app/features/public/auth/login/auth-login.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AuthRoutingModule,
-    PublicHeaderComponent,
-  ],
-  declarations: [
-    AuthCallbackComponent,
-    AuthLogoutComponent,
-    AuthLoginComponent,
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        AuthRoutingModule,
+        PublicHeaderComponent,
+        AuthCallbackComponent,
+        AuthLogoutComponent,
+        AuthLoginComponent,
+    ]
 })
 export class AuthModule { }

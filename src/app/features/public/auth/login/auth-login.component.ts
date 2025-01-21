@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngxs/store";
 import {User} from "@ingenium/app/core/store";
 import {ActivatedRoute} from "@angular/router";
+import { PublicHeaderComponent } from '../../../../core/layout/public/header/public-header.component';
 
 @Component({
     selector: 'app-page',
     templateUrl: './auth-login.component.html',
-    standalone: false
+    imports: [PublicHeaderComponent]
 })
 export class AuthLoginComponent implements OnInit {
   constructor(private store: Store, private route: ActivatedRoute) {}

@@ -8,8 +8,8 @@ describe('CloudComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CloudComponent ]
-    })
+    imports: [CloudComponent]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(CloudComponent);

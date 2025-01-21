@@ -5,12 +5,17 @@ import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {PromoService} from "@ingenium/app/core/services/coreAPI/item/derived_services/promo.service";
 import {ItemWideLimitedI} from "@ingenium/app/shared/models/item/itemwideI";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
+import { PublicHeaderComponent } from '../../../../../core/layout/public/header/public-header.component';
+import { NgIf, NgClass, NgStyle, AsyncPipe } from '@angular/common';
+import { HTMLDisplayComponent } from '../../../../../shared/components/htmldisplay/htmldisplay.component';
+import { PartnerGridComponent } from '../../../../../shared/components/partners/partner-grid/partner-grid.component';
+import { ColordbrgbaPipe } from '../../../../../shared/pipes/item/colorpipe.pipe';
 
 @Component({
     selector: 'app-vacature-display',
     templateUrl: './vacature-display.component.html',
     styleUrls: ['./vacature-display.component.scss'],
-    standalone: false
+    imports: [PublicHeaderComponent, NgIf, NgClass, NgStyle, HTMLDisplayComponent, PartnerGridComponent, AsyncPipe, ColordbrgbaPipe]
 })
 export class VacatureDisplayComponent implements OnInit {
 

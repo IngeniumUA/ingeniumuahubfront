@@ -13,21 +13,17 @@ import {ColordbrgbaPipe} from '../../../shared/pipes/item/colorpipe.pipe';
 import {HTMLDisplayComponent} from '../../../shared/components/htmldisplay/htmldisplay.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    PromoRoutingModule,
-    PublicHeaderComponent,
-    RecSysItemPreviewComponent,
-    PartnerGridComponent,
-    ColordbrgbaPipe,
-    HTMLDisplayComponent,
-  ],
-  declarations: [
-
-
-    VacatureDisplayComponent,
-    VacaturesListDisplayComponent
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        PromoRoutingModule,
+        PublicHeaderComponent,
+        RecSysItemPreviewComponent,
+        PartnerGridComponent,
+        ColordbrgbaPipe,
+        HTMLDisplayComponent,
+        VacatureDisplayComponent,
+        VacaturesListDisplayComponent,
+    ]
 })
 export class PromoModule { }

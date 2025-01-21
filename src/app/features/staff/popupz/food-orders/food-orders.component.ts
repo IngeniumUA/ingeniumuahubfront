@@ -2,12 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { interval, mergeMap } from 'rxjs';
 import { apiEnviroment } from 'src/environments/environment';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-food-orders',
     templateUrl: './food-orders.component.html',
     styleUrls: ['./food-orders.component.css'],
-    standalone: false
+    imports: [NgFor, NgIf]
 })
 export class FoodOrdersComponent implements OnInit {
   constructor(private httpService: HttpClient) {}

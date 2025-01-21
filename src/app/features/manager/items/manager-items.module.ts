@@ -7,15 +7,13 @@ import {ItemlogComponent} from '../../../shared/components/logs/itemlogs/itemlog
 import {ManagerItemDetailComponent} from '../../../shared/components/items/item/itemdetail/manager-item-detail.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ManagerItemsRoutingModule,
-    ItemtableComponent,
-    ManagerItemDetailComponent,
-    ItemlogComponent,
-  ],
-  declarations: [
-    ManagerItemsDashboardComponent,
-  ]
+    imports: [
+        CommonModule,
+        ManagerItemsRoutingModule,
+        ItemtableComponent,
+        ManagerItemDetailComponent,
+        ItemlogComponent,
+        ManagerItemsDashboardComponent,
+    ]
 })
 export class ManagerItemsModule {}

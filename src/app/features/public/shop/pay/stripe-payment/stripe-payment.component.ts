@@ -1,15 +1,16 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOptions} from "@stripe/stripe-js";
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
-import {FormBuilder} from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 import {Router} from "@angular/router";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-stripe-payment',
     templateUrl: './stripe-payment.component.html',
     styleUrls: ['./stripe-payment.component.css'],
-    standalone: false
+    imports: [ReactiveFormsModule, NgIf, StripePaymentElementComponent]
 })
 export class StripePaymentComponent implements OnInit {
 

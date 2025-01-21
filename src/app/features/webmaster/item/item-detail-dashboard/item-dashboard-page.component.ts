@@ -4,11 +4,17 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ItemWideI} from "@ingenium/app/shared/models/item/itemwideI";
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {ToastrService} from "ngx-toastr";
+import { NgIf, AsyncPipe } from '@angular/common';
+import { ItemDetailComponent } from '../../../../shared/components/staff_webmaster_manager/details/staff-item-detail/item-detail.component';
+import { ProductBlueprintDashboardComponent } from '../../../../shared/components/staff_webmaster_manager/dashboards/product-blueprint-dashboard/product-blueprint-dashboard.component';
+import { CheckoutAndTransactionDashboardComponent } from '../../../../shared/components/staff_webmaster_manager/dashboards/checkout-and-transaction-dashboard/checkout-and-transaction-dashboard.component';
+import { InteractionTableComponent } from '../../../../shared/components/staff_webmaster_manager/tables/interaction/interaction-table.component';
+import { DeleteButtonComponent } from '../../../../shared/components/staff_webmaster_manager/delete-button/delete-button.component';
 
 @Component({
     selector: 'app-item-detail-dashboard',
     templateUrl: './item-dashboard-page.component.html',
-    standalone: false
+    imports: [NgIf, ItemDetailComponent, ProductBlueprintDashboardComponent, CheckoutAndTransactionDashboardComponent, InteractionTableComponent, DeleteButtonComponent, AsyncPipe]
 })
 export class ItemDashboardPageComponent implements OnInit {
 

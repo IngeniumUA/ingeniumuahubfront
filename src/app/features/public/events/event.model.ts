@@ -23,11 +23,9 @@ import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading
         ColordbrgbaPipe,
         RecSysItemPreviewComponent,
         LoadingIndicatorComponent,
-        NgOptimizedImage
-    ],
-  declarations: [
-    EventsComponent,
-    EventDetailComponent,
-  ]
+        NgOptimizedImage,
+        EventsComponent,
+        EventDetailComponent
+    ]
 })
 export class EventModule { }

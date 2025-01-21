@@ -4,12 +4,14 @@ import {ActivatedRoute} from '@angular/router';
 import {ItemWideService} from "@ingenium/app/core/services/coreAPI/item/itemwide.service";
 import {ProductBlueprintI} from "@ingenium/app/shared/models/product_blueprint/productBlueprintModels";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
+import { NgIf, AsyncPipe } from '@angular/common';
+import { ProductBlueprintDetailComponent } from '../../../../shared/components/staff_webmaster_manager/details/product-blueprint-detail/product-blueprint-detail.component';
 
 @Component({
     selector: 'app-product-webmaster-page',
     templateUrl: './product-webmaster-page.component.html',
     styleUrls: ['./product-webmaster-page.component.css'],
-    standalone: false
+    imports: [NgIf, ProductBlueprintDetailComponent, AsyncPipe]
 })
 export class ProductWebmasterPageComponent implements OnInit {
 

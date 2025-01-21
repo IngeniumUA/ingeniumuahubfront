@@ -1,9 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-    name: 'eventdate',
-    standalone: false
-})
+@Pipe({ name: 'eventdate' })
 export class GroupnamePipe implements PipeTransform {
   transform(value: number): string {
     switch (value) {

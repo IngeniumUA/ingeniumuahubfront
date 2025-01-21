@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from "@ngxs/store";
 import {User, UserState} from "@ingenium/app/core/store";
+import { PublicHeaderComponent } from '../../../../core/layout/public/header/public-header.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-page',
     templateUrl: './auth-logout.component.html',
-    standalone: false
+    imports: [PublicHeaderComponent, RouterLink]
 })
 export class AuthLogoutComponent implements OnInit {
   loggedOut = false;

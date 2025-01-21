@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {OAuthService} from "angular-oauth2-oidc";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {isPlatformBrowser} from "@angular/common";
-import {NavigationEnd, Router} from "@angular/router";
+import { NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import {Store} from "@ngxs/store";
 import {User} from "@ingenium/app/core/store";
 import {Subject, takeUntil} from "rxjs";
@@ -11,7 +11,7 @@ import {Subject, takeUntil} from "rxjs";
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: false
+    imports: [RouterOutlet]
 })
 export class AppComponent implements OnInit {
   endSubscription = new Subject();

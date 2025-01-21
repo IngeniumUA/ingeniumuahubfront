@@ -14,19 +14,17 @@ import {ColordbrgbaPipe} from "@ingenium/app/shared/pipes/item/colorpipe.pipe";
 import {ProductComponent} from "@ingenium/app/shared/components/items/products/product/product.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ManagerRoutingModule,
-    SidenavComponent,
-    PublicHeaderComponent,
-    CreateGroupComponent,
-    ColordbrgbaPipe,
-    ProductComponent,
-  ],
-  declarations: [
-    ManagerHomeComponent,
-    ManagerComponent,
-    FlagTableComponent,
-  ]
+    imports: [
+        CommonModule,
+        ManagerRoutingModule,
+        SidenavComponent,
+        PublicHeaderComponent,
+        CreateGroupComponent,
+        ColordbrgbaPipe,
+        ProductComponent,
+        ManagerHomeComponent,
+        ManagerComponent,
+        FlagTableComponent,
+    ]
 })
 export class ManagerModule {}

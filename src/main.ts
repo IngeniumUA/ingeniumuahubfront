@@ -1,10 +1,26 @@
-import { enableProdMode } from "@angular/core";
+import { enableProdMode, ErrorHandler, provideAppInitializer, inject, isDevMode, importProvidersFrom } from "@angular/core";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 import * as Sentry from "@sentry/angular";
 
 
-import { AppModule } from './app/app.module';
+import { storageFactory } from './app/app.module';
 import { apiEnviroment } from './environments/environment';
+import { Router } from "@angular/router";
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from "@angular/common/http";
+import { JWTInterceptor } from "./app/core/interceptors/jwt-interceptor.service";
+import { OAuthStorage, OAuthModule } from "angular-oauth2-oidc";
+import { provideClientHydration, BrowserModule, bootstrapApplication } from "@angular/platform-browser";
+import { AppRoutingModule } from "./app/app-routing.module";
+import { provideAnimations } from "@angular/platform-browser/animations";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatButtonModule } from "@angular/material/button";
+import { ToastrModule } from "ngx-toastr";
+import { NgOptimizedImage } from "@angular/common";
+import { NgxsModule } from "@ngxs/store";
+import { UserState, CartState } from "./app/core/store";
+import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
+import { AppComponent } from "./app/app.component";
 
 
 Sentry.init({
@@ -24,7 +40,42 @@ Sentry.init({
 if (apiEnviroment.name !== 'development') {
   enableProdMode();
 }
-platformBrowserDynamic()
-  .bootstrapModule(AppModule)
+bootstrapApplication(AppComponent, {
+    providers: [
+        importProvidersFrom(BrowserModule, AppRoutingModule, ReactiveFormsModule, MatRadioModule, MatButtonModule, ToastrModule.forRoot(), NgOptimizedImage, OAuthModule.forRoot(), NgxsModule.forRoot([UserState, CartState], {
+            developmentMode: isDevMode(),
+        }), NgxsReduxDevtoolsPluginModule.forRoot({
+            disabled: !isDevMode(),
+        })),
+        {
+            provide: ErrorHandler,
+            useValue: Sentry.createErrorHandler({
+                showDialog: false,
+            }),
+        }, {
+            provide: Sentry.TraceService,
+            deps: [Router],
+        },
+        provideAppInitializer(() => {
+            const initializerFn = (() => () => {
+            })(inject(Sentry.TraceService));
+            return initializerFn();
+        }),
+        { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
+        {
+            provide: OAuthStorage, useFactory: () => {
+                if (typeof localStorage !== 'undefined') {
+                    return localStorage;
+                }
+                return null;
+            }
+        },
+        provideClientHydration(),
+        provideHttpClient(withFetch()),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideAnimations(),
+        provideAnimations()
+    ]
+})
   .then((_success) => console.log('Bootstrap success'))
   .catch((err) => console.error(err));

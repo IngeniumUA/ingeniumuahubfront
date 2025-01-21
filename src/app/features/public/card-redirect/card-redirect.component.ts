@@ -8,8 +8,7 @@ import {CardItemWideLimitedI} from "@ingenium/app/shared/models/item/cardI";
 @Component({
     selector: 'app-card-redirect',
     templateUrl: './card-redirect.component.html',
-    styleUrls: ['./card-redirect.component.css'],
-    standalone: false
+    styleUrls: ['./card-redirect.component.css']
 })
 export class CardRedirectComponent implements OnInit {
 

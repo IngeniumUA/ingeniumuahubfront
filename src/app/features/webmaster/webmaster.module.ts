@@ -67,18 +67,6 @@ import {
 
 
 @NgModule({
-  declarations: [
-    WebmasterComponent,
-    UsersListComponent,
-    UserDetailPageComponent,
-    GroupListComponent,
-    ItemsOverviewPageComponent,
-    ItemDashboardPageComponent,
-    CardsPageComponent,
-    ProductWebmasterPageComponent,
-    CheckoutDetailComponent,
-    OrderTrackingComponent
-  ],
     imports: [
         CommonModule,
         WebmasterRoutingModule,
@@ -100,9 +88,19 @@ import {
         TransactionDetailComponent,
         CurrencyPipe,
         InteractionTableComponent,
-        DeleteButtonComponent
+        DeleteButtonComponent,
+        WebmasterComponent,
+        UsersListComponent,
+        UserDetailPageComponent,
+        GroupListComponent,
+        ItemsOverviewPageComponent,
+        ItemDashboardPageComponent,
+        CardsPageComponent,
+        ProductWebmasterPageComponent,
+        CheckoutDetailComponent,
+        OrderTrackingComponent
     ], providers: [
-    DatePipe
-  ]
+        DatePipe
+    ]
 })
 export class WebmasterModule { }

@@ -8,8 +8,8 @@ describe('StripePaymentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StripePaymentComponent ]
-    })
+    imports: [StripePaymentComponent]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(StripePaymentComponent);

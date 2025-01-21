@@ -10,12 +10,15 @@ import {catchError} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {CartFailedI, CartSuccessI} from "@ingenium/app/shared/models/cart/cartI";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
+import { PublicHeaderComponent } from '../../../../core/layout/public/header/public-header.component';
+import { LoadingIndicatorComponent } from '../../../../shared/components/loading-indicator/loading-indicator.component';
+import { StripePaymentComponent } from './stripe-payment/stripe-payment.component';
 
 @Component({
     selector: 'app-page',
     templateUrl: './pay.component.html',
     styleUrls: ['./pay.component.css'],
-    standalone: false
+    imports: [PublicHeaderComponent, LoadingIndicatorComponent, StripePaymentComponent]
 })
 export class PayComponent implements OnInit {
   checkout!: CheckoutSmollI;

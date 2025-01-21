@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { CardTableComponent } from '../../../../shared/components/staff_webmaster_manager/tables/card-table/card-table.component';
 
 @Component({
     selector: 'app-card-dashboard',
     templateUrl: './cards-page.component.html',
-    standalone: false
+    imports: [CardTableComponent]
 })
 export class CardsPageComponent {
 

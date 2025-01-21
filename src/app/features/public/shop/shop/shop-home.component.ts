@@ -5,13 +5,17 @@ import {ShopService} from "@ingenium/app/core/services/coreAPI/item/derived_serv
 import {Store} from "@ngxs/store";
 import {CartState} from "@ingenium/app/core/store";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
-import {isPlatformBrowser} from "@angular/common";
+import { isPlatformBrowser, AsyncPipe } from "@angular/common";
+import { PublicHeaderComponent } from '../../../../core/layout/public/header/public-header.component';
+import { RouterLink } from '@angular/router';
+import { LoadingIndicatorComponent } from '../../../../shared/components/loading-indicator/loading-indicator.component';
+import { RecSysItemPreviewComponent } from '../../../../shared/components/items/recsys/rec-sys-item-preview/rec-sys-item-preview.component';
 
 @Component({
     selector: 'app-page',
     templateUrl: './shop-home.component.html',
     styleUrls: ['./shop-home.component.scss'],
-    standalone: false
+    imports: [PublicHeaderComponent, RouterLink, LoadingIndicatorComponent, RecSysItemPreviewComponent, AsyncPipe]
 })
 export class ShopHomeComponent {
   shopItems$: Observable<HttpState<RecSysPreviewI[]>> = of({loading: true, data: [], error: null});

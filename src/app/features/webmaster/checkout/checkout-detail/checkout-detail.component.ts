@@ -9,12 +9,16 @@ import {TransactionService} from "@ingenium/app/core/services/coreAPI/payment/tr
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
 import {ToastrService} from "ngx-toastr";
+import { NgIf, NgStyle, NgFor, AsyncPipe, DatePipe } from '@angular/common';
+import { TransactionTableComponent } from '../../../../shared/components/staff_webmaster_manager/tables/transaction-table/transaction-table.component';
+import { TransactionDetailComponent } from '../../../../shared/components/staff_webmaster_manager/details/transaction-detail/transaction-detail.component';
+import { CurrencyPipe } from '../../../../shared/pipes/currency.pipe';
 
 @Component({
     selector: 'app-checkout-detail',
     templateUrl: './checkout-detail.component.html',
     styleUrls: ['./checkout-detail.component.css'],
-    standalone: false
+    imports: [NgIf, NgStyle, TransactionTableComponent, NgFor, TransactionDetailComponent, AsyncPipe, DatePipe, CurrencyPipe]
 })
 export class CheckoutDetailComponent implements OnInit {
 

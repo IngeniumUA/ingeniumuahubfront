@@ -3,12 +3,14 @@ import {EventService} from "@ingenium/app/core/services/coreAPI/item/derived_ser
 import {Observable} from "rxjs";
 import {ProductOutI} from "@ingenium/app/shared/models/product/products";
 import {ProductsService} from "@ingenium/app/core/services/coreAPI/products.service";
+import { PublicHeaderComponent } from '../../../../core/layout/public/header/public-header.component';
+import { NgStyle } from '@angular/common';
 
 @Component({
     selector: 'app-galabal',
     templateUrl: './galabal.component.html',
     styleUrls: ['./galabal.component.css'],
-    standalone: false
+    imports: [PublicHeaderComponent, NgStyle]
 })
 export class GalabalComponent {
 

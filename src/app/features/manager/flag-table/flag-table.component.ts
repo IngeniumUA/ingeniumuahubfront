@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {FlagService} from "@ingenium/app/core/services/coreAPI/flag.service";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
+import { NgIf, AsyncPipe, JsonPipe } from '@angular/common';
+import { CreateGroupComponent } from '../../../shared/components/staff_webmaster_manager/create/create-group/create-group.component';
 
 interface FlagI {
   id: number
@@ -13,7 +15,7 @@ interface FlagI {
     selector: 'app-flag-table',
     templateUrl: './flag-table.component.html',
     styleUrls: ['./flag-table.component.css'],
-    standalone: false
+    imports: [NgIf, CreateGroupComponent, AsyncPipe, JsonPipe]
 })
 export class FlagTableComponent implements OnInit {
 

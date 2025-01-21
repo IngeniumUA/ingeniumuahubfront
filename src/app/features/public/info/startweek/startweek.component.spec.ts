@@ -8,8 +8,8 @@ describe('StartweekComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StartweekComponent ]
-    })
+    declarations: [StartweekComponent]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(StartweekComponent);

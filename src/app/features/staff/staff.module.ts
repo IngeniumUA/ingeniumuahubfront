@@ -15,22 +15,20 @@ import { StaffUseFullQRComponent } from './payment-code/staff-usefull-q-r.compon
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    StaffRoutingModule,
-    SidenavComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    StaffEventEditComponent,
-    PublicHeaderComponent
-  ],
-  declarations: [
-    StaffComponent,
-    StaffEventsListPageComponent,
-    StaffEventPageComponent,
-    DrinkOrdersComponent,
-    FoodOrdersComponent,
-    StaffUseFullQRComponent
-  ],
+    imports: [
+        CommonModule,
+        StaffRoutingModule,
+        SidenavComponent,
+        FormsModule,
+        ReactiveFormsModule,
+        StaffEventEditComponent,
+        PublicHeaderComponent,
+        StaffComponent,
+        StaffEventsListPageComponent,
+        StaffEventPageComponent,
+        DrinkOrdersComponent,
+        FoodOrdersComponent,
+        StaffUseFullQRComponent
+    ],
 })
 export class StaffModule { }

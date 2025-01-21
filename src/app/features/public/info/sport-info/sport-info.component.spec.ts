@@ -8,8 +8,8 @@ describe('SportInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SportInfoComponent ]
-    })
+    declarations: [SportInfoComponent]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(SportInfoComponent);

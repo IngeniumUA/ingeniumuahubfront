@@ -3,11 +3,12 @@ import {ActivatedRoute} from '@angular/router';
 import {retry, Subscription, switchMap, timer} from 'rxjs';
 import {HubCheckoutTrackerI} from '@ingenium/app/shared/models/tracker';
 import {CheckoutTrackerService} from "@ingenium/app/core/services/coreAPI/checkoutTracker.service";
+import { NgFor } from '@angular/common';
 
 @Component({
     selector: 'app-page',
     templateUrl: './order-tracking.component.html',
-    standalone: false
+    imports: [NgFor]
 })
 export class OrderTrackingComponent implements OnInit, OnDestroy {
 

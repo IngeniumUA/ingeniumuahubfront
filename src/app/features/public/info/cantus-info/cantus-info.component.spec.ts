@@ -8,8 +8,8 @@ describe('CantusInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CantusInfoComponent ]
-    })
+    declarations: [CantusInfoComponent]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(CantusInfoComponent);

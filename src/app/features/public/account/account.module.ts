@@ -17,21 +17,19 @@ import {
 import {AccountInfoComponent} from '../../../shared/components/account/account-details/account-info.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AccountRoutingModule,
-    PublicHeaderComponent,
-    CardComponent,
-    UnderConstructionComponent,
-    CheckoutDisplayComponent,
-    TransactionDisplayComponent,
-    AccountInfoComponent,
-  ],
-  declarations: [
-    AccountDetailsComponent,
-    AccountComponent,
-    AccountTransactionsComponent,
-  ]
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        AccountRoutingModule,
+        PublicHeaderComponent,
+        CardComponent,
+        UnderConstructionComponent,
+        CheckoutDisplayComponent,
+        TransactionDisplayComponent,
+        AccountInfoComponent,
+        AccountDetailsComponent,
+        AccountComponent,
+        AccountTransactionsComponent,
+    ]
 })
 export class AccountModule { }

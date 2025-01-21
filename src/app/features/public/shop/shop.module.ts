@@ -27,14 +27,6 @@ import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading
 
 
 @NgModule({
-  declarations: [
-    ShopHomeComponent,
-    CheckoutComponent,
-    PayComponent,
-    ShopDetailComponent,
-    StripePaymentComponent,
-    CheckoutConfirmComponent,
-  ],
     imports: [
         CommonModule,
         NgxStripeModule.forRoot('pk_live_nJtVFe7oRy6CCy9EEK8OKeFu'),
@@ -49,6 +41,12 @@ import {LoadingIndicatorComponent} from "@ingenium/app/shared/components/loading
         ColordbrgbaPipe,
         CheckoutDisplayComponent,
         LoadingIndicatorComponent,
+        ShopHomeComponent,
+        CheckoutComponent,
+        PayComponent,
+        ShopDetailComponent,
+        StripePaymentComponent,
+        CheckoutConfirmComponent,
     ]
 })
 export class ShopModule { }

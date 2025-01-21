@@ -5,11 +5,12 @@ import {User} from "@ingenium/app/core/store";
 import {Router} from "@angular/router";
 import {first} from "rxjs/operators";
 import {captureException} from "@sentry/angular";
+import { PublicHeaderComponent } from '../../../../core/layout/public/header/public-header.component';
 
 @Component({
     selector: 'app-page',
     templateUrl: './auth-callback.component.html',
-    standalone: false
+    imports: [PublicHeaderComponent]
 })
 export class AuthCallbackComponent implements OnInit {
   failure: boolean = false;

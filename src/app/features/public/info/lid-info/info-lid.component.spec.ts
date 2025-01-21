@@ -8,8 +8,8 @@ describe('InfoLidComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InfoLidComponent ]
-    })
+    declarations: [InfoLidComponent]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(InfoLidComponent);

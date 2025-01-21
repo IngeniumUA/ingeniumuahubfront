@@ -6,12 +6,13 @@ import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from '@ingenium/app/s
 import QRCode from 'qrcode';
 import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
 import {Router} from "@angular/router";
+import { NgIf, NgFor, NgClass, AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-account-transactions',
     templateUrl: './account-transactions.component.html',
     styleUrls: ['./account-transactions.component.scss'],
-    standalone: false
+    imports: [NgIf, NgFor, NgClass, AsyncPipe, DatePipe]
 })
 export class AccountTransactionsComponent implements OnInit, OnDestroy {
   constructor(private accountService: AccountService,

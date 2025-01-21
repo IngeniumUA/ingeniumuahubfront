@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
 import {ProductCategoryI, ProductGroupI} from '@ingenium/app/shared/models/product/products';
 import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
@@ -12,13 +12,17 @@ import {CartState} from "@ingenium/app/core/store";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 import {LayoutService} from "@ingenium/app/core/services/layout/layout.service";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
+import { PublicHeaderComponent } from '../../../../core/layout/public/header/public-header.component';
+import { NgStyle, NgFor, NgIf, AsyncPipe } from '@angular/common';
+import { ProductComponent } from '../../../../shared/components/items/products/product/product.component';
+import { ColordbrgbaPipe } from '../../../../shared/pipes/item/colorpipe.pipe';
 
 
 @Component({
     selector: 'app-page',
     templateUrl: './event-detail.component.html',
     styleUrls: ['./event-detail.component.scss'],
-    standalone: false
+    imports: [PublicHeaderComponent, NgStyle, NgFor, NgIf, ProductComponent, RouterLink, AsyncPipe, ColordbrgbaPipe]
 })
 export class EventDetailComponent implements OnInit {
   // Layout
