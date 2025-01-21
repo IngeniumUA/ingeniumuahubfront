@@ -13,24 +13,24 @@
         <nav role="tablist" class="categorie-section"
              [ngStyle]="{'background-color': (response.data.derived_type.display.color | colordbrgba: 1) }">
           <button class="categorie-button"
-                  *ngFor="let product_categorie of (this.productCategories$ | async); index as i"
-                  (click)="this.setProductCategory(i)"
-                  [ngStyle]="this.getCategoryButtonStyle(
-                    (this.currentProductCategoryIndex$ | async) === i,
+                  *ngFor="let product_categorie of (productCategories$ | async); index as i"
+                  (click)="setProductCategory(i)"
+                  [ngStyle]="getCategoryButtonStyle(
+                    (currentProductCategoryIndex$ | async) === i,
                     response.data.derived_type.display.color | colordbrgba: 1)"
           >{{ product_categorie.categorie_name }}</button>
         </nav>
 
         <!--Products list-->
-        <section *ngIf="(this.currentCategory$() | async) as current_categorie">
-          <div class="product-group" *ngFor="let product_group of (this.currentProductGroups | async); index as i">
+        <section *ngIf="(currentCategory$() | async) as current_categorie">
+          <div class="product-group" *ngFor="let product_group of (currentProductGroups | async); index as i">
             <h3>{{ product_group.group_name }}</h3>
             <div class="products">
-              @for (product of this.product_group.products; track product.id) {
+              @for (product of product_group.products; track product.id) {
                 <app-product [product]="product"
                              [primaryColorFull]="(response.data.derived_type.display.color | colordbrgba: 1)"
                              [primaryColorHalf]="(response.data.derived_type.display.color | colordbrgba: 0.5)"
-                             [itemId]="this.itemId" />
+                             [itemId]="itemId" />
               }
             </div>
           </div>
@@ -38,7 +38,7 @@
 
         <!--Checkout Button-->
         <div class="order-section flex flex-row gap-3">
-          @let productCount = (this.isCartEmpty$ | async);
+          @let productCount = (isCartEmpty$ | async);
           <button [disabled]="productCount && productCount <= 0" class="button button-primary" [routerLink]="['/shop/checkout']">Checkout</button>
         </div>
       }

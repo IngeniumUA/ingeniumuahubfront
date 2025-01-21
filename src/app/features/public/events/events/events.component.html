@@ -6,7 +6,7 @@
   <h1 class="white-section-title white-section-title-blue white-section-title-large">Evenementen</h1>
   <p>TD's en andere evenementen kan je op deze pagina vinden.</p>
 
-  @let events = this.events$ | async;
+  @let events = events$ | async;
   @if (events && (events.loading || events.error)) {
     <app-loading-indicator [isLoading]="events.loading" [isErrored]="events.error !== null"
                            [title]="'Evenementen aan het laden'" [message]="'Evenementen worden opgehaald'" />

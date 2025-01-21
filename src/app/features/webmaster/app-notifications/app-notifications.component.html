@@ -6,7 +6,7 @@
       <table>
         <tbody>
         <tr><th>Topic</th><td>
-          <ng-container *ngIf="(this.notifications$ | async) as notificationItems">
+          <ng-container *ngIf="(notifications$ | async) as notificationItems">
           <select formControlName="item_id" class="hubformfield-white">
             <option [ngValue]="''" disabled selected>Topic</option>
             <option *ngFor="let itemWide of notificationItems"
@@ -38,7 +38,7 @@
           (click)="onSubmit()">
     <span class="text-white">Send</span>
   </button>
-  <p *ngIf="this.sendBuffer" class="text-sm text-yellow-700">Zeker?</p>
+  <p *ngIf="sendBuffer" class="text-sm text-yellow-700">Zeker?</p>
 
-  <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
+  <span class="error-message" *ngIf="form_error !== null">{{ form_error }}</span>
 </section>

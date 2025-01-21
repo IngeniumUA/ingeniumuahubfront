@@ -95,6 +95,6 @@
   </aside>
 </div>
 
-<section *ngIf="this.paymentErrors.length > 0" class="transaction space-y-2">
-    <p class="error-message" *ngFor="let error of this.paymentErrors">{{ error.error.detail['error_statement_nl'] }}</p>
+<section *ngIf="paymentErrors.length > 0" class="transaction space-y-2">
+    <p class="error-message" *ngFor="let error of paymentErrors">{{ error.error.detail['error_statement_nl'] }}</p>
 </section>

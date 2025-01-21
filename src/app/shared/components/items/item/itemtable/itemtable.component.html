@@ -11,7 +11,7 @@
   <p class="item-table-header" id="item-table-header-is_active">Status</p>
   <p class="item-table-header" id="item-table-header-more"></p>
 
-  <ng-container *ngIf="(this.items$ | async) as items; else loading">
+  <ng-container *ngIf="(items$ | async) as items; else loading">
     <ng-container *ngFor="let item of items; index as i;">
       <p class="item-table-item">[ ]</p>
       <p class="item-table-item">{{ i }}</p>

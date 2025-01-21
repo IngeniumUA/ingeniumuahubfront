@@ -64,7 +64,7 @@
         <div>
         Validity:
         <select formControlName="validityControl">
-          <option selected [value]="this.transaction.validity">{{ transaction.validity }}</option>
+          <option selected [value]="transaction.validity">{{ transaction.validity }}</option>
           <option *ngFor="let validity of ValidityList" [ngValue]="validity" style="color: var(--mainblue)">
               {{ ValidityEnum[validity] }}
           </option>
@@ -83,7 +83,7 @@
 
         <div>
         Product:
-        <ng-container *ngIf="(this.products$ | async) as products else loadingProducts">
+        <ng-container *ngIf="(products$ | async) as products else loadingProducts">
           <select formControlName="productControl">
             <option [ngValue]="transaction.purchased_product" disabled selected>{{ transaction.purchased_product.name }} {{ transaction.purchased_product.price_policy.price }}</option>
             <option *ngFor="let product of products" [ngValue]="product">
@@ -113,20 +113,20 @@
 
     <div class="my-4 flex flex-row gap-3">
         <button class="button button-primary w-1/6 button-inline"
-        [disabled]="this.loading"
-        [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+        [disabled]="loading"
+        [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
         (click)="Patch()">
             Update</button>
 
         <button class="button button-primary w-1/6 button-inline"
-                [disabled]="this.loading"
-                [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+                [disabled]="loading"
+                [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
         (click)="PartialRefund()">
             Refund ( partial )</button>
 
         <button class="button button-primary w-1/6 button-inline"
-                [disabled]="this.loading"
-                [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+                [disabled]="loading"
+                [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
         (click)="SendEmail()">
             Send Transaction Email</button>
     </div>

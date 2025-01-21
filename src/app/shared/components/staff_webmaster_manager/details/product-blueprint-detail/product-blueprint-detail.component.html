@@ -87,16 +87,16 @@
     <span class="text-white">Update</span>
   </button>
 
-  <app-delete-button (deleteEvent)="deleteBlueprint(this.productBlueprint.id)" ></app-delete-button>
+  <app-delete-button (deleteEvent)="deleteBlueprint(productBlueprint.id)" ></app-delete-button>
 
-  <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
+  <span class="error-message" *ngIf="form_error !== null">{{ form_error }}</span>
 </section>
 
 <section>
   <h4>Price Policies</h4>
   <ng-container *ngIf="($pricePolicies | async) as pricePolicies">
     <div class="mb-2 p-0.5 border-2 rounded-md border-blue-900" *ngFor="let pricePolicy of pricePolicies; index as i">
-      <app-price-policy (RemovePricePolicyEvent)="RemovePricePolicy(pricePolicy)" (UpdatePricePolicyEvent)="this.UpdatePricePolicy($event)" [pricePolicy]="pricePolicy"></app-price-policy>
+      <app-price-policy (RemovePricePolicyEvent)="RemovePricePolicy(pricePolicy)" (UpdatePricePolicyEvent)="UpdatePricePolicy($event)" [pricePolicy]="pricePolicy"></app-price-policy>
     </div>
   </ng-container>
 

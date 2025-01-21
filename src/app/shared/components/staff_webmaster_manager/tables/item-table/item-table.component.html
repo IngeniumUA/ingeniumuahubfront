@@ -1,6 +1,6 @@
 <ng-container *ngIf="userRoles$ | async as rolesI">
 <ng-container *ngIf="GetDisplayedColumns(rolesI) as displayedColumns">
-<ng-container *ngIf="this.items$ as items">
+<ng-container *ngIf="items$ as items">
   <table mat-table [dataSource]="items">
     <!-- uuid Column -->
     <ng-container matColumnDef="id"

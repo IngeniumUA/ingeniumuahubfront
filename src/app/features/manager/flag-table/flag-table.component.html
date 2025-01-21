@@ -2,7 +2,7 @@
     <h2>Flags</h2>
     <br>
 
-  @for (flag of (this.flags$ | async); track flag.id) {
+  @for (flag of (flags$ | async); track flag.id) {
     <span>
       HubFlag<br>
       Id:{{ flag.id }}<br>

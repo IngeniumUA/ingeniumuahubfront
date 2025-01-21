@@ -20,11 +20,11 @@
 
     <section>
       <h3>Transactions</h3>
-      <ng-container *ngFor="let control of this.transactions().controls; let i=index">
+      <ng-container *ngFor="let control of transactions().controls; let i=index">
         <div [formGroup]="GetControl(control)" class="my-4 py-2 border-t border-gray-400 flex flex-row gap-2">
           <span>
           Product:
-          <ng-container *ngIf="(this.products$ | async) as products else loadingProducts">
+          <ng-container *ngIf="(products$ | async) as products else loadingProducts">
             <select formControlName="productControl">
               <option [ngValue]="null" disabled selected>Kies Product</option>
               <option *ngFor="let product of products" [ngValue]="product">
@@ -45,7 +45,7 @@
           </span>
 
           <button class="button button-primary w-1/12 button-inline"
-                  [disabled]="this.transactions().length === 1"
+                  [disabled]="transactions().length === 1"
                   (click)="RemoveTransaction(i)">
             Remove</button>
         </div>
@@ -67,12 +67,12 @@
       </label>
       <label>
         Create missing User
-        <input type="checkbox" formControlName="createUserIfNoneControl"/> <!-- TODO [disabled]="this.userNotInAPI"-->
+        <input type="checkbox" formControlName="createUserIfNoneControl"/> <!-- TODO [disabled]="userNotInAPI"-->
       </label>
 
       <button class="button button-primary w-1/6 button-inline"
-              [disabled]="this.loading"
-              [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+              [disabled]="loading"
+              [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
               (click)="SubmitForm()">
         Create</button>
 

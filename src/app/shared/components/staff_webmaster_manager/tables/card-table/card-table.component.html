@@ -1,5 +1,5 @@
 <section>
-  <!--  <ng-container *ngIf="this.cardStats$ | async as cardStats">-->
+  <!--  <ng-container *ngIf="cardStats$ | async as cardStats">-->
   <h2>Kaarten table</h2>
 
   <section class="flex flex-row gap-3">
@@ -10,14 +10,14 @@
   <mat-paginator
     [length]="600"
     [pageSize]="100"
-    [pageIndex]="this.pageIndex"
+    [pageIndex]="pageIndex"
     (page)="LoadData($event)"
     showFirstLastButtons
     aria-label="Select which cards">
   </mat-paginator>
-  <ng-container *ngIf="(this.cards$ | async) as cards else loading">
+  <ng-container *ngIf="(cards$ | async) as cards else loading">
     <table mat-table [dataSource]="cards" class="mat-elevation-z8">
-    <form [formGroup]="this.searchForm">
+    <form [formGroup]="searchForm">
       <!-- id Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> Card uuid </th>

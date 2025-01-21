@@ -7,9 +7,9 @@
   </span>
   <br>
   <button class="button button-primary w-1/6 button-inline"
-          [disabled]="this.loading"
-          [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+          [disabled]="loading"
+          [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
           (click)="onSubmit()">
-    <span class="text-white">{{ this.loading ? "Processing .." : "Create" }}</span>
+    <span class="text-white">{{ loading ? "Processing .." : "Create" }}</span>
   </button>
 </form>

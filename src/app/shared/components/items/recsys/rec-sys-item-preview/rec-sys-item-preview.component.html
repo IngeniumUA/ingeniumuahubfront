@@ -1,9 +1,9 @@
-@if (this.internalLink) {
-  <a [routerLink]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
+@if (internalLink) {
+  <a [routerLink]="[recsysItem.follow_through_link]" class="event-card-link-wrapper">
     <ng-container *ngTemplateOutlet="cardContent" />
   </a>
 } @else {
-  <a [href]="[this.recsysItem.follow_through_link]" class="event-card-link-wrapper">
+  <a [href]="[recsysItem.follow_through_link]" class="event-card-link-wrapper">
     <ng-container *ngTemplateOutlet="cardContent" />
   </a>
 }
@@ -12,19 +12,19 @@
   <article class="event-card" [style]=CardStyle()>
     <div class="image">
       <!-- Image might not be given (either could optionally be null), if null is passed the page breaks -->
-      @if (this.image !== null) {
-        <img [ngSrc]="this.image" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
+      @if (image !== null) {
+        <img [ngSrc]="image" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
       }
     </div>
     <div class="content">
-      <h3 [ngStyle]="{'color': textColor()}">{{ this.recsysItem.name }}</h3>
+      <h3 [ngStyle]="{'color': textColor()}">{{ recsysItem.name }}</h3>
       <span *ngIf="recsysItem.date !== undefined"
             class="date"
             [ngStyle]="{'color': textColor() }">
-        {{ this.recsysItem.date | date }}</span>
+        {{ recsysItem.date | date }}</span>
       <span class="font-bold"
             [ngStyle]="{'color': textColor() }">
-        {{ this.description }}</span>
+        {{ description }}</span>
     </div>
   </article>
 </ng-template>

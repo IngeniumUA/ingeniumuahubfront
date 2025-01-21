@@ -6,18 +6,18 @@
 </section>
 
 <section class="staffSection">
-  <app-checkout-and-transaction-dashboard [user_id]="this.user_id"></app-checkout-and-transaction-dashboard>
+  <app-checkout-and-transaction-dashboard [user_id]="user_id"></app-checkout-and-transaction-dashboard>
 </section>
 
 <section class="staffSection">
-  <app-interaction-table [user_id]="this.user_id"></app-interaction-table>
+  <app-interaction-table [user_id]="user_id"></app-interaction-table>
 </section>
 
 <section class="staffSection">
-  @if (!this.showCards) {
+  @if (!showCards) {
     <button class="button button-primary button-inline" (click)="toggleShowCards()">Toon gelinkte kaarten</button>
   } @else {
-    <app-card-table [userUUID]="this.user_id"></app-card-table>
+    <app-card-table [userUUID]="user_id"></app-card-table>
     <button class="button button-primary button-inline" (click)="toggleShowCards()">Verberg Tabel</button>
   }
 </section>

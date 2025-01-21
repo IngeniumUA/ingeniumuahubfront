@@ -1,4 +1,4 @@
-<div [style]="{'background-color': this.primaryColorHalf}">
+<div [style]="{'background-color': primaryColorHalf}">
   <h5>
     @if (product.price_policy === null) {
       {{ product.name }}
@@ -11,14 +11,14 @@
     }
   </h5>
 
-  <ng-container *ngIf="this.product.max_count > 0; else notAvailable">
-    <ng-container *ngIf="this.product.price_policy.price > 0">
+  <ng-container *ngIf="product.max_count > 0; else notAvailable">
+    <ng-container *ngIf="product.price_policy.price > 0">
       <p class="whitespace-nowrap text-black">&euro; {{ product.price_policy.price }}</p>
     </ng-container>
 
     <button (click)="TryDecreaseCount()"
-            [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) <= 0) ? 'gray' : this.primaryColorFull}"
-            [disabled]="(this.productForm.controls.count.value ?? 0) <= 0">
+            [ngStyle]="{'background-color': ((productForm.controls.count.value ?? 0) <= 0) ? 'gray' : primaryColorFull}"
+            [disabled]="(productForm.controls.count.value ?? 0) <= 0">
       -</button>
 
     <form [formGroup]="productForm">
@@ -30,8 +30,8 @@
     </form>
 
     <button (click)="TryIncreaseCount()"
-            [ngStyle]="{'background-color': ((this.productForm.controls.count.value ?? 0) >= this.product.max_count) ? 'gray' : this.primaryColorFull}"
-            [disabled]="(this.productForm.controls.count.value ?? 0) >= this.product.max_count">+</button>
+            [ngStyle]="{'background-color': ((productForm.controls.count.value ?? 0) >= product.max_count) ? 'gray' : primaryColorFull}"
+            [disabled]="(productForm.controls.count.value ?? 0) >= product.max_count">+</button>
   </ng-container>
 </div>
 
@@ -42,7 +42,7 @@
     <p>Al gekocht!</p>
   } @else if (product.max_count === -3) {
     <button class="product-to-login"
-            [ngStyle]="{'background-color': this.primaryColorFull}"
+            [ngStyle]="{'background-color': primaryColorFull}"
             (click)="ToLogin()">Login vereist!</button>
   }
 </ng-template>

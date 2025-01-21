@@ -8,12 +8,12 @@
     </div>
     <div>
       <a [routerLink]="'/shop/checkout'" class="button button-sm button-outline-blue">
-        Winkelwagen ({{ this.cartCount$ | async }})
+        Winkelwagen ({{ cartCount$ | async }})
       </a>
     </div>
   </div>
 
-  @let shopItems = this.shopItems$ | async;
+  @let shopItems = shopItems$ | async;
   @if (shopItems && (shopItems.loading || shopItems.error)) {
     <app-loading-indicator [isLoading]="shopItems.loading" [isErrored]="shopItems.error !== null"
                            [title]="'Producten aan het laden'" />

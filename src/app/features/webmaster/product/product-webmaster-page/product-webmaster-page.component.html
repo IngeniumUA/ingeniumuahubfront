@@ -1,6 +1,6 @@
 <section class="staffSection">
     <h1>Product Detail</h1>
-    <ng-container *ngIf="this.productBlueprint$ | async as blueprint">
+    <ng-container *ngIf="productBlueprint$ | async as blueprint">
         <app-product-blueprint-detail [productBlueprint]="blueprint" (updateProduct)="UpdateProduct($event)"></app-product-blueprint-detail>
     </ng-container>
 </section>

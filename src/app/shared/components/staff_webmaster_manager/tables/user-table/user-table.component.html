@@ -11,11 +11,11 @@
     <h3 class="text-blue-900">Extra search params</h3>
     <p>Groups</p>
     <button class="font-bold" (click)="AddGroupField()">Add New</button>
-    <form [formGroup]="this.searchForm">
+    <form [formGroup]="searchForm">
       <div class="flex flex-row w-12" *ngFor="let control of searchForm.controls['groupsControl'].controls; index as i">
           <select [formControl]="control">
             <option [ngValue]="null">Choose group</option>
-            <ng-container *ngIf="(this.groups$ | async) as groups else loading">
+            <ng-container *ngIf="(groups$ | async) as groups else loading">
               <option *ngFor="let group of groups" [ngValue]="group.id" style="color: var(--mainblue)">
                 {{ group.name }}
               </option>
@@ -31,19 +31,19 @@
       <button class="button button-primary button-inline" (click)="DownloadData()">Download</button>
     </section>
 
-  <ng-container *ngIf="(this.userData$ | async) as userTable else loading">
-    <ng-container *ngIf="this.userStats$ | async as userCount">
+  <ng-container *ngIf="(userData$ | async) as userTable else loading">
+    <ng-container *ngIf="userStats$ | async as userCount">
     <mat-paginator
       [length]="userCount"
       [pageSize]="100"
-      [pageIndex]="this.pageIndex"
+      [pageIndex]="pageIndex"
       (page)="LoadData($event)"
       showFirstLastButtons
       aria-label="Select which cards">
     </mat-paginator>
 
     <table mat-table [dataSource]="userTable" class="mat-elevation-z8">
-    <form [formGroup]="this.columnSearchForm">
+    <form [formGroup]="columnSearchForm">
       <ng-container matColumnDef="uuid">
         <th mat-header-cell *matHeaderCellDef>
           <div>

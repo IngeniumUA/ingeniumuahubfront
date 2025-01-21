@@ -5,19 +5,19 @@
     <button class="button button-primary button-inline" (click)="DownloadData()">Download</button>
   </section>
 
-  <ng-container *ngIf="(this.interactionData$ | async) as interactionTable else loading">
-  <ng-container *ngIf="this.interactionCount$ | async as interactionCount">
+  <ng-container *ngIf="(interactionData$ | async) as interactionTable else loading">
+  <ng-container *ngIf="interactionCount$ | async as interactionCount">
     <mat-paginator
       [length]="interactionCount"
       [pageSize]="100"
       (page)="LoadData($event)"
-      [pageIndex]="this.pageIndex"
+      [pageIndex]="pageIndex"
       showFirstLastButtons
       aria-label="Select which interactions">
     </mat-paginator>
 
     <table mat-table [dataSource]="interactionTable" class="mat-elevation-z8">
-      <form [formGroup]="this.columnSearchForm">
+      <form [formGroup]="columnSearchForm">
         <ng-container matColumnDef="interaction_id">
           <th mat-header-cell *matHeaderCellDef><div>
               ID<input class="w-3/4" type="text" placeholder="ID or UUID" [formControlName]="'idControl'"></div>

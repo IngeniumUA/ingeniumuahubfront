@@ -44,26 +44,26 @@
 
   <div class="my-4 flex flex-row gap-3">
     <button class="button button-primary w-1/6 button-inline"
-            [disabled]="this.loading"
-            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            [disabled]="loading"
+            [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="LoadData()">
       Refresh</button>
 
     <button class="button button-primary w-1/6 button-inline"
-            [disabled]="this.loading"
-            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            [disabled]="loading"
+            [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="Patch()">
       Update</button>
 
     <button class="button button-primary w-1/6 button-inline"
-            [disabled]="this.loading || checkout.checkout_status !== PaymentStatusEnum.successful"
-            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            [disabled]="loading || checkout.checkout_status !== PaymentStatusEnum.successful"
+            [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="Refund()">
       Refund</button>
 
     <button class="button button-primary w-1/6 button-inline"
-            [disabled]="this.loading"
-            [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+            [disabled]="loading"
+            [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
             (click)="SendEmail()">
       Send Email</button>
   </div>
@@ -76,7 +76,7 @@
 
 <section class="staffSection">
   <h1 class="text-blue-900">Transactions</h1>
-  <app-transaction-table [loadDataEvent]="this.transactionPatched" [checkout_id]="this.checkout_id"></app-transaction-table>
+  <app-transaction-table [loadDataEvent]="transactionPatched" [checkout_id]="checkout_id"></app-transaction-table>
 </section>
 
 <section class="staffSection">

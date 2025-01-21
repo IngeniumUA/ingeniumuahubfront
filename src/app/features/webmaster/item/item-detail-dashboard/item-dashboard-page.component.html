@@ -1,6 +1,6 @@
 <ng-container *ngIf="$itemDetail | async as item">
   <section class="staffSection">
-    <app-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)" />
+    <app-item-detail [item]="item" (itemUpdate)="UpdateItem($event)" />
   </section>
 
   @if (isPaymentItem(item.derived_type.derived_type_enum)) {
@@ -16,7 +16,7 @@
 
   @if (isInteractionOnlyItem(item.derived_type.derived_type_enum)) {
     <section class="staffSection">
-      <app-interaction-table [item_id]="this.item.item.id"></app-interaction-table>
+      <app-interaction-table [item_id]="item.item.id"></app-interaction-table>
     </section>
   }
 

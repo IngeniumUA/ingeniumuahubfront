@@ -1,11 +1,11 @@
 <ng-container *ngIf="$itemDetail | async as item">
 
 <section class="staffSection">
-  <app-item-detail [item]="item | asItemWide" (itemUpdate)="this.UpdateItem($event)" />
+  <app-item-detail [item]="item | asItemWide" (itemUpdate)="UpdateItem($event)" />
 </section>
 
 <section>
-  <app-interaction-table [item_id]="this.item.item.id"></app-interaction-table>
+  <app-interaction-table [item_id]="item.item.id"></app-interaction-table>
 </section>
 
 <section class="staffSection">
@@ -13,8 +13,8 @@
   <button class="bg-yellow-700 button button-primary button-inline"
           (click)="DisableItem(item.item.id)"
   >
-    <span class="text-white">{{ this.loadingDisable ? "Verwijderen ..." : "Verwijder" }}</span>
+    <span class="text-white">{{ loadingDisable ? "Verwijderen ..." : "Verwijder" }}</span>
   </button>
-  <p *ngIf="this.disableItemBuffer">Zeker?</p>
+  <p *ngIf="disableItemBuffer">Zeker?</p>
 </section>
 </ng-container>

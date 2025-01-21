@@ -1,4 +1,4 @@
-<ng-container *ngIf="(this.event$ | async) as event">
+<ng-container *ngIf="(event$ | async) as event">
 <section>
   <h2>Update Details</h2>
   <app-staff-event-edit [event]="event"></app-staff-event-edit>

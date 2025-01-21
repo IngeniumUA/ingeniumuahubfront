@@ -50,7 +50,7 @@
   </div>
 
   <!-- Previous transactions -->
-  <div *ngIf="(this.transactions$ | async) as transactions" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="">
+  <div *ngIf="(transactions$ | async) as transactions" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="">
     <div class="col-span-1 md:col-span-2 xl:col-span-4 -mb-6">
       <hr class="border-t border-gray-100 mb-4">
       <h2 class="white-section-title white-section-title-blue white-section-title--base" id="past-purchases">Vorige aankopen</h2>

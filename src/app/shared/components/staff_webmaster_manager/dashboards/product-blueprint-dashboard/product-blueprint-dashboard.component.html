@@ -1,5 +1,5 @@
 <section>
-    <ng-container *ngIf="this.$productBlueprint | async as tableStats"> <!-- ; let i = $index -->
+    <ng-container *ngIf="$productBlueprint | async as tableStats"> <!-- ; let i = $index -->
         <mat-table [dataSource]="tableStats">
             <!-- uuid Column -->
             <ng-container matColumnDef="product_id">
@@ -18,7 +18,7 @@
             <tr mat-header-row *matHeaderRowDef="['product_id', 'product_name', 'transactions_completed']"></tr>
             <tr mat-row *matRowDef="let row; columns: ['product_id', 'product_name', 'transactions_completed'];"></tr>
         </mat-table>
-      <br><span>Total: {{ this.calcTotal(tableStats) }}</span>
+      <br><span>Total: {{ calcTotal(tableStats) }}</span>
   </ng-container>
 </section>
 

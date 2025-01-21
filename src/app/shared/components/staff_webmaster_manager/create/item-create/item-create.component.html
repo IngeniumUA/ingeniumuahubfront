@@ -22,7 +22,7 @@
 </section>
 </form>
 
-<ng-container *ngIf="(this.$itemType | async ) as itemType">
+<ng-container *ngIf="($itemType | async ) as itemType">
 <form [formGroup]="eventCreateForm">
 <section *ngIf="itemType === 'eventitem'" class="flex flex-col gap-1 w-1/3">
   Eventsection
@@ -157,10 +157,10 @@
 
 <section class="flex flex-row gap-2">
   <button class="button button-primary w-1/6 button-inline"
-          [disabled]="this.loading"
-          [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null"
+          [disabled]="loading"
+          [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null"
           (click)="onSubmit(itemType)">
-    <span class="text-white">{{ this.loading ? "Processing .." : "Create" }}</span>
+    <span class="text-white">{{ loading ? "Processing .." : "Create" }}</span>
   </button>
   <button class="button button-primary w-1/6 button-inline"
           (click)="ToggleCreating.emit(true)">
@@ -168,4 +168,4 @@
   </button>
 </section>
 </ng-container>
-<span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
+<span class="error-message" *ngIf="form_error !== null">{{ form_error }}</span>

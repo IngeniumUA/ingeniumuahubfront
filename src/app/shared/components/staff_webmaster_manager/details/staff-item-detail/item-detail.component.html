@@ -1,5 +1,5 @@
 <h1>Itemdetail</h1>
-<section *ngIf="this.item.item as itemModel">
+<section *ngIf="item.item as itemModel">
   <h2>Core Item</h2>
   <form [formGroup]="itemForm">
     <span>
@@ -23,8 +23,8 @@
 
     <span>
       <app-availability-mixin-detail
-        (availabilityUpdated)="this.UpdateAvailability($event)"
-        [availability]="this.item.item.availability"
+        (availabilityUpdated)="UpdateAvailability($event)"
+        [availability]="item.item.availability"
       ></app-availability-mixin-detail>
     </span>
 
@@ -38,8 +38,8 @@
   </form>
 </section>
 
-<section *ngIf="this.isEventItem">
-  @let eventItemWide = this.item | asEventItemWide;
+<section *ngIf="isEventItem">
+  @let eventItemWide = item | asEventItemWide;
   <h2>Event Item</h2>
   <form [formGroup]="itemForm">
     <table>
@@ -63,17 +63,17 @@
     </table>
   </form>
   <br>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 0)" [displayMixin]="eventItemWide.derived_type.display"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="UpdateDisplayMixin($event, 0)" [displayMixin]="eventItemWide.derived_type.display"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="this.isShopItem">
-  @let shopItemWide = this.item | asShopItemWide;
+<section *ngIf="isShopItem">
+  @let shopItemWide = item | asShopItemWide;
   <h2>Shop Item</h2>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 1)" [displayMixin]="shopItemWide.derived_type.display"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="UpdateDisplayMixin($event, 1)" [displayMixin]="shopItemWide.derived_type.display"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="(this.isPromoItem)">
-  @let promoItemWide = this.item | asPromoItemWide;
+<section *ngIf="(isPromoItem)">
+  @let promoItemWide = item | asPromoItemWide;
   <h2>Promo Item</h2>
   <form [formGroup]="itemForm">
     <table>
@@ -83,17 +83,17 @@
       <tbody>
       <tr>
         <th>Type</th>
-        <td>{{ this.item.derived_type }}</td>
+        <td>{{ item.derived_type }}</td>
       </tr>
       </tbody>
     </table>
   </form>
   <br>
-  <app-display-mixin-detail (displayUpdate)="this.UpdateDisplayMixin($event, 2)" [displayMixin]="promoItemWide.derived_type.display"></app-display-mixin-detail>
+  <app-display-mixin-detail (displayUpdate)="UpdateDisplayMixin($event, 2)" [displayMixin]="promoItemWide.derived_type.display"></app-display-mixin-detail>
 </section>
 
-<section *ngIf="this.isCardItem">
-  <ng-container *ngIf="this.item | asCardItemWide as cardItemWide">
+<section *ngIf="isCardItem">
+  <ng-container *ngIf="item | asCardItemWide as cardItemWide">
   <h2>Card Item</h2>
   <table>
     <thead>
@@ -136,8 +136,8 @@
   </ng-container>
 </section>
 
-<section *ngIf="this.isNotificationItem">
-  <ng-container *ngIf="this.item | asNotificationItemWide as notificationItemWide">
+<section *ngIf="isNotificationItem">
+  <ng-container *ngIf="item | asNotificationItemWide as notificationItemWide">
     <h2>Notification Item</h2>
     <table>
       <thead>
@@ -162,8 +162,8 @@
 
   <button class="button button-primary button-inline"
           (click)="onSubmit()"
-          [disabled]="this.loading"
-          [ngStyle]="this.loading && {'background-color': 'var(--ingenium-blue)'} || null">
-    <span class="text-white">{{ this.loading ? "Updating ..." : "Update!" }}</span>
+          [disabled]="loading"
+          [ngStyle]="loading && {'background-color': 'var(--ingenium-blue)'} || null">
+    <span class="text-white">{{ loading ? "Updating ..." : "Update!" }}</span>
   </button>
 </section>

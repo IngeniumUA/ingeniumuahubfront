@@ -49,7 +49,7 @@
   <section class="ingenium-container" aria-labelledby="recommendations-title">
     <h2 id="recommendations-title" class="text-white mb-4">Uitgelicht</h2>
 
-    @let events = (this.homePageRec$ | async);
+    @let events = (homePageRec$ | async);
     @if (events && (events?.data?.length ?? 0) > 0) {
       <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
         @for (event of events.data; track event.name) {
@@ -73,7 +73,7 @@
   <section class="ingenium-container" aria-labelledby="jobs-title">
     <h2 id="jobs-title" class="text-white mb-4">Vacatures</h2>
 
-    @let recsysItems = (this.recsysItems$ | async);
+    @let recsysItems = (recsysItems$ | async);
     @if (recsysItems && recsysItems.length > 0) {
       <div class="event-card-list grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center gap-4">
         @for (item of recsysItems; track item.name) {

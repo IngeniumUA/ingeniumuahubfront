@@ -1,8 +1,8 @@
-<main *ngIf="!this.isSideNav" class="bg-blue-950 h-full flex flex-col">
+<main *ngIf="!isSideNav" class="bg-blue-950 h-full flex flex-col">
   <button class="m-1 button button-primary button-inline" (click)="toggleSideNav()">></button>
 </main>
 
-<main *ngIf="this.isSidenavInput && this.isSideNav" class="sidenav">
+<main *ngIf="isSidenavInput && isSideNav" class="sidenav">
   <div class="ingenium-container ingenium-container--no-padding-y h-full">
     <div class="flex flex-col md:flex-row h-full">
 
@@ -19,7 +19,7 @@
           -->
         </section>
 
-        <section *ngIf="this.isWebmaster$ | async">
+        <section *ngIf="isWebmaster$ | async">
           <a [routerLink]="['/web']" class="section-title">Webmaster</a>
           <a [routerLink]="['/web/user']" class="section-link">Users</a>
           <a [routerLink]="['/web/group']" class="section-link">Groups</a>

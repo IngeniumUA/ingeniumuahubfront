@@ -2,10 +2,10 @@
   <h4>Checkout</h4>
   <p>{{ checkout.date_completed | date }}</p>
   <ul class="list-disc list-inside">
-    <li *ngFor="let transaction of this.checkout.transactions">
+    <li *ngFor="let transaction of checkout.transactions">
       {{ transaction.purchased_product.name }} &mdash; &euro; {{ transaction.purchased_product.price_policy.price }}
     </li>
   </ul>
 
-  <span class="mt-2 block font-bold">Totaal: &euro; {{ this.checkout.amount }}</span>
+  <span class="mt-2 block font-bold">Totaal: &euro; {{ checkout.amount }}</span>
 </div>

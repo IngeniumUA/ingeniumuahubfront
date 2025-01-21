@@ -6,7 +6,7 @@
       <tbody>
       <tr>
         <th>Disabled</th>
-        <td>{{ this.availability.disabled }}</td>
+        <td>{{ availability.disabled }}</td>
       </tr>
       <tr>
           <th>Available</th>
@@ -38,14 +38,14 @@
       </option>
     </select>
 
-    @switch (this.currentPolicy) {
+    @switch (currentPolicy) {
       @case (AccessPolicyEnum.member_of_group) {
         <app-allow-deny-list (UpdateAccessPolicy)="updateAccessPolicy($event)"
-                             [access_policy_content]="this.availability.dynamic_policy_content?.access_policy_config | castToMemberOfGroup"></app-allow-deny-list>
+                             [access_policy_content]="availability.dynamic_policy_content?.access_policy_config | castToMemberOfGroup"></app-allow-deny-list>
       }
       @case (AccessPolicyEnum.access_key) {
         <app-access-key (UpdateAccessPolicy)="updateAccessPolicy($event)"
-                        [access_policy_content]="this.availability.dynamic_policy_content?.access_policy_config | castToAccessKey"></app-access-key>
+                        [access_policy_content]="availability.dynamic_policy_content?.access_policy_config | castToAccessKey"></app-access-key>
       }
       @default {
         <p>No content required!</p>

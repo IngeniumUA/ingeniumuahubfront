@@ -3,10 +3,10 @@
   <div class="flex flex-row gap-2 max-w-full mt-2 mb-2">
     <button *ngFor="let status of statusColumns"
             class="status-selector-button"
-            [ngClass]="status === this.selectedStatus ? 'status-button-selected': ''"
+            [ngClass]="status === selectedStatus ? 'status-button-selected': ''"
             (click)="SwitchStatusFilter(status)"
     >
-      <span [ngClass]="status === this.selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'">{{ PaymentStatusEnum[status] | titlecase }}</span>
+      <span [ngClass]="status === selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'">{{ PaymentStatusEnum[status] | titlecase }}</span>
       <span class="font-bold">{{ StatusToStats(status, statusStats) }}</span>
     </button>
   </div>
@@ -18,18 +18,18 @@
     <button class="button button-primary button-inline" (click)="DownloadData()">Download</button>
   </section>
 
-  <ng-container *ngIf="(this.transactionData$ | async) as transactionTable else loading">
+  <ng-container *ngIf="(transactionData$ | async) as transactionTable else loading">
     <mat-paginator
-      [length]="StatusToStats(this.selectedStatus, statusStats)"
+      [length]="StatusToStats(selectedStatus, statusStats)"
       [pageSize]="100"
-      [pageIndex]="this.pageIndex"
+      [pageIndex]="pageIndex"
       (page)="LoadData($event)"
       showFirstLastButtons
       aria-label="Select which cards">
     </mat-paginator>
 
     <table mat-table [dataSource]="transactionTable" class="mat-elevation-z8">
-    <form [formGroup]="this.searchForm">
+    <form [formGroup]="searchForm">
 
       <ng-container *ngIf="checkout_id === null" matColumnDef="checkout_uuid">
         <th mat-header-cell *matHeaderCellDef>Checkout</th>
