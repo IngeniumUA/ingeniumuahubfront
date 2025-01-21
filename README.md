@@ -15,6 +15,7 @@ This repository contains the Ionic project for the IngeniumUA mobile App.
 ### Installation
 1. Clone the repository
 2. Run `npm install` to install the dependencies
+3. Copy the `src/environments/environment.app_development.ts.example` to `src/environments.app_development.ts` and fill in the necessary values. This file is in a `.gitignore` so it won't (and shouldn't) be commited to the repository.
 
 ### Linter
 You can run `npm run lint` to lint the project.
@@ -29,15 +30,16 @@ If you want to run the app with live reload using the production environment, ad
 
 ## Building
 ### First time Building and Running
-1. Run `ionic build`
+1. Run `npm run build`
 2. Run `ionic cap sync`
 3. Run `ionic cap open android` or `ionic cap open ios`
 4. Press run on device in android studio or xcode
 
 ### Subsequent Building and Running
-1. Run `ionic cap sync`
-2. Run `ionic cap open android` or `ionic cap open ios`
-3. Press run on device in android studio or xcode
+1. Run `npm run build`
+2. Run `ionic cap sync`
+3. Run `ionic cap open android` or `ionic cap open ios`
+4. Press run on device in android studio or xcode
 
 ## Using the kippietools
 ### Setting version number
