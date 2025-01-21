@@ -8,10 +8,11 @@ import {User} from "@ingenium/app/core/store";
 import {Subject, takeUntil} from "rxjs";
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    imports: [RouterOutlet]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [RouterOutlet]
 })
 export class AppComponent implements OnInit {
   endSubscription = new Subject();

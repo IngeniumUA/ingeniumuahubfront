@@ -1,6 +1,6 @@
 import {Action, createSelector, NgxsOnInit, Selector, State, StateContext} from "@ngxs/store";
 import {CartActions, CartStateModel} from "@ingenium/app/core/store";
-import {Injectable} from "@angular/core";
+import {Inject, Injectable, PLATFORM_ID} from "@angular/core";
 import {ProductOutI, PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {removeItem} from "@ngxs/store/operators";
 
@@ -8,6 +8,7 @@ import {removeItem} from "@ngxs/store/operators";
 // @ts-expect-error
 import structuredClone from '@ungap/structured-clone';
 import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
+import {isPlatformBrowser} from "@angular/common";
 
 @State<CartStateModel>({
   name: 'cart',
@@ -20,14 +21,20 @@ import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
 })
 @Injectable()
 export class CartState implements NgxsOnInit {
-  constructor() {}
+  private readonly platformId: any;
+
+  constructor(@Inject(PLATFORM_ID) platformId: any) {
+    this.platformId = platformId;
+  }
 
   ngxsOnInit(ctx: StateContext<CartStateModel>): void {
-    const localStorageState = window.localStorage.getItem('cart-products');
-    if (localStorageState) {
-      ctx.patchState({
-        products: JSON.parse(localStorageState),
-      })
+    if (isPlatformBrowser(this.platformId)) {
+      const localStorageState = window.localStorage.getItem('cart-products');
+      if (localStorageState) {
+        ctx.patchState({
+          products: JSON.parse(localStorageState),
+        })
+      }
     }
   }
 

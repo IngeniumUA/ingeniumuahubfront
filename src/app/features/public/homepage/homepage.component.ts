@@ -22,9 +22,7 @@ export class HomepageComponent {
   recsysItems$: Observable<RecSysPreviewI[]> = of();
 
   constructor(private eventService: EventService, private promoService: PromoService) {
-    afterNextRender(() => { // Without this in pre-rendering we would get outdated data from the server
-      this.homePageRec$ = this.eventService.getEventsList();
-      this.recsysItems$ = this.promoService.getPromosList(8, 0);
-    });
+    this.homePageRec$ = this.eventService.getEventsList();
+    this.recsysItems$ = this.promoService.getPromosList(8, 0);
   }
 }
