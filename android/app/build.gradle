@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "development.com.app.ingeniumua"
+    namespace "test.development.com.app.ingeniumua"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "development.com.app.ingeniumua"
+        applicationId "test.development.com.app.ingeniumua"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 124

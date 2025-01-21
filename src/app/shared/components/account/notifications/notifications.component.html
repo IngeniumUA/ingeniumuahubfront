@@ -1,0 +1,33 @@
+<section class="pb-10">
+  <h2 class="white-section-title">Jouw Notificatie instellingen</h2>
+  <p>Wijzig hier jouw persoonlijke instellingen voor notificaties. Druk op Opslaan om je wijzigingen door te voeren.</p>
+
+  @if (loading_options) {
+    <app-loading-indicator [isLoading]="true" [isErrored]="false"
+                           [title]="'Notificatie opties aan het laden'" [message]="'We halen de mogelijke opties op'" />
+  } @else {
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" class="mt-6 w-full space-y-6">
+    <fieldset class="grid space-y-1.5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+
+      <div (click)="all_notifications_clicked()" class="form-field form-field-checkbox">
+        <input id="disableAllNotifications" type="checkbox" formControlName="disable_notifications">
+        <label for="disableAllNotifications">Schakel alle notificaties uit</label>
+      </div>
+
+      <div class="border-t border-gray-900/10 pt-2"></div>
+
+      <ng-container *ngFor="let itemWide of notificationList">
+        <div class="form-field form-field-checkbox">
+          <input id="{{(itemWide | asNotificationItemWide).item.id}}" type="checkbox" formControlName="{{(itemWide | asNotificationItemWide).item.id}}">
+          <label for="{{(itemWide | asNotificationItemWide).item.id}}">{{ itemWide.item.name }}</label>
+        </div>
+      </ng-container>
+
+    </fieldset>
+
+    <div class="form-field text-right">
+      <button type="submit" class="button button-danger" [disabled]="form.invalid || loading">Opslaan</button>
+    </div>
+  </form>
+  }
+</section>

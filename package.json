@@ -7,10 +7,11 @@
     "ng": "ng",
     "start": "ng serve",
     "build-revision-file": "ts-node -O '{\"module\": \"commonjs\"}' git.version.ts",
-    "build": "ng build",
+    "build": "ng build && npm run sentry:sourcemaps",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org ingeniumua --project ingeniumuahub-app ./www && sentry-cli sourcemaps upload --org ingeniumua --project ingeniumuahub-app ./www"
   },
   "private": true,
   "dependencies": {
@@ -35,6 +36,7 @@
     "@capacitor/core": "6.0.0",
     "@capacitor/filesystem": "^6.0.0",
     "@capacitor/haptics": "6.0.0",
+    "@capacitor/inappbrowser": "^1.0.3",
     "@capacitor/ios": "6.0.0",
     "@capacitor/keyboard": "6.0.0",
     "@capacitor/preferences": "^6.0.0",
@@ -45,7 +47,10 @@
     "@ionic/pwa-elements": "^3.2.2",
     "@ionic/storage-angular": "^4.0.0",
     "@ngxs/store": "^18.1.1",
-    "@sentry/angular": "^8.30.0",
+    "@sentry/angular": "8.42.0",
+    "@sentry/capacitor": "^1.1.0",
+    "@sentry/cli": "^2.41.0",
+    "@sentry/wizard": "^3.38.0",
     "@stripe/stripe-js": "^4.5.0",
     "@tailwindcss/forms": "^0.5.7",
     "@ungap/structured-clone": "^1.2.0",

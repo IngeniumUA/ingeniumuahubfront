@@ -96,6 +96,7 @@
             <a (click)="gotoPage('sub/account/transactions')" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 
             <button (click)="Logout()" type="button" class="nav-dropdown-item" role="menuitem">Afmelden</button>
+            <a (click)="gotoPage('sub/account/options-notifications')" class="nav-dropdown-item" role="menuitem">Notificatie opties</a>
 
             @let roles = (roles$ | async);
             @if (hasAnyRole(roles)) {

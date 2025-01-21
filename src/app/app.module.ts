@@ -20,7 +20,7 @@ import {PublicHeaderComponent} from './core/layout/public/header/public-header.c
 import {HomepageComponent} from './features/public/homepage/homepage.component';
 import {HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi} from '@angular/common/http';
 import {NotfoundpageComponent} from './features/notfoundpage/notfoundpage.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatButtonModule} from '@angular/material/button';
 import {JWTInterceptor} from './core/interceptors/jwt-interceptor.service';
@@ -75,34 +75,36 @@ export function storageFactory(): OAuthStorage {
     EventDatePipe,
   ],
   bootstrap: [AppComponent],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    IonicStorageModule.forRoot(),
-    PublicHeaderComponent,
-    PublicFooterComponent,
-    UnderConstructionComponent,
-    BrowserAnimationsModule,
-    CardComponent,
-    ReactiveFormsModule,
-    MatRadioModule,
-    MatButtonModule,
-    RecSysItemPreviewComponent,
-    PartnerBalkComponent,
-    PartnerDumpComponent,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    PartnerGridComponent,
-    PromoListComponent,
-    NgOptimizedImage,
-    OAuthModule.forRoot(),
-    NgxsModule.forRoot([UserState, CartState], {
-      developmentMode: isDevMode(),
-    }),
-    NgxsReduxDevtoolsPluginModule.forRoot({
-      disabled: !isDevMode(),
-    }),],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        IonicStorageModule.forRoot(),
+        PublicHeaderComponent,
+        PublicFooterComponent,
+        UnderConstructionComponent,
+        BrowserAnimationsModule,
+        CardComponent,
+        ReactiveFormsModule,
+        MatRadioModule,
+        MatButtonModule,
+        RecSysItemPreviewComponent,
+        PartnerBalkComponent,
+        PartnerDumpComponent,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        PartnerGridComponent,
+        PromoListComponent,
+        NgOptimizedImage,
+        OAuthModule.forRoot(),
+        NgxsModule.forRoot([UserState, CartState], {
+            developmentMode: isDevMode(),
+        }),
+        NgxsReduxDevtoolsPluginModule.forRoot({
+            disabled: !isDevMode(),
+        }),
+        FormsModule,
+    ],
   providers: [
     {
       provide: RouteReuseStrategy,

@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {LayoutService} from '@ingenium/app/core/services/layout/layout.service';
 import {ProductsService} from '@ingenium/app/core/services/coreAPI/products.service';
 import {BehaviorSubject, catchError, ignoreElements, Observable, of, shareReplay} from 'rxjs';
@@ -13,7 +14,6 @@ import {map} from "rxjs/operators";
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 import {currentPage} from "@app_services/page-tracking.service";
 import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
-import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-page',

@@ -63,7 +63,16 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
   interactionCount$: Observable<number> = of(0)
 
   GetDisplayedColumns(): string[] {
-    return ['interaction_id', 'user', 'item', 'interaction_type', 'last_updated_timestamp', 'created_timestamp'];
+    const columns = ['interaction_id', 'interaction_type', 'last_updated_timestamp', 'created_timestamp'];
+
+    // Add if not Input()
+    if (this.item_id === null) {
+      columns.splice(columns.indexOf('interaction_type'), 0, 'item');
+    }
+    if (this.user_id === null) {
+      columns.splice(columns.indexOf('interaction_type'), 0, 'user');
+    }
+    return columns
   }
 
   pageIndex: number = 0;
@@ -73,24 +82,6 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
     itemControl: new FormControl(''),
     interactionTypeControl: new FormControl('')
   });
-
-  LoadData(pageEvent: PageEvent | null = null) {
-    // Page behaviour
-    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
-    const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
-
-    // Transaction fetching
-    this.interactionData$ = this.interactionService.queryInteractions(
-      this.pageIndex * pageSize, pageSize, null,
-      this.user_id, this.item_id);
-
-    // Transactionstats
-    this.interactionCount$ = this.interactionService.getInteractionCount(null, this.user_id, this.item_id)
-  }
-
-  DownloadData() {
-
-  }
 
   ngOnInit() {
     this.LoadData();
@@ -102,6 +93,35 @@ export class InteractionTableComponent implements AfterViewInit, OnInit {
         this.LoadData();
       }
     );
+  }
+
+  LoadData(pageEvent: PageEvent | null = null) {
+    // Page behaviour
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
+
+    // Parse form
+    const interactionControlValue = this.columnSearchForm.get('idControl')!.value;
+    const interactionQuery = interactionControlValue === '' ? null: interactionControlValue;
+
+    const itemControlValue = this.columnSearchForm.get('itemControl')!.value;
+    const itemQuery = itemControlValue === '' ? null: itemControlValue;
+
+    const userControlValue = this.columnSearchForm.get('userControl')!.value;
+    const userQuery = userControlValue === '' ? null: userControlValue;
+
+    // Interaction fetching
+    this.interactionData$ = this.interactionService.queryInteractions(
+      this.pageIndex * pageSize, pageSize, null, interactionQuery,
+      this.user_id, this.item_id, itemQuery, userQuery);
+
+    // Interaction
+    this.interactionCount$ = this.interactionService.getInteractionCount(
+      null, interactionQuery, this.user_id, this.item_id, itemQuery, userQuery)
+  }
+
+  DownloadData() {
+
   }
 
   // ngOnChanges(changes: SimpleChanges) {
