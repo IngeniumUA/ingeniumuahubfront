@@ -98,7 +98,7 @@ def getversion():
         if data[i].startswith("        versionCode "):
             print("Version Code: " + data[i].replace("        versionCode ", "").replace("\n", ""))
         elif data[i].startswith("        versionName "):
-            print("Version Name: " + data[i].replace('        versionName ', "").replace("\n", ""))
+            print("Version Name: " + data[i].replace('        versionName ', "").replace("\n", "").replace('"', ''))
 
 
 @cli.command()
