@@ -55,10 +55,8 @@ export class NotificationsComponent  implements OnInit {
         this.notificationList = final_data
 
         this.storage.getWide("notifications_general")?.then((result) => {
-          console.log("general " + JSON.stringify(result));
           if (result !== undefined && result !== null) {
             let bool_result: boolean = result === "true"
-            console.log("bool " + bool_result)
             this.form.controls["disable_notifications"].setValue(bool_result)
             if (bool_result) {
               for (let notification of this.notificationList) {
@@ -72,7 +70,6 @@ export class NotificationsComponent  implements OnInit {
           }
         })
         this.storage.getWide("notifications")?.then((stored_notification_options) =>{
-          console.log("specific " + JSON.stringify(stored_notification_options));
           if (stored_notification_options !== undefined && stored_notification_options !== null) {
             stored_notification_options = JSON.parse(stored_notification_options);
             let stored_option: keyof typeof stored_notification_options;
