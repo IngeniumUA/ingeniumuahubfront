@@ -23,7 +23,7 @@ jobs:
           node-version: 18.x
 
       - name: Install app dependencies
-        run: npm install && npm install -g @ionic/cli
+        run: npm install
 
       - name: setup Python
         uses: actions/setup-python@v5
@@ -37,7 +37,7 @@ jobs:
         run: python kippietools setmode -m release
 
       - name: Build app
-        run: ionic build
+        run: npm run build
 
       - name: Capacitor sync
         run: npx cap sync
@@ -108,10 +108,10 @@ jobs:
           node-version: 18.x
 
       - name: Install app dependencies
-        run: npm install && npm install -g @ionic/cli
+        run: npm install
 
       - name: Build project app
-        run: ionic build
+        run: npm run build
 
       - name: Capacitor sync
         run: npx cap sync
