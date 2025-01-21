@@ -12,18 +12,19 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CartFailedI, FailedProductI} from "@ingenium/app/shared/models/cart/cartI";
 
 @Component({
-    selector: 'app-shoppingcart-list',
-    templateUrl: './shoppingcart-list.component.html',
-    styleUrls: ['./shoppingcart-list.component.scss'],
-    imports: [
-        NgForOf,
-        NgIf,
-        RouterLink,
-        AsyncPipe,
-        ReactiveFormsModule,
-        FormsModule,
-        KeyValuePipe,
-    ]
+  selector: 'app-shoppingcart-list',
+  templateUrl: './shoppingcart-list.component.html',
+  styleUrls: ['./shoppingcart-list.component.scss'],
+  standalone: true,
+  imports: [
+    NgForOf,
+    NgIf,
+    RouterLink,
+    AsyncPipe,
+    ReactiveFormsModule,
+    FormsModule,
+    KeyValuePipe,
+  ]
 })
 export class ShoppingcartListComponent implements OnInit {
   products$: Observable<ProductOutI[]> = this.store.select(CartState.getProducts);

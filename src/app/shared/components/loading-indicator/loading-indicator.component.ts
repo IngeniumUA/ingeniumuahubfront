@@ -2,12 +2,13 @@ import {Component, Input} from '@angular/core';
 import {NgIf} from "@angular/common";
 
 @Component({
-    selector: 'app-loading-indicator',
-    imports: [
-        NgIf
-    ],
-    templateUrl: './loading-indicator.component.html',
-    styleUrl: './loading-indicator.component.scss'
+  selector: 'app-loading-indicator',
+  imports: [
+    NgIf
+  ],
+  templateUrl: './loading-indicator.component.html',
+  styleUrl: './loading-indicator.component.scss',
+  standalone: true
 })
 export class LoadingIndicatorComponent {
   @Input() isLoading: boolean = false;

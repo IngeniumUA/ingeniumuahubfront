@@ -14,6 +14,7 @@ import {TemplatePageTitleStrategy} from "@ingenium/app/shared/others/PageTitleSt
 import {WalletRedirectComponent} from "@ingenium/app/features/public/wallet-redirect/wallet-redirect.component";
 import {GalabalComponent} from "@ingenium/app/features/public/custom-pages/galabal/galabal.component";
 
+import {routes as InfoRoutes} from '@ingenium/app/features/public/info/info.routes';
 
 const routes: Routes = [
   // Homepages
@@ -35,7 +36,10 @@ const routes: Routes = [
       {path: 'shop', title: 'Shop', loadChildren: () => import('src/app/features/public/shop/shop.module').then(x => x.ShopModule)},
 
       // Info
-      {path: 'info', loadChildren: () => import('src/app/features/public/info/info.module').then(x => x.InfoModule)},
+      {
+        path: 'info',
+        children: InfoRoutes
+      },
       {path: 'over-ons', redirectTo: 'info', pathMatch: 'full'},
       {path: 'praesidium', redirectTo: 'info/praesidium', pathMatch: 'prefix'},
       {path: 'partners', redirectTo: 'info/partners', pathMatch: 'full'},

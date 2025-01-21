@@ -6,19 +6,20 @@ import {ColordbrgbaPipe} from '@ingenium/app/shared/pipes/item/colorpipe.pipe';
 import {calcIntensity} from "@ingenium/app/shared/pipes/item/colorIntensity";
 
 @Component({
-    selector: 'app-rec-sys-item-preview',
-    templateUrl: './rec-sys-item-preview.component.html',
-    styleUrls: ['./rec-sys-item-preview.component.css'],
-    imports: [
-        DatePipe,
-        NgStyle,
-        RouterLink,
-        ColordbrgbaPipe,
-        NgIf,
-        NgClass,
-        NgTemplateOutlet,
-        NgOptimizedImage
-    ]
+  selector: 'app-rec-sys-item-preview',
+  templateUrl: './rec-sys-item-preview.component.html',
+  styleUrls: ['./rec-sys-item-preview.component.css'],
+  standalone: true,
+  imports: [
+    DatePipe,
+    NgStyle,
+    RouterLink,
+    ColordbrgbaPipe,
+    NgIf,
+    NgClass,
+    NgTemplateOutlet,
+    NgOptimizedImage
+  ]
 })
 export class RecSysItemPreviewComponent implements OnInit {
     @Input() recsysItem!: RecSysPreviewI;

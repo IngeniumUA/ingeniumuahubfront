@@ -56,11 +56,6 @@ bootstrapApplication(AppComponent, {
             provide: Sentry.TraceService,
             deps: [Router],
         },
-        provideAppInitializer(() => {
-            const initializerFn = (() => () => {
-            })(inject(Sentry.TraceService));
-            return initializerFn();
-        }),
         { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
         {
             provide: OAuthStorage, useFactory: () => {

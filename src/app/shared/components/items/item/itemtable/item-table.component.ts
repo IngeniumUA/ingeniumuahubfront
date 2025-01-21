@@ -7,17 +7,18 @@ import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 
 
 @Component({
-    selector: 'app-itemtable',
-    templateUrl: './itemtable.component.html',
-    styleUrls: ['./itemtable.component.css'],
-    imports: [
-        AsyncPipe,
-        NgFor,
-        RouterLink,
-        NgIf
-    ]
+  selector: 'app-item-table',
+  templateUrl: './item-table.component.html',
+  styleUrls: ['./item-table.component.css'],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    NgFor,
+    RouterLink,
+    NgIf
+  ]
 })
-export class ItemtableComponent implements OnInit {
+export class ItemTableComponent implements OnInit {
   constructor(private itemService: ItemService) {
   }
   items$!: Observable<ItemI[]>;

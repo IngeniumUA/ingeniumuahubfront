@@ -10,19 +10,18 @@ interface PartnerDisplay {
 }
 
 @Component({
-    selector: 'app-partner-grid',
-    templateUrl: './partner-grid.component.html',
-    styleUrls: ['./partner-grid.component.scss'],
-    imports: [
-        RecSysItemPreviewComponent,
-        NgForOf,
-        AsyncPipe
-    ]
+  selector: 'app-partner-grid',
+  templateUrl: './partner-grid.component.html',
+  styleUrls: ['./partner-grid.component.scss'],
+  standalone: true,
+  imports: [
+    RecSysItemPreviewComponent,
+    NgForOf,
+    AsyncPipe
+  ]
 })
 export class PartnerGridComponent {
-
-  constructor(private partnerService: PartnerService) {
-  }
+  constructor(private partnerService: PartnerService) { }
 
   partnerLogos$: Observable<string[]> = this.partnerService.getCurrentPartnerLogos()
   // partners: Observable<RecSysPreviewI[]> = this.httpClient.get<RecSysPreviewI[]>("/assets/temp_partner_config/partners.json");

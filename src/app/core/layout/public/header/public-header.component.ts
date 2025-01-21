@@ -9,19 +9,21 @@ import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 
 @Component({
-    selector: 'app-layout-public-header', // HTML tag for importing ( see app.component.html )
-    templateUrl: './public-header.component.html',
-    styleUrls: ['./public-header.component.scss'], // Allows it to be imported outside of routing
-    imports: [
-        NgIf,
-        RouterLink,
-        NgTemplateOutlet,
-        NgClass,
-        NgStyle,
-        NgOptimizedImage,
-        RouterLinkActive,
-        AsyncPipe,
-    ]
+  selector: 'app-layout-public-header', // HTML tag for importing ( see app.component.html )
+  templateUrl: './public-header.component.html',
+  styleUrls: ['./public-header.component.scss'],
+  standalone: true,
+  // Allows it to be imported outside of routing
+  imports: [
+    NgIf,
+    RouterLink,
+    NgTemplateOutlet,
+    NgClass,
+    NgStyle,
+    NgOptimizedImage,
+    RouterLinkActive,
+    AsyncPipe,
+  ]
 })
 export class PublicHeaderComponent {
   mobileMenuOpen: boolean = false;

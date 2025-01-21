@@ -1,16 +1,25 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Observable, of, Subject, takeUntil} from 'rxjs';
 import {PraesidiumGroupI} from "@ingenium/app/shared/models/praesidium";
 
 import praesidium from "@ingenium/app/shared/data/praesidium";
 import {Title} from "@angular/platform-browser";
+import {AsyncPipe, NgClass, NgIf} from "@angular/common";
+import {PublicHeaderComponent} from "@ingenium/app/core/layout/public/header/public-header.component";
 
 @Component({
-    selector: 'app-page',
-    templateUrl: './praesidium-info.component.html',
-    styleUrls: ['./praesidium-info.component.scss'],
-    standalone: false
+  selector: 'app-page',
+  templateUrl: './praesidium-info.component.html',
+  styleUrls: ['./praesidium-info.component.scss'],
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    RouterLink,
+    NgIf,
+    NgClass,
+    PublicHeaderComponent
+  ]
 })
 export class PraesidiumInfoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,

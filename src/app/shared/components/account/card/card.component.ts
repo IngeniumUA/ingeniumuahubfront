@@ -8,17 +8,18 @@ import {CardItemWideLimitedI, CardMembershipEnum} from "@ingenium/app/shared/mod
 import {ToastrService} from "ngx-toastr";
 
 @Component({
-    selector: 'app-card',
-    templateUrl: './card.component.html',
-    styleUrls: ['./card.component.css'],
-    imports: [
-        RouterLink,
-        NgIf,
-        AsyncPipe,
-        ReactiveFormsModule,
-        NgClass,
-        TitleCasePipe
-    ]
+  selector: 'app-card',
+  templateUrl: './card.component.html',
+  styleUrls: ['./card.component.css'],
+  standalone: true,
+  imports: [
+    RouterLink,
+    NgIf,
+    AsyncPipe,
+    ReactiveFormsModule,
+    NgClass,
+    TitleCasePipe
+  ]
 })
 export class CardComponent implements OnInit {
   @Input() is_lid: boolean = false;
