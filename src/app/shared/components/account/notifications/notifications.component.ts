@@ -32,6 +32,7 @@ export class NotificationsComponent  implements OnInit {
 
   notificationList: ItemWideLimitedI[] = [];
   loading_options = true
+  all_topic: string = ""
 
   public ionViewWillEnter() {
     this.ngOnInit()
@@ -45,9 +46,11 @@ export class NotificationsComponent  implements OnInit {
         let form_data: any = {disable_notifications: [false, Validators.required]}
 
         for (let notification of data) {
-          if (notification.item.name !== "Notify Everyone") {
+          if (notification.derived_type.derived_type_enum === "notificationitem" && notification.derived_type.notification_topic !== "all") {
             final_data.push(notification);
             form_data["" + notification.item.id] = [false, Validators.required]
+          } else {
+            this.all_topic = ""+notification.item.id
           }
         }
         this.form = this.formBuilder.group(form_data);
@@ -111,7 +114,7 @@ export class NotificationsComponent  implements OnInit {
     this.loading = true;
     let notificationDetails: any = {}
     for (let notification of this.notificationList) {
-      if (notification.item.name === "Notify Everyone") {
+      if (notification.derived_type.derived_type_enum === "notificationitem" && notification.derived_type.notification_topic === "all") {
         const index = this.notificationList.indexOf(notification, 0);
         if (index > -1) {
           this.notificationList.splice(index, 1);
@@ -125,12 +128,12 @@ export class NotificationsComponent  implements OnInit {
 
     let option: keyof typeof notificationDetails;
     if (this.form.controls['disable_notifications'].value) {
-      this.notificationService.unsubscribe_from_topic("11").subscribe()
+      this.notificationService.unsubscribe_from_topic(this.all_topic).subscribe()
       for (option in notificationDetails) {
         this.notificationService.unsubscribe_from_topic(option).subscribe()
       }
     } else {
-      this.notificationService.subscribe_to_topic("11").subscribe()
+      this.notificationService.subscribe_to_topic(this.all_topic).subscribe()
       for (option in notificationDetails) {
         if (notificationDetails[option]) {
           this.notificationService.subscribe_to_topic(option).subscribe()

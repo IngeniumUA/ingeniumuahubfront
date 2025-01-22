@@ -4,11 +4,15 @@ import {EventItemI, EventItemInI, EventItemLimitedI} from "@ingenium/app/shared/
 import {ShopItemI, ShopItemInI, ShopItemLimitedI} from "@ingenium/app/shared/models/item/shopI";
 import {CardItemI, CardItemInI} from "@ingenium/app/shared/models/item/cardI";
 import {LinkItemI, LinkItemInI} from "@ingenium/app/shared/models/item/linkI";
-import {NotificationItemI, NotificationItemInI} from "@ingenium/app/shared/models/item/hubNotificationItemI";
+import {
+  NotificationItemI,
+  NotificationItemInI,
+  NotificationItemLimitedI
+} from "@ingenium/app/shared/models/item/hubNotificationItemI";
 
 export interface ItemWideLimitedI {
   item: ItemLimitedI
-  derived_type: EventItemLimitedI | ShopItemLimitedI | PromoItemLimitedI // Notification and link to be added
+  derived_type: EventItemLimitedI | ShopItemLimitedI | PromoItemLimitedI | NotificationItemLimitedI
 }
 
 export interface ItemWideInI {

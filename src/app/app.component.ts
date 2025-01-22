@@ -10,10 +10,11 @@ import {OAuthService} from "angular-oauth2-oidc";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {NavigationEnd, Router} from "@angular/router";
 import {Store} from "@ngxs/store";
-import {User, UserState} from "@ingenium/app/core/store";
+import {User} from "@ingenium/app/core/store";
 import {Subject, takeUntil} from "rxjs";
-import {CapacitorHttp} from "@capacitor/core";
 import {AppFunctionsService} from "@app_services/app-functions.service";
+import {first} from "rxjs/operators";
+import {NotificationService} from "@ingenium/app/core/services/coreAPI/item/derived_services/notification.service";
 
 @Component({
   selector: 'app-root',
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit {
               private zone: NgZone,
               private pageTrackService: PageTrackingService,
               private navCtrl: NavController,
-              private appFunctionsService: AppFunctionsService,) {
+              private appFunctionsService: AppFunctionsService,
+              private notificationService: NotificationService) {
     oauthService.configure(apiEnviroment.oauthConfig);
     oauthService.loadDiscoveryDocument().then();
     this.preloadAudio().then();
@@ -117,7 +119,7 @@ export class AppComponent implements OnInit {
     PushNotifications.addListener('registration', (token: Token) => {
       console.log('Push registration success, token: ' + token.value);
       notification_token = token.value;
-      this.subscribe_to_topic(token.value, "11")
+      this.get_all_possible_notifications()
     });
 
     // Some issue with our setup and push will not work
@@ -139,23 +141,34 @@ export class AppComponent implements OnInit {
 
   gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
 
-  async subscribe_to_topic(token: string, topic: string) {
+  get_all_possible_notifications() {
+    this.storage.getWide("notifications_general")?.then((result) => {
+      if (result === undefined || result === null || result === "false") {
+          this.notificationService.queryNotification().pipe(first()).subscribe({
+            next: data => {
 
-    try {
-      const param = {
-        token: token
+              this.storage.getWide("notifications")?.then((stored_notification_options) =>{
+                if (stored_notification_options !== undefined && stored_notification_options !== null) {
+                  stored_notification_options = JSON.parse(stored_notification_options);
+                  let stored_option: keyof typeof stored_notification_options;
+                  for (let item of data) {
+                    let is_in_storage = false
+                    for (stored_option in stored_notification_options) {
+                      if (""+item.item.id === stored_option) {
+                        is_in_storage = true
+                        break
+                      }
+                    }
+                    if (!is_in_storage && item.derived_type.derived_type_enum === "notificationitem" && item.derived_type.default_subscription) {
+                      this.notificationService.subscribe_to_topic(""+item.item.id).subscribe()
+                    }
+                  }
+                }
+              });
+            }
+          })
       }
-      const options = {
-        url: apiEnviroment.apiUrl + "item/notification/subscribe/" + topic,
-        headers: {Authorization: `Bearer ${this.store.selectSnapshot(UserState.token)}`, 'Content-Type': "application/json"},
-        data: param
-      }
-      await CapacitorHttp.post(options);
-
-    } catch (error) {
-      console.log(error)
-    }
-
+    })
   }
 
 }
