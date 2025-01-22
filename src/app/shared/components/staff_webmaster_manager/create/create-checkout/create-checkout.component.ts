@@ -18,6 +18,7 @@ import {CheckoutInI} from "@ingenium/app/shared/models/payment/checkout/hubCheck
 import {ValidityEnum, ValidityList} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
 import {CheckoutService} from "@ingenium/app/core/services/coreAPI/payment/checkout.service";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
+import {ToastrService} from "ngx-toastr";
 
 
 @Component({
@@ -42,7 +43,8 @@ export class CreateCheckoutComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private productBlueprintService: ProductBlueprintService,
-              private checkoutService: CheckoutService) {
+              private checkoutService: CheckoutService,
+              private toastrService: ToastrService,) {
   }
 
   loading = false;
@@ -145,17 +147,22 @@ export class CreateCheckoutComponent implements OnInit {
       note: null
     };
 
+    this.loading = true;
     this.checkoutService.postCheckout(checkoutObj, forceCreate, sendMail, createMissingUser).subscribe(
       () => {
+        this.loading = false;
         this.checkoutCreated.emit(true);
+        this.toastrService.success("Checkout created")
       },
       (err: Error) => {
+        this.loading = false;
         this.handleError(err);
       }
     );
   }
 
   public handleError(error: Error | ValidationErrors, isFormError: boolean = false) {
+    this.toastrService.error(error.message);
     if (error instanceof HttpErrorResponse) {
       if (error.status == 404) {
         if (!this.userNotInAPI) {

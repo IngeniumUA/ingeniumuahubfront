@@ -13,9 +13,6 @@ import {ToastrService} from "ngx-toastr";
 export class ItemDashboardPageComponent implements OnInit {
 
   $itemDetail: Observable<ItemWideI| null> = of(null);
-
-  addingCheckout: boolean = false;
-
   itemId!: number | string;
 
   constructor(private itemWideService: ItemWideService,
@@ -34,17 +31,12 @@ export class ItemDashboardPageComponent implements OnInit {
       return;
     }
     this.itemId = id;
-
-
     this.$itemDetail = this.itemWideService.getItem(this.itemId);
   }
 
   UpdateItem(item: ItemWideI) {
     this.$itemDetail = this.itemWideService.putItem(item.item.id, item);
   }
-
-  disableItemBuffer: boolean = false;
-  loadingDisable: boolean = false;
 
   public DeleteItem(itemId: number) {
     this.itemWideService.deleteItem(itemId).subscribe({
@@ -62,11 +54,11 @@ export class ItemDashboardPageComponent implements OnInit {
     })
   }
 
-  ToggleAddingCheckout() {
-    this.addingCheckout = !this.addingCheckout;
+  public isPaymentItem(derived_item_enum: string): boolean {
+    return derived_item_enum === "eventitem" || derived_item_enum === "shoptitem";
   }
 
-  refetchTable(_reload: boolean) {
-    this.ToggleAddingCheckout();
+  public isInteractionOnlyItem(derived_item_enum: string): boolean {
+    return derived_item_enum === "promoitem" || derived_item_enum === "carditem" || derived_item_enum === "notificationitem" || derived_item_enum === "linkitem";
   }
 }

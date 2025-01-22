@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, JsonPipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {DisplayMixinDetailComponent} from '../display-mixin-detail/display-mixin-detail.component';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
@@ -9,7 +9,7 @@ import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompo
 import {EventItemI, isEventItem} from '@ingenium/app/shared/models/item/eventI';
 import {
   AsCardItemWide,
-  AsEventItemWide,
+  AsEventItemWide, AsNotificationItemWide,
   AsPromoItemWide,
   AsShopItemWide
 } from "@ingenium/app/shared/pipes/item/itemWidePipes";
@@ -22,6 +22,7 @@ import {
   AvailabilityMixinDetailComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
+import { isNotificationItem } from '@ingenium/app/shared/models/item/hubNotificationItemI';
 
 @Component({
   selector: 'app-item-detail',
@@ -41,7 +42,9 @@ import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availab
     AvailabilityMixinDetailComponent,
     AsShopItemWide,
     AsPromoItemWide,
-    AsEventItemWide
+    AsEventItemWide,
+    AsNotificationItemWide,
+    JsonPipe
   ],
   standalone: true,
   providers: [DatePipe]
@@ -57,6 +60,7 @@ export class ItemDetailComponent implements OnInit{
   isPromoItem: boolean = false;
   isCardItem: boolean = false;
   isLinkItem: boolean = false;
+  isNotificationItem: boolean = false;
 
   form_error: string | null = null;
   loading: boolean = false;
@@ -71,6 +75,7 @@ export class ItemDetailComponent implements OnInit{
     this.isPromoItem = this.item.derived_type.derived_type_enum === "promoitem" && "display" in this.item.derived_type;
     this.isCardItem = this.item.derived_type.derived_type_enum === "carditem";
     this.isLinkItem = this.item.derived_type.derived_type_enum === "linkitem";
+    this.isNotificationItem = this.item.derived_type.derived_type_enum === "notificationitem";
 
     // Setting up form
     this.itemForm = this.formBuilder.group({
@@ -85,6 +90,9 @@ export class ItemDetailComponent implements OnInit{
         this.datePipe.transform(this.item.derived_type.event_end, 'yyyy-MM-ddThh:mm')));
     }
 
+    if (isNotificationItem(this.item.derived_type)) {
+      this.itemForm.addControl('default_subscription', new FormControl(this.item.derived_type.default_subscription))
+    }
     // Promo
     // if (this.isPromoItem) {
     //
@@ -116,6 +124,16 @@ export class ItemDetailComponent implements OnInit{
           event_end: this.itemForm.controls['end_date'].value,
           event_metadata: (this.item.derived_type as EventItemI).event_metadata
         };
+      }
+    }
+    if (this.isNotificationItem) {
+      if ("notification_topic" in this.item.derived_type) {
+        this.item.derived_type = {
+          derived_type_enum: 'notificationitem',
+          notification_topic: this.item.derived_type.notification_topic,
+          default_subscription: this.itemForm.controls['default_subscription'].value,
+          notification_template: this.item.derived_type.notification_template
+        }
       }
     }
     // if (this.isPromoItem) {

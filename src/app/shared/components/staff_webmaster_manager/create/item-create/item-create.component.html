@@ -135,8 +135,7 @@
 </section>
 
 <section *ngIf="itemType === 'linkitem'" class="flex flex-col gap-1 w-1/3">
-  Linksection
-
+  Link Section
   <form [formGroup]="linkCreateForm">
     <label class="hubformfield-white">
       <input type="text" formControlName="link_identifier" placeholder="aaaa"/>
@@ -146,6 +145,15 @@
     </label>
   </form>
 </section>
+
+  <section *ngIf="itemType === 'notificationitem'" class="flex flex-col gap-1 w-1/3">
+    Notification Section
+    <form [formGroup]="notificationCreateForm">
+      <label class="hubformfield-white">
+        <input type="text" formControlName="notification_topic" placeholder="Kippie"/>
+      </label>
+    </form>
+  </section>
 
 <section class="flex flex-row gap-2">
   <button class="button button-primary w-1/6 button-inline"

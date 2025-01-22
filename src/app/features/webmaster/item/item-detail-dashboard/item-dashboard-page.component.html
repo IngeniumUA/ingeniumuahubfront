@@ -1,50 +1,26 @@
 <ng-container *ngIf="$itemDetail | async as item">
-
-<section class="staffSection">
-  <app-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)" />
-</section>
-
-@if (item.derived_type.derived_type_enum === 'promoitem') {
-
-} @else if (item.derived_type.derived_type_enum === 'carditem') {
-
-} @else if (item.derived_type.derived_type_enum === 'linkitem') {
-
-} @else {
   <section class="staffSection">
-    <h1>Product Blueprints</h1>
-    <app-product-blueprint-dashboard [item]="item.item" />
+    <app-item-detail [item]="item" (itemUpdate)="this.UpdateItem($event)" />
   </section>
 
-  <section class="staffSection">
-    <app-checkout-and-transaction-dashboard [item_id]="item.item.id" />
-  </section>
+  @if (isPaymentItem(item.derived_type.derived_type_enum)) {
+    <section class="staffSection">
+      <h1>Product Blueprints</h1>
+      <app-product-blueprint-dashboard [item]="item.item" />
+    </section>
+
+    <section class="staffSection">
+      <app-checkout-and-transaction-dashboard [item_id]="item.item.id" />
+    </section>
+  }
+
+  @if (isInteractionOnlyItem(item.derived_type.derived_type_enum)) {
+    <section class="staffSection">
+      <app-interaction-table [item_id]="this.item.item.id"></app-interaction-table>
+    </section>
+  }
 
   <section class="staffSection">
-    <h2>Add Checkout</h2>
-    <ng-container  *ngIf="addingCheckout">
-      <app-create-checkout [item_id]="item.item.id" (checkoutCreated)="refetchTable($event)" />
-      <button class="button button-primary w-1/6 button-inline"
-              (click)="ToggleAddingCheckout()">
-        Cancel
-      </button>
-    </ng-container>
-    <ng-container *ngIf="!addingCheckout">
-      <button class="button button-primary w-1/6 button-inline"
-              (click)="ToggleAddingCheckout()">
-        Add Checkout
-      </button>
-    </ng-container>
+    <app-delete-button (deleteEvent)="DeleteItem(item.item.id)"></app-delete-button>
   </section>
-}
-
-@if (item.derived_type.derived_type_enum === 'carditem' || item.derived_type.derived_type_enum === 'linkitem') {
-  <section class="staffSection">
-    <app-interaction-table [item_id]="this.item.item.id"></app-interaction-table>
-  </section>
-}
-
-<section class="staffSection">
-  <app-delete-button (deleteEvent)="DeleteItem(item.item.id)"></app-delete-button>
-</section>
 </ng-container>

@@ -1,7 +1,10 @@
 import {Component, Input} from '@angular/core';
 import {TransactionTableComponent} from '../../tables/transaction-table/transaction-table.component';
 import {CheckoutTableComponent} from '../../tables/checkout-table/checkout-table.component';
-import {NgClass, NgIf, NgStyle} from '@angular/common';
+import {NgClass} from '@angular/common';
+import {
+  CreateCheckoutComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-checkout/create-checkout.component";
 
 @Component({
   selector: 'app-checkout-and-transaction-dashboard',
@@ -10,9 +13,8 @@ import {NgClass, NgIf, NgStyle} from '@angular/common';
   imports: [
     TransactionTableComponent,
     CheckoutTableComponent,
-    NgIf,
     NgClass,
-    NgStyle
+    CreateCheckoutComponent
   ],
   standalone: true
 })
@@ -23,6 +25,7 @@ export class CheckoutAndTransactionDashboardComponent {
   @Input() loadDataEvent: boolean = false;
 
   selectedTable: string = 'checkouts';
+  addingCheckout: boolean = false;
 
   SetTable(table_name: string) {
     this.selectedTable = table_name;
@@ -33,5 +36,13 @@ export class CheckoutAndTransactionDashboardComponent {
       return 'table-selected';
     }
     return 'table-unselected';
+  }
+
+  refetchTable(_reload: boolean) {
+    this.ToggleAddingCheckout();
+  }
+
+  ToggleAddingCheckout() {
+    this.addingCheckout = !this.addingCheckout;
   }
 }
