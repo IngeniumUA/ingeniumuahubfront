@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DatePipe, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, JsonPipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {DisplayMixinDetailComponent} from '../display-mixin-detail/display-mixin-detail.component';
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
@@ -18,6 +18,7 @@ import {
   AvailabilityMixinDetailComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
+import { isNotificationItem } from '@ingenium/app/shared/models/item/hubNotificationItemI';
 import {AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
@@ -36,7 +37,8 @@ import {AppFunctionsService} from "@app_services/app-functions.service";
     AsShopItemWide,
     AsPromoItemWide,
     AsEventItemWide,
-    AsNotificationItemWide
+    AsNotificationItemWide,
+    JsonPipe
   ],
   standalone: true,
   providers: [DatePipe]
@@ -83,6 +85,9 @@ export class ItemDetailComponent implements OnInit{
         this.datePipe.transform(this.item.derived_type.event_end, 'yyyy-MM-ddThh:mm')));
     }
 
+    if (isNotificationItem(this.item.derived_type)) {
+      this.itemForm.addControl('default_subscription', new FormControl(this.item.derived_type.default_subscription))
+    }
     // Promo
     // if (this.isPromoItem) {
     //
@@ -114,6 +119,16 @@ export class ItemDetailComponent implements OnInit{
           event_end: this.itemForm.controls['end_date'].value,
           event_metadata: (this.item.derived_type as EventItemI).event_metadata
         };
+      }
+    }
+    if (this.isNotificationItem) {
+      if ("notification_topic" in this.item.derived_type) {
+        this.item.derived_type = {
+          derived_type_enum: 'notificationitem',
+          notification_topic: this.item.derived_type.notification_topic,
+          default_subscription: this.itemForm.controls['default_subscription'].value,
+          notification_template: this.item.derived_type.notification_template
+        }
       }
     }
     // if (this.isPromoItem) {

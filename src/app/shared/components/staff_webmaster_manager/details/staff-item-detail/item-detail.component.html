@@ -139,17 +139,33 @@
 <section *ngIf="this.isNotificationItem">
   <ng-container *ngIf="this.item | asNotificationItemWide as notificationItemWide">
     <h2>Notification Item</h2>
-    <table>
-      <thead>
-      <tr><th scope="col"></th><th scope="col">Notification Item:</th></tr>
-      </thead>
-      <tbody>
-      <tr>
-        <th>Notification Topic</th>
-        <td>{{ notificationItemWide.derived_type.notification_topic }}</td>
-      </tr>
-      </tbody>
-    </table>
+    <form [formGroup]="itemForm">
+      <table>
+        <thead>
+        <tr><th scope="col"></th><th scope="col">Notification:</th></tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>Notification Topic</th>
+          <td>{{ notificationItemWide.derived_type.notification_topic }}</td>
+        </tr>
+        <tr>
+          <th>Default Subscription</th>
+          <td><input type="checkbox" formControlName="default_subscription"/></td>
+        </tr>
+        <tr>
+          <th>Notification Template</th>
+          <td>
+            @if (notificationItemWide.derived_type.notification_template === null) {
+              None specified
+            } @else {
+              {{ notificationItemWide.derived_type.notification_template | json }}
+            }
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </form>
   </ng-container>
 </section>
 
