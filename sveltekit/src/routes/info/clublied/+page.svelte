@@ -1,0 +1,72 @@
+<script lang="ts">
+  import Header from '$lib/components/layout/header.svelte';
+
+  import clubliedAudio from '$assets/clublied.mp3';
+</script>
+
+<header>
+  <Header whiteTheme={true} />
+</header>
+
+<main class="ingenium-container" id="main-content">
+  <h1 class="white-section-title white-section-title-large white-section-title-blue">Clublied</h1>
+
+  <p>
+    Lyrics: Lauranne Goorden<br>
+    Faculteit Toegepaste Ingenieurswetenschappen, Universiteit Antwerpen<br>
+    Opgericht 2018 - 2019 (1 mei 2018) door Arne Chantrain (Praeses), Gilles Pleysier (Vice-praeses) en Antoine Hancké (Vice-praeses)<br>
+    Op de melodie van Trink, trink, Brüderlein, trink<br>
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <blockquote class="mt-4 p-6 -mx-5 sm:mx-0 py-6 rounded block md:inline-block italic text-gray-800 bg-gray-50">
+      Dit is het lied van Ingenium<br>
+      Dus giet alle glazen maar vol<br>
+      Het beste programma voor de student<br>
+      Fundeert op den ethanol<br>
+      Talent is bij ons snel te vinden<br>
+      Zowel in de les als in bed<br>
+      Wij zorgen voor spanning, wij brouwen het bier<br>
+      Zo halen we een 10 toch maar net<br><br>
+      (ayayayay)<br>
+      Drinken en poepen Ingenium paraat<br>
+      Zijt maar zeker dat hij recht staat (Hij staat!)<br>
+      Poepen en drinken het beste vermaak<br>
+      Wij schieten altijd stevig raak<br>
+      Samen ne cantus of samen TD<br>
+      Zo valt dat studeren wel mee (Hahaha)<br>
+      Samen wat hangen en samen ne pré<br>
+      Ons lam zuipen in de KP In de KP (bis)<br><br>
+      En komt daar bij 't einde van 't schooljaar<br>
+      De angst voor de 2e zit aan<br>
+      Dan dromen wij al van het volgend jaar<br>
+      Dat blauw grijs paars er weer zal staan<br>
+      Ja zo dromen wij al als schachten<br>
+      Dat wij ingenieur zullen zijn<br>
+      In deze club vol jong knap volk<br>
+      Met bier als ons medicijn<br><br>
+      (ayayayay)<br>
+      Drinken en poepen Ingenium paraat<br>
+      Zijt maar zeker dat hij recht staat (Hij staat!)<br>
+      Poepen en drinken het beste vermaak<br>
+      Wij schieten altijd stevig raak<br>
+      Samen ne cantus of samen TD<br>
+      Zo valt dat studeren wel mee (Hahaha)<br>
+      Samen wat hangen en samen ne pré<br>
+      Ons lam zuipen in de KP In de KP (bis)
+    </blockquote>
+
+    <aside class="col-span-1 lg:col-span-2 justify-self-center mt-6 w-full md:max-w-lg">
+      <div class="white-section-title">Beluisteren</div>
+      <p>Je kan ons clublied beluisteren via de speler hieronder of via YouTube</p>
+
+      <audio controls class="w-full" preload="none">
+        <source src={clubliedAudio} type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+
+      <a href="https://www.youtube.com/watch?v=vl3dRHtI3ww" target="_blank" rel="noreferrer noopener" class="button button-outline-blue button-sm mt-6 block">Beluisteren via YouTube</a>
+    </aside>
+  </div>
+
+</main>

@@ -1,0 +1,51 @@
+.alert {
+  @apply p-4;
+
+  .alert-text {
+    @apply text-sm;
+  }
+
+  &.alert-warning {
+    @apply bg-yellow-50;
+
+    a {
+      @apply font-medium underline text-yellow-700 hover:text-yellow-600;
+    }
+
+    &.alert-border {
+      @apply border-yellow-400;
+    }
+  }
+
+  &.alert-info {
+    @apply bg-blue-50;
+
+    a {
+      @apply font-medium underline text-blue-700 hover:text-blue-600;
+    }
+
+    &.alert-border {
+      @apply border-blue-400;
+    }
+  }
+
+  &.alert-danger {
+    @apply bg-red-50;
+
+    a {
+      @apply font-medium underline text-red-700 hover:text-red-600;
+    }
+
+    &.alert-border {
+      @apply border-red-400;
+    }
+
+    .alert-text {
+      @apply text-red-700;
+    }
+  }
+
+  &.alert-border {
+    @apply border-l-4;
+  }
+}

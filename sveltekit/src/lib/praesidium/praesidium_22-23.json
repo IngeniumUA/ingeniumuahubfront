@@ -1,0 +1,232 @@
+[
+  {
+    "groupName": "Praesidium",
+    "categories": [
+      {
+        "categorieName": "Hoog Praesidium",
+        "praesidia": [
+          {
+            "name": "Bryan Vanhoudt",
+            "functie": "Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BryanVanhoudt.webp"
+          },
+          {
+            "name": "Wout De Smit",
+            "functie": "Vice-Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutDeSmit.webp"
+          },
+          {
+            "name": "Jonathan Fonteyn",
+            "functie": "Vice-Praeses",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonathanFonteyn.webp"
+          },
+          {
+            "name": "Liesbeth Poppe",
+            "functie": "Quaestor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LiesbethPoppe.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Cantor",
+        "praesidia": [
+          {
+            "name": "Thor Claessens",
+            "functie": "Cantor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Business Relations",
+        "praesidia": [
+          {
+            "name": "Wout Saenen",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WoutSaenen.webp"
+          },
+          {
+            "name": "Robbe Gevers",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RobbeGevers.webp"
+          },
+          {
+            "name": "Anne Marie De Laet",
+            "functie": "Business Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/AnneMarieDeLaet.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Public Relations",
+        "praesidia": [
+          {
+            "name": "Jarne Arnouts",
+            "functie": "Public Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JarneArnouts.webp"
+          },
+          {
+            "name": "Michiel Vercauteren",
+            "functie": "Public Relations",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MichielVercauteren.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Doopteam",
+        "praesidia": [
+          {
+            "name": "Vincent Jacobs",
+            "functie": "Schachtentemmer",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/VincentJacobs.webp"
+          },
+          {
+            "name": "Michael Schoenmakers",
+            "functie": "Zedenmeester",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MichaelSchoenmakers.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Webmaster",
+        "praesidia": [
+          {
+            "name": "Yorben Joosen",
+            "functie": "Webmaster",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/YorbenJoosen.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Mentor",
+        "praesidia": [
+          {
+            "name": "Cyrianne Mintiens",
+            "functie": "Mentor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/CyrianneMintiens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Ab-actis & Scriptor",
+        "praesidia": [
+          {
+            "name": "Robbe De Helt",
+            "functie": "Ab-actis & Scriptor",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/RobbeDeHelt.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Feest",
+        "praesidia": [
+          {
+            "name": "Jorre Beyltiens",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JorreBeyltiens.webp"
+          },
+          {
+            "name": "Lies Hornikx",
+            "functie": "Feest",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/LiesHornikx.webp"
+          },
+          {
+            "name": "Bjorn Lahey",
+            "functie": "Dux-festi",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BjornLahey.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "S.O.C.",
+        "praesidia": [
+          {
+            "name": "Wannes Brusselmans",
+            "functie": "S.O.C.",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/WannesBrusselmans.webp"
+          },
+          {
+            "name": "Jonas Verburgh",
+            "functie": "S.O.C.",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JonasVerburgh.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Media",
+        "praesidia": [
+          {
+            "name": "Juna Siebens",
+            "functie": "Media",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JunaSiebens.webp"
+          }
+        ]
+      },
+      {
+        "categorieName": "Peters",
+        "praesidia": [
+          {
+            "name": "Joost Swinnen",
+            "functie": "Peter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/JoostSwinnen.webp"
+          },
+          {
+            "name": "Tim Kalfus",
+            "functie": "Peter",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/TimKalfus.webp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Education",
+    "categories": [
+      {
+        "categorieName": "Education",
+        "praesidia": [
+          {
+            "name": "Brecht Maes",
+            "functie": "Education Elektromechanica",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/BrechtMaes.webp"
+          },
+          {
+            "name": "Marie Struyf",
+            "functie": "Education Chemie",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/MarieStruyf.webp"
+          },
+          {
+            "name": "Vienna Van den Bossche",
+            "functie": "Education Chemie",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ViennaVandenBossche.webp"
+          },
+          {
+            "name": "Anna Massart",
+            "functie": "Education Bouwkunde",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/AnnaMassart.webp"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "groupName": "Ski-team",
+    "categories": [
+      {
+        "categorieName": "Ski's",
+        "praesidia": [
+          {
+            "name": "Siebe De Winter",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/SiebeDeWinter.webp"
+          },
+          {
+            "name": "Thor Claessens",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/ThorClaessens.webp"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,211 @@
+@use 'tailwindcss/base';
+@use 'tailwindcss/components';
+@use 'tailwindcss/utilities';
+
+@use "default";
+//@use 'ngx-toastr/toastr';
+@use "staff_styles";
+@use "button";
+@use "vertical_nav";
+@use "cards";
+@use "alert";
+@use "forms";
+@use "badges";
+
+:root {
+  --mainblue: rgb(0, 5, 61); /* #00053D */
+  --mainblue-90: rgba(0, 5, 61, 0.9); /*rgba(10, 31, 68, 0.9);*/
+  --mainwhite: #ffffff;
+
+  --secondblue: #1f2980; /*rgb(31, 41, 128)*/
+
+  --error-red: #FF5000;
+  --succes-green: #5cb85c;
+
+  --ingenium-blue: #1f2980;
+  --ingenium-grey: #d4dbe9;
+  --ingenium-grey-75: rgba(212, 219, 233, 0.75);
+  --ingenium-grey-9: rgba(212, 219, 233, 0.9);
+  --ingenium-purple: #4d2b88;
+}
+
+html, body {
+  @apply w-full overflow-x-hidden h-full block text-gray-900;
+}
+
+body {
+  @apply flex flex-col;
+}
+
+body {
+  margin: 0;
+  font-family: D-DIN, sans-serif;
+}
+
+/* ---------- */
+/* Headers */
+/* ---------- */
+h1 {
+  margin: 0;
+
+  line-height: 2.25rem;
+  font-size: 2.25rem;
+
+  font-family: D-DIN, sans-serif;
+  font-weight: bold;
+
+  &.white-section-title {
+    @apply text-xl;
+  }
+}
+
+h2 {
+  line-height: 1.5rem;
+  font-size: 1.5rem;  /* 24px */
+  font-weight: bold;
+  margin: 0;
+
+  &.white-section-title {
+    @apply text-lg;
+  }
+}
+
+h3 {
+  margin: 0;
+
+  line-height: 1.2rem;
+  font-size: 1.2rem;  /* 20px */
+  font-weight: lighter;
+  font-family: D-DIN Condensed, sans-serif;
+}
+
+h4 {
+  font-family: D-DIN, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.white-section-title {
+  @apply font-semibold leading-7 text-gray-900;
+
+  &.white-section-title-large {
+    @apply text-2xl;
+  }
+
+  &.white-section-title-blue {
+    @apply text-blue-900;
+  }
+
+  &.white-section-title--base {
+    @apply text-base;
+  }
+
+  & + p {
+    @apply mt-0.5 text-sm leading-6 text-gray-600 mb-6;
+  }
+
+  & + p.small-margin {
+    @apply mb-2;
+  }
+
+  & + p.no-margin {
+    @apply mb-0;
+  }
+}
+
+p {
+  @apply leading-6 text-gray-600;
+}
+
+// Ingenium Container
+.ingenium-container {
+  @apply p-5 mx-auto container;
+
+  &.ingenium-container--no-padding-x {
+    @apply px-0;
+  }
+
+  &.ingenium-container--no-padding-y {
+    @apply py-0;
+  }
+}
+
+/* Button */
+.hubbutton-blue {
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--mainblue);
+  border-radius: 5px;
+  border: none;
+
+  color: var(--mainwhite);
+  transition: color 0.5s ease-out;
+}
+
+.hubbutton-blue:hover {
+  color: var(--mainwhite);
+  cursor: pointer;
+}
+
+.hubbutton-blue:disabled {
+  background-color: var(--ingenium-grey)
+}
+
+.hubbutton-white {
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--mainwhite);
+  border-radius: 5px;
+  border: none;
+
+  color: var(--mainblue);
+  transition: color 0.5s ease-out;
+}
+
+/* Formfield */
+.hubformfield-white {
+  height: 100%;
+  box-sizing: border-box;
+
+  position: relative;
+  display: inline-block;
+
+  border: solid var(--mainblue) 1px;
+  border-radius: 5px;
+}
+
+.hubformfield-white input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  padding-left: 16px;
+
+  border: none;
+  appearance: none;
+  background-color: transparent;
+
+  line-height: 1.1rem;
+  font-size: 1.1rem;  /* 20px */
+  font-weight: lighter;
+  font-family: D-DIN Condensed, sans-serif;
+}
+
+.error-message {
+  color: var(--error-red);
+  font-weight: bold;
+  font-family: D-DIN Condensed, D-DIN, sans-serif;
+}
+
+.success-message {
+  color: var(--succes-green);
+  font-weight: bold;
+  font-family: D-DIN Condensed, D-DIN, sans-serif;
+}
+
+.clickable {
+  cursor: pointer;
+}
+

@@ -1,0 +1,54 @@
+.form-field {
+  label {
+    @apply block text-sm font-medium leading-6 text-gray-800 transition-colors ease-in-out;
+  }
+
+  input {
+    &[type='checkbox'], [type='radio'] {
+      @apply relative h-4 w-4 cursor-pointer appearance-none rounded-md border border-blue-300 transition-all checked:border-gray-900 checked:bg-blue-900;
+    }
+
+    &:disabled {
+      @apply bg-gray-100 text-gray-500 cursor-not-allowed;
+    }
+  }
+
+  input:not([type='checkbox'], [type='radio']), select, textarea {
+    @apply mt-2 block w-full rounded-md border-0 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-900 sm:text-sm sm:leading-6 transition-all ease-in-out;
+  }
+
+  &.is-invalid {
+    label {
+      @apply text-red-500;
+    }
+
+    input {
+      @apply ring-red-500 focus:ring-red-500;
+    }
+  }
+
+  &.form-field-checkbox {
+    @apply flex items-center;
+
+    label {
+      @apply ms-2;
+    }
+  }
+
+  .field-error-message-list {
+    @apply ml-1;
+  }
+}
+
+fieldset {
+  legend {
+    &:not(.sr-only) {
+      @apply text-sm text-gray-900;
+    }
+  }
+}
+
+.field-error-message-list {
+  @apply mt-1.5 text-sm text-red-500 list-disc list-inside;
+}
+

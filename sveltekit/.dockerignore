@@ -1,0 +1,7 @@
+README.md
+.env
+.env.example
+.gitignore
+.idea
+.svelte-kit
+node_modules
