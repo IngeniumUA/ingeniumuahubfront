@@ -1,5 +1,4 @@
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
-import {EventItemI} from "@ingenium/app/shared/models/item/eventI";
 
 export function isNotificationItem(object: any): object is NotificationItemI {
   return object.derived_type_enum === "notificationitem";
