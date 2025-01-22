@@ -222,6 +222,7 @@ export class ItemCreateComponent implements OnInit {
     return {
       derived_type_enum: 'notificationitem',
       notification_topic: notificationTopic !== null ? notificationTopic : "topic",
+      default_subscription: false
     }
   }
 

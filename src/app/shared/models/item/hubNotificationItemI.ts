@@ -1,14 +1,27 @@
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 import {EventItemI} from "@ingenium/app/shared/models/item/eventI";
 
+export function isNotificationItem(object: any): object is NotificationItemI {
+  return object.derived_type_enum === "notificationitem";
+}
+
 export interface NotificationItemInI {
   derived_type_enum: string
-  notification_topic: string;
+  notification_topic: string
+  default_subscription: boolean
 }
 
 export interface NotificationItemI {
   derived_type_enum: string
-  notification_topic: string;
+  notification_topic: string
+  default_subscription: boolean
+  notification_template: object | null // TODO -> object specified as firebase Message interface type
+}
+
+export interface NotificationItemLimitedI {
+  derived_type_enum: string
+  notification_topic: string
+  default_subscription: boolean
 }
 
 export interface NotificationItemWideI {
