@@ -1,8 +1,21 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+	import { browser } from '$app/environment';
+	import { userState } from "$lib/states/user.svelte";
+	import {getUserFromLocalStorage, setupOidcClient} from "$lib/auth/auth";
 	import Footer from '$lib/components/layout/footer.svelte';
 	import '../assets/scss/styles.scss';
 
 	let { children } = $props();
+
+	// Setup oidc client on client
+	if (browser) {
+		userState.oidcClient = setupOidcClient();
+		const user = getUserFromLocalStorage();
+		if (user) {
+			Object.assign(userState, user);
+		}
+	}
 </script>
 
 <svelte:head>

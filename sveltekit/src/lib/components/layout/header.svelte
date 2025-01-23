@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { userState } from "$lib/states/user.svelte";
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
 
 	let { noBackground = false, whiteTheme = false } = $props();
@@ -6,14 +7,27 @@
 	let infoDropdownOpen = $state(false);
 	let accountDropdownOpen = $state(false);
 
-	let isAuth = false;
-
 	let getNavigationTheme = $derived.by(() => {
 		if (noBackground) {
 			return 'nav-transparent-background';
 		}
 		return whiteTheme ? 'nav-white' : 'nav-dark';
 	});
+
+	async function doLogin() {
+		if (!userState.oidcClient) return;
+
+		try {
+			const data = await userState.oidcClient.createSigninRequest({
+				disablePKCE: false,
+			});
+
+			// @ts-ignore
+			window.location = data.url;
+		} catch (e) {
+			console.error(e);
+		}
+	}
 </script>
 
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
@@ -86,7 +100,7 @@
 				<!-- Profile dropdown -->
 				<div class="relative ml-3">
 					<div>
-						{#if isAuth}
+						{#if userState.authenticated}
 							<!-- Profile dropdown button -->
 							<button type="button" onclick={ () => accountDropdownOpen = !accountDropdownOpen } aria-haspopup="true" id="profile-menu-button"
 								class="button button-primary button-icon-only relative inline-flex items-center justify-center { !whiteTheme ? '' : 'button-accessibility-white' }">
@@ -97,7 +111,8 @@
 							</button>
 						{:else}
 							<!-- Login button -->
-							<button class="button button-primary button-icon-only relative inline-flex items-center justify-center { !whiteTheme ? '' : 'button-accessibility-white' }" title="Aanmelden">
+							<button onclick={ doLogin } title="Aanmelden"
+											class="button button-primary button-icon-only relative inline-flex items-center justify-center { !whiteTheme ? '' : 'button-accessibility-white' }">
 								<span class="hidden md:inline">Aanmelden</span>
 								<svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 									<path d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -107,7 +122,7 @@
 					</div>
 
 					<!-- Profile dropdown menu -->
-					{#if accountDropdownOpen && isAuth}
+					{#if accountDropdownOpen && userState.authenticated}
 						<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
 							<a href="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
@@ -117,7 +132,7 @@
 							<hr class="nav-dropdown-divider">
 							<span class="nav-dropdown-no-link">
 								<span class="sr-only">Je bent ingelogd met</span>
-								????
+								{ userState.user.email }
 							</span>
 						</div>
 					{/if}
