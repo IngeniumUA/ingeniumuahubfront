@@ -1,0 +1,14 @@
+<section class="staffSection">
+  <h1>Keycloak</h1>
+
+  @let realmName = realmName$ | async;
+  <h2>Realm: {{ realmName }}</h2>
+
+  <h2>Groups</h2>
+  @for (group of (keycloakGroups$ | async); track group.id) {
+    <li>Name: {{ group.name }} Id: {{group.id}}</li>
+  } @empty {
+    No Groups
+  }
+
+</section>
