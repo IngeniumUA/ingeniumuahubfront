@@ -55,7 +55,7 @@ export class ItemDashboardPageComponent implements OnInit {
   }
 
   public isPaymentItem(derived_item_enum: string): boolean {
-    return derived_item_enum === "eventitem" || derived_item_enum === "shoptitem";
+    return derived_item_enum === "eventitem" || derived_item_enum === "shopitem";
   }
 
   public isInteractionOnlyItem(derived_item_enum: string): boolean {
