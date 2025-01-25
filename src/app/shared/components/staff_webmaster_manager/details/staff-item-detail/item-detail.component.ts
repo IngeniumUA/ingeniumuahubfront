@@ -23,6 +23,7 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 import {AvailabilityCompositionI} from "@ingenium/app/shared/models/item/availabilityCompositionI";
 import { isNotificationItem } from '@ingenium/app/shared/models/item/hubNotificationItemI';
+import {PromoItemTypeEnum} from "@ingenium/app/shared/models/item/promoI";
 
 @Component({
   selector: 'app-item-detail',
@@ -172,4 +173,5 @@ export class ItemDetailComponent implements OnInit{
 
   protected readonly CardTypeEnum = CardTypeEnum;
   protected readonly CardMembershipEnum = CardMembershipEnum;
+  protected readonly PromoItemTypeEnum = PromoItemTypeEnum;
 }

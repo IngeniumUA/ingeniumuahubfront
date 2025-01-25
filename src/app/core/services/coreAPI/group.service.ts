@@ -24,8 +24,25 @@ export class GroupService {
     return this.httpClient.get<GroupI[]>(`${this.apiUrl}?${params.toString()}`);
   }
 
-  public getGroupTable(): Observable<[]> {
-    return this.httpClient.get<[]>(`${this.apiUrl}/table`);
+  public getGroupCount(user_uuid: string | null = null, academicYear: string | null = null): Observable<number> {
+    const param = {
+      user_uuid: user_uuid,
+      academic_year: academicYear
+    }
+    const params = new URLSearchParams(removeNull(param));
+    return this.httpClient.get<number>(`${this.apiUrl}/count?${params.toString()}`);
+  }
+
+  public getGroupTable(limit: number, offset: number,
+                       user_uuid: string | null = null, academicYear: string | null = null): Observable<[]> {
+    const param = {
+      limit: limit,
+      offset: offset,
+      user_uuid: user_uuid,
+      academic_year: academicYear
+    }
+    const params = new URLSearchParams(removeNull(param));
+    return this.httpClient.get<[]>(`${this.apiUrl}/table?${params.toString()}`);
   }
 
   public AddUserToGroup(group_id: string, user_id: string): Observable<GroupI[]> {

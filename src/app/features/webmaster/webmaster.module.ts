@@ -64,6 +64,9 @@ import {
 import {
     DeleteButtonComponent
 } from "@ingenium/app/shared/components/staff_webmaster_manager/delete-button/delete-button.component";
+import {
+  CreateGroupComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-group/create-group.component";
 
 
 @NgModule({
@@ -79,29 +82,30 @@ import {
     CheckoutDetailComponent,
     OrderTrackingComponent
   ],
-    imports: [
-        CommonModule,
-        WebmasterRoutingModule,
-        SidenavComponent,
-        GroupTableComponent,
-        PublicHeaderComponent,
-        UserTableComponent,
-        ItemTableComponent,
-        ItemDetailComponent,
-        UserDetailComponent,
-        ProductBlueprintDashboardComponent,
-        CardTableComponent,
-        TransactionTableComponent,
-        ItemCreateComponent,
-        ProductBlueprintCreateComponent,
-        ProductBlueprintDetailComponent,
-        CheckoutAndTransactionDashboardComponent,
-        CreateCheckoutComponent,
-        TransactionDetailComponent,
-        CurrencyPipe,
-        InteractionTableComponent,
-        DeleteButtonComponent
-    ], providers: [
+  imports: [
+    CommonModule,
+    WebmasterRoutingModule,
+    SidenavComponent,
+    GroupTableComponent,
+    PublicHeaderComponent,
+    UserTableComponent,
+    ItemTableComponent,
+    ItemDetailComponent,
+    UserDetailComponent,
+    ProductBlueprintDashboardComponent,
+    CardTableComponent,
+    TransactionTableComponent,
+    ItemCreateComponent,
+    ProductBlueprintCreateComponent,
+    ProductBlueprintDetailComponent,
+    CheckoutAndTransactionDashboardComponent,
+    CreateCheckoutComponent,
+    TransactionDetailComponent,
+    CurrencyPipe,
+    InteractionTableComponent,
+    DeleteButtonComponent,
+    CreateGroupComponent
+  ], providers: [
     DatePipe
   ]
 })

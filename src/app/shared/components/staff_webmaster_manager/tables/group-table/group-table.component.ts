@@ -1,13 +1,21 @@
-import { Component } from '@angular/core';
+import {AfterViewInit, Component, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {Observable} from 'rxjs';
+import {AsyncPipe, DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {debounceTime, delay, Observable, of} from 'rxjs';
+import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {
-  CreateCheckoutComponent
-} from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-checkout/create-checkout.component";
-import {
-  CreateGroupComponent
-} from "@ingenium/app/shared/components/staff_webmaster_manager/create/create-group/create-group.component";
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell, MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow, MatRowDef, MatTable
+} from "@angular/material/table";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
 
 @Component({
   selector: 'app-group-table',
@@ -17,28 +25,86 @@ import {
     AsyncPipe,
     NgForOf,
     NgIf,
-    CreateCheckoutComponent,
-    CreateGroupComponent
+    CurrencyPipe,
+    DatePipe,
+    FormsModule,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatPaginator,
+    MatProgressSpinner,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    ReactiveFormsModule,
+    MatHeaderCellDef
   ],
   standalone: true
 })
-export class GroupTableComponent {
-  constructor(private staffGroupService: GroupService) {
+export class GroupTableComponent implements OnInit, OnChanges, AfterViewInit {
+  constructor(private groupService: GroupService) {
   }
 
-  addingGroup: boolean = false
-  groups$: Observable<[]> = this.staffGroupService.getGroupTable();
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  loadData() {
-   this.groups$ = this.staffGroupService.getGroupTable();
+  groups$: Observable<GroupI[]> = of([]);
+  groupCount$: Observable<number> = this.groupService.getGroupCount();
+
+  pageIndex: number = 0
+  blob!: Blob;
+
+  searchForm = new FormGroup({
+    idControl: new FormControl(''),
+    groupNameControl: new FormControl(''),
+  });
+
+  ngOnChanges(changes: SimpleChanges) {
+    const loadData: SimpleChange = changes['loadDataEvent'];
+    if (loadData.previousValue !== loadData.currentValue) {
+      // When previous value was 'loading' and now 'loading' has switched off
+      // Then we can reload our own data as well
+      this.LoadData();
+    }
   }
 
-  ToggleAddingGroup() {
-    this.addingGroup = !this.addingGroup
+  GetDisplayedColumns(): string[] {
+    return ['id', 'name', 'academic_year', 'keycloak_group_uuid', 'last_update_timestamp', 'created_timestamp', 'user_count'];
   }
 
-  GroupCreated() {
-    this.addingGroup = false;
-    this.loadData()
+  ngOnInit() {
+    this.LoadData();
+    this.searchForm.valueChanges.pipe(
+      delay(500),
+      debounceTime(500)
+      //combineLatest
+    ).subscribe(() => {
+        this.LoadData();
+      }
+    );
+  }
+
+  ngAfterViewInit() {
+    // Label popups are breaking something frontend related, just remove them
+    // In some cases the paginator is undefined ? We check if it is defined
+    if (this.paginator === undefined) {
+      return;
+    }
+    const paginatorIntl = this.paginator._intl;
+    paginatorIntl.itemsPerPageLabel = '';
+    paginatorIntl.nextPageLabel = '';
+    paginatorIntl.previousPageLabel = '';
+    paginatorIntl.firstPageLabel = '';
+    paginatorIntl.lastPageLabel = '';
+  }
+
+  LoadData(pageEvent: PageEvent | null = null) {
+    this.pageIndex = pageEvent === null ? 0: pageEvent.pageIndex;
+    const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
+
+    this.groups$ = this.groupService.getGroupTable(this.pageIndex * pageSize, pageSize);
+    this.groupCount$ = this.groupService.getGroupCount();
   }
 }

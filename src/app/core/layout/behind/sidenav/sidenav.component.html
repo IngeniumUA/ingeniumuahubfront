@@ -11,6 +11,7 @@
         <section *ngIf="isManager$ | async">
           <a [routerLink]="['/man']" class="section-title">Manager</a>
           <a [routerLink]="['/man/flag']" class="section-link">Flags</a>
+          <a [routerLink]="['/man/keycloak']" class="section-link">Keycloak</a>
           <a [routerLink]="['/man/interaction']" class="section-link">Interactions</a>
           <!--
           <a class="section-link">Logs</a>
