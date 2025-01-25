@@ -6,4 +6,5 @@ export interface GroupInI {
 export interface GroupI {
   id: number
   name: string
+  keycloak_group_uuid: string | null
 }
