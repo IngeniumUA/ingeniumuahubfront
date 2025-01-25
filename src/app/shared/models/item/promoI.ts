@@ -17,13 +17,13 @@ export interface PromoItemInI {
 
 export interface PromoItemLimitedI {
   derived_type_enum: "promoitem"
-  promo_type: string
+  promo_type: number
   display: DisplayCompositionI
 }
 
 export interface PromoItemI {
   derived_type_enum: "promoitem"
-  promo_type: string
+  promo_type: number
   display: DisplayCompositionI
 }
 
