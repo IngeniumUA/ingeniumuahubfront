@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
-import {AsyncPipe, DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {debounceTime, delay, Observable, of} from 'rxjs';
 import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
