@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
 import {AsyncPipe, DatePipe, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {debounceTime, delay, Observable, of} from 'rxjs';
@@ -40,12 +40,11 @@ import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
     MatRowDef,
     MatTable,
     ReactiveFormsModule,
-    TitleCasePipe,
     MatHeaderCellDef
   ],
   standalone: true
 })
-export class GroupTableComponent implements OnInit, OnChanges {
+export class GroupTableComponent implements OnInit, OnChanges, AfterViewInit {
   constructor(private groupService: GroupService) {
   }
 
