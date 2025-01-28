@@ -1,9 +1,14 @@
-import {OidcClient, SigninResponse} from "oidc-client-ts";
-import { PUBLIC_KC_ISSUER, PUBLIC_KC_CLIENT_ID, PUBLIC_KC_REDIRECT_URL} from "$env/static/public";
-import {userState, type UserStateI} from "$lib/states/user.svelte";
+import {OidcClient, SigninResponse, UserManager} from "oidc-client-ts";
+import Cookies from 'js-cookie';
+import { PUBLIC_KC_ISSUER, PUBLIC_KC_CLIENT_ID, PUBLIC_KC_REDIRECT_URL } from "$env/static/public";
+import type { UserStateI } from "$lib/states/user.svelte";
+import { browser } from "$app/environment";
 
+/**
+ * Create an OIDC Client
+ */
 export const setupOidcClient = () => {
-  return new OidcClient({
+  const mgr = new UserManager({
     authority: PUBLIC_KC_ISSUER,
     client_id: PUBLIC_KC_CLIENT_ID,
     redirect_uri: PUBLIC_KC_REDIRECT_URL,
@@ -12,47 +17,75 @@ export const setupOidcClient = () => {
     filterProtocolClaims: true,
     disablePKCE: false,
   });
+  return mgr;
 }
 
 export const setUserInStateFromResponse = (userState: UserStateI, response: SigninResponse) => {
   userState.access_token = response.access_token;
   userState.id_token = response.id_token;
   userState.refresh_token = response.refresh_token;
-  userState.authenticated = true;
   userState.user = {
     name: response.profile.name,
     email: response.profile.email,
   }
 
-  // Save in locale storage
-  localStorage.setItem("access_token", response.access_token);
-  // @ts-ignore
-  localStorage.setItem("id_token", response.id_token);
-  // @ts-ignore
-  localStorage.setItem("refresh_token", response.refresh_token);
-  localStorage.setItem("authenticated", "true");
-  localStorage.setItem("user", JSON.stringify(userState.user));
+  // Set 1 month expiration for other data
+  const exp = new Date();
+  exp.setMonth(exp.getMonth() + 1);
 
-  // Set a cookie with the access token
-  document.cookie = `access_token=${response.access_token}; SameSite=Strict; Secure`;
+  // Create instance with default values
+  const cookies = Cookies.withAttributes({
+    secure: true,
+    sameSite: 'strict',
+    expires: exp,
+  });
+
+  // Set the cookies
+  cookies.set('access_token', response.access_token, {
+    //expires: new Date(response.expires_at ?? Date.now()) // TODO: Fix this!
+  });
+  if (response.refresh_token) {
+    cookies.set('refresh_token', response.refresh_token);
+  }
+  if (response.id_token) {
+    cookies.set('id_token', response.id_token);
+  }
 }
 
-export const getUserFromLocalStorage = () => {
-  const access_token = localStorage.getItem("access_token");
-  const id_token = localStorage.getItem("id_token");
-  const refresh_token = localStorage.getItem("refresh_token");
-  const authenticated = localStorage.getItem("authenticated");
-  const user = localStorage.getItem("user");
-
-  if (access_token && id_token && refresh_token && authenticated && user) {
+export const getTokens = (params: Partial<Record<string, string>>) => {
+  if (browser) {
     return {
-      access_token,
-      id_token,
-      refresh_token,
-      authenticated: true,
-      user: JSON.parse(user)
+      access_token: Cookies.get('access_token'),
+      refresh_token: Cookies.get('refresh_token'),
+      id_token: Cookies.get('id_token'),
     }
   }
 
-  return null;
+  return {
+    access_token: params.__ACCESS_TOKEN__,
+    refresh_token: params.__REFRESH_TOKEN__,
+    id_token: params.__ID_TOKEN__,
+  }
+}
+
+/**
+ * Sets the correct header of access token
+ * @param params uses to get the access token on the server
+ * @param additionalHeaders can be used to set additional headers
+ */
+export const getAuthorizationHeaders = (params: Partial<Record<string, string>>, additionalHeaders = {}): HeadersInit => {
+  const accessToken = getTokens(params).access_token;
+  if (!accessToken) return additionalHeaders;
+
+  // Merge additional headers with auth header
+  return {
+    ...additionalHeaders,
+    'Authorization': `Bearer ${accessToken}`
+  }
+}
+
+export const logout = () => {
+  if (browser) {
+
+  }
 }

@@ -1,7 +1,7 @@
-import {OidcClient} from "oidc-client-ts";
+import type { UserManager } from "oidc-client-ts";
 
 export interface UserStateI {
-  oidcClient: OidcClient|null,
+  oidcClient: UserManager|null,
   authenticated: boolean,
   access_token?: string,
   id_token?: string,

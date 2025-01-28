@@ -18,12 +18,7 @@
 		if (!userState.oidcClient) return;
 
 		try {
-			const data = await userState.oidcClient.createSigninRequest({
-				disablePKCE: false,
-			});
-
-			// @ts-ignore
-			window.location = data.url;
+			await userState.oidcClient.signinRedirect();
 		} catch (e) {
 			console.error(e);
 		}

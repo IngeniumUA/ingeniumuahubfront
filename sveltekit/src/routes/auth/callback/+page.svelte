@@ -12,11 +12,11 @@
     if (!userState.oidcClient) return;
 
     try {
-      const response = await userState.oidcClient.processSigninResponse(window.location.href);
+      const response = await userState.oidcClient.signinCallback(window.location.href);
 
-      setUserInStateFromResponse(userState, response);
+      //setUserInStateFromResponse(userState, response);
 
-      await goto('/', {replaceState: true}); // We don't want to keep the callback url in the history
+      await goto('/', { replaceState: true }); // We don't want to keep the callback url in the history
     } catch (error) {
       isFailure = true;
       if (error instanceof Error) {
