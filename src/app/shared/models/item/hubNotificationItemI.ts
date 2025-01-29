@@ -1,4 +1,5 @@
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
+import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
 
 export function isNotificationItem(object: any): object is NotificationItemI {
   return object.derived_type_enum === "notificationitem";
@@ -21,6 +22,7 @@ export interface NotificationItemLimitedI {
   derived_type_enum: string
   notification_topic: string
   default_subscription: boolean
+  display: DisplayCompositionI  // TODO Fix warcrime
 }
 
 export interface NotificationItemWideI {
