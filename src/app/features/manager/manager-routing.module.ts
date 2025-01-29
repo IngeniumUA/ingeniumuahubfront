@@ -6,6 +6,7 @@ import {FlagTableComponent} from './flag-table/flag-table.component';
 import {
   InteractionsPageComponent
 } from "@ingenium/app/features/webmaster/interactions-page/interactions-page.component";
+import {KeycloakPageComponent} from "@ingenium/app/features/manager/keycloak-page/keycloak-page.component";
 
 
 const routes: Routes = [
@@ -16,6 +17,7 @@ const routes: Routes = [
       {path: 'flag', component: FlagTableComponent},
       {path: 'items', loadChildren: () => import('./items/manager-items.module').then(x => x.ManagerItemsModule)},
       {path: 'interaction', component: InteractionsPageComponent},
+      {path: 'keycloak', component: KeycloakPageComponent},
     ]
   },
 ];

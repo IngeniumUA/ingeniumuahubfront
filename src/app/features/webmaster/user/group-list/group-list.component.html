@@ -2,3 +2,21 @@
   <app-group-table></app-group-table>
 </section>
 
+<section class="staffSection mt-2">
+  <h2>Add Group</h2>
+  <ng-container  *ngIf="addingGroup else addGroupButton">
+    <app-create-group (groupCreated)="GroupCreated()" />
+    <br>
+    <button class="button button-primary w-1/6 button-inline"
+            (click)="ToggleAddingGroup()">
+      Cancel
+    </button>
+  </ng-container>
+</section>
+
+<ng-template #addGroupButton>
+  <button class="button button-primary w-1/6 button-inline"
+          (click)="ToggleAddingGroup()">
+    Add
+  </button>
+</ng-template>

@@ -11,6 +11,7 @@
         <section *ngIf="isManager$ | async">
           <a (click)="gotoPage('man')" class="section-title">Manager</a>
           <a (click)="gotoPage('man/flag')" class="section-link">Flags</a>
+          <a (click)="gotoPage('man/keycloak')" class="section-link">Keycloak</a>
           <a (click)="gotoPage('man/interaction')" class="section-link">Interactions</a>
           <!--
           <a class="section-link">Logs</a>
