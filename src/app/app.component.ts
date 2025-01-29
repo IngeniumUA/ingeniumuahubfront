@@ -163,6 +163,12 @@ export class AppComponent implements OnInit {
                       this.notificationService.subscribe_to_topic(""+item.item.id).subscribe()
                     }
                   }
+                } else {
+                  for (let item of data) {
+                    if (item.derived_type.derived_type_enum === "notificationitem" && item.derived_type.default_subscription) {
+                      this.notificationService.subscribe_to_topic("" + item.item.id).subscribe()
+                    }
+                  }
                 }
               });
             }
