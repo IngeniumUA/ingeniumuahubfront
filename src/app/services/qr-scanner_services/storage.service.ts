@@ -71,6 +71,10 @@ export class StorageService {
     this._storage?.remove(this.storageModule)
   }
 
+  public resetWide() {
+    this._storage?.clear()
+  }
+
   public clearSpecific(key: string) {
     // this._storage?.remove(key).then()
     let newStore

@@ -48,7 +48,7 @@ export class NotificationsComponent  implements OnInit {
         for (let notification of data) {
           if (notification.derived_type.derived_type_enum === "notificationitem" && notification.derived_type.notification_topic !== "all") {
             final_data.push(notification);
-            form_data["" + notification.item.id] = [false, Validators.required]
+            form_data["" + notification.item.id] = [notification.derived_type.default_subscription, Validators.required]
           } else {
             this.all_topic = ""+notification.item.id
           }
