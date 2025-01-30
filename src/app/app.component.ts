@@ -135,7 +135,11 @@ export class AppComponent implements OnInit {
     // Method called when tapping on a notification
     PushNotifications.addListener('pushNotificationActionPerformed', (notification: ActionPerformed) => {
       console.log('Push action performed: ' + JSON.stringify(notification));
-      this.gotoPage('sub/events')
+      if (notification.notification.data && notification.notification.data.path) {
+        this.gotoPage(notification.notification.data.path)
+      } else {
+        this.gotoPage('sub/events')
+      }
     });
   }
 
