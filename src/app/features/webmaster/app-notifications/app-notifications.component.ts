@@ -38,6 +38,7 @@ export class AppNotificationsComponent implements OnInit {
       item_id: ['', Validators.required],
       title: ['', Validators.required],
       body: ['', Validators.required],
+      data: ['', Validators.pattern('/({(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'),{1} ?)*(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'))})|(^$)/gm')],
     });
   }
 
@@ -53,7 +54,8 @@ export class AppNotificationsComponent implements OnInit {
     this.notificationService.sendNotification(
       this.notificationForm.controls['item_id'].value,
       this.notificationForm.controls['title'].value,
-      this.notificationForm.controls['body'].value).subscribe(
+      this.notificationForm.controls['body'].value,
+      JSON.parse(this.notificationForm.controls['data'].value)).subscribe(
       (_) => {
         this.toastrService.success('Notification sent successfully');
       },
