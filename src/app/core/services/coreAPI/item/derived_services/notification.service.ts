@@ -29,10 +29,11 @@ export class NotificationService {
     return this.httpClient.get<ItemWideLimitedI>(`${this.apiUrl}${item}`).pipe(shareReplay())
   }
 
-  sendNotification(item: string | number, title: string, body: string): Observable<void> {
+  sendNotification(item: string | number, title: string, body: string, data: object | null): Observable<void> {
     const payload = {
       title: title,
-      body: body
+      body: body,
+      data: data
     }
     return this.httpClient.post<void>(`${apiEnviroment.apiUrl}item/wide/notification/${item}/send_notification`, payload);
   }
