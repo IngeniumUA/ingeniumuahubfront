@@ -7,11 +7,16 @@ import { AppModule } from './app/app.module';
 import { apiEnviroment } from './environments/environment';
 
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import {replayIntegration} from "@sentry/angular";
 
 Sentry.init({
     dsn: "https://832eff534433afa7d7be27a930c422d4@o4507006131437568.ingest.us.sentry.io/4508667027783680",
     integrations: [
       SentryAngular.browserTracingIntegration(),
+      replayIntegration({
+        maskAllText: true,
+        blockAllMedia: true,
+      })
     ],
     // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
     tracePropagationTargets: ["localhost", /^http:\/\/localhost/, /^capacitor:\/\/localhost/, /^https:\/\/hub\.ingeniumua\.be\/api/, /^https:\/\/hub\.dev\.ingeniumua\.be\/api/],
