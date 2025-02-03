@@ -14,7 +14,7 @@ Sentry.init({
       SentryAngular.browserTracingIntegration(),
     ],
     // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-    tracePropagationTargets: ["localhost", /^https:\/\/ingeniumua\.be\/api/, /^https:\/\/hub\.dev\.ingeniumua\.be\/api/],
+    tracePropagationTargets: ["localhost", /^http:\/\/localhost/, /^capacitor:\/\/localhost/, /^https:\/\/hub\.ingeniumua\.be\/api/, /^https:\/\/hub\.dev\.ingeniumua\.be\/api/],
     // enabled: apiEnviroment.name !== 'development',
     enabled: true, // disabled sentry in app cuz it no workey
     environment: apiEnviroment.name,
