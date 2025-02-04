@@ -1,6 +1,8 @@
-<ng-container *ngIf="$groupDetail | async as groupI">
+
+
+<ng-container *ngIf="this.$groupDetail | async as groupI">
 <section class="staffSection">
-  <h2>Core user Obj</h2>
+  <h2>Core Group Obj</h2>
   <table>
     <thead>
     <tr>
@@ -43,5 +45,23 @@
     </tr>
     </tbody>
   </table>
+</section>
+
+<section class="staffSection">
+    <h2>Counts</h2>
+
+    @let roles = this.roles$ | async;
+    <ul>
+        <li>Core members: {{ this.groupMembersCount$ | async }}</li>
+          @if (roles !== null && roles.is_manager && groupI.keycloak_group_uuid !== null) {
+            <li>Keycloak members: {{ this.keycloakGroupMembersCount$ | async }}</li>
+          }
+    </ul>
+
+    <div class="alert alert-info mb-4">
+        <p class="alert-text">Iterates all user objects stored on the core db and synchronises them using sso_uuid with the keycloak application.</p>
+    </div>
+    <button class="button button-primary button-inline" (click)="syncWithKeycloak()">Synchronise with keycloak</button>
+
 </section>
 </ng-container>

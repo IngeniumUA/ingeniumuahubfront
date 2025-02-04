@@ -19,6 +19,10 @@ export class GroupService {
     return this.httpClient.get<GroupI>(`${this.apiUrl}/${groupId}`);
   }
 
+  public getGroupMemberCount(groupId: number): Observable<number> {
+    return this.httpClient.get<number>(`${this.apiUrl}/${groupId}/count`);
+  }
+
   public GetGroupsList(user_uuid: string | null = null, academicYear: string | null = null): Observable<GroupI[]> {
     const param = {
       user_uuid: user_uuid,
@@ -67,5 +71,9 @@ export class GroupService {
 
   public patchGroup(groupId: number, groupObj: object): Observable<GroupI> {
     return this.httpClient.patch<GroupI>(`${this.apiUrl}/${groupId}`, groupObj);
+  }
+
+  public syncMembersWithKeycloak(groupId: number): Observable<boolean> {
+    return this.httpClient.patch<boolean>(`${this.apiUrl}/${groupId}`, {});
   }
 }
