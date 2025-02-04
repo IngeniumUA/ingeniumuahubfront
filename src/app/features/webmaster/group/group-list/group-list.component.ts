@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
 
 @Component({
   selector: 'app-group-list',
