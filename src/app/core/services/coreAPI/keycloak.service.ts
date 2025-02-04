@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
-import {Observable} from "rxjs";
+import {Observable, shareReplay} from "rxjs";
 import {KeycloakGroupI} from "@ingenium/app/shared/models/keycloakModels";
 
 @Injectable({
@@ -20,5 +20,9 @@ export class KeycloakService {
 
   getGroups(): Observable<KeycloakGroupI[]> {
     return this.httpClient.get<KeycloakGroupI[]>(`${this.apiUrl}/group?limit=1000`);
+  }
+
+  getGroupMemberCount(groupUUID: string): Observable<number> {
+    return this.httpClient.get<number>(`${this.apiUrl}/group/${groupUUID}/count`).pipe(shareReplay());
   }
 }

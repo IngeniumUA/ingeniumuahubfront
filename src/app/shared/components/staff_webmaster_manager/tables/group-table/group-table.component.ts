@@ -1,8 +1,7 @@
 import {AfterViewInit, Component, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild} from '@angular/core';
 import {GroupService} from '@ingenium/app/core/services/coreAPI/group.service';
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe} from '@angular/common';
 import {debounceTime, delay, Observable, of} from 'rxjs';
-import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {
   MatCell,
@@ -16,6 +15,7 @@ import {
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-group-table',
@@ -23,9 +23,6 @@ import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
   styleUrls: ['./group-table.component.scss'],
   imports: [
     AsyncPipe,
-    NgForOf,
-    NgIf,
-    CurrencyPipe,
     DatePipe,
     FormsModule,
     MatCell,
@@ -40,7 +37,8 @@ import {GroupI} from "@ingenium/app/shared/models/group/hubGroupI";
     MatRowDef,
     MatTable,
     ReactiveFormsModule,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    RouterLink
   ],
   standalone: true
 })
