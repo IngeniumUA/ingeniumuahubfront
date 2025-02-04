@@ -1,0 +1,47 @@
+<ng-container *ngIf="$groupDetail | async as groupI">
+<section class="staffSection">
+  <h2>Core user Obj</h2>
+  <table>
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Group:</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+      <th>ID</th>
+      <td>{{ groupI.id }}</td>
+    </tr>
+    <tr>
+      <th>Name</th>
+      <td>
+        {{ groupI.name }}
+      </td>
+    </tr>
+    <tr>
+      <th>Keycloak UUID</th>
+      <td>
+        @if (groupI.keycloak_group_uuid) {
+          {{ groupI.keycloak_group_uuid }}
+        } @else {
+          <form [formGroup]="this.groupPatchForm">
+            <input class="w-3/4" type="text" placeholder="sso_uuid" [formControlName]="'keycloakUuidControl'">
+          </form>
+          <button class="button button-primary button-inline" (click)="patchGroup()">Synchronise</button>
+        }
+      </td>
+    </tr>
+    <tr>
+      <th>Last Edited</th>
+      <td>{{ groupI.last_update_timestamp | date: 'long' }} </td>
+    </tr>
+    <tr>
+      <th>Created At</th>
+      <td>{{ groupI.created_timestamp | date: 'long' }}</td>
+    </tr>
+    </tbody>
+  </table>
+</section>
+</ng-container>

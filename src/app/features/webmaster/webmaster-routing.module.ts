@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {WebmasterComponent} from './webmaster.component';
-import {GroupListComponent} from './user/group-list/group-list.component';
+import {GroupListComponent} from '@ingenium/app/features/webmaster/group/group-list/group-list.component';
 import {UsersListComponent} from './user/users-list/users-list.component';
 import {ItemsOverviewPageComponent} from './item/item-dashboard/items-overview-page.component';
 import {ItemDashboardPageComponent} from './item/item-detail-dashboard/item-dashboard-page.component';
@@ -19,6 +19,7 @@ import {
 import {
   AppNotificationsComponent
 } from "@ingenium/app/features/webmaster/app-notifications/app-notifications.component";
+import {GroupDetailPageComponent} from "@ingenium/app/features/webmaster/group/group-detail/group-detail-page.component";
 
 
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
       {path: 'user', component: UsersListComponent},
       {path: 'user/:id', component: UserDetailPageComponent},
       {path: 'group', component: GroupListComponent},
+      {path: 'group/:id', component: GroupDetailPageComponent},
       {path: 'item', component: ItemsOverviewPageComponent},
       {path: 'item/:id', component: ItemDashboardPageComponent},
       {path: 'card', component: CardsPageComponent},

@@ -7,9 +7,6 @@ import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
   styleUrls: ['./group-list.component.css']
 })
 export class GroupListComponent {
-  constructor(private staffGroupService: GroupService) {
-  }
-
   addingGroup: boolean = false
 
   ToggleAddingGroup() {
