@@ -4,6 +4,10 @@
   import clubliedAudio from '$assets/clublied.mp3';
 </script>
 
+<svelte:head>
+  <title>Clublied | Ingenium UA</title>
+</svelte:head>
+
 <header>
   <Header whiteTheme={true} />
 </header>

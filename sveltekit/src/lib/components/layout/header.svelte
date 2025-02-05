@@ -26,7 +26,7 @@
 </script>
 
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
-<a class="accessibility-go-to-content" href="#main-content">Naar de inhoud</a>
+<a class="accessibility-go-to-content" href="#main-content">Naar de inhoud gaan</a>
 <!-- NAVIGATION -->
 <nav class="{ getNavigationTheme }">
 	<div class="px-2 sm:px-6 lg:px-8">
@@ -76,7 +76,7 @@
 								<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="info-menu-button" tabindex="-1">
 									<a href="/info" class="nav-dropdown-item" role="menuitem">Over ons</a>
 									<a href="/info/praesidium" class="nav-dropdown-item" role="menuitem">Praesidium</a>
-									<a href="/info/relations" class="nav-dropdown-item">Partner relations</a>
+									<a href="/info/relations" class="nav-dropdown-item" lang="en">Partner relations</a>
 									<a href="https://www.engineersoftomorrow.com/" target="_blank" rel="opener" class="nav-dropdown-item">Engineers Of Tomorrow</a>
 									<a href="/vacatures" class="nav-dropdown-item">Vacatures</a>
 									<a href="/info/clublied" class="nav-dropdown-item">Clublied</a>
@@ -146,7 +146,7 @@
 				<a href="/cloud" class="nav-item">Cloud</a>
 				<a href="/info" class="nav-item" role="menuitem">Over ons</a>
 				<a href="/info/praesidium" class="nav-item" role="menuitem">Praesidium</a>
-				<a href="/info/relations" class="nav-item">Partner relations</a>
+				<a href="/info/relations" class="nav-item" lang="en">Partner relations</a>
 				<a href="/vacatures" class="nav-item">Vacatures</a>
 				<a href="/info/clublied" class="nav-item">Clublied</a>
 				<a href="/info/contact" class="nav-item">Contact</a>

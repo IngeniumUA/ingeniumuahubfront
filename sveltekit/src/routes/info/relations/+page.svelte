@@ -1,10 +1,13 @@
 <script lang="ts">
-  // !! DON'T USE SSG HERE AS IT USES DYNAMIC PARTNER GRID AT BOTTOM OF PAGE !!
   import Header from '$lib/components/layout/header.svelte';
+  import PartnersGrid from '$lib/components/partners/partners-grid.svelte';
 
-  import eotPicture from '$assets/images/EoT_interview.png';
-  import pitchPicture from '$assets/images/pitch.png';
+  let { data } = $props();
 </script>
+
+<svelte:head>
+  <title>Partner relations | Ingenium UA</title>
+</svelte:head>
 
 <header>
   <Header whiteTheme={true} />
@@ -12,13 +15,13 @@
 
 <main class="relative h-full" id="main-content">
   <div class="ingenium-container">
-    <h1 class="white-section-title white-section-title-blue white-section-title-large">Partner relations</h1>
+    <h1 class="white-section-title white-section-title-blue white-section-title-large" lang="en">Partner relations</h1>
     <p>Ingenium organiseert verschillende activiteiten en evenementen om de studenten te ondersteunen in hun academische
       en professionele carrière. Hieronder vindt u meer informatie over onze evenementen en hoe u als bedrijf hieraan
       kan deelnemen.</p>
 
     <!-- EOT -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <div class="col-span-1 md:col-span-2">
         <h2 class="text-base mb-2 font-bold">Engineers of Tomorrow</h2>
         <p>Sinds het academiejaar 2019-2020 hebben wij vanuit de faculteit de kans gekregen om samen
@@ -45,12 +48,12 @@
         <a href="https://www.engineersoftomorrow.com/eot-voor-bedrijven/home" target="_blank" referrerpolicy="origin" rel="noopener"
            class="mt-3 block button button-outline-blue button-sm">Meer op de EoT website</a>
       </div>
-      <img src={eotPicture} alt="" aria-hidden="true" height="278" width="417">
-    </div>
+      <enhanced:img src="$assets/images/EoT_interview.png" alt="" aria-hidden="true" />
+    </section>
 
     <!-- NOON PITCH -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200">
-      <img src={pitchPicture} alt="" aria-hidden="true" height="297" width="397">
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-200">
+      <enhanced:img src="$assets/images/pitch.png" alt="" aria-hidden="true" />
       <div class="col-span-1 md:col-span-2">
         <h2 class="text-base mb-2 font-bold">Bedrijfspitch-middag op campus</h2>
         <p>
@@ -68,10 +71,10 @@
           zo voor dit bedrijf kunnen gaan werken.
         </p>
       </div>
-    </div>
+    </section>
 
     <!-- EVENING PITCH -->
-    <div class="mt-6 pt-6 border-t border-gray-200 mb-8">
+    <section class="mt-6 py-6 border-y border-gray-200 mb-8">
       <h2 class="text-base mb-2 font-bold">Bedrijfspitch-avond op campus</h2>
       <p>
         Na succes van vorige jaren, zullen er ook dit jaar weer pitchavonden zijn!
@@ -79,6 +82,13 @@
         De pitches zijn ook per studeerrichting ingedeeld zodat verschillende bedrijven tegelijk gericht kunnen pitchen.
         Na de laatste pitches is er nog de mogelijkheid om te netwerken met de studenten.
       </p>
-    </div>
+    </section>
   </div>
+
+  <section>
+    <div class="ingenium-container">
+      <h2 class="white-section-title white-section-title-blue">De partners van Ingenium UA</h2>
+    </div>
+    <PartnersGrid partners={ data.partners } />
+  </section>
 </main>

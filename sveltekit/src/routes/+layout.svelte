@@ -5,7 +5,7 @@
 	import Footer from '$lib/components/layout/footer.svelte';
 	import '../assets/scss/styles.scss';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	// Setup oidc client on client
 	if (browser) {
@@ -21,4 +21,5 @@
 <div class="flex-1">
 	{@render children()}
 </div>
-<Footer />
+
+<Footer serverHostname={ data.serverHostname } />

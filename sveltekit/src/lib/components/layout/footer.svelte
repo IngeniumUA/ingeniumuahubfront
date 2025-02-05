@@ -1,5 +1,7 @@
 <script lang="ts">
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
+
+	let { serverHostname = '???' } = $props();
 </script>
 
 <footer>
@@ -17,6 +19,8 @@
 				<a href="/info/credits">Credits</a>
 			</div>
 		</div>
+
+		<p class="server-info" aria-hidden="true">{ serverHostname }</p>
 	</div>
 </footer>
 
@@ -38,7 +42,7 @@
     }
 
     .footer-content {
-      @apply bg-blue-950 -mt-8 pb-4 text-xs text-gray-300;
+      @apply bg-blue-950 -mt-8 pb-4 text-xs text-gray-300 relative;
 
       .footer-end {
         @apply border-t border-blue-900 px-6 pt-4 flex flex-col md:flex-row gap-y-3 gap-x-6 items-center justify-center;
@@ -47,6 +51,10 @@
           @apply text-inherit;
         }
       }
+
+			.server-info {
+				@apply text-blue-900/90 absolute right-0 bottom-0 px-6 pb-4;
+			}
     }
 
     a {

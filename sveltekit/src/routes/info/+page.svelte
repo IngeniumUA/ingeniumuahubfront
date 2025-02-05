@@ -1,10 +1,10 @@
 <script lang="ts">
   import Header from '$lib/components/layout/header.svelte';
-
-  import whoAreWePicture from '$assets/images/wiezijnwij.png';
-  import galaPicture from '$assets/images/galabal.jpg';
-  import imaginelabPicture from '$assets/images/imaginelab_project.png';
 </script>
+
+<svelte:head>
+  <title>Over ons | Ingenium UA</title>
+</svelte:head>
 
 <header>
   <Header whiteTheme={true} />
@@ -34,14 +34,14 @@
         </p>
         <a href="/info/praesidium" class="mt-3 block button button-outline-blue button-sm">Bekijk het huidig praesidium</a>
       </div>
-      <img src={whoAreWePicture} alt="" aria-hidden="true">
+      <enhanced:img src="$assets/images/praesidium_thumb.webp" alt="" aria-hidden="true" />
     </div>
   </div>
 
   <!-- VISION AND AMBITION -->
   <section class="visual-break-section">
     <div class="ingenium-container grid grid-cols-1 lg:grid-cols-3 gap-4">
-      <img src={galaPicture}  alt="" aria-hidden="true">
+      <enhanced:img src="$assets/images/galabal.jpg"  alt="" aria-hidden="true" />
       <div class="col-span-1 md:col-span-2">
         <h2>Onze visie</h2>
 
@@ -95,7 +95,21 @@
         <p>
           <a href="https://imaginelab.club" rel="noopener" referrerpolicy="origin" class="mt-3 block button button-outline-blue button-sm">Bezoek imaginelab.club</a>
       </div>
-      <img alt="" aria-hidden="true" src={imaginelabPicture}>
+      <enhanced:img alt="" aria-hidden="true" src="$assets/images/imaginelab_project.png" />
     </div>
   </section>
 </main>
+
+<style>
+  .visual-break-section {
+      @apply bg-gray-200 my-5;
+  }
+
+  h2 {
+      @apply text-base mb-2 font-bold;
+  }
+
+  picture, img, picture > source {
+      @apply w-full mx-auto rounded-sm;
+  }
+</style>

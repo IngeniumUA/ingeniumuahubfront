@@ -19,7 +19,8 @@ export const load: PageLoad = async ({ fetch }) => {
 
 		return {
 			recommendations: parsedRecommendations as RecSysPreviewI[],
-			sponsored: parsedSponsored as RecSysPreviewI[]
+			sponsored: parsedSponsored as RecSysPreviewI[],
+			partnersReq: fetch(`${PUBLIC_API_URL}/partner/logo`).then(response => response.json())
 		}
 	} catch (e) {
 		console.error(e);

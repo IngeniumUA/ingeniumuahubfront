@@ -1,20 +1,15 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import Header from '$lib/components/layout/header.svelte';
-	import Footer from '$lib/components/layout/footer.svelte';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
-
-	import backgroundImg from '$assets/images/galabal-background/galabalbg_c_scale,w_1270.webp';
-	import presThumb from '$assets/images/praesidium_thumb.webp';
+	import PartnersGrid from '$lib/components/partners/partners-grid.svelte';
 
 	let { data }: PageProps = $props();
 </script>
 
 <div id="homepage-wrapper">
 	<header class="hero">
-		<picture aria-hidden="true">
-			<img src={backgroundImg} alt="" height="740" width="1270">
-		</picture>
+		<enhanced:img src="$assets/images/galabal_bg.webp" fetchpriority="high" sizes="min(1279px, 100vw)" alt="" aria-hidden="true" />
 
 		<div class="hero-wrapper">
 			<Header noBackground={true} whiteTheme={false} />
@@ -34,7 +29,7 @@
 		<section class="ingenium-container">
 			<div class="intro-card">
 				<div class="intro-card__image">
-					<img src={presThumb} alt="" aria-hidden="true" width="1000" height="863">
+					<enhanced:img src="$assets/images/praesidium_thumb.webp" alt="" aria-hidden="true" />
 				</div>
 				<div class="intro-card__content">
 					<p class="text-white">
@@ -98,6 +93,22 @@
 			{:else}
 				<p class="text-white text-lg w-full">Er zijn momenteel geen vacatures beschikbaar.</p>
 			{/if}
+		</section>
+
+		<!-- Sponsorbalkje -->
+		<section class="bg-white partner-section">
+			<h1 class="white-section-title white-section-title-large white-section-title-blue text-center mb-4">Met dank aan onze partners</h1>
+
+			{#await data.partnersReq}
+				<p class="text-center">
+					We zijn bezig met het laden van de partners. <br>
+					<span class="font-bold">Geen JavaScript? Kijk dan op onze <a href="/info/relations">relations pagina</a> voor meer info.</span>
+				</p>
+			{:then partners}
+				<PartnersGrid { partners } />
+			{:catch error}
+				<p class="text-center">Er is een fout opgetreden bij het ophalen van de partners.</p>
+			{/await}
 		</section>
 
 	</main>
@@ -234,11 +245,9 @@
     border: solid 2px white;
     color: var(--mainwhite);
     font-weight: bold;
-    padding: 0.5rem;
-    padding-right: 2rem;
-    padding-left: 2rem;
+		padding: 0.5rem 2rem;
 
-    margin: 1rem auto;
+		margin: 1rem auto;
     text-align: center;
     max-width: 6rem;
 

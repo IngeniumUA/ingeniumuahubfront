@@ -2,6 +2,10 @@
   import Header from '$lib/components/layout/header.svelte';
 </script>
 
+<svelte:head>
+  <title>Credits | Ingenium UA</title>
+</svelte:head>
+
 <header>
   <Header whiteTheme={true} />
 </header>

@@ -1,4 +1,4 @@
-import {OidcClient, SigninResponse, UserManager} from "oidc-client-ts";
+import { SigninResponse, UserManager } from "oidc-client-ts";
 import Cookies from 'js-cookie';
 import { PUBLIC_KC_ISSUER, PUBLIC_KC_CLIENT_ID, PUBLIC_KC_REDIRECT_URL } from "$env/static/public";
 import type { UserStateI } from "$lib/states/user.svelte";

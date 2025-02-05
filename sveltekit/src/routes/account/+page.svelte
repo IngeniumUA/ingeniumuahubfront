@@ -1,4 +1,4 @@
-<script type="ts">
+<script lang="ts">
   import MemberCard from '$lib/components/account/member-card.svelte';
   import AccountDetails from '$lib/components/account/account-details.svelte';
 
