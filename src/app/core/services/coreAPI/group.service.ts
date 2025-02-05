@@ -74,6 +74,6 @@ export class GroupService {
   }
 
   public syncMembersWithKeycloak(groupId: number): Observable<boolean> {
-    return this.httpClient.patch<boolean>(`${this.apiUrl}/${groupId}`, {});
+    return this.httpClient.patch<boolean>(`${this.apiUrl}/sync_to_keycloak/${groupId}`, {});
   }
 }
