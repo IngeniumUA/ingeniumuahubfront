@@ -1,20 +1,25 @@
 <script>
   import { onMount } from "svelte";
   import { goto } from '$app/navigation';
-  import { userState } from "$lib/states/user.svelte";
-  import { setUserInStateFromResponse } from "$lib/auth/auth";
+  import { oidcClient } from "$lib/states/user.svelte";
+  import { fetchUserDetails } from "$lib/auth/auth";
   import Header from "$lib/components/layout/header.svelte";
 
   let isFailure = $state(false);
   let errorMsg = $state('');
 
   onMount(async () => {
-    if (!userState.oidcClient) return;
+    if (!oidcClient.userManager) {
+        throw new Error("User manager not initialized.");
+    }
 
     try {
-      const response = await userState.oidcClient.signinCallback(window.location.href);
+      const user = await oidcClient.userManager.signinCallback(window.location.href);
+      if (!user) {
+          throw new Error("No user received from authentication.");
+      }
 
-      //setUserInStateFromResponse(userState, response);
+      await fetchUserDetails(oidcClient.userManager, user);
 
       await goto('/', { replaceState: true }); // We don't want to keep the callback url in the history
     } catch (error) {

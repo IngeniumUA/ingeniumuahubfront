@@ -4,11 +4,10 @@ import type { RecSysPreviewI } from "$lib/models/RecSysI";
 
 export const load: PageLoad = async ({ fetch }) => {
   try {
-    const eventsReq = await fetch(`${PUBLIC_API_URL}/item/event/list`);
-    const events = await eventsReq.json() as RecSysPreviewI[];
+    const events = await fetch(`${PUBLIC_API_URL}/item/event/list`).then(r => r.json());
 
     return {
-      events
+      events: events as RecSysPreviewI[]
     }
   } catch (error) {
     console.error(error);

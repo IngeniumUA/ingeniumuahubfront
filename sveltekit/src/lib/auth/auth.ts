@@ -1,14 +1,25 @@
-import { SigninResponse, UserManager } from "oidc-client-ts";
+import { User, UserManager, WebStorageStateStore } from "oidc-client-ts";
 import Cookies from 'js-cookie';
 import { PUBLIC_KC_ISSUER, PUBLIC_KC_CLIENT_ID, PUBLIC_KC_REDIRECT_URL } from "$env/static/public";
-import type { UserStateI } from "$lib/states/user.svelte";
 import { browser } from "$app/environment";
+
+export const fetchUserDetails = async (userManager: UserManager, userState: object) => {
+  const user = await userManager.getUser();
+
+  if (user) {
+    Object.assign(userState, user)
+  } else {
+    Object.assign(userState, {});
+  }
+
+  setTokensInCookies(user);
+}
 
 /**
  * Create an OIDC Client
  */
-export const setupOidcClient = () => {
-  const mgr = new UserManager({
+export const setupOidcClient = (oidcClient: any, userState: object) => {
+  oidcClient.userManager = new UserManager({
     authority: PUBLIC_KC_ISSUER,
     client_id: PUBLIC_KC_CLIENT_ID,
     redirect_uri: PUBLIC_KC_REDIRECT_URL,
@@ -16,55 +27,38 @@ export const setupOidcClient = () => {
     scope: "openid email roles",
     filterProtocolClaims: true,
     disablePKCE: false,
+    stateStore: new WebStorageStateStore({ store: window.localStorage }),
   });
-  return mgr;
+
+  // When the user is logged in.
+  oidcClient.userManager.events.addUserSignedIn(() => fetchUserDetails(oidcClient.userManager, userState));
+
+  // Now fetch the user
+  fetchUserDetails(oidcClient.userManager, userState);
 }
 
-export const setUserInStateFromResponse = (userState: UserStateI, response: SigninResponse) => {
-  userState.access_token = response.access_token;
-  userState.id_token = response.id_token;
-  userState.refresh_token = response.refresh_token;
-  userState.user = {
-    name: response.profile.name,
-    email: response.profile.email,
+export const setTokensInCookies = (user: User|null) => {
+  if (user === null) {
+    Cookies.remove("access_token");
+    return;
   }
 
-  // Set 1 month expiration for other data
-  const exp = new Date();
-  exp.setMonth(exp.getMonth() + 1);
-
-  // Create instance with default values
-  const cookies = Cookies.withAttributes({
+  Cookies.set('access_token', user.access_token, {
     secure: true,
     sameSite: 'strict',
-    expires: exp,
+    expires: user.expires_at !== undefined ? new Date(user.expires_at * 1000) : Date.now(),
   });
-
-  // Set the cookies
-  cookies.set('access_token', response.access_token, {
-    //expires: new Date(response.expires_at ?? Date.now()) // TODO: Fix this!
-  });
-  if (response.refresh_token) {
-    cookies.set('refresh_token', response.refresh_token);
-  }
-  if (response.id_token) {
-    cookies.set('id_token', response.id_token);
-  }
 }
 
 export const getTokens = (params: Partial<Record<string, string>>) => {
   if (browser) {
     return {
       access_token: Cookies.get('access_token'),
-      refresh_token: Cookies.get('refresh_token'),
-      id_token: Cookies.get('id_token'),
     }
   }
 
   return {
     access_token: params.__ACCESS_TOKEN__,
-    refresh_token: params.__REFRESH_TOKEN__,
-    id_token: params.__ID_TOKEN__,
   }
 }
 
@@ -81,11 +75,5 @@ export const getAuthorizationHeaders = (params: Partial<Record<string, string>>,
   return {
     ...additionalHeaders,
     'Authorization': `Bearer ${accessToken}`
-  }
-}
-
-export const logout = () => {
-  if (browser) {
-
   }
 }

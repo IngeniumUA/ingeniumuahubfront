@@ -4,23 +4,18 @@ import type { RecSysPreviewI } from '$lib/models/RecSysI';
 
 export const load: PageLoad = async ({ fetch }) => {
 	try {
-		const recommendationsRequest = fetch(`${PUBLIC_API_URL}/item/event/list`);
-		const sponsoredRequest = fetch(`${PUBLIC_API_URL}/item/promo/list`);
+		const recommendationsReq = fetch(`${PUBLIC_API_URL}/item/event/list`).then(r => r.json());
+		const sponsoredReq = fetch(`${PUBLIC_API_URL}/item/promo/list`).then(r => r.json());
 
 		// Wait for all promises
 		const [recommendations, sponsored] = await Promise.all([
-			recommendationsRequest, sponsoredRequest
-		]);
-
-		// Parse JSON
-		const [parsedRecommendations, parsedSponsored] = await Promise.all([
-			recommendations.json(), sponsored.json()
+			recommendationsReq, sponsoredReq
 		]);
 
 		return {
-			recommendations: parsedRecommendations as RecSysPreviewI[],
-			sponsored: parsedSponsored as RecSysPreviewI[],
-			partnersReq: fetch(`${PUBLIC_API_URL}/partner/logo`).then(response => response.json())
+			recommendations: recommendations as RecSysPreviewI[],
+			sponsored: sponsored as RecSysPreviewI[],
+			partnersReq: fetch(`${PUBLIC_API_URL}/partner/logo`).then(r => r.json()),
 		}
 	} catch (e) {
 		console.error(e);

@@ -1,20 +1,7 @@
-import type { UserManager } from "oidc-client-ts";
+import type {User, UserManager} from "oidc-client-ts";
 
-export interface UserStateI {
-  oidcClient: UserManager|null,
-  authenticated: boolean,
-  access_token?: string,
-  id_token?: string,
-  refresh_token?: string,
-  user: {
-    name?: string
-    email?: string,
-    roles?: string[],
-  }
-}
-
-export const userState = $state<UserStateI>({
-  oidcClient: null,
-  authenticated: false,
-  user: {}
+export const oidcClient = $state<{ userManager: null|UserManager }>({
+  userManager: null,
 });
+// @ts-ignore
+export const user = $state<User>({});

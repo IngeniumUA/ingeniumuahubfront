@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { userState } from "$lib/states/user.svelte";
+	import { user, oidcClient } from "$lib/states/user.svelte";
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
 
 	let { noBackground = false, whiteTheme = false } = $props();
@@ -15,18 +15,30 @@
 	});
 
 	async function doLogin() {
-		if (!userState.oidcClient) return;
+		if (!oidcClient.userManager) {
+			console.error("User Manager not initialized!");
+			return;
+		}
 
 		try {
-			await userState.oidcClient.signinRedirect();
+			await oidcClient.userManager.signinRedirect();
 		} catch (e) {
 			console.error(e);
 		}
 	}
+
+	async function doLogout() {
+		if (!oidcClient.userManager) {
+			console.error("User Manager not initialized!");
+			return;
+		}
+
+		await oidcClient.userManager.signoutRedirect();
+	}
 </script>
 
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
-<a class="accessibility-go-to-content" href="#main-content">Naar de inhoud gaan</a>
+<a class="accessibility-go-to-content" href="#main-content">Naar de inhoud</a>
 <!-- NAVIGATION -->
 <nav class="{ getNavigationTheme }">
 	<div class="px-2 sm:px-6 lg:px-8">
@@ -76,7 +88,7 @@
 								<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="info-menu-button" tabindex="-1">
 									<a href="/info" class="nav-dropdown-item" role="menuitem">Over ons</a>
 									<a href="/info/praesidium" class="nav-dropdown-item" role="menuitem">Praesidium</a>
-									<a href="/info/relations" class="nav-dropdown-item" lang="en">Partner relations</a>
+									<a href="/info/relations" class="nav-dropdown-item">Partner relations</a>
 									<a href="https://www.engineersoftomorrow.com/" target="_blank" rel="opener" class="nav-dropdown-item">Engineers Of Tomorrow</a>
 									<a href="/vacatures" class="nav-dropdown-item">Vacatures</a>
 									<a href="/info/clublied" class="nav-dropdown-item">Clublied</a>
@@ -95,7 +107,7 @@
 				<!-- Profile dropdown -->
 				<div class="relative ml-3">
 					<div>
-						{#if userState.authenticated}
+						{#if Object.keys(user).length > 0}
 							<!-- Profile dropdown button -->
 							<button type="button" onclick={ () => accountDropdownOpen = !accountDropdownOpen } aria-haspopup="true" id="profile-menu-button"
 								class="button button-primary button-icon-only relative inline-flex items-center justify-center { !whiteTheme ? '' : 'button-accessibility-white' }">
@@ -117,17 +129,17 @@
 					</div>
 
 					<!-- Profile dropdown menu -->
-					{#if accountDropdownOpen && userState.authenticated}
+					{#if accountDropdownOpen && Object.keys(user).length > 0}
 						<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
 							<a href="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 
-							<button type="button" class="nav-dropdown-item" role="menuitem">Afmelden</button>
+							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
 
 							<hr class="nav-dropdown-divider">
 							<span class="nav-dropdown-no-link">
 								<span class="sr-only">Je bent ingelogd met</span>
-								{ userState.user.email }
+								{ user.profile.email }
 							</span>
 						</div>
 					{/if}
@@ -146,7 +158,7 @@
 				<a href="/cloud" class="nav-item">Cloud</a>
 				<a href="/info" class="nav-item" role="menuitem">Over ons</a>
 				<a href="/info/praesidium" class="nav-item" role="menuitem">Praesidium</a>
-				<a href="/info/relations" class="nav-item" lang="en">Partner relations</a>
+				<a href="/info/relations" class="nav-item">Partner relations</a>
 				<a href="/vacatures" class="nav-item">Vacatures</a>
 				<a href="/info/clublied" class="nav-item">Clublied</a>
 				<a href="/info/contact" class="nav-item">Contact</a>

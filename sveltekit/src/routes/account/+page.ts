@@ -8,8 +8,8 @@ export const load = async ({ fetch, params }) => {
     }
 
     return {
-      account: fetch(`${PUBLIC_API_URL}/account`, options).then(response => response.json()),
-      memberCard: fetch(`${PUBLIC_API_URL}/account/card`, options).then(response => response.json()),
+      account: fetch(`${PUBLIC_API_URL}/account`, options).then(r => r.json()),
+      memberCard: fetch(`${PUBLIC_API_URL}/account/card`, options).then(r => r.json()),
     }
   } catch (error) {
 

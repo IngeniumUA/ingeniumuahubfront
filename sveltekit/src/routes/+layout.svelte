@@ -1,15 +1,18 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { userState } from "$lib/states/user.svelte";
+	import { oidcClient, user } from "$lib/states/user.svelte";
 	import { setupOidcClient } from "$lib/auth/auth";
+
 	import Footer from '$lib/components/layout/footer.svelte';
+	import PageSpinner from '$lib/components/spinners/page-spinner.svelte';
+
 	import '../assets/scss/styles.scss';
 
 	let { children, data } = $props();
 
 	// Setup oidc client on client
 	if (browser) {
-		userState.oidcClient = setupOidcClient();
+		setupOidcClient(oidcClient, user);
 	}
 </script>
 
@@ -18,8 +21,9 @@
 	<meta name="description" content="Sinds 2018 is Ingenium de officiële faculteitsvereniging van de faculteit Toegepaste Ingenieurswetenschappen aan de Universiteit Antwerpen.">
 </svelte:head>
 
+<PageSpinner />
 <div class="flex-1">
 	{@render children()}
 </div>
-
 <Footer serverHostname={ data.serverHostname } />
+
