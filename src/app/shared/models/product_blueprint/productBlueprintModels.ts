@@ -35,6 +35,7 @@ export interface ProductBlueprintI {
   max_per_checkout: number
 
   ordering: number
+  allow_individualised: boolean
 
   origin_item_id: number
   source_item_ids: number[]
