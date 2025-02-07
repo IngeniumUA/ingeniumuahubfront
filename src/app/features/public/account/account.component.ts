@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {Store} from '@ngxs/store';
 import {Observable} from 'rxjs';
 import {UserState} from "@ingenium/app/core/store";
-import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 @Component({
   selector: 'app-page',
@@ -10,7 +9,7 @@ import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent {
-  roles$: Observable<UserRolesI|null>;
+  roles$: Observable<string[]|null>;
 
   constructor(private store: Store) {
     this.roles$ = this.store.select(UserState.roles);

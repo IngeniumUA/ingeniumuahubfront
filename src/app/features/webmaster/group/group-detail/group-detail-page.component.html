@@ -53,7 +53,7 @@
     @let roles = this.roles$ | async;
     <ul>
         <li>Core members: {{ this.groupMembersCount$ | async }}</li>
-          @if (roles !== null && roles.is_manager && groupI.keycloak_group_uuid !== null) {
+          @if (roles !== null && roles?.includes('manager') && groupI.keycloak_group_uuid !== null) {
             <li>Keycloak members: {{ this.keycloakGroupMembersCount$ | async }}</li>
           }
     </ul>

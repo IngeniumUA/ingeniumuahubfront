@@ -5,7 +5,6 @@ import {Observable} from "rxjs";
 import {Store} from '@ngxs/store';
 import {User, UserState} from '@ingenium/app/core/store';
 import {OAuthService} from "angular-oauth2-oidc";
-import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 
 @Component({
@@ -30,7 +29,7 @@ export class PublicHeaderComponent {
   infoDropdownOpen: boolean = false;
 
   email$: Observable<string|null>;
-  roles$: Observable<UserRolesI|null>;
+  roles$: Observable<string[]|null>;
   isAuth$: Observable<boolean>;
 
   @Input() light_theme: boolean = false;  // 'dark' or 'light'
@@ -71,13 +70,10 @@ export class PublicHeaderComponent {
     this.infoDropdownOpen = b;
   }
 
-  hasAnyRole(roles: UserRolesI|null): boolean {
-    if (roles === null) {
-      return false;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return Object.keys(roles).some((key): boolean => roles[key]);
+  hasAnyRole(roles: string[]|null): boolean {
+    // This is kind of trash but this will do for now
+    return roles?.some(role => {
+      return ['manager', 'staff', 'webmaster'].includes(role);
+    }) ?? false;
   }
 }

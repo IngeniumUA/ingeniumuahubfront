@@ -100,11 +100,11 @@
             <button (click)="Logout()" type="button" class="nav-dropdown-item" role="menuitem">Afmelden</button>
 
             @let roles = (roles$ | async);
-            @if (hasAnyRole(roles)) {
+            @if (roles && hasAnyRole(roles)) {
               <hr class="nav-dropdown-divider">
-              <a [routerLink]="['/man']" *ngIf="roles?.is_manager" class="nav-dropdown-item" role="menuitem">Manager</a>
-              <a [routerLink]="['/web']" *ngIf="roles?.is_webmaster" class="nav-dropdown-item" role="menuitem" >Webmaster</a>
-              <a [routerLink]="['/staff']" *ngIf="roles?.is_staff" class="nav-dropdown-item" role="menuitem" >Staff</a>
+              <a [routerLink]="['/man']" *ngIf="roles?.includes('manager')" class="nav-dropdown-item" role="menuitem">Manager</a>
+              <a [routerLink]="['/web']" *ngIf="roles?.includes('webmaster')" class="nav-dropdown-item" role="menuitem" >Webmaster</a>
+              <a [routerLink]="['/staff']" *ngIf="roles?.includes('staff')" class="nav-dropdown-item" role="menuitem" >Staff</a>
             }
 
             <hr class="nav-dropdown-divider">

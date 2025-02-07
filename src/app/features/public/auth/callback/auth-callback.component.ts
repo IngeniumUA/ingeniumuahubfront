@@ -28,20 +28,11 @@ export class AuthCallbackComponent implements OnInit {
         throw new Error("No token or success received from endpoint!");
       }
 
-      const claims = this.oauthService.getIdentityClaims();
-
       // When the user is authenticated, set the auth data in the store
-      this.store.dispatch(new User.SetAuthData(
-        this.oauthService.getAccessToken(),
-        claims['email'],
-      )).pipe(first()).subscribe(() => {
-        // When the user data is set, get the user roles
-        this.store.dispatch(new User.GetRoles());
-
-        // Wait for a second
+      this.store.dispatch(new User.FetchAuthTokenFromStorage).pipe(first()).subscribe(() => {
         setTimeout(() => {
           this.router.navigateByUrl(decodeURIComponent(this.oauthService.state || '/'));
-        }, 1000);
+        }, 500);
       });
     } catch (error) {
       captureException(error);

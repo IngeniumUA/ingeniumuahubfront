@@ -31,7 +31,7 @@ export class ShoppingcartListComponent implements OnInit {
   products$: Observable<ProductOutI[]> = this.store.select(CartState.getProducts);
   failedCart$: Observable<null|CartFailedI> = this.store.select(CartState.getFailedCart);
   totalPrice$: Observable<number> = this.store.select(CartState.getTotalPrice);
-  allowStaffCheckout$ = this.store.select(UserState.roles).pipe(map(roles => roles && roles.is_manager));
+  allowStaffCheckout$ = this.store.select(UserState.roles).pipe(map(roles => roles && roles?.includes('manager')));
 
   items: ItemLimitedI[] = [];
   paymentErrors: HttpErrorResponse[] = [];
@@ -40,7 +40,7 @@ export class ShoppingcartListComponent implements OnInit {
 
   ngOnInit() {
     // Temporary, should be moved elsewhere
-    if (this.store.selectSnapshot(UserState.roles)?.is_manager) {
+    if (this.store.selectSnapshot(UserState.roles)?.includes('manager')) {
       this.store.dispatch(new CartActions.SetPaymentMethod(PaymentProviderEnum.Kassa));
     }
   }
