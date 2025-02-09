@@ -1,6 +1,6 @@
 import type { PageLoad } from './$types';
-import { PUBLIC_API_URL } from '$env/static/public';
 import type { RecSysPreviewI } from '$lib/models/RecSysI';
+import { PUBLIC_API_URL } from '$env/static/public';
 
 export const load: PageLoad = async ({ fetch }) => {
 	try {

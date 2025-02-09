@@ -1,31 +1,42 @@
 <script>
   import { onMount } from "svelte";
   import { goto } from '$app/navigation';
-  import { oidcClient } from "$lib/states/user.svelte";
+  import { auth } from "$lib/states/auth.svelte.ts";
   import { fetchUserDetails } from "$lib/auth/auth";
   import Header from "$lib/components/layout/header.svelte";
 
   let isFailure = $state(false);
+  let hasClearMessage = $state(true);
   let errorMsg = $state('');
 
   onMount(async () => {
-    if (!oidcClient.userManager) {
-        throw new Error("User manager not initialized.");
+    if (!auth.userManager) {
+      throw new Error("User manager not initialized.");
     }
 
     try {
-      const user = await oidcClient.userManager.signinCallback(window.location.href);
-      if (!user) {
-          throw new Error("No user received from authentication.");
+      const data = await auth.userManager.signinCallback(window.location.href);
+      if (!data) {
+        throw new Error("No user received from authentication.");
       }
 
-      await fetchUserDetails(oidcClient.userManager, user);
+      auth.user = await fetchUserDetails(auth.userManager);
 
-      await goto('/', { replaceState: true }); // We don't want to keep the callback url in the history
+      // We can directly assume the next url is safe, Svelte does not allow external urls
+      // replaceState -> We don't want to keep the callback url in the history
+      await goto(data.state?.next || '/', { replaceState: true });
     } catch (error) {
       isFailure = true;
       if (error instanceof Error) {
-        errorMsg = error.message;
+        switch (error.message) { // I don't like this, but it's the only way to provide a clear message
+          case 'No matching state found in storage':
+            errorMsg = 'De sessie is verlopen of je gebruikte de terug knop in jouw browser. Probeer opnieuw aan te melden.';
+            break;
+          default:
+            errorMsg = error.message;
+            hasClearMessage = false;
+            break;
+        }
       } else {
         errorMsg = 'Onbekende fout';
       }
@@ -48,8 +59,12 @@
         </svg>
     <h1 class="white-section-title white-section-title-large">Het aanmelden is mislukt</h1>
     <p>
-      We konden je niet aanmelden. Probeer het opnieuw of contacteer ons voor hulp. <br>
-      <span class="text-xs">Fout melding: {errorMsg}</span>
+      {#if hasClearMessage}
+        {errorMsg}
+      {:else}
+        We konden je niet aanmelden. Probeer het opnieuw of contacteer ons voor hulp. <br>
+        <span class="text-xs">Fout melding: {errorMsg}</span>
+      {/if}
     </p>
   {:else}
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12 mb-2 motion-safe:animate-spin">

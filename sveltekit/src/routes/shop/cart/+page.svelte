@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Header from '$lib/components/layout/header.svelte';
 	import { cartDetails, cartProducts, removeProductFromCart } from '$lib/states/cart.svelte';
+	import {hasRole, isAuthenticated} from "$lib/states/auth.svelte.js";
 
 	const totalPrice = $derived.by(() => {
 		return cartProducts.reduce((total, product) => {
@@ -63,15 +64,24 @@
 						<dd>&euro; { totalPrice }</dd>
 					</dl>
 
-					<div class="form-field mt-2">
-						<label for="guest-email" style="font-weight:bold;" >E-mailadres</label>
-						<input type="email" id="guest-email" autocomplete="email" required bind:value={ cartDetails.guestEmail } />
-					</div>
+					{#if !isAuthenticated()}
+						<div class="form-field mt-2">
+							<label for="guest-email" style="font-weight:bold;" >E-mailadres</label>
+							<input type="email" id="guest-email" autocomplete="email" required bind:value={ cartDetails.guestEmail } />
+						</div>
+					{/if}
 
 					<div class="form-field mt-2">
 						<label for="remarks">Opmerkingen <span class="sr-only">Dit veld kan je invullen indien je een opmerking wil toevoegen.</span></label>
 						<textarea name="remarks" id="remarks" rows="3" class="w-full resize-none" bind:value={ cartDetails.note }></textarea>
 					</div>
+
+					{#if hasRole('staff')}
+						<div class="form-field form-field-checkbox mt-4">
+							<input id="staffCheckout" type="checkbox" bind:checked={ cartDetails.staffCheckout } />
+							<label for="staffCheckout">Dit is een kassa bestelling</label>
+						</div>
+					{/if}
 
 					<a class="mt-4 button button-sm button-primary button-full" href="/shop/pay">
 						<span class="text-inherit">Naar betalen</span>

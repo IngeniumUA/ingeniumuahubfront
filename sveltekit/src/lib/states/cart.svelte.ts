@@ -4,6 +4,7 @@ export const cartProducts: ProductOutI[] = $state([]);
 export const cartDetails = $state({
 	guestEmail: '',
 	note: '',
+	staffCheckout: true,
 })
 
 /**
@@ -19,6 +20,7 @@ export const storeProductsInLocalStorage = () => {
 export const retrieveProductsFromLocalStorage = () => {
 	const storageData = window.localStorage.getItem('cartProducts');
 	if (!storageData) return;
+	cartProducts.length = 0; // Clear the array, needed for dev mode
 	cartProducts.push(...JSON.parse(storageData));
 }
 

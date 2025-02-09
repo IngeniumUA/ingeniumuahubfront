@@ -1,6 +1,7 @@
 <script lang="ts">
   import type {ProductOutI} from "$lib/models/productsI";
   import { addProductToCart, getProductCount, reduceProductQuantity } from '$lib/states/cart.svelte';
+  import {getLoginUrlWithRedirect} from "$lib/auth/auth";
 
   let { product }: { product: ProductOutI } = $props();
   let initialCount = getProductCount(product, true); // Initial count in state
@@ -12,6 +13,7 @@
     return product.price_policy.name;
   });
 
+  // TODO: This needs some improvement with the input field
   function setValue(val: number) {
     const newValue = Math.min(Math.max(product.max_count, 0), val); // Clamp between 0 and max
     const diff = count - newValue;
@@ -56,7 +58,7 @@
       {:else if product.max_count === -2}
         <p>Je hebt dit al gekocht</p>
       {:else if product.max_count === -3}
-        <a href="/auth/login">Aanmelden vereist</a>
+        <a href={ getLoginUrlWithRedirect() }>Aanmelden vereist</a>
       {:else}
         <p>Toevoegen niet mogelijk</p>
       {/if}

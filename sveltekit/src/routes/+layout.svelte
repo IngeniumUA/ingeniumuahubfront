@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { oidcClient, user } from "$lib/states/user.svelte";
-	import { setupOidcClient } from "$lib/auth/auth";
+	import '../assets/scss/styles.scss';
 
+	import { browser } from '$app/environment';
+
+	import { auth } from "$lib/states/auth.svelte.js";
+	import { retrieveProductsFromLocalStorage } from "$lib/states/cart.svelte";
 	import Footer from '$lib/components/layout/footer.svelte';
 	import GlobalPageSpinner from '$lib/components/spinners/global-page-spinner.svelte';
 
-	import '../assets/scss/styles.scss';
-	import { retrieveProductsFromLocalStorage } from '$lib/states/cart.svelte';
-
 	let { children, data } = $props();
-
-	// Setup oidc client and retrieve cart products
 	if (browser) {
-		setupOidcClient(oidcClient, user);
+		auth.userManager = data.oidcClient;
+		auth.user = data.user;
 		retrieveProductsFromLocalStorage();
 	}
 </script>
