@@ -2,12 +2,13 @@ import {ProductOutI, PaymentProviderEnum} from "@ingenium/app/shared/models/prod
 import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
 
 export interface CartTransactionI extends ProductOutI {
-  user_email: string | null;
+  user_email: string|null;
 }
 
 export interface CartStateModel {
-  products: ProductOutI[]; // TODO Sig dit moet dus de CartTransaction van hierboven worden
+  products: ProductOutI[];
   paymentProvider: PaymentProviderEnum,
   checkoutNote: string;
   failedCart: null|CartFailedI;
+  user_email: string|null,
 }

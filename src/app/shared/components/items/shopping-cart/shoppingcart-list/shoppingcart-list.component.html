@@ -25,7 +25,7 @@
         <li class="cart-list-product">
           <div class="cart-list-product__content">
             <p class="cart-list-product__title">
-              {{ product.name}}@if (product.price_policy.name !== null) {: {{ product.price_policy.name }}}
+              {{ product.name }}@if (product.price_policy.name !== null) {: {{ product.price_policy.name }}}
             </p>
             <ul *ngIf="product.product_meta.other_meta_data" class="cart-list-product__options">
               <li *ngFor="let meta of product.product_meta.other_meta_data | keyvalue">
@@ -67,16 +67,35 @@
 
   <!-- CART SUMMARY -->
   <aside>
-    <div class="cart-summary">
+    <div class="cart-summary" [formGroup]="checkoutForm">
       <h2 class="cart-summary__title">Overzicht</h2>
       <dl class="cart-summary__items">
         <dt>Totaal</dt>
         <dd>&euro; {{ totalPrice$ | async }}</dd>
       </dl>
 
-      <div class="form-field mt-2">
+      @if ((isAuth$ | async) === false) {
+        <div [ngClass]="{ 'form-field mt-2': true, 'is-invalid': checkoutForm.get('guestEmailField')?.errors !== null }"
+             [attr.aria-errormessage]="checkoutForm.get('guestEmailField')?.errors !== null ? 'checkout-email-errors' : null">
+          <label for="email" style="font-weight:bold;" >E-mailadres</label>
+          <input type="email" id="email" formControlName="guestEmailField" autocomplete="email" required
+            (change)="onEmailAreaChanged($event)" />
+
+          <ul *ngIf="checkoutForm.get('guestEmailField')?.errors" class="field-error-message-list" id="checkout-email-errors">
+            <li *ngIf="checkoutForm.get('guestEmailField')?.errors?.['email']">Vul een geldig e-mailadres in.</li>
+          </ul>
+        </div>
+      }
+
+      <div [ngClass]="{ 'form-field mt-2': true, 'is-invalid': checkoutForm.get('checkoutNote')?.errors !== null }"
+           [attr.aria-errormessage]="checkoutForm.get('checkoutNote')?.errors !== null ? 'checkout-note-errors' : null">
         <label for="remarks">Opmerkingen <span class="sr-only">Dit veld kan je invullen indien je een opmerking wil toevoegen.</span></label>
-        <textarea name="remarks" id="remarks" rows="3" class="w-full resize-none" (change)="onNoteAreaChanged($event)"></textarea>
+        <textarea name="remarks" id="remarks" rows="3" class="w-full resize-none" formControlName="checkoutNote"
+            (change)="onNoteAreaChanged($event)"></textarea>
+
+        <ul *ngIf="checkoutForm.get('checkoutNote')?.errors" class="field-error-message-list" id="checkout-note-errors">
+          <li *ngIf="checkoutForm.get('checkoutNote')?.errors?.['maxlength']">Je notitie mag maximaal 100 characters zijn.</li>
+        </ul>
       </div>
 
       @let allowStaffCheckout = (allowStaffCheckout$ | async);
@@ -96,5 +115,5 @@
 </div>
 
 <section *ngIf="this.paymentErrors.length > 0" class="transaction space-y-2">
-    <p class="error-message" *ngFor="let error of this.paymentErrors">{{ error.error.detail['error_statement_nl'] }}</p>
+  <p class="error-message" *ngFor="let error of this.paymentErrors">{{ error.error.detail['error_statement_nl'] }}</p>
 </section>

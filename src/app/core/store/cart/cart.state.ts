@@ -16,6 +16,7 @@ import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
     paymentProvider: PaymentProviderEnum.Stripe,
     checkoutNote: '',
     failedCart: null,
+    user_email: null,
   },
 })
 @Injectable()
@@ -23,10 +24,10 @@ export class CartState implements NgxsOnInit {
   constructor() {}
 
   ngxsOnInit(ctx: StateContext<CartStateModel>): void {
-    const localStorageState = window.localStorage.getItem('cart-products');
+    const localStorageState = window.localStorage.getItem('cart-state');
     if (localStorageState) {
       ctx.patchState({
-        products: JSON.parse(localStorageState),
+        ...JSON.parse(localStorageState),
       })
     }
   }
@@ -59,8 +60,13 @@ export class CartState implements NgxsOnInit {
   }
 
   @Selector()
-  static getFailedCart(state: CartStateModel): null|CartFailedI {
+  static getFailedCart(state: CartStateModel): CartFailedI|null {
     return state.failedCart;
+  }
+
+  @Selector()
+  static getGuestEmail(state: CartStateModel): string|null {
+    return state.user_email;
   }
 
 
@@ -136,7 +142,7 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.StoreInLocalStorage)
   storeInLocalStorage(ctx: StateContext<CartStateModel>) {
-    window.localStorage.setItem('cart-products', JSON.stringify(ctx.getState().products));
+    window.localStorage.setItem('cart-state', JSON.stringify(ctx.getState()));
   }
 
   @Action(CartActions.ClearCart)
@@ -159,6 +165,15 @@ export class CartState implements NgxsOnInit {
     ctx.patchState({
       checkoutNote: action.note
     });
+    ctx.dispatch(new CartActions.StoreInLocalStorage());
+  }
+
+  @Action(CartActions.SetEmail)
+  setEmail(ctx: StateContext<CartStateModel>, action: CartActions.SetEmail) {
+    ctx.patchState({
+      user_email: action.email,
+    });
+    ctx.dispatch(new CartActions.StoreInLocalStorage());
   }
 
   @Action(CartActions.AddCartErrors)

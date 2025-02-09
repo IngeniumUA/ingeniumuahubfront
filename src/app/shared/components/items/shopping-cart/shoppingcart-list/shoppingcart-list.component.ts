@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
 import {RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 import {Store} from "@ngxs/store";
 import {CartActions, CartState, UserState} from "@ingenium/app/core/store";
 import {map} from "rxjs/operators";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CartFailedI, FailedProductI} from "@ingenium/app/shared/models/cart/cartI";
 
 @Component({
@@ -23,7 +23,7 @@ import {CartFailedI, FailedProductI} from "@ingenium/app/shared/models/cart/cart
     ReactiveFormsModule,
     FormsModule,
     KeyValuePipe,
-
+    NgClass,
   ],
   standalone: true
 })
@@ -32,9 +32,12 @@ export class ShoppingcartListComponent implements OnInit {
   failedCart$: Observable<null|CartFailedI> = this.store.select(CartState.getFailedCart);
   totalPrice$: Observable<number> = this.store.select(CartState.getTotalPrice);
   allowStaffCheckout$ = this.store.select(UserState.roles).pipe(map(roles => roles && roles?.includes('manager')));
+  isAuth$ = this.store.select(UserState.isAuthenticated);
 
   items: ItemLimitedI[] = [];
   paymentErrors: HttpErrorResponse[] = [];
+
+  checkoutForm: FormGroup = new FormGroup({});
 
   constructor(private store: Store) {}
 
@@ -43,6 +46,17 @@ export class ShoppingcartListComponent implements OnInit {
     if (this.store.selectSnapshot(UserState.roles)?.includes('manager')) {
       this.store.dispatch(new CartActions.SetPaymentMethod(PaymentProviderEnum.Kassa));
     }
+
+    // Set email validator field
+    this.checkoutForm = new FormGroup({
+      guestEmailField: new FormControl(this.store.selectSnapshot(CartState.getGuestEmail), [
+        Validators.email,
+        Validators.required,
+      ]),
+      checkoutNote: new FormControl(this.store.selectSnapshot(CartState.getCheckoutNote), [
+        Validators.maxLength(100),
+      ])
+    });
   }
 
   removeProductFromCart(index: number) {
@@ -61,6 +75,11 @@ export class ShoppingcartListComponent implements OnInit {
   onNoteAreaChanged(event: Event) {
     const note = (event.target as HTMLInputElement).value;
     this.store.dispatch(new CartActions.SetCheckoutNote(note));
+  }
+
+  onEmailAreaChanged(event: Event) {
+    const email = (event.target as HTMLInputElement).value;
+    this.store.dispatch(new CartActions.SetEmail(email));
   }
 
   hasFailedProduct(product: ProductOutI, failedProducts: FailedProductI[]|undefined) {

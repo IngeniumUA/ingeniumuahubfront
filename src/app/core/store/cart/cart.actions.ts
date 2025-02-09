@@ -40,6 +40,11 @@ export namespace CartActions {
     constructor(public note: string) { }
   }
 
+  export class SetEmail {
+    static readonly type = '[Cart] Set E-mail';
+    constructor(public email: string) { }
+  }
+
   export class AddCartErrors {
     static readonly type = '[Cart] Add Cart Errors';
     constructor(public errors: CartFailedI|null) {}
