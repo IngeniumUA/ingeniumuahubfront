@@ -4,6 +4,9 @@ import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
+import {Observable} from "rxjs";
+import {Store} from "@ngxs/store";
+import {UserState} from "@ingenium/app/core/store";
 
 @Component({
   selector: 'app-stripe-payment',
@@ -14,7 +17,8 @@ export class StripePaymentComponent implements OnInit {
 
   constructor(    private formBuilder: FormBuilder,
                   private stripeService: StripeService,
-                  private router: Router) {
+                  private router: Router,
+                  private store: Store) {
   }
 
   @Input() checkout!: CheckoutSmollI;
@@ -69,7 +73,12 @@ export class StripePaymentComponent implements OnInit {
           alert( 'Betaling Success!' );
 
           // Redirect to transactions
+        if (this.store.selectSnapshot(UserState.isAuthenticated)) {
           this.router.navigateByUrl('/account/transactions')
+        } else {
+          this.router.navigateByUrl('/shop/confirm')
+        }
+
       } else if (result.paymentIntent.status === 'requires_action') {
           // Big one!
           // We sent about 35 mails over 5 months to get this issue fixed

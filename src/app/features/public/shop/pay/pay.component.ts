@@ -56,6 +56,14 @@ export class PayComponent implements OnInit {
     ).subscribe();
   }
 
+  navigateToNextPage() {
+    if (this.store.selectSnapshot(UserState.isAuthenticated)) {
+      this.router.navigateByUrl('/account/transactions')
+    } else {
+      this.router.navigateByUrl('/shop/confirm')
+    }
+  }
+
   processCheckoutResponse(response: CartSuccessI) {
     switch (response.checkout.payment_provider) {
       case PaymentProviderEnum.Dev:
@@ -64,15 +72,15 @@ export class PayComponent implements OnInit {
           this.toastrService.success(`Het volgnummer is ${response.tracker_id}`, 'Bestelling gelukt!', {
             timeOut: 10000,
           });
-          this.router.navigateByUrl('/account/transactions/');
+          this.navigateToNextPage()
           break;
         }
 
-        this.router.navigateByUrl('/account/transactions');
+        this.navigateToNextPage()
         break;
 
       case PaymentProviderEnum.Free:
-        this.router.navigateByUrl('/shop/confirm');
+        this.navigateToNextPage()
         break;
 
       case PaymentProviderEnum.Kassa:
