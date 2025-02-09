@@ -3,7 +3,6 @@
   import { page } from '$app/state';
   import { auth } from "$lib/states/auth.svelte.js";
   import Header from "$lib/components/layout/header.svelte";
-  import {goto} from "$app/navigation";
 
   onMount(async () => {
     await auth.doLogin({
