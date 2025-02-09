@@ -4,15 +4,17 @@
 	import { setupOidcClient } from "$lib/auth/auth";
 
 	import Footer from '$lib/components/layout/footer.svelte';
-	import PageSpinner from '$lib/components/spinners/page-spinner.svelte';
+	import GlobalPageSpinner from '$lib/components/spinners/global-page-spinner.svelte';
 
 	import '../assets/scss/styles.scss';
+	import { retrieveProductsFromLocalStorage } from '$lib/states/cart.svelte';
 
 	let { children, data } = $props();
 
-	// Setup oidc client on client
+	// Setup oidc client and retrieve cart products
 	if (browser) {
 		setupOidcClient(oidcClient, user);
+		retrieveProductsFromLocalStorage();
 	}
 </script>
 
@@ -21,7 +23,7 @@
 	<meta name="description" content="Sinds 2018 is Ingenium de officiële faculteitsvereniging van de faculteit Toegepaste Ingenieurswetenschappen aan de Universiteit Antwerpen.">
 </svelte:head>
 
-<PageSpinner />
+<GlobalPageSpinner />
 <div class="flex-1">
 	{@render children()}
 </div>

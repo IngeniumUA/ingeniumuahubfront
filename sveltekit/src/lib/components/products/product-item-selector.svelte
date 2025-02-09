@@ -1,140 +1,111 @@
 <script lang="ts">
   import type {ProductOutI} from "$lib/models/productsI";
+  import { addProductToCart, getProductCount, reduceProductQuantity } from '$lib/states/cart.svelte';
 
   let { product }: { product: ProductOutI } = $props();
-  let count = $state(0);
+  let initialCount = getProductCount(product, true); // Initial count in state
+  let count = $state(initialCount)
+  let inputCount = $state(initialCount);
 
   let name = $derived.by(() => {
     if (product.price_policy === null || product.price_policy.name === null) return product.name;
     return product.price_policy.name;
-  })
+  });
 
-  function increaseCount() {
+  function setValue(val: number) {
+    const newValue = Math.min(Math.max(product.max_count, 0), val); // Clamp between 0 and max
+    const diff = count - newValue;
+    count = newValue;
 
-  }
-  function decreaseCount() {
+    if (diff < 0) {
+      addProductToCart(product, Math.abs(diff));
+    } else if (diff > 0) {
+      reduceProductQuantity(product, diff);
+    }
 
+    inputCount = newValue; //getProductCount(product, true);
   }
 </script>
 
-<div>
-  <h5>{ name }</h5>
+<div class="product-item-selector">
+  <p class="product-name">{ name }</p>
 
   {#if product.max_count > 0}
     {#if product.price_policy.price > 0}
-      <p class="whitespace-nowrap text-black">&euro; { product.price_policy.price }</p>
+      <p class="product-price">&euro; { product.price_policy.price }</p>
     {/if}
 
-    <button disabled={ count <= product.max_count }>
-      <span class="sr-only">Product 1x verwijderen</span>
-      <span>-</span>
-    </button>
+    <div class="button-quantity-group">
+      <button disabled={ count <= 0 } onclick={ () => setValue(count - 1) }>
+        <span class="sr-only">Aantal verlagen (nu: { count})</span>
+        <span aria-hidden="true">&minus;</span>
+      </button>
 
-    <form>
-      <input id="product-count-form" type="number" value="0">
-    </form>
+      <input type="number" min="0" max={ product.max_count }
+             bind:value={ inputCount } oninput={ (e) => setValue(Number.parseInt(e.target?.value)) } />
 
-    <button disabled={ count >= product.max_count }>
-      <span class="sr-only">Product 1x toevoegen</span>
-      <span>+</span>
-    </button>
+      <button disabled={ count >= product.max_count } onclick={ () => setValue(count + 1) }>
+        <span class="sr-only">Aantal verhogen (nu: { count})</span>
+        <span aria-hidden="true">&plus;</span>
+      </button>
+    </div>
   {:else}
-
+    <div class="product-status">
+      {#if product.max_count === -1}
+        <p>Uitverkocht</p>
+      {:else if product.max_count === -2}
+        <p>Je hebt dit al gekocht</p>
+      {:else if product.max_count === -3}
+        <a href="/auth/login">Aanmelden vereist</a>
+      {:else}
+        <p>Toevoegen niet mogelijk</p>
+      {/if}
+    </div>
   {/if}
 </div>
 
-<style>
-    div {
-        margin: 0;
 
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
+<style lang="scss">
+  .button-quantity-group {
+    @apply flex items-center rounded-lg border;
 
-        border-radius: 8px;
-        min-height: 2rem;
-        padding-left: 0.3rem;
-        padding-right: 0.3rem;
-    }
-
-    h5 {
-        margin: 0;
-        padding: 0;
-        flex-grow: 1;
-
-        text-align: left;
-    }
-    p {
-        margin: 0;
-        padding-right: 0.5rem;
-        text-wrap: none;
-    }
-
-    /* Button */
     button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      @apply size-10 leading-10 font-bold transition text-blue-900 hover:text-gray-200 hover:bg-blue-900;
 
-        box-sizing: border-box;
-        -webkit-flex-shrink: 0;
-        flex-shrink: 0;
+      &:disabled {
+        @apply cursor-not-allowed text-gray-500 hover:bg-transparent;
+      }
 
-        height: 1.5rem;
-        width: 1.5rem;
+      &:first-child {
+        @apply rounded-l-lg;
+      }
 
-        padding: 0;
-
-        border: none;
-        border-radius: 10px;
-
-        font-size: 1.3rem;
-        line-height: 1.3rem;
-
-        color: var(--mainwhite);
+      &:last-child {
+        @apply rounded-r-lg;
+      }
     }
 
-    /* Input */
     input {
-        margin-left: 0.3rem;
-        margin-right: 0.3rem;
+      @apply h-10 w-16 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none;
+    }
+  }
 
-        height: 1.5rem;
-        min-width: 4rem;
+  .product-status {
+    p {
+      @apply italic;
+    }
+  }
 
-        padding: 0;
+  .product-item-selector {
+    @apply ml-2 py-2 flex flex-row items-center border-gray-200 border-b border-gray-200;
 
-        border: none;
-        text-align: center;
-        font-size: 1rem;
-        line-height: 1rem;
-
-        -webkit-text-decoration-thickness: 2px;
-        -webkit-text-decoration-line: underline;
-        -webkit-text-decoration-style: solid;
+    .product-name {
+      @apply flex-1;
     }
 
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    .product-price {
+      @apply whitespace-nowrap pr-4 text-gray-900;
     }
-
-    #product-count-form {
-        width: 1.5rem;
-    }
-
-    .product-to-login {
-        width: auto;
-        font-size: inherit;
-
-        padding: 3px;
-        padding-left: 6px;
-        padding-right: 6px;
-
-        border: none;
-        border-radius: 10px;
-    }
+  }
 
 </style>

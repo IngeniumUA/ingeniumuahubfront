@@ -1,39 +1,74 @@
 <script lang="ts">
   import type { PageProps } from './$types';
-  import type {ProductOutI} from "$lib/models/productsI";
+  import type { ProductGroupI } from '$lib/models/productsI';
 
   import Header from '$lib/components/layout/header.svelte';
   import ProductItemSelector from '$lib/components/products/product-item-selector.svelte';
   import {transformColorToRGBA} from "$lib/utilities/style-utilities";
+  import { cartProducts } from '$lib/states/cart.svelte';
 
   let { data }: PageProps = $props();
+  let currentCategory = $state(0);
 
-  let categories: Record<string, Record<string, ProductOutI[]>> = $derived.by(() => {
+  // Get the categories in sorted order
+  let categories = $derived.by(() => {
     if (data.products === undefined || data.products.length === 0) return [];
 
-    // Go over each product and group them by `product_meta.categorie` and `product_meta.group`
-    return data.products.reduce((acc, product) => {
-      let category = product.product_meta.categorie;
-      let group = product.product_meta.group;
+    return data.products
+      .sort((a, b) => {
+        return a.ordering - b.ordering;
+      })
+      .reduce<string[]>((acc, product) => {
+        if (!acc.includes(product.product_meta.categorie)) {
+          acc.push(product.product_meta.categorie);
+        }
+        return acc;
+      }, []);
+  });
 
-      // If the category doesn't yet exist in the accumulator, create it
-      if (!acc[category]) acc[category] = {};
-      // If the group doesn't yet exist in the category, create it
-      if (!acc[category][group]) acc[category][group] = [];
+  // Get the products of the selected category
+  // I don't really like this as it can probably be simplified but ok
+  let products = $derived.by(() => {
+    if (data.products === undefined || data.products.length === 0) return [];
 
-      acc[category][group].push(product);
+    return data.products.reduce<ProductGroupI[]>((acc, product) => {
+      // If the product is not part of the category
+      if (product.product_meta.categorie !== categories[currentCategory]) {
+        return acc;
+      }
+
+      // Find if the group already exists, if not add it
+      const groupIdx = acc.findIndex((g) => g.group_name === product.product_meta.group);
+      if (groupIdx === -1) {
+        acc.push({
+          group_name: product.product_meta.group,
+          products: [
+            product
+          ]
+        })
+      } else {
+        acc[groupIdx].products.push(product);
+
+        // Sort the products
+        acc[groupIdx].products = acc[groupIdx].products.sort((a, b) => {
+          return a.price_policy.ordering - b.price_policy.ordering;
+        });
+      }
 
       return acc;
-    }, {});
+    }, []);
   });
-  let currentCategory = $state(Object.keys(categories)[0]);
 
-  function buttonStyle(category: string) {
+  function buttonStyle(category: number) {
     if (category === currentCategory) {
       return 'text-black bg-white font-bold';
     }
   }
 </script>
+
+<svelte:head>
+  <title>{ data.event.item.name ?? 'Onbekend evenement' } | IngeniumUA</title>
+</svelte:head>
 
 <header>
   <Header whiteTheme={true} />
@@ -46,29 +81,35 @@
       <p>{ data.event.item.description }</p>
 
       {#if Array.isArray(data.products) && data.products.length > 0}
-        <nav role="tablist" class="categorie-section" style:background-color={ transformColorToRGBA(data.event.derived_type.display.color) }>
-          {#each Object.keys(categories) as name }
-            <button class="categorie-button { buttonStyle(name) }" onclick="{ () => currentCategory = name }">
+        <nav class="categorie-section" style:background-color={ transformColorToRGBA(data.event.derived_type.display.color) }>
+          {#each categories as name, idx }
+            <button class="categorie-button { buttonStyle(idx) }" onclick="{ () => currentCategory = idx }">
               { name }
             </button>
           {/each}
         </nav>
 
-        {#if currentCategory !== ''}
-          {#each Object.keys(categories[currentCategory]) as group }
-            <section class="product-group">
-              <h3>{ group }</h3>
-              <div class="products">
-                {#each categories[currentCategory][group] as product }
-                  <ProductItemSelector { product } />
+        <ul aria-label="Product groepen">
+          {#each products as group }
+            <li class="product-group">
+              <p>{ group.group_name }</p>
+              <ul class="products">
+                {#each group.products as product }
+                  <li>
+                    <ProductItemSelector { product } />
+                  </li>
                 {/each}
-              </div>
-            </section>
+              </ul>
+            </li>
           {/each}
-        {/if}
+        </ul>
       {:else}
         <p>Er zijn geen producten beschikbaar voor deze activiteit.</p>
       {/if}
+
+      <div class="text-right mt-4">
+        <a href="/shop/cart" class="button button-primary button-sm">Winkelwagen bekijken ({ cartProducts.length })</a>
+      </div>
     </section>
     <aside>
       <img src="{ data.event.derived_type.display.image_square }" alt="" aria-hidden="true" loading="eager"
@@ -78,6 +119,22 @@
 </main>
 
 <style lang="scss">
+  .product-group {
+    @apply mt-3;
+
+    p {
+      @apply text-lg font-semibold;
+    }
+
+    .products {
+      @apply ml-2 border-l border-blue-900;
+    }
+
+    &:first-child {
+      @apply mt-0;
+    }
+  }
+
   section {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -109,45 +166,5 @@
 
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-  }
-
-  /* Products */
-  .product-group {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  .product-group h3 {
-    font-weight: bolder;
-    font-family: D-DIN Condensed, D-DIN, sans-serif;
-
-    font-size: 1.1rem;
-    color: var(--mainblue);
-  }
-
-  .product-group .products {
-    padding-left: 5px;
-    padding-bottom: 0.5rem;
-
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  /* Order button */
-  .order-section {
-    width: 100%;
-
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-
-    margin-bottom: 2rem;
-
-    border: solid var(--ingenium-grey) 2px;
-    border-left: none;
-    border-right: none;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
   }
 </style>
