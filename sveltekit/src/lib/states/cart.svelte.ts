@@ -10,9 +10,9 @@ export const cartDetails = $state({
 	guestEmail: '',
 	note: '',
 	staffCheckout: true,
-	isPaying: true,
+	isPaying: false,
 	turnstileToken: null,
-	stripePayment: true,
+	stripePayment: false,
 	checkout: null,
 })
 

@@ -99,7 +99,7 @@
   }
 
   .product-item-selector {
-    @apply ml-2 py-2 flex flex-row items-center border-gray-200 border-b;
+    @apply ml-2 py-2 flex flex-row items-center border-b border-gray-200;
 
     .product-name {
       @apply flex-1;

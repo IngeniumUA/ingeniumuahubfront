@@ -1,16 +1,14 @@
 FROM node:20-alpine AS build
 ARG ENVIRONMENT=production
 
-# Copying of ENV is not required as Vite will use the correct one automatically
-
 WORKDIR /source
 COPY . .
-RUN npm ci && npm run build -- --mode $ENVIRONMENT
+RUN npm ci && npm run build -- --mode $ENVIRONMENT && rm -rf node_modules && npm ci --omit=dev
 
 FROM gcr.io/distroless/nodejs20-debian12 AS runtime
 
 WORKDIR /app
 COPY --from=build /source/build ./build
-COPY --from=build /source/package.json .
-RUN npm install --omit=dev
-CMD ["node", "build"]
+COPY --from=build /source/node_modules ./node_modules
+COPY --from=build /source/package.json ./package.json
+CMD ["build/index.js"]

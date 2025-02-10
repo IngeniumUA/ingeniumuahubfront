@@ -4,7 +4,7 @@
 
   import Header from '$lib/components/layout/header.svelte';
   import ProductItemSelector from '$lib/components/products/product-item-selector.svelte';
-  import {transformColorToRGBA} from "$lib/utilities/style-utilities";
+  import {calcColorIntensity, transformColorToRGBA} from "$lib/utilities/style-utilities";
   import { cartProducts } from '$lib/states/cart.svelte';
 
   let { data }: PageProps = $props();
@@ -16,7 +16,7 @@
 
     return data.products
       .sort((a, b) => {
-        return a.ordering - b.ordering;
+        return b.ordering - a.ordering;
       })
       .reduce<string[]>((acc, product) => {
         if (!acc.includes(product.product_meta.categorie)) {
@@ -51,12 +51,19 @@
 
         // Sort the products
         acc[groupIdx].products = acc[groupIdx].products.sort((a, b) => {
-          return a.price_policy.ordering - b.price_policy.ordering;
+          return b.price_policy.ordering - a.price_policy.ordering;
         });
       }
 
       return acc;
     }, []);
+  });
+
+  let primaryColor = $derived.by(() => {
+    return transformColorToRGBA(data.event.derived_type.display.color);
+  });
+  let secondaryColor = $derived.by(() => {
+    return calcColorIntensity(data.event.derived_type.display.color, -0.1) < 180 ? 'white' : 'black';
   });
 
   function buttonStyle(category: number) {
@@ -81,9 +88,10 @@
       <p>{ data.event.item.description }</p>
 
       {#if Array.isArray(data.products) && data.products.length > 0}
-        <nav class="categorie-section" style:background-color={ transformColorToRGBA(data.event.derived_type.display.color) }>
+        <nav class="categorie-section" style:background-color={ primaryColor }>
           {#each categories as name, idx }
-            <button class="categorie-button { buttonStyle(idx) }" onclick="{ () => currentCategory = idx }">
+            <button class="categorie-button { buttonStyle(idx) }" onclick="{ () => currentCategory = idx }"
+                    style:color={ currentCategory === idx ? 'inherit' : secondaryColor }>
               { name }
             </button>
           {/each}
@@ -93,7 +101,7 @@
           {#each products as group }
             <li class="product-group">
               <p>{ group.group_name }</p>
-              <ul class="products">
+              <ul class="products" style:border-color={ primaryColor }>
                 {#each group.products as product }
                   <li>
                     <ProductItemSelector { product } />
@@ -107,8 +115,8 @@
         <p>Er zijn geen producten beschikbaar voor deze activiteit.</p>
       {/if}
 
-      <div class="text-right mt-4">
-        <a href="/shop/cart" class="button button-primary button-sm">Winkelwagen bekijken ({ cartProducts.length })</a>
+      <div class="cart-button-container">
+        <a href="/shop/cart" class="button button-primary">Winkelwagen bekijken ({ cartProducts.length })</a>
       </div>
     </section>
     <aside>
@@ -135,6 +143,14 @@
     }
   }
 
+  .cart-button-container {
+    @apply text-center md:text-right mt-4;
+
+    .button {
+      @apply w-full text-center justify-center md:w-auto md:justify-start md:text-left;
+    }
+  }
+
   section {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -156,6 +172,7 @@
     display: flex;
     flex-direction: row;
   }
+
   .categorie-section .categorie-button {
     height: 100%;
     max-width: 50%;

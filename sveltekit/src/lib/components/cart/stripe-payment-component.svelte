@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
   import { PUBLIC_STRIPE_PK_KEY, PUBLIC_STRIPE_RETURN_URL } from "$env/static/public";
-  import { cartDetails } from "$lib/states/cart.svelte";
+  import { cartDetails, clearCart } from "$lib/states/cart.svelte";
   import Modal from "$lib/components/layout/modal.svelte";
 
   let isOpen = $state(true);
@@ -31,6 +31,7 @@
 
     try {
       await element.submit();
+      clearCart();
       const data = await stripe.confirmPayment({
         elements: element,
         redirect: 'if_required',
