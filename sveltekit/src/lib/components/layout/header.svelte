@@ -2,6 +2,7 @@
 	import { auth, isAuthenticated } from "$lib/states/auth.svelte.js";
 	import { getLoginUrlWithRedirect } from "$lib/auth/auth";
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
+	import {PUBLIC_KC_LOGOUT_URL} from "$env/static/public";
 
 	let { noBackground = false, whiteTheme = false } = $props();
 	let mobileMenuOpen = $state(false);
@@ -16,7 +17,9 @@
 	});
 
 	async function doLogout() {
-		await auth.userManager.signoutRedirect();
+		await auth.userManager.signoutRedirect({
+			post_logout_redirect_uri: PUBLIC_KC_LOGOUT_URL,
+		});
 	}
 </script>
 
