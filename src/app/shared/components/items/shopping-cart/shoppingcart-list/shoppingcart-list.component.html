@@ -42,11 +42,11 @@
                   Kan niet aangekocht worden
                   </span>
                 <span class="text-ingenium-grey-700 text-sm">
-                  @if (failedProduct.auth_error === null) {
-                    {{ failedProduct.non_auth_error.error_nl }}
-                  } @else {
-                    {{ failedProduct.auth_error.error_nl }}
-                  }
+                  @if (failedProduct.auth_error !== undefined && failedProduct.auth_error !== null) {
+                    {{ failedProduct.auth_error | json }}
+                  } @else if (failedProduct.non_auth_error !== undefined && failedProduct.non_auth_error !== null) {
+                  {{ failedProduct.non_auth_error | json }}
+                }
                 </span>
               </p>
             }

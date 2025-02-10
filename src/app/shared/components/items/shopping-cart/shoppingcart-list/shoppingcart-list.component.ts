@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
 import {Router, RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -25,6 +25,7 @@ import {apiEnviroment} from "@ingenium/environments/environment";
     FormsModule,
     KeyValuePipe,
     NgClass,
+    JsonPipe,
   ],
   standalone: true
 })
