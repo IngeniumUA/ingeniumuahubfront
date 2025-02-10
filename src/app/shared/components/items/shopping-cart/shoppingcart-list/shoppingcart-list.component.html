@@ -63,6 +63,9 @@
         </li>
       }
     </ul>
+    @if (failedCart !== null && failedCart.error_nl !== undefined && failedCart.error_nl !== null) {
+      <span  class="error-message">{{ failedCart.error_nl }}</span>
+    }
   </section>
 
   <!-- CART SUMMARY -->
