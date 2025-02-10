@@ -25,7 +25,6 @@ import {apiEnviroment} from "@ingenium/environments/environment";
     FormsModule,
     KeyValuePipe,
     NgClass,
-    JsonPipe,
   ],
   standalone: true
 })
