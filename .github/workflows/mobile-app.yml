@@ -138,12 +138,12 @@ jobs:
       - name: Assemble IPA
         run: xcodebuild archive -archivePath App.xcarchive -exportArchive -exportOptionsPlist ./archive.plist -exportPath output -allowProvisioningUpdates
 
-      - name: Upload release bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-ios
-          path: output/
-          retention-days: 1
+#      - name: Upload release bundle
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: app-ios
+#          path: output/
+#          retention-days: 1
 
       - name: Validate and Upload to apple connect
         run: |

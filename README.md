@@ -55,6 +55,10 @@ run `python kippietools setmode -m {release or notificationtest}`. This only aff
 - Every page should implement the hardware back button. Use backButtonClicked from app-functions service.
 
 # Releasing to stores
+First, merge the dev-mobile-app branch into the mobile-app branch.
+<br>
+Make sure to set the app version! Otherwise, the app upload to the release platforms will fail!
+
 The app packages for ios and android get uploaded to the release panels automatically through GitHub actions.
 <br><br>
 To release for ios:
@@ -64,8 +68,10 @@ To release for ios:
 - At the upper left, right under Ingenium, click on the plus next to iOS App.
 - Enter the version number of the release.
 - In the "Previews and Screenshots" section under "What's New in This Version", enter the changes made to the app.
-- In the "Build" section, select the desired (Normally the only or latest) build.
-- In the top right, click on "Add for Review".
+- In the "Build" section, click on "Add Build".
+- Select the desired (Normally the only or latest) build.
+- In the top right, click on "Save", then click on "Add for Review".
+- In the top right, click on "Submit to App Review".
 
 <br>
 To release for Android:
@@ -77,6 +83,14 @@ To release for Android:
 - At the top right, click on "Nieuwe release maken".
 - In the "App-bendels" section, click on "Toevoegen vanuit bibliotheek".
 - Select the desired (Normally the latest) build.
-- In the "Details van release" section, under "Releasenaam" enter the version number and under "Release-opmerkingen" enter the changes made to the app.
+- In the "Details van release" section, under "Release-opmerkingen" enter the changes made to the app.
 - In the bottom right, click on "Volgende".
 - In the bottom right, click on "Opslaan".
+- In the popup, click on "Ga naar overzicht".
+- In the top right, click on "1 wijziging sturen voor beoordeling".
+- In the popup, click on "Wijzigingen ter beoordeling sturen".
+
+## Notes
+- It takes 2 to 3 days to complete the review process.
+- When merging the dev banch, it takes about 10min for the GitHub actions to complete.
+- The IOS app bundle needs to be processed when it is uploaded. This takes about 15min. Only after the review is completed will you see the app in the "Build" section.
