@@ -43,6 +43,7 @@ export class PayComponent implements OnInit {
       products: this.store.selectSnapshot(CartState.getProducts),
       checkout_note: this.store.selectSnapshot(CartState.getCheckoutNote),
       user_email: email,
+      captcha_token: this.store.selectSnapshot(CartState.getCaptchaToken),
     }).pipe(
       map((result: CartSuccessI) => this.processCheckoutResponse(result)),
       catchError((error): any => {

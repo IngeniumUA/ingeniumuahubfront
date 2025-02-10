@@ -45,6 +45,11 @@ export namespace CartActions {
     constructor(public email: string) { }
   }
 
+  export class SetCaptchaToken {
+    static readonly type = '[Cart] Set Captcha Token';
+    constructor(public token: string|null) { }
+  }
+
   export class AddCartErrors {
     static readonly type = '[Cart] Add Cart Errors';
     constructor(public errors: CartFailedI|null) {}

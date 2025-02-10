@@ -11,4 +11,5 @@ export interface CartStateModel {
   checkoutNote: string;
   failedCart: null|CartFailedI;
   user_email: string|null,
+  captchaToken: string|null;
 }

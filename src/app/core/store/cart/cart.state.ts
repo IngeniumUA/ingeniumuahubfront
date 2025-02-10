@@ -17,6 +17,7 @@ import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
     checkoutNote: '',
     failedCart: null,
     user_email: null,
+    captchaToken: null,
   },
 })
 @Injectable()
@@ -67,6 +68,11 @@ export class CartState implements NgxsOnInit {
   @Selector()
   static getGuestEmail(state: CartStateModel): string|null {
     return state.user_email;
+  }
+
+  @Selector()
+  static getCaptchaToken(state: CartStateModel): string|null {
+    return state.captchaToken;
   }
 
 
@@ -142,7 +148,9 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.StoreInLocalStorage)
   storeInLocalStorage(ctx: StateContext<CartStateModel>) {
-    window.localStorage.setItem('cart-state', JSON.stringify(ctx.getState()));
+    const state = structuredClone(ctx.getState());
+    state.captchaToken = null;
+    window.localStorage.setItem('cart-state', JSON.stringify(state));
   }
 
   @Action(CartActions.ClearCart)
@@ -174,6 +182,13 @@ export class CartState implements NgxsOnInit {
       user_email: action.email,
     });
     ctx.dispatch(new CartActions.StoreInLocalStorage());
+  }
+
+  @Action(CartActions.SetCaptchaToken)
+  setCaptchaToken(ctx: StateContext<CartStateModel>, action: CartActions.SetCaptchaToken) {
+    ctx.patchState({
+      captchaToken: action.token,
+    });
   }
 
   @Action(CartActions.AddCartErrors)

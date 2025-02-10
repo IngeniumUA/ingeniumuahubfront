@@ -16,5 +16,6 @@ export const apiEnviroment = {
   apiUrl: 'https://hub.dev.ingeniumua.be/api/v1/',
   appHost: 'dev.ingeniumua.be',
   oauthConfig: OAuthConfig,
-  versions: versions
+  versions: versions,
+  turnstileSiteKey: '0x4AAAAAAAX0Qzpta2sfvGK-',
 };
