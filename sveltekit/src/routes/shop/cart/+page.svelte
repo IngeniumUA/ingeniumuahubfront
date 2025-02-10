@@ -1,14 +1,14 @@
 <script lang="ts">
-	import {browser} from "$app/environment";
-	import {PUBLIC_CLOUDFLARE_TURNSTILE} from "$env/static/public";
-	import {hasRole, isAuthenticated} from "$lib/states/auth.svelte";
+	import { browser } from "$app/environment";
+	import { PUBLIC_CLOUDFLARE_TURNSTILE } from "$env/static/public";
+	import { hasRole, isAuthenticated } from "$lib/states/auth.svelte";
+	import { getLoginUrlWithRedirect } from "$lib/auth/auth";
+	import { cartDetails, cartProducts, checkoutCart } from '$lib/states/cart.svelte';
 	import Header from '$lib/components/layout/header.svelte';
 	import Modal from "$lib/components/layout/modal.svelte";
 	import CartList from "$lib/components/cart/cart-list.svelte";
 	import StripePaymentComponent from "$lib/components/cart/stripe-payment-component.svelte";
-	import {cartDetails, cartProducts, checkoutCart} from '$lib/states/cart.svelte';
 	import InsetSpinner from '$lib/components/spinners/inset-spinner.svelte';
-	import {getLoginUrlWithRedirect} from "$lib/auth/auth";
 
 	let error = $state(false);
 	let errorMsg = $state('');
@@ -108,6 +108,9 @@
 		{/snippet}
 	</Modal>
 {/if}
+{#if cartDetails.isPaying && cartDetails.stripePayment}
+	<StripePaymentComponent />
+{/if}
 
 <header>
 	<Header whiteTheme={true} />
@@ -141,11 +144,7 @@
 						<dd>&euro; { totalPrice }</dd>
 					</dl>
 
-					{#if cartDetails.isPaying}
-						{#if cartDetails.stripePayment}
-							<StripePaymentComponent />
-						{/if}
-					{:else}
+					{#if !cartDetails.isPaying}
 						<div class="form-field mt-2">
 							<label for="remarks">Opmerkingen <span class="sr-only">Dit veld kan je invullen indien je een opmerking wil toevoegen.</span></label>
 							<textarea name="remarks" id="remarks" rows="3" class="w-full resize-none"
