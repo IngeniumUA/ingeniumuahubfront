@@ -39,7 +39,7 @@ export const setTokensInCookies = (user: User|null) => {
   });
 }
 
-export const getTokens = (params: Partial<Record<string, string>>) => {
+export const getTokens = (params: Partial<Record<string, string>>|null) => {
   if (browser) {
     return {
       access_token: Cookies.get('access_token'),
@@ -47,7 +47,7 @@ export const getTokens = (params: Partial<Record<string, string>>) => {
   }
 
   return {
-    access_token: params.__ACCESS_TOKEN__,
+    access_token: params?.__ACCESS_TOKEN__,
   }
 }
 
@@ -65,7 +65,7 @@ export const hasValidToken = (params: Partial<Record<string, string>>) => {
  * @param params uses to get the access token on the server
  * @param additionalHeaders can be used to set additional headers
  */
-export const getAuthorizationHeaders = (params: Partial<Record<string, string>>, additionalHeaders = {}): HeadersInit => {
+export const getAuthorizationHeaders = (params: Partial<Record<string, string>>|null, additionalHeaders = {}): HeadersInit => {
   const accessToken = getTokens(params).access_token;
   if (!accessToken) return additionalHeaders;
 

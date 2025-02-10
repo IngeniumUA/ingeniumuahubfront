@@ -1,10 +1,19 @@
-import type { ProductOutI } from '$lib/models/productsI';
+import {PaymentProviderEnum, type ProductOutI} from '$lib/models/productsI';
+import {getAuthorizationHeaders} from "$lib/auth/auth";
+import {PUBLIC_API_URL} from "$env/static/public";
+import {isAuthenticated} from "$lib/states/auth.svelte";
+import type {CartSuccessI} from "$lib/models/cartI";
+import {goto} from "$app/navigation";
 
 export const cartProducts: ProductOutI[] = $state([]);
 export const cartDetails = $state({
 	guestEmail: '',
 	note: '',
 	staffCheckout: true,
+	isPaying: true,
+	turnstileToken: null,
+	stripePayment: true,
+	checkout: null,
 })
 
 /**
@@ -63,6 +72,14 @@ export const reduceProductQuantity = (product: ProductOutI, count: number = 1) =
 }
 
 /**
+ * Clears the cart
+ */
+export const clearCart = () => {
+	cartProducts.length = 0;
+	storeProductsInLocalStorage();
+}
+
+/**
  * Get the amount in cart for a specific product
  * @param product the product to check
  * @param checkPricePolicy set to true if you want to differentiate between price policies
@@ -75,4 +92,76 @@ export const getProductCount = (product: ProductOutI, checkPricePolicy: boolean 
 		}
 		return isSameProduct;
 	}).length;
+}
+
+/**
+ * Execute the cart details
+ */
+export const checkoutCart = async () => {
+	try {
+		const auth = isAuthenticated();
+		const data: CartSuccessI = await fetch(`${PUBLIC_API_URL}/cart/checkout?requested_payment_provider=4`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(null, {
+				'Content-Type': 'application/json',
+			}),
+			body: JSON.stringify({
+				cart: {
+					products: cartProducts,
+					checkout_note: cartDetails.note,
+					user_email: auth ? null : cartDetails.guestEmail,
+				},
+				captcha_token: auth ? null : cartDetails.turnstileToken,
+			}),
+		}).then((res) => {
+			if (!res.ok) throw new Error(res.statusText);
+			return res.json();
+		});
+
+		await handlePayment(data);
+	} catch (error) {
+		// TODO: handle errors
+
+		throw error;
+	}
+}
+
+/**
+ *
+ */
+export const handlePayment = async (data: CartSuccessI) => {
+	cartDetails.isPaying = true;
+
+	switch (data.checkout.payment_provider) {
+		case PaymentProviderEnum.Dev:
+			await goToSuccessPage();
+			break;
+
+		case PaymentProviderEnum.Free:
+			await goToSuccessPage();
+			break;
+
+		case PaymentProviderEnum.Kassa:
+			//await goto(data.checkout.payment_url);
+			break;
+
+		case PaymentProviderEnum.Stripe:
+			// @ts-expect-error TODO: fix the types for this
+			cartDetails.checkout = data.checkout;
+			cartDetails.stripePayment = true;
+			break;
+	}
+}
+
+/**
+ * Navigates to the correct page after payment
+ */
+export const goToSuccessPage = async () => {
+	clearCart();
+
+	if (isAuthenticated()) {
+		await goto('/account/transactions');
+	} else {
+		await goto('/shop/confirm?redirect_status=succeeded');
+	}
 }

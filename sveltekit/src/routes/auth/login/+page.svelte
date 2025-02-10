@@ -12,6 +12,7 @@
 </script>
 
 <svelte:head>
+  <title>Aanmelden | IngeniumUA</title>
   <meta name="robots" content="noindex">
 </svelte:head>
 

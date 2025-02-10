@@ -1,18 +1,110 @@
 <script lang="ts">
+	import {browser} from "$app/environment";
+	import {PUBLIC_CLOUDFLARE_TURNSTILE} from "$env/static/public";
+	import {hasRole, isAuthenticated} from "$lib/states/auth.svelte";
 	import Header from '$lib/components/layout/header.svelte';
-	import { cartDetails, cartProducts, removeProductFromCart } from '$lib/states/cart.svelte';
-	import {hasRole, isAuthenticated} from "$lib/states/auth.svelte.js";
+	import Modal from "$lib/components/layout/modal.svelte";
+	import CartList from "$lib/components/cart/cart-list.svelte";
+	import StripePaymentComponent from "$lib/components/cart/stripe-payment-component.svelte";
+	import {cartDetails, cartProducts, checkoutCart} from '$lib/states/cart.svelte';
+	import InsetSpinner from '$lib/components/spinners/inset-spinner.svelte';
+	import {getLoginUrlWithRedirect} from "$lib/auth/auth";
+
+	let error = $state(false);
+	let errorMsg = $state('');
+	let loading = $state(false);
+	let modalOpen = $state(false);
+	let turnstileLoaded = $state(false);
+	let turnstileElement;
 
 	const totalPrice = $derived.by(() => {
 		return cartProducts.reduce((total, product) => {
 			return total + product.price_policy.price;
 		}, 0);
 	})
+	const guestButtonDisabled = $derived.by(() => {
+		return cartDetails.turnstileToken == null || cartDetails.guestEmail === '';
+	});
+
+	if (browser) {
+		window.onloadTurnstileCallback = () => {
+			turnstileLoaded = true;
+		}
+	}
+
+	function checkCart() {
+		if (isAuthenticated()) {
+			doPayment();
+		} else {
+			modalOpen = true;
+			window.turnstile.render(turnstileElement, {
+				theme: 'light',
+				size: 'flexible',
+				language: 'nl',
+				sitekey: PUBLIC_CLOUDFLARE_TURNSTILE,
+				callback: (token) => {
+					cartDetails.turnstileToken = token;
+				},
+				expiredCallback: () => {
+					cartDetails.turnstileToken = null;
+				},
+			});
+		}
+	}
+
+	async function doPayment() {
+		loading = true;
+		modalOpen = false;
+
+		try {
+			const data = await checkoutCart();
+		} catch (e) {
+			loading = false;
+			error = true;
+
+			if (e instanceof Error) {
+				errorMsg = e.message;
+			} else {
+				errorMsg = 'Unknown error';
+			}
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>Winkelwagen | IngeniumUA</title>
 </svelte:head>
+
+<!-- Modal used for guest checkout -->
+{#if !isAuthenticated()}
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onloadTurnstileCallback" defer></script>
+	<Modal title="Betalen als gast" bind:isOpen={ modalOpen }>
+		{#snippet children()}
+			<div class="p-4 md:p-5">
+				<p class="text-sm">
+					Je bent niet aangemeld op onze website, hiervoor moet je enkele extra gegevens opgeven.
+					<a href={ getLoginUrlWithRedirect() } class="font-bold">Toch nog aanmelden?</a>
+				</p>
+
+				<form action="#" onsubmit={ (e) => { e.preventDefault(); doPayment() } } class="mt-4 space-y-3 text-left">
+					<div class="form-field">
+						<label for="email">E-mailadres</label>
+						<input type="email" id="email" name="email" class="w-full" required bind:value={ cartDetails.guestEmail } />
+					</div>
+
+					<div class="form-field">
+						<label for="name">CAPTCHA</label>
+						<div id="turnstile-captcha" bind:this={ turnstileElement }></div>
+					</div>
+
+					<div class="form-field">
+						<button type="submit" class="button button-primary button-full" disabled={ guestButtonDisabled }>Bevestigen</button>
+					</div>
+				</form>
+			</div>
+		{/snippet}
+	</Modal>
+{/if}
 
 <header>
 	<Header whiteTheme={true} />
@@ -24,71 +116,53 @@
 
 	{#if cartProducts.length > 0}
 		<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-			<!-- CART LIST -->
-			<section class="col-span-1 md:col-span-2 lg:col-span-3">
-				<h2 class="sr-only">De volgende producten zitten in jouw winkelwagen:</h2>
-				<ul class="cart-list">
-					{#each cartProducts as product, idx }
-						<li class="cart-list-product">
-							<div class="cart-list-product__content">
-								<p class="cart-list-product__title">
-									{ product.name }{ product.price_policy.name !== null ? ': ' + product.price_policy.name : '' }
-								</p>
-								{#if product.product_meta.other_meta_data}
-									<ul class="cart-list-product__options">
-
-									</ul>
-								{/if}
-								<p class="cart-list-product__price">&euro; { product.price_policy.price }</p>
-							</div>
-
-							<div class="cart-list-product__actions">
-								<button type="button" onclick={ () => removeProductFromCart(idx) }>
-									<span class="sr-only">{ product.name } verwijderen uit je winkelwagen.</span>
-									<svg class="h-5 w-5" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-										<path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
-									</svg>
-								</button>
-							</div>
-						</li>
-					{/each}
-				</ul>
-			</section>
+			<CartList loading={ loading } />
 
 			<!-- CART SUMMARY -->
 			<aside>
 				<div class="cart-summary">
+					{#if error}
+						<div class="alert alert-danger mb-2" role="alert">
+							<p class="alert-text">
+								Oei, er ging iets mis bij de bestelling. <br>
+								<span class="text-xs">Fout: { errorMsg }</span>
+							</p>
+						</div>
+					{/if}
+
+					<InsetSpinner loading={ loading } message="Je bestelling wordt gecontroleerd..." />
+
 					<h2 class="cart-summary__title">Overzicht</h2>
 					<dl class="cart-summary__items">
 						<dt>Totaal</dt>
 						<dd>&euro; { totalPrice }</dd>
 					</dl>
 
-					{#if !isAuthenticated()}
+					{#if cartDetails.isPaying}
+						{#if cartDetails.stripePayment}
+							<StripePaymentComponent />
+						{/if}
+					{:else}
 						<div class="form-field mt-2">
-							<label for="guest-email" style="font-weight:bold;" >E-mailadres</label>
-							<input type="email" id="guest-email" autocomplete="email" required bind:value={ cartDetails.guestEmail } />
+							<label for="remarks">Opmerkingen <span class="sr-only">Dit veld kan je invullen indien je een opmerking wil toevoegen.</span></label>
+							<textarea name="remarks" id="remarks" rows="3" class="w-full resize-none"
+												bind:value={ cartDetails.note } disabled={ loading }></textarea>
 						</div>
+
+						{#if hasRole('staff')}
+							<div class="form-field form-field-checkbox mt-4">
+								<input id="staffCheckout" type="checkbox" bind:checked={ cartDetails.staffCheckout } disabled={ loading } />
+								<label for="staffCheckout">Dit is een kassa bestelling</label>
+							</div>
+						{/if}
+
+						<button class="mt-4 button button-sm button-primary button-full" onclick={ checkCart } disabled={ loading }>
+							<span class="text-inherit">Naar betalen</span>
+							<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+								<path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" stroke-linecap="round" stroke-linejoin="round"></path>
+							</svg>
+						</button>
 					{/if}
-
-					<div class="form-field mt-2">
-						<label for="remarks">Opmerkingen <span class="sr-only">Dit veld kan je invullen indien je een opmerking wil toevoegen.</span></label>
-						<textarea name="remarks" id="remarks" rows="3" class="w-full resize-none" bind:value={ cartDetails.note }></textarea>
-					</div>
-
-					{#if hasRole('staff')}
-						<div class="form-field form-field-checkbox mt-4">
-							<input id="staffCheckout" type="checkbox" bind:checked={ cartDetails.staffCheckout } />
-							<label for="staffCheckout">Dit is een kassa bestelling</label>
-						</div>
-					{/if}
-
-					<a class="mt-4 button button-sm button-primary button-full" href="/shop/pay">
-						<span class="text-inherit">Naar betalen</span>
-						<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-							<path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" stroke-linecap="round" stroke-linejoin="round"></path>
-						</svg>
-					</a>
 				</div>
 			</aside>
 		</div>
@@ -112,41 +186,8 @@
 
 
 <style lang="scss">
-  .cart-list {
-    @apply space-y-4;
-
-    .cart-list-product {
-      @apply grid grid-cols-6 py-4 border-b border-gray-100;
-
-      .cart-list-product__title {
-        @apply text-base;
-      }
-
-      .cart-list-product__price {
-        @apply font-bold text-black mt-1.5;
-      }
-
-      .cart-list-product__content {
-        @apply col-span-5;
-      }
-
-      .cart-list-product__actions {
-        // align items to the end
-        @apply flex items-end justify-end;
-
-        button {
-          @apply text-black hover:text-gray-600;
-        }
-      }
-
-      .cart-list-product__options {
-        @apply text-gray-500 text-sm;
-      }
-    }
-  }
-
   .cart-summary {
-    @apply flex flex-col p-4 bg-gray-50;
+    @apply flex flex-col p-4 bg-gray-50 relative;
 
     .cart-summary__title {
       @apply text-lg mb-2;
