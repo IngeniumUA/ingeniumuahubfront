@@ -16,6 +16,7 @@
 	let modalOpen = $state(false);
 	let turnstileLoaded = $state(false);
 	let turnstileElement;
+	let turnstileWidgetId = '';
 
 	const totalPrice = $derived.by(() => {
 		return cartProducts.reduce((total, product) => {
@@ -37,12 +38,14 @@
 			doPayment();
 		} else {
 			modalOpen = true;
-			window.turnstile.render(turnstileElement, {
+			if (turnstileWidgetId !== '') return;
+
+			turnstileWidgetId = window.turnstile.render(turnstileElement, {
 				theme: 'light',
 				size: 'flexible',
 				language: 'nl',
 				sitekey: PUBLIC_CLOUDFLARE_TURNSTILE,
-				callback: (token) => {
+				callback: (token: string) => {
 					cartDetails.turnstileToken = token;
 				},
 				expiredCallback: () => {
