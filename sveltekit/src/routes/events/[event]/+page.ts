@@ -4,13 +4,14 @@ import { PUBLIC_API_URL } from "$env/static/public";
 import type { ItemWideLimitedI } from "$lib/models/item/itemwideI";
 import type { ProductOutI } from "$lib/models/productsI";
 import { getAuthorizationHeaders } from "$lib/auth/auth";
+import {handleRequest} from "$lib/utilities/httpUtilities";
 
 export const load: PageLoad = async ({ fetch, params }) => {
   try {
-    const eventReq = fetch(`${PUBLIC_API_URL}/item/event/${params.event}`);
+    const eventReq = fetch(`${PUBLIC_API_URL}/item/event/${params.event}`).then(handleRequest);
     const productReq = fetch(`${PUBLIC_API_URL}/item/products/${params.event}`, {
       headers: getAuthorizationHeaders(params),
-    });
+    }).then(handleRequest);
     const [eventData, productsData] = await Promise.all([eventReq, productReq]);
     const [event, products]: [ event: ItemWideLimitedI, products: ProductOutI[] ] = await Promise.all([eventData.json(), productsData.json()]);
 

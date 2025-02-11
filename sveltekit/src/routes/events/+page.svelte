@@ -26,7 +26,7 @@
     </div>
   {:else}
     <div class="alert alert-info alert-border">
-      <p class="text-sm text-blue-700">Er staat momenteel geen evenementen online</p>
+      <p class="text-sm text-blue-700">Er staan momenteel geen evenementen online</p>
     </div>
   {/if}
 </main>

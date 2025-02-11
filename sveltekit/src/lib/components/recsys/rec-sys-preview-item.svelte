@@ -4,10 +4,14 @@
   /** @type {{ item: RecSysPreviewI|null, loading: boolean }} */
   const { item, loading = false } = $props();
 
+  let external = $derived.by(() => {
+    if (item === null || !item.follow_through_link) return false;
+    return item.follow_through_link.startsWith('http');
+  });
   let url = $derived.by(() => {
     if (item === null || !item.follow_through_link) return '';
 
-    if (item.follow_through_link.startsWith('/event')) {
+    if (!external) {
       return item.follow_through_link.replace('/event/', '/events/');
     }
 
@@ -36,7 +40,7 @@
     </div>
   </article>
 {:else}
-  <a href="{ url }" class="event-card-link-wrapper">
+  <a href={ url } rel={ external ? 'noopener' : '' }  class="event-card-link-wrapper">
     <article class="event-card" style="{cardStyle}">
       <div class="image">
         <!-- Image might not be given (either could optionally be null), if null is passed the page breaks -->

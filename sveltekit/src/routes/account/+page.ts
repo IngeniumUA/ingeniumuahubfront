@@ -1,6 +1,7 @@
-import {PUBLIC_API_URL} from "$env/static/public";
-import {getAuthorizationHeaders, getLoginUrlWithRedirect, hasValidToken} from "$lib/auth/auth";
-import {redirect} from "@sveltejs/kit";
+import { PUBLIC_API_URL } from "$env/static/public";
+import { getAuthorizationHeaders, getLoginUrlWithRedirect, hasValidToken } from "$lib/auth/auth";
+import { redirect } from "@sveltejs/kit";
+import { handleRequest } from "$lib/utilities/httpUtilities";
 
 export const load = async ({ fetch, params, url }) => {
   if (!hasValidToken(params)) {
@@ -13,8 +14,8 @@ export const load = async ({ fetch, params, url }) => {
     }
 
     return {
-      account: fetch(`${PUBLIC_API_URL}/account`, options).then(r => r.json()),
-      memberCard: fetch(`${PUBLIC_API_URL}/account/card`, options).then(r => r.json()),
+      account: fetch(`${PUBLIC_API_URL}/account`, options).then(handleRequest),
+      memberCard: fetch(`${PUBLIC_API_URL}/account/card`, options).then(handleRequest),
     }
   } catch (error) {
 
