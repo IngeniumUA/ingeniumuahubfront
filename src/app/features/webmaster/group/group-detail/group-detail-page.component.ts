@@ -7,7 +7,6 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {AsyncPipe, DatePipe, NgIf} from "@angular/common";
 import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 import {ToastrService} from "ngx-toastr";
-import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 import {Store} from "@ngxs/store";
 import {UserState} from "@ingenium/app/core/store";
 import {KeycloakService} from "@ingenium/app/core/services/coreAPI/keycloak.service";
@@ -32,7 +31,7 @@ export class GroupDetailPageComponent implements OnInit {
     this.roles$ = this.store.select(UserState.roles);
   }
 
-  roles$: Observable<UserRolesI|null>;
+  roles$: Observable<string[]|null>;
 
   groupId!: number;
   $groupDetail!: Observable<GroupI>;

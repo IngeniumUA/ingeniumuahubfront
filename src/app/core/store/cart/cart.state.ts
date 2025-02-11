@@ -16,6 +16,8 @@ import {CartFailedI} from "@ingenium/app/shared/models/cart/cartI";
     paymentProvider: PaymentProviderEnum.Stripe,
     checkoutNote: '',
     failedCart: null,
+    user_email: null,
+    captchaToken: null,
   },
 })
 @Injectable()
@@ -23,10 +25,10 @@ export class CartState implements NgxsOnInit {
   constructor() {}
 
   ngxsOnInit(ctx: StateContext<CartStateModel>): void {
-    const localStorageState = window.localStorage.getItem('cart-products');
+    const localStorageState = window.localStorage.getItem('cart-state');
     if (localStorageState) {
       ctx.patchState({
-        products: JSON.parse(localStorageState),
+        ...JSON.parse(localStorageState),
       })
     }
   }
@@ -59,8 +61,18 @@ export class CartState implements NgxsOnInit {
   }
 
   @Selector()
-  static getFailedCart(state: CartStateModel): null|CartFailedI {
+  static getFailedCart(state: CartStateModel): CartFailedI|null {
     return state.failedCart;
+  }
+
+  @Selector()
+  static getGuestEmail(state: CartStateModel): string|null {
+    return state.user_email;
+  }
+
+  @Selector()
+  static getCaptchaToken(state: CartStateModel): string|null {
+    return state.captchaToken;
   }
 
 
@@ -136,7 +148,9 @@ export class CartState implements NgxsOnInit {
 
   @Action(CartActions.StoreInLocalStorage)
   storeInLocalStorage(ctx: StateContext<CartStateModel>) {
-    window.localStorage.setItem('cart-products', JSON.stringify(ctx.getState().products));
+    const state = structuredClone(ctx.getState());
+    state.captchaToken = null;
+    window.localStorage.setItem('cart-state', JSON.stringify(state));
   }
 
   @Action(CartActions.ClearCart)
@@ -158,6 +172,22 @@ export class CartState implements NgxsOnInit {
   setCheckoutNote(ctx: StateContext<CartStateModel>, action: CartActions.SetCheckoutNote) {
     ctx.patchState({
       checkoutNote: action.note
+    });
+    ctx.dispatch(new CartActions.StoreInLocalStorage());
+  }
+
+  @Action(CartActions.SetEmail)
+  setEmail(ctx: StateContext<CartStateModel>, action: CartActions.SetEmail) {
+    ctx.patchState({
+      user_email: action.email,
+    });
+    ctx.dispatch(new CartActions.StoreInLocalStorage());
+  }
+
+  @Action(CartActions.SetCaptchaToken)
+  setCaptchaToken(ctx: StateContext<CartStateModel>, action: CartActions.SetCaptchaToken) {
+    ctx.patchState({
+      captchaToken: action.token,
     });
   }
 

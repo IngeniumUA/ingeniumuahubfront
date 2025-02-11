@@ -5,10 +5,7 @@ import {User} from './user.actions';
 import {Router} from "@angular/router";
 import {OAuthService} from "angular-oauth2-oidc";
 import {HttpClient} from "@angular/common/http";
-import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 import {apiEnviroment} from "@ingenium/environments/environment";
-import {catchError, of} from "rxjs";
-import {map} from "rxjs/operators";
 import {CartActions} from "@ingenium/app/core/store";
 import {isPlatformServer} from "@angular/common";
 
@@ -74,54 +71,25 @@ export class UserState {
     this.oauthService.initLoginFlow(action.destinationPath);
   }
 
-  @Action(User.GetRoles)
-  getRoles(ctx: StateContext<UserStateModel>) {
-    const emptyRoles: UserRolesI = {
-      is_manager: false,
-      is_webmaster: false,
-      is_staff: false,
-      is_lid: false,
-    };
-
-    this.httpClient.get<UserRolesI>(`${apiEnviroment.apiUrl}account/roles`)
-      .pipe(
-        map((roles: UserRolesI|null) => roles),
-        catchError((_) => {
-          return of(null);
-        })
-      )
-      .subscribe((roles: UserRolesI|null) => {
-        if (roles === null) {
-          ctx.patchState({
-            roles: emptyRoles,
-          });
-        }
-
-        ctx.patchState({
-          roles
-        });
-      });
-  }
-
   @Action(User.RefreshToken)
   refreshAccessToken(_ctx: StateContext<UserStateModel>, _action: User.RefreshToken) {
     // ...
   }
 
   @Action(User.FetchAuthTokenFromStorage)
-  fetchAuthTokenFromStorage(ctx: StateContext<UserStateModel>, action: User.FetchAuthTokenFromStorage) {
+  fetchAuthTokenFromStorage(ctx: StateContext<UserStateModel>, _action: User.FetchAuthTokenFromStorage) {
     if (!this.oauthService.hasValidAccessToken()) {
       return;
     }
 
+    const claims = this.oauthService.getIdentityClaims();
+
     // Set required auth parameters
     const token = this.oauthService.getAccessToken();
-    const email = this.oauthService.getIdentityClaims()['email'];
-    ctx.dispatch(new User.SetAuthData(token, email));
+    const email = claims['email'];
+    const roles = claims['realm_access']?.['roles'] ?? [];
 
-    if (action.shouldGetRoles) {
-      ctx.dispatch(new User.GetRoles());
-    }
+    ctx.dispatch(new User.SetAuthData(token, email, roles));
   }
 
   @Action(User.SetAuthData)
@@ -130,6 +98,7 @@ export class UserState {
       ...ctx.getState(),
       token: action.token,
       email: action.email,
+      roles: action.roles,
     });
   }
 

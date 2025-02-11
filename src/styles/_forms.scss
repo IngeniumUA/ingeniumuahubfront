@@ -22,7 +22,7 @@
       @apply text-red-500;
     }
 
-    input {
+    input, textarea {
       @apply ring-red-500 focus:ring-red-500;
     }
   }

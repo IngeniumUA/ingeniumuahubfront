@@ -4,7 +4,6 @@ import {Store} from "@ngxs/store";
 import {UserState} from "@ingenium/app/core/store";
 import {catchError, Observable, of, skipWhile, timeout} from "rxjs";
 import {map} from "rxjs/operators";
-import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 
 
 export const staffGuard = () : Observable<boolean|RedirectCommand> => {
@@ -15,8 +14,8 @@ export const staffGuard = () : Observable<boolean|RedirectCommand> => {
     .pipe(
       skipWhile(roles => !roles), // Wait when roles is null
       timeout(3000), // Timeout after 3 seconds
-      map((roles: UserRolesI|null): boolean|RedirectCommand => {
-        if (roles?.is_staff) {
+      map((roles: string[]|null): boolean|RedirectCommand => {
+        if (roles?.includes('staff')) {
           return true;
         }
 

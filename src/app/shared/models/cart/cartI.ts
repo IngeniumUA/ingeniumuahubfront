@@ -26,5 +26,7 @@ export interface FailedProductI {
 }
 
 export interface CartFailedI {
+  error_nl: string
+  error_en: string
   failed_products: FailedProductI[]
 }

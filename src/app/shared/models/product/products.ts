@@ -47,6 +47,7 @@ export interface ProductOutI {
   note: string|null;
   max_count: number;
   product_meta: ProductMetaI;
+  allow_individualised: boolean;
 }
 
 export enum PaymentProviderEnum {

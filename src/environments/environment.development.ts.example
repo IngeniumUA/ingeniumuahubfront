@@ -18,4 +18,5 @@ export const apiEnviroment = {
   appHost: 'localhost:4200', // Specify port if different than 80 or 443
   oauthConfig: OAuthConfig,
   versions: versions,
+  turnstileSiteKey: '',
 };

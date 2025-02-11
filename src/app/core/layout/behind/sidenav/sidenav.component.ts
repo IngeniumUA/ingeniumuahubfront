@@ -23,8 +23,8 @@ export class SidenavComponent {
 
   isSideNav: boolean = true;
 
-  isWebmaster$: Observable<boolean> = this.store.select(state => state.user.roles.is_webmaster);
-  isManager$: Observable<boolean> = this.store.select(state => state.user.roles.is_manager);
+  isWebmaster$: Observable<boolean> = this.store.select(state => state.user.roles?.includes('webmaster'));
+  isManager$: Observable<boolean> = this.store.select(state => state.user.roles?.includes('manager'));
 
   constructor(private store: Store) {}
 
