@@ -4,8 +4,8 @@ import { PUBLIC_API_URL } from '$env/static/public';
 
 export const load: PageLoad = async ({ fetch }) => {
 	try {
-		const recommendationsReq = fetch(`${PUBLIC_API_URL}/item/event/list`).then(r => r.json());
-		const sponsoredReq = fetch(`${PUBLIC_API_URL}/item/promo/list`).then(r => r.json());
+		const recommendationsReq = fetch(`${PUBLIC_API_URL}/item/event/list?limit=4`).then(r => r.json());
+		const sponsoredReq = fetch(`${PUBLIC_API_URL}/item/promo/list?limit=4`).then(r => r.json());
 
 		// Wait for all promises
 		const [recommendations, sponsored] = await Promise.all([
