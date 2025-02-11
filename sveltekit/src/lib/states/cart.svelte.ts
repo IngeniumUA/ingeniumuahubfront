@@ -56,10 +56,13 @@ export const removeProductFromCart = (index: number) => {
 
 export const reduceProductQuantity = (product: ProductOutI, count: number = 1) => {
 	// Find all products with same settings
-	const foundIndexes = cartProducts.reduce<number[]>((acc, p, index, _) => {
-		if (p.id === product.id && p.price_policy.id === product.price_policy.id) {
+	const foundIndexes = cartProducts.reduce<number[]>((acc, p, index, _) =>  {
+		const pricePolicyCheck = p.price_policy !== null && product.price_policy !== null && p.price_policy.id === product.price_policy.id;
+
+		if (p.id === product.id && pricePolicyCheck) {
 			acc.push(index);
 		}
+
 		return acc;
 	}, []);
 
@@ -87,7 +90,7 @@ export const clearCart = () => {
 export const getProductCount = (product: ProductOutI, checkPricePolicy: boolean = false) => {
 	return cartProducts.filter((p) => {
 		const isSameProduct = p.id === product.id;
-		if (checkPricePolicy) {
+		if (checkPricePolicy && p.price_policy !== null && product.price_policy !== null) {
 			return isSameProduct && p.price_policy.id === product.price_policy.id;
 		}
 		return isSameProduct;

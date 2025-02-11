@@ -12,14 +12,18 @@
       <li class="cart-list-product">
         <div class="cart-list-product__content">
           <p class="cart-list-product__title">
-            { product.name }{ product.price_policy.name !== null ? ': ' + product.price_policy.name : '' }
+            { product.name }{ product.price_policy !== null && product.price_policy.name !== null ? ': ' + product.price_policy.name : '' }
           </p>
           {#if product.product_meta.other_meta_data}
             <ul class="cart-list-product__options">
-
+              {#each Object.keys(product.product_meta.other_meta_data) as key }
+                <li>
+                  <span class="capitalize">{ key }</span>: <span>{ product.product_meta.other_meta_data[key] }</span>
+                </li>
+              {/each}
             </ul>
           {/if}
-          <p class="cart-list-product__price">&euro; { product.price_policy.price }</p>
+          <p class="cart-list-product__price">&euro; { product.price_policy !== null ? product.price_policy.price : '???' }</p>
         </div>
 
         <div class="cart-list-product__actions">

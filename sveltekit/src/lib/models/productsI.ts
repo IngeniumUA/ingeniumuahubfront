@@ -43,7 +43,7 @@ export interface ProductOutI {
   blueprint_id: number;
   origin_item_id: number;
   date_generated: string;
-  price_policy: PricePolicyLimitedI;
+  price_policy: PricePolicyLimitedI|null;
   note: string|null;
   max_count: number;
   product_meta: ProductMetaI;
