@@ -60,10 +60,10 @@
   });
 
   let primaryColor = $derived.by(() => {
-    return transformColorToRGBA(data.event.derived_type.display.color);
+    return transformColorToRGBA(data.event?.derived_type.display.color);
   });
   let secondaryColor = $derived.by(() => {
-    return calcColorIntensity(data.event.derived_type.display.color, -0.1) < 180 ? 'white' : 'black';
+    return calcColorIntensity(data.event?.derived_type.display.color, -0.1) < 180 ? 'white' : 'black';
   });
 
   function buttonStyle(category: number) {
