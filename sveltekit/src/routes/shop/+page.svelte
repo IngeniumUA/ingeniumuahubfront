@@ -10,5 +10,3 @@
 <header>
   <Header whiteTheme={ true } />
 </header>
-
-<Error500 />
