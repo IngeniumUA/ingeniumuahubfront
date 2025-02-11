@@ -1,23 +1,24 @@
 <script lang="ts">
-  import type { RecSysPreviewI } from '$lib/models/RecSysI';
-  import {calcColorIntensity, transformColorToRGBA} from "$lib/utilities/style-utilities";
+  import { calcColorIntensity, transformColorToRGBA } from "$lib/utilities/style-utilities";
 
   /** @type {{ item: RecSysPreviewI|null, loading: boolean }} */
   const { item, loading = false } = $props();
 
   let url = $derived.by(() => {
-    if (item === null) return '';
+    if (item === null || !item.follow_through_link) return '';
 
-    // If link is /event/ replace it with /events/
-    return item.follow_through_link.replace('/event/', '/events/');
+    if (item.follow_through_link.startsWith('/event')) {
+      return item.follow_through_link.replace('/event/', '/events/');
+    }
+
+    return item.follow_through_link;
   });
-
   let cardStyle = $derived.by(() => {
-    if (item === null) return '';
+    if (item === null || !item.color) return '';
     return `background: ${transformColorToRGBA(item.color, 1)}; border: solid 2px ${transformColorToRGBA(item.color, 0.5)}`;
   });
   let textStyle = $derived.by(() => {
-    if (item === null) return '';
+    if (item === null || !item.color) return '';
     return calcColorIntensity(item.color) < 180 ? 'white' : 'black';
   })
 </script>
@@ -39,8 +40,10 @@
     <article class="event-card" style="{cardStyle}">
       <div class="image">
         <!-- Image might not be given (either could optionally be null), if null is passed the page breaks -->
-        {#if item.image_square !== null}
+        {#if item.image_square}
           <img src="{ item.image_square }" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
+        {:else}
+          <enhanced:img src="$assets/svg/ingenium-schild.svg" />
         {/if}
       </div>
       <div class="content">
