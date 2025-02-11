@@ -11,16 +11,12 @@ export namespace User {
 
   export class SetAuthData {
     static readonly type = '[User] Set Auth Data';
-    constructor(public token: string, public email: string) {}
+    constructor(public token: string, public email: string, public roles: string[]) {}
   }
 
   export class FetchAuthTokenFromStorage {
     static readonly type = '[User] Fetch browser token';
-    constructor(public shouldGetRoles: boolean = true) {}
-  }
-
-  export class GetRoles {
-    static readonly type = '[User] Get Roles';
+    constructor() {}
   }
 
   export class Logout {

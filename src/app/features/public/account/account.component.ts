@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {Store} from '@ngxs/store';
 import {Observable} from 'rxjs';
 import {UserState} from "@ingenium/app/core/store";
-import {UserRolesI} from "@ingenium/app/shared/models/user/userRolesI";
 import {backButtonClicked, AppFunctionsService} from "@app_services/app-functions.service";
 
 @Component({
@@ -11,7 +10,7 @@ import {backButtonClicked, AppFunctionsService} from "@app_services/app-function
   styleUrls: ['./account.component.scss']
 })
 export class AccountComponent {
-  roles$: Observable<UserRolesI|null>;
+  roles$: Observable<string[]|null>;
 
   constructor(private store: Store,
               private appFunctionsService: AppFunctionsService,) {

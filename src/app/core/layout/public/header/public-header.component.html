@@ -99,11 +99,11 @@
             <a (click)="gotoPage('sub/account/options-notifications')" class="nav-dropdown-item" role="menuitem">Notificatie opties</a>
 
             @let roles = (roles$ | async);
-            @if (hasAnyRole(roles)) {
+            @if (roles && hasAnyRole(roles)) {
               <hr class="nav-dropdown-divider">
-              <a (click)="gotoPage('man')" *ngIf="roles?.is_manager" class="nav-dropdown-item" role="menuitem">Manager</a>
-              <a (click)="gotoPage('web')" *ngIf="roles?.is_webmaster" class="nav-dropdown-item" role="menuitem" >Webmaster</a>
-              <a (click)="gotoPage('staff')" *ngIf="roles?.is_staff" class="nav-dropdown-item" role="menuitem" >Staff</a>
+              <a (click)="gotoPage('man')" *ngIf="roles?.includes('manager')" class="nav-dropdown-item" role="menuitem">Manager</a>
+              <a (click)="gotoPage('web')" *ngIf="roles?.includes('webmaster')" class="nav-dropdown-item" role="menuitem" >Webmaster</a>
+              <a (click)="gotoPage('staff')" *ngIf="roles?.includes('staff')" class="nav-dropdown-item" role="menuitem" >Staff</a>
             }
 
             <hr class="nav-dropdown-divider">

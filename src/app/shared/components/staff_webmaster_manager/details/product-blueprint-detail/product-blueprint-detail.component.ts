@@ -62,6 +62,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
         max_individual: [this.productBlueprint.max_individual, [Validators.required, Validators.min(1)]],
         max_per_checkout: [this.productBlueprint.max_per_checkout, [Validators.required, Validators.min(1)]],
         product_ordering: [this.productBlueprint.ordering, [Validators.required]],
+        allow_individualised: [this.productBlueprint.allow_individualised, [Validators.required]],
       });
 
       // Temporary "bool" for toggling checkout_tracking
@@ -133,6 +134,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
         max_per_checkout: this.blueprintForm.controls['max_per_checkout'].value,
 
         ordering: this.blueprintForm.controls['product_ordering'].value,
+        allow_individualised: this.blueprintForm.controls['allow_individualised'].value,
 
         price_policies: [],
 

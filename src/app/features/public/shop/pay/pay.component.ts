@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {apiEnviroment} from '@ingenium/environments/environment';
 import {Store} from "@ngxs/store";
-import {CartActions, CartState} from "@ingenium/app/core/store";
+import {CartActions, CartState, UserState} from "@ingenium/app/core/store";
 import {PaymentProviderEnum} from "@ingenium/app/shared/models/product/products";
 import {map} from "rxjs/operators";
 import {catchError} from "rxjs";
@@ -34,12 +34,22 @@ export class PayComponent implements OnInit {
       this.gotoPage('sub/shop')
     }
 
+    // Get the email, if user is authenticated set it to none
+    let email = this.store.selectSnapshot(CartState.getGuestEmail);
+    if (this.store.selectSnapshot(UserState.isAuthenticated)) {
+      email = null;
+    }
+
     const paymentProvider = this.store.selectSnapshot(CartState.getPaymentProvider);
 
     // Request the checkout ID.
     this.httpClient.post<CartSuccessI>(`${apiEnviroment.apiUrl}cart/checkout?requested_payment_provider=${paymentProvider.valueOf()}`, {
-      products: this.store.selectSnapshot(CartState.getProducts),
-      checkout_note: this.store.selectSnapshot(CartState.getCheckoutNote),
+      cart: {
+        products: this.store.selectSnapshot(CartState.getProducts),
+        checkout_note: this.store.selectSnapshot(CartState.getCheckoutNote),
+        user_email: email,
+      },
+      captcha_token: this.store.selectSnapshot(CartState.getCaptchaToken),
     }).pipe(
       map((result: CartSuccessI) => this.processCheckoutResponse(result)),
       catchError((error): any => {
@@ -53,6 +63,14 @@ export class PayComponent implements OnInit {
     ).subscribe();
   }
 
+  navigateToNextPage() {
+    if (this.store.selectSnapshot(UserState.isAuthenticated)) {
+      this.gotoPage('sub/account/transactions')
+    } else {
+      this.gotoPage('sub/shop/confirm')
+    }
+  }
+
   processCheckoutResponse(response: CartSuccessI) {
     switch (response.checkout.payment_provider) {
       case PaymentProviderEnum.Dev:
@@ -61,14 +79,15 @@ export class PayComponent implements OnInit {
           this.toastrService.success(`Het volgnummer is ${response.tracker_id}`, 'Bestelling gelukt!', {
             timeOut: 10000,
           });
-          this.gotoPage('/account/transactions/')
+          this.navigateToNextPage()
           break;
         }
-        this.gotoPage('sub/account/transactions')
+
+        this.navigateToNextPage()
         break;
 
       case PaymentProviderEnum.Free:
-        this.gotoPage('sub/shop/confirm')
+        this.navigateToNextPage()
         break;
 
       case PaymentProviderEnum.Kassa:

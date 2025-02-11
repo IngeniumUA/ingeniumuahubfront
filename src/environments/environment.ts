@@ -20,7 +20,8 @@ export let apiEnviroment = {
   apiUrl: 'https://hub.ingeniumua.be/api/v1/',
   // apiUrl: 'https://hub.dev.ingeniumua.be/api/v1/',
   oauthConfig: OAuthConfig,
-  versions: versions
+  versions: versions,
+  turnstileSiteKey: '0x4AAAAAAAX0Qzpta2sfvGK-',
 };
 
 export function openUri(uri: string) {

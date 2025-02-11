@@ -3,6 +3,9 @@ import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOpt
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {FormBuilder} from "@angular/forms";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
+import {Observable} from "rxjs";
+import {Store} from "@ngxs/store";
+import {UserState} from "@ingenium/app/core/store";
 import {NavController} from "@ionic/angular";
 import {PageTrackingService} from "@app_services/page-tracking.service";
 import {backButtonClicked} from "@app_services/app-functions.service";
@@ -16,6 +19,7 @@ export class StripePaymentComponent implements OnInit {
 
   constructor(    private formBuilder: FormBuilder,
                   private stripeService: StripeService,
+                  private store: Store
                   private navCtrl: NavController,
                   private pageTrackService: PageTrackingService,) {
     backButtonClicked()
@@ -73,8 +77,14 @@ export class StripePaymentComponent implements OnInit {
           alert( 'Betaling Success!' );
 
           // Redirect to transactions
+        if (this.store.selectSnapshot(UserState.isAuthenticated)) {
           this.pageTrackService.addToTree('sub/account/transactions')
           this.navCtrl.navigateRoot('/sub/account/transactions').then()
+        } else {
+          this.pageTrackService.addToTree('sub/shop/confirm')
+          this.navCtrl.navigateRoot('/sub/shop/confirm').then()
+        }
+
       } else if (result.paymentIntent.status === 'requires_action') {
           // Big one!
           // We sent about 35 mails over 5 months to get this issue fixed

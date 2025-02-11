@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import {backButtonClicked} from "@app_services/app-functions.service";
-import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
 
 @Component({
   selector: 'app-group-list',
@@ -8,7 +7,7 @@ import {GroupService} from "@ingenium/app/core/services/coreAPI/group.service";
   styleUrls: ['./group-list.component.css']
 })
 export class GroupListComponent {
-  constructor(private staffGroupService: GroupService) {
+  constructor() {
     backButtonClicked()
   }
 

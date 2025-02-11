@@ -24,9 +24,9 @@
         </a>
 
         <ng-container *ngIf="(roles$ | async) as roles">
-          <a (click)="gotoPage('man')" class="cursor-pointer" *ngIf="roles.is_manager">Manager</a>
-          <a (click)="gotoPage('web')" class="cursor-pointer" *ngIf="roles.is_webmaster">Webmaster</a>
-          <a (click)="gotoPage('staff')" class="cursor-pointer" *ngIf="roles.is_staff">Staff</a>
+          <a (click)="gotoPage('man')" class="cursor-pointer" *ngIf="roles?.includes('is_manager')">Manager</a>
+          <a (click)="gotoPage('web')" class="cursor-pointer" *ngIf="roles?.includes('is_webmaster')">Webmaster</a>
+          <a (click)="gotoPage('staff')" class="cursor-pointer" *ngIf="roles?.includes('is_staff')">Staff</a>
         </ng-container>
       </nav>
     </aside>

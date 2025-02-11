@@ -1,26 +1,22 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { versions } from "@ingenium/environments/versions";
-import {Browser} from "@capacitor/browser";
 
 const OAuthConfig: AuthConfig = {
   issuer: 'https://sso.ingeniumua.be/realms/IngeniumTESTING',
   redirectUri: window.location.origin + '/auth/callback',
   postLogoutRedirectUri: window.location.origin + '/auth/logout',
-  clientId: 'ingeniumapp',
+  clientId: 'ingeniumwebsite',
   responseType: 'code',
   scope: 'openid profile email',
+  showDebugInformation: true,
   useSilentRefresh: false,
-  openUri
 };
 
 export const apiEnviroment = {
-  name: 'staging',
-  apiUrl: 'https://hub.dev.ingeniumua.be/api/v1/',
+  name: 'development',
+  apiUrl: 'http://localhost:3000/api/v1/', // or for proxy '/api/v1/'
+  appHost: 'localhost:4200', // Specify port if different than 80 or 443
   oauthConfig: OAuthConfig,
   versions: versions,
-  turnstileSiteKey: '0x4AAAAAAAX0Qzpta2sfvGK-',
+  turnstileSiteKey: '',
 };
-
-export function openUri(uri: string) {
-  Browser.open({ url: uri });
-}
