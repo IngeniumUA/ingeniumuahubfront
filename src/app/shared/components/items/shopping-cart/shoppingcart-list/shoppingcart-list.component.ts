@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AsyncPipe, JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
 import {Observable} from "rxjs";
@@ -141,7 +141,7 @@ export class ShoppingcartListComponent implements OnInit {
 
   goToPayment() {
     if (this.store.selectSnapshot(UserState.isAuthenticated)) {
-      this.router.navigateByUrl('/shop/pay');
+      this.gotoPage('sub/shop/pay');
       return;
     }
 
@@ -151,6 +151,6 @@ export class ShoppingcartListComponent implements OnInit {
       return;
     }
 
-    this.router.navigateByUrl('/shop/pay');
+    this.gotoPage('sub/shop/pay');
   }
 }

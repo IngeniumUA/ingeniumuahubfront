@@ -3,7 +3,6 @@ import {PaymentIntentOrSetupIntentResult, PaymentIntentResult, StripeElementsOpt
 import {StripePaymentElementComponent, StripeService} from "ngx-stripe";
 import {FormBuilder} from "@angular/forms";
 import {CheckoutSmollI} from "@ingenium/app/shared/models/payment/checkout/hubCheckoutI";
-import {Observable} from "rxjs";
 import {Store} from "@ngxs/store";
 import {UserState} from "@ingenium/app/core/store";
 import {NavController} from "@ionic/angular";
@@ -19,7 +18,7 @@ export class StripePaymentComponent implements OnInit {
 
   constructor(    private formBuilder: FormBuilder,
                   private stripeService: StripeService,
-                  private store: Store
+                  private store: Store,
                   private navCtrl: NavController,
                   private pageTrackService: PageTrackingService,) {
     backButtonClicked()
