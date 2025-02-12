@@ -18,11 +18,12 @@
       Zelf bestanden uploaden
     </a>
   </div>
-  <iframe class="w-full" src="https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/" width="100%" height="70%"></iframe>
+  <iframe src="https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/" width="100%" height="70%"></iframe>
 </main>
 
 <style>
   iframe {
+      height: 70vh;
     @apply w-full;
   }
 </style>
