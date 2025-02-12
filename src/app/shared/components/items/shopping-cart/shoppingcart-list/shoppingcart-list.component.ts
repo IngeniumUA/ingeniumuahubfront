@@ -45,7 +45,9 @@ export class ShoppingcartListComponent implements OnInit {
   constructor(private store: Store, private router: Router) {}
 
   ngOnInit() {
-    this.loadCloudFlareTurnstile();
+    if (!this.store.selectSnapshot(UserState.isAuthenticated)) {
+      this.loadCloudFlareTurnstile();  // Only load when user is not authenticated
+    }
 
     // Temporary, should be moved elsewhere
     if (this.store.selectSnapshot(UserState.roles)?.includes('manager')) {
