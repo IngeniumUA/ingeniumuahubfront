@@ -125,7 +125,7 @@
     }
   }
 
-  td img {
+  img {
     @apply block mx-auto;
   }
 </style>
