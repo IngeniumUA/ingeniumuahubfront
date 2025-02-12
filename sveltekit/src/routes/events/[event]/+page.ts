@@ -7,10 +7,14 @@ import { getAuthorizationHeaders } from "$lib/auth/auth";
 import {handleRequest} from "$lib/utilities/httpUtilities";
 import {error} from "@sveltejs/kit";
 
-export const load: PageLoad = async ({ fetch, params }) => {
+export const load: PageLoad = async ({ fetch, params, url }) => {
   try {
-    const eventReq = fetch(`${PUBLIC_API_URL}/item/event/${params.event}`).then(handleRequest);
-    const productReq = fetch(`${PUBLIC_API_URL}/item/products/${params.event}`, {
+    // Check for the access token
+    let accessKey = url.searchParams.get('access_key');
+    accessKey = accessKey ? `?access_key=${accessKey}` : '';
+
+    const eventReq = fetch(`${PUBLIC_API_URL}/item/event/${params.event}${accessKey}`).then(handleRequest);
+    const productReq = fetch(`${PUBLIC_API_URL}/item/products/${params.event}${accessKey}`, {
       headers: getAuthorizationHeaders(params),
     }).then(handleRequest);
     const [event, products]: [ event: ItemWideLimitedI, products: ProductOutI[] ] = await Promise.all([eventReq, productReq]);
