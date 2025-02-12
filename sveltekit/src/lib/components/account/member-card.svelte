@@ -1,7 +1,11 @@
-<script type="ts">
+<script lang="ts">
   import InlineSpinner from '$lib/components/spinners/inline-spinner.svelte';
+  import type { CardItemWideLimitedI } from '$lib/models/item/cardI';
+  import { CardMembershipEnum } from "$lib/models/item/cardI";
 
-  let { response } = $props();
+  let { response, failed_notification, success_notification }: {
+    response: Promise<CardItemWideLimitedI|null>, failed_notification: string|null, success_notification: string|null
+  } = $props();
 </script>
 
 <section class="pb-10">
@@ -11,14 +15,18 @@
   {#await response}
     <InlineSpinner message="We zijn je lidkaart status aan het ophalen..." />
   {:then memberCard}
-    {#if Object.is(memberCard) && Object.keys(memberCard).length > 0}
+    {#if memberCard !== null && Object.keys(memberCard).length > 0}
       <div class="lidkaart-card">
         <div class="lidkaart-wrapper">
             <img src="{ memberCard.derived_type.display.image_landscape }" alt="card">
         </div>
-        <!--<p><span class="font-bold">{ CardMembershipEnum[memberCard.derived_type.member_type] | titlecase }: </span>{ memberCard.item.name }</p>
-        <span *ngIf="failed_notification !== null" class="error-message">{{ failed_notification }}</span>
-        <span *ngIf="success_notification !== null" class="success-message">{{ success_notification}}</span>-->
+        <p><span class="font-bold capitalize">{ CardMembershipEnum[memberCard.derived_type.member_type] }:</span> { memberCard.item.name }</p>
+
+        {#if failed_notification !== null}
+          <span class="error-message">{ failed_notification }</span>
+        {:else if success_notification !== null}
+          <span class="success-message">{ success_notification }</span>
+        {/if}
       </div>
     {:else}
       <div class="alert alert-info mb-4">

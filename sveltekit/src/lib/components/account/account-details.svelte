@@ -11,7 +11,7 @@
   {#await response}
     <InlineSpinner message="We halen jouw account gegevens op..." />
   {:then details}
-    { JSON.stringify(details) }
+
   {:catch error}
     <p></p>
   {/await}

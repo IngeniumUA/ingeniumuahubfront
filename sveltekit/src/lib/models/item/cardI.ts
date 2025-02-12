@@ -1,5 +1,5 @@
-import {DisplayCompositionI} from "@ingenium/app/shared/models/item/displayCompositionI";
-import {ItemI, ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
+import type {DisplayCompositionI} from "$lib/models/item/displayCompositionI";
+import type {ItemI, ItemLimitedI} from "$lib/models/item/itemI";
 
 export enum CardMembershipEnum {
   lid= 1,
@@ -33,7 +33,6 @@ export interface CardItemLimitedI {
   card_type: CardTypeEnum
 
   display: DisplayCompositionI
-
 }
 
 export interface CardItemI {
