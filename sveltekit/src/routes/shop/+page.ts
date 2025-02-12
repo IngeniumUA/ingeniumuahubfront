@@ -3,8 +3,7 @@ import {error, redirect} from "@sveltejs/kit";
 import {handleRequest} from "$lib/utilities/httpUtilities";
 
 export const load = async ({ fetch }) => {
-  error(401, 'Unauthorized');
-  /*try {
+  try {
     const data = await fetch(`${PUBLIC_API_URL}/item/shop/list`).then(handleRequest);
 
     return {
@@ -16,5 +15,5 @@ export const load = async ({ fetch }) => {
     }
 
     error(500, 'Onbekende fout');
-  }*/
+  }
 }
