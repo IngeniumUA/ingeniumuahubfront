@@ -13,14 +13,14 @@ export const load: PageLoad = async ({ fetch, params, url }) => {
     let accessKey = url.searchParams.get('access_key');
     accessKey = accessKey ? `?access_key=${accessKey}` : '';
 
-    const eventReq = fetch(`${PUBLIC_API_URL}/item/event/${params.event}${accessKey}`).then(handleRequest);
-    const productReq = fetch(`${PUBLIC_API_URL}/item/products/${params.event}${accessKey}`, {
+    const shopReq = fetch(`${PUBLIC_API_URL}/item/shop/${params.product}${accessKey}`).then(handleRequest);
+    const productReq = fetch(`${PUBLIC_API_URL}/item/products/${params.product}${accessKey}`, {
       headers: getAuthorizationHeaders(params),
     }).then(handleRequest);
-    const [event, products]: [ event: ItemWideLimitedI, products: ProductOutI[] ] = await Promise.all([eventReq, productReq]);
+    const [shop, products]: [ event: ItemWideLimitedI, products: ProductOutI[] ] = await Promise.all([shopReq, productReq]);
 
     return {
-      event,
+      shop,
       products
     }
   } catch (e) {

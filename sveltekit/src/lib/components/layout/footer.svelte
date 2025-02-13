@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
 
-	let { serverHostname = '???' } = $props();
+	let { serverHostname = '' } = $props();
 </script>
 
 <footer>

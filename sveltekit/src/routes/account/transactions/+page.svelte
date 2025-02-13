@@ -27,6 +27,19 @@
 
     isModalOpen = true;
   }
+
+  // TODO: Fix this
+  function getWalletLink(transaction: TransactionLimitedI, platform: string) {
+    const transaction_uuid: string = transaction.interaction.interaction_uuid
+    let nummer: number = + transaction_uuid.replace(/\D/g, "")
+    let nummer_str = "" + nummer
+    nummer_str = nummer_str.split("e")[0].replace(".", "")
+    nummer = +nummer_str
+    const locatie_naam: string = "Ingenium" //TODO fix once location is implemented
+
+    // Get and redirect to wallet link
+    return `/wallet/?transaction_uuid=${transaction_uuid}&nummer=${nummer}&locatie_naam=${locatie_naam}&platform=${platform}`;
+  }
 </script>
 
 <Modal title={ modalTitle } bind:isOpen={ isModalOpen }>
@@ -90,6 +103,15 @@
               <path d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
           </button>
+
+          <div class="flex gap-4 items-center justify-center mt-3">
+            <a href={ getWalletLink(transaction, 'google') } data-sveltekit-preload-data="tap">
+              <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
+            </a>
+            <a href={ getWalletLink(transaction, 'apple') } data-sveltekit-preload-data="tap">
+              <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
+            </a>
+          </div>
         </article>
       {/each}
     {/if}
@@ -125,7 +147,7 @@
     }
   }
 
-  td img {
+  img {
     @apply block mx-auto;
   }
 </style>
