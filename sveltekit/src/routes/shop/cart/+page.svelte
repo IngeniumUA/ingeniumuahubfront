@@ -65,7 +65,9 @@
 			loading = false;
 			error = true;
 
-			if (e instanceof Error) {
+			if (e instanceof Response && e.status === 406) {
+				errorMsg = 'er zijn producten in je winkelwagen die je niet kan bestellen.';
+			} else if (e instanceof Error) {
 				errorMsg = e.message;
 			} else {
 				errorMsg = 'Unknown error';

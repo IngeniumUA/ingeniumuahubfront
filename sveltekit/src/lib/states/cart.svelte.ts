@@ -2,7 +2,7 @@ import {PaymentProviderEnum, type ProductOutI} from '$lib/models/productsI';
 import {getAuthorizationHeaders} from "$lib/auth/auth";
 import {PUBLIC_API_URL} from "$env/static/public";
 import {isAuthenticated} from "$lib/states/auth.svelte";
-import type {CartSuccessI} from "$lib/models/cartI";
+import type {CartFailedI, CartSuccessI} from "$lib/models/cartI";
 import {goto} from "$app/navigation";
 
 export const cartProducts: ProductOutI[] = $state([]);
@@ -15,6 +15,9 @@ export const cartDetails = $state({
 	stripePayment: false,
 	checkout: null,
 })
+export const failedCart: CartFailedI = $state({
+	failed_products: [],
+});
 
 /**
  * Stores the products in local storage
@@ -101,6 +104,8 @@ export const getProductCount = (product: ProductOutI, checkPricePolicy: boolean 
  * Execute the cart details
  */
 export const checkoutCart = async () => {
+	Object.assign(failedCart, {});
+
 	try {
 		const auth = isAuthenticated();
 		const data: CartSuccessI = await fetch(`${PUBLIC_API_URL}/cart/checkout?requested_payment_provider=4`, {
@@ -117,13 +122,16 @@ export const checkoutCart = async () => {
 				captcha_token: auth ? null : cartDetails.turnstileToken,
 			}),
 		}).then((res) => {
-			if (!res.ok) throw new Error(res.statusText);
+			if (!res.ok) throw res;
 			return res.json();
 		});
 
 		await handlePayment(data);
-	} catch (error) {
-		// TODO: handle errors
+	} catch (error: any) {
+		if (error instanceof Response && error.status === 406) {
+			const data = await error.json();
+			Object.assign(failedCart, data.detail);
+		}
 
 		throw error;
 	}
@@ -167,4 +175,15 @@ export const goToSuccessPage = async () => {
 	} else {
 		await goto('/shop/confirm?redirect_status=succeeded');
 	}
+}
+
+/**
+ * Get the failed product from the failed cart
+ */
+export const getFailedProduct = (product: ProductOutI) => {
+	if (!failedCart.failed_products) return undefined;
+
+	return failedCart.failed_products.find(failedProduct => {
+		return product.id === failedProduct.product.id && product.price_policy?.id === failedProduct.product.price_policy?.id;
+	});
 }

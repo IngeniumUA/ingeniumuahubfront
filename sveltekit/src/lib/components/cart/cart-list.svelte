@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { cartDetails, cartProducts, removeProductFromCart } from "$lib/states/cart.svelte";
+  import {cartDetails, cartProducts, getFailedProduct, removeProductFromCart} from "$lib/states/cart.svelte";
 
   const { loading = false } = $props();
 </script>
@@ -24,6 +24,20 @@
             </ul>
           {/if}
           <p class="cart-list-product__price">&euro; { product.price_policy !== null ? product.price_policy.price : '???' }</p>
+
+          <!-- Update this, as it is quite bad -->
+          {#if getFailedProduct(product) }
+            <p class="text-sm">
+              <span class="text-red-700 font-bold underline">Kan niet aangekocht worden:</span>
+              <span class="text-ingenium-grey-700 lowercase">
+                {#if !getFailedProduct(product).auth_error }
+                    { getFailedProduct(product).non_auth_error.error_nl }
+                {:else}
+                    { getFailedProduct(product).auth_error.error_nl }
+                {/if}
+              </span>
+            </p>
+          {/if}
         </div>
 
         <div class="cart-list-product__actions">
