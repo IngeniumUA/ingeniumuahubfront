@@ -105,10 +105,10 @@
           </button>
 
           <div class="flex gap-4 items-center justify-center mt-3">
-            <a href={ getWalletLink(transaction, 'google') }>
+            <a href={ getWalletLink(transaction, 'google') } data-sveltekit-preload-data="tap">
               <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
             </a>
-            <a href={ getWalletLink(transaction, 'apple') }>
+            <a href={ getWalletLink(transaction, 'apple') } data-sveltekit-preload-data="tap">
               <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
             </a>
           </div>
