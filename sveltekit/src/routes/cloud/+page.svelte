@@ -23,7 +23,7 @@
 
 <style>
   iframe {
-      height: 70vh;
+    height: 70vh;
     @apply w-full;
   }
 </style>
