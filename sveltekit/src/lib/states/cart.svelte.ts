@@ -169,12 +169,11 @@ export const handlePayment = async (data: CartSuccessI) => {
  */
 export const goToSuccessPage = async () => {
 	clearCart();
-
-	if (isAuthenticated()) {
-		await goto('/account/transactions');
-	} else {
-		await goto('/shop/confirm?redirect_status=succeeded');
-	}
+	// Clear paying status
+	cartDetails.isPaying = false;
+	cartDetails.stripePayment = false;
+	cartDetails.checkout = null;
+	await goto('/shop/confirm?redirect_status=succeeded');
 }
 
 /**

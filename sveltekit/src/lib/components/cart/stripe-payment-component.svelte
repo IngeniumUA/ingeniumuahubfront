@@ -1,15 +1,20 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
+  import {
+    loadStripe,
+    type PaymentIntentOrSetupIntentResult, type PaymentIntentResult,
+    type Stripe,
+    type StripeElements
+  } from '@stripe/stripe-js';
   import { PUBLIC_STRIPE_PK_KEY, PUBLIC_STRIPE_RETURN_URL } from "$env/static/public";
   import { cartDetails, clearCart } from "$lib/states/cart.svelte";
   import Modal from "$lib/components/layout/modal.svelte";
-  import {PaymentIntentResult} from "@stripe/stripe-js/dist/stripe-js/stripe";
-  import {goToSuccessPage} from "../../states/cart.svelte";
+  import { goToSuccessPage } from "../../states/cart.svelte";
 
   let isOpen = $state(true);
   let element: StripeElements = null!;
   let stripe: Stripe|null = null;
+  let blocked = $state(false);
 
   onMount(async () => {
     try {
@@ -18,7 +23,7 @@
 
       element = stripe.elements({
         clientSecret: cartDetails.checkout.client_secret,
-      })
+      });
       const paymentElement = element.create('payment', {
         paymentMethodOrder: ['bancontact', 'ideal', 'card'],
       });
@@ -30,6 +35,7 @@
 
   async function doPayment() {
     if (!stripe) return;
+    blocked = true;
 
     try {
       await element.submit();
@@ -42,42 +48,40 @@
         }
       });
       // Handle the response asynchronously because further API calls might be required to finish payment
-      await handleStripeResponse(response)
+      await handleStripeResponse(response);
     } catch (error) {
       console.error(error);
     }
   }
 
-  async function handleStripeResponse(result: PaymentIntentResult) {
+  // TODO: This should be revamped cuz it just bad code!
+  async function handleStripeResponse(result: PaymentIntentResult|PaymentIntentOrSetupIntentResult) {
+    if (!stripe || !cartDetails.checkout) return;
     if (result.error || result.paymentIntent === undefined) {
       // Show error to your customer (e.g., insufficient funds)
-      alert( result.error.message );
+      alert(result.error?.message || 'Er is iets foutgegaan!');
+      blocked = false;
       return;
     }
 
     switch (result.paymentIntent.status) {
       case 'succeeded':
-        // Show a success message to your customer
-        alert( 'Betaling Success!' );
-
         // Redirect to shop confirm
         await goToSuccessPage()
         break;
 
-      case 'requires_action':
-        // Big one!
-        // We sent about 35 mails over 5 months to get this issue fixed
-        // It's a specific Bancontact authentication problem where a bank requires extra authentication
+      case 'requires_action': {
         // https://docs.stripe.com/js/payment_intents/handle_next_action
-        if (cartDetails.checkout.client_secret == null) {
+        if (result.paymentIntent.client_secret == null) {
           alert("Client Secret was invalid!");
           return;
         }
-        // Handle then next action and iteratively handle the response again
-        response = await stripe.handleNextAction({clientSecret: cartDetails.checkout.client_secret});
-        await handleStripeResponse(response)
 
+        // Handle then next action and iteratively handle the response again
+        const response = await stripe.handleNextAction({ clientSecret: result.paymentIntent.client_secret });
+        await handleStripeResponse(response);
         break;
+      }
 
       default:
         // If no status was not handled in previous cases we display error
@@ -91,7 +95,7 @@
     <form action="#" class="p-4" onsubmit={ (e) => { e.preventDefault(); doPayment(); } }>
       <div id="stripe-card-element"></div>
 
-      <button class="button button-primary button-full mt-2" type="submit">
+      <button class="button button-primary button-full mt-2" type="submit" disabled={ blocked }>
         Betalen
       </button>
     </form>
