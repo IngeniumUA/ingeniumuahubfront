@@ -89,6 +89,15 @@ export class ShoppingcartListComponent implements OnInit {
     this.store.dispatch(new CartActions.SetEmail(email));
   }
 
+  onExtraFormChanged(product: ProductOutI, form_data_key: any) {
+    form_data_key = form_data_key as string
+    const form_data_value = (<HTMLInputElement>document.getElementById(product.id+form_data_key)).value
+
+    console.log(form_data_value)
+
+    return product.id + form_data_key + form_data_value; //TODO actually implement
+  }
+
   hasFailedProduct(product: ProductOutI, failedProducts: FailedProductI[]|undefined) {
     if (!failedProducts) {
       return undefined;
@@ -152,4 +161,6 @@ export class ShoppingcartListComponent implements OnInit {
 
     this.router.navigateByUrl('/shop/pay');
   }
+
+  protected readonly JSON = JSON;
 }
