@@ -99,12 +99,33 @@ export class ShoppingcartListComponent implements OnInit {
     const form_data_value = (event.target as HTMLInputElement).value
 
     console.log(product)
-    const meta_data = product.product_meta.other_meta_data
+    let meta_data: any = product.product_meta.other_meta_data
     const form_data = JSON.parse(meta_data["form"])
     form_data[form_data_key] = form_data_value
-    meta_data["form"] = JSON.stringify(form_data)
-    console.log(meta_data)
-    // product.product_meta.other_meta_data = meta_data
+    meta_data["form"] = form_data
+    meta_data = JSON.stringify(meta_data)
+    // product.product_meta.other_meta_data["form"] = JSON.stringify(form_data)
+    const updated_meta: ProductMetaI = {
+      group: product.product_meta.group,
+      categorie: product.product_meta.categorie,
+      upon_completion: product.product_meta.upon_completion,
+      other_meta_data: {meta_data}
+    }
+    const updated_product: ProductOutI = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      ordering: product.ordering,
+      blueprint_id: product.blueprint_id,
+      origin_item_id: product.origin_item_id,
+      date_generated: product.date_generated,
+      price_policy: product.price_policy,
+      note: product.note,
+      max_count: product.max_count,
+      product_meta: updated_meta,
+      allow_individualised: product.allow_individualised
+    }
+    console.log(updated_product);
     console.log(product)
   }
 
