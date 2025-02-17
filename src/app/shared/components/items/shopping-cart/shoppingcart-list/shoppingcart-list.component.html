@@ -32,13 +32,14 @@
                 @if (meta.key !== "form") {
                   <span class="capitalize">{{ meta.key }}</span>: <span>{{ meta.value}}</span>
                 } @else {
-                  <div *ngFor="let form_data of JSON.parse(meta.value) | keyvalue">
+                  @for (form_data_key of Object.keys(JSON.parse($any(meta.value))); track $index) {
+                    @let form_data_value = JSON.parse($any(meta.value))[form_data_key];
                     <div [ngClass]="{ 'form-field mt-2': true }">
-                      <label for="{{form_data.key}}" style="font-weight:bold;" >{{form_data.key}}</label>
-                      <input type="{{$any(form_data.value)['type']}}" id="{{product.id + $any(form_data.key)}}" required
-                             (change)="onExtraFormChanged(product, form_data.key)"/>
+                      <label for="{{product.origin_item_id + form_data_key}}" style="font-weight:bold;" >{{form_data_key}}</label>
+                      <input type="{{form_data_value['type']}}" id="{{product.origin_item_id + form_data_key}}" required
+                             (change)="onExtraFormChanged($event, product, form_data_key)"/>
                     </div>
-                  </div>
+                  }
                 }
               </li>
             </ul>

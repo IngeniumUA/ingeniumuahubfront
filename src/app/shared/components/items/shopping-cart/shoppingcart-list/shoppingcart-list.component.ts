@@ -1,6 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
+import {
+  ProductOutI,
+  PaymentProviderEnum,
+  PricePolicyLimitedI,
+  ProductMetaI
+} from '@ingenium/app/shared/models/product/products';
 import {Router, RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
@@ -89,13 +94,18 @@ export class ShoppingcartListComponent implements OnInit {
     this.store.dispatch(new CartActions.SetEmail(email));
   }
 
-  onExtraFormChanged(product: ProductOutI, form_data_key: any) {
+  onExtraFormChanged(event: Event, product: ProductOutI, form_data_key: any) {
     form_data_key = form_data_key as string
-    const form_data_value = (<HTMLInputElement>document.getElementById(product.id+form_data_key)).value
+    const form_data_value = (event.target as HTMLInputElement).value
 
-    console.log(form_data_value)
-
-    return product.id + form_data_key + form_data_value; //TODO actually implement
+    console.log(product)
+    const meta_data = product.product_meta.other_meta_data
+    const form_data = JSON.parse(meta_data["form"])
+    form_data[form_data_key] = form_data_value
+    meta_data["form"] = JSON.stringify(form_data)
+    console.log(meta_data)
+    // product.product_meta.other_meta_data = meta_data
+    console.log(product)
   }
 
   hasFailedProduct(product: ProductOutI, failedProducts: FailedProductI[]|undefined) {
@@ -163,4 +173,5 @@ export class ShoppingcartListComponent implements OnInit {
   }
 
   protected readonly JSON = JSON;
+  protected readonly Object = Object;
 }
