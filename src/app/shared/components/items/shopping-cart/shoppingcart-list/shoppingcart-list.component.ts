@@ -3,7 +3,6 @@ import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {
   ProductOutI,
   PaymentProviderEnum,
-  PricePolicyLimitedI,
   ProductMetaI
 } from '@ingenium/app/shared/models/product/products';
 import {Router, RouterLink} from '@angular/router';
@@ -98,18 +97,16 @@ export class ShoppingcartListComponent implements OnInit {
     form_data_key = form_data_key as string
     const form_data_value = (event.target as HTMLInputElement).value
 
-    console.log(product)
-    let meta_data: any = product.product_meta.other_meta_data
-    const form_data = JSON.parse(meta_data["form"])
-    form_data[form_data_key] = form_data_value
-    meta_data["form"] = form_data
-    meta_data = JSON.stringify(meta_data)
-    // product.product_meta.other_meta_data["form"] = JSON.stringify(form_data)
+    let meta_data: any = JSON.stringify(product.product_meta.other_meta_data)
+    meta_data = JSON.parse(meta_data)  // janky as fuck but needed to get around read only
+    const form = JSON.parse(meta_data["form"])
+    form[form_data_key]["value"] = form_data_value
+
     const updated_meta: ProductMetaI = {
       group: product.product_meta.group,
       categorie: product.product_meta.categorie,
       upon_completion: product.product_meta.upon_completion,
-      other_meta_data: {meta_data}
+      other_meta_data: {form: JSON.stringify(form)}
     }
     const updated_product: ProductOutI = {
       id: product.id,
@@ -125,8 +122,8 @@ export class ShoppingcartListComponent implements OnInit {
       product_meta: updated_meta,
       allow_individualised: product.allow_individualised
     }
-    console.log(updated_product);
-    console.log(product)
+    this.store.dispatch(new CartActions.ReduceProductQuantity(product));
+    this.store.dispatch(new CartActions.AddToCart(updated_product));
   }
 
   hasFailedProduct(product: ProductOutI, failedProducts: FailedProductI[]|undefined) {
