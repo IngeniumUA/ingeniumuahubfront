@@ -77,4 +77,7 @@ export class PublicHeaderComponent {
   }
 
   gotoPage(page: string) {this.appFunctionsService.goToPage(page);}
+  test() {
+    console.log(window.location.href)
+  }
 }
