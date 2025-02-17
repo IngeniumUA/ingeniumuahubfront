@@ -12,7 +12,12 @@
     </td></tr>
     <tr><th>Date Created</th><td>{{ productBlueprint.created_timestamp | date }}</td></tr>
     <tr><th>Last Updated</th><td>{{ productBlueprint.last_update_timestamp | date }}</td></tr>
-    <tr><th>Origin Item ID</th><td><a (click)="gotoPage('sub/web/item' + productBlueprint.origin_item_id)" class="cursor-pointer" >{{ productBlueprint.origin_item_id }}</a></td></tr>
+    <tr><th>Origin Item ID</th><td><a (click)="gotoPage('sub/web/item/' + productBlueprint.origin_item_id)" class="cursor-pointer" >{{ productBlueprint.origin_item_id }}</a></td></tr>
+    <tr><th>Source Item IDs</th><td>
+      @for (source_item_id of productBlueprint.source_item_ids; track source_item_id) {
+        <a (click)="gotoPage('sub/web/item/' + source_item_id)" class="cursor-pointer" >{{ source_item_id }}</a>
+      }
+    </td></tr>
 
     <tr><th>Name</th><td>
       <label class="hubformfield-white">

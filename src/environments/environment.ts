@@ -15,10 +15,11 @@ const OAuthConfig: AuthConfig = {
   openUri
 };
 
-export let apiEnviroment = {
+export const apiEnviroment = {
   name: 'production',
   apiUrl: 'https://hub.ingeniumua.be/api/v1/',
   // apiUrl: 'https://hub.dev.ingeniumua.be/api/v1/',
+  appHost: 'admin.ingeniumua.be',
   oauthConfig: OAuthConfig,
   versions: versions,
   turnstileSiteKey: '0x4AAAAAAAX0Qzpta2sfvGK-',
