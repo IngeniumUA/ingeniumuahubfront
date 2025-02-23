@@ -1,8 +1,0 @@
-<section>
-  <ng-container *ngFor="let event of (this.events$ | async)">
-    <div class="event-table-card">
-      <div id="image-wrap" aria-hidden="true"><img alt="" src="{{ event.derived_type }}" [routerLink]="[event.item.id]"></div>
-      <p>{{ event.item.name }}</p>
-    </div>
-  </ng-container>
-</section>
