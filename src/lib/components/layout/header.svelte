@@ -57,16 +57,17 @@
 				</a>
 			</div>
 
-			<div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+			<div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0" role="menubar">
 				<!-- DESKTOP MENU -->
 				<div class="desktop-nav">
 					<div class="flex space-x-4">
-						<a href="/" class="nav-item">Home</a>
-						<a href="/events" class="nav-item">Events</a>
+						<a href="/" class="nav-item" role="menuitem">Home</a>
+						<a href="/events" class="nav-item" role="menuitem">Events</a>
 
 						<!-- INFO DROPDOWN -->
 						<div class="relative">
-							<button type="button" onclick={ () => infoDropdownOpen = !infoDropdownOpen } aria-expanded="{infoDropdownOpen}" aria-haspopup="true" class="nav-item flex items-center"  id="info-menu-button">
+							<button type="button" onclick={ () => infoDropdownOpen = !infoDropdownOpen } id="info-menu-button"
+											role="menuitem" aria-expanded="{infoDropdownOpen}" aria-haspopup="menu" class="nav-item flex items-center">
 								Info <span aria-hidden="true" class="text-inherit ml-2 text-xs">&#9660;</span>
 							</button>
 
@@ -75,17 +76,17 @@
 									<a href="/info" class="nav-dropdown-item" role="menuitem">Over ons</a>
 									<a href="/info/praesidium" class="nav-dropdown-item" role="menuitem">Praesidium</a>
 									<a href="/info/relations" class="nav-dropdown-item">Partner relations</a>
-									<a href="https://www.engineersoftomorrow.com/" target="_blank" rel="opener" class="nav-dropdown-item">Engineers Of Tomorrow</a>
-									<a href="/vacatures" class="nav-dropdown-item">Vacatures</a>
-									<a href="/info/clublied" class="nav-dropdown-item">Clublied</a>
-									<a href="/info/contact" class="nav-dropdown-item">Contact</a>
+									<a href="https://www.engineersoftomorrow.com/" target="_blank" rel="opener" class="nav-dropdown-item" role="menuitem">Engineers Of Tomorrow</a>
+									<a href="/vacatures" class="nav-dropdown-item" role="menuitem">Vacatures</a>
+									<a href="/info/clublied" class="nav-dropdown-item" role="menuitem">Clublied</a>
+									<a href="/info/contact" class="nav-dropdown-item" role="menuitem">Contact</a>
 								</div>
 							{/if}
 						</div>
 						<!-- INFO DROPDOWN END -->
 
-						<a href="/shop" class="nav-item">Shop</a>
-						<a href="/cloud" class="nav-item">Cloud</a>
+						<a href="/shop" class="nav-item" role="menuitem">Shop</a>
+						<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
 					</div>
 				</div>
 				<!-- DESKTOP MENU END -->
@@ -136,18 +137,18 @@
 
 	<!-- Mobile menu -->
 	{#if mobileMenuOpen}
-		<div class="mobile-nav">
+		<div class="mobile-nav" role="menu">
 			<div class="space-y-1 px-2 pb-3 pt-2">
-				<a href="/" class="nav-item">Home</a>
-				<a href="/events" class="nav-item">Events</a>
-				<a href="/shop" class="nav-item">Shop</a>
-				<a href="/cloud" class="nav-item">Cloud</a>
+				<a href="/" class="nav-item" role="menuitem">Home</a>
+				<a href="/events" class="nav-item" role="menuitem">Events</a>
+				<a href="/shop" class="nav-item" role="menuitem">Shop</a>
+				<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
 				<a href="/info" class="nav-item" role="menuitem">Over ons</a>
 				<a href="/info/praesidium" class="nav-item" role="menuitem">Praesidium</a>
-				<a href="/info/relations" class="nav-item">Partner relations</a>
-				<a href="/vacatures" class="nav-item">Vacatures</a>
-				<a href="/info/clublied" class="nav-item">Clublied</a>
-				<a href="/info/contact" class="nav-item">Contact</a>
+				<a href="/info/relations" class="nav-item" role="menuitem">Partner relations</a>
+				<a href="/vacatures" class="nav-item" role="menuitem">Vacatures</a>
+				<a href="/info/clublied" class="nav-item" role="menuitem">Clublied</a>
+				<a href="/info/contact" class="nav-item" role="menuitem">Contact</a>
 			</div>
 		</div>
 	{/if}

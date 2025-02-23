@@ -40,7 +40,7 @@
     </div>
   </article>
 {:else}
-  <a href={ url } rel={ external ? 'noopener' : '' }  class="event-card-link-wrapper">
+  <a href={ url } rel={ external ? 'noopener' : '' } aria-label={ item.name } class="event-card-link-wrapper">
     <article class="event-card" style="{cardStyle}">
       <div class="image">
         <!-- Image might not be given (either could optionally be null), if null is passed the page breaks -->
@@ -51,7 +51,7 @@
         {/if}
       </div>
       <div class="content">
-        <h3 style:color={ textStyle }>{ item.name }</h3>
+        <p class="title" style:color={ textStyle }>{ item.name }</p>
       </div>
     </article>
   </a>
