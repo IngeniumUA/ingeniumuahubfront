@@ -6,7 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: Staging
-
+    permissions:
+      contents: read
+      packages: write
     name: Build container
     steps:
       - name: Checkout
