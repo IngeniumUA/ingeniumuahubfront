@@ -25,14 +25,10 @@ jobs:
           username: ${{ env.OWNER_LC }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Create env file'
-        run: |
-          touch .env
-          echo ${{ vars.SVELTEKIT_ENV_FILE }} >> .env.staging
-
       - name: Build
         uses: docker/build-push-action@v2
         with:
+          build-args: ENVIRONMENT=staging
           push: true
           tags: ghcr.io/ingeniumua/ingeniumuahubfront:staging
 
