@@ -29,7 +29,23 @@
             </p>
             <ul *ngIf="product.product_meta.other_meta_data" class="cart-list-product__options">
               <li *ngFor="let meta of product.product_meta.other_meta_data | keyvalue">
-                <span class="capitalize">{{ meta.key }}</span>: <span>{{ meta.value}}</span>
+                @if (meta.key !== "form") {
+                  <span class="capitalize">{{ meta.key }}</span>: <span>{{ meta.value}}</span>
+                } @else {
+                  @for (form_data_key of Object.keys(JSON.parse($any(meta.value))); track $index) {
+                    @let form_data_value = JSON.parse($any(meta.value))[form_data_key];
+                    <div [ngClass]="{ 'form-field mt-2': true }">
+                      <label for="{{product.origin_item_id + form_data_key}}" style="font-weight:bold;" >{{form_data_key}}</label>
+                      @if (form_data_value["value"]) {
+                        <input type="{{form_data_value['type']}}" id="{{product.origin_item_id + form_data_key}}" required
+                               (change)="onExtraFormChanged($event, product, form_data_key)" value="{{form_data_value['value']}}"/>
+                      } @else {
+                        <input type="{{form_data_value['type']}}" id="{{product.origin_item_id + form_data_key}}" required
+                               (change)="onExtraFormChanged($event, product, form_data_key)"/>
+                      }
+                    </div>
+                  }
+                }
               </li>
             </ul>
             <p class="cart-list-product__price">&euro; {{ product.price_policy.price }}</p>
