@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, Observable, of, startWith} from 'rxjs';
 import {apiEnviroment} from '@ingenium/environments/environment';
-import {ItemI, ItemInI} from "@ingenium/app/shared/models/item/itemI";
+import {ItemI, ItemInI, ItemTypeEnum} from "@ingenium/app/shared/models/item/itemI";
 import {map} from "rxjs/operators";
 import {HttpState} from "@ingenium/app/shared/models/httpState";
 import {captureException} from "@sentry/angular";
+import {removeNull} from "@ingenium/app/core/services/serviceUtils";
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,29 @@ export class ItemService {
 
   apiUrl = apiEnviroment.apiUrl + 'item';
 
-  public getItems(): Observable<ItemI[]> {
-    return this.httpClient.get<ItemI[]>(this.apiUrl);
+  public queryItems(offset: number = 0, count: number = 50, itemType: ItemTypeEnum[] | []): Observable<ItemI[]> {
+    const param = {
+      offset: offset,
+      limit: count
+    }
+    const params = new URLSearchParams(removeNull(param));
+    for (const item_type of itemType) {
+      params.append("item_type", ItemTypeEnum[item_type])
+    }
+    return this.httpClient.get<ItemI[]>(`${this.apiUrl}?${params.toString()}`);
   }
+
+  public countItems(itemType: ItemTypeEnum[] | []): Observable<number> {
+    const param = {
+
+    }
+    const params = new URLSearchParams(removeNull(param));
+    for (const item_type of itemType) {
+      params.append("item_type", ItemTypeEnum[item_type])
+    }
+    return this.httpClient.get<number>(`${this.apiUrl}/count?${params.toString()}`);
+  }
+
   public getItem(itemId: string): Observable<ItemI> {
     return this.httpClient.get<ItemI>(this.apiUrl + "/" + itemId);
   }

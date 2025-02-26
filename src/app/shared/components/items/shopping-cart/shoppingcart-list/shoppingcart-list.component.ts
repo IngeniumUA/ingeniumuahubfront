@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {AsyncPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {ProductOutI, PaymentProviderEnum} from '@ingenium/app/shared/models/product/products';
+import {
+  ProductOutI,
+  PaymentProviderEnum,
+  ProductMetaI
+} from '@ingenium/app/shared/models/product/products';
 import {Router, RouterLink} from '@angular/router';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ItemLimitedI} from "@ingenium/app/shared/models/item/itemI";
@@ -89,6 +93,39 @@ export class ShoppingcartListComponent implements OnInit {
     this.store.dispatch(new CartActions.SetEmail(email));
   }
 
+  onExtraFormChanged(event: Event, product: ProductOutI, form_data_key: any) {
+    form_data_key = form_data_key as string
+    const form_data_value = (event.target as HTMLInputElement).value
+
+    let meta_data: any = JSON.stringify(product.product_meta.other_meta_data)
+    meta_data = JSON.parse(meta_data)  // janky as fuck but needed to get around read only
+    const form = JSON.parse(meta_data["form"])
+    form[form_data_key]["value"] = form_data_value
+
+    const updated_meta: ProductMetaI = {
+      group: product.product_meta.group,
+      categorie: product.product_meta.categorie,
+      upon_completion: product.product_meta.upon_completion,
+      other_meta_data: {form: JSON.stringify(form)}
+    }
+    const updated_product: ProductOutI = {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      ordering: product.ordering,
+      blueprint_id: product.blueprint_id,
+      origin_item_id: product.origin_item_id,
+      date_generated: product.date_generated,
+      price_policy: product.price_policy,
+      note: product.note,
+      max_count: product.max_count,
+      product_meta: updated_meta,
+      allow_individualised: product.allow_individualised
+    }
+    this.store.dispatch(new CartActions.ReduceProductQuantity(product));
+    this.store.dispatch(new CartActions.AddToCart(updated_product));
+  }
+
   hasFailedProduct(product: ProductOutI, failedProducts: FailedProductI[]|undefined) {
     if (!failedProducts) {
       return undefined;
@@ -152,4 +189,7 @@ export class ShoppingcartListComponent implements OnInit {
 
     this.router.navigateByUrl('/shop/pay');
   }
+
+  protected readonly JSON = JSON;
+  protected readonly Object = Object;
 }

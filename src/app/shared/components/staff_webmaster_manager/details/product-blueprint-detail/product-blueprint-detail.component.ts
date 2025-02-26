@@ -24,7 +24,6 @@ import {ToastrService} from "ngx-toastr";
   imports: [
     DatePipe,
     RouterLink,
-    JsonPipe,
     NgForOf,
     FormsModule,
     ReactiveFormsModule,
@@ -73,8 +72,9 @@ export class ProductBlueprintDetailComponent implements OnInit {
         categorie: [this.productBlueprint.product_blueprint_metadata.categorie],
         group: [this.productBlueprint.product_blueprint_metadata.group],
         upon_completion: [''],
-        track_checkout: [tracking_checkout]
+        track_checkout: [tracking_checkout],
         // todo upon_completion: [this.productBlueprint.product_blueprint_metadata.upon_completion === null ? '': JSON.stringify(this.productBlueprint.product_blueprint_metadata.upon_completion[0])]
+        form_template: [this.productBlueprint.product_blueprint_metadata.other_meta_data === null ? '': JSON.stringify(this.productBlueprint.product_blueprint_metadata.other_meta_data).slice(9,JSON.stringify(this.productBlueprint.product_blueprint_metadata.other_meta_data).length-2).replaceAll("\\","")]
       });
     }
 
@@ -101,7 +101,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
         group: this.productMetaForm.controls['group'].value,
         categorie: this.productMetaForm.controls['categorie'].value,
         upon_completion: upon_completion,
-        other_meta_data: this.productBlueprint.product_blueprint_metadata.other_meta_data
+        other_meta_data: {"form":this.productMetaForm.controls['form_template'].value},
       };
 
       // Check if valid guardclause

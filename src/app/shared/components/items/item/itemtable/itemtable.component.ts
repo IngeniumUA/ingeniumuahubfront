@@ -23,7 +23,7 @@ export class ItemtableComponent implements OnInit {
   }
   items$!: Observable<ItemI[]>;
   ngOnInit(): void {
-    this.items$ = this.itemService.getItems();
+    this.items$ = this.itemService.queryItems(0, 50, []);
   }
 
 }

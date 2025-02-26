@@ -1,10 +1,46 @@
-<ng-container *ngIf="userRoles$ | async as rolesI">
-<ng-container *ngIf="GetDisplayedColumns(rolesI) as displayedColumns">
-<ng-container *ngIf="this.items$ as items">
+<h2>Item Table</h2>
+
+<section class="top-query-form">
+  <h3 class="text-blue-900">Extra search params</h3>
+  <p>Item Types</p>
+  <button class="font-bold" (click)="AddItemTypeField()">Add New</button>
+  <form [formGroup]="this.searchForm">
+    <div class="flex flex-row w-12" *ngFor="let control of searchForm.controls['itemTypesControl'].controls; index as i">
+      <select [formControl]="control" class="hubformfield-white">
+        <option [ngValue]="null">Choose itemtype</option>
+        @for (itemtype of ItemTypeList; track itemtype) {
+          <option [ngValue]="itemtype" style="color: var(--mainblue)">
+            {{ ItemTypeEnum[itemtype] }}
+          </option>
+        }
+      </select>
+      <button class="font-bold" (click)="RemoveItemTypeField(i)">Remove</button>
+    </div>
+  </form>
+</section>
+
+<section class="flex flex-row gap-3 my-2">
+  <button class="button button-primary button-inline" (click)="LoadData()">Refresh</button>
+  <button class="button button-primary button-inline" disabled>Download</button>
+</section>
+
+<section>
+@if (this.items$ | async; as items) {
+  @let itemCount = this.itemCount$ | async;
+
+  <mat-paginator
+    [length]="itemCount"
+    [pageSize]="50"
+    [pageIndex]="this.pageIndex"
+    (page)="LoadData($event)"
+    showFirstLastButtons
+    aria-label="Select which cards">
+  </mat-paginator>
+
   <table mat-table [dataSource]="items">
     <!-- uuid Column -->
     <ng-container matColumnDef="id"
-    *ngIf="displayedColumns.includes('id')">
+    *ngIf="GetDisplayedColumns().includes('id')">
       <th mat-header-cell *matHeaderCellDef> ID </th>
       <td mat-cell *matCellDef="let item"><a [routerLink]="[item.id]"> {{ item.id }}</a></td>
     </ng-container>
@@ -40,9 +76,12 @@
     </ng-container>
 
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="GetDisplayedColumns()"></tr>
+    <tr mat-row *matRowDef="let row; columns: GetDisplayedColumns();"></tr>
   </table>
-</ng-container>
-</ng-container>
-</ng-container>
+} @else {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+}
+</section>
