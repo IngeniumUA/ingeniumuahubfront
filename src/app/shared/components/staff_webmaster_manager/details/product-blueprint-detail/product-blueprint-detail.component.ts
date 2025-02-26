@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, DatePipe, NgForOf, NgIf} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CheckoutTrackerConfigI, ProductMetaI, UponCompletionMetaI} from '../../../../models/product/products';
