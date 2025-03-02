@@ -10,6 +10,12 @@
   let { data }: PageProps = $props();
   let currentCategory = $state(0);
 
+  function buttonStyle(category: number) {
+    if (category === currentCategory) {
+      return 'text-black bg-white font-bold';
+    }
+  }
+
   // Get the categories in sorted order
   let categories = $derived.by(() => {
     if (data.products === undefined || data.products.length === 0) return [];
@@ -66,15 +72,14 @@
     return calcColorIntensity(data.event?.derived_type.display.color, -0.1) < 180 ? 'white' : 'black';
   });
 
-  function buttonStyle(category: number) {
-    if (category === currentCategory) {
-      return 'text-black bg-white font-bold';
-    }
-  }
+  let pageTitle = $derived.by(() => `${data.event.item.name} | IngeniumUA`);
 </script>
 
 <svelte:head>
-  <title>{ data.event.item.name ?? 'Onbekend evenement' } | IngeniumUA</title>
+  <title>{ pageTitle }</title>
+  <meta property="og:title" content={ pageTitle } />
+  <meta property="og:description" content={ data.event.item.description } />
+  <meta property="og:image" content={ data.event.derived_type.display.image_square } />
 </svelte:head>
 
 <header>

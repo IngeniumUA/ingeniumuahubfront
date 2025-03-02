@@ -7,6 +7,10 @@
 	let { data }: PageProps = $props();
 </script>
 
+<svelte:head>
+	<title>Ingenium UA - Studentenvereninging FTI</title>
+</svelte:head>
+
 <div id="homepage-wrapper">
 	<header class="hero">
 		<enhanced:img src="$assets/images/galabal_bg.webp" fetchpriority="high" sizes="min(1279px, 100vw)" alt="" aria-hidden="true" />

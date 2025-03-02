@@ -15,7 +15,7 @@
   <Header whiteTheme={ true } />
 </header>
 
-<main class="ingenium-container h-full text-center flex flex-1 flex-col justify-center items-center">
+<main id="main-content" class="ingenium-container text-center flex flex-1 flex-col justify-center items-center">
   {#if data.paymentStatus === 'succeeded'}
     <div class="icon-wrapper bg-green-100 rounded-full">
       <svg class="text-green-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

@@ -20,7 +20,7 @@
 			</div>
 		</div>
 
-		<p class="server-info" aria-hidden="true">{ serverHostname }</p>
+		<p class="server-info hidden" aria-hidden="true">{ serverHostname }</p>
 	</div>
 </footer>
 
