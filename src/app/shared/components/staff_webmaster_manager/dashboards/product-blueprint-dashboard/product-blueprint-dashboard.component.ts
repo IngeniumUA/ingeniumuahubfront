@@ -1,9 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AsyncPipe, DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgIf} from '@angular/common';
 import {Observable, of} from 'rxjs';
-import {
-  ProductBlueprintDetailComponent
-} from '../../details/product-blueprint-detail/product-blueprint-detail.component';
 import {
   ProductBlueprintCreateComponent
 } from '../../create/product-blueprint-create/product-blueprint-create.component';
@@ -12,6 +9,8 @@ import {RouterLink} from '@angular/router';
 import {ItemI} from "@ingenium/app/shared/models/item/itemI";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum";
+import {CurrencyPipe} from "@ingenium/app/shared/pipes/currency.pipe";
+import {PricePolicyService} from "@ingenium/app/core/services/coreAPI/blueprint/pricePolicy.service";
 
 @Component({
   selector: 'app-product-blueprint-dashboard',
@@ -19,32 +18,32 @@ import {PaymentStatusEnum} from "@ingenium/app/shared/models/payment/statusEnum"
   styleUrls: ['./product-blueprint-dashboard.component.css'],
   imports: [
     AsyncPipe,
-    NgForOf,
     NgIf,
-    ProductBlueprintDetailComponent,
     ProductBlueprintCreateComponent,
-    DatePipe,
     MatTableModule,
     RouterLink,
-    JsonPipe
+    CurrencyPipe
   ],
   standalone: true
 })
 export class ProductBlueprintDashboardComponent implements OnInit {
   @Input() item!: ItemI;
   $productBlueprint: Observable<[]> = of([]);
+  $pricePolicyTable: Observable<[]> = of([]);
 
-  constructor(private productBlueprintService: ProductBlueprintService) {
+  constructor(private productBlueprintService: ProductBlueprintService,
+              private pricePolicyService: PricePolicyService,) {
   }
 
   calcTotal(input: []): number {
-    return input.reduce((acc, blueprintStat: any) => acc + blueprintStat.transaction_count, 0);
+    return input.reduce((acc, stat: any) => acc + stat.transaction_count, 0);
   }
 
   loadData() {
     this.$productBlueprint = this.productBlueprintService.queryProductTable(this.item.id,
       this.item.id,
       PaymentStatusEnum.successful);  // source_item
+    this.$pricePolicyTable = this.pricePolicyService.queryPricePolicyTable(this.item.id, this.item.id,)
   }
 
   ngOnInit() {
