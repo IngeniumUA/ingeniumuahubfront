@@ -1,0 +1,77 @@
+<section class="staffSection">
+  <h1>Checkout Trackers</h1>
+
+
+  <h2>Transactions Table</h2>
+
+  <section class="flex flex-row gap-3">
+    <button class="button button-primary button-inline" (click)="LoadData()">Refresh</button>
+    <button disabled class="button button-primary button-inline">Download</button>
+  </section>
+
+  @let checkoutTrackerCount = this.checkoutTrackerCount$ | async;
+  <ng-container *ngIf="(this.checkoutTrackers$ | async) as checkoutTrackerData else loading">
+    <mat-paginator
+      [length]="checkoutTrackerCount"
+      [pageSize]="100"
+      [pageIndex]="this.pageIndex"
+      (page)="LoadData($event)"
+      showFirstLastButtons
+      aria-label="Select which cards">
+    </mat-paginator>
+
+    <table mat-table [dataSource]="checkoutTrackerData" class="mat-elevation-z8">
+      <form [formGroup]="this.searchForm">
+
+        <ng-container matColumnDef="checkout">
+          <th mat-header-cell *matHeaderCellDef>Checkout</th>
+          <td mat-cell *matCellDef="let checkoutTracker">
+            <a [routerLink]="['../../checkout/'+checkoutTracker.checkout.checkout_uuid ]">{{ checkoutTracker.checkout.checkout_uuid }}</a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="checkout_tracker_id">
+          <th mat-header-cell *matHeaderCellDef>
+            <div>
+              <span class="whitespace-nowrap">Inter. ID</span>
+              <input class="w-1/4" type="text" placeholder="ID" [formControlName]="'checkoutTrackerIdControl'">
+            </div>
+          </th>
+          <td mat-cell *matCellDef="let checkoutTracker"> {{ checkoutTracker.id }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="checkout_tracker_status">
+          <th mat-header-cell *matHeaderCellDef><div>Status</div></th>
+          <td mat-cell *matCellDef="let checkoutTracker">
+            <p
+            >{{ HubCheckoutTrackerStatusEnum[checkoutTracker.checkout_tracker_status] | titlecase }}</p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="last_updated_timestamp">
+          <th mat-header-cell *matHeaderCellDef><div>Last Update</div></th>
+          <td mat-cell *matCellDef="let checkoutTracker"> {{ checkoutTracker.last_update_timestamp | date: 'dd/MM/yyyy h:mm:ss' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="created_timestamp">
+          <th mat-header-cell *matHeaderCellDef><div>Date Created</div></th>
+          <td mat-cell *matCellDef="let checkoutTracker"> {{ checkoutTracker.created_timestamp | date: 'dd/MM/yyyy HH:mm:ss' }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="GetDisplayedColumns()"></tr>
+        <tr mat-row *matRowDef="let row; columns: GetDisplayedColumns();"></tr>
+
+      </form>
+    </table>
+
+    <ng-container *ngIf="checkoutTrackerData.length !== 0 else noItems"></ng-container>
+  </ng-container>
+</section>
+
+<ng-template #noItems>Nothing to display</ng-template>
+
+<ng-template #loading>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
