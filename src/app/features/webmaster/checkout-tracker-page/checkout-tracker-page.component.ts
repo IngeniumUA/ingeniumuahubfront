@@ -80,7 +80,7 @@ export class CheckoutTrackerPageComponent implements OnInit, OnChanges, AfterVie
   }
 
   GetDisplayedColumns(): string[] {
-    return ['checkout_tracker_id', 'checkout', 'checkout_tracker_status', 'last_updated_timestamp', 'created_timestamp'];
+    return ['checkout_tracker_id', 'checkout', 'checkout_tracker_status', 'disabled', 'last_updated_timestamp', 'created_timestamp'];
   }
 
   ngOnInit() {
@@ -123,8 +123,8 @@ export class CheckoutTrackerPageComponent implements OnInit, OnChanges, AfterVie
 
     // Query
     this.checkoutTrackers$ = this.checkoutTrackerService.getTrackers(this.pageIndex * pageSize, pageSize,
-      this.itemId, trackerStatusQuery, checkoutTrackerIdQuery);
-    this.checkoutTrackerCount$ = this.checkoutTrackerService.getTrackerCount(this.itemId, trackerStatusQuery, checkoutTrackerIdQuery);
+      this.itemId, trackerStatusQuery, checkoutTrackerIdQuery, "None");
+    this.checkoutTrackerCount$ = this.checkoutTrackerService.getTrackerCount(this.itemId, trackerStatusQuery, checkoutTrackerIdQuery, "None");
   }
 
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;

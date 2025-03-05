@@ -48,6 +48,14 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="disabled">
+          <th mat-header-cell *matHeaderCellDef><div>Disabled</div></th>
+          <td mat-cell *matCellDef="let checkoutTracker">
+            <p
+            >{{ checkoutTracker.disabled }}</p>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="last_updated_timestamp">
           <th mat-header-cell *matHeaderCellDef><div>Last Update</div></th>
           <td mat-cell *matCellDef="let checkoutTracker"> {{ checkoutTracker.last_update_timestamp | date: 'dd/MM/yyyy h:mm:ss' }} </td>
