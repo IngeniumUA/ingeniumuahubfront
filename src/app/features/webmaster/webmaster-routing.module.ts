@@ -20,6 +20,9 @@ import {
   AppNotificationsComponent
 } from "@ingenium/app/features/webmaster/app-notifications/app-notifications.component";
 import {GroupDetailPageComponent} from "@ingenium/app/features/webmaster/group/group-detail/group-detail-page.component";
+import {
+  CheckoutTrackerPageComponent
+} from "@ingenium/app/features/webmaster/checkout-tracker-page/checkout-tracker-page.component";
 
 
 const routes: Routes = [
@@ -37,6 +40,7 @@ const routes: Routes = [
       {path: 'product/:id', component: ProductWebmasterPageComponent},
       // {path: 'checkout',},
       {path: 'checkout/:id', component: CheckoutDetailComponent},
+      {path: 'checkout_tracker', component: CheckoutTrackerPageComponent},
       {path: 'tracking/:id', component: OrderTrackingComponent},
       {path: 'file/media', component: MediabucketFileListPageComponent},
       {path: 'app_notifications', component: AppNotificationsComponent},
