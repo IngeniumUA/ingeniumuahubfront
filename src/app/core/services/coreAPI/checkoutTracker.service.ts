@@ -16,17 +16,20 @@ export class CheckoutTrackerService {
 
   public getTrackerCount(item: string | number | null = null,
                          tracker_status: string | number | null = null,
-                         checkout_tracker_id: number | null = null): Observable<number> {
+                         checkout_tracker_id: number | null = null,
+                         disabled: boolean | string = false): Observable<number> {
     /**
      * Fetches HubCheckoutTracker objects
      * @param item can both be item_name and item_id
      * @param tracker_status as either integer or correct string
      * @param checkout_tracker_id unique ID of checkout tracker object (mostly for debugging)
+     * @param disabled if tracker has been 'completed' (so, is disabled)
      */
     const param = {
       item: item,
       checkout_tracker_id: checkout_tracker_id,
       tracker_status: tracker_status,
+      disabled: disabled
     }
     const params = new URLSearchParams(removeNull(param));
     return this.httpClient.get<number>(`${this.apiUrl}/count?${params.toString()}`)
@@ -35,12 +38,14 @@ export class CheckoutTrackerService {
   public getTrackers(offset: number = 0, count: number = 50,
                      item: string | number | null = null,
                      tracker_status: string | number | null = null,
-                     checkout_tracker_id: number | null = null): Observable<HubCheckoutTrackerI[]> {
+                     checkout_tracker_id: number | null = null,
+                     disabled: boolean | string = false): Observable<HubCheckoutTrackerI[]> {
     /**
      * Fetches HubCheckoutTracker objects
      * @param item can both be item_name and item_uuid
      * @param tracker_status as either integer or correct string
      * @param checkout_tracker_id unique ID of checkout tracker object (mostly for debugging)
+     * @param disabled if tracker has been 'completed' (so, is disabled)
      */
     const param = {
       offset: offset,
@@ -48,6 +53,7 @@ export class CheckoutTrackerService {
       item: item,
       checkout_tracker_id: checkout_tracker_id,
       tracker_status: tracker_status,
+      disabled: disabled,
       salt: (new Date()).getTime()  // Salt was required before -> to be tested without salt
     }
     const params = new URLSearchParams(removeNull(param));
