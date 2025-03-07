@@ -13,10 +13,12 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
+		"@capacitor/assets": "^3.0.5",
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
 		"@sveltejs/adapter-auto": "^4.0.0",
 		"@sveltejs/adapter-node": "^5.2.12",
+		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/enhanced-img": "^0.4.4",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
@@ -40,6 +42,11 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
+		"@capacitor/android": "^7.0.1",
+		"@capacitor/browser": "^7.0.0",
+		"@capacitor/cli": "^6.2.0",
+		"@capacitor/core": "^7.0.1",
+		"@capacitor/ios": "^7.0.1",
 		"@sentry/sveltekit": "^9.0.0",
 		"@stripe/stripe-js": "^5.6.0",
 		"@ungap/structured-clone": "^1.3.0",
