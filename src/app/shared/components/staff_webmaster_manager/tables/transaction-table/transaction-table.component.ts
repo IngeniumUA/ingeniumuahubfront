@@ -169,10 +169,10 @@ export class TransactionTableComponent implements AfterViewInit, OnChanges, OnIn
       null,
       pricePolicyQuery);
 
-    // Transactionstats
+    // Transaction stats
     this.statusStats$ = this.transactionService.transactionCountGroupByStatus(
       this.item_id, this.user_id, interactionQuery,
-      status,
+      null, // For this table, never filter on status
       validityQuery,
       this.checkout_id, null,
       productNameQuery,
