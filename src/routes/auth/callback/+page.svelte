@@ -20,7 +20,7 @@
       const expectedState = window.sessionStorage.getItem('expected_state');
 
       // Pre-emtively stop if certain parameters are not present
-      if (!pckeCodeVerifier || !expectedState || !page.params.state || !page.params.code) {
+      if (!pckeCodeVerifier || !expectedState || !page.url.searchParams.has('state') || !page.url.searchParams.has('code')) {
         throw new Error('No matching state found in storage');
       }
 

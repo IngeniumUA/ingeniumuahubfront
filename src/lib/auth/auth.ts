@@ -1,4 +1,9 @@
-import { PUBLIC_KC_CLIENT_ID, PUBLIC_KC_DISCOVERY, PUBLIC_KC_REDIRECT_URL } from '$env/static/public';
+import {
+  PUBLIC_KC_CLIENT_ID,
+  PUBLIC_KC_DISCOVERY,
+  PUBLIC_KC_LOGOUT_URL,
+  PUBLIC_KC_REDIRECT_URL
+} from '$env/static/public';
 import { browser } from '$app/environment';
 import { page } from '$app/state';
 
@@ -51,15 +56,28 @@ export const getUserFromToken = (token: string): AuthUser => {
 export const storeTokens = (tokens: TokenEndpointResponse|undefined) => {
   if (!tokens) {
     Cookies.remove('access_token');
+    Cookies.remove('id_token');
     return;
   }
 
-  const millisecondAdd = (tokens.expires_in !== undefined ? tokens.expires_in : 5) * 60000; // 1 min = 60000 ms
+  const millisecondAdd = (tokens.expires_in !== undefined ? tokens.expires_in : 300) * 1000; // expires_in sec and 5 min to ms
   Cookies.set('access_token', tokens.access_token, {
     secure: true,
     sameSite: 'strict',
     expires: new Date(Date.now() + millisecondAdd),
   });
+}
+
+export const doLogout = async () => {
+  const config = await getOpenIdDiscovery();
+  const metadata = config.serverMetadata();
+
+  if (metadata.frontchannel_logout_session_supported && metadata.end_session_endpoint) {
+    const url = new URL(metadata.end_session_endpoint);
+    url.searchParams.append('post_logout_redirect_uri', PUBLIC_KC_LOGOUT_URL);
+    url.searchParams.append('client_id', PUBLIC_KC_CLIENT_ID);
+    window.location.replace(url);
+  }
 }
 
 export const getTokens = (params: Partial<Record<string, string>>|null) => {

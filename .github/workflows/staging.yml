@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ sveltekit ]
+    branches: [ develop ]
 
 jobs:
   build:
