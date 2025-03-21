@@ -1,14 +1,22 @@
-import { browser } from "$app/environment";
-import { fetchUserDetails, setupOidcClient } from "$lib/auth/auth";
+import Cookies from 'js-cookie';
+import { getUserFromToken } from '$lib/auth/auth';
 
 export const load = async ({ data }) => {
-  if (!browser) return; // Don't configure OIDC client on the server
-
-  const oidcClient = setupOidcClient();
-  
-  return {
-    ...data,
-    oidcClient,
-    user: await fetchUserDetails(oidcClient),
+  // If there is no user given (e.g. failed or no SSR)
+  if (!data.user) {
+    // Check if there is a valid token
+    const token = Cookies.get('access_token');
+    if (token) {
+      try {
+        data.user = getUserFromToken(token);
+      } catch (e) {
+        Cookies.remove('access_token');
+        console.error(e);
+      }
+    }
   }
+
+	return {
+		...data,
+	}
 }

@@ -1,37 +1,47 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
+  import * as client from 'openid-client';
+
   import { goto } from '$app/navigation';
-  import { auth } from "$lib/states/auth.svelte.ts";
-  import { fetchUserDetails } from "$lib/auth/auth";
+  import { auth } from "$lib/states/auth.svelte";
+  import { getOpenIdDiscovery, getUserFromToken, storeTokens } from '$lib/auth/auth';
   import Header from "$lib/components/layout/header.svelte";
+  import { captureException } from '@sentry/sveltekit';
+  import { page } from '$app/state';
 
   let isFailure = $state(false);
   let hasClearMessage = $state(true);
   let errorMsg = $state('');
 
-  onMount(async () => {
-    if (!auth.userManager) {
-      throw new Error("User manager not initialized.");
-    }
-
+  const loginCallback = async () => {
     try {
-      const data = await auth.userManager.signinCallback(window.location.href);
-      if (!data) {
-        throw new Error("No user received from authentication.");
+      const config = await getOpenIdDiscovery();
+      const pckeCodeVerifier = window.sessionStorage.getItem('pkce_code_verifier');
+      const expectedState = window.sessionStorage.getItem('expected_state');
+
+      // Pre-emtively stop if certain parameters are not present
+      if (!pckeCodeVerifier || !expectedState || !page.params.state || !page.params.code) {
+        throw new Error('No matching state found in storage');
       }
 
-      auth.user = await fetchUserDetails(auth.userManager);
+      auth.tokens = await client.authorizationCodeGrant(config, new URL(window.location.href), {
+        pkceCodeVerifier: pckeCodeVerifier || undefined,
+        expectedState: expectedState || undefined,
+      });
+      storeTokens(auth.tokens);
+      auth.user = getUserFromToken(auth.tokens.access_token);
 
-      // We can directly assume the next url is safe, Svelte does not allow external urls
-      // replaceState -> We don't want to keep the callback url in the history
-      await goto(data.state?.next || '/', { replaceState: true });
+      // Get the state parameter from the url
+      const state: Record<string, string> = JSON.parse(expectedState || '/');
+      await goto(state?.next || '/', { replaceState: true });
     } catch (error) {
       isFailure = true;
       if (error instanceof Error) {
+        console.log(error);
         switch (error.message) { // I don't like this, but it's the only way to provide a clear message
           case 'No matching state found in storage':
             errorMsg = 'De sessie is verlopen of je gebruikte de terug knop in jouw browser. Probeer opnieuw aan te melden.';
-            break;
+            return; // Don't capture this error
           default:
             errorMsg = error.message;
             hasClearMessage = false;
@@ -40,7 +50,13 @@
       } else {
         errorMsg = 'Onbekende fout';
       }
+
+      captureException(error);
     }
+  }
+
+  onMount(() => {
+    loginCallback();
   });
 </script>
 

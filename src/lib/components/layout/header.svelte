@@ -17,7 +17,7 @@
 	});
 
 	async function doLogout() {
-		await auth.userManager.signoutRedirect({
+		await auth.oidcClient.signoutRedirect({
 			post_logout_redirect_uri: PUBLIC_KC_LOGOUT_URL,
 		});
 	}
@@ -126,7 +126,7 @@
 							<hr class="nav-dropdown-divider">
 							<span class="nav-dropdown-no-link">
 								<span class="sr-only">Je bent ingelogd met</span>
-								{ auth.user.profile.email }
+								{ auth.user.email }
 							</span>
 						</div>
 					{/if}
