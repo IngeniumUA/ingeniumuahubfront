@@ -45,7 +45,7 @@
       <fieldset>
         <div class="form-field">
           <label for="email">E-mailadres</label>
-          <input id="email" type="email" readonly disabled value={ auth.user.profile.email } />
+          <input id="email" type="email" readonly disabled value={ auth.user?.email || '' } />
           <p class="text-sm text-gray-500 mt-1.5">Je kan je e-mailadres niet wijzigen. Contacteer ons als je dit toch wil aanpassen.</p>
         </div>
       </fieldset>
