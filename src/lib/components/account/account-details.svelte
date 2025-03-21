@@ -23,7 +23,7 @@
     try {
       await fetch(`${PUBLIC_API_URL}/account`, {
         method: 'PUT',
-        headers: getAuthorizationHeaders({ 'Content-Type': 'application/json' }),
+        headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
         body: JSON.stringify(details)
       });
     } catch (error) {
@@ -94,6 +94,6 @@
       </div>
     </form>
   {:catch error}
-    <p></p>
+    <p>Something went wrong...</p>
   {/await}
 </section>
