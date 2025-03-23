@@ -82,6 +82,7 @@ export class ItemDetailComponent implements OnInit{
     this.itemForm = this.formBuilder.group({
       name: [this.item.item.name, [Validators.required, ValidURLCharacters()]],
       description: [this.item.item.description],
+      connected_account_id: [this.item.item.item_metadata.payment_configuration.stripe_payment_configuration.connected_account_id]
     });
     // Adding event if required
     if (isEventItem(this.item.derived_type)) {
@@ -116,6 +117,16 @@ export class ItemDetailComponent implements OnInit{
     // So, to be changed later
     this.item.item.name = this.itemForm.controls['name'].value;
     this.item.item.description = this.itemForm.controls['description'].value;
+
+    // Special case - checking for stripe account field
+    const connectedAccountControlValue = this.itemForm.controls['connected_account_id'].value;
+    if (connectedAccountControlValue !== null && connectedAccountControlValue !== "") {
+      this.item.item.item_metadata.payment_configuration.stripe_payment_configuration.connected_account_id = connectedAccountControlValue;
+    } else {
+      this.item.item.item_metadata.payment_configuration.stripe_payment_configuration.connected_account_id = null
+    }
+
+    // Special case for eventitem
     if (this.isEventItem) {
       if ("display" in this.item.derived_type) {
         this.item.derived_type = {
