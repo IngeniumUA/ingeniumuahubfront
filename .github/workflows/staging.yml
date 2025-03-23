@@ -43,5 +43,5 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           containerAppName: ${{ vars.AZURE_CONTAINER_APP_NAME }}
-          resourceGroup: ${{ vars.AZURE_CONTAINER_APP_NAME }}
+          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ghcr.io/ingeniumua/ingeniumuahubfront:staging
