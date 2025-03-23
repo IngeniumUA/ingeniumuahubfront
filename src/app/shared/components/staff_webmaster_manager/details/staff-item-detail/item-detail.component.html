@@ -35,6 +35,17 @@
         <textarea matInput formControlName="description"></textarea>
       </mat-form-field>
     </span>
+
+    @if (this.isEventItem || this.isShopItem) {
+      <span>
+      <h3>Item Metadata</h3>
+      Connected Stripe Account
+      <label class="hubformfield-white">
+                <input type="text" formControlName="connected_account_id" placeholder="Stripe Account ID"/>
+            </label>
+    </span>
+    }
+
   </form>
 </section>
 
