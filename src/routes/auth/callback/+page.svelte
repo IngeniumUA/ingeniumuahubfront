@@ -26,12 +26,12 @@
         throw new Error('No matching state found in storage');
       }
 
-      auth.tokens = await client.authorizationCodeGrant(config, new URL(AuthCodeUrl), {
+      const tokens = await client.authorizationCodeGrant(config, new URL(AuthCodeUrl), {
         pkceCodeVerifier: pckeCodeVerifier || undefined,
         expectedState: expectedState || undefined,
       });
-      storeTokens(auth.tokens);
-      auth.user = getUserFromToken(auth.tokens.access_token);
+      storeTokens(tokens);
+      auth.user = getUserFromToken(tokens.access_token);
 
       // Get the state parameter from the url
       const state: Record<string, string> = JSON.parse(expectedState || '/');

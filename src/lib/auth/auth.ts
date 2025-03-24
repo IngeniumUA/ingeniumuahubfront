@@ -127,6 +127,9 @@ export const getAuthorizationHeaders = (params: Partial<Record<string, string>>|
 /**
  * Create a login URL with a redirect to the current page.
  */
-export const getLoginUrlWithRedirect = (path: undefined|string = undefined) => {
-  return `/auth/login?next=${path || page.url.pathname}`;
+export const getLoginUrlWithRedirect = (path: string|undefined = undefined) => {
+  // Check if the page route id would go to a prohibited page, if so redirect to root
+  let defaultPath = ['DEF', '/auth/logout', '/auth/login', '/auth/callback'].includes(page.route.id || 'DEF') ? '/' : page.url.pathname;
+
+  return `/auth/login?next=${path || defaultPath}`;
 }
