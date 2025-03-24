@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { auth, isAuthenticated } from "$lib/states/auth.svelte.js";
-	import { getLoginUrlWithRedirect } from "$lib/auth/auth";
+	import { auth, isAuthenticated } from "$lib/states/auth.svelte";
+	import { getLoginUrlWithRedirect, doLogout } from "$lib/auth/auth";
+
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
-	import {PUBLIC_KC_LOGOUT_URL} from "$env/static/public";
 
 	let { noBackground = false, whiteTheme = false } = $props();
 	let mobileMenuOpen = $state(false);
@@ -15,12 +15,6 @@
 		}
 		return whiteTheme ? 'nav-white' : 'nav-dark';
 	});
-
-	async function doLogout() {
-		await auth.userManager.signoutRedirect({
-			post_logout_redirect_uri: PUBLIC_KC_LOGOUT_URL,
-		});
-	}
 </script>
 
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
@@ -126,7 +120,7 @@
 							<hr class="nav-dropdown-divider">
 							<span class="nav-dropdown-no-link">
 								<span class="sr-only">Je bent ingelogd met</span>
-								{ auth.user.profile.email }
+								{ auth.user.email }
 							</span>
 						</div>
 					{/if}

@@ -23,7 +23,7 @@
     try {
       await fetch(`${PUBLIC_API_URL}/account`, {
         method: 'PUT',
-        headers: getAuthorizationHeaders({ 'Content-Type': 'application/json' }),
+        headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
         body: JSON.stringify(details)
       });
     } catch (error) {
@@ -45,7 +45,7 @@
       <fieldset>
         <div class="form-field">
           <label for="email">E-mailadres</label>
-          <input id="email" type="email" readonly disabled value={ auth.user.profile.email } />
+          <input id="email" type="email" readonly disabled value={ auth.user?.email || '' } />
           <p class="text-sm text-gray-500 mt-1.5">Je kan je e-mailadres niet wijzigen. Contacteer ons als je dit toch wil aanpassen.</p>
         </div>
       </fieldset>
@@ -94,6 +94,6 @@
       </div>
     </form>
   {:catch error}
-    <p></p>
+    <p>Something went wrong...</p>
   {/await}
 </section>

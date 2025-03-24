@@ -5,15 +5,15 @@
 	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 
-	import { auth } from "$lib/states/auth.svelte.js";
 	import { retrieveProductsFromLocalStorage } from "$lib/states/cart.svelte";
 	import Footer from '$lib/components/layout/footer.svelte';
 	import GlobalPageSpinner from '$lib/components/spinners/global-page-spinner.svelte';
+	import { auth } from '$lib/states/auth.svelte';
 
 	let { children, data } = $props();
+
+	auth.user = data.user;
 	if (browser) {
-		auth.userManager = data.oidcClient;
-		auth.user = data.user;
 		retrieveProductsFromLocalStorage();
 	}
 </script>

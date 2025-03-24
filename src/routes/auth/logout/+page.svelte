@@ -1,5 +1,8 @@
 <script lang="ts">
   import Header from "$lib/components/layout/header.svelte";
+  import { storeTokens } from '$lib/auth/auth';
+  
+  storeTokens(undefined);
 </script>
 
 <svelte:head>

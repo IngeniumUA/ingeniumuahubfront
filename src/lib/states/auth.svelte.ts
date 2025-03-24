@@ -1,30 +1,24 @@
-import type { User, UserManager } from "oidc-client-ts";
+import type { AuthState } from '$lib/models/authI';
 
-interface UserState {
-  userManager: null|UserManager;
-  user: User|null;
-  doLogin: (state: object) => Promise<void>;
-}
-
-export const auth = $state<UserState>({
-  userManager: null,
-  user: null,
-  doLogin: async (state: object = {}) => {
-    if (!auth.userManager) return;
-    await auth.userManager.signinRedirect({
-      state: state,
-    });
-  }
+export const auth = $state<AuthState>({
+  discoveryLoaded: false,
+  discoveryFailed: true,
+  authConfig: undefined,
+  tokens: undefined,
+  user: undefined,
 });
 
 /**
  * Check if the user is authenticated.
  */
 export const isAuthenticated = () => {
-  return auth.user?.access_token !== undefined;
+  return auth.user !== undefined;
 }
 
+/**
+ * Check if the user has a specific role.
+ * @param role name of the role to check for
+ */
 export const hasRole = (role: string) => {
-  // @ts-expect-error -> cannot change type of oidc package
-  return auth?.profile?.realm_access?.roles?.includes(role) || false;
+  return auth?.user?.realm_access?.roles?.includes(role) || false;
 }
