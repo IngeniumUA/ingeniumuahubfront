@@ -12,6 +12,8 @@ import * as client from 'openid-client';
 import { jwtDecode } from 'jwt-decode';
 import type { TokenEndpointResponse } from 'openid-client';
 import type { AuthUser } from '$lib/models/authI';
+import { Capacitor } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
 
 export const getOpenIdDiscovery = async () => {
   return await client.discovery(new URL(PUBLIC_KC_DISCOVERY), PUBLIC_KC_CLIENT_ID);
@@ -37,6 +39,7 @@ export const doLogin = async (state: Record<string, string> = {}): Promise<URL> 
     code_challenge: codeChallenge,
     code_challenge_method: 'S256',
     state: strState,
+    prompt: 'login',
   });
 }
 
@@ -76,7 +79,11 @@ export const doLogout = async () => {
     const url = new URL(metadata.end_session_endpoint);
     url.searchParams.append('post_logout_redirect_uri', PUBLIC_KC_LOGOUT_URL);
     url.searchParams.append('client_id', PUBLIC_KC_CLIENT_ID);
-    window.location.replace(url);
+    if (Capacitor.getPlatform() === "web") {
+      window.location.replace(url);
+    } else {
+      await Browser.open({ url: url.href })
+    }
   }
 }
 

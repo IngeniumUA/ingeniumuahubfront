@@ -4,6 +4,8 @@
 
   import { doLogin } from '$lib/auth/auth';
   import Header from "$lib/components/layout/header.svelte";
+  import { Capacitor } from '@capacitor/core';
+  import { Browser } from '@capacitor/browser';
 
   let isFailed = $state(false);
 
@@ -13,8 +15,12 @@
         next: page.url.searchParams.get('next') || '/',
       });
 
-      // TODO: Handle mobile app login
-      window.location.replace(url);
+      if (Capacitor.getPlatform() === "web") {
+        window.location.replace(url);
+      } else {
+        await Browser.open({ url: url.href })
+      }
+
     } catch (e) {
       console.error(e);
       isFailed = true;

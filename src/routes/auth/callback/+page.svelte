@@ -13,6 +13,8 @@
   let hasClearMessage = $state(true);
   let errorMsg = $state('');
 
+  const AuthCodeUrl = new URL(window.location.href.replace('http://localhost', 'ingenium:/').replace('https://localhost', 'ingenium:/').replace('capacitor://localhost', 'ingenium:/'));
+
   const loginCallback = async () => {
     try {
       const config = await getOpenIdDiscovery();
@@ -24,7 +26,7 @@
         throw new Error('No matching state found in storage');
       }
 
-      auth.tokens = await client.authorizationCodeGrant(config, new URL(window.location.href), {
+      auth.tokens = await client.authorizationCodeGrant(config, new URL(AuthCodeUrl), {
         pkceCodeVerifier: pckeCodeVerifier || undefined,
         expectedState: expectedState || undefined,
       });

@@ -1,10 +1,12 @@
 import * as Sentry from "@sentry/sveltekit";
-import {PUBLIC_SENTRY_DSN} from "$env/static/public";
-import {dev} from "$app/environment";
+import { PUBLIC_SENTRY_DSN } from '$env/static/public';
+import { Browser } from '@capacitor/browser';
+import { App } from '@capacitor/app';
+import { goto } from '$app/navigation';
 
 Sentry.init({
   dsn: PUBLIC_SENTRY_DSN,
-  enabled: !dev,
+  enabled: false,  // TODO fix this
 
   // We recommend adjusting this value in production, or using tracesSampler
   // for finer control
@@ -17,3 +19,10 @@ Sentry.init({
 });
 
 export const handleError = Sentry.handleErrorWithSentry();
+
+App.addListener('appUrlOpen', async (event) => {
+  if (event.url.startsWith('ingenium://')) {
+    await Browser.close(); // Close the in-app browser
+    goto(decodeURI(event.url.replace('ingenium:/', '')))
+  }
+});
