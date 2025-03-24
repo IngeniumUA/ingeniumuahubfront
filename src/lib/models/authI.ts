@@ -18,6 +18,5 @@ export interface AuthState {
 	discoveryLoaded: boolean,
 	discoveryFailed: boolean,
 	authConfig: Configuration|undefined;
-	tokens: TokenEndpointResponse|undefined;
 	user: AuthUser|undefined;
 }

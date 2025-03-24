@@ -1,8 +1,13 @@
 <script lang="ts">
   import Header from "$lib/components/layout/header.svelte";
   import { storeTokens } from '$lib/auth/auth';
-  
-  storeTokens(undefined);
+	import { onMount } from "svelte";
+	import { auth } from "$lib/states/auth.svelte";
+
+  onMount(() => {
+    auth.user = undefined;
+    storeTokens(undefined);
+  });
 </script>
 
 <svelte:head>

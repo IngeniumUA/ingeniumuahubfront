@@ -4,7 +4,6 @@ export const auth = $state<AuthState>({
   discoveryLoaded: false,
   discoveryFailed: true,
   authConfig: undefined,
-  tokens: undefined,
   user: undefined,
 });
 

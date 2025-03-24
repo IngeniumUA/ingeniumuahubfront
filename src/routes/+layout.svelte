@@ -12,7 +12,10 @@
 
 	let { children, data } = $props();
 
-	auth.user = data.user;
+	if (page.route.id !== '/auth/logout') {
+		auth.user = data.user;
+	}
+
 	if (browser) {
 		retrieveProductsFromLocalStorage();
 	}
