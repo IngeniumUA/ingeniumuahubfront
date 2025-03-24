@@ -3,6 +3,18 @@
   import QRCode from "qrcode";
   import Modal from "$lib/components/layout/modal.svelte";
   import type {TransactionLimitedI} from "$lib/models/transactionI";
+  import { goto } from '$app/navigation';
+  import { ScreenBrightness } from '@capacitor-community/screen-brightness';
+  import { onMount } from 'svelte';
+
+  let startup = true;
+  let brightness: number
+  onMount(async () => {
+    console.log('Page component mounted');
+    const currentBrightness = await ScreenBrightness.getBrightness()
+    brightness = currentBrightness.brightness;
+    startup = false;
+  });
 
   let { data }: { data: { transactions: TransactionLimitedI[] }} = $props();
   let isModalOpen = $state(false);
@@ -16,6 +28,10 @@
   async function showQrCode(e: Event, transaction: TransactionLimitedI) {
     e.preventDefault();
 
+    const currentBrightness = await ScreenBrightness.getBrightness()
+    brightness = currentBrightness.brightness
+    await ScreenBrightness.setBrightness({brightness: 1.0})
+
     modalTitle = `QR Code voor ${transaction.interaction.item_name}`;
     qrCode = await QRCode.toDataURL(transaction.interaction.interaction_uuid, {
       color: {
@@ -26,9 +42,19 @@
     });
 
     isModalOpen = true;
+    document.body.style.overflow = 'hidden'; // Disable scrolling
   }
 
-  // TODO: Fix this
+  $effect(() => {
+    if (!isModalOpen) {
+      document.body.style.overflow = ''; // Restore scrolling
+      if (!startup) {
+        ScreenBrightness.setBrightness({brightness: brightness})
+      }
+    }
+  });
+
+
   function getWalletLink(transaction: TransactionLimitedI, platform: string) {
     const transaction_uuid: string = transaction.interaction.interaction_uuid
     let nummer: number = + transaction_uuid.replace(/\D/g, "")
@@ -40,6 +66,12 @@
     // Get and redirect to wallet link
     return `/wallet/?transaction_uuid=${transaction_uuid}&nummer=${nummer}&locatie_naam=${locatie_naam}&platform=${platform}`;
   }
+
+  function gotoWalletLink(transaction: TransactionLimitedI, platform: string) {
+    goto(getWalletLink(transaction, platform));
+    return null
+  }
+
 </script>
 
 <Modal title={ modalTitle } bind:isOpen={ isModalOpen }>
@@ -80,10 +112,10 @@
 
             <dt>Bedrag</dt>
             <dd>
-              {#if transaction.purchased_product.price_policy.price === 0}
+              {#if transaction.purchased_product.price_policy?.price === 0}
                 Gratis
               {:else}
-                &euro; { transaction.purchased_product.price_policy.price }
+                &euro; { transaction.purchased_product.price_policy?.price }
               {/if}
             </dd>
 
@@ -105,12 +137,12 @@
           </button>
 
           <div class="flex gap-4 items-center justify-center mt-3">
-            <a href={ getWalletLink(transaction, 'google') } data-sveltekit-preload-data="tap">
+            <button onclick="{() => gotoWalletLink(transaction, 'google')}" data-sveltekit-preload-data="tap">
               <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
-            </a>
-            <a href={ getWalletLink(transaction, 'apple') } data-sveltekit-preload-data="tap">
+            </button>
+            <button onclick="{() => gotoWalletLink(transaction, 'apple')}" data-sveltekit-preload-data="tap">
               <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
-            </a>
+            </button>
           </div>
         </article>
       {/each}

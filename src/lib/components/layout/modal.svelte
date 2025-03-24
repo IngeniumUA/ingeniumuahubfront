@@ -8,7 +8,7 @@
   <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
 
   <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-    <div class="flex min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
+    <div class="flex min-h-full items-center justify-center p-4">
       <!-- Modal content -->
       <div class="relative min-w-8 w-screen max-w-lg bg-white rounded-lg shadow-sm">
         <!-- Modal header -->

@@ -42,6 +42,7 @@
 		"vite": "^5.4.11"
 	},
 	"dependencies": {
+		"@capacitor-community/screen-brightness": "^7.0.0",
 		"@capacitor/android": "^7.0.1",
 		"@capacitor/app": "^7.0.0",
 		"@capacitor/browser": "^7.0.0",
