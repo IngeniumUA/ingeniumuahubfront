@@ -6,7 +6,7 @@ import { goto } from '$app/navigation';
 
 Sentry.init({
   dsn: PUBLIC_SENTRY_DSN,
-  enabled: false,  // TODO fix this
+  enabled: true,
 
   // We recommend adjusting this value in production, or using tracesSampler
   // for finer control
