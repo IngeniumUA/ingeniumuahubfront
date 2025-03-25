@@ -16,6 +16,9 @@ import {
 } from "@ingenium/app/shared/components/staff_webmaster_manager/delete-button/delete-button.component";
 import {ProductBlueprintService} from "@ingenium/app/core/services/coreAPI/blueprint/productBlueprint.service";
 import {ToastrService} from "ngx-toastr";
+import {
+  AvailabilityMixinDetailComponent
+} from "@ingenium/app/shared/components/staff_webmaster_manager/details/availability-mixin-detail/availability-mixin-detail.component";
 
 @Component({
   selector: 'app-product-blueprint-detail',
@@ -31,7 +34,8 @@ import {ToastrService} from "ngx-toastr";
     PricePolicyComponent,
     PricePolicyComponentCreateComponent,
     AsyncPipe,
-    DeleteButtonComponent
+    DeleteButtonComponent,
+    AvailabilityMixinDetailComponent
   ],
   standalone: true
 })
@@ -85,7 +89,6 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.handleFormError(error);
         return;  }
 
-
       const track_checkout: boolean = this.productMetaForm.controls['track_checkout'].value;
       const checkout_config: CheckoutTrackerConfigI = {
         status_queue: [1, 2, 3],
@@ -110,18 +113,9 @@ export class ProductBlueprintDetailComponent implements OnInit {
         this.handleFormError(error);
         return;  }
 
-      const availability: AvailabilityCompositionI = {
-        available: this.blueprintForm.controls['available'].value,
-        disabled: this.productBlueprint.availability.disabled,
-        available_from: null,
-        available_until: null,
-        dynamic_policy_type: null,
-        dynamic_policy_content: null
-      }
-
       const product: ProductBlueprintI = {
         id: this.productBlueprint.id,
-        availability: availability,
+        availability: this.productBlueprint.availability,
         created_timestamp: this.productBlueprint.created_timestamp,
         last_update_timestamp: this.productBlueprint.last_update_timestamp,
         origin_item_id: this.productBlueprint.origin_item_id,
@@ -148,6 +142,9 @@ export class ProductBlueprintDetailComponent implements OnInit {
       this.form_error = err.message;
     }
 
+  UpdateAvailability(availabilityObj: AvailabilityCompositionI): void {
+    this.productBlueprint.availability = availabilityObj;
+  }
 
     /*
       *  Price policy code
