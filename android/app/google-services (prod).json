@@ -1,0 +1,29 @@
+﻿{
+  "project_info": {
+    "project_number": "1080728263022",
+    "project_id": "ingeniumapp-notifications",
+    "storage_bucket": "ingeniumapp-notifications.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080728263022:android:da5ea9e6acb4d224b6497f",
+        "android_client_info": {
+          "package_name": "development.com.app.ingeniumua"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcOW19JUmmN8Mo6_NShVUDZB6_RIxla6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,133 @@
+﻿import rich_click as click
+import os
+
+def replace_android_url_name(filename: str, app_name: str, app_url: str):
+    with open(filename, "r") as buildfile:
+        data = buildfile.readlines()
+
+    if app_url == "development.com.app.ingeniumua":
+        for i in range(len(data)):
+            data[i] = data[i].replace("test.development.com.app.ingeniumua", app_url)
+            data[i] = data[i].replace("Ingenium Test", app_name)
+    else:
+        for i in range(len(data)):
+            if app_url not in data[i]:
+                data[i] = data[i].replace("development.com.app.ingeniumua", app_url)
+            if app_name not in data[i]:
+                data[i] = data[i].replace("Ingenium", app_name)
+    with open(filename, "w") as buildfile:
+        for line in data:
+            buildfile.write(line)
+
+
+click.rich_click.OPTION_GROUPS = {
+    "kippietools setversion": [
+        {
+            "name": "Set Version number",
+            "options": ["--version"],
+        },
+    ],
+    "kippietools getversion": [
+            {
+                "name": "Get Version number",
+            },
+        ],
+    "kippietools setmode": [
+        {
+            "name": "Set the mode of the app between notificationtest and release",
+            "options": ["--mode"],
+        }
+    ]
+}
+click.rich_click.COMMAND_GROUPS = {
+    "kippietools": [
+        {
+            "name": "Main usage",
+            "commands": ["setversion", "getversion", "setmode"],
+        },
+    ]
+}
+@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
+
+def cli():
+    """
+    This tool is can be used to set the version number of the app.
+    It can also set the app to the notification test url and back to the release url. This only works for android.
+    """
+
+@cli.command()
+@click.option("--version", "-v", required=True, help="The version that the app gets set to")
+def setversion(version):
+    """Set the app version."""
+    with open("./android/app/build.gradle", "r") as buildfile:
+        data = buildfile.readlines()
+
+    int_version = version.replace(".", "")
+    for i in range(len(data)):
+        if data[i].startswith("        versionCode "):
+            data[i] = f"        versionCode {int_version}\n"
+        elif data[i].startswith("        versionName "):
+            data[i] = f'        versionName "{version}"\n'
+    with open("./android/app/build.gradle", "w") as buildfile:
+        for line in data:
+            buildfile.write(line)
+
+
+    with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
+        data = projfile.readlines()
+
+    for i in range(len(data)):
+        if data[i].startswith("				CURRENT_PROJECT_VERSION = "):
+            data[i] = f"				CURRENT_PROJECT_VERSION = {version};\n"
+        elif data[i].startswith("				MARKETING_VERSION = "):
+            data[i] = f'				MARKETING_VERSION = {version};\n'
+    with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
+        for line in data:
+            buildfile.write(line)
+
+    print("Successfully set version to " + version)
+
+
+@cli.command()
+def getversion():
+    """Get the app version."""
+    with open("./android/app/build.gradle", "r") as buildfile:
+        data = buildfile.readlines()
+
+    for i in range(len(data)):
+        if data[i].startswith("        versionCode "):
+            print("Version Code: " + data[i].replace("        versionCode ", "").replace("\n", ""))
+        elif data[i].startswith("        versionName "):
+            print("Version Name: " + data[i].replace('        versionName ', "").replace("\n", "").replace('"', ''))
+
+
+@cli.command()
+@click.option("--mode", "-m", required=True, help="The mode that the app gets set to, can be 'release' or 'notificationtest'. Only works on android.")
+def setmode(mode):
+    """Set the android app mode."""
+    app_url = ""
+    app_name = ""
+    if mode == "release":
+        if os.path.isfile("./android/app/google-services (prod).json"):
+            os.rename("./android/app/google-services.json", "./android/app/google-services (dev).json")
+            os.rename("./android/app/google-services (prod).json", "./android/app/google-services.json")
+        app_url = "development.com.app.ingeniumua"
+        app_name = "Ingenium"
+    elif mode == "notificationtest":
+        if os.path.isfile("./android/app/google-services (dev).json"):
+            os.rename("./android/app/google-services.json", "./android/app/google-services (prod).json")
+            os.rename("./android/app/google-services (dev).json", "./android/app/google-services.json")
+        app_url = "test.development.com.app.ingeniumua"
+        app_name = "Ingenium Test"
+    else:
+        raise ValueError("Invalid mode, must be 'release' or 'notificationtest'")
+
+    replace_android_url_name(filename="./android/app/build.gradle", app_name=app_name, app_url=app_url)
+    replace_android_url_name(filename="./android/app/src/main/AndroidManifest.xml", app_name=app_name, app_url=app_url)
+    replace_android_url_name(filename="./android/app/src/main/assets/capacitor.config.json", app_name=app_name, app_url=app_url)
+    replace_android_url_name(filename="./android/app/src/main/res/values/strings.xml", app_name=app_name, app_url=app_url)
+
+    print("Successfully set android app mode to " + mode)
+
+if __name__ == "__main__":
+    cli()
