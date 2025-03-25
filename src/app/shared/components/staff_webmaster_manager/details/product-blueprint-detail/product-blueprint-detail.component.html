@@ -15,13 +15,6 @@
         <a [routerLink]="['/web/item/' + source_item_id]" >{{ source_item_id }}</a>
       }
     </td></tr>
-    <span>
-      <app-availability-mixin-detail
-        (availabilityUpdated)="this.UpdateAvailability($event)"
-        [availability]="this.productBlueprint.availability"
-      ></app-availability-mixin-detail>
-    </span>
-
     <tr><th>Name</th><td>
       <label class="hubformfield-white">
         <input type="text" formControlName="name" placeholder="Name"/>
@@ -32,6 +25,20 @@
         <input type="text" formControlName="description" placeholder="Description"/>
       </label>
     </td></tr>
+    </tbody>
+  </table>
+  <span>
+    <app-availability-mixin-detail
+      (availabilityUpdated)="this.UpdateAvailability($event)"
+      [availability]="this.productBlueprint.availability"
+    ></app-availability-mixin-detail>
+  </span>
+  <table>
+    <thead>
+      <tr><th scope="col"></th><th scope="col">Additional</th>
+      </tr>
+    </thead>
+    <tbody>
     <tr><th>Max Total</th><td>
       <label class="hubformfield-white">
         <input type="number" formControlName="max_total" placeholder="Max total"/>
