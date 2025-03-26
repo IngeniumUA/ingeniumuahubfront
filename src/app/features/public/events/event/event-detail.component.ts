@@ -54,8 +54,9 @@ export class EventDetailComponent implements OnInit {
     this.setEvent(id);
 
     // Setup product table
+    const accessKey: string | null = this.route.snapshot.queryParamMap.get('access_key');
     const product_to_categorie = new ProductsToCategoriesPipe();
-    this.productCategories$ = this.productService.getProducts(id).pipe(
+    this.productCategories$ = this.productService.getProducts(id, accessKey).pipe(
       map(productArray => product_to_categorie.transform(productArray)),
       shareReplay()
     );

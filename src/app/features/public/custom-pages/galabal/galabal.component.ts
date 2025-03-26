@@ -15,7 +15,7 @@ export class GalabalComponent {
               private productService: ProductsService) {
   }
 
-  products$: Observable<ProductOutI[]> = this.productService.getProducts("Ingenium Galabal");
+  products$: Observable<ProductOutI[]> = this.productService.getProducts("Ingenium Galabal", null);
   // $galabalItem: Observable<HttpState<ItemWideLimitedI>> = this.eventService.getEvent("Ingenium%20Galabal");
 
   // ngOnInit() {
