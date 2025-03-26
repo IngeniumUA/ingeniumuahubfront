@@ -1,6 +1,7 @@
 ﻿on:
   push:
-    branches: [ mobile-app ]
+    paths:
+      - './android/app/build.gradle'  # if version is updated
 
 jobs:
   build_android:
@@ -10,6 +11,14 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
+
+      - name: setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10.11"
+
+      - name: set version and check if ci/cd should be ran
+        run: python kippietools setmode -m release
 
       - name: Setup java
         uses: actions/setup-java@v3
@@ -24,11 +33,6 @@ jobs:
 
       - name: Install app dependencies
         run: npm install
-
-      - name: setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10.11"
 
       - name: install python dependencies
         run: pip install rich-click google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
