@@ -1,9 +1,11 @@
 import * as Sentry from "@sentry/sveltekit";
-import { PUBLIC_SENTRY_DSN } from '$env/static/public';
+import { PUBLIC_API_URL, PUBLIC_SENTRY_DSN } from '$env/static/public';
 import { Browser } from '@capacitor/browser';
 import { App } from '@capacitor/app';
 import { goto } from '$app/navigation';
 import { type ActionPerformed, type PushNotificationSchema, PushNotifications, type Token } from '@capacitor/push-notifications';
+import { Preferences } from '@capacitor/preferences';
+
 
 Sentry.init({
   dsn: PUBLIC_SENTRY_DSN,
@@ -42,11 +44,11 @@ PushNotifications.requestPermissions().then((result) => {
 PushNotifications.addListener('registration', (token: Token) => {
   console.log('Push registration success, token: ' + token.value);
   notification_token = token.value;
-  // get_all_possible_notifications()
+  get_all_possible_notifications()
 });
 
 // Some issue with our setup and push will not work
-PushNotifications.addListener('registrationError', (error: any) => {
+PushNotifications.addListener('registrationError', (error) => {
   console.log('Error on registration: ' + JSON.stringify(error));
 });
 
@@ -65,40 +67,84 @@ PushNotifications.addListener('pushNotificationActionPerformed', (notification: 
   }
 });
 
-// function get_all_possible_notifications() {
-//   this.storage.getWide("notifications_general")?.then((result) => {
-//     if (result === undefined || result === null || result === "false") {
-//       this.notificationService.queryNotification().pipe(first()).subscribe({
-//         next: data => {
-//
-//           this.storage.getWide("notifications")?.then((stored_notification_options) =>{
-//             if (stored_notification_options !== undefined && stored_notification_options !== null) {
-//               stored_notification_options = JSON.parse(stored_notification_options);
-//               let stored_option: keyof typeof stored_notification_options;
-//               for (let item of data) {
-//                 let is_in_storage = false
-//                 for (stored_option in stored_notification_options) {
-//                   if (""+item.item.id === stored_option) {
-//                     is_in_storage = true
-//                     break
-//                   }
-//                 }
-//                 if (!is_in_storage && item.derived_type.derived_type_enum === "notificationitem" && item.derived_type.default_subscription) {
-//                   this.notificationService.subscribe_to_topic(""+item.item.id).subscribe()
-//                 }
-//               }
-//             } else {
-//               for (let item of data) {
-//                 if (item.derived_type.derived_type_enum === "notificationitem" && item.derived_type.default_subscription) {
-//                   this.notificationService.subscribe_to_topic("" + item.item.id).subscribe()
-//                 }
-//               }
-//             }
-//           });
-//         }
-//       })
-//     }
-//   })
-// }
+function get_all_possible_notifications() {
+  getObjectFromStorage("notifications_general")?.then(async (result) => {
+    if (result === undefined || result === null || result === "false") {
+      const fetchData = await queryNotification()
+      getObjectFromStorage("notifications")?.then(async (stored_notification_options) => {
+        if (stored_notification_options !== undefined && stored_notification_options !== null) {
+          stored_notification_options = JSON.parse(stored_notification_options);
+          let stored_option: keyof typeof stored_notification_options;
+          for (const item of fetchData) {
+            let is_in_storage = false
+            for (stored_option in stored_notification_options) {
+              if ("" + item.item.id === stored_option) {
+                is_in_storage = true
+                break
+              }
+            }
+            if (!is_in_storage && item.derived_type.derived_type_enum === "notificationitem" && item.derived_type.default_subscription) {
+              await subscribe_to_topic("" + item.item.id)
+            }
+          }
+        } else {
+          for (const item of fetchData) {
+            if (item.derived_type.derived_type_enum === "notificationitem" && item.derived_type.default_subscription) {
+              await subscribe_to_topic("" + item.item.id)
+            }
+          }
+        }
+      });
+    }
+  })
+}
+
+function subscribe_to_topic(item: string | number) {
+  const payload = {
+    token: notification_token
+  }
+  return fetch(`${PUBLIC_API_URL}/item/notification/subscribe/${item}`, {
+    method: "POST",
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  }).then(r => r.json())
+}
+
+function queryNotification(limit: number = 10, offset: number = 0) {
+  const param = {
+    limit: limit,
+    offset: offset
+  }
+  const params = new URLSearchParams(removeNull(param));
+  return fetch(`${PUBLIC_API_URL}/item/notification/?${params.toString()}`).then(r => r.json())
+}
+
+function removeNull<T>(obj: T | any): T | any {
+  Object.keys(obj).forEach((key) => {
+    // Delete if the value is null or undefined
+    if (obj[key] == null) {
+      delete obj[key];
+    }
+    else if (obj[key] && typeof obj[key] === 'object') {
+      // If the object is an empty array, delete the key
+      if (Array.isArray(obj[key]) && obj[key].length === 0) {
+        delete obj[key];
+      } else {
+        // Recursively call removeNull for nested objects
+        removeNull(obj[key]);
+      }
+    }
+  })
+  return obj;
+}
+
+async function getObjectFromStorage(key: string) {
+  const ret = await Preferences.get({key});
+  if (ret.value !== null) {
+    return JSON.parse(ret.value);
+  } else {
+    return null;
+  }
+}
 
 export let notification_token: string = "";
