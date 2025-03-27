@@ -6,6 +6,7 @@
   import { goto } from '$app/navigation';
   import { ScreenBrightness } from '@capacitor-community/screen-brightness';
   import { onMount } from 'svelte';
+  import { Capacitor } from '@capacitor/core';
 
   let startup = true;
   let brightness: number
@@ -137,12 +138,15 @@
           </button>
 
           <div class="flex gap-4 items-center justify-center mt-3">
-            <button onclick="{() => gotoWalletLink(transaction, 'google')}" data-sveltekit-preload-data="tap">
-              <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
-            </button>
-            <button onclick="{() => gotoWalletLink(transaction, 'apple')}" data-sveltekit-preload-data="tap">
-              <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
-            </button>
+            {#if Capacitor.getPlatform() === 'android' || Capacitor.getPlatform() === 'web'}
+              <button onclick="{() => gotoWalletLink(transaction, 'google')}" data-sveltekit-preload-data="tap">
+                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
+              </button>
+            {:else if Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'web'}
+              <button onclick="{() => gotoWalletLink(transaction, 'apple')}" data-sveltekit-preload-data="tap">
+                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
+              </button>
+            {/if}
           </div>
         </article>
       {/each}
