@@ -15,6 +15,9 @@ import type { AuthUser } from '$lib/models/authI';
 import { Capacitor } from '@capacitor/core';
 import { Browser } from '@capacitor/browser';
 
+const ACCESS_TOKEN_COOKIE = 'access_token';
+const ID_TOKEN_COOKIE = 'id_token';
+
 export const getOpenIdDiscovery = async () => {
   return await client.discovery(new URL(PUBLIC_KC_DISCOVERY), PUBLIC_KC_CLIENT_ID);
 }
@@ -39,6 +42,7 @@ export const doLogin = async (state: Record<string, string> = {}): Promise<URL> 
     code_challenge: codeChallenge,
     code_challenge_method: 'S256',
     state: strState,
+    scope: 'openid profile',
     prompt: 'login',
   });
 }
@@ -58,17 +62,20 @@ export const getUserFromToken = (token: string): AuthUser => {
 
 export const storeTokens = (tokens: TokenEndpointResponse|undefined) => {
   if (!tokens) {
-    Cookies.remove('access_token');
-    Cookies.remove('id_token');
+    Cookies.remove(ACCESS_TOKEN_COOKIE);
+    Cookies.remove(ID_TOKEN_COOKIE);
     return;
   }
 
   const millisecondAdd = (tokens.expires_in !== undefined ? tokens.expires_in : 300) * 1000; // expires_in sec and 5 min to ms
-  Cookies.set('access_token', tokens.access_token, {
+  const options: Cookies.CookieAttributes = {
     secure: true,
     sameSite: 'strict',
     expires: new Date(Date.now() + millisecondAdd),
-  });
+  }
+
+  Cookies.set(ACCESS_TOKEN_COOKIE, tokens.access_token, options);
+  Cookies.set(ID_TOKEN_COOKIE, tokens.id_token || '', options);
 }
 
 export const doLogout = async () => {
@@ -79,6 +86,7 @@ export const doLogout = async () => {
     const url = new URL(metadata.end_session_endpoint);
     url.searchParams.append('post_logout_redirect_uri', PUBLIC_KC_LOGOUT_URL);
     url.searchParams.append('client_id', PUBLIC_KC_CLIENT_ID);
+    url.searchParams.append('id_token_hint', Cookies.get(ID_TOKEN_COOKIE) || '');
     if (Capacitor.getPlatform() === "web") {
       window.location.replace(url);
     } else {
@@ -90,12 +98,14 @@ export const doLogout = async () => {
 export const getTokens = (params: Partial<Record<string, string>>|null) => {
   if (browser) {
     return {
-      access_token: Cookies.get('access_token'),
+      access_token: Cookies.get(ACCESS_TOKEN_COOKIE),
+      id_token: Cookies.get(ID_TOKEN_COOKIE),
     }
   }
 
   return {
     access_token: params?.__ACCESS_TOKEN__,
+    id_token: params?.__ID_TOKEN__,
   }
 }
 
