@@ -9,13 +9,10 @@ export const load = async ({ fetch, params, url }) => {
   }
 
   try {
-    const options = {
-      headers: getAuthorizationHeaders(params),
-    }
-
     return {
-      transactions: await fetch(`${PUBLIC_API_URL}/account/transactions`, options).then(r => r.json() as Promise<TransactionLimitedI[]>),
-      trackedItems: null,
+      transactions: await fetch(`${PUBLIC_API_URL}/account/transactions`, {
+        headers: getAuthorizationHeaders(params),
+      }).then(r => r.json() as Promise<TransactionLimitedI[]>),
     }
   } catch (error) {
 

@@ -5,13 +5,13 @@ import {
   PUBLIC_KC_REDIRECT_URL
 } from '$env/static/public';
 import { browser } from '$app/environment';
-import { page } from '$app/state';
 
 import Cookies from 'js-cookie';
 import * as client from 'openid-client';
 import { jwtDecode } from 'jwt-decode';
 import type { TokenEndpointResponse } from 'openid-client';
 import type { AuthUser } from '$lib/models/authI';
+import type { Page } from '@sveltejs/kit';
 
 const ACCESS_TOKEN_COOKIE = 'access_token';
 const ID_TOKEN_COOKIE = 'id_token';
@@ -130,9 +130,19 @@ export const getAuthorizationHeaders = (params: Partial<Record<string, string>>|
 /**
  * Create a login URL with a redirect to the current page.
  */
-export const getLoginUrlWithRedirect = (path: string|undefined = undefined) => {
-  // Check if the page route id would go to a prohibited page, if so redirect to root
-  let defaultPath = ['DEF', '/auth/logout', '/auth/login', '/auth/callback'].includes(page.route.id || 'DEF') ? '/' : page.url.pathname;
+export const getLoginUrlWithRedirect = (path: string|undefined=undefined, page: Page<Record<string, string>, string | null>|undefined=undefined) => {
+  let actualPath = '/';
 
-  return `/auth/login?next=${path || defaultPath}`;
+  // Manually defined redirects
+  if (path !== undefined) {
+    actualPath = path;
+  }
+
+  // When given a page item, it is usual an automatic redirect
+  if (page !== undefined) {
+    // Check if the page route id would go to a prohibited page, if so redirect to root
+    actualPath = ['DEF', '/auth/logout', '/auth/login', '/auth/callback'].includes(page.route.id || 'DEF') ? '/' : page.url.pathname;
+  }
+
+  return `/auth/login?next=${actualPath}`;
 }
