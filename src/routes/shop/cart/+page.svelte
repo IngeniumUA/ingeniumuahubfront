@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import { browser } from "$app/environment";
 	import { PUBLIC_CLOUDFLARE_TURNSTILE } from "$env/static/public";
 	import { hasRole, isAuthenticated } from "$lib/states/auth.svelte";
@@ -88,7 +89,7 @@
 			<div class="p-4 md:p-5">
 				<p class="text-sm">
 					Je bent niet aangemeld op onze website, hiervoor moet je enkele extra gegevens opgeven.
-					<a href={ getLoginUrlWithRedirect() } class="font-bold">Toch nog aanmelden?</a>
+					<a href={ getLoginUrlWithRedirect(undefined, page) } class="font-bold">Toch nog aanmelden?</a>
 				</p>
 
 				<form action="#" onsubmit={ (e) => { e.preventDefault(); doPayment() } } class="mt-4 space-y-3 text-left">

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type {ProductOutI} from "$lib/models/productsI";
+	import { page } from "$app/state";
   import { addProductToCart, getProductCount, reduceProductQuantity } from '$lib/states/cart.svelte';
   import {getLoginUrlWithRedirect} from "$lib/auth/auth";
+  import type {ProductOutI} from "$lib/models/productsI";
 
   let { product }: { product: ProductOutI } = $props();
   let initialCount = getProductCount(product, true); // Initial count in state
@@ -58,7 +59,7 @@
       {:else if product.max_count === -2}
         <p>Je hebt dit al gekocht</p>
       {:else if product.max_count === -3}
-        <a href={ getLoginUrlWithRedirect() }>Aanmelden vereist</a>
+        <a href={ getLoginUrlWithRedirect(undefined, page) }>Aanmelden vereist</a>
       {:else}
         <p>Toevoegen niet mogelijk</p>
       {/if}

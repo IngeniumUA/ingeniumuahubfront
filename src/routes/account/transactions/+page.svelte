@@ -2,6 +2,7 @@
   import dayjs from "dayjs";
   import QRCode from "qrcode";
   import Modal from "$lib/components/layout/modal.svelte";
+  import CheckoutTracker from "$lib/components/account/checkout-tracker.svelte";
   import type {TransactionLimitedI} from "$lib/models/transactionI";
   import { goto } from '$app/navigation';
   import { ScreenBrightness } from '@capacitor-community/screen-brightness';
@@ -87,6 +88,8 @@
   <h1 class="white-section-title">Jouw aankopen</h1>
   <p>Op deze pagina kan je al jouw voltooide aankopen herbekijken.</p>
 
+  <CheckoutTracker />
+
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="past-purchases">
     <div class="col-span-1 md:col-span-2 xl:col-span-4 -mb-6">
       <hr class="border-t border-gray-100 mb-4">
@@ -111,14 +114,16 @@
               { transaction.purchased_product.name}
             </dd>
 
-            <dt>Bedrag</dt>
-            <dd>
-              {#if transaction.purchased_product.price_policy?.price === 0}
-                Gratis
-              {:else}
-                &euro; { transaction.purchased_product.price_policy?.price }
-              {/if}
-            </dd>
+            {#if transaction.purchased_product.price_policy}
+              <dt>Bedrag</dt>
+              <dd>
+                {#if transaction.purchased_product.price_policy.price === 0}
+                  Gratis
+                {:else}
+                  &euro; { transaction.purchased_product.price_policy.price }
+                {/if}
+              </dd>
+            {/if}
 
             <dt>Betaald op</dt>
             {#if transaction.completed_timestamp === null}

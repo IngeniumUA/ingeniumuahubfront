@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import { auth, isAuthenticated } from "$lib/states/auth.svelte";
 	import { getLoginUrlWithRedirect, doLogout } from "$lib/auth/auth";
 
@@ -99,7 +100,7 @@
 							</button>
 						{:else}
 							<!-- Login button -->
-							<a href={ getLoginUrlWithRedirect() } title="Aanmelden"
+							<a href={ getLoginUrlWithRedirect(undefined, page) } title="Aanmelden"
 											class="button button-primary button-icon-only relative inline-flex items-center justify-center { !whiteTheme ? '' : 'button-accessibility-white' }">
 								<span class="hidden md:inline">Aanmelden</span>
 								<svg class="md:hidden block h-6 w-6" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
