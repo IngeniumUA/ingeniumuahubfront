@@ -4,7 +4,7 @@ import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from "@ingenium/app/s
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
-import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
@@ -124,10 +124,14 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
         return 'Klaar voor afhaling';
       case HubCheckoutTrackerStatusEnum.Ready:
         return 'Markeer afgehaald';
+      case HubCheckoutTrackerStatusEnum.Finished:
+        return 'Bestelling is afgewerkt'
       default:
         return 'Onbekende status';
     }
   }
 
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;
+  protected readonly Object = Object;
+  protected readonly JSON = JSON;
 }

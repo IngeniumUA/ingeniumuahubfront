@@ -68,11 +68,11 @@ const routes: Routes = [
   {path: 'galabal', component: GalabalComponent},
 
   //** Popupz **//
-  /*{
+  {
     path: 'popupz',
     loadChildren: () => import('src/app/features/popupz/popupz.module').then(x => x.PopupzModule),
   },
-  { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },*/
+  { path: 'popup', redirectTo: 'popupz', pathMatch: 'full' },
 
   //** Employee **//
 

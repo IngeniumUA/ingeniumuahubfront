@@ -5,6 +5,7 @@ import {HubCheckoutTrackerStatusEnum} from "@ingenium/app/shared/models/tracker"
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
+import {RouterLink} from "@angular/router";
 
 interface PublicOrderTrackerI {
   id: number;
@@ -16,7 +17,8 @@ interface PublicOrderTrackerI {
   standalone: true,
   imports: [
     NgOptimizedImage,
-    NgForOf
+    NgForOf,
+    RouterLink
   ],
   providers: [
     { provide: Window, useValue: window }
