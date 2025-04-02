@@ -4,7 +4,7 @@ import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from "@ingenium/app/s
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
-import {JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
