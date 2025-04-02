@@ -124,10 +124,14 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
         return 'Klaar voor afhaling';
       case HubCheckoutTrackerStatusEnum.Ready:
         return 'Markeer afgehaald';
+      case HubCheckoutTrackerStatusEnum.Finished:
+        return 'Bestelling is afgewerkt'
       default:
         return 'Onbekende status';
     }
   }
 
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;
+  protected readonly Object = Object;
+  protected readonly JSON = JSON;
 }

@@ -12,8 +12,8 @@ import {map} from "rxjs/operators";
 })
 export class PopupzTemplateComponent {
   productCount$: Observable<number> = this.store.select(CartState.getProductCount);
-  isStaff$: Observable<boolean> = this.store.select(UserState.roles)
-    .pipe(map((roles) => roles?.is_staff ?? false));
+  isStaff$ = this.store.select(UserState.roles).
+  pipe(map(roles => roles && roles?.includes('staff')));
 
   foodMenuExpanded = false;
 
