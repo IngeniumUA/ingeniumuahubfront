@@ -99,12 +99,19 @@ export class ProductBlueprintDetailComponent implements OnInit {
       }
       const upon_completion = track_checkout ? upon_completion_filled: null;
 
+      const metaFormControl = this.productMetaForm.controls['form_template'].value
+      let otherMetaData
+      if (metaFormControl === null || metaFormControl === "") {
+        otherMetaData = {};
+      } else {
+        otherMetaData = metaFormControl;
+      }
 
       const productMeta: ProductMetaI = {
         group: this.productMetaForm.controls['group'].value,
         categorie: this.productMetaForm.controls['categorie'].value,
         upon_completion: upon_completion,
-        other_meta_data: {"form":this.productMetaForm.controls['form_template'].value},
+        other_meta_data: otherMetaData,
       };
 
       // Check if valid guardclause
