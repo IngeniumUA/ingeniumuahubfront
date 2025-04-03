@@ -6,7 +6,6 @@ import {
 } from '$env/static/public';
 import { browser } from '$app/environment';
 
-import Cookies from 'js-cookie';
 import * as client from 'openid-client';
 import { jwtDecode } from 'jwt-decode';
 import type { TokenEndpointResponse } from 'openid-client';
@@ -17,6 +16,28 @@ import { Browser } from '@capacitor/browser';
 
 const ACCESS_TOKEN_COOKIE = 'access_token';
 const ID_TOKEN_COOKIE = 'id_token';
+
+function setCookie(cname: string, cvalue: string, exsec: number) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exsec * 1000));
+  const expires = "expires="+d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname: string) {
+  const name = cname + "=";
+  const ca = document.cookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
 
 export const getOpenIdDiscovery = async () => {
   return await client.discovery(new URL(PUBLIC_KC_DISCOVERY), PUBLIC_KC_CLIENT_ID);
@@ -62,20 +83,24 @@ export const getUserFromToken = (token: string): AuthUser => {
 
 export const storeTokens = (tokens: TokenEndpointResponse|undefined) => {
   if (!tokens) {
-    Cookies.remove(ACCESS_TOKEN_COOKIE);
-    Cookies.remove(ID_TOKEN_COOKIE);
+    setCookie(ACCESS_TOKEN_COOKIE, "", 0)
+    setCookie(ID_TOKEN_COOKIE, "", 0)
+    // Cookies.remove(ACCESS_TOKEN_COOKIE);
+    // Cookies.remove(ID_TOKEN_COOKIE);
     return;
   }
 
-  const millisecondAdd = (tokens.expires_in !== undefined ? tokens.expires_in : 300) * 1000; // expires_in sec and 5 min to ms
-  const options: Cookies.CookieAttributes = {
-    secure: true,
-    sameSite: 'strict',
-    expires: new Date(Date.now() + millisecondAdd),
-  }
-  
-  Cookies.set(ACCESS_TOKEN_COOKIE, tokens.access_token, options);
-  Cookies.set(ID_TOKEN_COOKIE, tokens.id_token || '', options);
+  // const millisecondAdd = (tokens.expires_in !== undefined ? tokens.expires_in : 300) * 1000; // expires_in sec and 5 min to ms
+  // const options: Cookies.CookieAttributes = {
+  //   secure: true,
+  //   sameSite: 'strict',
+  //   expires: new Date(Date.now() + millisecondAdd),
+  // }
+
+  setCookie(ACCESS_TOKEN_COOKIE, tokens.access_token, (tokens.expires_in !== undefined ? tokens.expires_in : 300))
+  setCookie(ID_TOKEN_COOKIE, (tokens.id_token !== undefined ? tokens.id_token : "undefined"), (tokens.expires_in !== undefined ? tokens.expires_in : 300))
+  // Cookies.set(ACCESS_TOKEN_COOKIE, tokens.access_token, options);
+  // Cookies.set(ID_TOKEN_COOKIE, tokens.id_token || '', options);
 }
 
 export const doLogout = async () => {
@@ -86,7 +111,8 @@ export const doLogout = async () => {
     const url = new URL(metadata.end_session_endpoint);
     url.searchParams.append('post_logout_redirect_uri', PUBLIC_KC_LOGOUT_URL);
     url.searchParams.append('client_id', PUBLIC_KC_CLIENT_ID);
-    url.searchParams.append('id_token_hint', Cookies.get(ID_TOKEN_COOKIE) || '');
+    url.searchParams.append('id_token_hint', getCookie(ID_TOKEN_COOKIE) || '');
+    // url.searchParams.append('id_token_hint', Cookies.get(ID_TOKEN_COOKIE) || '');
     if (Capacitor.getPlatform() === "web") {
       window.location.replace(url);
     } else {
@@ -98,8 +124,10 @@ export const doLogout = async () => {
 export const getTokens = (params: Partial<Record<string, string>>|null) => {
   if (browser) {
     return {
-      access_token: Cookies.get(ACCESS_TOKEN_COOKIE),
-      id_token: Cookies.get(ID_TOKEN_COOKIE),
+      access_token: getCookie(ACCESS_TOKEN_COOKIE),
+      id_token: getCookie(ID_TOKEN_COOKIE),
+      // access_token: Cookies.get(ACCESS_TOKEN_COOKIE),
+      // id_token: Cookies.get(ID_TOKEN_COOKIE),
     }
   }
 
