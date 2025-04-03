@@ -24,9 +24,11 @@ Sentry.init({
 export const handleError = Sentry.handleErrorWithSentry();
 
 App.addListener('appUrlOpen', async (event) => {
+  console.log('url: ');
+  console.log(event.url)
   if (event.url.startsWith('ingenium://')) {
     await Browser.close(); // Close the in-app browser
-    goto(decodeURI(event.url.replace('ingenium:/', '')))
+    await goto(decodeURI(event.url.replace('ingenium:/', '')))
   }
 });
 
