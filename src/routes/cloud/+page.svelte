@@ -1,5 +1,11 @@
 <script lang="ts">
   import Header from "$lib/components/layout/header.svelte";
+  import { Browser } from '@capacitor/browser';
+
+  function openCloud() {
+    Browser.open({url: "https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/"})
+    return null
+  }
 </script>
 
 <svelte:head>
@@ -18,12 +24,18 @@
       Zelf bestanden uploaden
     </a>
   </div>
-  <iframe src="https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/" width="100%" height="70%"></iframe>
+  <br>
+<!--  <iframe src="https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/" width="100%" height="70%"></iframe>-->
+  <div class="flex flex-col items-center">
+    <button on:click="{() => openCloud()}" class="button button-outline-blue button-sm my-4">
+      Open Cloud
+    </button>
+  </div>
 </main>
 
-<style>
-  iframe {
-    height: 70vh;
-    @apply w-full;
-  }
-</style>
+<!--<style>-->
+<!--  iframe {-->
+<!--    height: 70vh;-->
+<!--    @apply w-full;-->
+<!--  }-->
+<!--</style>-->
