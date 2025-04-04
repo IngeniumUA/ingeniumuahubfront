@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/sveltekit";
-import { PUBLIC_API_URL, PUBLIC_SENTRY_DSN } from '$env/static/public';
+import { PUBLIC_API_URL, PUBLIC_SENTRY_DSN, PUBLIC_SENTRY_ENVIRONMENT } from '$env/static/public';
 import { Browser } from '@capacitor/browser';
 import { App } from '@capacitor/app';
 import { goto } from '$app/navigation';
@@ -19,6 +19,8 @@ Sentry.init({
   integrations: [Sentry.replayIntegration()],
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
+
+  environment: PUBLIC_SENTRY_ENVIRONMENT
 });
 
 export const handleError = Sentry.handleErrorWithSentry();
