@@ -104,7 +104,7 @@ export class ProductBlueprintDetailComponent implements OnInit {
       if (metaFormControl === null || metaFormControl === "") {
         otherMetaData = {};
       } else {
-        otherMetaData = metaFormControl;
+        otherMetaData = {"form" :metaFormControl};
       }
 
       const productMeta: ProductMetaI = {
