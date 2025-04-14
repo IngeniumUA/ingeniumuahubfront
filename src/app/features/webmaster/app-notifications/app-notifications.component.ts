@@ -84,10 +84,10 @@ export class AppNotificationsComponent implements OnInit {
 
     // Second press sends notification
     this.notificationService.sendNotificationUser(
-      this.notificationForm.controls['email'].value,
-      this.notificationForm.controls['title'].value,
-      this.notificationForm.controls['body'].value,
-      JSON.parse(this.notificationForm.controls['data'].value)).subscribe(
+      this.notificationFormUser.controls['email'].value,
+      this.notificationFormUser.controls['title'].value,
+      this.notificationFormUser.controls['body'].value,
+      JSON.parse(this.notificationFormUser.controls['data'].value)).subscribe(
       (_) => {
         this.toastrService.success('Notification sent successfully');
       },
