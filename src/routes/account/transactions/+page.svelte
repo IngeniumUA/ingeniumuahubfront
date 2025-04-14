@@ -31,6 +31,21 @@
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  function animateToOne(start: number, duration = 500, callback: (value: number) => void) {
+    const startTime = performance.now();
+
+    function tick(now: number) {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1); // Normalized 0-1 progress
+      const value = start + (1 - start) * t;
+      callback(value);
+
+      if (t < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
   async function showQrCode(e: Event, transaction: TransactionLimitedI) {
     e.preventDefault();
 
@@ -47,8 +62,8 @@
 
     const currentBrightness = await ScreenBrightness.getBrightness()
     brightness = currentBrightness.brightness
-    await sleep(100);
-    await ScreenBrightness.setBrightness({brightness: 1.0})
+    await sleep(10);
+    animateToOne(brightness, 500, async (v) => await ScreenBrightness.setBrightness({ brightness: v }));
     document.body.style.overflow = 'hidden'; // Disable scrolling
   }
 
