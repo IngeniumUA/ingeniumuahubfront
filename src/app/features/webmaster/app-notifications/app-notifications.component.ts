@@ -45,7 +45,7 @@ export class AppNotificationsComponent implements OnInit {
       data: ['', Validators.pattern('/({(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'),{1} ?)*(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'))})|(^$)/gm')],
     });
     this.notificationFormUser = this.formBuilder.group({
-      item_id: ['', Validators.required],
+      email: ['', Validators.required],
       title: ['', Validators.required],
       body: ['', Validators.required],
       data: ['', Validators.pattern('/({(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'),{1} ?)*(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'))})|(^$)/gm')],
