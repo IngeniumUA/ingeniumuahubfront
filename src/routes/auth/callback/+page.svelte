@@ -35,7 +35,7 @@
       storeTokens(tokens);
       auth.user = getUserFromToken(tokens.access_token);
 
-      // await link_user_token(auth.user.email)
+      await link_user_token(auth.user.email)
 
       // Get the state parameter from the url
       const state: Record<string, string> = JSON.parse(expectedState || '/');
