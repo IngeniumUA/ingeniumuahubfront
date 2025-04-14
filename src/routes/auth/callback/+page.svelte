@@ -68,9 +68,8 @@
   function link_user_token(email: string) {
     const payload = {
       token: notification_token,
-      user_email: email
     }
-    return fetch(`${PUBLIC_API_URL}/item/notification/link_user`, {
+    return fetch(`${PUBLIC_API_URL}/item/notification/link_user/${email}`, {
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(payload)
