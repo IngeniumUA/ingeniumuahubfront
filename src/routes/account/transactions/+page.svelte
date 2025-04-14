@@ -27,6 +27,10 @@
     return dayjs(date).format('D MMM YYYY, H:mm');
   }
 
+  function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   async function showQrCode(e: Event, transaction: TransactionLimitedI) {
     e.preventDefault();
 
@@ -43,6 +47,7 @@
 
     const currentBrightness = await ScreenBrightness.getBrightness()
     brightness = currentBrightness.brightness
+    await sleep(100);
     await ScreenBrightness.setBrightness({brightness: 1.0})
     document.body.style.overflow = 'hidden'; // Disable scrolling
   }
