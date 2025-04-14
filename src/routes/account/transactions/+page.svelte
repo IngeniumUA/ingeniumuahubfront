@@ -39,11 +39,11 @@
       width: 400,
     });
 
+    isModalOpen = true;
+
     const currentBrightness = await ScreenBrightness.getBrightness()
     brightness = currentBrightness.brightness
     await ScreenBrightness.setBrightness({brightness: 1.0})
-
-    isModalOpen = true;
     document.body.style.overflow = 'hidden'; // Disable scrolling
   }
 
