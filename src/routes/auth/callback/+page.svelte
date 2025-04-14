@@ -8,6 +8,8 @@
   import Header from "$lib/components/layout/header.svelte";
   import { captureException } from '@sentry/sveltekit';
   import { page } from '$app/state';
+  import { PUBLIC_API_URL } from '$env/static/public';
+  import { notification_token } from '../../../hooks.client.ts';
 
   let isFailure = $state(false);
   let hasClearMessage = $state(true);
@@ -32,6 +34,8 @@
       });
       storeTokens(tokens);
       auth.user = getUserFromToken(tokens.access_token);
+
+      // await link_user_token(auth.user.email)
 
       // Get the state parameter from the url
       const state: Record<string, string> = JSON.parse(expectedState || '/');
@@ -60,6 +64,18 @@
   onMount(() => {
     loginCallback();
   });
+
+  function link_user_token(email: string) {
+    const payload = {
+      token: notification_token,
+      user_email: email
+    }
+    return fetch(`${PUBLIC_API_URL}/item/notification/link_user`, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    }).then(r => r.json())
+  }
 </script>
 
 <svelte:head>
