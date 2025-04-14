@@ -47,3 +47,47 @@
 
   <span class="error-message" *ngIf="this.form_error !== null">{{ form_error }}</span>
 </section>
+
+<br>
+
+<section class="staffSection">
+  <h1>Send User notification</h1>
+
+  <section>
+    <form [formGroup]="notificationFormUser">
+      <table>
+        <tbody>
+        <tr><th>User Email</th><td>
+          <label class="hubformfield-white">
+            <input type="text" formControlName="email" placeholder="Email"/>
+          </label>
+        </td></tr>
+        <tr><th>Title</th><td>
+          <label class="hubformfield-white">
+            <input type="text" formControlName="title" placeholder="Title"/>
+          </label>
+        </td></tr>
+        <tr><th>Body</th><td>
+          <label class="hubformfield-white">
+            <input type="text" formControlName="body" placeholder="Body"/>
+          </label>
+        </td></tr>
+        <tr><th>Data</th><td>
+          <label class="hubformfield-white">
+            <input type="text" formControlName="data" placeholder="Data dict of format {'': ''}"/>
+          </label>
+        </td></tr>
+        </tbody>
+      </table>
+    </form>
+  </section>
+
+  <h2 class="text-blue-900">Send Notification</h2>
+  <button class="button button-primary button-inline"
+          (click)="onSubmitUser()">
+    <span class="text-white">Send</span>
+  </button>
+  <p *ngIf="this.sendBufferUser" class="text-sm text-yellow-700">Zeker?</p>
+
+  <span class="error-message" *ngIf="this.form_error_user !== null">{{ form_error_user }}</span>
+</section>

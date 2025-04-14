@@ -33,8 +33,18 @@ export class AppNotificationsComponent implements OnInit {
   sendBuffer: boolean = false;
   form_error: string | null = null;
 
+  notificationFormUser: any;
+  sendBufferUser: boolean = false;
+  form_error_user: string | null = null;
+
   ngOnInit() {
     this.notificationForm = this.formBuilder.group({
+      item_id: ['', Validators.required],
+      title: ['', Validators.required],
+      body: ['', Validators.required],
+      data: ['', Validators.pattern('/({(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'),{1} ?)*(("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'): ?("[A-Za-z0-9_-]+?"|\'[A-Za-z0-9_-]+?\'))})|(^$)/gm')],
+    });
+    this.notificationFormUser = this.formBuilder.group({
       item_id: ['', Validators.required],
       title: ['', Validators.required],
       body: ['', Validators.required],
@@ -53,6 +63,28 @@ export class AppNotificationsComponent implements OnInit {
     // Second press sends notification
     this.notificationService.sendNotification(
       this.notificationForm.controls['item_id'].value,
+      this.notificationForm.controls['title'].value,
+      this.notificationForm.controls['body'].value,
+      JSON.parse(this.notificationForm.controls['data'].value)).subscribe(
+      (_) => {
+        this.toastrService.success('Notification sent successfully');
+      },
+      (error: Error) => {
+        this.toastrService.error(`Notification failed to send: ${error.message}`);
+      });
+  }
+
+  onSubmitUser() {
+    // First press toggles "are you sure?"
+    if (! this.sendBufferUser) {
+      this.sendBufferUser = true;
+      return;
+    }
+    this.sendBufferUser = false;
+
+    // Second press sends notification
+    this.notificationService.sendNotificationUser(
+      this.notificationForm.controls['email'].value,
       this.notificationForm.controls['title'].value,
       this.notificationForm.controls['body'].value,
       JSON.parse(this.notificationForm.controls['data'].value)).subscribe(
