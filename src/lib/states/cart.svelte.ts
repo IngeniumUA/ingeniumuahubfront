@@ -57,6 +57,12 @@ export const removeProductFromCart = (index: number) => {
 	storeProductsInLocalStorage();
 }
 
+/**
+ * This functions reduces the quantity of a product
+ * It also checks for the price policy to be the same!
+ * @param product
+ * @param count
+ */
 export const reduceProductQuantity = (product: ProductOutI, count: number = 1) => {
 	// Find all products with same settings
 	const foundIndexes = cartProducts.reduce<number[]>((acc, p, index, _) =>  {
@@ -76,6 +82,13 @@ export const reduceProductQuantity = (product: ProductOutI, count: number = 1) =
 		removeProductFromCart(foundIndexes[--countToRemove]);
 	}
 }
+
+export const updateProductMeta = (key: string, target: any) => {
+	let value = target?.value;
+
+	//cartProducts[key] = value;
+}
+
 
 /**
  * Clears the cart

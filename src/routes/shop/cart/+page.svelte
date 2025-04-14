@@ -111,6 +111,7 @@
 		{/snippet}
 	</Modal>
 {/if}
+<!-- Stripe elements checkout modal -->
 {#if cartDetails.isPaying && cartDetails.stripePayment}
 	<StripePaymentComponent />
 {/if}

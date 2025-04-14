@@ -1,14 +1,24 @@
 <script lang="ts">
-  import {cartDetails, cartProducts, getFailedProduct, removeProductFromCart} from "$lib/states/cart.svelte";
+  import {
+    cartDetails,
+    cartProducts,
+    getFailedProduct,
+    removeProductFromCart,
+    updateProductMeta
+  } from '$lib/states/cart.svelte';
 
   const { loading = false } = $props();
+
+  function getRadioId(cartIndex: number, metaKey: string, formKey: string, option: string) {
+    return `${cartIndex}-${metaKey}-${formKey}-${option}`;
+  }
 </script>
 
 <!-- CART LIST -->
 <section class="col-span-1 md:col-span-2 lg:col-span-3">
   <h2 class="sr-only">De volgende producten zitten in jouw winkelwagen:</h2>
   <ul class="cart-list">
-    {#each cartProducts as product, idx }
+    {#each cartProducts as product, idx}
       <li class="cart-list-product">
         <div class="cart-list-product__content">
           <p class="cart-list-product__title">
@@ -16,9 +26,29 @@
           </p>
           {#if product.product_meta.other_meta_data}
             <ul class="cart-list-product__options">
-              {#each Object.keys(product.product_meta.other_meta_data) as key }
+              {#each Object.entries(product.product_meta.other_meta_data) as [key, meta] }
                 <li>
-                  <span class="capitalize">{ key }</span>: <span>{ product.product_meta.other_meta_data[key] }</span>
+                  {#if key !== "form"}
+                    <span class="capitalize">{ key }</span>: <span>{ meta }</span>
+                  {:else}
+                    {@const parsed_data = JSON.parse(meta)}
+                    {#each Object.entries(parsed_data) as [formKey, formField] }
+                      {#if formField['type'] !== "option" }
+                        <input required type="{product.product_meta.other_meta_data[key]['type']}" id="{ product.origin_item_id + key }"
+                          value={ product.product_meta.other_meta_data[key]['value'] ?? undefined } oninput={ (el) => updateProductMeta(key, el.target) } />
+                      {:else if formField['type'] === "option" }
+                        <p>Selecteer een keuze:</p>
+                        {#each formField['options'] as option}
+                          <div class="form-field-checkbox space-y-2 ml-2">
+                            <input type="radio" id={ getRadioId(idx, key, formKey, option) } name={ `${idx}-${key}-${formKey}` } />
+                            <label for={ getRadioId(idx, key, formKey, option) }>{ option }</label>
+                          </div>
+                        {/each}
+                      {:else}
+                        <p>Unknown field input</p>
+                      {/if}
+                    {/each}
+                  {/if}
                 </li>
               {/each}
             </ul>
@@ -26,7 +56,7 @@
           <p class="cart-list-product__price">&euro; { product.price_policy !== null ? product.price_policy.price : '???' }</p>
 
           <!-- Update this, as it is quite bad -->
-          {#if getFailedProduct(product) }
+          {#if getFailedProduct(product)}
             <p class="text-sm">
               <span class="text-red-700 font-bold underline">Kan niet aangekocht worden:</span>
               <span class="text-ingenium-grey-700 lowercase">
