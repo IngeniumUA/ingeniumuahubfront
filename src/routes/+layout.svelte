@@ -11,6 +11,8 @@
 	import { auth } from '$lib/states/auth.svelte';
 	import { setContext } from 'svelte';
 
+	import { SvelteToast } from '@zerodevx/svelte-toast';
+
 	let { children, data } = $props();
 
 	if (page.route.id !== '/auth/logout') {
@@ -37,5 +39,6 @@
 <div id="wrapper">
 	{@render children()}
 </div>
-<Footer serverHostname={ data.serverHostname } />
+<Footer serverHostname={ data.serverHostname } enabled={data.footerEnabled} />
 
+<SvelteToast />

@@ -12,6 +12,14 @@
 @use "forms";
 @use "badges";
 
+body.barcode-scanning-active {
+  background-color: transparent;
+}
+
+:root.barcode-scanning-active-r {
+  background-color: transparent;
+}
+
 :root {
   --mainblue: rgb(0, 5, 61); /* #00053D */
   --mainblue-90: rgba(0, 5, 61, 0.9); /*rgba(10, 31, 68, 0.9);*/

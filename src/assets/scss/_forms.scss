@@ -38,6 +38,10 @@
   .field-error-message-list {
     @apply ml-1;
   }
+
+  select {
+    @apply text-sm font-medium leading-6 text-gray-800 transition-colors ease-in-out rounded-md;
+  }
 }
 
 fieldset {

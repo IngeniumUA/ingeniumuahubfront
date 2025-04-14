@@ -1,9 +1,10 @@
 <script lang="ts">
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
 
-	let { serverHostname = '' } = $props();
+	let { serverHostname = '', enabled = true } = $props();
 </script>
 
+{#if enabled}
 <footer>
 	<div class="footer-logo">
 		<img src={ingeniumSchild} alt="" aria-hidden="true" height="1024" width="1024">
@@ -23,6 +24,7 @@
 		<p class="server-info hidden" aria-hidden="true">{ serverHostname }</p>
 	</div>
 </footer>
+{/if}
 
 <style lang="scss">
   footer {

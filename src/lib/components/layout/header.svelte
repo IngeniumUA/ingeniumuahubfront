@@ -119,9 +119,16 @@
 							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
 
 							<hr class="nav-dropdown-divider">
+
+							{#if auth.user?.realm_access.roles.includes("staff")}
+								<a href="/scanners" class="nav-dropdown-item" role="menuitem">Scanners</a>
+
+								<hr class="nav-dropdown-divider">
+							{/if}
+
 							<span class="nav-dropdown-no-link">
 								<span class="sr-only">Je bent ingelogd met</span>
-								{ auth.user.email }
+								{ auth.user?.email }
 							</span>
 						</div>
 					{/if}

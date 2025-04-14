@@ -4,7 +4,8 @@ import { Browser } from '@capacitor/browser';
 import { App } from '@capacitor/app';
 import { goto } from '$app/navigation';
 import { type ActionPerformed, type PushNotificationSchema, PushNotifications, type Token } from '@capacitor/push-notifications';
-import { Preferences } from '@capacitor/preferences';
+import { NativeAudio } from '@capgo/native-audio';
+import { AppStorage } from '$lib/scanners/storage.ts';
 
 
 Sentry.init({
@@ -24,6 +25,33 @@ Sentry.init({
 });
 
 export const handleError = Sentry.handleErrorWithSentry();
+
+async function preloadAudio() {
+  try{
+    const path = 'sounds/'
+    await NativeAudio.preload({
+      assetId: "oneBeep",
+      assetPath: path + "scansound_one_beep.wav",
+      audioChannelNum: 1,
+      isUrl: false
+    })
+    await NativeAudio.preload({
+      assetId: "twoBeep",
+      assetPath: path + "scansound_two_beeps.wav",
+      audioChannelNum: 1,
+      isUrl: false
+    })
+    await NativeAudio.preload({
+      assetId: "longBeep",
+      assetPath: path + "scansound_long_beep.wav",
+      audioChannelNum: 1,
+      isUrl: false
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+preloadAudio()
 
 App.addListener('appUrlOpen', async (event) => {
   console.log('url: ');
@@ -72,10 +100,10 @@ PushNotifications.addListener('pushNotificationActionPerformed', (notification: 
 });
 
 function get_all_possible_notifications() {
-  getObjectFromStorage("notifications_general")?.then(async (result) => {
+  AppStorage.getWide("notifications_general")?.then(async (result) => {
     if (result === undefined || result === null || result === "false") {
       const fetchData = await queryNotification()
-      getObjectFromStorage("notifications")?.then(async (stored_notification_options) => {
+      AppStorage.getWide("notifications")?.then(async (stored_notification_options) => {
         if (stored_notification_options !== undefined && stored_notification_options !== null) {
           stored_notification_options = JSON.parse(stored_notification_options);
           let stored_option: keyof typeof stored_notification_options;
@@ -140,15 +168,6 @@ function removeNull<T>(obj: T | any): T | any {
     }
   })
   return obj;
-}
-
-async function getObjectFromStorage(key: string) {
-  const ret = await Preferences.get({key});
-  if (ret.value !== null) {
-    return JSON.parse(ret.value);
-  } else {
-    return null;
-  }
 }
 
 export let notification_token: string = "";
