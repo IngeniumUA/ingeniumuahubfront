@@ -4,19 +4,17 @@
 <dict>
     <key>NSCameraUsageDescription</key>
     <string>Camera use for QR-code scanning</string>
-    <dict>
-      <key>NSPrivacyAccessedAPITypes</key>
-      <array>
-        <dict>
-          <key>NSPrivacyAccessedAPIType</key>
-          <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
-          <key>NSPrivacyAccessedAPITypeReasons</key>
-          <array>
-            <string>CA92.1</string>
-          </array>
-        </dict>
-      </array>
-    </dict>
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array>
+          <string>CA92.1</string>
+        </array>
+      </dict>
+    </array>
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
