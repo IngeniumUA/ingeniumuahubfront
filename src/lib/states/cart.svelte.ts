@@ -1,4 +1,9 @@
-import {PaymentProviderEnum, type ProductOutI} from '$lib/models/productsI';
+import {
+	PaymentProviderEnum,
+	type ProductFormFieldI, type ProductFormI,
+	type ProductOtherMetaI,
+	type ProductOutI
+} from '$lib/models/productsI';
 import {getAuthorizationHeaders} from "$lib/auth/auth";
 import {PUBLIC_API_URL} from "$env/static/public";
 import {isAuthenticated} from "$lib/states/auth.svelte";
@@ -6,6 +11,7 @@ import type {CartFailedI, CartSuccessI} from "$lib/models/cartI";
 import {goto} from "$app/navigation";
 
 export const cartProducts: ProductOutI[] = $state([]);
+export const cartProductFormData: { [key:number]: ProductFormI } = $state({});
 export const cartDetails = $state({
 	guestEmail: '',
 	note: '',
@@ -24,6 +30,7 @@ export const failedCart: CartFailedI = $state({
  */
 export const storeProductsInLocalStorage = () => {
 	window.localStorage.setItem('cartProducts', JSON.stringify(cartProducts));
+	window.localStorage.setItem('cartMetadata', JSON.stringify(cartProductFormData));
 }
 
 /**
@@ -31,9 +38,14 @@ export const storeProductsInLocalStorage = () => {
  */
 export const retrieveProductsFromLocalStorage = () => {
 	const storageData = window.localStorage.getItem('cartProducts');
+	const storageMetadata = window.localStorage.getItem('cartMetadata');
+
 	if (!storageData) return;
 	cartProducts.length = 0; // Clear the array, needed for dev mode
 	cartProducts.push(...JSON.parse(storageData));
+
+	if (!storageMetadata) return;
+	Object.assign(cartProductFormData, JSON.parse(storageMetadata));
 }
 
 /**
@@ -54,6 +66,7 @@ export const addProductToCart = (product: ProductOutI, count: number = 1) => {
 
 export const removeProductFromCart = (index: number) => {
 	cartProducts.splice(index, 1);
+	delete cartProductFormData[index];
 	storeProductsInLocalStorage();
 }
 
@@ -83,10 +96,21 @@ export const reduceProductQuantity = (product: ProductOutI, count: number = 1) =
 	}
 }
 
-export const updateProductMeta = (key: string, target: any) => {
-	let value = target?.value;
-
-	//cartProducts[key] = value;
+/**
+ * Updates the product metadata form field
+ * @param productIdx index of product in the array list
+ * @param formKey the key of the form field
+ * @param meta the metadata of the form field
+ * @param el the input element
+ */
+export const updateProductMeta = (productIdx: number, formKey: string, meta: ProductFormFieldI, el: HTMLInputElement) => {
+	const formData = cartProductFormData[productIdx] || {};
+	formData[formKey] = {
+		...meta,
+		value: el.value,
+	}
+	cartProductFormData[productIdx] = formData;
+	storeProductsInLocalStorage();
 }
 
 
@@ -128,7 +152,10 @@ export const checkoutCart = async () => {
 			}),
 			body: JSON.stringify({
 				cart: {
-					products: cartProducts,
+					products: cartProducts.map((p, idx) => {
+						p.product_meta.other_meta_data.form = cartProductFormData[idx] || {};
+						return p;
+					}),
 					checkout_note: cartDetails.note,
 					user_email: auth ? null : cartDetails.guestEmail,
 				},
@@ -198,4 +225,14 @@ export const getFailedProduct = (product: ProductOutI) => {
 	return failedCart.failed_products.find(failedProduct => {
 		return product.id === failedProduct.product.id && product.price_policy?.id === failedProduct.product.price_policy?.id;
 	});
+}
+
+/**
+ * Get the product metadata value from the state
+ * Returns undefined if not found
+ */
+export const getProductMetaValue = (productKey: number, formKey: string) => {
+	if (!cartProductFormData[productKey]) return undefined;
+	const formField = cartProductFormData[productKey][formKey];
+	return formField?.value ?? undefined;
 }

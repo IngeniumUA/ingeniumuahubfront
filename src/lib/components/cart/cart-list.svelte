@@ -6,11 +6,24 @@
     removeProductFromCart,
     updateProductMeta
   } from '$lib/states/cart.svelte';
+  import type { ProductFormI } from '$lib/models/productsI';
 
   const { loading = false } = $props();
 
   function getRadioId(cartIndex: number, metaKey: string, formKey: string, option: string) {
     return `${cartIndex}-${metaKey}-${formKey}-${option}`;
+  }
+
+  function getFormData(meta: string|object|undefined): ProductFormI {
+    if (typeof meta === 'object') {
+      return meta as ProductFormI;
+    }
+
+    if (typeof meta === 'undefined') {
+      return {} as ProductFormI;
+    }
+
+    return JSON.parse(meta);
   }
 </script>
 
@@ -31,16 +44,19 @@
                   {#if key !== "form"}
                     <span class="capitalize">{ key }</span>: <span>{ meta }</span>
                   {:else}
-                    {@const parsed_data = JSON.parse(meta)}
+                    {@const parsed_data = getFormData(meta)}
                     {#each Object.entries(parsed_data) as [formKey, formField] }
+                      <!-- @type -->
                       {#if formField['type'] !== "option" }
-                        <input required type="{product.product_meta.other_meta_data[key]['type']}" id="{ product.origin_item_id + key }"
-                          value={ product.product_meta.other_meta_data[key]['value'] ?? undefined } oninput={ (el) => updateProductMeta(key, el.target) } />
-                      {:else if formField['type'] === "option" }
+                        <input required type="{ formField['type'] }" id="{ product.origin_item_id + key }"
+                          value={ formField['value'] } oninput={ (e) => updateProductMeta(idx, formKey, formField, e.currentTarget) } />
+                      {:else if formField['type'] === "option" && formField['options'] }
                         <p>Selecteer een keuze:</p>
                         {#each formField['options'] as option}
                           <div class="form-field-checkbox space-y-2 ml-2">
-                            <input type="radio" id={ getRadioId(idx, key, formKey, option) } name={ `${idx}-${key}-${formKey}` } />
+                            <input type="radio" id={ getRadioId(idx, key, formKey, option) } name={ `${idx}-${key}-${formKey}` }
+                                   value={ option } checked={ formField['value'] === option }
+                                   onchange={ (e) => updateProductMeta(idx, formKey, formField, e.currentTarget) } />
                             <label for={ getRadioId(idx, key, formKey, option) }>{ option }</label>
                           </div>
                         {/each}

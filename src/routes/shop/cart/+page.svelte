@@ -61,7 +61,7 @@
 		modalOpen = false;
 
 		try {
-			const data = await checkoutCart();
+			await checkoutCart();
 		} catch (e) {
 			loading = false;
 			error = true;
