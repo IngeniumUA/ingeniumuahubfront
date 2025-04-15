@@ -42,3 +42,10 @@
 <Footer serverHostname={ data.serverHostname } enabled={data.footerEnabled} />
 
 <SvelteToast />
+
+<style lang="scss">
+	:root {
+    --toastBarHeight: 0px;
+    --toastBorderRadius: 4px;
+	}
+</style>

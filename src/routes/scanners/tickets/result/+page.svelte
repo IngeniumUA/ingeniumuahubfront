@@ -13,6 +13,7 @@
 	import Modal from '$lib/components/layout/modal.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { App } from '@capacitor/app';
+	import { notificationToast } from '$lib/components/layout/toasts.ts';
 
 	let notesToast: number;
 
@@ -154,7 +155,10 @@
 	}
 
 	async function showToast() {
-		notesToast = toast.push(UserNotes);
+		const notes_toast = "" +
+			`<p>${UserNotes}</p>`
+
+		notesToast = notificationToast(notes_toast);
 	}
 
 	function Back() {

@@ -6,6 +6,7 @@ import { goto } from '$app/navigation';
 import { type ActionPerformed, type PushNotificationSchema, PushNotifications, type Token } from '@capacitor/push-notifications';
 import { NativeAudio } from '@capgo/native-audio';
 import { AppStorage } from '$lib/scanners/storage.ts';
+import { notificationToast } from '$lib/components/layout/toasts.ts';
 
 
 Sentry.init({
@@ -87,6 +88,15 @@ PushNotifications.addListener('registrationError', (error) => {
 // Show us the notification payload if the app is open on our device
 PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
   console.log('Push received: ' + JSON.stringify(notification));
+
+  const notification_toast = "" +
+    `<p class='text-gray-800 font-bold'>${notification.title}</p> 
+     <hr class="nav-dropdown-divider">
+     <div style='margin-top: 4px'
+      <p>${notification.body}</p>
+     </div>`
+
+  notificationToast(notification_toast);
 });
 
 // Method called when tapping on a notification
