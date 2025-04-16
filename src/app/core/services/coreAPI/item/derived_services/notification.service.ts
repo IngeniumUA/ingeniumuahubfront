@@ -36,4 +36,13 @@ export class NotificationService {
     }
     return this.httpClient.post<void>(`${apiEnviroment.apiUrl}item/wide/notification/${item}/send_notification`, payload);
   }
+
+  sendNotificationUser(email: string, title: string, body: string, data: object | null): Observable<void> {
+    const payload = {
+      title: title,
+      body: body,
+      data: data
+    }
+    return this.httpClient.post<void>(`${apiEnviroment.apiUrl}item/wide/notification/user/${email}/send_notification`, payload);
+  }
 }
