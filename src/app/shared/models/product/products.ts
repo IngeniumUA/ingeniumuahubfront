@@ -21,7 +21,7 @@ export interface ProductMetaI {
   group: string;
   categorie: string; // Food / drinks
   upon_completion: UponCompletionMetaI | null;
-  other_meta_data: {[key:string]:string};
+  other_meta_data: {[key:string]:any};
 }
 
 export interface PricePolicyLimitedI {
