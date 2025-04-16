@@ -72,13 +72,22 @@ export class ProductBlueprintDetailComponent implements OnInit {
       // Temporary "bool" for toggling checkout_tracking
       const tracking_checkout = !(this.productBlueprint.product_blueprint_metadata?.upon_completion?.track_checkout == null)
 
+      // Parsing metadata form
+      let formTemplate = '';  // Default value
+      if (this.productBlueprint.product_blueprint_metadata.other_meta_data !== null) {
+        const formObject: {[key:string]:any} = this.productBlueprint.product_blueprint_metadata.other_meta_data;
+        if (formObject["form"] !== undefined) {
+          formTemplate = JSON.stringify(formObject["form"]);
+        }
+      }
+
       this.productMetaForm = this.formBuilder.group({
         categorie: [this.productBlueprint.product_blueprint_metadata.categorie],
         group: [this.productBlueprint.product_blueprint_metadata.group],
         upon_completion: [''],
         track_checkout: [tracking_checkout],
         // todo upon_completion: [this.productBlueprint.product_blueprint_metadata.upon_completion === null ? '': JSON.stringify(this.productBlueprint.product_blueprint_metadata.upon_completion[0])]
-        form_template: [this.productBlueprint.product_blueprint_metadata.other_meta_data === null ? '': JSON.stringify(this.productBlueprint.product_blueprint_metadata.other_meta_data).slice(9,JSON.stringify(this.productBlueprint.product_blueprint_metadata.other_meta_data).length-2).replaceAll("\\","")]
+        form_template: [formTemplate]
       });
     }
 
@@ -104,8 +113,9 @@ export class ProductBlueprintDetailComponent implements OnInit {
       if (metaFormControl === null || metaFormControl === "") {
         otherMetaData = {};
       } else {
-        otherMetaData = {"form" :metaFormControl};
+        otherMetaData = {"form" : JSON.parse(metaFormControl)};
       }
+      console.log(otherMetaData);
 
       const productMeta: ProductMetaI = {
         group: this.productMetaForm.controls['group'].value,
