@@ -96,17 +96,13 @@ export const reduceProductQuantity = (product: ProductOutI, count: number = 1) =
  * @param el the input element
  */
 export const updateProductMeta = (productIdx: number, formKey: string, meta: ProductFormFieldI, el: HTMLInputElement) => {
-	// @ts-ignore
-	const formData = JSON.parse(cartProducts[productIdx].product_meta.other_meta_data?.form) || {};
+	const formData = cartProducts[productIdx].product_meta.other_meta_data?.form || {};
 	formData[formKey] = {
 		...meta,
 		value: el.value,
 	}
 
-	console.log(formData);
-
-	//@ts-ignore
-	cartProducts[productIdx].product_meta.other_meta_data.form = JSON.stringify(formData);
+	cartProducts[productIdx].product_meta.other_meta_data.form = formData;
 	storeProductsInLocalStorage();
 }
 

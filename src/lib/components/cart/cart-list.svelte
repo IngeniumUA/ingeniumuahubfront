@@ -14,16 +14,10 @@
     return `${cartIndex}-${metaKey}-${formKey}-${option}`;
   }
 
+  // This is stupid rn, as it just makes sure the type is set correctly.
+  // This will be changed in an upcoming update
   function getFormData(meta: string|object|undefined): ProductFormI {
-    if (typeof meta === 'object') {
-      return meta as ProductFormI;
-    }
-
-    if (typeof meta === 'undefined') {
-      return {} as ProductFormI;
-    }
-
-    return JSON.parse(meta);
+    return meta as ProductFormI;
   }
 </script>
 
@@ -44,9 +38,7 @@
                   {#if key !== "form"}
                     <span class="capitalize">{ key }</span>: <span>{ meta }</span>
                   {:else}
-                    {@const parsed_data = getFormData(meta)}
-                    {#each Object.entries(parsed_data) as [formKey, formField] }
-                      <!-- @type -->
+                    {#each Object.entries(getFormData(meta)) as [formKey, formField] }
                       {#if formField['type'] !== "option" }
                         <input required type="{ formField['type'] }" id="{ product.origin_item_id + key }"
                           value={ formField['value'] } oninput={ (e) => updateProductMeta(idx, formKey, formField, e.currentTarget) } />
