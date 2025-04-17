@@ -17,11 +17,27 @@ export interface UponCompletionMetaI {
   track_checkout: CheckoutTrackerConfigI | null
 }
 
+export interface ProductFormFieldI {
+  type: string;
+  value: string|number|undefined;
+  options: string[]|undefined;
+}
+
+export interface ProductFormI {
+  [key:string]: ProductFormFieldI,
+}
+
+export interface ProductOtherMetaI {
+  form?: ProductFormI;
+  [key:string]: string|object|undefined,
+}
+
+
 export interface ProductMetaI {
   group: string;
   categorie: string; // Food / drinks
   upon_completion: UponCompletionMetaI | null;
-  other_meta_data: {[key:string]:string};
+  other_meta_data: ProductOtherMetaI;
 }
 
 export interface PricePolicyLimitedI {

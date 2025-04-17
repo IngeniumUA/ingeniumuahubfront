@@ -61,7 +61,7 @@
 		modalOpen = false;
 
 		try {
-			const data = await checkoutCart();
+			await checkoutCart();
 		} catch (e) {
 			loading = false;
 			error = true;
@@ -111,6 +111,7 @@
 		{/snippet}
 	</Modal>
 {/if}
+<!-- Stripe elements checkout modal -->
 {#if cartDetails.isPaying && cartDetails.stripePayment}
 	<StripePaymentComponent />
 {/if}

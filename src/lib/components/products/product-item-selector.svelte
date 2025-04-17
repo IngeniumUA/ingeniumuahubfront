@@ -31,7 +31,12 @@
 </script>
 
 <div class="product-item-selector">
-  <p class="product-name">{ name }</p>
+  <p class="product-name">
+    { name }
+    {#if Object.prototype.hasOwnProperty.call(product.product_meta.other_meta_data, "form") && product.product_meta.other_meta_data.form}
+      <span class="text-xs text-orange-500 block italic">Product heeft personalisaties, zie winkelwagen</span>
+    {/if}
+  </p>
 
   {#if product.max_count > 0}
     {#if product.price_policy.price > 0}
