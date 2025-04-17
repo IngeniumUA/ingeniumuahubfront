@@ -64,7 +64,7 @@ export const doLogin = async (state: Record<string, string> = {}): Promise<URL> 
     code_challenge_method: 'S256',
     state: strState,
     scope: 'openid profile',
-    prompt: 'login',
+    // prompt: 'login',  // ask user to log in again every time
   });
 }
 

@@ -8,6 +8,7 @@
   } from '$lib/utilities/notificationUtilities.ts';
   import { AppStorage } from '$lib/scanners/storage.js';
   import InlineSpinner from '$lib/components/spinners/inline-spinner.svelte';
+  import { setVibration } from '../../../hooks.client.ts';
 
 
   let form_data: any = {}
@@ -16,6 +17,8 @@
   let notificationList: ItemWideLimitedI[] = [];
   let loading_options = true
   let all_topic: string = ""
+
+  let vibrationValue: boolean = true
 
   onMount(async () => {
     const data = await queryNotification()
@@ -59,6 +62,13 @@
           }
         }
       }
+    }
+
+    let storedVibration = await AppStorage.getWide("vibration")
+    if (storedVibration !== undefined && storedVibration !== null) {
+      storedVibration = JSON.parse(storedVibration)
+      setVibration(storedVibration)
+      vibrationValue = storedVibration
     }
   })
 
@@ -111,6 +121,11 @@
 
     loading = false;
   }
+
+  function vibrationChanged() {
+    AppStorage.setWide("vibration", JSON.stringify(vibrationValue))
+    setVibration(vibrationValue)
+  }
 </script>
 
 <section class="h-full">
@@ -124,6 +139,14 @@
 
       <div class=" form-field form-field-checkbox flex items-center justify-between border-b py-2">
         <input id="disable_notifications" type="checkbox"
+               onchange={()=>{vibrationChanged()}}
+               bind:checked={vibrationValue}
+        >
+        <label for="disable_notifications" class="flex items-center space-x-2">Trillen bij meldingen</label>
+      </div>
+
+      <div class=" form-field form-field-checkbox flex items-center justify-between border-b py-2">
+        <input id="disable_notifications" type="checkbox"
                onchange={()=>{all_notifications_clicked()}}
                bind:checked={form_data["disable_notifications"].storedValue}
                disabled={form_data["disable_notifications"].isDisabled}
@@ -132,7 +155,7 @@
       </div>
 
       {#each notificationList as itemWide}
-        <div class="form-field form-field-checkbox">
+        <div class=" form-field form-field-checkbox flex items-center justify-between py-2">
           <input id={""+itemWide.item.id} type="checkbox"
                  bind:checked={form_data[""+itemWide.item.id].storedValue}
                  disabled={form_data[""+itemWide.item.id].isDisabled}

@@ -7,6 +7,8 @@ import { type ActionPerformed, type PushNotificationSchema, PushNotifications, t
 import { NativeAudio } from '@capgo/native-audio';
 import { notificationToast } from '$lib/components/layout/toasts.ts';
 import { get_all_possible_notifications } from '$lib/utilities/notificationUtilities.ts';
+import { Haptics } from '@capacitor/haptics';
+import { AppStorage } from '$lib/scanners/storage.ts';
 
 
 Sentry.init({
@@ -85,6 +87,15 @@ PushNotifications.addListener('registrationError', (error) => {
   console.log('Error on registration: ' + JSON.stringify(error));
 });
 
+
+async function get_vibrations() {
+  let storedVibration = await AppStorage.getWide("vibration")
+  if (storedVibration !== undefined && storedVibration !== null) {
+    storedVibration = JSON.parse(storedVibration)
+    setVibration(storedVibration)
+  }
+}
+get_vibrations()
 // Show us the notification payload if the app is open on our device
 PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
   console.log('Push received: ' + JSON.stringify(notification));
@@ -97,6 +108,9 @@ PushNotifications.addListener('pushNotificationReceived', (notification: PushNot
      </div>`
 
   notificationToast(notification_toast);
+  if (vibration) {
+    Haptics.vibrate({duration: 700})
+  }
 });
 
 // Method called when tapping on a notification
@@ -109,4 +123,9 @@ PushNotifications.addListener('pushNotificationActionPerformed', (notification: 
   }
 });
 
+export function setVibration(setValue: boolean) {
+  vibration = setValue;
+}
+
+export let vibration = true
 export let notification_token: string = "";
