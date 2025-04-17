@@ -1,12 +1,26 @@
-import {PaymentProviderEnum, type ProductOutI} from '$lib/models/productsI';
+import {
+	PaymentProviderEnum,
+	type ProductFormFieldI,
+	type ProductOutI
+} from '$lib/models/productsI';
 import {getAuthorizationHeaders} from "$lib/auth/auth";
 import {PUBLIC_API_URL} from "$env/static/public";
 import {isAuthenticated} from "$lib/states/auth.svelte";
-import type {CartFailedI, CartSuccessI} from "$lib/models/cartI";
+import type { CartFailedI, CartSuccessI, CheckoutSmallI } from '$lib/models/cartI';
 import {goto} from "$app/navigation";
 
+export interface CartDetailsState {
+	guestEmail: string;
+	note: string;
+	staffCheckout: boolean;
+	isPaying: boolean;
+	turnstileToken: string|null;
+	stripePayment: boolean;
+	checkout: CheckoutSmallI|null;
+}
+
 export const cartProducts: ProductOutI[] = $state([]);
-export const cartDetails = $state({
+export const cartDetails: CartDetailsState = $state({
 	guestEmail: '',
 	note: '',
 	staffCheckout: true,
@@ -31,6 +45,7 @@ export const storeProductsInLocalStorage = () => {
  */
 export const retrieveProductsFromLocalStorage = () => {
 	const storageData = window.localStorage.getItem('cartProducts');
+
 	if (!storageData) return;
 	cartProducts.length = 0; // Clear the array, needed for dev mode
 	cartProducts.push(...JSON.parse(storageData));
@@ -57,9 +72,15 @@ export const removeProductFromCart = (index: number) => {
 	storeProductsInLocalStorage();
 }
 
+/**
+ * This functions reduces the quantity of a product
+ * It also checks for the price policy to be the same!
+ * @param product
+ * @param count
+ */
 export const reduceProductQuantity = (product: ProductOutI, count: number = 1) => {
 	// Find all products with same settings
-	const foundIndexes = cartProducts.reduce<number[]>((acc, p, index, _) =>  {
+	const foundIndexes = cartProducts.reduce<number[]>((acc, p, index) =>  {
 		const pricePolicyCheck = p.price_policy !== null && product.price_policy !== null && p.price_policy.id === product.price_policy.id;
 
 		if (p.id === product.id && pricePolicyCheck) {
@@ -78,10 +99,30 @@ export const reduceProductQuantity = (product: ProductOutI, count: number = 1) =
 }
 
 /**
+ * Updates the product metadata form field
+ * @param productIdx index of product in the array list
+ * @param formKey the key of the form field
+ * @param meta the metadata of the form field
+ * @param el the input element
+ */
+export const updateProductMeta = (productIdx: number, formKey: string, meta: ProductFormFieldI, el: HTMLInputElement) => {
+	const formData = cartProducts[productIdx].product_meta.other_meta_data?.form || {};
+	formData[formKey] = {
+		...meta,
+		value: el.value,
+	}
+
+	cartProducts[productIdx].product_meta.other_meta_data.form = formData;
+	storeProductsInLocalStorage();
+}
+
+
+/**
  * Clears the cart
  */
 export const clearCart = () => {
 	cartProducts.length = 0;
+	cartDetails.note = '';
 	storeProductsInLocalStorage();
 }
 
@@ -145,19 +186,18 @@ export const handlePayment = async (data: CartSuccessI) => {
 
 	switch (data.checkout.payment_provider) {
 		case PaymentProviderEnum.Dev:
-			await goToSuccessPage();
+			await goToSuccessPage(data);
 			break;
 
 		case PaymentProviderEnum.Free:
-			await goToSuccessPage();
+			await goToSuccessPage(data);
 			break;
 
 		case PaymentProviderEnum.Kassa:
-			//await goto(data.checkout.payment_url);
+			await goToSuccessPage(data);
 			break;
 
 		case PaymentProviderEnum.Stripe:
-			// @ts-expect-error TODO: fix the types for this
 			cartDetails.checkout = data.checkout;
 			cartDetails.stripePayment = true;
 			break;
@@ -167,13 +207,18 @@ export const handlePayment = async (data: CartSuccessI) => {
 /**
  * Navigates to the correct page after payment
  */
-export const goToSuccessPage = async () => {
+export const goToSuccessPage = async (data: CartSuccessI) => {
 	clearCart();
+
 	// Clear paying status
 	cartDetails.isPaying = false;
 	cartDetails.stripePayment = false;
 	cartDetails.checkout = null;
-	await goto('/shop/confirm?redirect_status=succeeded');
+
+	await goto(
+		`/shop/confirm?redirect_status=succeeded&checkout_uuid=${data.checkout.checkout_uuid}&tracker_id=${data.tracker_id}`,
+		{ replaceState: true, noScroll: false }
+	);
 }
 
 /**
