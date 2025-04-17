@@ -115,6 +115,7 @@
 						<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
 							<a href="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
+							<a href="/account/notification-options" class="nav-dropdown-item" role="menuitem">Notificatie opties</a>
 
 							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
 

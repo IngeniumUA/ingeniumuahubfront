@@ -4,11 +4,11 @@ import type {ShopItemI, ShopItemInI, ShopItemLimitedI} from "$lib/models/item/sh
 import type {PromoItemI, PromoItemInI, PromoItemLimitedI} from "$lib/models/item/promoI";
 import type {CardItemI, CardItemInI} from "$lib/models/item/cardI";
 import type {LinkItemI, LinkItemInI} from "$lib/models/item/linkI";
-import type {NotificationItemI, NotificationItemInI} from "$lib/models/item/hubNotificationItemI";
+import type {NotificationItemI, NotificationItemInI, NotificationItemLimitedI} from "$lib/models/item/hubNotificationItemI";
 
 export interface ItemWideLimitedI {
   item: ItemLimitedI
-  derived_type: EventItemLimitedI | ShopItemLimitedI | PromoItemLimitedI // Notification and link to be added
+  derived_type: EventItemLimitedI | ShopItemLimitedI | PromoItemLimitedI | NotificationItemLimitedI // Notification and link to be added
 }
 
 export interface ItemWideInI {
