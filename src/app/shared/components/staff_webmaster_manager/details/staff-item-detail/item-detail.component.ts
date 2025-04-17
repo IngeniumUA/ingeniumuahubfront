@@ -93,8 +93,16 @@ export class ItemDetailComponent implements OnInit{
     }
 
     if (isNotificationItem(this.item.derived_type)) {
+      let notificationTemplate;
+      try {
+        notificationTemplate = JSON.stringify(this.item.derived_type.notification_template)
+      }
+      catch {
+        notificationTemplate = null;
+      }
+
       this.itemForm.addControl('default_subscription', new FormControl(this.item.derived_type.default_subscription))
-      this.itemForm.addControl('notification_template', new FormControl(this.item.derived_type.notification_template))
+      this.itemForm.addControl('notification_template', new FormControl(notificationTemplate))
     }
     // Promo
     // if (this.isPromoItem) {
@@ -142,7 +150,7 @@ export class ItemDetailComponent implements OnInit{
     if (this.isNotificationItem) {
       if ("notification_topic" in this.item.derived_type) {
         const notificationTemplateControlValue: string | null = this.itemForm.controls['notification_template'].value;
-        const notificationTemplate = notificationTemplateControlValue === null || notificationTemplateControlValue === "" ? null : JSON.stringify(notificationTemplateControlValue);
+        const notificationTemplate = notificationTemplateControlValue === null || notificationTemplateControlValue === "" ? null : JSON.parse(notificationTemplateControlValue);
 
         this.item.derived_type = {
           derived_type_enum: 'notificationitem',
