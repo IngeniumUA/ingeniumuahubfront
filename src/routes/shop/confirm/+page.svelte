@@ -22,11 +22,22 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
       </svg>
     </div>
-    <h1 class="success">Betaling gelukt!</h1>
-    <p>
-      Er is een e-mail verstuurd met een bevestiging <span class="font-bold">Krijg zeker in je spam folder!</span> <br>
-      Niets ontvangen? <a href="/info/contact">Neem dan contact op met ons</a>.
-    </p>
+    <h1 class="success">Betaling gelukt</h1>
+    {#if data.trackerId}
+      <p>
+        Jouw bestellingsnummer is <br>
+        <span class="inline-block text-center text-3xl text-black font-bold rounded-lg px-4 py-2 mt-4 mb-1 border-2 border-gray-300 bg-gray-50 animate-bounce">
+          { data.trackerId }
+        </span>
+      </p>
+
+      <p>Volg het via je telefoon of via ons eigen scherm.</p>
+    {:else}
+      <p>
+        Er is een e-mail verstuurd met een bevestiging <span class="font-bold">Krijg zeker in je spam folder!</span> <br>
+        Niets ontvangen? <a href="/info/contact">Neem dan contact op met ons</a>.
+      </p>
+    {/if}
 
     <a href="/account/transactions" class="button button-outline-blue button-sm mt-4">Alle bestellingen bekijken</a>
   {:else if data.paymentStatus === 'failed'}

@@ -19,7 +19,7 @@
   onMount(async () => {
     try {
       stripe = await loadStripe(PUBLIC_STRIPE_PK_KEY);
-      if (!stripe) return;
+      if (!stripe || !cartDetails.checkout) return;
 
       element = stripe.elements({
         clientSecret: cartDetails.checkout.client_secret,
@@ -44,7 +44,7 @@
         elements: element,
         redirect: 'if_required',
         confirmParams: {
-          return_url: PUBLIC_STRIPE_RETURN_URL,
+          return_url: `${PUBLIC_STRIPE_RETURN_URL}?checkout_uuid=${cartDetails.checkout ? cartDetails.checkout.checkout_uuid : ''}`,
         }
       });
       // Handle the response asynchronously because further API calls might be required to finish payment

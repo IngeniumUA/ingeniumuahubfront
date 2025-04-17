@@ -6,11 +6,21 @@ import {
 import {getAuthorizationHeaders} from "$lib/auth/auth";
 import {PUBLIC_API_URL} from "$env/static/public";
 import {isAuthenticated} from "$lib/states/auth.svelte";
-import type {CartFailedI, CartSuccessI} from "$lib/models/cartI";
+import type { CartFailedI, CartSuccessI, CheckoutSmallI } from '$lib/models/cartI';
 import {goto} from "$app/navigation";
 
+export interface CartDetailsState {
+	guestEmail: string;
+	note: string;
+	staffCheckout: boolean;
+	isPaying: boolean;
+	turnstileToken: string|null;
+	stripePayment: boolean;
+	checkout: CheckoutSmallI|null;
+}
+
 export const cartProducts: ProductOutI[] = $state([]);
-export const cartDetails = $state({
+export const cartDetails: CartDetailsState = $state({
 	guestEmail: '',
 	note: '',
 	staffCheckout: true,
@@ -112,6 +122,7 @@ export const updateProductMeta = (productIdx: number, formKey: string, meta: Pro
  */
 export const clearCart = () => {
 	cartProducts.length = 0;
+	cartDetails.note = '';
 	storeProductsInLocalStorage();
 }
 
@@ -175,19 +186,18 @@ export const handlePayment = async (data: CartSuccessI) => {
 
 	switch (data.checkout.payment_provider) {
 		case PaymentProviderEnum.Dev:
-			await goToSuccessPage();
+			await goToSuccessPage(data);
 			break;
 
 		case PaymentProviderEnum.Free:
-			await goToSuccessPage();
+			await goToSuccessPage(data);
 			break;
 
 		case PaymentProviderEnum.Kassa:
-			//await goto(data.checkout.payment_url);
+			await goToSuccessPage(data);
 			break;
 
 		case PaymentProviderEnum.Stripe:
-			// @ts-expect-error TODO: fix the types for this
 			cartDetails.checkout = data.checkout;
 			cartDetails.stripePayment = true;
 			break;
@@ -197,13 +207,18 @@ export const handlePayment = async (data: CartSuccessI) => {
 /**
  * Navigates to the correct page after payment
  */
-export const goToSuccessPage = async () => {
+export const goToSuccessPage = async (data: CartSuccessI) => {
 	clearCart();
+
 	// Clear paying status
 	cartDetails.isPaying = false;
 	cartDetails.stripePayment = false;
 	cartDetails.checkout = null;
-	await goto('/shop/confirm?redirect_status=succeeded');
+
+	await goto(
+		`/shop/confirm?redirect_status=succeeded&checkout_uuid=${data.checkout.checkout_uuid}&tracker_id=${data.tracker_id}`,
+		{ replaceState: true, noScroll: false }
+	);
 }
 
 /**
