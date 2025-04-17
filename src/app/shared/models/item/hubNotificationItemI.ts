@@ -14,7 +14,7 @@ export interface NotificationItemI {
   derived_type_enum: string
   notification_topic: string
   default_subscription: boolean
-  notification_template: object | null // TODO -> object specified as firebase Message interface type
+  notification_template: string | null // TODO -> object specified as firebase Message interface type
 }
 
 export interface NotificationItemLimitedI {
