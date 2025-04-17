@@ -142,7 +142,7 @@ export class ItemDetailComponent implements OnInit{
     if (this.isNotificationItem) {
       if ("notification_topic" in this.item.derived_type) {
         const notificationTemplateControlValue: string | null = this.itemForm.controls['notification_template'].value;
-        const notificationTemplate = notificationTemplateControlValue === null || notificationTemplateControlValue === "" ? null : notificationTemplateControlValue;
+        const notificationTemplate = notificationTemplateControlValue === null || notificationTemplateControlValue === "" ? null : JSON.stringify(notificationTemplateControlValue);
 
         this.item.derived_type = {
           derived_type_enum: 'notificationitem',
