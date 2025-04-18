@@ -15,6 +15,8 @@ export interface CheckoutI {
 
   checkout_status: PaymentStatusEnum
 
+  readonly checkout_metadata: object
+
   completed_timestamp: string | null
   last_updated_timestamp: string
   created_timestamp: string
