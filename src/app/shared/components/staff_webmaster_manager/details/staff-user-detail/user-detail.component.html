@@ -49,6 +49,10 @@
         <td>{{ userDetail.created_timestamp | date: 'long' }}</td>
       </tr>
       <tr>
+        <th>Notification Token</th>
+        <td>{{ userDetail.notification_token }}</td>
+      </tr>
+      <tr>
         <th>Is Active</th>
         <td>{{ !userDetail.disabled }}</td>
       </tr>

@@ -25,9 +25,11 @@ export interface UserWideI {
   // PRIVATE model for user information, including prefetched groups and account info
 
   user_uuid: string
-  sso_uuid: string | null
+  sso_uuid: string
   first_name: string | null
   last_name: string | null
+
+  notification_token: string | null
 
   email: string
   disabled: boolean
