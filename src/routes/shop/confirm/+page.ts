@@ -1,11 +1,19 @@
 import { handleRequest } from '$lib/utilities/httpUtilities';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import { PUBLIC_API_URL } from '$env/static/public';
+import { cartDetails, clearCart } from '$lib/states/cart.svelte.ts';
 
 export const ssr = false;
 export const prerender = false;
 
 export const load = async ({ url, params, fetch }) => {
+  clearCart();
+
+  // Clear paying status
+  cartDetails.isPaying = false;
+  cartDetails.stripePayment = false;
+  cartDetails.checkout = null;
+
   const paymentStatus = url.searchParams.get('redirect_status');
   if (paymentStatus !== 'succeeded') {
     return {

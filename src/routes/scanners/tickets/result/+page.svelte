@@ -126,7 +126,7 @@
 					AutoValidate(UserId)
 					if (!disableSound) {await playAudio("oneBeep")}
 				}
-				if (doAutoReturn) {
+				if (doAutoReturn && UserNotes === "") {
 					await sleep(returnTime*1000)
 					Back()
 				}
@@ -262,7 +262,7 @@
 					UserGeldigheid = "consumed"
 					imgPath = "/checkmark.png"
 					closeMoreModal()
-					if (doAutoReturn) {
+					if (doAutoReturn && UserNotes === "") {
 						sleep(returnTime*1000)
 						Back()
 					}
@@ -363,7 +363,7 @@
 
 <main class="ingenium-container" id="main-content">
 
-	<div class="absolute inset-y-0 right-0 flex pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ml-3 z-30">
+	<div class="absolute inset-y-0 right-0 flex pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ml-3 z-30 mt-6">
 		<button onclick={()=>{ReturnToHome()}} title="Home"
 			 class="button button-primary button-icon-only relative items-center justify-center button-accessibility-white h-10 z-50" style="margin: 1.12rem">
 			<span class="hidden md:inline">Home</span>
@@ -385,7 +385,7 @@
 		</div>
 	{/if}
 
-	<div class="absolute inset-y-0 left-0 flex pl-2 sm:static sm:inset-auto sm:ml-6 sm:pl-0 ml-3 z-40">
+	<div class="absolute inset-y-0 left-0 flex pl-2 sm:static sm:inset-auto sm:ml-6 sm:pl-0 ml-3 z-40 mt-6">
 		<button onclick={ (e) => OpenMoreModal(e) } disabled="{!isMoreModalEnabled}" title="More"
 						class="button button-primary button-icon-only relative items-center justify-center button-accessibility-white h-10 z-50" style="margin: 1.12rem">
 			<span class="hidden md:inline">More</span>

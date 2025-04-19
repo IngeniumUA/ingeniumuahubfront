@@ -8,7 +8,9 @@
   } from '$lib/utilities/notificationUtilities.ts';
   import { AppStorage } from '$lib/scanners/storage.js';
   import InlineSpinner from '$lib/components/spinners/inline-spinner.svelte';
-  import { setVibration } from '../../../hooks.client.ts';
+  import { notification_token, setVibration } from '../../../hooks.client.ts';
+  import { auth } from '$lib/states/auth.svelte.ts';
+  import { PUBLIC_API_URL } from '$env/static/public';
 
 
   let form_data: any = {}
@@ -75,11 +77,11 @@
   function all_notifications_clicked() {
     if (form_data["disable_notifications"].storedValue) {
       for (let notification of notificationList) {
-        form_data[""+notification.item.id].isDisabled = false
+        form_data[""+notification.item.id].isDisabled = true
       }
     } else {
       for (let notification of notificationList) {
-        form_data[""+notification.item.id].isDisabled = true
+        form_data[""+notification.item.id].isDisabled = false
       }
     }
   }
@@ -105,11 +107,17 @@
     let option: keyof typeof notificationDetails;
     if (form_data["disable_notifications"].storedValue) {
       unsubscribe_from_topic(all_topic)
+      if (auth.user?.email !== undefined) {
+        unlink_user_token(auth.user.email)
+      }
       for (option in notificationDetails) {
         unsubscribe_from_topic(option)
       }
     } else {
       subscribe_to_topic(all_topic)
+      if (auth.user?.email !== undefined) {
+        link_user_token(auth.user.email)
+      }
       for (option in notificationDetails) {
         if (notificationDetails[option]) {
           subscribe_to_topic(option)
@@ -120,6 +128,28 @@
     }
 
     loading = false;
+  }
+
+  function unlink_user_token(email: string) {
+    const payload = {
+      token: null,
+    }
+    return fetch(`${PUBLIC_API_URL}/item/notification/link_user/${email}`, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    }).then(r => r.json())
+  }
+
+  function link_user_token(email: string) {
+    const payload = {
+      token: notification_token,
+    }
+    return fetch(`${PUBLIC_API_URL}/item/notification/link_user/${email}`, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    }).then(r => r.json())
   }
 
   function vibrationChanged() {
@@ -138,18 +168,17 @@
     <div class="p-4">
 
       <div class=" form-field form-field-checkbox flex items-center justify-between border-b py-2">
-        <input id="disable_notifications" type="checkbox"
+        <input id="vibrationSettings" type="checkbox"
                onchange={()=>{vibrationChanged()}}
                bind:checked={vibrationValue}
         >
-        <label for="disable_notifications" class="flex items-center space-x-2">Trillen bij meldingen</label>
+        <label for="vibrationSettings" class="flex items-center space-x-2">Trillen bij meldingen</label>
       </div>
 
       <div class=" form-field form-field-checkbox flex items-center justify-between border-b py-2">
         <input id="disable_notifications" type="checkbox"
                onchange={()=>{all_notifications_clicked()}}
                bind:checked={form_data["disable_notifications"].storedValue}
-               disabled={form_data["disable_notifications"].isDisabled}
         >
         <label for="disable_notifications" class="flex items-center space-x-2">Schakel alle notificaties uit</label>
       </div>

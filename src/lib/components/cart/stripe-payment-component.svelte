@@ -58,35 +58,49 @@
   async function handleStripeResponse(result: PaymentIntentResult|PaymentIntentOrSetupIntentResult) {
     if (!stripe || !cartDetails.checkout) return;
     if (result.error || result.paymentIntent === undefined) {
+      const errorUrl = result.error?.payment_intent?.next_action?.redirect_to_url?.url
+      if (errorUrl && errorUrl.startsWith("http")) {
+        // await Browser.open({url: errorUrl});
+        await processNextAction(result.error)  //On mobile, it is not able to open the return link and errors. This error contains al needed info so we process the next action anyways with this error info.
+        return
+      }
       // Show error to your customer (e.g., insufficient funds)
+      console.log("error: "+JSON.stringify(result))
       alert(result.error?.message || 'Er is iets foutgegaan!');
       blocked = false;
       return;
     }
 
-    switch (result.paymentIntent.status) {
-      case 'succeeded':
-        // Redirect to shop confirm
-        await goToSuccessPage()
-        break;
+    await processNextAction(result)
 
-      case 'requires_action': {
-        // https://docs.stripe.com/js/payment_intents/handle_next_action
-        if (result.paymentIntent.client_secret == null) {
-          alert("Client Secret was invalid!");
-          return;
+  }
+
+  async function processNextAction(result: any) {
+    if (result.paymentIntent && stripe)
+      switch (result.paymentIntent.status) {
+        case 'succeeded':
+          // Redirect to shop confirm
+          await goToSuccessPage()
+          break;
+
+        case 'requires_action': {
+          // https://docs.stripe.com/js/payment_intents/handle_next_action
+          if (result.paymentIntent.client_secret == null) {
+            alert("Client Secret was invalid!");
+            return;
+          }
+
+          // Handle then next action and iteratively handle the response again
+          const response = await stripe.handleNextAction({ clientSecret: result.paymentIntent.client_secret });
+          await handleStripeResponse(response);
+          break;
         }
 
-        // Handle then next action and iteratively handle the response again
-        const response = await stripe.handleNextAction({ clientSecret: result.paymentIntent.client_secret });
-        await handleStripeResponse(response);
-        break;
+        default:
+          // If no status was not handled in previous cases we display error
+          alert('Er is iets foutgegaan!');
       }
 
-      default:
-        // If no status was not handled in previous cases we display error
-        alert('Er is iets foutgegaan!');
-    }
   }
 </script>
 

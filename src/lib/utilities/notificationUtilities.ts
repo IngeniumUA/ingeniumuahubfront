@@ -83,3 +83,9 @@ function removeNull<T>(obj: T | any): T | any {
 	})
 	return obj;
 }
+
+export function updateGetNotifications(updated_value: boolean) {
+	getNotifications = updated_value
+}
+
+export let getNotifications: boolean = true

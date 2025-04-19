@@ -10,6 +10,7 @@
 	import CartList from "$lib/components/cart/cart-list.svelte";
 	import StripePaymentComponent from "$lib/components/cart/stripe-payment-component.svelte";
 	import InsetSpinner from '$lib/components/spinners/inset-spinner.svelte';
+	import { updateGetNotifications } from '$lib/utilities/notificationUtilities.ts';
 
 	let error = $state(false);
 	let errorMsg = $state('');
@@ -18,6 +19,7 @@
 	let turnstileLoaded = $state(false);
 	let turnstileElement;
 	let turnstileWidgetId = '';
+	let getInternalNotifications = $state(true)
 
 	const totalPrice = $derived.by(() => {
 		return cartProducts.reduce((total, product) => {
@@ -75,6 +77,10 @@
 			}
 		}
 	}
+
+	function getNotificationUpdated() {
+		updateGetNotifications(getInternalNotifications)
+	}
 </script>
 
 <svelte:head>
@@ -96,6 +102,11 @@
 					<div class="form-field">
 						<label for="email">E-mailadres</label>
 						<input type="email" id="email" name="email" class="w-full" required bind:value={ cartDetails.guestEmail } />
+					</div>
+
+					<div class="form-field form-field-checkbox">
+						<input id="enableNotificationsCheckbox" type="checkbox" bind:checked={ getInternalNotifications } onchange={()=>getNotificationUpdated()}>
+						<label for="enableNotificationsCheckbox">Ik wil graag notificaties over deze bestelling ontvangen</label>
 					</div>
 
 					<div class="form-field">

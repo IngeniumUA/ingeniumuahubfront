@@ -8,6 +8,8 @@ import {PUBLIC_API_URL} from "$env/static/public";
 import {isAuthenticated} from "$lib/states/auth.svelte";
 import type { CartFailedI, CartSuccessI, CheckoutSmallI } from '$lib/models/cartI';
 import {goto} from "$app/navigation";
+import { getNotifications } from '$lib/utilities/notificationUtilities.ts';
+import { notification_token } from '../../hooks.client.ts';
 
 export interface CartDetailsState {
 	guestEmail: string;
@@ -147,6 +149,13 @@ export const getProductCount = (product: ProductOutI, checkPricePolicy: boolean 
 export const checkoutCart = async () => {
 	Object.assign(failedCart, {});
 
+	let notification_token_cart: string | null
+	if (getNotifications) {
+		notification_token_cart = notification_token
+	} else {
+		notification_token_cart = null
+	}
+
 	try {
 		const auth = isAuthenticated();
 		const data: CartSuccessI = await fetch(`${PUBLIC_API_URL}/cart/checkout?requested_payment_provider=4`, {
@@ -159,6 +168,7 @@ export const checkoutCart = async () => {
 					products: cartProducts,
 					checkout_note: cartDetails.note,
 					user_email: auth ? null : cartDetails.guestEmail,
+					notification_token: notification_token_cart
 				},
 				captcha_token: auth ? null : cartDetails.turnstileToken,
 			}),

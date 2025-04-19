@@ -89,7 +89,7 @@
 <main class="ingenium-container" id="main-content" on:touchstart={handleTouchStart}
 			on:touchend={handleTouchEnd}>
 
-	<div class="absolute inset-y-0 right-0 flex pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ml-3 z-40">
+	<div class="absolute inset-y-0 right-0 flex pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ml-3 z-40 mt-6">
 		<div class="form-field" style="padding: 10px;">
 			<div>
 				<select

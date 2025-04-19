@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { loadStripe } from "@stripe/stripe-js";
-  import {onMount} from "svelte";
   import Header from "$lib/components/layout/header.svelte";
 
   let { data } = $props();

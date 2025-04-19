@@ -113,7 +113,7 @@
 <main class="ingenium-container" id="main-content" on:touchstart={handleTouchStart}
 			on:touchend={handleTouchEnd}>
 
-	<div class="absolute inset-y-0 right-0 flex pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ml-3 z-40">
+	<div class="absolute inset-y-0 right-0 flex pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ml-3 z-40 mt-6">
 		<a href="/scanners" title="Home"
 			 class="button button-primary button-icon-only relative items-center justify-center button-accessibility-white h-10 z-50" style="margin: 1.12rem">
 			<span class="hidden md:inline">Home</span>

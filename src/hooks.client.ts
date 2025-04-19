@@ -20,7 +20,6 @@ Sentry.init({
   tracesSampleRate: 0.5,
 
   // Optional: Initialize Session Replay:
-  integrations: [Sentry.replayIntegration()],
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 
@@ -57,8 +56,6 @@ async function preloadAudio() {
 preloadAudio()
 
 App.addListener('appUrlOpen', async (event) => {
-  console.log('url: ');
-  console.log(event.url)
   if (event.url.startsWith('ingenium://')) {
     await Browser.close(); // Close the in-app browser
     await goto(decodeURI(event.url.replace('ingenium:/', '')))
