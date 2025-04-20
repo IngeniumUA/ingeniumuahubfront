@@ -107,7 +107,6 @@ export class UserTableComponent implements OnInit, AfterViewInit {
 
     const emailQuery = emailControlValue === '' ? null: emailControlValue;
     const uuidQuery = uuidControlValue === '' ? null: uuidControlValue;
-    const userQuery = uuidQuery !== null ? uuidQuery : emailQuery;
 
     const groupsQueries: number[] | null = (groupControlValuesFiltered.length < 0) ? null: groupControlValuesFiltered;
 
@@ -116,10 +115,10 @@ export class UserTableComponent implements OnInit, AfterViewInit {
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Data
-    this.userData$ = this.userService.queryUsers(this.pageIndex * pageSize, pageSize, userQuery, groupsQueries).pipe(first());
+    this.userData$ = this.userService.queryUsers(this.pageIndex * pageSize, pageSize, uuidQuery, groupsQueries, emailQuery).pipe(first());
 
     // Stats
-    this.userStats$ = this.userService.getUserCount(userQuery, groupsQueries).pipe(first());
+    this.userStats$ = this.userService.getUserCount(uuidQuery, groupsQueries, emailQuery).pipe(first());
   }
 
   DownloadData() {
