@@ -20,22 +20,27 @@ export class UserService {
 
   public queryUsers(offset: number = 0, count: number = 50,
                     user: string | null = null,
-                    groups: number[] | null = null
+                    groups: number[] | null = null,
+                    user_email_contains: string | null = null
   ): Observable<UserI[]> {
     const param = {
       offset: offset,
       limit: count,
       user: user,
+      user_email_contains: user_email_contains,
       group: groups
     }
     const params = new URLSearchParams(removeNull(param));
     return this.httpClient.get<UserI[]>(`${this.apiUrl}?${params.toString()}`);
   }
 
-  public getUserCount(user: string | null = null, groups: number[] | null = null
+  public getUserCount(user: string | null = null,
+                      groups: number[] | null = null,
+                      user_email_contains: string | null = null
   ): Observable<number> {
     const param = {
       user: user,
+      user_email_contains: user_email_contains,
       group: groups
     }
     const params = new URLSearchParams(removeNull(param));
