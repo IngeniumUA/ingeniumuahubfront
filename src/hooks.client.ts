@@ -9,6 +9,9 @@ import { notificationToast } from '$lib/components/layout/toasts.ts';
 import { get_all_possible_notifications } from '$lib/utilities/notificationUtilities.ts';
 import { Haptics } from '@capacitor/haptics';
 import { AppStorage } from '$lib/scanners/storage.ts';
+import { doLogin, getTokens } from '$lib/auth/auth.ts';
+import { page } from '$app/state';
+import { Capacitor } from '@capacitor/core';
 
 
 Sentry.init({
@@ -27,6 +30,26 @@ Sentry.init({
 });
 
 export const handleError = Sentry.handleErrorWithSentry();
+
+if (getTokens(null).access_token) {
+  const login = async () => {
+    try {
+      const url = await doLogin({
+        next: page.url.searchParams.get('next') || '/',
+      });
+
+      if (Capacitor.getPlatform() === "web") {
+        window.location.replace(url);
+      } else {
+        await Browser.open({ url: url.href })
+      }
+
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  login()
+}
 
 async function preloadAudio() {
   try{

@@ -11,6 +11,7 @@
   import { PUBLIC_API_URL } from '$env/static/public';
   import { notification_token } from '../../../hooks.client.ts';
   import { AppStorage } from '$lib/scanners/storage.ts';
+  import { get_all_possible_notifications } from '$lib/utilities/notificationUtilities.ts';
 
   let isFailure = $state(false);
   let hasClearMessage = $state(true);
@@ -36,6 +37,7 @@
       storeTokens(tokens);
       auth.user = getUserFromToken(tokens.access_token);
 
+      get_all_possible_notifications()
       const no_notifications = await AppStorage.getWide("notifications_general")
       if(!JSON.parse(no_notifications)) {
         await link_user_token(auth.user.email)
