@@ -27,10 +27,9 @@
                 <ul *ngIf="transaction.purchased_product.product_meta" class="ml-6 list-disc list-inside">
                   <li *ngFor="let meta of transaction.purchased_product.product_meta.other_meta_data | keyvalue">
                     @if (meta.key === 'form') {
-                      @for (form_data_key of Object.keys(JSON.parse($any(meta.value))); track $index) {
-                        @let form_data_value = JSON.parse($any(meta.value))[form_data_key];
-                        <span class="capitalize font-light">{{ form_data_key.split(' ')[0] }}</span>: <span class="font-bold">{{ form_data_value['value'] }}</span>
-                      }
+                      <span class="font-bold">
+                        {{ meta.value | json }}
+                      </span>
                     }
                   </li>
                 </ul>
