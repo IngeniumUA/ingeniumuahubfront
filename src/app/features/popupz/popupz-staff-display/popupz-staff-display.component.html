@@ -28,7 +28,7 @@
                   <li *ngFor="let meta of transaction.purchased_product.product_meta.other_meta_data | keyvalue">
                     @if (meta.key === 'form') {
                       <span class="font-bold">
-                        {{ meta.value | json }}
+                        {{ getNestedValue(meta.value) }}
                       </span>
                     }
                   </li>

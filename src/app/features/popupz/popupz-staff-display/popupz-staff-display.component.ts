@@ -132,6 +132,11 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
     }
   }
 
+  getNestedValue(obj: any): string {
+    const firstKey = Object.keys(obj)[0];
+    return obj[firstKey]?.value ?? '';
+  }
+
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;
   protected readonly Object = Object;
   protected readonly JSON = JSON;
