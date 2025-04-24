@@ -4,7 +4,8 @@ import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from "@ingenium/app/s
 import {HttpClient} from "@angular/common/http";
 import {apiEnviroment} from "@ingenium/environments/environment";
 import {map} from "rxjs/operators";
-import {JsonPipe, KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import {KeyValuePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transaction/hubTransactionI";
@@ -18,7 +19,7 @@ import {TransactionLimitedI} from "@ingenium/app/shared/models/payment/transacti
     KeyValuePipe,
     FormsModule,
     NgClass,
-    JsonPipe
+    TitleCasePipe
   ],
   templateUrl: './popupz-staff-display.component.html',
   styleUrl: './popupz-staff-display.component.scss'
@@ -130,11 +131,6 @@ export class PopupzStaffDisplayComponent implements OnInit, OnDestroy {
       default:
         return 'Onbekende status';
     }
-  }
-
-  getNestedValue(obj: any): string {
-    const firstKey = Object.keys(obj)[0];
-    return obj[firstKey]?.value ?? '';
   }
 
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;
