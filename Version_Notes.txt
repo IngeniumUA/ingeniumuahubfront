@@ -1,10 +1,9 @@
 ﻿////File that specifies all additional needed data for uploading and releasing on app stores////
 
 
-Version = 1.5.3
+Version = 1.5.4
 
 ////update notes in het nederlands////
 VERSION_UPDATES_START
-- Problemen met bestellingen opgelost
-- Login bij opstarten verbeterd
+- Grafisch probleem met inloggen opgelost
 VERSION_UPDATES_END
