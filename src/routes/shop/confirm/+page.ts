@@ -14,7 +14,7 @@ export const load = async ({ url, params, fetch }) => {
   cartDetails.isPaying = false;
   cartDetails.stripePayment = false;
   cartDetails.checkout = null;
-  AppStorage.setWide("was_paying", "false")
+  AppStorage.setWide("was_paying", "-1")
 
   const paymentStatus = url.searchParams.get('redirect_status');
   if (paymentStatus !== 'succeeded') {

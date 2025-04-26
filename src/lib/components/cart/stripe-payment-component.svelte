@@ -18,7 +18,7 @@
   let blocked = $state(false);
 
   onMount(async () => {
-    AppStorage.setWide("was_paying", "true")
+    AppStorage.setWide("was_paying", JSON.stringify(cartDetails.checkout?.checkout_uuid))
     try {
       stripe = await loadStripe(PUBLIC_STRIPE_PK_KEY);
       if (!stripe || !cartDetails.checkout) return;

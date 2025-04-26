@@ -142,11 +142,10 @@ export function setVibration(setValue: boolean) {
 }
 
 async function get_was_paying() {
-  let storedPaying = await AppStorage.getWide("was_paying")
+  const storedPaying = await AppStorage.getWide("was_paying")
   if (storedPaying !== undefined && storedPaying !== null) {
-    storedPaying = JSON.parse(storedPaying)
-    if (storedPaying) {
-      goto(PUBLIC_STRIPE_RETURN_URL)
+    if (storedPaying !== "-1") {
+      goto(PUBLIC_STRIPE_RETURN_URL+"?checkout_uuid="+storedPaying)
     }
   }
 }
