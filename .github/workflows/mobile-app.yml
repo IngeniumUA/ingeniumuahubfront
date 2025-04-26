@@ -187,4 +187,5 @@ jobs:
             --release_notes '{"nl-BE":"'"$RELEASE_NOTES"'"}' \
             --api_key_path ./auth_key.json \
             --submit_for_review \
-            --automatic_release
+            --automatic_release \
+            --disable_precheck
