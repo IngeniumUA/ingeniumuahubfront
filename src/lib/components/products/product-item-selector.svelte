@@ -14,6 +14,16 @@
     return product.price_policy.name;
   });
 
+  let productPrice = $derived.by(() => {
+    if (product.price_policy) {
+      if (product.price_policy.price > 0) {
+        return `€ ${product.price_policy.price}`;
+      }
+      return "Gratis";
+    }
+    return "Onbekend";
+  });
+
   // TODO: This needs some improvement with the input field
   function setValue(val: number) {
     const newValue = Math.min(Math.max(product.max_count, 0), val); // Clamp between 0 and max
@@ -39,9 +49,7 @@
   </p>
 
   {#if product.max_count > 0}
-    {#if product.price_policy.price > 0}
-      <p class="product-price">&euro; { product.price_policy.price }</p>
-    {/if}
+    <p class="product-price">{ productPrice }</p>
 
     <div class="button-quantity-group">
       <button disabled={ count <= 0 } onclick={ () => setValue(count - 1) }>
