@@ -145,7 +145,7 @@ def prepare_update():
         data = versionfile.readlines()
     for i in range(len(data)):
         if data[i].replace(" ", "").startswith("Version="):
-            versioncode = data[i].replace(" ", "").replace("Version=", "")
+            versioncode = data[i].replace(" ", "").replace("Version=", "").replace("\n", "")
             set_version(versioncode)
         if data[i].startswith("ANDROID_VERSION_UPDATES_START"):
             i += 1
