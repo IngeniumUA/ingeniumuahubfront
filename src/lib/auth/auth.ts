@@ -17,14 +17,16 @@ import { Browser } from '@capacitor/browser';
 const ACCESS_TOKEN_COOKIE = 'access_token';
 const ID_TOKEN_COOKIE = 'id_token';
 
-function setCookie(cname: string, cvalue: string, exsec: number) {
+export function setCookie(cname: string, cvalue: string, exsec: number) {
+  if (!browser) {return}
   const d = new Date();
   d.setTime(d.getTime() + (exsec * 1000));
   const expires = "expires="+d.toUTCString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-function getCookie(cname: string) {
+export function getCookie(cname: string) {
+  if (!browser) {return}
   const name = cname + "=";
   const ca = document.cookie.split(';');
   for(let i = 0; i < ca.length; i++) {

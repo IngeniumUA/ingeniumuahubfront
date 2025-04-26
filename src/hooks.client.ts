@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/sveltekit";
-import { PUBLIC_SENTRY_DSN, PUBLIC_SENTRY_ENVIRONMENT } from '$env/static/public';
+import { PUBLIC_SENTRY_DSN, PUBLIC_SENTRY_ENVIRONMENT, PUBLIC_STRIPE_RETURN_URL } from '$env/static/public';
 import { Browser } from '@capacitor/browser';
 import { App } from '@capacitor/app';
 import { goto } from '$app/navigation';
@@ -9,10 +9,8 @@ import { notificationToast } from '$lib/components/layout/toasts.ts';
 import { get_all_possible_notifications } from '$lib/utilities/notificationUtilities.ts';
 import { Haptics } from '@capacitor/haptics';
 import { AppStorage } from '$lib/scanners/storage.ts';
-import { doLogin, getTokens } from '$lib/auth/auth.ts';
-import { page } from '$app/state';
-import { Capacitor } from '@capacitor/core';
-
+import { getCookie, getUserFromToken, setCookie } from '$lib/auth/auth.ts';
+import { auth } from '$lib/states/auth.svelte.ts';
 
 Sentry.init({
   dsn: PUBLIC_SENTRY_DSN,
@@ -31,24 +29,14 @@ Sentry.init({
 
 export const handleError = Sentry.handleErrorWithSentry();
 
-if (getTokens(null).access_token) {
-  const login = async () => {
-    try {
-      const url = await doLogin({
-        next: page.url.searchParams.get('next') || '/',
-      });
-
-      if (Capacitor.getPlatform() === "web") {
-        window.location.replace(url);
-      } else {
-        await Browser.open({ url: url.href })
-      }
-
-    } catch (e) {
-      console.error(e);
-    }
+const token = getCookie('access_token');
+if (token) {
+  try {
+    auth.user = getUserFromToken(token);
+  } catch (e) {
+    setCookie('access_token', "", 0);
+    console.error(e);
   }
-  login()
 }
 
 async function preloadAudio() {
@@ -82,6 +70,12 @@ App.addListener('appUrlOpen', async (event) => {
   if (event.url.startsWith('ingenium://')) {
     await Browser.close(); // Close the in-app browser
     await goto(decodeURI(event.url.replace('ingenium:/', '')))
+  }
+});
+
+Browser.addListener('browserFinished', () => {
+  if (location.pathname === "/auth/login") {
+    goto('/')
   }
 });
 
@@ -146,6 +140,17 @@ PushNotifications.addListener('pushNotificationActionPerformed', (notification: 
 export function setVibration(setValue: boolean) {
   vibration = setValue;
 }
+
+async function get_was_paying() {
+  let storedPaying = await AppStorage.getWide("was_paying")
+  if (storedPaying !== undefined && storedPaying !== null) {
+    storedPaying = JSON.parse(storedPaying)
+    if (storedPaying) {
+      goto(PUBLIC_STRIPE_RETURN_URL)
+    }
+  }
+}
+get_was_paying()
 
 export let vibration = true
 export let notification_token: string = "";

@@ -10,6 +10,7 @@
   import { cartDetails, clearCart } from "$lib/states/cart.svelte";
   import Modal from "$lib/components/layout/modal.svelte";
   import { goToSuccessPage } from "../../states/cart.svelte";
+  import { AppStorage } from '$lib/scanners/storage.ts';
 
   let isOpen = $state(true);
   let element: StripeElements = null!;
@@ -17,6 +18,7 @@
   let blocked = $state(false);
 
   onMount(async () => {
+    AppStorage.setWide("was_paying", "true")
     try {
       stripe = await loadStripe(PUBLIC_STRIPE_PK_KEY);
       if (!stripe || !cartDetails.checkout) return;

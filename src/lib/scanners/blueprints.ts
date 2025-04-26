@@ -24,7 +24,9 @@ export class BlueprintsService {
 				url: PUBLIC_API_URL + "/blueprint?limit=50&offset=0&source_item_id=" + eventDict[selectedEvent],
 				headers: {Authorization: `Bearer ${accessToken}`}
 			}
+			const debugBlueprintsDict = blueprintsDict
 			const response = await CapacitorHttp.get(options);
+			blueprintsDict = debugBlueprintsDict
 
 			if (response.status === 200) {
 				const jsonResponse = await response.data
@@ -40,6 +42,7 @@ export class BlueprintsService {
 					}
 				}
 				blueprintsDict[selectedEvent] = trueDict
+				AppStorage.setStorage("blueprints", blueprintsDict)
 				this.returnMsg = "success"
 			}
 

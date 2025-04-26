@@ -42,23 +42,21 @@
 	let confirmDelete: string = ""
 
 
-	onMount(()=>{
-		setBlueprints()
-
+	onMount(async ()=>{
 		events = Object.keys(eventDict)
 		selectedItem = selectedEvent
 		actualEventSelected = !(selectedItem === "" || selectedItem === 'Alle evenementen');
+		await setBlueprints()
 	})
 
-	function setBlueprints() {
-		blueprintGetter.getBlueprints().then((result) => {
-			if (result === "server_error") {
-				goto('/')
-			} else {
-				eventBlueprints = Object.keys(blueprintsDict[selectedEvent])
-				boxStates = blueprintsDict[selectedEvent]
-			}
-		})
+	async function setBlueprints() {
+		const result = await blueprintGetter.getBlueprints()
+		if (result === "server_error") {
+			goto('/')
+		} else {
+			eventBlueprints = Object.keys(blueprintsDict[selectedEvent])
+			boxStates = blueprintsDict[selectedEvent]
+		}
 	}
 
 	function onItemSelection() {
