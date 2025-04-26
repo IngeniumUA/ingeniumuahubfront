@@ -188,4 +188,5 @@ jobs:
             --api_key_path ./auth_key.json \
             --submit_for_review \
             --automatic_release \
-            --disable_precheck
+            --run_precheck_before_submit false \
+            --precheck_include_in_app_purchases false
