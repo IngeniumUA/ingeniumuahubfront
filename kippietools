@@ -147,22 +147,14 @@ def prepare_update():
         if data[i].replace(" ", "").startswith("Version="):
             versioncode = data[i].replace(" ", "").replace("Version=", "").replace("\n", "")
             set_version(versioncode)
-        if data[i].startswith("ANDROID_VERSION_UPDATES_START"):
+        if data[i].startswith("VERSION_UPDATES_START"):
             i += 1
-            android_update_string = ""
-            while not data[i].startswith("ANDROID_VERSION_UPDATES_END"):
-                android_update_string += data[i]
+            update_string = ""
+            while not data[i].startswith("VERSION_UPDATES_END"):
+                update_string += data[i]
                 i += 1
-            with open("./android_release_notes.txt", "w") as androidfile:
-                androidfile.write(android_update_string)
-        if data[i].startswith("IOS_VERSION_UPDATES_START"):
-            i += 1
-            ios_update_string = ""
-            while not data[i].startswith("IOS_VERSION_UPDATES_END"):
-                ios_update_string += data[i]
-                i += 1
-            with open("./ios_release_notes.txt", "w") as iosfile:
-                iosfile.write(ios_update_string)
+            with open("./release_notes.txt", "w") as updatefile:
+                updatefile.write(update_string)
 
     print("Successfully prepared app for update")
 

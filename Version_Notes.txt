@@ -2,15 +2,8 @@
 
 Version = 1.5.3
 
-////android update notes in het nederlands////
-ANDROID_VERSION_UPDATES_START
+////update notes in het nederlands////
+VERSION_UPDATES_START
 - Problemen met bestellingen opgelost
 - Login bij opstarten verbeterd
-ANDROID_VERSION_UPDATES_END
-
-
-////ios update notes in het engels////
-IOS_VERSION_UPDATES_START
-- Fixed issues with checkouts
-- Improved login on startup
-IOS_VERSION_UPDATES_END
+VERSION_UPDATES_END

@@ -42,8 +42,7 @@ When you alter Version_Notes.txt and push these changes, the app will automatica
 <br>
 In Verion_Notes.txt you will need to:
 - Specify the build version, this will always need to be changed
-- Specify release notes for android in dutch
-- Specify release notes for ios in english
+- Specify release notes in dutch
 
 ## Releasing manually
 The app packages for ios and android get uploaded to the release panels automatically through GitHub actions.

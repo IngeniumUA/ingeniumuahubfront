@@ -12,7 +12,7 @@ PACKAGE_NAME = 'development.com.app.ingeniumua'
 APP_BUNDLE_PATH = './android/app/build/outputs/bundle/release/app-release-signed.aab'
 
 # Path to the app release notes
-RELEASE_NOTES_PATH = './android_release_notes.txt'
+RELEASE_NOTES_PATH = './release_notes.txt'
 
 # Authenticate with the service account
 credentials = service_account.Credentials.from_service_account_file(
@@ -52,7 +52,7 @@ track_request = service.edits().tracks().update(
             'versionCodes': [str(version_code)],
             'status': 'completed',
             'releaseNotes': [{
-                'language': "nl-NL",
+                'language': "nl-BE",
                 'text': release_notes
             }]
         }]
