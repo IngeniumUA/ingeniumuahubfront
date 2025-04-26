@@ -1,7 +1,7 @@
 ﻿on:
   push:
     paths:
-      - 'android/app/build.gradle'  # if version is updated
+      - 'Version_Notes.txt'  # if version is updated
 
 jobs:
   build_android:
@@ -46,6 +46,9 @@ jobs:
 
       - name: set app mode to release
         run: python kippietools setmode -m release
+
+      - name: generate needed release notes and set version
+        run: python kippietools prepare-update
 
       - name: Build app bundle
         run: cd android && ./gradlew bundle
@@ -120,6 +123,11 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10.11"
+
       - name: Install app dependencies
         run: npm install
 
@@ -132,6 +140,9 @@ jobs:
 
       - name: Capacitor sync
         run: npx cap sync
+
+      - name: generate needed release notes and set version
+        run: python kippietools prepare-update
 
       - name: Build project
         run: xcodebuild -workspace './ios/App/App.xcworkspace' -scheme App -destination generic/platform=iOS -archivePath App.xcarchive archive
@@ -146,7 +157,29 @@ jobs:
 #          path: output/
 #          retention-days: 1
 
-      - name: Validate and Upload to apple connect
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1' # Or whatever version works for you
+
+      - name: Install fastlane
+        run: gem install fastlane
+
+      - name: Upload to App Store Connect with Fastlane
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
         run: |
-          xcrun altool --validate-app -t "iOS" -f ./output/App.ipa -u "webmaster@ingeniumua.be" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}"
-          xcrun altool --upload-app -t "iOS" -f ./output/App.ipa -u "webmaster@ingeniumua.be" -p "${{ secrets.APPLE_DEVELOPER_PASSWORD }}"
+          echo "$APP_STORE_CONNECT_API_KEY" > AuthKey.p8
+
+          fastlane deliver \
+            --ipa "./output/App.ipa" \
+            --skip_screenshots \
+            --skip_metadata \
+            --release_notes "$(cat ./ios_release_notes.txt)" \
+            --api_key_path AuthKey.p8 \
+            --api_key_id $APP_STORE_CONNECT_API_KEY_ID \
+            --issuer_id $APP_STORE_CONNECT_API_ISSUER_ID \
+            --submit_for_review \
+            --automatic_release

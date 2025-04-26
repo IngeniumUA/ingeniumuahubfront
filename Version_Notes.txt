@@ -1,0 +1,16 @@
+﻿////File that specifies all additional needed data for uploading and releasing on app stores////
+
+Version = 1.5.3
+
+////android update notes in het nederlands////
+ANDROID_VERSION_UPDATES_START
+problemen met bestellingen opgelost
+login bij opstarten verbeterd
+ANDROID_VERSION_UPDATES_END
+
+
+////ios update notes in het engels////
+IOS_VERSION_UPDATES_START
+fixed issues with checkouts
+improved login on startup
+IOS_VERSION_UPDATES_END

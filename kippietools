@@ -19,46 +19,7 @@ def replace_android_url_name(filename: str, app_name: str, app_url: str):
         for line in data:
             buildfile.write(line)
 
-
-click.rich_click.OPTION_GROUPS = {
-    "kippietools setversion": [
-        {
-            "name": "Set Version number",
-            "options": ["--version"],
-        },
-    ],
-    "kippietools getversion": [
-            {
-                "name": "Get Version number",
-            },
-        ],
-    "kippietools setmode": [
-        {
-            "name": "Set the mode of the app between notificationtest and release",
-            "options": ["--mode"],
-        }
-    ]
-}
-click.rich_click.COMMAND_GROUPS = {
-    "kippietools": [
-        {
-            "name": "Main usage",
-            "commands": ["setversion", "getversion", "setmode"],
-        },
-    ]
-}
-@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
-
-def cli():
-    """
-    This tool is can be used to set the version number of the app.
-    It can also set the app to the notification test url and back to the release url. This only works for android.
-    """
-
-@cli.command()
-@click.option("--version", "-v", required=True, help="The version that the app gets set to")
-def setversion(version):
-    """Set the app version."""
+def set_version(version):
     with open("./android/app/build.gradle", "r") as buildfile:
         data = buildfile.readlines()
 
@@ -84,6 +45,54 @@ def setversion(version):
     with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
         for line in data:
             buildfile.write(line)
+
+
+click.rich_click.OPTION_GROUPS = {
+    "kippietools setversion": [
+        {
+            "name": "Set Version number",
+            "options": ["--version"],
+        },
+    ],
+    "kippietools getversion": [
+            {
+                "name": "Get Version number",
+            },
+        ],
+    "kippietools setmode": [
+        {
+            "name": "Set the mode of the app between notificationtest and release",
+            "options": ["--mode"],
+        }
+    ],
+    "kippietools prepare-update": [
+        {
+            "name": "create the release notes files, set mode and version",
+            "options": [],
+        }
+    ]
+}
+click.rich_click.COMMAND_GROUPS = {
+    "kippietools": [
+        {
+            "name": "Main usage",
+            "commands": ["setversion", "getversion", "setmode", "prepare-update"],
+        },
+    ]
+}
+@click.group(context_settings=dict(help_option_names=["-h", "--help"]))
+
+def cli():
+    """
+    This tool is can be used to set the version number of the app.
+    It can also set the app to the notification test url and back to the release url. This only works for android.
+    """
+
+@cli.command()
+@click.option("--version", "-v", required=True, help="The version that the app gets set to")
+def setversion(version):
+    """Set the app version."""
+    set_version(version)
 
     print("Successfully set version to " + version)
 
@@ -128,6 +137,34 @@ def setmode(mode):
     replace_android_url_name(filename="./android/app/src/main/res/values/strings.xml", app_name=app_name, app_url=app_url)
 
     print("Successfully set android app mode to " + mode)
+
+@cli.command()
+def prepare_update():
+    """Generate the needed version notes txt files and set the verion"""
+    with open("./Version_Notes.txt", "r") as versionfile:
+        data = versionfile.readlines()
+    for i in range(len(data)):
+        if data[i].replace(" ", "").startswith("Version="):
+            versioncode = data[i].replace(" ", "").replace("Version=", "")
+            set_version(versioncode)
+        if data[i].startswith("ANDROID_VERSION_UPDATES_START"):
+            i += 1
+            android_update_string = ""
+            while not data[i].startswith("ANDROID_VERSION_UPDATES_END"):
+                android_update_string += data[i]
+                i += 1
+            with open("./android_release_notes.txt", "w") as androidfile:
+                androidfile.write(android_update_string)
+        if data[i].startswith("IOS_VERSION_UPDATES_START"):
+            i += 1
+            ios_update_string = ""
+            while not data[i].startswith("IOS_VERSION_UPDATES_END"):
+                ios_update_string += data[i]
+                i += 1
+            with open("./ios_release_notes.txt", "w") as iosfile:
+                iosfile.write(ios_update_string)
+
+    print("Successfully prepared app for update")
 
 if __name__ == "__main__":
     cli()

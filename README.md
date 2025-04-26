@@ -34,9 +34,18 @@ run `python kippietools setversion -v {version code like 1.1.1}`. Version code s
 ### Setting url of the app to switch between notification testing and release.
 run `python kippietools setmode -m {release or notificationtest}`. This only affects the android build of the app.
 
-# Releasing to stores
-When you set the version using kippietools and push the changes, a github action will trigger that builds and uploads the app to the play console and apple developer platforms.
+### Generating release notes and set verion from Version_Notes.txt
+run `python kippietools prepare-update`. This is primarily a function for github ci/cd but can be run without issues.
 
+# Releasing to stores
+When you alter Version_Notes.txt and push these changes, the app will automatically be released to the stores.
+<br>
+In Verion_Notes.txt you will need to:
+- Specify the build version, this will always need to be changed
+- Specify release notes for android in dutch
+- Specify release notes for ios in english
+
+## Releasing manually
 The app packages for ios and android get uploaded to the release panels automatically through GitHub actions.
 <br><br>
 To release for ios:
