@@ -179,12 +179,12 @@ jobs:
 
       - name: Upload to App Store with Dutch release notes
         run: |
-          RELEASE_NOTES=$(cat ./release_notes.txt | sed ':a;N;$!ba;s/\n/\\n/g')
+          RELEASE_NOTES=$(awk '{printf "%s\\n", $0}' ./release_notes.txt)
           fastlane deliver \
             --ipa "./output/App.ipa" \
             --skip_screenshots \
             --skip_metadata \
-            --release_notes "{\"nl-BE\":\"$RELEASE_NOTES\"}" \
+            --release_notes '{"nl-BE":"'"$RELEASE_NOTES"'"}' \
             --api_key_path ./auth_key.json \
             --submit_for_review \
             --automatic_release
