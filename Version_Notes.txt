@@ -1,5 +1,6 @@
 ﻿////File that specifies all additional needed data for uploading and releasing on app stores////
 
+
 Version = 1.5.3
 
 ////android update notes in het nederlands////

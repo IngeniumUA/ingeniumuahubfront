@@ -168,21 +168,22 @@ jobs:
       - name: Install fastlane
         run: gem install fastlane
 
-      - name: Upload to App Store Connect with Fastlane
-        env:
-          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+      - name: Write App Store Connect API key JSON
         run: |
-          echo "$APP_STORE_CONNECT_API_KEY" > AuthKey.p8
+          echo '{
+            "key_id": "${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}",
+            "issuer_id": "${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}",
+            "key": "${{ secrets.APP_STORE_CONNECT_API_KEY }}",
+            "in_house": false
+          }' > ./auth_key.json
 
+      - name: Upload to App Store with release notes
+        run: |
           fastlane deliver \
             --ipa "./output/App.ipa" \
             --skip_screenshots \
             --skip_metadata \
-            --release_notes "$(cat ./ios_release_notes.txt)" \
-            --api_key_path AuthKey.p8 \
-            --api_key_id $APP_STORE_CONNECT_API_KEY_ID \
-            --issuer_id $APP_STORE_CONNECT_API_ISSUER_ID \
+            --release_notes "$(cat ./release_notes.txt)" \
+            --api_key_path ./auth_key.json \
             --submit_for_review \
             --automatic_release
