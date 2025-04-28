@@ -188,6 +188,7 @@ jobs:
             --ipa "./output/App.ipa" \
             --skip_screenshots \
             --api_key_path ./auth_key.json \
+            --force \
             --submit_for_review \
             --automatic_release \
             --run_precheck_before_submit false \
