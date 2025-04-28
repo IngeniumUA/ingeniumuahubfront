@@ -66,8 +66,8 @@ jobs:
           echo "${{ secrets.PLAY_SERVICE_ACCOUNT }}" > ./ingeniumuahub-play-console.json.base64
           base64 -d ./ingeniumuahub-play-console.json.base64 > ./ingeniumuahub-play-console.json
 
-      - name: upload the bundle to the play console
-        run: python upload_android_bundle.py
+#      - name: upload the bundle to the play console
+#        run: python upload_android_bundle.py
 
   #      - name: Upload release bundle
   #        uses: actions/upload-artifact@v4
@@ -179,7 +179,7 @@ jobs:
 
       - name: Prepare metadata
         run: |
-          mkdir -p fastlane/metadata/nl-BE
+          mkdir -p fastlane/metadata/nl-NL
           cp release_notes.txt fastlane/metadata/nl-BE/release_notes.txt
 
       - name: Upload to App Store with Fastlane
