@@ -14,10 +14,14 @@ export class CheckoutTrackerService {
 
   apiUrl = apiEnviroment.apiUrl + 'checkout/tracker';
 
+  public printTracker(checkout_tracker_id: number) {
+    return this.httpClient.post<boolean>(`${this.apiUrl}/print/${checkout_tracker_id}`, {})
+  }
+
   public getTrackerCount(item: string | number | null = null,
                          tracker_status: string | number | null = null,
                          checkout_tracker_id: number | null = null,
-                         disabled: boolean | string = false): Observable<number> {
+                         disabled: boolean | null = false): Observable<number> {
     /**
      * Fetches HubCheckoutTracker objects
      * @param item can both be item_name and item_id
@@ -28,8 +32,8 @@ export class CheckoutTrackerService {
     const param = {
       item: item,
       checkout_tracker_id: checkout_tracker_id,
-      tracker_status: tracker_status,
-      disabled: disabled
+      checkout_tracker_status: tracker_status,
+      disabled: disabled === null ? "None" : disabled,  // Translate to "None" for parsing
     }
     const params = new URLSearchParams(removeNull(param));
     return this.httpClient.get<number>(`${this.apiUrl}/count?${params.toString()}`)
@@ -39,7 +43,7 @@ export class CheckoutTrackerService {
                      item: string | number | null = null,
                      tracker_status: string | number | null = null,
                      checkout_tracker_id: number | null = null,
-                     disabled: boolean | string = false): Observable<HubCheckoutTrackerI[]> {
+                     disabled: boolean | null = false): Observable<HubCheckoutTrackerI[]> {
     /**
      * Fetches HubCheckoutTracker objects
      * @param item can both be item_name and item_uuid
@@ -52,8 +56,8 @@ export class CheckoutTrackerService {
       limit: count,
       item: item,
       checkout_tracker_id: checkout_tracker_id,
-      tracker_status: tracker_status,
-      disabled: disabled,
+      checkout_tracker_status: tracker_status,
+      disabled: disabled === null ? "None" : disabled,  // Translate to "None" for parsing
       salt: (new Date()).getTime()  // Salt was required before -> to be tested without salt
     }
     const params = new URLSearchParams(removeNull(param));
