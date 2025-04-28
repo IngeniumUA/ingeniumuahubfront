@@ -9,6 +9,13 @@ export enum HubCheckoutTrackerStatusEnum {
   All = 10,
 }
 
+export const CheckoutTrackerStatusList = [
+  HubCheckoutTrackerStatusEnum.Pending,
+  HubCheckoutTrackerStatusEnum.Finished,
+  HubCheckoutTrackerStatusEnum.Ready,
+  HubCheckoutTrackerStatusEnum.All
+]
+
 export interface HubCheckoutTrackerI {
   id: number,
   checkout: CheckoutI

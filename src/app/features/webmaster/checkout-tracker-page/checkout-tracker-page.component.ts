@@ -12,8 +12,12 @@ import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {debounceTime, delay, Observable, of} from "rxjs";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CheckoutTrackerService} from "@ingenium/app/core/services/coreAPI/checkoutTracker.service";
-import {HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum} from "@ingenium/app/shared/models/tracker";
-import {AsyncPipe, DatePipe, NgIf, TitleCasePipe} from "@angular/common";
+import {
+  CheckoutTrackerStatusList,
+  HubCheckoutTrackerI,
+  HubCheckoutTrackerStatusEnum
+} from "@ingenium/app/shared/models/tracker";
+import {AsyncPipe, DatePipe, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
 import {
   MatCell,
   MatCellDef,
@@ -25,6 +29,8 @@ import {
 } from "@angular/material/table";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {RouterLink} from "@angular/router";
+import {ValidityEnum} from "@ingenium/app/shared/models/payment/transaction/validityEnum";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-checkout-tracker-page',
@@ -47,18 +53,21 @@ import {RouterLink} from "@angular/router";
     ReactiveFormsModule,
     TitleCasePipe,
     RouterLink,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    NgForOf
   ],
   templateUrl: './checkout-tracker-page.component.html',
   styleUrl: './checkout-tracker-page.component.scss'
 })
 export class CheckoutTrackerPageComponent implements OnInit, OnChanges, AfterViewInit {
-  constructor(private checkoutTrackerService: CheckoutTrackerService) {
+  constructor(private checkoutTrackerService: CheckoutTrackerService,
+              private toastrService: ToastrService,) {
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   @Input() itemId: number | null = null;
+
+  printing: boolean = false;
 
   checkoutTrackers$: Observable<HubCheckoutTrackerI[]> = of([]);
   checkoutTrackerCount$: Observable<number> = of(0);
@@ -68,7 +77,21 @@ export class CheckoutTrackerPageComponent implements OnInit, OnChanges, AfterVie
   searchForm = new FormGroup({
     trackerStatusControl: new FormControl(HubCheckoutTrackerStatusEnum.All),
     checkoutTrackerIdControl: new FormControl(null),
+    disabledControl: new FormControl(null),
   });
+
+  printCheckoutTracker(checkoutTrackerId: number) {
+    this.printing = true;
+
+    this.checkoutTrackerService.printTracker(checkoutTrackerId).subscribe((_) => {
+        this.toastrService.success('Printing!');
+        this.printing = false;
+      },
+      (error: Error) => {
+        this.toastrService.error(`Failed to print: ${error.message}`);
+        this.printing = false;
+      });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     const loadData: SimpleChange = changes['loadDataEvent'];
@@ -80,7 +103,7 @@ export class CheckoutTrackerPageComponent implements OnInit, OnChanges, AfterVie
   }
 
   GetDisplayedColumns(): string[] {
-    return ['checkout_tracker_id', 'checkout', 'checkout_tracker_status', 'disabled', 'last_updated_timestamp', 'created_timestamp'];
+    return ['print', 'checkout_tracker_id', 'checkout', 'checkout_tracker_status', 'disabled', 'last_updated_timestamp', 'created_timestamp'];
   }
 
   ngOnInit() {
@@ -113,6 +136,7 @@ export class CheckoutTrackerPageComponent implements OnInit, OnChanges, AfterVie
     // Form parsing
     const trackerStatusControlValue = this.searchForm.get('trackerStatusControl')!.value;
     const checkoutTrackerIdControlValue = this.searchForm.get('checkoutTrackerIdControl')!.value;
+    const disabledControlValue = this.searchForm.get('disabledControl')!.value;
 
     const trackerStatusQuery = trackerStatusControlValue === HubCheckoutTrackerStatusEnum.All ? null: trackerStatusControlValue;
     const checkoutTrackerIdQuery = checkoutTrackerIdControlValue === '' || checkoutTrackerIdControlValue === null ? null: parseInt(checkoutTrackerIdControlValue);
@@ -122,10 +146,13 @@ export class CheckoutTrackerPageComponent implements OnInit, OnChanges, AfterVie
     const pageSize = pageEvent === null ? 100: pageEvent.pageSize;
 
     // Query
+    console.log(trackerStatusQuery);
     this.checkoutTrackers$ = this.checkoutTrackerService.getTrackers(this.pageIndex * pageSize, pageSize,
-      this.itemId, trackerStatusQuery, checkoutTrackerIdQuery, "None");
-    this.checkoutTrackerCount$ = this.checkoutTrackerService.getTrackerCount(this.itemId, trackerStatusQuery, checkoutTrackerIdQuery, "None");
+      this.itemId, trackerStatusQuery, checkoutTrackerIdQuery, disabledControlValue);
+    this.checkoutTrackerCount$ = this.checkoutTrackerService.getTrackerCount(this.itemId, trackerStatusQuery, checkoutTrackerIdQuery, disabledControlValue);
   }
 
   protected readonly HubCheckoutTrackerStatusEnum = HubCheckoutTrackerStatusEnum;
+  protected readonly ValidityEnum = ValidityEnum;
+  protected readonly CheckoutTrackerStatusList = CheckoutTrackerStatusList;
 }

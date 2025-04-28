@@ -27,16 +27,20 @@
                 <ul *ngIf="transaction.purchased_product.product_meta" class="ml-6 list-disc list-inside">
                   <li *ngFor="let meta of transaction.purchased_product.product_meta.other_meta_data | keyvalue">
                     @if (meta.key === 'form') {
-                      <span class="font-bold">
-                        {{ getNestedValue(meta.value) }}
-                      </span>
+                      @for (form_field_key of Object.keys(meta.value); track $index) {
+                        <span class="capitalize font-light">{{ form_field_key }}</span>:
+                        <span class="font-bold">{{ meta.value[form_field_key].value ?? "" }}
+                        </span>
+                      }
+
                     }
                   </li>
                 </ul>
               </li>
-              <span>{{ transaction.interaction.user_email }}</span>
             }
           }
+          <span>{{ order.checkout.user_email }}<br>{{ order.checkout.user_first_name | titlecase }} {{ order.checkout.user_last_name | titlecase }}
+          </span>
         </ul>
         @if (order.checkout.note !== null && order.checkout.note !== '') {
           <span class="text-sm underline">Opmerking:</span>
