@@ -11,6 +11,8 @@ import { Haptics } from '@capacitor/haptics';
 import { AppStorage } from '$lib/scanners/storage.ts';
 import { getCookie, getUserFromToken, setCookie } from '$lib/auth/auth.ts';
 import { auth } from '$lib/states/auth.svelte.ts';
+import { Capacitor } from '@capacitor/core';
+import { browser } from '$app/environment';
 
 Sentry.init({
   dsn: PUBLIC_SENTRY_DSN,
@@ -39,39 +41,38 @@ if (token) {
   }
 }
 
-async function preloadAudio() {
-  try{
-    const path = 'sounds/'
-    await NativeAudio.preload({
-      assetId: "oneBeep",
-      assetPath: path + "scansound_one_beep.wav",
-      audioChannelNum: 1,
-      isUrl: false
-    })
-    await NativeAudio.preload({
-      assetId: "twoBeep",
-      assetPath: path + "scansound_two_beeps.wav",
-      audioChannelNum: 1,
-      isUrl: false
-    })
-    await NativeAudio.preload({
-      assetId: "longBeep",
-      assetPath: path + "scansound_long_beep.wav",
-      audioChannelNum: 1,
-      isUrl: false
-    })
-  } catch (e) {
-    console.log(e)
-  }
+function preloadAudio() {
+  if (Capacitor.getPlatform() === "web") {return}
+  const path = 'sounds/'
+  NativeAudio.preload({
+    assetId: "oneBeep",
+    assetPath: path + "scansound_one_beep.wav",
+    audioChannelNum: 1,
+    isUrl: false
+  })
+  NativeAudio.preload({
+    assetId: "twoBeep",
+    assetPath: path + "scansound_two_beeps.wav",
+    audioChannelNum: 1,
+    isUrl: false
+  })
+  NativeAudio.preload({
+    assetId: "longBeep",
+    assetPath: path + "scansound_long_beep.wav",
+    audioChannelNum: 1,
+    isUrl: false
+  })
 }
 preloadAudio()
 
-App.addListener('appUrlOpen', async (event) => {
-  if (event.url.startsWith('ingenium://')) {
-    await Browser.close(); // Close the in-app browser
-    await goto(decodeURI(event.url.replace('ingenium:/', '')))
-  }
-});
+if (browser) {
+  App.addListener('appUrlOpen', async (event) => {
+    if (event.url.startsWith('ingenium://')) {
+      await Browser.close(); // Close the in-app browser
+      await goto(decodeURI(event.url.replace('ingenium:/', '')))
+    }
+  });
+}
 
 Browser.addListener('browserFinished', () => {
   if (location.pathname === "/auth/login") {
@@ -80,26 +81,26 @@ Browser.addListener('browserFinished', () => {
 });
 
 
-PushNotifications.requestPermissions().then((result) => {
+if (Capacitor.getPlatform() !== "web") {PushNotifications.requestPermissions().then((result) => {
   if (result.receive === 'granted') {
     // Register with Apple / Google to receive push via APNS/FCM
     PushNotifications.register();
   } else {
     // Show some error
   }
-});
+});}
 
 // On success, we should be able to receive notifications
-PushNotifications.addListener('registration', (token: Token) => {
+if (Capacitor.getPlatform() !== "web") {PushNotifications.addListener('registration', (token: Token) => {
   console.log('Push registration success, token: ' + token.value);
   notification_token = token.value;
   get_all_possible_notifications()
-});
+});}
 
 // Some issue with our setup and push will not work
-PushNotifications.addListener('registrationError', (error) => {
+if (Capacitor.getPlatform() !== "web") {PushNotifications.addListener('registrationError', (error) => {
   console.log('Error on registration: ' + JSON.stringify(error));
-});
+});}
 
 
 async function get_vibrations() {
@@ -110,8 +111,9 @@ async function get_vibrations() {
   }
 }
 get_vibrations()
+
 // Show us the notification payload if the app is open on our device
-PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+if (Capacitor.getPlatform() !== "web") {PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
   console.log('Push received: ' + JSON.stringify(notification));
 
   const notification_toast = "" +
@@ -125,17 +127,17 @@ PushNotifications.addListener('pushNotificationReceived', (notification: PushNot
   if (vibration) {
     Haptics.vibrate({duration: 700})
   }
-});
+});}
 
 // Method called when tapping on a notification
-PushNotifications.addListener('pushNotificationActionPerformed', (notification: ActionPerformed) => {
+if (Capacitor.getPlatform() !== "web") {PushNotifications.addListener('pushNotificationActionPerformed', (notification: ActionPerformed) => {
   console.log('Push action performed: ' + JSON.stringify(notification));
   if (notification.notification.data && notification.notification.data.path) {
     goto(notification.notification.data.path)
   } else {
     goto("/events")
   }
-});
+});}
 
 export function setVibration(setValue: boolean) {
   vibration = setValue;
