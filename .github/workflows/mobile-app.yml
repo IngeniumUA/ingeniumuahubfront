@@ -180,7 +180,7 @@ jobs:
       - name: Prepare metadata
         run: |
           mkdir -p fastlane/metadata/nl-NL
-          cp release_notes.txt fastlane/metadata/nl-BE/release_notes.txt
+          cp release_notes.txt fastlane/metadata/nl-NL/release_notes.txt
 
       - name: Upload to App Store with Fastlane
         run: |
