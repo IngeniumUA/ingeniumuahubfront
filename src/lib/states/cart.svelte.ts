@@ -23,7 +23,7 @@ export const cartProducts: ProductOutI[] = $state([]);
 export const cartDetails: CartDetailsState = $state({
 	guestEmail: '',
 	note: '',
-	staffCheckout: true,
+	staffCheckout: false,
 	isPaying: false,
 	turnstileToken: null,
 	stripePayment: false,
