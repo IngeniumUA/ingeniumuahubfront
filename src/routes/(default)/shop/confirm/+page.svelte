@@ -1,9 +1,17 @@
 <script lang="ts">
-  import { loadStripe } from "@stripe/stripe-js";
   import {onMount} from "svelte";
   import Header from "$lib/components/layout/header.svelte";
+  import { PUBLIC_API_URL } from '$env/static/public';
 
   let { data } = $props();
+
+  onMount(() => {
+    if (data.trackerId) {
+      const sseEvent = new EventSource(`${PUBLIC_API_URL}/api/v1/trackers/${data.trackerId}/events`, {
+        withCredentials: true,
+      });
+    }
+  });
 </script>
 
 <svelte:head>
