@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { page } from '$app/state';
+
 	import '../assets/scss/styles.scss';
 	import opengraphImg from '$assets/images/opengraph_galabal.webp';
 
@@ -24,7 +26,7 @@
 		retrieveProductsFromLocalStorage();
 	}
 
-	
+	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -35,10 +37,11 @@
 	{/if}
 </svelte:head>
 
+
 <GlobalPageSpinner />
-<div id="wrapper">
-	{@render children()}
-</div>
+
+{@render children()}
+
 <Footer serverHostname={ data.serverHostname } enabled={data.footerEnabled} />
 
 <SvelteToast />

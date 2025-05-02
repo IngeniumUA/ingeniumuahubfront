@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from "$app/state";
 	import { browser } from "$app/environment";
 	import { PUBLIC_CLOUDFLARE_TURNSTILE } from "$env/static/public";
@@ -77,6 +78,13 @@
 			}
 		}
 	}
+
+	// On mount check if the user has permission to use a kassa payment
+	onMount(() => {
+		if (isAuthenticated() && hasRole('staff')) {
+			cartDetails.staffCheckout = true;
+		}
+	});
 
 	function getNotificationUpdated() {
 		updateGetNotifications(getInternalNotifications)
