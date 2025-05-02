@@ -5,8 +5,11 @@ import { handleRequest } from '$lib/utilities/httpUtilities';
 import { browser } from '$app/environment';
 
 export const load = async ({ params, url }) => {
+  let url_path_param = url.searchParams.get("path")
+  if (url_path_param === null) {url_path_param = ""}
+  const total_url = url.pathname + "?path=" + encodeURI(url_path_param)
   if (!hasValidToken(params)) {
-    redirect(307, getLoginUrlWithRedirect(url.pathname));
+    redirect(307, getLoginUrlWithRedirect(total_url));
   }
   const cloud_sas: string = await fetch(
     `${PUBLIC_API_URL}/file/sas_cloud_token`,
