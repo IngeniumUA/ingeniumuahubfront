@@ -1,28 +1,11 @@
 <script lang="ts">
-	import '../assets/scss/styles.scss';
-	import opengraphImg from '$assets/images/opengraph_galabal.webp';
-
-	import { browser } from '$app/environment';
 	import { page } from '$app/state';
 
-	import { retrieveProductsFromLocalStorage } from "$lib/states/cart.svelte";
-	import Footer from '$lib/components/layout/footer.svelte';
+	import '../assets/scss/styles.scss';
+	import opengraphImg from '$assets/images/opengraph_galabal.webp';
 	import GlobalPageSpinner from '$lib/components/spinners/global-page-spinner.svelte';
-	import { auth } from '$lib/states/auth.svelte';
-	import { setContext } from 'svelte';
 
-	let { children, data } = $props();
-
-	if (page.route.id !== '/auth/logout') {
-		setContext()
-		auth.user = data.user;
-	}
-
-	if (browser) {
-		retrieveProductsFromLocalStorage();
-	}
-
-	
+	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -33,9 +16,6 @@
 	{/if}
 </svelte:head>
 
-<GlobalPageSpinner />
-<div id="wrapper">
-	{@render children()}
-</div>
-<Footer serverHostname={ data.serverHostname } />
 
+<GlobalPageSpinner />
+{@render children()}

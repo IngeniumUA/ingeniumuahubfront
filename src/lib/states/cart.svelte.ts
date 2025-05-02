@@ -23,7 +23,7 @@ export const cartProducts: ProductOutI[] = $state([]);
 export const cartDetails: CartDetailsState = $state({
 	guestEmail: '',
 	note: '',
-	staffCheckout: true,
+	staffCheckout: false,
 	isPaying: false,
 	turnstileToken: null,
 	stripePayment: false,
@@ -146,10 +146,11 @@ export const getProductCount = (product: ProductOutI, checkPricePolicy: boolean 
  */
 export const checkoutCart = async () => {
 	Object.assign(failedCart, {});
+	const paymentProvider = cartDetails.staffCheckout ? PaymentProviderEnum.Kassa : PaymentProviderEnum.Stripe;
 
 	try {
 		const auth = isAuthenticated();
-		const data: CartSuccessI = await fetch(`${PUBLIC_API_URL}/cart/checkout?requested_payment_provider=4`, {
+		const data: CartSuccessI = await fetch(`${PUBLIC_API_URL}/cart/checkout?requested_payment_provider=${paymentProvider}`, {
 			method: 'POST',
 			headers: getAuthorizationHeaders(null, {
 				'Content-Type': 'application/json',

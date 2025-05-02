@@ -14,3 +14,8 @@ export interface HubCheckoutTrackerI {
   checkout: CheckoutI
   checkout_tracker_status: HubCheckoutTrackerStatusEnum
 }
+
+export interface PublicOrderTrackerI {
+  id: number;
+  checkout_tracker_status: HubCheckoutTrackerStatusEnum,
+}
