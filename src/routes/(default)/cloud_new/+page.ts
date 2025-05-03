@@ -3,6 +3,7 @@ import { redirect } from "@sveltejs/kit";
 import { PUBLIC_API_URL } from '$env/static/public';
 import { handleRequest } from '$lib/utilities/httpUtilities';
 import { browser } from '$app/environment';
+import Cookies from 'js-cookie';
 
 export const load = async ({ params, url }) => {
   let url_path_param = url.searchParams.get("path")
@@ -11,30 +12,44 @@ export const load = async ({ params, url }) => {
   if (!hasValidToken(params)) {
     redirect(307, getLoginUrlWithRedirect(total_url));
   }
-  const cloud_sas: string = await fetch(
-    `${PUBLIC_API_URL}/file/sas_cloud_token`,
-    {
-      method: 'GET',
-      headers: getAuthorizationHeaders(params),
-    }
-  ).then(handleRequest);
+
+  let cloud_sas: string | undefined = Cookies.get("sas_cloud_token")
+  if (!cloud_sas) {
+    cloud_sas = await fetch(
+      `${PUBLIC_API_URL}/file/sas_cloud_token`,
+      {
+        method: 'GET',
+        headers: getAuthorizationHeaders(params),
+      }
+    ).then(handleRequest) as string;
+    Cookies.set("sas_cloud_token", cloud_sas, { expires: Date.now() + 86300000 });
+  }
 
   async function get_file_list() {
     if (!browser) return;
+
+    const allFiles: any[] = [];
+    let nextMarker = "";
+
     try {
-      const filelist = await fetch(
-        `https://ingeniumuacloud.blob.core.windows.net/cloud?${cloud_sas}&restype=container&comp=list`,
-        { method: 'GET' }
-      )
+      do {
+        const url = `https://ingeniumuacloud.blob.core.windows.net/cloud?${cloud_sas}&restype=container&comp=list${nextMarker ? `&marker=${encodeURIComponent(nextMarker)}` : ''}`;
 
-      const xmlText = await filelist.text();
+        const res = await fetch(url, { method: 'GET' });
+        const xmlText = await res.text();
 
-      if (!filelist.ok) {
-        console.error("Azure error:", xmlText);
-        return;
-      }
+        if (!res.ok) {
+          console.error("Azure error:", xmlText);
+          break;
+        }
 
-      return parseBlobListXml(xmlText);
+        const { blobs, nextMarker: newMarker } = parseBlobListXml(xmlText);
+        allFiles.push(...blobs);
+        nextMarker = newMarker;
+
+      } while (nextMarker);
+
+      return allFiles;
     } catch (err) {
       console.error("Fetch error:", err);
     }
@@ -45,7 +60,7 @@ export const load = async ({ params, url }) => {
     const xmlDoc = parser.parseFromString(xmlText, "application/xml");
     const blobNodes = xmlDoc.getElementsByTagName("Blob");
 
-    return Array.from(blobNodes).map((blob) => {
+    const blobs = Array.from(blobNodes).map((blob) => {
       const name = blob.getElementsByTagName("Name")[0]?.textContent ?? "";
 
       const props = blob.getElementsByTagName("Properties")[0];
@@ -58,6 +73,11 @@ export const load = async ({ params, url }) => {
         lastModified: lastModified
       };
     });
+
+    const nextMarkerNode = xmlDoc.getElementsByTagName("NextMarker")[0];
+    const nextMarker = nextMarkerNode?.textContent ?? "";
+
+    return { blobs, nextMarker };
   };
 
   const file_list = await get_file_list()
