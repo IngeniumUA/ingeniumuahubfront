@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../assets/scss/styles.scss';
+	import '../../assets/scss/styles.scss';
 	import opengraphImg from '$assets/images/opengraph_galabal.webp';
 
 	import { browser } from '$app/environment';

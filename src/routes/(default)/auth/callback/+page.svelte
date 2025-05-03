@@ -9,7 +9,7 @@
   import { captureException } from '@sentry/sveltekit';
   import { page } from '$app/state';
   import { PUBLIC_API_URL } from '$env/static/public';
-  import { notification_token } from '../../../hooks.client.ts';
+  import { notification_token } from '../../../../hooks.client.ts';
   import { AppStorage } from '$lib/scanners/storage.ts';
   import { get_all_possible_notifications } from '$lib/utilities/notificationUtilities.ts';
 
