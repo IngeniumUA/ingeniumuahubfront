@@ -1,9 +1,9 @@
-import { getAuthorizationHeaders, getLoginUrlWithRedirect, hasValidToken } from '$lib/auth/auth';
+import { getAuthorizationHeaders, getCookie, getLoginUrlWithRedirect, hasValidToken, setCookie } from '$lib/auth/auth';
 import { redirect } from "@sveltejs/kit";
 import { PUBLIC_API_URL } from '$env/static/public';
 import { handleRequest } from '$lib/utilities/httpUtilities';
 import { browser } from '$app/environment';
-import Cookies from 'js-cookie';
+
 
 export const load = async ({ params, url }) => {
   let url_path_param = url.searchParams.get("path")
@@ -13,7 +13,7 @@ export const load = async ({ params, url }) => {
     redirect(307, getLoginUrlWithRedirect(total_url));
   }
 
-  let cloud_sas: string | undefined = Cookies.get("sas_cloud_token")
+  let cloud_sas: string | undefined = getCookie("sas_cloud_token")
   if (!cloud_sas) {
     cloud_sas = await fetch(
       `${PUBLIC_API_URL}/file/sas_cloud_token`,
@@ -22,7 +22,7 @@ export const load = async ({ params, url }) => {
         headers: getAuthorizationHeaders(params),
       }
     ).then(handleRequest) as string;
-    Cookies.set("sas_cloud_token", cloud_sas, { expires: Date.now() + 86300000 });
+    setCookie("sas_cloud_token", cloud_sas, Date.now() + 86300000 );
   }
 
   async function get_file_list() {
