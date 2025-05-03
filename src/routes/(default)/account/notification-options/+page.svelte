@@ -8,7 +8,7 @@
   } from '$lib/utilities/notificationUtilities.ts';
   import { AppStorage } from '$lib/scanners/storage.js';
   import InlineSpinner from '$lib/components/spinners/inline-spinner.svelte';
-  import { notification_token, setVibration } from '../../../hooks.client.ts';
+  import { notification_token, setVibration } from '../../../../hooks.client.ts';
   import { auth } from '$lib/states/auth.svelte.ts';
   import { PUBLIC_API_URL } from '$env/static/public';
 
