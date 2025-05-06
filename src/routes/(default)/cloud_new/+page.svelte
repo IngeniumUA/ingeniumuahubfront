@@ -32,7 +32,7 @@
     if (url_path) {
       path = url_path
       if (url_path.includes('.')) {
-        downloadOrOpenFile(url_path)
+        downloadAndOpenFile(url_path)
       } else {
         get_current_files()
       }
@@ -80,41 +80,26 @@
   }
 
 
-  async function downloadOrOpenFile(file: string) {
-    const fileUrl = `https://ingeniumuacloud.blob.core.windows.net/cloud/${file}?${data.cloud_sas}`;
+  async function downloadAndOpenFile(fileName: string) {
+    const fileUrl = `https://ingeniumuacloud.blob.core.windows.net/cloud/${fileName}?${data.cloud_sas}`;
     try {
-      // Fetch the file as a blob using CapacitorHttp
       const response = await CapacitorHttp.request({
         method: 'GET',
         url: fileUrl,
-        responseType: 'blob'
+        responseType: 'arraybuffer' // still use arraybuffer to get base64
       });
-
-      const blob = response.data as Blob;
-      // Convert blob to base64 for saving
-      const base64Data = await blobToBase64(blob)
+      const base64Data = response.data; // already base64
       await Filesystem.writeFile({
-        path: file,
+        path: fileName,
         data: base64Data,
         directory: Directory.Documents
       });
+      alert('Het bestand werd gedownload.');
 
     } catch (error) {
-      console.error('Error downloading file:', error);
-      alert('Download failed');
+      console.error('Download or open failed:', error);
+      alert('Something went wrong during the download.');
     }
-  }
-
-  function blobToBase64(blob: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = reject;
-      reader.onloadend = () => {
-        const base64 = reader.result?.toString().split(',')[1]; // remove the data prefix
-        resolve(base64 ?? '');
-      };
-      reader.readAsDataURL(blob);
-    });
   }
 
   function isPathEmpty() {
@@ -173,10 +158,10 @@
       {/if}
       {#each current_files as file}
         <div class="icon-text-wrapper">
-          <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg onclick="{()=>{downloadAndOpenFile(file[1])}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
-          <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
+          <button class="icon-text" onclick="{()=>{downloadAndOpenFile(file[1])}}">{file[0]}</button>
         </div>
       {/each}
       {#each current_folders as folder}

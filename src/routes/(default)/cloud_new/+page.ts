@@ -22,7 +22,7 @@ export const load = async ({ params, url }) => {
         headers: getAuthorizationHeaders(params),
       }
     ).then(handleRequest) as string;
-    setCookie("sas_cloud_token", cloud_sas, Date.now() + 86300000 );
+    setCookie("sas_cloud_token", cloud_sas, 80000 );
   }
 
   async function get_file_list() {
