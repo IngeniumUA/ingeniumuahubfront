@@ -1,20 +1,18 @@
 <script lang="ts">
   import Header from '$lib/components/layout/header.svelte';
-  import { onDestroy, onMount } from 'svelte';
+  import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import mammoth from 'mammoth';
+  import { CapacitorHttp } from '@capacitor/core';
+  import { Filesystem, Directory } from '@capacitor/filesystem';
 
 
   let { data } = $props();
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
   let path: string = $state("")
-  let openedFile: {open: boolean, url: string, type: string} = $state({open: false, url: '', type: ''})
-  let fileHtml = $state('');
 
   function get_current_files() {
-    openedFile = {open: false, url: '', type: ''};
     if (data.file_list === undefined) {return}
     for (const blob of data.file_list) {
       if (blob.name.startsWith(path)) {
@@ -43,10 +41,6 @@
     }
   })
 
-  onDestroy(() => {
-    URL.revokeObjectURL(openedFile.url);
-  });
-
   function openSubFolder(folder: string) {
     path = path + folder + "/"
     current_folders = []
@@ -55,7 +49,6 @@
   }
 
   function openSpecificFolder(folder_pos_in_array: number, folder_name: string) {
-    URL.revokeObjectURL(openedFile.url);
     if ((path.endsWith(folder_name + '/') && folder_name !== "") || folder_name.includes(".")) {return}
     const pathlist = path.slice(0, path.length - 2).split("/")
     let temppath = ""
@@ -88,48 +81,40 @@
 
 
   async function downloadOrOpenFile(file: string) {
-    const response = await fetch(`https://ingeniumuacloud.blob.core.windows.net/cloud/${file}?${data.cloud_sas}`);
-    if (!response.ok) {
-      alert('Failed to fetch the file: ' + response.statusText);
-      return;
+    const fileUrl = `https://ingeniumuacloud.blob.core.windows.net/cloud/${file}?${data.cloud_sas}`;
+    try {
+      // Fetch the file as a blob using CapacitorHttp
+      const response = await CapacitorHttp.request({
+        method: 'GET',
+        url: fileUrl,
+        responseType: 'blob'
+      });
+
+      const blob = response.data as Blob;
+      // Convert blob to base64 for saving
+      const base64Data = await blobToBase64(blob)
+      await Filesystem.writeFile({
+        path: file,
+        data: base64Data,
+        directory: Directory.Documents
+      });
+
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      alert('Download failed');
     }
-    const blob = await response.blob();
-    let url = URL.createObjectURL(blob);
-
-    // Open the file locally
-    if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx"])) {
-      path = file
-      current_folders = []
-      current_files= []
-      updateSearchParam()
-
-      if (checkFileType(file, [".docx"])) {
-        const arrayBuffer = await blob.arrayBuffer();
-        const result = await mammoth.convertToHtml({ arrayBuffer });
-        fileHtml = result.value;
-      }
-
-      openedFile = {open: true, url: url, type: blob.type};
-      return
-    }
-
-    // Download the file
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = file;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   }
 
-  function checkFileType(file: string, allowed_types: string[]) {
-    for (const allowed_type of allowed_types) {
-      if (file.endsWith(allowed_type)) {
-        return true
-      }
-    }
-    return false
+  function blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onloadend = () => {
+        const base64 = reader.result?.toString().split(',')[1]; // remove the data prefix
+        resolve(base64 ?? '');
+      };
+      reader.readAsDataURL(blob);
+    });
   }
 
   function isPathEmpty() {
@@ -143,9 +128,6 @@
   }
   function folderIsFile(folder: string) {
     return folder.includes(".")
-  }
-  function fileIsDocx() {
-    return openedFile.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
   }
 
 </script>
@@ -180,42 +162,32 @@
         {/if}
       {/each}
     </div>
-    {#if openedFile.open}
-      <div class="file_container">
-        {#if fileIsDocx()}
-          {@html fileHtml}
-        {:else}
-          <iframe title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px"></iframe>
-        {/if}
-      </div>
-    {:else}
-      <div class="browse_file_container">
-        {#if !isPathEmpty()}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
-          </div>
-        {/if}
-        {#each current_files as file}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
-          </div>
-        {/each}
-        {#each current_folders as folder}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
-          </div>
-        {/each}
-      </div>
-    {/if}
+    <div class="browse_file_container">
+      {#if !isPathEmpty()}
+        <div class="icon-text-wrapper">
+          <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
+        </div>
+      {/if}
+      {#each current_files as file}
+        <div class="icon-text-wrapper">
+          <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
+        </div>
+      {/each}
+      {#each current_folders as folder}
+        <div class="icon-text-wrapper">
+          <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
+        </div>
+      {/each}
+    </div>
   </div>
 
 </main>
@@ -232,15 +204,6 @@
   .browse_file_container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 1rem;
-    overflow-y: auto;
-    padding: 1rem;
-    box-sizing: border-box;
-    flex: 1;
-  }
-
-  .file_container {
-    height: 100%;
     gap: 1rem;
     overflow-y: auto;
     padding: 1rem;

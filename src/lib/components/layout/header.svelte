@@ -145,7 +145,7 @@
 				<a href="/" class="nav-item" role="menuitem">Home</a>
 				<a href="/events" class="nav-item" role="menuitem">Events</a>
 				<a href="/shop" class="nav-item" role="menuitem">Shop</a>
-				<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
+				<a href="/cloud_new" class="nav-item" role="menuitem">Cloud</a>
 				<a href="/info" class="nav-item" role="menuitem">Over ons</a>
 				<a href="/info/praesidium" class="nav-item" role="menuitem">Praesidium</a>
 				<a href="/info/relations" class="nav-item" role="menuitem">Partner relations</a>
