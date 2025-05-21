@@ -38,12 +38,14 @@
   function search_files(search: string) {
     if (search === "") {
       if (!cleared_query) {
-        current_folders = []
-        current_files = []
         const url_path = page?.url.searchParams.get('path');
         if (url_path) {
           path = url_path
+        } else {
+          path = ""
         }
+        current_folders = []
+        current_files = []
         get_current_files()
         cleared_query = true
       }
@@ -59,17 +61,14 @@
         if (split_blob[split_blob.length - 1].toLowerCase().includes(search.toLowerCase())) {
           current_files.push([split_blob[split_blob.length - 1], blob])
         } else {
-          const folder = split_blob.find(blob_in_split => blob_in_split.toLowerCase().includes(search))
-          if (folder !== undefined && !current_folders.includes(folder)) {
-            let folder_path = ""
-            const folder_path_index = split_blob.findIndex(blob_in_split => blob_in_split.toLowerCase().includes(search))
-            for (let i = 0; i <= folder_path_index; i++) {
-              folder_path = folder_path + split_blob[i] + "/"
-            }
-            folder_path = folder_path.slice(0, folder_path.length - 1)
-            if (!current_folders.includes(folder_path)) {
-              current_folders.push(folder_path)
-            }
+          let folder_path = ""
+          const folder_path_index = split_blob.findIndex(blob_in_split => blob_in_split.toLowerCase().includes(search))
+          for (let i = 0; i <= folder_path_index; i++) {
+            folder_path = folder_path + split_blob[i] + "/"
+          }
+          folder_path = folder_path.slice(0, folder_path.length - 1)
+          if (!current_folders.includes(folder_path)) {
+            current_folders.push(folder_path)
           }
         }
       }
