@@ -9,7 +9,8 @@
 	import Footer from '$lib/components/layout/footer.svelte';
 	import GlobalPageSpinner from '$lib/components/spinners/global-page-spinner.svelte';
 	import { auth } from '$lib/states/auth.svelte';
-	import { setContext } from 'svelte';
+	import { onMount, setContext } from 'svelte';
+	import { afterNavigate } from '$app/navigation';
 
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 
@@ -25,6 +26,16 @@
 	}
 
 
+
+	onMount(() => {
+		afterNavigate((nav) => {
+			const currentUrl = nav.to?.url?.pathname || '';
+
+			if (!currentUrl.includes('cloud')) {
+				localStorage.removeItem('fetched_file_list');
+			}
+		});
+	});
 </script>
 
 <svelte:head>
