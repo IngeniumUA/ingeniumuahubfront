@@ -62,7 +62,7 @@
           current_files.push([split_blob[split_blob.length - 1], blob])
         } else {
           let folder_path = ""
-          const folder_path_index = split_blob.findIndex(blob_in_split => blob_in_split.toLowerCase().includes(search))
+          const folder_path_index = split_blob.findIndex(blob_in_split => blob_in_split.toLowerCase().includes(search.toLowerCase()))
           for (let i = 0; i <= folder_path_index; i++) {
             folder_path = folder_path + split_blob[i] + "/"
           }
