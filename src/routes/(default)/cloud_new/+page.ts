@@ -2,6 +2,7 @@ import { getAuthorizationHeaders, getLoginUrlWithRedirect, hasValidToken } from 
 import { redirect } from '@sveltejs/kit';
 import { PUBLIC_API_URL } from '$env/static/public';
 import { handleRequest } from '$lib/utilities/httpUtilities';
+import { browser } from '$app/environment';
 
 export const load = async ({ params, url }) => {
 	let url_path_param = url.searchParams.get('path');
@@ -14,6 +15,7 @@ export const load = async ({ params, url }) => {
 	}
 
 	async function get_file_list() {
+		if (!browser) {return}
 		let fetched_file_list
 		fetched_file_list = localStorage.getItem('fetched_file_list');
 		if (fetched_file_list !== null) {
