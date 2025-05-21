@@ -14,6 +14,7 @@
   let path: string = $state("")
   let query = $state('');
   let timeout: ReturnType<typeof setTimeout>;
+  let cleared_query = $state(true);
 
   function get_current_files() {
     query = ''
@@ -33,9 +34,19 @@
 
   function search_files(search: string) {
     if (search === "") {
-      get_current_files()
+      if (!cleared_query) {
+        current_folders = []
+        current_files = []
+        const url_path = page?.url.searchParams.get('path');
+        if (url_path) {
+          path = url_path
+        }
+        get_current_files()
+        cleared_query = true
+      }
       return
     }
+    cleared_query = false
     path = ""
     current_folders = []
     current_files= []
