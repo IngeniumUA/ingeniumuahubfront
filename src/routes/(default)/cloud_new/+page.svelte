@@ -3,7 +3,6 @@
   import { onMount } from 'svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import { CapacitorHttp } from '@capacitor/core';
   import { Filesystem, Directory } from '@capacitor/filesystem';
   import { PUBLIC_API_URL } from '$env/static/public';
   import { getAuthorizationHeaders } from '$lib/auth/auth';
@@ -123,7 +122,7 @@
   }
 
 
-  async function downloadAndOpenFile(fileName: string) {
+  async function downloadAndOpenFile(file: string) {
 		let response
 		try {
 			response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}`, {
@@ -142,13 +141,34 @@
 			alert('Failed to fetch the file: ' + response.statusText);
 			return;
 		}
-      const base64Data = response.arrayBuffer; // already base64
+    try {
+      const arrayBuffer = await response.arrayBuffer();
+      const base64Data = await arrayBufferToBase64Async(arrayBuffer);
+      const fileName = file.split("/")[file.split("/").length - 1];
       await Filesystem.writeFile({
         path: fileName,
         data: base64Data,
         directory: Directory.Documents
       });
       alert('Het bestand werd gedownload.');
+    } catch (error) {
+      alert(error);
+    }
+  }
+  function arrayBufferToBase64Async(buffer: ArrayBuffer): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const blob = new Blob([buffer]);
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const base64String = (reader.result as string).split(',')[1]; // remove the "data:*/*;base64," prefix
+        resolve(base64String);
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsDataURL(blob);
+    });
   }
 
   function isPathEmpty() {
