@@ -4,6 +4,8 @@
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
   import mammoth from 'mammoth';
+  import { PUBLIC_API_URL } from '$env/static/public';
+  import { getAuthorizationHeaders } from '$lib/auth/auth';
 
 
   let { data } = $props();
@@ -12,22 +14,63 @@
   let path: string = $state("")
   let openedFile: {open: boolean, url: string, type: string} = $state({open: false, url: '', type: ''})
   let fileHtml = $state('');
+  let query = $state('');
+  let timeout: ReturnType<typeof setTimeout>;
 
   function get_current_files() {
+    query = ''
     openedFile = {open: false, url: '', type: ''};
     if (data.file_list === undefined) {return}
     for (const blob of data.file_list) {
-      if (blob.name.startsWith(path)) {
-        const blob_in_folder = blob.name.replace(path, "")
+      if (blob.startsWith(path)) {
+        const blob_in_folder = blob.replace(path, "")
         if (blob_in_folder.includes("/") && !current_folders.includes(blob_in_folder.split("/")[0])) {
           current_folders.push(blob_in_folder.split("/")[0])
         } else if (!blob_in_folder.includes("/")) {
-          current_files.push([blob_in_folder, blob.name])
+          current_files.push([blob_in_folder, blob])
         }
       }
     }
     updateSearchParam()
   }
+
+  function search_files(search: string) {
+    if (search === "") {
+      get_current_files()
+      return
+    }
+    path = ""
+    current_folders = []
+    current_files= []
+    for (const blob of data.file_list) {
+      if (blob.toLowerCase().includes(search.toLowerCase())) {
+        const split_blob = blob.split("/")
+        if (split_blob[split_blob.length - 1].toLowerCase().includes(search.toLowerCase())) {
+          current_files.push([split_blob[split_blob.length - 1], blob])
+        } else {
+          const folder = split_blob.find(blob_in_split => blob_in_split.toLowerCase().includes(search))
+          if (folder !== undefined && !current_folders.includes(folder)) {
+            let folder_path = ""
+            const folder_path_index = split_blob.findIndex(blob_in_split => blob_in_split.toLowerCase().includes(search))
+            for (let i = 0; i <= folder_path_index; i++) {
+              folder_path = folder_path + split_blob[i] + "/"
+            }
+            folder_path = folder_path.slice(0, folder_path.length - 1)
+            if (!current_folders.includes(folder_path)) {
+              current_folders.push(folder_path)
+            }
+          }
+        }
+      }
+    }
+  }
+  $effect(() => {
+    const q = query;
+    clearTimeout(timeout); // clear any previous debounce
+    timeout = setTimeout(() => {
+      search_files(q);
+    }, 300); // 300ms debounce
+  });
 
   onMount(()=>{
     const url_path = page?.url.searchParams.get('path');
@@ -88,11 +131,25 @@
 
 
   async function downloadOrOpenFile(file: string) {
-    const response = await fetch(`https://ingeniumuacloud.blob.core.windows.net/cloud/${file}?${data.cloud_sas}`);
+    let response
+    try {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}`, {
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
+
+    if (!response) {
+      alert('No response from the server');
+      return;
+    }
     if (!response.ok) {
       alert('Failed to fetch the file: ' + response.statusText);
       return;
     }
+
     const blob = await response.blob();
     let url = URL.createObjectURL(blob);
 
@@ -179,6 +236,9 @@
           <p>/</p>
         {/if}
       {/each}
+    </div>
+    <div class="breadcrumb form-field">
+      <input type="text" bind:value={query} placeholder="Zoeken in de cloud">
     </div>
     {#if openedFile.open}
       <div class="file_container">
