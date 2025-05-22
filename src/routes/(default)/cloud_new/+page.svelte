@@ -12,7 +12,7 @@
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
   let path: string = $state("")
-  let openedFile: {open: boolean, url: string, type: string} = $state({open: false, url: '', type: ''})
+  let openedFile: {open: boolean, url: string, type: string, file: string} = $state({open: false, url: '', type: '', file: ''})
   let fileHtml = $state('');
   let query = $state('');
   let timeout: ReturnType<typeof setTimeout>;
@@ -20,7 +20,7 @@
 
   function get_current_files() {
     query = ''
-    openedFile = {open: false, url: '', type: ''};
+    openedFile = {open: false, url: '', type: '', file: ''};
     if (data.file_list === undefined) {return}
     for (const blob of data.file_list) {
       if (blob.startsWith(path)) {
@@ -176,7 +176,7 @@
         fileHtml = result.value;
       }
 
-      openedFile = {open: true, url: url, type: blob.type};
+      openedFile = {open: true, url: url, type: blob.type, file: file};
       return
     }
 
@@ -211,8 +211,11 @@
   function folderIsFile(folder: string) {
     return folder.includes(".")
   }
-  function fileIsDocx() {
-    return openedFile.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  function fileIsDocx(file: string) {
+    return checkFileType(file, [".docx"])
+  }
+  function fileIsImg(file: string) {
+    return checkFileType(file, [".jpg", ".png", ".jpeg"])
   }
 
 </script>
@@ -252,8 +255,10 @@
     </div>
     {#if openedFile.open}
       <div class="file_container">
-        {#if fileIsDocx()}
+        {#if fileIsDocx(openedFile.file)}
           {@html fileHtml}
+        {:else if fileIsImg(openedFile.file)}
+          <img src="{openedFile.url}" alt="Cloud">
         {:else}
           <iframe title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px"></iframe>
         {/if}
@@ -294,7 +299,7 @@
   .cloud_container {
     display: flex;
     flex-direction: column;
-    height: 110vh;
+    height: 120vh;
     border: 2px solid lightgray;
     border-radius: 10px;
   }
