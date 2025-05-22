@@ -13,7 +13,7 @@
 
 		<div class="footer-end">
 			<p>BTW: BE 0699.697.622</p>
-			<p>Tel: +32 468 22 67 30</p>
+			<p>Tel: +32 470 69 80 74</p>
 			<div class="flex gap-x-4">
 				<a href="/info/contact">Meer contact info</a>
 				<a href="/info/credits">Credits</a>
