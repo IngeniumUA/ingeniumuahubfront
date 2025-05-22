@@ -17,6 +17,9 @@
 		<a href="https://forms.gle/CoXVk2Rwk5QMKYLU6" target="_blank" rel="noopener" class="button button-primary button-sm my-4">
 			Zelf bestanden uploaden
 		</a>
+		<a href="/cloud_new" rel="noopener" class="button button-primary button-sm my-4" style="background-color: #00bf63">
+			Nieuwe cloud
+		</a>
 	</div>
 	<iframe src="https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/" width="100%" height="70%"></iframe>
 </main>
