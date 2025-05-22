@@ -33,6 +33,26 @@
     }
   }
 
+  &.button-education {
+    @apply border-green-500 text-white bg-green-500 focus:outline focus:outline-green-800 focus:outline-offset-2;
+
+    &:hover {
+      @apply border-green-800 bg-green-800;
+    }
+
+    &.button-accessibility-white {
+      @apply focus:outline-white;
+    }
+
+    * {
+      @apply text-white;
+    }
+
+    &:disabled {
+      @apply hover:bg-green-500;
+    }
+  }
+
   &.button-danger {
     @apply border-red-900 text-white bg-red-900 focus:outline focus:outline-red-950 focus:outline-offset-2;
 
