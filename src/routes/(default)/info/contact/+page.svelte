@@ -33,6 +33,12 @@
             Mail: renzo.craeymeersch&#64;ingeniumua.be <br>
             Tel: +32 499 14 90 15
           </dd>
+
+          <dt>Ward De Voeght</dt>
+          <dd>
+            Mail: ward.devoeght&#64;ingeniumua.be <br>
+            Tel: +32 474 57 63 27
+          </dd>
         </dl>
       </section>
 
@@ -41,10 +47,10 @@
         <p>Zijn onze Business Relations niet helemaal juist voor je vraag?</p>
 
         <dl>
-          <dt>Wannes Brusselmans</dt>
+          <dt>Nico Verstappen</dt>
           <dd>
-            Mail: wannes.brusselmans&#64;ingeniumua.be <br>
-            Tel: +32 468 22 67 30
+            Mail: nico.verstappen&#64;ingeniumua.be <br>
+            Tel: +32 470 69 80 74
           </dd>
         </dl>
       </section>
@@ -54,9 +60,9 @@
         <p>Voor vragen over onze social media en/of public relations.</p>
 
         <dl>
-          <dt>Jona Vandormael & Ailee Louise Van Hauwaert</dt>
+          <dt>Alexander Ceuppens & Lore Philips</dt>
           <dd>
-            Mail: marketing&#64;ingeniumua.be
+            Mail: public.relations&#64;ingeniumua.be
           </dd>
         </dl>
       </div>

@@ -30,7 +30,7 @@
     <div>
       <p class="font-bold text-black">Others</p>
       <ul class="list-disc list-inside">
-        <li>Revision: ????</li>
+        <li>Revision: 2025</li>
       </ul>
     </div>
   </div>
