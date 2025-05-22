@@ -229,14 +229,16 @@
 </header>
 
 <main class="ingenium-container relative h-full" id="main-content">
-  <div class="flex flex-row items-center">
+  <div class="flex flex-col items-center">
     <h1>De cloud is voor studenten, van studenten. Upload zelf ook studiemateriaal!</h1>
-    <a href="https://forms.gle/CoXVk2Rwk5QMKYLU6" target="_blank" rel="noopener" class="button button-primary button-sm my-4">
-      Zelf bestanden uploaden
-    </a>
-    <a href="https://forms.gle/ExgeXheiDvoip2AZ9" target="_blank" rel="noopener" class="button button-education button-sm my-4">
-      Geef feedback!
-    </a>
+    <div class="flex-row flex-1">
+      <a href="https://forms.gle/CoXVk2Rwk5QMKYLU6" target="_blank" rel="noopener" class="button button-primary button-sm my-4">
+        Zelf bestanden uploaden
+      </a>
+      <a href="https://forms.gle/ExgeXheiDvoip2AZ9" target="_blank" rel="noopener" class="button button-education button-sm my-4">
+        Geef feedback!
+      </a>
+    </div>
   </div>
 
   <div class="cloud_container">
