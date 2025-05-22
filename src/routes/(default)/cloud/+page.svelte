@@ -17,7 +17,7 @@
 		<a href="https://forms.gle/CoXVk2Rwk5QMKYLU6" target="_blank" rel="noopener" class="button button-primary button-sm my-4">
 			Zelf bestanden uploaden
 		</a>
-		<a href="/cloud_new" rel="noopener" class="button button-primary button-sm my-4" style="background-color: #00bf63">
+		<a href="/cloud_new" rel="noopener" class="button button-education button-sm my-4">
 			Nieuwe cloud
 		</a>
 	</div>
