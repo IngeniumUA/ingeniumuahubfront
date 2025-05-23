@@ -176,11 +176,10 @@
 			return;
 		}
 
-		const blob = await response.blob();
-		let url = URL.createObjectURL(blob);
-
 		// Open the file locally
-		if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])) {
+		if (checkFileType(file, [".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])) {
+      const blob = await response.blob();
+      let url = URL.createObjectURL(blob);
 			loading_file = true
 			path = file
 			current_folders = []
@@ -210,6 +209,7 @@
 			}
 
 			openedFile = {open: true, url: url, type: blob.type, file: file};
+      URL.revokeObjectURL(url);
 			loading_file = false
 			return
 		}
