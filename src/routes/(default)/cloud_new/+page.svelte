@@ -8,6 +8,7 @@
   import { getAuthorizationHeaders } from '$lib/auth/auth';
 
 
+  let PdfRender: any = $state(null);
   let { data } = $props();
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
@@ -103,12 +104,15 @@
     }, 300); // 300ms debounce
   });
 
-  onMount(()=>{
+  onMount(async ()=>{
+    const module = await import('$lib/components/cloud/PdfRender.svelte');
+    PdfRender = module.default;
+
     const url_path = page?.url.searchParams.get('path');
     if (url_path) {
       path = url_path
       if (url_path.includes('.')) {
-        downloadAndOpenFile(url_path)
+        await downloadAndOpenFile(url_path)
       } else {
         get_current_files()
       }
@@ -324,7 +328,7 @@
         {:else if fileIsImg(openedFile.file)}
           <img src="{openedFile.url}" alt="Cloud">
         {:else}
-          <embed title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px">
+          <PdfRender pdfUrl={openedFile.url}></PdfRender>
         {/if}
       </div>
     {:else}
