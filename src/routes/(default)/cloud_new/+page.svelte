@@ -16,6 +16,7 @@
   let query = $state('');
   let timeout: ReturnType<typeof setTimeout>;
   let cleared_query = $state(true);
+  let loading_file = $state(false);
 
   function get_current_files(update_params=true) {
     query = ''
@@ -184,6 +185,7 @@
 
     // Open the file locally
     if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])) {
+      loading_file = true
       path = file
       current_folders = []
       current_files= []
@@ -212,6 +214,7 @@
       }
 
       openedFile = {open: true, url: url, type: blob.type, file: file};
+      loading_file = false
       return
     }
 
@@ -309,35 +312,39 @@
         {/if}
       </div>
     {:else}
-      {#if data.file_list === undefined}
-        <p>We zijn de cloud aan het laden...</p>
-      {/if}
-      <div class="browse_file_container">
-        {#if !isPathEmpty()}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
-          </div>
+      {#if loading_file}
+        <p>We zijn je bestand aan het openen...</p>
+      {:else}>
+        {#if data.file_list === undefined}
+          <p>We zijn de cloud aan het laden...</p>
         {/if}
-        {#each current_folders as folder}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
-          </div>
-        {/each}
-        {#each current_files as file}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
-          </div>
-        {/each}
-      </div>
+        <div class="browse_file_container">
+          {#if !isPathEmpty()}
+            <div class="icon-text-wrapper">
+              <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
+            </div>
+          {/if}
+          {#each current_folders as folder}
+            <div class="icon-text-wrapper">
+              <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
+            </div>
+          {/each}
+          {#each current_files as file}
+            <div class="icon-text-wrapper">
+              <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
+            </div>
+          {/each}
+        </div>
+      {/if}
     {/if}
   </div>
 
