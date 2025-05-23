@@ -314,7 +314,7 @@
     {:else}
       {#if loading_file}
         <p>We zijn je bestand aan het openen...</p>
-      {:else}>
+      {:else}
         {#if data.file_list === undefined}
           <p>We zijn de cloud aan het laden...</p>
         {/if}
