@@ -13,7 +13,7 @@
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
   let path: string = $state("")
-  let openedFile: {open: boolean, url: string, type: string, file: string} = $state({open: false, url: '', type: '', file: ''})
+  let openedFile: {open: boolean, url: string, type: string, file: string, blob: Blob | null} = $state({open: false, url: '', type: '', file: '', blob: null})
   let fileHtml = $state('');
   let query = $state('');
   let timeout: ReturnType<typeof setTimeout>;
@@ -22,7 +22,7 @@
 
   function get_current_files(update_params=true) {
     query = ''
-    openedFile = {open: false, url: '', type: '', file: ''};
+    openedFile = {open: false, url: '', type: '', file: '', blob: null};
     if (data.file_list === undefined) {return}
     for (const blob of data.file_list) {
       if (blob.startsWith(path)) {
@@ -181,7 +181,7 @@
 		}
 
 		// Open the file locally
-		if (checkFileType(file, [".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])) {
+		if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])) {
       const blob = await response.blob();
       let url = URL.createObjectURL(blob);
 			loading_file = true
@@ -212,7 +212,7 @@
 				}
 			}
 
-			openedFile = {open: true, url: url, type: blob.type, file: file};
+			openedFile = {open: true, url: url, type: blob.type, file: file, blob: blob};
       URL.revokeObjectURL(url);
 			loading_file = false
 			return
@@ -328,7 +328,7 @@
         {:else if fileIsImg(openedFile.file)}
           <img src="{openedFile.url}" alt="Cloud">
         {:else}
-          <PdfRender pdfUrl={openedFile.url}></PdfRender>
+          <PdfRender pdfBlob={openedFile.blob}></PdfRender>
         {/if}
       </div>
     {:else}
