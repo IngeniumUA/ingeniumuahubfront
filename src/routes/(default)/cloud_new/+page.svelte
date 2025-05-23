@@ -3,7 +3,6 @@
   import { onDestroy, onMount } from 'svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import mammoth from 'mammoth';
   import { PUBLIC_API_URL } from '$env/static/public';
   import { getAuthorizationHeaders } from '$lib/auth/auth';
 
@@ -184,16 +183,32 @@
     let url = URL.createObjectURL(blob);
 
     // Open the file locally
-    if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx"])) {
+    if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])) {
       path = file
       current_folders = []
       current_files= []
       updateSearchParam()
 
-      if (checkFileType(file, [".docx"])) {
-        const arrayBuffer = await blob.arrayBuffer();
-        const result = await mammoth.convertToHtml({ arrayBuffer });
-        fileHtml = result.value;
+      if (fileIsConverted(file)) {
+        try {
+          const formData = new FormData();
+          formData.append('file', blob, file);
+          const res = await fetch(`${PUBLIC_API_URL}/cloud/convert`, {
+            method: 'POST',
+            headers: getAuthorizationHeaders(null),
+            body: formData
+          });
+
+          if (!res.ok) {
+            const { error } = await res.json();
+            throw new Error(error || 'Unknown error');
+          }
+
+          const data = await res.json();
+          fileHtml = data.html;
+        } catch (err) {
+          console.error('Fetch error:', err);
+        }
       }
 
       openedFile = {open: true, url: url, type: blob.type, file: file};
@@ -231,8 +246,8 @@
   function folderIsFile(folder: string) {
     return folder.includes(".")
   }
-  function fileIsDocx(file: string) {
-    return checkFileType(file, [".docx"])
+  function fileIsConverted(file: string) {
+    return checkFileType(file, [".docx", ".odt", ".md", ".markdown", ".tex"])
   }
   function fileIsImg(file: string) {
     return checkFileType(file, [".jpg", ".png", ".jpeg"])
@@ -280,8 +295,13 @@
     </div>
     {#if openedFile.open}
       <div class="file_container">
-        {#if fileIsDocx(openedFile.file)}
-          {@html fileHtml}
+        {#if fileIsConverted(openedFile.file)}
+          <iframe
+            title="cloud document"
+            srcdoc={fileHtml}
+            style="width: 100%; height: 100%; border: none; min-height: 400px; border-radius: 5px"
+            sandbox="allow-same-origin allow-scripts"
+          ></iframe>
         {:else if fileIsImg(openedFile.file)}
           <img src="{openedFile.url}" alt="Cloud">
         {:else}
