@@ -5,6 +5,7 @@
   import { goto } from '$app/navigation';
   import { PUBLIC_API_URL } from '$env/static/public';
   import { getAuthorizationHeaders } from '$lib/auth/auth';
+  import PdfRender from '$lib/components/cloud/PdfRender.svelte';
 
 
   let { data } = $props();
@@ -308,7 +309,7 @@
         {:else if fileIsImg(openedFile.file)}
           <img src="{openedFile.url}" alt="Cloud">
         {:else}
-          <embed title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px">
+          <PdfRender pdfUrl={openedFile.url}></PdfRender>
         {/if}
       </div>
     {:else}
