@@ -1,8 +1,8 @@
 ﻿////File that specifies all additional needed data for uploading and releasing on app stores////
 
-Version = 1.5.5
+Version = 1.6.0
 
 ////update notes in het nederlands////
 VERSION_UPDATES_START
-- bugs bij opstart opgelost
+- grote update aan de cloud, oude cloud nog steeds beschikbaar
 VERSION_UPDATES_END
