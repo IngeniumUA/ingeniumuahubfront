@@ -1,53 +1,113 @@
 ﻿<script>
 	import { onMount } from 'svelte';
-	import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+	import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
 
-	pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
+	GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 
-	export let pdfUrl;
+		export let pdfUrl;
 
-	let container;
+		let container;
+		let scale = 1; // user-controlled zoom level
+		let pdfDoc;
 
-	async function renderAllPages(url) {
-		const loadingTask = pdfjsLib.getDocument(url);
-		const pdfDoc = await loadingTask.promise;
-		container.innerHTML = ''; // clear container
+		async function renderAllPages() {
+		if (!pdfDoc || !container) return;
+
+		container.innerHTML = ''; // clear previous pages
+
+		const containerWidth = container.clientWidth;
 
 		for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-			const page = await pdfDoc.getPage(pageNum);
+		const page = await pdfDoc.getPage(pageNum);
 
-			const canvas = document.createElement('canvas');
-			const context = canvas.getContext('2d');
-			const viewport = page.getViewport({ scale: 1.5 });
-			canvas.height = viewport.height;
-			canvas.width = viewport.width;
+		const unscaledViewport = page.getViewport({ scale: 1 });
+		const fitScale = containerWidth / unscaledViewport.width;
+		const finalScale = fitScale * scale;
+		const viewport = page.getViewport({ scale: finalScale });
 
-			await page.render({ canvasContext: context, viewport }).promise;
+		const canvas = document.createElement('canvas');
+		const context = canvas.getContext('2d');
 
-			container.appendChild(canvas);
-		}
+		canvas.width = viewport.width;
+		canvas.height = viewport.height;
+
+		canvas.style.width = `${viewport.width}px`;
+		canvas.style.height = `${viewport.height}px`;
+		canvas.style.display = 'block';
+		canvas.style.marginBottom = '1rem';
+
+		await page.render({ canvasContext: context, viewport }).promise;
+		container.appendChild(canvas);
+	}
 	}
 
-	onMount(() => {
+		async function loadPdf(url) {
+		const loadingTask = getDocument(url);
+		pdfDoc = await loadingTask.promise;
+		await renderAllPages();
+	}
+
+		function zoomIn() {
+		scale += 0.1;
+		renderAllPages();
+	}
+
+		function zoomOut() {
+		scale = Math.max(0.1, scale - 0.1);
+		renderAllPages();
+	}
+
+		onMount(() => {
 		if (pdfUrl) {
-			renderAllPages(pdfUrl);
-		}
+		loadPdf(pdfUrl);
+	}
 	});
+
+		$: if (pdfUrl) {
+		loadPdf(pdfUrl);
+	}
 </script>
 
 <style>
-    div#pdf-container {
-        overflow-y: auto;
-        min-height: 400px;
-        border-radius: 5px;
-				width: 100%;
-				height: 100%;
+    .controls {
+        margin-bottom: 1rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+				height: 5vh;
     }
+
+    button {
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        border: 1px solid lightgray;
+        background-color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #f0f0f0;
+    }
+
+    .pdf-container {
+        overflow-x: auto;
+        overflow-y: auto;
+				max-height: 95vh;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
     canvas {
         display: block;
-        margin: 10px auto;
-        box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        margin: 0 auto 1rem;
     }
 </style>
 
-<div id="pdf-container" bind:this={container}></div>
+<div class="controls">
+	<button on:click={zoomOut}>- Zoom Out</button>
+	<button on:click={zoomIn}>+ Zoom In</button>
+</div>
+
+<div bind:this={container} class="pdf-container"></div>

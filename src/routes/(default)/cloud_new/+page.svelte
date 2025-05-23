@@ -5,9 +5,9 @@
   import { goto } from '$app/navigation';
   import { PUBLIC_API_URL } from '$env/static/public';
   import { getAuthorizationHeaders } from '$lib/auth/auth';
-  import PdfRender from '$lib/components/cloud/PdfRender.svelte';
 
 
+  let PdfRender: any = $state(null);
   let { data } = $props();
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
@@ -103,12 +103,15 @@
     }, 300); // 300ms debounce
   });
 
-  onMount(()=>{
+  onMount(async ()=>{
+    const module = await import('$lib/components/cloud/PdfRender.svelte');
+    PdfRender = module.default;
+
     const url_path = page?.url.searchParams.get('path');
     if (url_path) {
       path = url_path
       if (url_path.includes('.')) {
-        downloadOrOpenFile(url_path)
+        await downloadOrOpenFile(url_path)
       } else {
         get_current_files()
       }
