@@ -201,7 +201,7 @@
 
           if (!res.ok) {
             const { error } = await res.json();
-            throw new Error(error || 'Unknown error');
+            alert(error || 'Unknown error');
           }
 
           const data = await res.json();
