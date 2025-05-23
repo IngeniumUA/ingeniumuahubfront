@@ -3,11 +3,11 @@
   import { onDestroy, onMount } from 'svelte';
   import { page } from '$app/state';
   import { goto } from '$app/navigation';
-  import mammoth from 'mammoth';
   import { PUBLIC_API_URL } from '$env/static/public';
   import { getAuthorizationHeaders } from '$lib/auth/auth';
 
 
+  let PdfRender: any = $state(null);
   let { data } = $props();
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
@@ -17,8 +17,9 @@
   let query = $state('');
   let timeout: ReturnType<typeof setTimeout>;
   let cleared_query = $state(true);
+  let loading_file = $state(false);
 
-  function get_current_files() {
+  function get_current_files(update_params=true) {
     query = ''
     openedFile = {open: false, url: '', type: '', file: ''};
     if (data.file_list === undefined) {return}
@@ -32,7 +33,9 @@
         }
       }
     }
-    updateSearchParam()
+    if (update_params) {
+      updateSearchParam()
+    }
   }
 
   function search_files(search: string) {
@@ -74,7 +77,25 @@
       }
     }
   }
+  let currentSearch: string | null = null;
   $effect(() => {
+    const newSearch = page?.url.searchParams.get('path');
+    if (newSearch !== currentSearch) {
+      currentSearch = newSearch;
+      const url_path = page?.url.searchParams.get('path');
+      current_folders = []
+      current_files= []
+      if (url_path) {
+        path = url_path
+        if (!url_path.includes('.')) {
+          get_current_files(false)
+        }
+      } else {
+        path = ""
+        get_current_files(false)
+      }
+    }
+
     const q = query;
     clearTimeout(timeout); // clear any previous debounce
     timeout = setTimeout(() => {
@@ -82,12 +103,15 @@
     }, 300); // 300ms debounce
   });
 
-  onMount(()=>{
+  onMount(async ()=>{
+    const module = await import('$lib/components/cloud/PdfRender.svelte');
+    PdfRender = module.default;
+
     const url_path = page?.url.searchParams.get('path');
     if (url_path) {
       path = url_path
       if (url_path.includes('.')) {
-        downloadOrOpenFile(url_path)
+        await downloadOrOpenFile(url_path)
       } else {
         get_current_files()
       }
@@ -136,7 +160,7 @@
   function updateSearchParam() {
     const url = new URL(page.url);
     url.searchParams.set('path', path);
-    goto(`${url.pathname}?${url.searchParams.toString()}`, { keepFocus: true, replaceState: true });
+    goto(`${url.pathname}?${url.searchParams.toString()}`, { keepFocus: true, replaceState: false });
   }
 
 
@@ -164,19 +188,37 @@
     let url = URL.createObjectURL(blob);
 
     // Open the file locally
-    if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx"])) {
+    if (checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])) {
+      loading_file = true
       path = file
       current_folders = []
       current_files= []
       updateSearchParam()
 
-      if (checkFileType(file, [".docx"])) {
-        const arrayBuffer = await blob.arrayBuffer();
-        const result = await mammoth.convertToHtml({ arrayBuffer });
-        fileHtml = result.value;
+      if (fileIsConverted(file)) {
+        try {
+          const formData = new FormData();
+          formData.append('file', blob, file);
+          const res = await fetch(`${PUBLIC_API_URL}/cloud/convert`, {
+            method: 'POST',
+            headers: getAuthorizationHeaders(null),
+            body: formData
+          });
+
+          if (!res.ok) {
+            const { error } = await res.json();
+            alert(error || 'Unknown error');
+          }
+
+          const data = await res.json();
+          fileHtml = data.html;
+        } catch (err) {
+          console.error('Fetch error:', err);
+        }
       }
 
       openedFile = {open: true, url: url, type: blob.type, file: file};
+      loading_file = false
       return
     }
 
@@ -211,8 +253,8 @@
   function folderIsFile(folder: string) {
     return folder.includes(".")
   }
-  function fileIsDocx(file: string) {
-    return checkFileType(file, [".docx"])
+  function fileIsConverted(file: string) {
+    return checkFileType(file, [".docx", ".odt", ".md", ".markdown", ".tex"])
   }
   function fileIsImg(file: string) {
     return checkFileType(file, [".jpg", ".png", ".jpeg"])
@@ -260,41 +302,53 @@
     </div>
     {#if openedFile.open}
       <div class="file_container">
-        {#if fileIsDocx(openedFile.file)}
-          {@html fileHtml}
+        {#if fileIsConverted(openedFile.file)}
+          <iframe
+            title="cloud document"
+            srcdoc={fileHtml}
+            style="width: 100%; height: 100%; border: none; min-height: 400px; border-radius: 5px"
+            sandbox="allow-same-origin allow-scripts"
+          ></iframe>
         {:else if fileIsImg(openedFile.file)}
           <img src="{openedFile.url}" alt="Cloud">
         {:else}
-          <iframe title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px"></iframe>
+          <PdfRender pdfUrl={openedFile.url}></PdfRender>
         {/if}
       </div>
     {:else}
-      <div class="browse_file_container">
-        {#if !isPathEmpty()}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
-          </div>
+      {#if loading_file}
+        <p>We zijn je bestand aan het openen...</p>
+      {:else}
+        {#if data.file_list === undefined}
+          <p>We zijn de cloud aan het laden...</p>
         {/if}
-        {#each current_folders as folder}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
-          </div>
-        {/each}
-        {#each current_files as file}
-          <div class="icon-text-wrapper">
-            <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-            <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
-          </div>
-        {/each}
-      </div>
+        <div class="browse_file_container">
+          {#if !isPathEmpty()}
+            <div class="icon-text-wrapper">
+              <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
+            </div>
+          {/if}
+          {#each current_folders as folder}
+            <div class="icon-text-wrapper">
+              <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
+            </div>
+          {/each}
+          {#each current_files as file}
+            <div class="icon-text-wrapper">
+              <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
+            </div>
+          {/each}
+        </div>
+      {/if}
     {/if}
   </div>
 
@@ -302,6 +356,7 @@
 
 <style>
   .cloud_container {
+    touch-action: pinch-zoom;
     display: flex;
     flex-direction: column;
     height: 120vh;
@@ -311,12 +366,12 @@
 
   .browse_file_container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
     gap: 1rem;
     overflow-y: auto;
     padding: 1rem;
     box-sizing: border-box;
-    flex: 1;
+    /*flex: 1;*/
   }
 
   .file_container {
@@ -358,7 +413,7 @@
   }
 
   .icon-text {
-    max-width: 100px;
+    max-width: 70px;
     margin-top: 0.1rem;
     text-align: center;
     word-wrap: break-word;
