@@ -18,7 +18,7 @@
   let timeout: ReturnType<typeof setTimeout>;
   let cleared_query = $state(true);
 
-  function get_current_files() {
+  function get_current_files(update_params=true) {
     query = ''
     openedFile = {open: false, url: '', type: '', file: ''};
     if (data.file_list === undefined) {return}
@@ -32,7 +32,9 @@
         }
       }
     }
-    updateSearchParam()
+    if (update_params) {
+      updateSearchParam()
+    }
   }
 
   function search_files(search: string) {
@@ -74,7 +76,25 @@
       }
     }
   }
+  let currentSearch: string | null = null;
   $effect(() => {
+    const newSearch = page?.url.searchParams.get('path');
+    if (newSearch !== currentSearch) {
+      currentSearch = newSearch;
+      const url_path = page?.url.searchParams.get('path');
+      current_folders = []
+      current_files= []
+      if (url_path) {
+        path = url_path
+        if (!url_path.includes('.')) {
+          get_current_files(false)
+        }
+      } else {
+        path = ""
+        get_current_files(false)
+      }
+    }
+
     const q = query;
     clearTimeout(timeout); // clear any previous debounce
     timeout = setTimeout(() => {
@@ -136,7 +156,7 @@
   function updateSearchParam() {
     const url = new URL(page.url);
     url.searchParams.set('path', path);
-    goto(`${url.pathname}?${url.searchParams.toString()}`, { keepFocus: true, replaceState: true });
+    goto(`${url.pathname}?${url.searchParams.toString()}`, { keepFocus: true, replaceState: false });
   }
 
 
@@ -265,14 +285,17 @@
         {:else if fileIsImg(openedFile.file)}
           <img src="{openedFile.url}" alt="Cloud">
         {:else}
-          <iframe title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px"></iframe>
+          <embed title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px">
         {/if}
       </div>
     {:else}
+      {#if data.file_list === undefined}
+        <p>We zijn de cloud aan het laden...</p>
+      {/if}
       <div class="browse_file_container">
         {#if !isPathEmpty()}
           <div class="icon-text-wrapper">
-            <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
             <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
@@ -280,7 +303,7 @@
         {/if}
         {#each current_folders as folder}
           <div class="icon-text-wrapper">
-            <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
             <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
@@ -288,7 +311,7 @@
         {/each}
         {#each current_files as file}
           <div class="icon-text-wrapper">
-            <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" height="100px" width="100px" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg>
             <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
@@ -302,6 +325,7 @@
 
 <style>
   .cloud_container {
+    touch-action: pinch-zoom;
     display: flex;
     flex-direction: column;
     height: 120vh;
@@ -311,12 +335,12 @@
 
   .browse_file_container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
     gap: 1rem;
     overflow-y: auto;
     padding: 1rem;
     box-sizing: border-box;
-    flex: 1;
+    /*flex: 1;*/
   }
 
   .file_container {
@@ -358,7 +382,7 @@
   }
 
   .icon-text {
-    max-width: 100px;
+    max-width: 70px;
     margin-top: 0.1rem;
     text-align: center;
     word-wrap: break-word;
