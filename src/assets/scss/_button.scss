@@ -53,6 +53,10 @@
     }
   }
 
+  &.button-icon {
+    @apply p-0 w-8 h-8 justify-center items-center;
+  }
+
   &.button-danger {
     @apply border-red-900 text-white bg-red-900 focus:outline focus:outline-red-950 focus:outline-offset-2;
 
