@@ -18,6 +18,7 @@
   let timeout: ReturnType<typeof setTimeout>;
   let cleared_query = $state(true);
   let loading_file = $state(false);
+  let grid_mode = $state(false)
 
   function get_current_files(update_params=true) {
     query = ''
@@ -231,7 +232,31 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
-  function downloadFile(url: string, file: string) {
+  async function downloadFile(file: string) {
+    let response
+    try {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}`, {
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
+
+    if (!response) {
+      alert('No response from the server');
+      return;
+    }
+    if (!response.ok) {
+      alert('Failed to fetch the file: ' + response.statusText);
+      return;
+    }
+
+    const blob = await response.blob();
+    let url = URL.createObjectURL(blob);
+    downloadFileWithUrl(url, file);
+  }
+  function downloadFileWithUrl(url: string, file: string) {
     // Download the file
     const a = document.createElement('a');
     a.href = url;
@@ -296,6 +321,18 @@
     </div>
   </div>
 
+  <div class="style_buttons">
+    <button onclick="{()=>{grid_mode = true}}" class="{grid_mode ? 'style_button_selected' : 'style_button_deselected'}" aria-label="grid">
+      <svg class="w-6 h-6 text-gray-800 dark:text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857Zm10 0A1.857 1.857 0 0 0 13 14.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 19.143v-4.286A1.857 1.857 0 0 0 19.143 13h-4.286Z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+    <button onclick="{()=>{grid_mode = false}}" class="{!grid_mode ? 'style_button_selected' : 'style_button_deselected'}" aria-label="list">
+      <svg class="w-6 h-6 text-gray-800 dark:text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"/>
+      </svg>
+    </button>
+  </div>
   <div class="cloud_container">
     <div class="breadcrumb">
       <p>Map:</p>
@@ -311,7 +348,7 @@
       {/each}
       {#if openedFile.open}
         <div class="ml-auto pr-2">
-          <button type="button" onclick="{()=>{downloadFile(openedFile.url, openedFile.file)}}" class="button button-education button-icon button-icon-only cursor-pointer" aria-label="download">
+          <button type="button" onclick="{()=>{downloadFileWithUrl(openedFile.url, openedFile.file)}}" class="button button-education button-icon button-icon-only cursor-pointer" aria-label="download">
             <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
               <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
               <path fill-rule="evenodd" d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
@@ -347,29 +384,40 @@
         {#if data.file_list === undefined}
           <p>We zijn de cloud aan het laden...</p>
         {/if}
-        <div class="browse_file_container">
+
+        <div class="browse_file_container_{grid_mode ? 'grid' : 'list'}">
           {#if !isPathEmpty()}
-            <div class="icon-text-wrapper">
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
               <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
-              <button class="icon-text" onclick="{()=>{backFolder()}}">Terug</button>
+              <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{backFolder()}}">Terug</button>
             </div>
           {/if}
           {#each current_folders as folder}
-            <div class="icon-text-wrapper">
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
               <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
-              <button class="icon-text" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
+              <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
             </div>
           {/each}
           {#each current_files as file}
-            <div class="icon-text-wrapper">
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
               <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
-              <button class="icon-text" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
+              <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
+              {#if !grid_mode}
+                <div class="ml-auto pr-2">
+                  <button type="button" onclick="{()=>{downloadFile(file[1])}}" class="button button-education button-icon button-icon-only cursor-pointer" aria-label="download">
+                    <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
+                      <path fill-rule="evenodd" d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                </div>
+              {/if}
             </div>
           {/each}
         </div>
@@ -380,6 +428,33 @@
 </main>
 
 <style>
+  .style_buttons {
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+    margin-bottom: 0.25rem;
+    /*padding: 0.5rem 1rem;*/
+    /*border: 1px solid #ddd;*/
+    /*border-radius: 6px;*/
+    /*transition: background 0.2s;*/
+  }
+  .style_button_deselected {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+  .style_button_selected {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
+    background-color: #f5f5f5;
+  }
+  .style_button_deselected:hover {
+    background-color: #f5f5f5;
+  }
+
   .cloud_container {
     touch-action: pinch-zoom;
     display: flex;
@@ -389,14 +464,22 @@
     border-radius: 10px;
   }
 
-  .browse_file_container {
+  .browse_file_container_grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 1rem;
     overflow-y: auto;
     padding: 1rem;
     box-sizing: border-box;
     /*flex: 1;*/
+  }
+  .browse_file_container_list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+    padding: 1rem;
+    box-sizing: border-box;
   }
 
   .file_container {
@@ -431,17 +514,54 @@
     font-size: 1rem;
   }
 
-  .icon-text-wrapper {
+  .icon-text-wrapper-grid {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
   }
 
-  .icon-text {
+  .icon-text-wrapper-grid:hover {
+    background-color: #f5f5f5;
+  }
+
+  .icon-text-grid {
+    padding: 0.01rem 0.05rem;
     max-width: 70px;
     margin-top: 0.1rem;
     text-align: center;
     word-wrap: break-word;
     white-space: normal;
+  }
+
+  .icon-text-wrapper-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .icon-text-wrapper-list svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .icon-text-wrapper-list:hover {
+    background-color: #f5f5f5;
+  }
+
+  .icon-text-list {
+    max-width: none;
+    margin-top: 0;
+    text-align: left;
+    word-break: break-word;
+    white-space: normal;
+    flex: 1;
   }
 </style>
