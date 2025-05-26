@@ -61,7 +61,7 @@ click.rich_click.OPTION_GROUPS = {
         ],
     "kippietools setmode": [
         {
-            "name": "Set the mode of the app between notificationtest and release",
+            "name": "Set the mode of the app between notificationtest, release, iosdebug and iosrelease",
             "options": ["--mode"],
         }
     ],
@@ -86,6 +86,7 @@ def cli():
     """
     This tool is can be used to set the version number of the app.
     It can also set the app to the notification test url and back to the release url. This only works for android.
+    It is also able to set the ios config in a debug mode so github workflow can produce a functioning debug file.
     """
 
 @cli.command()
@@ -111,7 +112,7 @@ def getversion():
 
 
 @cli.command()
-@click.option("--mode", "-m", required=True, help="The mode that the app gets set to, can be 'release' or 'notificationtest'. Only works on android.")
+@click.option("--mode", "-m", required=True, help="The mode that the app gets set to, can be 'release', 'notificationtest', 'iosdebug or iosrelease. Notificationtest only works on android.")
 def setmode(mode):
     """Set the android app mode."""
     app_url = ""
@@ -122,12 +123,65 @@ def setmode(mode):
             os.rename("./android/app/google-services (prod).json", "./android/app/google-services.json")
         app_url = "development.com.app.ingeniumua"
         app_name = "Ingenium"
+
     elif mode == "notificationtest":
         if os.path.isfile("./android/app/google-services (dev).json"):
             os.rename("./android/app/google-services.json", "./android/app/google-services (prod).json")
             os.rename("./android/app/google-services (dev).json", "./android/app/google-services.json")
         app_url = "test.development.com.app.ingeniumua"
         app_name = "Ingenium Test"
+
+    elif mode == "iosrelease":
+        with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
+            data = projfile.readlines()
+
+        isInRelease = False
+        for i in range(len(data)):
+            if data[i].startswith("				CODE_SIGN_STYLE = Manual"):
+                isInRelease = True
+                break
+        if not isInRelease:
+            for i in range(len(data)):
+                if data[i].startswith("				CODE_SIGN_STYLE = "):
+                    data[i] = f"				CODE_SIGN_STYLE = Manual;\n"
+                elif data[i].startswith("						ProvisioningStyle = "):
+                    data[i] = f'						ProvisioningStyle = Manual;\n'
+                elif data[i].startswith('				CODE_SIGN_IDENTITY = "Apple Development";'):
+                    data[i] = f'				CODE_SIGN_IDENTITY = "Apple Development";\n				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";\n'
+                elif data[i].startswith('				DEVELOPMENT_TEAM = '):
+                    data[i] = f'				DEVELOPMENT_TEAM = "";\n				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = KN532TA27C;\n'
+                elif data[i].startswith(
+                        '				PROVISIONING_PROFILE_SPECIFIER = "";'):
+                    data[i] = f'				PROVISIONING_PROFILE_SPECIFIER = "";\n				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github App creation";\n'
+            with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
+                for line in data:
+                    buildfile.write(line)
+    elif mode == "iosdebug":
+        with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
+            data = projfile.readlines()
+
+        isInDebug = False
+        for i in range(len(data)):
+            if data[i].startswith("				CODE_SIGN_STYLE = Automatic"):
+                isInDebug = True
+                break
+        if not isInDebug:
+            for i in range(len(data)):
+                if data[i].startswith("				CODE_SIGN_STYLE = "):
+                    data[i] = f"				CODE_SIGN_STYLE = Automatic;\n"
+                elif data[i].startswith("						ProvisioningStyle = "):
+                    data[i] = f'						ProvisioningStyle = Automatic;\n'
+                elif data[i].startswith("				DEVELOPMENT_TEAM = "):
+                    data[i] = f'				DEVELOPMENT_TEAM = KN532TA27C;\n'
+                elif data[i].startswith('				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";'):
+                    data[i] = f''
+                elif data[i].startswith('				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = KN532TA27C;'):
+                    data[i] = f''
+                elif data[i].startswith('				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github App creation";'):
+                    data[i] = f''
+            with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
+                for line in data:
+                    buildfile.write(line)
     else:
         raise ValueError("Invalid mode, must be 'release' or 'notificationtest'")
 
