@@ -1,4 +1,11 @@
-﻿on: workflow_dispatch
+﻿on:
+  workflow_dispatch:
+    inputs:
+      run:
+        description: 'run the ipa generator'
+        default: true
+        required: true
+        type: boolean
 
 jobs:
   build_ios:
