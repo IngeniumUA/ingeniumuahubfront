@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev --mode dev --host",
-		"build": "vite build",
+		"build": "vite build --mode staging",
 		"build:staging": "vite build --mode staging && vite preview",
 		"test:android": "vite build --mode staging && npx cap sync && npx cap run android --target R5CXC0A5L2L",
 		"test:ios": "vite build --mode staging && npx cap sync && npx cap run ios --target [TARGET]",
