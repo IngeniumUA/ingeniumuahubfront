@@ -72,6 +72,7 @@
 									<a href="/info/praesidium" class="nav-dropdown-item" role="menuitem">Praesidium</a>
 									<a href="/info/relations" class="nav-dropdown-item">Partner relations</a>
 									<a href="https://www.engineersoftomorrow.com/" target="_blank" rel="opener" class="nav-dropdown-item" role="menuitem">Engineers Of Tomorrow</a>
+									<a href="https://wiki.ingeniumua.be/" target="_blank" rel="opener" class="nav-dropdown-item" role="menuitem">Wiki</a>
 									<a href="/vacatures" class="nav-dropdown-item" role="menuitem">Vacatures</a>
 									<a href="/info/clublied" class="nav-dropdown-item" role="menuitem">Clublied</a>
 									<a href="/info/contact" class="nav-dropdown-item" role="menuitem">Contact</a>
