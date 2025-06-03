@@ -228,7 +228,7 @@
     // Download the file
     const a = document.createElement('a');
     a.href = url;
-    a.download = file;
+    a.download = file.split("/").reverse()[0];
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -272,7 +272,7 @@
     // Download the file
     const a = document.createElement('a');
     a.href = url;
-    a.download = file;
+    a.download = file.split("/").reverse()[0];
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
