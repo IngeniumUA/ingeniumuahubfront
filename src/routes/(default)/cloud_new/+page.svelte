@@ -444,7 +444,7 @@
               {#if !grid_mode}
                 <div class="ml-auto">
                   {#if current_metadata[file[1]] !== null && current_metadata[file[1]] !== undefined}
-                    <p>{current_metadata[file[1]].last_modified.split("T")[0].split("-").reverse().join("/")}</p>
+                    <button type="button" onclick="{()=>{downloadOrOpenFile(file[1])}}">{current_metadata[file[1]].last_modified.split("T")[0].split("-").reverse().join("/")}</button>
                   {/if}
                 </div>
                 <div class="ml-auto pr-2 pl-2 leftline">
