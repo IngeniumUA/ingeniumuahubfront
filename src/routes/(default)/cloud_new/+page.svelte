@@ -12,6 +12,7 @@
   let { data } = $props();
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
+  let current_metadata: { [key: string]: {last_modified: string} } = $state({})
   let path: string = $state("")
   let openedFile: {open: boolean, url: string, type: string, file: string, blob: Blob | null} = $state({open: false, url: '', type: '', file: '', blob: null})
   let fileHtml = $state('');
@@ -32,6 +33,7 @@
           current_folders.push(blob_in_folder.split("/")[0])
         } else if (!blob_in_folder.includes("/")) {
           current_files.push([blob_in_folder, blob])
+          getFileMetadata(blob)
         }
       }
     }
@@ -162,15 +164,15 @@
 
 
   async function downloadAndOpenFile(file: string) {
-		let response
-		try {
-			response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}`, {
-				method: 'GET',
-				headers: getAuthorizationHeaders(null)
-			});
-		} catch (err) {
-			console.error('Fetch error:', err);
-		}
+    let response
+    try {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=false`, {
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
 
 		if (!response) {
 			alert('No response from the server');
@@ -248,16 +250,16 @@
       reader.readAsDataURL(blob);
     });
   }
-	async function downloadFile(file: string) {
-		let response
-		try {
-			response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}`, {
-				method: 'GET',
-				headers: getAuthorizationHeaders(null)
-			});
-		} catch (err) {
-			console.error('Fetch error:', err);
-		}
+  async function downloadFile(file: string) {
+    let response
+    try {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=true`, {
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
 
 		if (!response) {
 			alert('No response from the server');
@@ -286,14 +288,26 @@
 		downloadFile(file)
 	}
 
-	function checkFileType(file: string, allowed_types: string[]) {
-		for (const allowed_type of allowed_types) {
-			if (file.endsWith(allowed_type)) {
-				return true
-			}
-		}
-		return false
-	}
+  async function getFileMetadata(file: string) {
+    try {
+      const metadata = await fetch(`${PUBLIC_API_URL}/cloud/get_file_metadata/${file}`, {  // let backend know a file is being downloaded
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+      current_metadata[file] = await metadata.json();
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
+  }
+
+  function checkFileType(file: string, allowed_types: string[]) {
+    for (const allowed_type of allowed_types) {
+      if (file.endsWith(allowed_type)) {
+        return true
+      }
+    }
+    return false
+  }
 
   function isPathEmpty() {
     return path === ""
@@ -428,7 +442,12 @@
               </svg>
               <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{downloadAndOpenFile(file[1])}}">{file[0]}</button>
               {#if !grid_mode}
-                <div class="ml-auto pr-2">
+                <div class="ml-auto">
+                  {#if current_metadata[file[1]] !== null && current_metadata[file[1]] !== undefined}
+                    <p>{current_metadata[file[1]].last_modified.split("T")[0].split("-").reverse().join("/")}</p>
+                  {/if}
+                </div>
+                <div class="ml-auto pr-2 pl-2 leftline">
                   <button type="button" onclick="{()=>{downloadFile(file[1])}}" class="button button-education button-icon button-icon-only cursor-pointer" aria-label="download">
                     <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                       <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
@@ -472,6 +491,17 @@
   }
   .style_button_deselected:hover {
     background-color: #f5f5f5;
+  }
+  .leftline {
+    @media (min-width: 500px) {
+      border-left: 2px solid #ddd;
+    }
+    @media (max-width: 500px) {
+      visibility: hidden;
+      width: 0;
+      padding: 0;
+      margin: 0;
+    }
   }
 
   .cloud_container {
