@@ -509,7 +509,7 @@
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 1rem;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 0.5rem;
     box-sizing: border-box;
     /*flex: 1;*/
   }
@@ -518,7 +518,7 @@
     flex-direction: column;
     gap: 0.75rem;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 0.5rem;
     box-sizing: border-box;
   }
 
@@ -526,7 +526,7 @@
     height: 100%;
     gap: 1rem;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 0.25rem;
     box-sizing: border-box;
     flex: 1;
   }
