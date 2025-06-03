@@ -135,53 +135,27 @@ def setmode(mode):
         with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
             data = projfile.readlines()
 
-        isInRelease = False
         for i in range(len(data)):
-            if data[i].startswith("				CODE_SIGN_STYLE = Manual"):
-                isInRelease = True
-                break
-        if not isInRelease:
-            for i in range(len(data)):
-                if data[i].startswith("				CODE_SIGN_STYLE = "):
-                    data[i] = f"				CODE_SIGN_STYLE = Manual;\n"
-                elif data[i].startswith("						ProvisioningStyle = "):
-                    data[i] = f'						ProvisioningStyle = Manual;\n'
-                elif data[i].startswith('				CODE_SIGN_IDENTITY = "Apple Development";'):
-                    data[i] = f'				CODE_SIGN_IDENTITY = "Apple Development";\n				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";\n'
-                elif data[i].startswith('				DEVELOPMENT_TEAM = '):
-                    data[i] = f'				DEVELOPMENT_TEAM = "";\n				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = KN532TA27C;\n'
-                elif data[i].startswith(
-                        '				PROVISIONING_PROFILE_SPECIFIER = "";'):
-                    data[i] = f'				PROVISIONING_PROFILE_SPECIFIER = "";\n				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github App creation";\n'
-            with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
-                for line in data:
-                    buildfile.write(line)
+            if data[i].startswith('				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";'):
+                data[i] = f'				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";\n'
+            elif data[i].startswith(
+                    '				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "App Developer Profile";'):
+                data[i] = f'				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github App creation";\n'
+        with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
+            for line in data:
+                buildfile.write(line)
     elif mode == "iosdebug":
         with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
             data = projfile.readlines()
 
-        isInDebug = False
         for i in range(len(data)):
-            if data[i].startswith("				CODE_SIGN_STYLE = Automatic"):
-                isInDebug = True
-                break
-        if not isInDebug:
-            for i in range(len(data)):
-                if data[i].startswith("				CODE_SIGN_STYLE = "):
-                    data[i] = f"				CODE_SIGN_STYLE = Automatic;\n"
-                elif data[i].startswith("						ProvisioningStyle = "):
-                    data[i] = f'						ProvisioningStyle = Automatic;\n'
-                elif data[i].startswith("				DEVELOPMENT_TEAM = "):
-                    data[i] = f'				DEVELOPMENT_TEAM = KN532TA27C;\n'
-                elif data[i].startswith('				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";'):
-                    data[i] = f''
-                elif data[i].startswith('				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = KN532TA27C;'):
-                    data[i] = f''
-                elif data[i].startswith('				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github App creation";'):
-                    data[i] = f''
-            with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
-                for line in data:
-                    buildfile.write(line)
+            if data[i].startswith('				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";'):
+                data[i] = f'				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";\n'
+            elif data[i].startswith('				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github App creation";'):
+                data[i] = f'				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "App Developer Profile";\n'
+        with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
+            for line in data:
+                buildfile.write(line)
     else:
         raise ValueError("Invalid mode, must be 'release' or 'notificationtest'")
 
@@ -190,7 +164,7 @@ def setmode(mode):
     replace_android_url_name(filename="./android/app/src/main/assets/capacitor.config.json", app_name=app_name, app_url=app_url)
     replace_android_url_name(filename="./android/app/src/main/res/values/strings.xml", app_name=app_name, app_url=app_url)
 
-    print("Successfully set android app mode to " + mode)
+    print("Successfully set app mode to " + mode)
 
 @cli.command()
 def prepare_update():
