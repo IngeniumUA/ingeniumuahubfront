@@ -434,7 +434,7 @@
               <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
               {#if !grid_mode}
                 <div class="ml-auto">
-                  {#if current_metadata[file[1]]}
+                  {#if current_metadata[file[1]] !== null && current_metadata[file[1]] !== undefined}
                     <p>{current_metadata[file[1]].last_modified.split("T")[0].split("-").reverse().join("/")}</p>
                   {/if}
                 </div>
@@ -484,7 +484,15 @@
     background-color: #f5f5f5;
   }
   .leftline {
-    border-left: 2px solid #ddd;
+    @media (min-width: 500px) {
+      border-left: 2px solid #ddd;
+    }
+    @media (max-width: 500px) {
+      visibility: hidden;
+      width: 0;
+      padding: 0;
+      margin: 0;
+    }
   }
 
   .cloud_container {
