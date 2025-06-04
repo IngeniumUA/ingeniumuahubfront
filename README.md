@@ -24,6 +24,20 @@ During development, you can run the app on your device using `npm run test:andro
 <br>
 For this to work you will need to change the target in package.json. To get the target id of your device, run `npx cap run [ios/android] --list`.
 
+### Building ipa for iOS without mac
+You can build an ipa file for testing without a mac through Github Workflows:
+1. Go to the Github repo and open the sveltekit mobile app branch
+2. Go to the Actions tab
+3. Go to the ios-debug.yml workflow
+4. Open the dropdown "Run workflow" on the right side of the screen
+5. Change the branch from main to sveltekit mobile, leave the checkbox checked
+6. Click run workflow and open the running workflow
+7. When it's finished, an artifact will be downloadable with the ipa file
+8. Upload the ipa file to https://www.installonair.com/#
+9. Download on iPhone by scanning the QR-code
+<br>
+note: this will only work if the iPhone is registered in the Apple developer console and added to the developer profile. The iPhone also needs to be set up so it allows downloading and opening ipa files.
+
 ## Using the kippietools
 ### Getting the curren app version
 run `python kippietools getversion`.
