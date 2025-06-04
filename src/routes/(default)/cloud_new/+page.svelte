@@ -179,7 +179,7 @@
 			return;
 		}
 		if (!response.ok) {
-			alert('Failed to fetch the file: ' + response.statusText);
+			alert('Failed to fetch the file: ' + JSON.stringify(response));
 			return;
 		}
 
