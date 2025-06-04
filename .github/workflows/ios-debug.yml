@@ -92,5 +92,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-ios
-          path: output/
+          path: output/App.ipa
           retention-days: 1
