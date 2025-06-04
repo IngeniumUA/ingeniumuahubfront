@@ -66,6 +66,7 @@
         const split_blob = blob.split("/")
         if (split_blob[split_blob.length - 1].toLowerCase().includes(search.toLowerCase())) {
           current_files.push([split_blob[split_blob.length - 1], blob])
+          getFileMetadata(blob)
         } else {
           let folder_path = ""
           const folder_path_index = split_blob.findIndex(blob_in_split => blob_in_split.toLowerCase().includes(search.toLowerCase()))
