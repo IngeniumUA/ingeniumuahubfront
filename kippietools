@@ -134,7 +134,6 @@ def setmode(mode):
     elif mode == "iosrelease":
         with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
             data = projfile.readlines()
-
         for i in range(len(data)):
             if data[i].startswith('				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";'):
                 data[i] = f'				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";\n'
@@ -144,10 +143,20 @@ def setmode(mode):
         with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
             for line in data:
                 buildfile.write(line)
+
+        with open("./archive.plist", "r") as archfile:
+            data_arch = archfile.readlines()
+        for i in range(len(data_arch)):
+            if data_arch[i].startswith('<string>development</string>'):
+                data_arch[i] = f'<string>app-store-connect</string>\n'
+            elif data_arch[i].startswith('    <string>App Developer Profile</string>'):
+                data_arch[i] = f'    <string>Github App creation</string>\n'
+        with open("./archive.plist", "w") as archbuildfile:
+            for line in data_arch:
+                archbuildfile.write(line)
     elif mode == "iosdebug":
         with open("./ios/App/App.xcodeproj/project.pbxproj", "r") as projfile:
             data = projfile.readlines()
-
         for i in range(len(data)):
             if data[i].startswith('				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";'):
                 data[i] = f'				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";\n'
@@ -156,6 +165,17 @@ def setmode(mode):
         with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
             for line in data:
                 buildfile.write(line)
+
+        with open("./archive.plist", "r") as archfile:
+                    data_arch = archfile.readlines()
+        for i in range(len(data_arch)):
+            if data_arch[i].startswith('<string>app-store-connect</string>'):
+                data_arch[i] = f'<string>development</string>\n'
+            elif data_arch[i].startswith('    <string>Github App creation</string>'):
+                data_arch[i] = f'    <string>App Developer Profile</string>\n'
+        with open("./archive.plist", "w") as archbuildfile:
+                    for line in data_arch:
+                        archbuildfile.write(line)
     else:
         raise ValueError("Invalid mode, must be 'release' or 'notificationtest'")
 

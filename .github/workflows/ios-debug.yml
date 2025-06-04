@@ -76,7 +76,7 @@ jobs:
       - name: Capacitor sync
         run: npx cap sync
 
-      - name: set app mode to release
+      - name: set app mode to debug
         run: python kippietools setmode -m iosdebug
 
       - name: generate needed release notes and set version
