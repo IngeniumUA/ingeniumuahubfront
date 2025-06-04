@@ -11,6 +11,7 @@
   let { data } = $props();
   let current_folders: string[] = $state([])
   let current_files: string[][] = $state([])
+  let current_metadata: { [key: string]: {last_modified: string} } = $state({})
   let path: string = $state("")
   let openedFile: {open: boolean, url: string, type: string, file: string} = $state({open: false, url: '', type: '', file: ''})
   let fileHtml = $state('');
@@ -31,6 +32,7 @@
           current_folders.push(blob_in_folder.split("/")[0])
         } else if (!blob_in_folder.includes("/")) {
           current_files.push([blob_in_folder, blob])
+          getFileMetadata(blob)
         }
       }
     }
@@ -168,7 +170,7 @@
   async function downloadOrOpenFile(file: string) {
     let response
     try {
-      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}`, {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=false`, {
         method: 'GET',
         headers: getAuthorizationHeaders(null)
       });
@@ -226,7 +228,7 @@
     // Download the file
     const a = document.createElement('a');
     a.href = url;
-    a.download = file;
+    a.download = file.split("/").reverse()[0];
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -235,7 +237,7 @@
   async function downloadFile(file: string) {
     let response
     try {
-      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}`, {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=true`, {
         method: 'GET',
         headers: getAuthorizationHeaders(null)
       });
@@ -254,17 +256,39 @@
 
     const blob = await response.blob();
     let url = URL.createObjectURL(blob);
-    downloadFileWithUrl(url, file);
+    downloadFileWithUrl(url, file, true);
   }
-  function downloadFileWithUrl(url: string, file: string) {
+  function downloadFileWithUrl(url: string, file: string, fetched: boolean = false) {
+    if (!fetched) {
+      try {
+        fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=true`, {  // let backend know a file is being downloaded
+          method: 'GET',
+          headers: getAuthorizationHeaders(null)
+        });
+      } catch (err) {
+        console.error('Fetch error:', err);
+      }
+    }
     // Download the file
     const a = document.createElement('a');
     a.href = url;
-    a.download = file;
+    a.download = file.split("/").reverse()[0];
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  async function getFileMetadata(file: string) {
+    try {
+      const metadata = await fetch(`${PUBLIC_API_URL}/cloud/get_file_metadata/${file}`, {  // let backend know a file is being downloaded
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+      current_metadata[file] = await metadata.json();
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
   }
 
   function checkFileType(file: string, allowed_types: string[]) {
@@ -387,29 +411,34 @@
 
         <div class="browse_file_container_{grid_mode ? 'grid' : 'list'}">
           {#if !isPathEmpty()}
-            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
-              <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <button class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}"  onclick="{()=>{backFolder()}}">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
-              <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{backFolder()}}">Terug</button>
-            </div>
+              <span class="icon-text-{grid_mode ? 'grid' : 'list'}">Terug</span>
+            </button>
           {/if}
           {#each current_folders as folder}
-            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
-              <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <button class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{openSubFolder(folder)}}">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
-              <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{openSubFolder(folder)}}">{folder}</button>
-            </div>
+              <span class="icon-text-{grid_mode ? 'grid' : 'list'}">{folder}</span>
+            </button>
           {/each}
           {#each current_files as file}
-            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
-              <svg onclick="{()=>{downloadOrOpenFile(file[1])}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}"  onclick="{()=>{downloadOrOpenFile(file[1])}}" onkeyup={()=>{}} role="button" tabindex="0">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
-              <button class="icon-text-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{downloadOrOpenFile(file[1])}}">{file[0]}</button>
+              <p class="icon-text-{grid_mode ? 'grid' : 'list'}">{file[0]}</p>
               {#if !grid_mode}
-                <div class="ml-auto pr-2">
+                <div class="ml-auto">
+                  {#if current_metadata[file[1]] !== null && current_metadata[file[1]] !== undefined}
+                    <p>{current_metadata[file[1]].last_modified.split("T")[0].split("-").reverse().join("/")}</p>
+                  {/if}
+                </div>
+                <div class="ml-auto pr-2 pl-2 leftline">
                   <button type="button" onclick="{()=>{downloadFile(file[1])}}" class="button button-education button-icon button-icon-only cursor-pointer" aria-label="download">
                     <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                       <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
@@ -454,6 +483,17 @@
   .style_button_deselected:hover {
     background-color: #f5f5f5;
   }
+  .leftline {
+    @media (min-width: 500px) {
+      border-left: 2px solid #ddd;
+    }
+    @media (max-width: 500px) {
+      visibility: hidden;
+      width: 0;
+      padding: 0;
+      margin: 0;
+    }
+  }
 
   .cloud_container {
     touch-action: pinch-zoom;
@@ -469,7 +509,7 @@
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 1rem;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 0.5rem;
     box-sizing: border-box;
     /*flex: 1;*/
   }
@@ -478,7 +518,7 @@
     flex-direction: column;
     gap: 0.75rem;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 0.5rem;
     box-sizing: border-box;
   }
 
@@ -486,7 +526,7 @@
     height: 100%;
     gap: 1rem;
     overflow-y: auto;
-    padding: 1rem;
+    padding: 0.25rem;
     box-sizing: border-box;
     flex: 1;
   }
