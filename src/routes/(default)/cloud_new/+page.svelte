@@ -420,7 +420,7 @@
 
         <div class="browse_file_container_{grid_mode ? 'grid' : 'list'}">
           {#if !isPathEmpty()}
-            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{backFolder()}}" onkeyup={()=>{}} role="button" tabindex="0">
               <svg onclick="{()=>{backFolder()}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
@@ -428,7 +428,7 @@
             </div>
           {/if}
           {#each current_folders as folder}
-            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}"  onclick="{()=>{openSubFolder(folder)}}" onkeyup={()=>{}} role="button" tabindex="0">
               <svg onclick="{()=>{openSubFolder(folder)}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
@@ -436,7 +436,7 @@
             </div>
           {/each}
           {#each current_files as file}
-            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}">
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{downloadAndOpenFile(file[1])}}" onkeyup={()=>{}} role="button" tabindex="0">
               <svg onclick="{()=>{downloadAndOpenFile(file[1])}}" style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
               </svg>
