@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { auth, isAuthenticated } from "$lib/states/auth.svelte";
+	import { auth, hasRole, isAuthenticated } from '$lib/states/auth.svelte';
 	import { getLoginUrlWithRedirect, doLogout } from "$lib/auth/auth";
 
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
@@ -16,6 +16,10 @@
 		}
 		return whiteTheme ? 'nav-white' : 'nav-dark';
 	});
+
+	function isStaff() {
+		return hasRole("staff")
+	}
 </script>
 
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
@@ -116,6 +120,12 @@
 						<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
 							<a href="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
+
+							{#if isStaff()}
+								<hr class="nav-dropdown-divider">
+								<a href="/cloud_verify" class="nav-dropdown-item" role="menuitem">Cloud uploads</a>
+								<hr class="nav-dropdown-divider">
+							{/if}
 
 							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
 
