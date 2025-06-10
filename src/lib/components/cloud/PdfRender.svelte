@@ -4,13 +4,13 @@
 
 	GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 
-		export let pdfUrl;
+	export let pdfUrl;
 
-		let container;
-		let scale = 1; // user-controlled zoom level
-		let pdfDoc;
+	let container;
+	let scale = 1; // user-controlled zoom level
+	let pdfDoc;
 
-		async function renderAllPages() {
+	async function renderAllPages() {
 		if (!pdfDoc || !container) return;
 
 		container.innerHTML = ''; // clear previous pages
@@ -18,54 +18,54 @@
 		const containerWidth = container.clientWidth;
 
 		for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-		const page = await pdfDoc.getPage(pageNum);
+			const page = await pdfDoc.getPage(pageNum);
 
-		const unscaledViewport = page.getViewport({ scale: 1 });
-		const fitScale = containerWidth / unscaledViewport.width;
-		const finalScale = fitScale * scale;
-		const viewport = page.getViewport({ scale: finalScale });
+			const unscaledViewport = page.getViewport({ scale: 1 });
+			const fitScale = containerWidth / unscaledViewport.width;
+			const finalScale = fitScale * scale;
+			const viewport = page.getViewport({ scale: finalScale });
 
-		const canvas = document.createElement('canvas');
-		const context = canvas.getContext('2d');
+			const canvas = document.createElement('canvas');
+			const context = canvas.getContext('2d');
 
-		canvas.width = viewport.width;
-		canvas.height = viewport.height;
+			canvas.width = viewport.width;
+			canvas.height = viewport.height;
 
-		canvas.style.width = `${viewport.width}px`;
-		canvas.style.height = `${viewport.height}px`;
-		canvas.style.display = 'block';
-		canvas.style.marginBottom = '1rem';
+			canvas.style.width = `${viewport.width}px`;
+			canvas.style.height = `${viewport.height}px`;
+			canvas.style.display = 'block';
+			canvas.style.marginBottom = '1rem';
 
-		await page.render({ canvasContext: context, viewport }).promise;
-		container.appendChild(canvas);
+			await page.render({ canvasContext: context, viewport }).promise;
+			container.appendChild(canvas);
+		}
 	}
-	}
 
-		async function loadPdf(url) {
+	async function loadPdf(url) {
 		const loadingTask = getDocument(url);
 		pdfDoc = await loadingTask.promise;
 		await renderAllPages();
 	}
 
-		function zoomIn() {
+	function zoomIn() {
 		scale += 0.1;
 		renderAllPages();
 	}
 
-		function zoomOut() {
+	function zoomOut() {
 		scale = Math.max(0.1, scale - 0.1);
 		renderAllPages();
 	}
 
-		onMount(() => {
-		if (pdfUrl) {
-		loadPdf(pdfUrl);
-	}
+	onMount(() => {
+			if (pdfUrl) {
+			loadPdf(pdfUrl);
+		}
 	});
 
-		$: if (pdfUrl) {
-		loadPdf(pdfUrl);
-	}
+	// $: if (pdfUrl) {
+	// 	loadPdf(pdfUrl);
+	// }
 </script>
 
 <style>
