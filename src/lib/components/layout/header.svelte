@@ -149,11 +149,11 @@
 				<a href="/events" class="nav-item" role="menuitem">Events</a>
 				<a href="/shop" class="nav-item" role="menuitem">Shop</a>
 				<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
+				<a href="https://wiki.ingeniumua.be" class="nav-item" role="menuitem">Wiki</a>
 				<a href="/info" class="nav-item" role="menuitem">Over ons</a>
 				<a href="/info/praesidium" class="nav-item" role="menuitem">Praesidium</a>
 				<a href="/info/relations" class="nav-item" role="menuitem">Partner relations</a>
 				<a href="/vacatures" class="nav-item" role="menuitem">Vacatures</a>
-				<a href="/info/clublied" class="nav-item" role="menuitem">Clublied</a>
 				<a href="/info/contact" class="nav-item" role="menuitem">Contact</a>
 			</div>
 		</div>
@@ -220,7 +220,7 @@
 
     .mobile-nav {
       @apply sm:hidden;
-      background-color: #d4dbe9fa;
+      background-color: white;
 
       .nav-item {
         @apply rounded-lg block text-blue-900 hover:bg-blue-900 hover:text-white border-transparent focus-visible:ring-black;
