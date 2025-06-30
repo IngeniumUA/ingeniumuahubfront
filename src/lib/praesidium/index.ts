@@ -1,5 +1,6 @@
 import type {PraesidiumGroupI} from "$lib/models/praesidium";
 
+import _year2526 from "./praesidium_25-26.json";
 import _year2425 from "./praesidium_24-25.json";
 import _year2324 from "./praesidium_23-24.json";
 import _year2223 from "./praesidium_22-23.json";
@@ -9,6 +10,7 @@ import _year1920 from "./praesidium_19-20.json";
 import _year1819 from "./praesidium_18-19.json";
 
 const years: { [key: string]: PraesidiumGroupI[] } = {
+  '25-26': _year2526 as PraesidiumGroupI[],
   '24-25': _year2425 as PraesidiumGroupI[],
   '23-24': _year2324 as PraesidiumGroupI[],
   '22-23': _year2223 as PraesidiumGroupI[],
