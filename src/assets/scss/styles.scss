@@ -77,6 +77,8 @@ h2 {
 h3 {
   margin: 0;
 
+  @apply text-blue-900;
+
   line-height: 1.2rem;
   font-size: 1.2rem;  /* 20px */
   font-weight: lighter;
