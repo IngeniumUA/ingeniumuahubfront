@@ -125,7 +125,7 @@
 								<hr class="nav-dropdown-divider">
 								<a href="/cloud_verify" class="nav-dropdown-item" role="menuitem">Cloud uploads</a>
 								<a href="/staff" class="nav-dropdown-item" role="menuitem">Staff</a>
-								<a href="/webmaster" class="nav-dropdown-item" role="menuitem">Webmaster</a>
+								<a href="/staff" class="nav-dropdown-item" role="menuitem">Webmaster</a>
 								<hr class="nav-dropdown-divider">
 							{/if}
 

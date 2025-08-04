@@ -12,12 +12,20 @@
 	<div class="flex flex-col md:flex-row h-full">
 		<aside class="py-6 px-4 sm:px-2 col-span-1 md:col-span-2 w-full md:w-1/4 lg:w-1/5">
 			<nav class="vertical-nav vertical-nav-transparent">
+				<div>
+					<a class="font-semibold" href="/webmaster">Webmaster Home</a>
 
-				<a class="font-semibold" href="/staff">Staff Home</a>
+					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
+					<a href="/staff/flag">Flags</a>
+					<a href="/staff/dashboard">Dashboard</a>
+				</div>
 
-				<hr class="h-px my-8 bg-blue-900 border-0 dark:bg-blue-950">
-				<a href="/staff/flag">Flags</a>
-				<a href="/staff/dashboard">Dashboard</a>
+				<div class="mt-16">
+					<a class="font-semibold" href="/staff">Staff Home</a>
+
+					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
+					<a href="/staff/vacatures">Vacatures</a>
+				</div>
 
 			</nav>
 		</aside>
