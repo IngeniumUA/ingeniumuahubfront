@@ -12,3 +12,18 @@
 h1, h2 {
   color: var(--secondblue);
 }
+
+.ingenium-form {
+  fieldset {
+    @apply mb-2;
+    label {
+      @apply font-semibold text-blue-900;
+    }
+    p {
+      @apply text-sm text-gray-500;
+    }
+    input {
+      @apply m-0;
+    }
+  }
+}

@@ -83,20 +83,6 @@
 	};
 </script>
 
-<style>
-	.ingenium-form {
-			fieldset {
-					@apply mb-2;
-					label {
-							@apply font-semibold text-blue-900;
-					}
-					p {
-							@apply text-sm text-gray-500;
-					}
-			}
-	}
-</style>
-
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
 		<h1>HubFlag</h1>

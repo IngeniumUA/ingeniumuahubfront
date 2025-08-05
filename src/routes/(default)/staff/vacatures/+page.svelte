@@ -1,5 +1,7 @@
 ﻿<script lang="ts">
 	import type { ItemI } from '$lib/models/item/itemI';
+	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
+	import type { RecSysPreviewI } from '$lib/models/RecSysI';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -15,6 +17,34 @@
 	 */
 	let onlyShowActive: boolean = true;
 
+	/**
+	 * Edit modal and form
+	 */
+	let editItemSelectedIndex: null | number = null;
+	let editItemSelected: ItemI | null = null;
+	let loadingPatch: boolean = false;
+
+	function setEditItemIndex(index: number | null) {
+		editItemSelectedIndex = index;
+		if (editItemSelectedIndex !== null && editItemSelectedIndex < data.vacatures.length) {
+			editItemSelected = data.vacatures.at(editItemSelectedIndex)!;
+		}
+	}
+	function getRecsysPreview(): RecSysPreviewI|null {
+		if (editItemSelectedIndex === null) return null;
+		const item = data.vacatures.at(editItemSelectedIndex);
+		if (item === undefined) return null;
+
+		return {
+			follow_through_link: "",
+			name: item.name,
+			date: "",
+			color: "",
+			image_square: "",
+			image_landscape: "",
+			preview_description: ""
+		}
+	}
 
 	/**
 	 * Create New Form Methods and vars
@@ -32,16 +62,11 @@
 
 			thead {
 					@apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
-
-					th {
-
-					}
-					h4 {
-
-					}
 			}
 	}
-
+	.button-success {
+			@apply bg-green-600 text-white hover:bg-green-700;
+	}
 </style>
 
 <main class="ingenium-container relative" id="main-content">
@@ -80,7 +105,126 @@
 				</label>
 			</div>
 
-			<!-- TODO herwerken als aparte item table component -->
+			<!-- TODO Alles hieronder herwerken als aparte item table component -->
+
+			<!-- Modal (pop-up) -->
+			<!-- https://flowbite.com/docs/components/modal/#form-element -->
+			{#if editItemSelectedIndex !== null && editItemSelected !== null}
+				<div
+					class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 cursor-default"
+					on:click={() => setEditItemIndex(null)}
+					role="button"
+					tabindex="0"
+					on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setEditItemIndex(null)}
+				>
+					<div
+						class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl cursor-default"
+						on:click|stopPropagation
+						role="button"
+						tabindex="0"
+						on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setEditItemIndex(null)}
+					>
+					<!--- Modal Header --->
+					<div class="flex items-center justify-between p-2 border-b rounded-t dark:border-gray-600 border-gray-200">
+						<h2>
+							Bewerk Vacture
+						</h2>
+						<button
+							type="button"
+							class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+							on:click={() => setEditItemIndex(null)}
+							>
+							<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+							</svg>
+							<span class="sr-only">Close modal</span>
+						</button>
+					</div>
+
+					<!--- Modal Content --->
+					<div class="flex justify-between p-2">
+						<!-- Linkerkant form -->
+						<form class="flex-1 ingenium-form">
+							<fieldset>
+								<div class="form-field">
+									<label for="vacatureName">Name</label>
+									<input id="vacatureName" type="text" required bind:value={ editItemSelected.name }/>
+									<p>Display naam van de vacature.</p>
+								</div>
+							</fieldset>
+
+							<fieldset>
+								<div class="form-field">
+									<label for="vacatureDescription">Description</label>
+									<input id="vacatureDescription" type="text" required bind:value={ editItemSelected.description }/>
+									<p>Optioneel, een beschrijving.</p>
+								</div>
+							</fieldset>
+
+							<!-- Display section -->
+							<div class="container flex flex-col md:flex-row gap-2">
+								<!-- Left side -->
+								<div class="flex-1">
+									<fieldset>
+										<div class="form-field">
+											<label for="vacatureColor">Color</label>
+											<input id="vacatureColor" type="text" required bind:value={ editItemSelected }/>
+											<p>Kleur voor de weergave van de vacature.</p>
+										</div>
+									</fieldset>
+									<fieldset>
+									<div class="form-field">
+										<label for="vacatureClickThroughLink">Click Through Link</label>
+										<input id="vacatureClickThroughLink" type="text" required bind:value={ editItemSelected }/>
+										<p>Waar je naartoe wordt gestuurd als je op de vacature klikt.</p>
+									</div>
+								</fieldset>
+								</div>
+								<!-- Right side -->
+								<div class="flex-1">
+									<fieldset>
+										<div class="form-field">
+											<label for="vacaturePreviewDescription">Preview Description</label>
+											<input id="vacaturePreviewDescription" type="text" required bind:value={ editItemSelected }/>
+											<p>Optioneel, extra tekst op de preview.</p>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+						</form>
+
+						<!-- Separator lijn -->
+						<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+
+						<!-- Rechterkant recsys preview -->
+						<div class="flex-1 p-4">
+							<RecSysPreviewItem item={getRecsysPreview()} />
+						</div>
+
+					</div>
+					<!--- Modal Footer --->
+						<div class="p-2 flex justify-between items-center border-t dark:border-gray-600 border-gray-200">
+							<button type="submit" class="button button-primary w-24 button-inline"
+											disabled={loadingPatch}>
+								<span class="text-white">Update</span>
+							</button>
+							{#if (editItemSelected.availability.available)}
+								<button class="button button-danger w-24 button-inline"
+												disabled={loadingPatch}
+												>
+									<span class="text-white">Disable</span>
+								</button>
+							{:else}
+								<button class="button-success button w-24 button-inline"
+												disabled={loadingPatch}>
+									<span class="text-white">Activate</span>
+								</button>
+							{/if}
+						</div>
+				</div>
+			</div>
+			{/if}
+
 			<table>
 				<thead>
 					<tr>
@@ -100,7 +244,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					{#each data.vacatures as item (item.id)}
+					{#each data.vacatures as item, index (item.id)}
 					<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
 						<th scope="row" class="pr-6 py-4 text-gray-800 font-bold whitespace-nowrap dark:text-white">
 							{item.name}
@@ -134,7 +278,7 @@
 							</div>
 						</td>
 						<td class="pr-4 py-4">
-							<button aria-label="edit">
+							<button aria-label="edit" on:click={() => setEditItemIndex(index)}>
 								<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 										 width="20px" height="20px" viewBox="0 0 528.899 528.899"
 										 xml:space="preserve">
