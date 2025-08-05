@@ -1,16 +1,24 @@
 ﻿<script lang="ts">
-	import type { ItemI } from '$lib/models/item/itemI';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
-	import type { RecSysPreviewI } from '$lib/models/RecSysI';
+	import type { PromoItemWideI } from '$lib/models/item/promoI';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import { getAuthorizationHeaders } from '$lib/auth/auth';
 
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	export let data: {
-		vacatures: ItemI[],
+		vacatures: PromoItemWideI[],
 		available_vacatures_count: number,
 		total_vacatures_count: number;
 	};
+
+	/**
+	 * Refresh will reload the whole page
+	 */
+	function refresh() {
+		location.reload(); // or a more granular data reload
+	}
 
 	/**
 	 * Query options and configuration
@@ -21,8 +29,10 @@
 	 * Edit modal and form
 	 */
 	let editItemSelectedIndex: null | number = null;
-	let editItemSelected: ItemI | null = null;
-	let loadingPatch: boolean = false;
+	let editItemSelected: PromoItemWideI | null = null;
+
+	let itemPutError: string | null = null;
+	let loadingPut: boolean = false;
 
 	function setEditItemIndex(index: number | null) {
 		editItemSelectedIndex = index;
@@ -30,19 +40,59 @@
 			editItemSelected = data.vacatures.at(editItemSelectedIndex)!;
 		}
 	}
-	function getRecsysPreview(): RecSysPreviewI|null {
-		if (editItemSelectedIndex === null) return null;
-		const item = data.vacatures.at(editItemSelectedIndex);
-		if (item === undefined) return null;
-
-		return {
-			follow_through_link: "",
-			name: item.name,
+	function handleImageToggle(value: boolean) {
+		if (editItemSelected === null) { return; }
+		// Current value of the image field is stored within state variable
+		// Square -> true
+		// Landscape -> false
+		if (value) {
+			editItemSelected.derived_type.display.image_square = editItemImage;
+			editItemSelected.derived_type.display.image_landscape = null;
+		} else {
+			editItemSelected.derived_type.display.image_landscape = editItemImage;
+			editItemSelected.derived_type.display.image_square = null;
+		}
+	}
+	$: editItemImage = editItemSelected
+		? editItemSelected.derived_type.display.image_square ?? editItemSelected.derived_type.display.image_landscape
+		: null;
+	$: recsysPreview = editItemSelectedIndex !== null && editItemSelected
+		? {
+			follow_through_link: editItemSelected.derived_type.display.follow_through_link || "",
+			name: editItemSelected.item.name,
 			date: "",
-			color: "",
-			image_square: "",
-			image_landscape: "",
-			preview_description: ""
+			color: editItemSelected.derived_type.display.color,
+			image_square: editItemSelected.derived_type.display.image_square,
+			image_landscape: editItemSelected.derived_type.display.image_landscape,
+			preview_description: editItemSelected.derived_type.display.preview_description
+		}
+		: null;
+	async function handlePut() {
+		// Preliminary checks
+		if (editItemSelected === null) {
+			itemPutError = "Item is null?"
+			return;
+		}
+
+		//
+		loadingPut = true;
+
+		// Perform put request
+		try {
+			const response = await fetch(`${PUBLIC_API_URL}/item/wide/${editItemSelected.item.id}`, {
+				method: 'PUT',
+				headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+				body: JSON.stringify(editItemSelected)
+			});
+			if (response.ok) {
+				loadingPut = false;
+			} else {
+				itemPutError = `Failed to create flag: ${await response.text()}`;
+			}
+		} catch (error) {
+			itemPutError = error instanceof Error ? error.message : 'Error submitting form';
+		} finally {
+			loadingPut = false; // Reset loading state
 		}
 	}
 
@@ -72,7 +122,7 @@
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
 		<h1>Vacatures</h1>
-		<button class="button button-primary w-24 button-inline">
+		<button on:click={refresh} class="button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
@@ -106,23 +156,26 @@
 			</div>
 
 			<!-- TODO Alles hieronder herwerken als aparte item table component -->
-
 			<!-- Modal (pop-up) -->
 			<!-- https://flowbite.com/docs/components/modal/#form-element -->
 			{#if editItemSelectedIndex !== null && editItemSelected !== null}
 				<div
 					class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 cursor-default"
-					on:click={() => setEditItemIndex(null)}
+					on:mousedown={(e) => {
+					if (e.target === e.currentTarget) {
+						setEditItemIndex(null);
+						}
+					}}
 					role="button"
 					tabindex="0"
-					on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setEditItemIndex(null)}
-				>
+					on:keydown={(e) => {if (e.key === 'Escape') {setEditItemIndex(null);}}}
+					>
 					<div
 						class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl cursor-default"
 						on:click|stopPropagation
 						role="button"
 						tabindex="0"
-						on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setEditItemIndex(null)}
+						on:keydown={(e) => {if (e.key === 'Escape') {setEditItemIndex(null);}}}
 					>
 					<!--- Modal Header --->
 					<div class="flex items-center justify-between p-2 border-b rounded-t dark:border-gray-600 border-gray-200">
@@ -144,11 +197,12 @@
 					<!--- Modal Content --->
 					<div class="flex justify-between p-2">
 						<!-- Linkerkant form -->
-						<form class="flex-1 ingenium-form">
+						<form class="flex-1 ingenium-form"
+									on:submit|preventDefault={handlePut}>
 							<fieldset>
 								<div class="form-field">
 									<label for="vacatureName">Name</label>
-									<input id="vacatureName" type="text" required bind:value={ editItemSelected.name }/>
+									<input id="vacatureName" type="text" required bind:value={ editItemSelected.item.name }/>
 									<p>Display naam van de vacature.</p>
 								</div>
 							</fieldset>
@@ -156,7 +210,7 @@
 							<fieldset>
 								<div class="form-field">
 									<label for="vacatureDescription">Description</label>
-									<input id="vacatureDescription" type="text" required bind:value={ editItemSelected.description }/>
+									<input id="vacatureDescription" type="text" required bind:value={ editItemSelected.item.description }/>
 									<p>Optioneel, een beschrijving.</p>
 								</div>
 							</fieldset>
@@ -168,14 +222,14 @@
 									<fieldset>
 										<div class="form-field">
 											<label for="vacatureColor">Color</label>
-											<input id="vacatureColor" type="text" required bind:value={ editItemSelected }/>
+											<input id="vacatureColor" type="text" required bind:value={ editItemSelected.derived_type.display.color }/>
 											<p>Kleur voor de weergave van de vacature.</p>
 										</div>
 									</fieldset>
 									<fieldset>
 									<div class="form-field">
 										<label for="vacatureClickThroughLink">Click Through Link</label>
-										<input id="vacatureClickThroughLink" type="text" required bind:value={ editItemSelected }/>
+										<input id="vacatureClickThroughLink" type="text" required bind:value={ editItemSelected.derived_type.display.follow_through_link }/>
 										<p>Waar je naartoe wordt gestuurd als je op de vacature klikt.</p>
 									</div>
 								</fieldset>
@@ -185,8 +239,33 @@
 									<fieldset>
 										<div class="form-field">
 											<label for="vacaturePreviewDescription">Preview Description</label>
-											<input id="vacaturePreviewDescription" type="text" required bind:value={ editItemSelected }/>
+											<input id="vacaturePreviewDescription" type="text" required bind:value={ editItemSelected.derived_type.display.preview_description }/>
 											<p>Optioneel, extra tekst op de preview.</p>
+										</div>
+									</fieldset>
+
+									<fieldset>
+										<div class="form-field">
+											<label for="vacatureImage">Image</label>
+											<input id="vacatureImage" type="text" required bind:value={ editItemImage }/>
+
+											<label class="inline-flex items-center cursor-pointer my-4">
+												<input type="checkbox"
+															 checked={editItemSelected.derived_type.display.image_square !== null}
+															 on:change={(e) => handleImageToggle(e.currentTarget.checked)} class="hidden peer">
+												<div class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full
+													peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+													after:content-['']
+													after:absolute after:top-[2px] after:start-[2px]
+													after:w-5 after:h-5
+													after:bg-white after:rounded-full
+													after:transition-transform
+													peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+													"></div>
+												<span class="ms-3 text-sm font-medium text-gray-600">
+													Square
+												</span>
+											</label>
 										</div>
 									</fieldset>
 								</div>
@@ -198,25 +277,31 @@
 
 						<!-- Rechterkant recsys preview -->
 						<div class="flex-1 p-4">
-							<RecSysPreviewItem item={getRecsysPreview()} />
+							{#if recsysPreview}
+								<RecSysPreviewItem item={recsysPreview} />
+							{/if}
 						</div>
-
 					</div>
+					{#if (itemPutError !== null)}
+						<p class="error-message">{itemPutError}</p>
+					{/if}
+
 					<!--- Modal Footer --->
 						<div class="p-2 flex justify-between items-center border-t dark:border-gray-600 border-gray-200">
-							<button type="submit" class="button button-primary w-24 button-inline"
-											disabled={loadingPatch}>
-								<span class="text-white">Update</span>
+							<button type="button" class="button button-primary w-24 button-inline"
+											disabled={loadingPut}
+											on:click={handlePut}>
+								<span class="text-white">Save</span>
 							</button>
-							{#if (editItemSelected.availability.available)}
+							{#if (editItemSelected.item.availability.available)}
 								<button class="button button-danger w-24 button-inline"
-												disabled={loadingPatch}
+												disabled={loadingPut}
 												>
 									<span class="text-white">Disable</span>
 								</button>
 							{:else}
 								<button class="button-success button w-24 button-inline"
-												disabled={loadingPatch}>
+												disabled={loadingPut}>
 									<span class="text-white">Activate</span>
 								</button>
 							{/if}
@@ -244,13 +329,13 @@
 					</tr>
 					</thead>
 					<tbody>
-					{#each data.vacatures as item, index (item.id)}
+					{#each data.vacatures as item, index (item.item.id)}
 					<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
 						<th scope="row" class="pr-6 py-4 text-gray-800 font-bold whitespace-nowrap dark:text-white">
-							{item.name}
+							{item.item.name}
 						</th>
 						<td class="px-6 py-4">
-							{item.description.slice(0, Math.min(item.description.length, 200))}
+							{item.item.description.slice(0, Math.min(item.item.description.length, 200))}
 						</td>
 						<td class="px-6 py-4">
 							<div class="w-32 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
@@ -265,15 +350,15 @@
 						<td class="px-6 py-4">
 							<div class="w-32 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
 								<p class="block w-full px-1 py-0.5 border-b border-gray-200">
-									Available: {item.availability.available}
+									Available: {item.item.availability.available}
 								</p>
-								{#if (item.availability.available_from !== null)}
+								{#if (item.item.availability.available_from !== null)}
 									<p class="block w-full px-1 py-0.5 border-b border-gray-200">
-										Available from: {item.availability.available_from}
+										Available from: {item.item.availability.available_from}
 									</p>
 								{/if}
-								{#if (item.availability.available_from !== null)}
-									Available until: {item.availability.available_until}
+								{#if (item.item.availability.available_until !== null)}
+									Available until: {item.item.availability.available_until}
 								{/if}
 							</div>
 						</td>

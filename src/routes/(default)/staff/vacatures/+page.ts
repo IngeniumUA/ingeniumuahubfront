@@ -2,6 +2,7 @@
 import { handleRequest } from '$lib/utilities/httpUtilities';
 import { PUBLIC_API_URL } from "$env/static/public";
 import type { ItemI } from '$lib/models/item/itemI';
+import type { PromoItemWideI } from '$lib/models/item/promoI';
 
 
 export async function load({ fetch, params }) {
@@ -10,7 +11,7 @@ export async function load({ fetch, params }) {
 		limit: '100',
 	});
 
-	const vacatures: ItemI[] = await fetch(`${PUBLIC_API_URL}/item?${query.toString()}`, {
+	const vacatures: PromoItemWideI[] = await fetch(`${PUBLIC_API_URL}/item/wide?${query.toString()}`, {
 		headers: getAuthorizationHeaders(params)
 	}).then(r => handleRequest(r));
 	const total_vacatures_count: number = await fetch(`${PUBLIC_API_URL}/item/count?${query.toString()}`, {

@@ -44,10 +44,10 @@
     <article class="event-card" style="{cardStyle}">
       <div class="image">
         <!-- Image might not be given (either could optionally be null), if null is passed the page breaks -->
-        {#if item.image_square}
-          <img src="{ item.image_square }" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
+        {#if item.image_square !== null && item.image_square}
+          <img src="{ item.image_square}" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
         {:else if item.image_landscape}
-          <img src="{ item.image_landscape }" loading="lazy" width="1920" height="1024" alt="" aria-hidden="true">
+          <img src="{ item.image_landscape !== null && item.image_landscape }" loading="lazy" width="1920" height="1024" alt="" aria-hidden="true">
         {:else}
           <enhanced:img src="$assets/svg/ingenium-schild.svg" />
         {/if}

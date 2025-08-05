@@ -3,7 +3,7 @@ export interface RecSysPreviewI {
     name: string;
     date: string | undefined;
     color: string;
-    image_square: string;
-    image_landscape: string;
+    image_square: string | null;
+    image_landscape: string | null;
     preview_description: string;
 }
