@@ -1,8 +1,9 @@
 ﻿<script lang="ts">
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import type { PromoItemWideI } from '$lib/models/item/promoI';
-	import { PUBLIC_API_URL } from '$env/static/public';
-	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
+	import type { ItemI } from '$lib/models/item/itemI';
+	import { handleRequest } from '$lib/utilities/httpUtilities';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -14,16 +15,31 @@
 	};
 
 	/**
-	 * Refresh will reload the whole page
-	 */
-	function refresh() {
-		location.reload(); // or a more granular data reload
-	}
-
-	/**
-	 * Query options and configuration
+	 * Refreshing data
 	 */
 	let onlyShowActive: boolean = true;
+	async function refreshTable() {
+		const query = new URLSearchParams({
+			item_type: "promoitem",
+			limit: '100',
+		});
+		if (!onlyShowActive) {
+			query.set("available", `${!onlyShowActive}`)
+		}
+		data.vacatures = await CoreItemWideAPI.queryPromoItem(query);
+	}
+	async function refresh() {
+		const query = new URLSearchParams({
+			item_type: "promoitem",
+			limit: '100',
+		});
+		data.total_vacatures_count = await CoreItemWideAPI.countItemWide(query);
+		if (!onlyShowActive) {
+			query.set("available", `${!onlyShowActive}`)
+		}
+		data.available_vacatures_count = await CoreItemWideAPI.countItemWide(query);
+		await refreshTable();
+	}
 
 	/**
 	 * Edit modal and form
@@ -32,9 +48,10 @@
 	let editItemSelected: PromoItemWideI | null = null;
 
 	let itemPutError: string | null = null;
-	let loadingPut: boolean = false;
+	let loadingHTTP: boolean = false;
 
 	function setEditItemIndex(index: number | null) {
+		itemPutError = null;
 		editItemSelectedIndex = index;
 		if (editItemSelectedIndex !== null && editItemSelectedIndex < data.vacatures.length) {
 			editItemSelected = data.vacatures.at(editItemSelectedIndex)!;
@@ -73,29 +90,36 @@
 			itemPutError = "Item is null?"
 			return;
 		}
-
-		//
-		loadingPut = true;
-
+		loadingHTTP = true;
 		// Perform put request
 		try {
-			const response = await fetch(`${PUBLIC_API_URL}/item/wide/${editItemSelected.item.id}`, {
-				method: 'PUT',
-				headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
-				body: JSON.stringify(editItemSelected)
-			});
-			if (response.ok) {
-				loadingPut = false;
-			} else {
-				itemPutError = `Failed to create flag: ${await response.text()}`;
-			}
+			await CoreItemWideAPI.putItem(editItemSelected.item.id, editItemSelected);
 		} catch (error) {
 			itemPutError = error instanceof Error ? error.message : 'Error submitting form';
 		} finally {
-			loadingPut = false; // Reset loading state
+			loadingHTTP = false; // Reset loading state
 		}
 	}
+	async function handleAvailableButton(nextStatus: boolean) {
+		// Preliminary checks
+		if (editItemSelected === null) {
+			itemPutError = "Item is null?"
+			return;
+		}
 
+		const putModel = editItemSelected.item;
+		putModel.availability.available = nextStatus
+
+		try {
+			const resp: ItemI = await CoreItemAPI.putItem(editItemSelected.item.id, putModel).catch(handleRequest);
+			editItemSelected.item.availability.available = resp.availability.available;
+			await refresh();
+		} catch (error) {
+			itemPutError = error instanceof Error ? error.message : 'Error submitting form';
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
+	}
 	/**
 	 * Create New Form Methods and vars
 	 */
@@ -138,7 +162,7 @@
 			<div class="flex justify-between items-center mb-6">
 				<h3 class="font-bold">Lijst</h3>
 				<label class="inline-flex items-center cursor-pointer my-4">
-					<input type="checkbox" bind:checked={onlyShowActive} class="sr-only peer">
+					<input type="checkbox" bind:checked={onlyShowActive} on:click={() => refreshTable()} class="sr-only peer">
 					<div class="
 							relative w-11 h-6
 							bg-gray-200 dark:bg-gray-700
@@ -263,7 +287,11 @@
 													peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 													"></div>
 												<span class="ms-3 text-sm font-medium text-gray-600">
-													Square
+													{#if editItemSelected.derived_type.display.image_square === null}
+														Rectangle
+													{:else}
+														Square
+													{/if}
 												</span>
 											</label>
 										</div>
@@ -289,19 +317,21 @@
 					<!--- Modal Footer --->
 						<div class="p-2 flex justify-between items-center border-t dark:border-gray-600 border-gray-200">
 							<button type="button" class="button button-primary w-24 button-inline"
-											disabled={loadingPut}
+											disabled={loadingHTTP}
 											on:click={handlePut}>
 								<span class="text-white">Save</span>
 							</button>
 							{#if (editItemSelected.item.availability.available)}
 								<button class="button button-danger w-24 button-inline"
-												disabled={loadingPut}
+												disabled={loadingHTTP}
+												on:click={() => {handleAvailableButton(false)}}
 												>
 									<span class="text-white">Disable</span>
 								</button>
 							{:else}
 								<button class="button-success button w-24 button-inline"
-												disabled={loadingPut}>
+												disabled={loadingHTTP}
+												on:click={() => {handleAvailableButton(true)}}>
 									<span class="text-white">Activate</span>
 								</button>
 							{/if}
@@ -320,12 +350,8 @@
 							<h4 class="text-blue-900 text-sm">Description</h4>
 						</th>
 						<th scope="col" class="px-6 py-3">
-							<h4 class="text-blue-900 text-sm">Display</h4>
-						</th>
-						<th scope="col" class="px-6 py-3">
 							<h4 class="text-blue-900 text-sm">Availability</h4>
 						</th>
-
 					</tr>
 					</thead>
 					<tbody>
@@ -339,18 +365,10 @@
 						</td>
 						<td class="px-6 py-4">
 							<div class="w-32 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
-								<p class="block w-full px-1 py-0.5 border-b border-gray-200">
-									Click through link
-								</p>
-								<p class="block w-full px-1 py-0.5 border-b border-gray-200">
-									Preview Desc
-								</p>
-							</div>
-						</td>
-						<td class="px-6 py-4">
-							<div class="w-32 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
-								<p class="block w-full px-1 py-0.5 border-b border-gray-200">
-									Available: {item.item.availability.available}
+								<p class="block w-full px-1 py-0.5 border-b border-gray-200
+								{item.item.availability.available ? 'text-green-800' : 'text-red-800'}"
+									>
+									{item.item.availability.available ? "Available": "Not Available" }
 								</p>
 								{#if (item.item.availability.available_from !== null)}
 									<p class="block w-full px-1 py-0.5 border-b border-gray-200">
