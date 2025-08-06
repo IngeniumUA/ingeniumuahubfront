@@ -1,7 +1,6 @@
 ﻿import { getAuthorizationHeaders } from '$lib/auth/auth';
 import { handleRequest } from '$lib/utilities/httpUtilities';
 import { PUBLIC_API_URL } from "$env/static/public";
-import type { ItemI } from '$lib/models/item/itemI';
 import type { PromoItemWideI } from '$lib/models/item/promoI';
 
 
