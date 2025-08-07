@@ -247,6 +247,9 @@
 	<div class="container">
 		{#if addingNew}
 			<h2>Adding new</h2>
+			<div class="alert alert-info mb-4 max-w-2xl">
+				<p class="alert-text">Flags toevoegen is een operatie die je niet kan terugdraaien. Zeker configuration flags, zorg dat je weet wat je doet :).</p>
+			</div>
 
 			<form method="POST"
 						on:submit={handleSubmit}
