@@ -1,3 +1,8 @@
+export const makePretty = (input_str: string): string => {
+    if (input_str.startsWith('_')) {return input_str}
+    return input_str.substring(0, 1).toUpperCase().concat(input_str.substring(1).replace("_", " "));
+}
+
 /**
  * Transforms the received database color into an rgba color
  * @param db_color

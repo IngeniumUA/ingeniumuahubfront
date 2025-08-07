@@ -1,13 +1,65 @@
 ﻿<script lang="ts">
 	import {
-		getFlagValue,
 		type HubFlag,
 		HubFlagTypeEnum,
 		HubFlagTypeList,
-		HubFlagValueTypeEnum, HubFlagValueTypeList
+		HubFlagValueTypeEnum,
+		HubFlagValueTypeList
 	} from '$lib/models/flag/HubFlagI';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import { makePretty } from '$lib/utilities/style-utilities';
+	import { CoreFlagAPI } from '$lib/core_api/flag_api';
+	import { handleRequest } from '$lib/utilities/httpUtilities';
+
+	async function refresh() {
+		data.configFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
+			flag_type: '1',
+			limit: '100'
+		}));
+		data.featureFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
+			flag_type: '2',
+			limit: '100'
+		}));
+		flagPutError = null;
+	}
+	
+	function handleCheckboxChange(event: Event, flag: { value: boolean | string | number }) {
+		const target = event.target as HTMLInputElement;
+		flag.value = target.checked;
+	}
+
+	let loadingHTTP: boolean = false;
+	/**
+	 * Perform PUT for flag object
+	 * @param flag
+	 */
+	let flagPutError: string | null = null
+	async function updateFlag(flagIndex: number, flag_type: HubFlagTypeEnum) {
+		if (loadingHTTP) {return}
+		loadingHTTP = true;
+
+		// Assigning correct list
+		let flags = flag_type === HubFlagTypeEnum.configuration ? data.configFlags: data.featureFlags;
+		if (flags.length <= flagIndex) {
+			loadingHTTP = false;
+			return
+		}
+		const flagPatch: Pick<HubFlag, 'value' | 'flag_value_type'> = {
+			value: flags[flagIndex].value,
+			flag_value_type: flags[flagIndex].flag_value_type
+		};
+
+		// Performing request
+		try {
+			flags[flagIndex] = await CoreFlagAPI.patchFlag(flags[flagIndex].name, flagPatch).catch(handleRequest);
+			flagPutError = null;
+		} catch (error) {
+			flagPutError = error instanceof Error ? error.message : 'Error submitting form';
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
+	}
 
 	function toggleAddNew() {
 		addingNew = !addingNew;
@@ -23,32 +75,34 @@
 	let numberNewFlagValue: number = 0;
 	let stringNewFlagValue: boolean = false;
 
-	let loadingPost: boolean = false;
-
 	async function handleSubmit() {
 		// Resetting error and preventing double POST with flag
 		newFlagError = null;
-		loadingPost = true;
+		loadingHTTP = true;
 
 		// Parsing flag
-		let parsedValue: { [key: string]: boolean | number | string };
+		let parsedValue: boolean | number | string;
 		switch (newFlagValueType) {
 			case HubFlagValueTypeEnum.bool: {
-				parsedValue = { value: booleanNewFlagValue };
+				parsedValue = booleanNewFlagValue
 				break;
 			}
 			case HubFlagValueTypeEnum.int: {
-				parsedValue = { value: numberNewFlagValue };
+				parsedValue = numberNewFlagValue;
 				break;
 			}
 			case HubFlagValueTypeEnum.string: {
-				parsedValue = { value: stringNewFlagValue };
+				parsedValue = stringNewFlagValue;
 				break;
 			}
 			case HubFlagValueTypeEnum.dict: {
 				newFlagError = "Dict nog niet geimplementeerd";
-				loadingPost = false;
+				loadingHTTP = false;
 				return;
+			}
+			default: {
+				loadingHTTP = false;
+				return
 			}
 		}
 
@@ -73,7 +127,7 @@
 		} catch (error) {
 		newFlagError = error instanceof Error ? error.message : 'Error submitting form';
 		} finally {
-			loadingPost = false; // Reset loading state
+			loadingHTTP = false; // Reset loading state
 		}
 	}
 
@@ -86,7 +140,7 @@
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
 		<h1>HubFlag</h1>
-		<button class="button button-primary w-24 button-inline">
+		<button class="button button-primary w-24 button-inline" on:click={refresh}>
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
@@ -97,14 +151,17 @@
 			<p class="alert-text">Configuratie flags zijn <span class="font-bold">vast besliste</span> variabelen in de applicatie.
 				Ze geven ons de optie om razendsnel het platform te configureren. Denk aan betalingen uitzetten, sms notifications toelaten, etc.</p>
 		</div>
+		{#if (flagPutError !== null)}
+			<p class="error-message">{flagPutError}</p>
+		{/if}
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-cols-fr">
-			{#each data.configFlags as flag (flag.id)}
+			{#each data.configFlags as flag, i (flag.id)}
 				<div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 					<div class="flex justify-between items-center">
 					<h3 class="font-semibold">
 						<span class="text-gray-600 font-semibold">{flag.id}: </span>
-						{flag.name}
+						{makePretty(flag.name)}
 					</h3>
 					<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 							 width="20px" height="20px" viewBox="0 0 528.899 528.899"
@@ -124,7 +181,10 @@
 					{#if flag.flag_value_type === HubFlagValueTypeEnum.bool}
 						<!-- Taken from https://flowbite.com/docs/forms/toggle/  -->
 						<label class="inline-flex items-center cursor-pointer my-4">
-							<input type="checkbox" value={getFlagValue(flag)} class="sr-only peer">
+							<input type="checkbox"
+										 class="sr-only peer"
+										 checked={flag.value ? true : false}
+										 on:change={(e) => handleCheckboxChange(e, flag)}>
 							<div class="
 							relative w-11 h-6
 							bg-gray-200 dark:bg-gray-700
@@ -140,9 +200,9 @@
 							<span class="ms-3 text-sm font-medium text-gray-600">Toggle</span>
 						</label>
 					{:else if flag.flag_value_type === HubFlagValueTypeEnum.int}
-						{getFlagValue(flag)}
+						{flag.value}
 					{:else if flag.flag_value_type === HubFlagValueTypeEnum.string}
-						{getFlagValue(flag)}
+						{flag.value}
 					{:else if flag.flag_value_type === HubFlagValueTypeEnum.dict}
 						{flag.value}
 					{:else}
@@ -150,10 +210,13 @@
 					{/if}
 
 					<div class="flex justify-between items-center">
-						<button class="button button-danger w-24 button-inline">
-							<span class="text-white">Remove</span>
-						</button>
-						<button class="button button-primary w-24 button-inline">
+						{#if flag.flag_type === HubFlagTypeEnum.feature}
+							<button class="button button-danger w-24 button-inline">
+								<span class="text-white">Remove</span>
+							</button>
+						{/if}
+						<button class="button button-primary w-24 button-inline"
+						on:click={() => {updateFlag(i, HubFlagTypeEnum.configuration)}}>
 							<span class="text-white">Update</span>
 						</button>
 					</div>
@@ -239,11 +302,11 @@
 
 				<div class="flex gap-4 items-center mb-6">
 					<button type="submit" class="button button-primary w-24 button-inline"
-									disabled={loadingPost}>
+									disabled={loadingHTTP}>
 						<span class="text-white">Submit</span>
 					</button>
 					<button class="button button-primary w-24 button-inline"
-									disabled={loadingPost}
+									disabled={loadingHTTP}
 									on:click={toggleAddNew}>
 						<span class="text-white">Cancel</span>
 					</button>

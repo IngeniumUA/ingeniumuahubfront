@@ -1,16 +1,14 @@
-﻿import { getAuthorizationHeaders } from '$lib/auth/auth';
-import { handleRequest } from '$lib/utilities/httpUtilities';
-import { PUBLIC_API_URL } from "$env/static/public";
-import { type HubFlag, HubFlagTypeEnum } from '$lib/models/flag/HubFlagI';
+﻿import { CoreFlagAPI } from '$lib/core_api/flag_api';
 
 
-export async function load({ fetch, params }) {
-	const flags: HubFlag[] = await fetch(`${PUBLIC_API_URL}/flag`, {
-		headers: getAuthorizationHeaders(params)
-	}).then(r => handleRequest(r));
-
-	const configFlags = flags.filter((flag: HubFlag) => flag.flag_type === HubFlagTypeEnum.configuration);
-	const featureFlags = flags.filter((flag: HubFlag) => flag.flag_type === HubFlagTypeEnum.feature);
-
+export async function load() {
+	const configFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
+		flag_type: '1',
+		limit: '100'
+	}));
+	const featureFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
+		flag_type: '2',
+		limit: '100'
+	}));
 	return { configFlags, featureFlags };
 }
