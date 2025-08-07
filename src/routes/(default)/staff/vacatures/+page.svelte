@@ -46,6 +46,7 @@
 	 */
 	let editItemSelectedIndex: null | number = null;
 	let editItemSelected: PromoItemWideI | null = null;
+	let editItemExternalLink: boolean = false;
 
 	let itemPutError: string | null = null;
 	let loadingHTTP: boolean = false;
@@ -55,6 +56,7 @@
 		editItemSelectedIndex = index;
 		if (editItemSelectedIndex !== null && editItemSelectedIndex < data.vacatures.length) {
 			editItemSelected = data.vacatures.at(editItemSelectedIndex)!;
+			editItemExternalLink = editItemSelected.derived_type.display.follow_through_link.startsWith("http")
 		}
 	}
 	function handleImageToggle(value: boolean) {
@@ -75,7 +77,7 @@
 		: null;
 	$: recsysPreview = editItemSelectedIndex !== null && editItemSelected
 		? {
-			follow_through_link: editItemSelected.derived_type.display.follow_through_link || "",
+			follow_through_link: editItemExternalLink ? editItemSelected.derived_type.display.follow_through_link: `/vacature/${editItemSelected.item.name}`,
 			name: editItemSelected.item.name,
 			date: "",
 			color: editItemSelected.derived_type.display.color,
@@ -92,6 +94,7 @@
 		}
 		loadingHTTP = true;
 		// Perform put request
+		editItemSelected.derived_type.display.follow_through_link = editItemExternalLink ? editItemSelected.derived_type.display.follow_through_link: `/vacature/${editItemSelected.item.name}`
 		try {
 			await CoreItemWideAPI.putItem(editItemSelected.item.id, editItemSelected);
 		} catch (error) {
@@ -250,13 +253,36 @@
 											<p>Kleur voor de weergave van de vacature.</p>
 										</div>
 									</fieldset>
-									<fieldset>
-									<div class="form-field">
-										<label for="vacatureClickThroughLink">Click Through Link</label>
-										<input id="vacatureClickThroughLink" type="text" required bind:value={ editItemSelected.derived_type.display.follow_through_link }/>
-										<p>Waar je naartoe wordt gestuurd als je op de vacature klikt.</p>
-									</div>
-								</fieldset>
+										<fieldset>
+											<div class="form-field">
+												<label for="vacatureClickThroughLink">Click Through Link</label>
+												{#if (editItemExternalLink)}
+												<input id="vacatureClickThroughLink" type="text" required bind:value={ editItemSelected.derived_type.display.follow_through_link }/>
+												{/if}
+													<p>Waar je naartoe wordt gestuurd als je op de vacature klikt.</p>
+											</div>
+										</fieldset>
+									<label class="inline-flex items-center cursor-pointer my-4">
+										<input type="checkbox"
+													 bind:checked={editItemExternalLink} class="hidden peer">
+										<div class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full
+													peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+													after:content-['']
+													after:absolute after:top-[2px] after:start-[2px]
+													after:w-5 after:h-5
+													after:bg-white after:rounded-full
+													after:transition-transform
+													peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+													"></div>
+												<span class="ms-3 text-sm font-medium text-gray-600">
+													{#if editItemExternalLink}
+														Extern
+													{:else}
+														Item zelf
+													{/if}
+												</span>
+									</label>
+
 								</div>
 								<!-- Right side -->
 								<div class="flex-1">
