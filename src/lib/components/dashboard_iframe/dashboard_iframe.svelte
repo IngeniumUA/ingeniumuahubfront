@@ -3,6 +3,8 @@
 	export let path: string = "";
 	let iframeEl: HTMLIFrameElement;
 
+	// todo these options https://docs.streamlit.io/deploy/streamlit-community-cloud/share-your-app/embed-your-app#embed-options
+
 	const baseUrl: string = "https://dashboard.ingeniumua.be";
 	$: iframeSrc = `${baseUrl}/${path}`;
 
