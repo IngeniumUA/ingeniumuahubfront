@@ -134,16 +134,7 @@
 </script>
 
 <style>
-	table {
-			@apply w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400;
 
-			thead {
-					@apply text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400;
-			}
-	}
-	.button-success {
-			@apply bg-green-600 text-white hover:bg-green-700;
-	}
 </style>
 
 <main class="ingenium-container relative" id="main-content">
@@ -366,62 +357,56 @@
 			</div>
 			{/if}
 
-			<table>
+			<table class="ingenium-table">
 				<thead>
 					<tr>
-						<th scope="col" class="pr-6 py-3">
-							<h4 class="text-blue-900 font-bold text-sm">Item Name</h4>
-						</th>
-						<th scope="col" class="px-6 py-3">
-							<h4 class="text-blue-900 text-sm">Description</h4>
-						</th>
-						<th scope="col" class="px-6 py-3">
-							<h4 class="text-blue-900 text-sm">Availability</h4>
-						</th>
+						<th scope="col"><h4>Item Name</h4></th>
+						<th scope="col"><h4>Description</h4></th>
+						<th scope="col"><h4>Availability</h4></th>
 					</tr>
-					</thead>
-					<tbody>
-					{#each data.vacatures as item, index (item.item.id)}
-					<tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-						<th scope="row" class="pr-6 py-4 text-gray-800 font-bold whitespace-nowrap dark:text-white">
-							{item.item.name}
-						</th>
-						<td class="px-6 py-4">
-							{item.item.description.slice(0, Math.min(item.item.description.length, 200))}
-						</td>
-						<td class="px-6 py-4">
-							<div class="w-32 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
-								<p class="block w-full px-1 py-0.5 border-b border-gray-200
-								{item.item.availability.available ? 'text-green-800' : 'text-red-800'}"
-									>
-									{item.item.availability.available ? "Available": "Not Available" }
+				</thead>
+				<tbody>
+				{#each data.vacatures as item, index (item.item.id)}
+				<tr>
+					<th scope="row">
+						{item.item.name}
+					</th>
+					<td>
+						{item.item.description.slice(0, Math.min(item.item.description.length, 200))}
+					</td>
+					<td>
+						<div class="w-32 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
+							<p class="block w-full px-1 py-0.5 border-b border-gray-200
+							{item.item.availability.available ? 'text-green-800' : 'text-red-800'}"
+								>
+								{item.item.availability.available ? "Available": "Not Available" }
+							</p>
+							{#if (item.item.availability.available_from !== null)}
+								<p class="block w-full px-1 py-0.5 border-b border-gray-200">
+									Available from: {item.item.availability.available_from}
 								</p>
-								{#if (item.item.availability.available_from !== null)}
-									<p class="block w-full px-1 py-0.5 border-b border-gray-200">
-										Available from: {item.item.availability.available_from}
-									</p>
-								{/if}
-								{#if (item.item.availability.available_until !== null)}
-									Available until: {item.item.availability.available_until}
-								{/if}
-							</div>
-						</td>
-						<td class="pr-4 py-4">
-							<button aria-label="edit" on:click={() => setEditItemIndex(index)}>
-								<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-										 width="20px" height="20px" viewBox="0 0 528.899 528.899"
-										 xml:space="preserve">
-							<g>
-								<path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
-									c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
-									C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069
-									L27.473,390.597L0.3,512.69z"/>
-							</g>
-							</svg>
-							</button>
-						</td>
-					</tr>
-					{/each}
+							{/if}
+							{#if (item.item.availability.available_until !== null)}
+								Available until: {item.item.availability.available_until}
+							{/if}
+						</div>
+					</td>
+					<td>
+						<button aria-label="edit" on:click={() => setEditItemIndex(index)}>
+							<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+									 width="20px" height="20px" viewBox="0 0 528.899 528.899"
+									 xml:space="preserve">
+						<g>
+							<path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
+								c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
+								C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069
+								L27.473,390.597L0.3,512.69z"/>
+						</g>
+						</svg>
+						</button>
+					</td>
+				</tr>
+				{/each}
 				</tbody>
 			</table>
 		</div>
