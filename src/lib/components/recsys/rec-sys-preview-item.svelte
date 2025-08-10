@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { calcColorIntensity, transformColorToRGBA } from "$lib/utilities/style-utilities";
+  import { calcColorIntensity, prettyDate, transformColorToRGBA } from '$lib/utilities/style-utilities';
 
   /** @type {{ item: RecSysPreviewI|null, loading: boolean }} */
   const { item, loading = false } = $props();
@@ -54,6 +54,12 @@
       </div>
       <div class="content">
         <p class="title" style:color={ textStyle }>{ item.name }</p>
+        {#if item.date !== null}
+          <p class="text-lg text-right font-bold" style:color={ textStyle }>{ prettyDate(item.date) }</p>
+        {/if}
+        {#if item.preview_description !== null}
+          <p class="text-lg text-right font-bold" style:color={ textStyle }>{ item.preview_description }</p>
+        {/if}
       </div>
     </article>
   </a>

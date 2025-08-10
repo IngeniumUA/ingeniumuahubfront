@@ -1,10 +1,22 @@
+/**
+ * Uusally used when converting enum names to something nice to displau
+ * @param input_str
+ */
 export const makePretty = (input_str: string): string => {
     if (input_str.startsWith('_')) {return input_str}
     return input_str.substring(0, 1).toUpperCase().concat(input_str.substring(1).replace("_", " "));
 }
 
 /**
- * Transforms the received database color into an rgba color
+ * TODO Function, quick and dirty at the moment
+ * @param input_str
+ */
+export const prettyDate = (input_str: string): string => {
+    return input_str.split("T")[0]
+}
+
+/**
+ * Transforms the received database color into a rgba color
  * @param db_color
  * @param a alpha value
  */
