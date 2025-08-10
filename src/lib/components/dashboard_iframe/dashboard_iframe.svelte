@@ -4,7 +4,6 @@
 	let iframeEl: HTMLIFrameElement;
 
 	// todo these options https://docs.streamlit.io/deploy/streamlit-community-cloud/share-your-app/embed-your-app#embed-options
-
 	const baseUrl: string = "https://dashboard.ingeniumua.be";
 	$: iframeSrc = `${baseUrl}/${path}`;
 
@@ -21,12 +20,14 @@
 	}
 </script>
 
-<iframe
-	bind:this={iframeEl}
-	src={iframeSrc}
-	title="Ingenium Dashboard"
-	width="100%"
-	height="800"
-	style="border:none;"
-	on:load={onLoad}
-></iframe>
+<div style="width: 100%; height: 100%; position: relative;">
+	<iframe
+		bind:this={iframeEl}
+		src={iframeSrc}
+		title="Ingenium Dashboard"
+		width="100%"
+		height="800"
+		style="border:none;"
+		on:load={onLoad}
+	></iframe>
+</div>

@@ -1,11 +1,10 @@
 ﻿<script lang="ts">
+	import DashboardIframe from '$lib/components/dashboard_iframe/dashboard_iframe.svelte';
+	import { getTokens } from '$lib/auth/auth';
 
+	const access_token = getTokens(null).access_token;
 </script>
 
-<div style="width: 100%; height: 100%; position: relative;">
-	<iframe
-		title="dashboard"
-		src="https://dashboard.ingeniumua.be"
-		style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
-	></iframe>
-</div>
+{#if access_token !== null && access_token !== undefined}
+	<DashboardIframe token="{access_token}" path=""></DashboardIframe>
+{/if}
