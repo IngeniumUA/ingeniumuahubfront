@@ -173,189 +173,7 @@
 				</label>
 			</div>
 
-			<!-- TODO Alles hieronder herwerken als aparte item table component -->
-			<!-- Modal (pop-up) -->
-			<!-- https://flowbite.com/docs/components/modal/#form-element -->
-			{#if editItemSelectedIndex !== null && editItemSelected !== null}
-				<div
-					class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 cursor-default"
-					on:mousedown={(e) => {
-					if (e.target === e.currentTarget) {
-						setEditItemIndex(null);
-						}
-					}}
-					role="button"
-					tabindex="0"
-					on:keydown={(e) => {if (e.key === 'Escape') {setEditItemIndex(null);}}}
-					>
-					<div
-						class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl cursor-default"
-						on:click|stopPropagation
-						role="button"
-						tabindex="0"
-						on:keydown={(e) => {if (e.key === 'Escape') {setEditItemIndex(null);}}}
-					>
-					<!--- Modal Header --->
-					<div class="flex items-center justify-between p-2 border-b rounded-t dark:border-gray-600 border-gray-200">
-						<h2>
-							Bewerk Vacture
-						</h2>
-						<button
-							type="button"
-							class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-							on:click={() => setEditItemIndex(null)}
-							>
-							<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-							</svg>
-							<span class="sr-only">Close modal</span>
-						</button>
-					</div>
 
-					<!--- Modal Content --->
-					<div class="flex justify-between p-2">
-						<!-- Linkerkant form -->
-						<form class="flex-1 ingenium-form"
-									on:submit|preventDefault={handlePut}>
-							<fieldset>
-								<div class="form-field">
-									<label for="vacatureName">Name</label>
-									<input id="vacatureName" type="text" required bind:value={ editItemSelected.item.name }/>
-									<p>Display naam van de vacature.</p>
-								</div>
-							</fieldset>
-
-							<fieldset>
-								<div class="form-field">
-									<label for="vacatureDescription">Description</label>
-									<input id="vacatureDescription" type="text" required bind:value={ editItemSelected.item.description }/>
-									<p>Optioneel, een beschrijving.</p>
-								</div>
-							</fieldset>
-
-							<!-- Display section -->
-							<div class="container flex flex-col md:flex-row gap-2">
-								<!-- Left side -->
-								<div class="flex-1">
-									<fieldset>
-										<div class="form-field">
-											<label for="vacatureColor">Color</label>
-											<input id="vacatureColor" type="text" required bind:value={ editItemSelected.derived_type.display.color }/>
-											<p>Kleur voor de weergave van de vacature.</p>
-										</div>
-									</fieldset>
-										<fieldset>
-											<div class="form-field">
-												<label for="vacatureClickThroughLink">Click Through Link</label>
-												{#if (editItemExternalLink)}
-												<input id="vacatureClickThroughLink" type="text" required bind:value={ editItemSelected.derived_type.display.follow_through_link }/>
-												{/if}
-													<p>Waar je naartoe wordt gestuurd als je op de vacature klikt.</p>
-											</div>
-										</fieldset>
-									<label class="inline-flex items-center cursor-pointer my-4">
-										<input type="checkbox"
-													 bind:checked={editItemExternalLink} class="hidden peer">
-										<div class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full
-													peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
-													after:content-['']
-													after:absolute after:top-[2px] after:start-[2px]
-													after:w-5 after:h-5
-													after:bg-white after:rounded-full
-													after:transition-transform
-													peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-													"></div>
-												<span class="ms-3 text-sm font-medium text-gray-600">
-													{#if editItemExternalLink}
-														Extern
-													{:else}
-														Item zelf
-													{/if}
-												</span>
-									</label>
-
-								</div>
-								<!-- Right side -->
-								<div class="flex-1">
-									<fieldset>
-										<div class="form-field">
-											<label for="vacaturePreviewDescription">Preview Description</label>
-											<input id="vacaturePreviewDescription" type="text" required bind:value={ editItemSelected.derived_type.display.preview_description }/>
-											<p>Optioneel, extra tekst op de preview.</p>
-										</div>
-									</fieldset>
-
-									<fieldset>
-										<div class="form-field">
-											<label for="vacatureImage">Image</label>
-											<input id="vacatureImage" type="text" required bind:value={ editItemImage }/>
-
-											<label class="inline-flex items-center cursor-pointer my-4">
-												<input type="checkbox"
-															 checked={editItemSelected.derived_type.display.image_square !== null}
-															 on:change={(e) => handleImageToggle(e.currentTarget.checked)} class="hidden peer">
-												<div class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full
-													peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
-													after:content-['']
-													after:absolute after:top-[2px] after:start-[2px]
-													after:w-5 after:h-5
-													after:bg-white after:rounded-full
-													after:transition-transform
-													peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-													"></div>
-												<span class="ms-3 text-sm font-medium text-gray-600">
-													{#if editItemSelected.derived_type.display.image_square === null}
-														Rectangle
-													{:else}
-														Square
-													{/if}
-												</span>
-											</label>
-										</div>
-									</fieldset>
-								</div>
-							</div>
-						</form>
-
-						<!-- Separator lijn -->
-						<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
-
-						<!-- Rechterkant recsys preview -->
-						<div class="flex-1 p-4">
-							{#if recsysPreview}
-								<RecSysPreviewItem item={recsysPreview} />
-							{/if}
-						</div>
-					</div>
-					{#if (itemPutError !== null)}
-						<p class="error-message">{itemPutError}</p>
-					{/if}
-
-					<!--- Modal Footer --->
-						<div class="p-2 flex justify-between items-center border-t dark:border-gray-600 border-gray-200">
-							<button type="button" class="button button-primary w-24 button-inline"
-											disabled={loadingHTTP}
-											on:click={handlePut}>
-								<span class="text-white">Save</span>
-							</button>
-							{#if (editItemSelected.item.availability.available)}
-								<button class="button button-danger w-24 button-inline"
-												disabled={loadingHTTP}
-												on:click={() => {handleAvailableButton(false)}}
-												>
-									<span class="text-white">Disable</span>
-								</button>
-							{:else}
-								<button class="button-success button w-24 button-inline"
-												disabled={loadingHTTP}
-												on:click={() => {handleAvailableButton(true)}}>
-									<span class="text-white">Activate</span>
-								</button>
-							{/if}
-						</div>
-				</div>
-			</div>
-			{/if}
 
 			<table class="ingenium-table">
 				<thead>
@@ -463,3 +281,186 @@
 		</button>
 	{/if}
 </main>
+
+<!-- Edit Modal (pop-up) -->
+<!-- https://flowbite.com/docs/components/modal/#form-element -->
+{#if editItemSelectedIndex !== null && editItemSelected !== null}
+	<div
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 cursor-default"
+		on:mousedown={(e) => {
+					if (e.target === e.currentTarget) {
+						setEditItemIndex(null);
+						}
+					}}
+		role="button"
+		tabindex="0"
+		on:keydown={(e) => {if (e.key === 'Escape') {setEditItemIndex(null);}}}
+	>
+		<div
+			class="relative bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl cursor-default"
+			on:click|stopPropagation
+			role="button"
+			tabindex="0"
+			on:keydown={(e) => {if (e.key === 'Escape') {setEditItemIndex(null);}}}
+		>
+			<!--- Modal Header --->
+			<div class="flex items-center justify-between p-2 border-b rounded-t dark:border-gray-600 border-gray-200">
+				<h2>
+					Bewerk Vacture
+				</h2>
+				<button
+					type="button"
+					class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+					on:click={() => setEditItemIndex(null)}
+				>
+					<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+					</svg>
+					<span class="sr-only">Close modal</span>
+				</button>
+			</div>
+
+			<!--- Modal Content --->
+			<div class="flex justify-between p-2">
+				<!-- Linkerkant form -->
+				<form class="flex-1 ingenium-form"
+							on:submit|preventDefault={handlePut}>
+					<fieldset>
+						<div class="form-field">
+							<label for="vacatureName">Name</label>
+							<input id="vacatureName" type="text" required bind:value={ editItemSelected.item.name }/>
+							<p>Display naam van de vacature.</p>
+						</div>
+					</fieldset>
+
+					<fieldset>
+						<div class="form-field">
+							<label for="vacatureDescription">Description</label>
+							<input id="vacatureDescription" type="text" required bind:value={ editItemSelected.item.description }/>
+							<p>Optioneel, een beschrijving.</p>
+						</div>
+					</fieldset>
+
+					<!-- Display section -->
+					<div class="container flex flex-col md:flex-row gap-2">
+						<!-- Left side -->
+						<div class="flex-1">
+							<fieldset>
+								<div class="form-field">
+									<label for="vacatureColor">Color</label>
+									<input id="vacatureColor" type="text" required bind:value={ editItemSelected.derived_type.display.color }/>
+									<p>Kleur voor de weergave van de vacature.</p>
+								</div>
+							</fieldset>
+							<fieldset>
+								<div class="form-field">
+									<label for="vacatureClickThroughLink">Click Through Link</label>
+									{#if (editItemExternalLink)}
+										<input id="vacatureClickThroughLink" type="text" required bind:value={ editItemSelected.derived_type.display.follow_through_link }/>
+									{/if}
+									<p>Waar je naartoe wordt gestuurd als je op de vacature klikt.</p>
+								</div>
+							</fieldset>
+							<label class="inline-flex items-center cursor-pointer my-4">
+								<input type="checkbox"
+											 bind:checked={editItemExternalLink} class="hidden peer">
+								<div class="relative w-11 h-6 bg-blue-900 dark:bg-gray-700 rounded-full
+													peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+													after:content-['']
+													after:absolute after:top-[2px] after:start-[2px]
+													after:w-5 after:h-5
+													after:bg-white after:rounded-full
+													after:transition-transform
+													peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+													"></div>
+								<span class="ms-3 text-sm font-medium text-gray-600">
+													{#if editItemExternalLink}
+														Extern
+													{:else}
+														Item zelf
+													{/if}
+												</span>
+							</label>
+
+						</div>
+						<!-- Right side -->
+						<div class="flex-1">
+							<fieldset>
+								<div class="form-field">
+									<label for="vacaturePreviewDescription">Preview Description</label>
+									<input id="vacaturePreviewDescription" type="text" required bind:value={ editItemSelected.derived_type.display.preview_description }/>
+									<p>Optioneel, extra tekst op de preview.</p>
+								</div>
+							</fieldset>
+
+							<fieldset>
+								<div class="form-field">
+									<label for="vacatureImage">Image</label>
+									<input id="vacatureImage" type="text" required bind:value={ editItemImage }/>
+
+									<label class="inline-flex items-center cursor-pointer my-4">
+										<input type="checkbox"
+													 checked={editItemSelected.derived_type.display.image_square !== null}
+													 on:change={(e) => handleImageToggle(e.currentTarget.checked)} class="hidden peer">
+										<div class="relative w-11 h-6 bg-gray-200 dark:bg-gray-700 rounded-full
+													peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+													after:content-['']
+													after:absolute after:top-[2px] after:start-[2px]
+													after:w-5 after:h-5
+													after:bg-white after:rounded-full
+													after:transition-transform
+													peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+													"></div>
+										<span class="ms-3 text-sm font-medium text-gray-600">
+													{#if editItemSelected.derived_type.display.image_square === null}
+														Rectangle
+													{:else}
+														Square
+													{/if}
+												</span>
+									</label>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</form>
+
+				<!-- Separator lijn -->
+				<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+
+				<!-- Rechterkant recsys preview -->
+				<div class="flex-1 p-4">
+					{#if recsysPreview}
+						<RecSysPreviewItem item={recsysPreview} />
+					{/if}
+				</div>
+			</div>
+			{#if (itemPutError !== null)}
+				<p class="error-message">{itemPutError}</p>
+			{/if}
+
+			<!--- Modal Footer --->
+			<div class="p-2 flex justify-between items-center border-t dark:border-gray-600 border-gray-200">
+				<button type="button" class="button button-primary w-24 button-inline"
+								disabled={loadingHTTP}
+								on:click={handlePut}>
+					<span class="text-white">Save</span>
+				</button>
+				{#if (editItemSelected.item.availability.available)}
+					<button class="button button-danger w-24 button-inline"
+									disabled={loadingHTTP}
+									on:click={() => {handleAvailableButton(false)}}
+					>
+						<span class="text-white">Disable</span>
+					</button>
+				{:else}
+					<button class="button-success button w-24 button-inline"
+									disabled={loadingHTTP}
+									on:click={() => {handleAvailableButton(true)}}>
+						<span class="text-white">Activate</span>
+					</button>
+				{/if}
+			</div>
+		</div>
+	</div>
+{/if}
