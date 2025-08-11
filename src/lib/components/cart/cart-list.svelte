@@ -42,7 +42,8 @@
                       <p>{ formKey }</p>
                       {#if formField['type'] !== "option" }
                         <input required type="{ formField['type'] }" id="{ product.origin_item_id + key }"
-                          value={ formField['value'] } oninput={ (e) => updateProductMeta(idx, formKey, formField, e.currentTarget) } />
+                          value={ formField['value'] } oninput={ (e) => updateProductMeta(idx, formKey, formField, e.currentTarget) }
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-900 focus:border-blue-900 block w-full p-2.5"/>
                       {:else if formField['type'] === "option" && formField['options'] }
                         {#each formField['options'] as option}
                           <div class="form-field-checkbox space-y-2 ml-2">
