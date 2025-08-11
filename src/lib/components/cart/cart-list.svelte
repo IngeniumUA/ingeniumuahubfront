@@ -39,11 +39,11 @@
                     <span class="capitalize">{ key }</span>: <span>{ meta }</span>
                   {:else}
                     {#each Object.entries(getFormData(meta)) as [formKey, formField] }
+                      <p>{ formKey }</p>
                       {#if formField['type'] !== "option" }
                         <input required type="{ formField['type'] }" id="{ product.origin_item_id + key }"
                           value={ formField['value'] } oninput={ (e) => updateProductMeta(idx, formKey, formField, e.currentTarget) } />
                       {:else if formField['type'] === "option" && formField['options'] }
-                        <p>Selecteer een keuze:</p>
                         {#each formField['options'] as option}
                           <div class="form-field-checkbox space-y-2 ml-2">
                             <input type="radio" id={ getRadioId(idx, key, formKey, option) } name={ `${idx}-${key}-${formKey}` }
