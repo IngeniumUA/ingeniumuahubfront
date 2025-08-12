@@ -5,22 +5,13 @@
 	import opengraphImg from '$assets/images/opengraph_galabal.webp';
 	import GlobalPageSpinner from '$lib/components/spinners/global-page-spinner.svelte';
 	import { PUBLIC_UMAMI_WEBSITE_ID } from '$env/static/public';
-	import { onMount } from 'svelte';
+	import { UmamiAPI } from '$lib/umami/umami_api';
 
 	let { children } = $props();
 
 	// Umami Tracking script
-	// Inject Umami script dynamically on mount
-	onMount(() => {
-		if (!PUBLIC_UMAMI_WEBSITE_ID) return;
-
-		const script = document.createElement('script');
-		script.defer = true;
-		script.src = 'https://traffic.ingeniumua.be/script.js';
-		script.setAttribute('data-website-id', PUBLIC_UMAMI_WEBSITE_ID);
-		document.head.appendChild(script);
-	});
-
+	// Injects Umami script dynamically on mount
+	UmamiAPI.loadUmami(PUBLIC_UMAMI_WEBSITE_ID);
 </script>
 
 <svelte:head>

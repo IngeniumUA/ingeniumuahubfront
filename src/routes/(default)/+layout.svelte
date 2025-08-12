@@ -7,6 +7,7 @@
 	import { auth } from '$lib/states/auth.svelte';
 	import { onMount, setContext } from 'svelte';
 	import { afterNavigate } from '$app/navigation';
+	import { UmamiAPI } from '$lib/umami/umami_api';
 
 	let { children, data } = $props();
 
@@ -19,7 +20,15 @@
 		retrieveProductsFromLocalStorage();
 	}
 
-	onMount(() => {
+	onMount(async () => {
+		// Inject user with Umami
+		// todo Add or get session ID (use svelte-umami package)
+		if (data.user?.email) {
+			await UmamiAPI.identify({
+				email: data.user.email,
+			});
+		}
+
 		afterNavigate((nav) => {
 			const currentUrl = nav.to?.url?.pathname || '';
 
