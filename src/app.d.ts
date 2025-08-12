@@ -8,13 +8,6 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
-
-	interface Window {
-		umami?: {
-			track: (name: string, data?: Record<string, unknown>) => void;
-			identify: (data: Record<string, unknown>) => void;
-		};
-	}
 }
 
 export {};
