@@ -9,6 +9,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
     name: Build container
     steps:
       - name: Checkout
