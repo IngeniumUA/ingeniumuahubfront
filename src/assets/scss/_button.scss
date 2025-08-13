@@ -14,10 +14,10 @@
   }
 
   &.button-primary {
-    @apply border-blue-900 text-white bg-blue-900 focus:outline focus:outline-blue-950 focus:outline-offset-2;
+    @apply border-red-900 text-white bg-red-900 focus:outline focus:outline-red-950 focus:outline-offset-2;
 
     &:hover {
-      @apply border-blue-950 bg-blue-950;
+      @apply border-red-950 bg-red-950;
     }
 
     &.button-accessibility-white {
@@ -29,7 +29,7 @@
     }
 
     &:disabled {
-      @apply hover:bg-blue-900;
+      @apply hover:bg-red-900;
     }
   }
 
@@ -73,19 +73,19 @@
     @apply border-white text-white bg-transparent;
 
     &:hover {
-      @apply bg-white text-blue-950;
+      @apply bg-white text-red-950;
     }
   }
 
-  &.button-outline-blue {
-    @apply border-blue-900 text-blue-900 bg-transparent;
+  &.button-outline-red {
+    @apply border-red-900 text-red-900 bg-transparent;
 
     &.active {
-      @apply bg-blue-950 text-white border-blue-950 focus:outline-blue-950;
+      @apply bg-red-950 text-white border-red-950 focus:outline-red-950;
     }
 
     &:hover {
-      @apply bg-blue-900 text-white;
+      @apply bg-red-900 text-white;
     }
   }
 

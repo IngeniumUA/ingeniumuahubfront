@@ -3,11 +3,10 @@
 	import { auth, hasRole, isAuthenticated } from '$lib/states/auth.svelte';
 	import { getLoginUrlWithRedirect, doLogout } from "$lib/auth/auth";
 
-	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
+	import schild from '$assets/svg/biomedica-schild.svg';
 
 	let { noBackground = false, whiteTheme = false } = $props();
 	let mobileMenuOpen = $state(false);
-	let infoDropdownOpen = $state(false);
 	let accountDropdownOpen = $state(false);
 
 	let getNavigationTheme = $derived.by(() => {
@@ -50,9 +49,9 @@
 
 			<div class="nav-logo-wrapper">
 				<!-- LOGO -->
-				<a href="/" class="nav-logo-link">
-					<span class="sr-only">Ingenium home pagina</span>
-					<img class="h-16 w-auto" src="{ingeniumSchild}" alt="" aria-hidden="true" height="1024" width="1024">
+				<a href="https://biomedica-antwerpen.be" class="nav-logo-link">
+					<span class="sr-only">Biomedica home pagina</span>
+					<img class="h-16 w-auto" src="{schild}" alt="" aria-hidden="true" height="1024" width="1024">
 				</a>
 			</div>
 
@@ -63,30 +62,7 @@
 						<a href="/" class="nav-item" role="menuitem">Home</a>
 						<a href="/events" class="nav-item" role="menuitem">Events</a>
 
-						<!-- INFO DROPDOWN -->
-						<div class="relative">
-							<button type="button" onclick={ () => infoDropdownOpen = !infoDropdownOpen } id="info-menu-button"
-											role="menuitem" aria-expanded="{infoDropdownOpen}" aria-haspopup="menu" class="nav-item flex items-center">
-								Info <span aria-hidden="true" class="text-inherit ml-2 text-xs">&#9660;</span>
-							</button>
-
-							{#if infoDropdownOpen}
-								<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="info-menu-button" tabindex="-1">
-									<a href="/info" class="nav-dropdown-item" role="menuitem">Over ons</a>
-									<a href="/info/praesidium" class="nav-dropdown-item" role="menuitem">Praesidium</a>
-									<a href="/info/relations" class="nav-dropdown-item">Partner relations</a>
-									<a href="https://www.engineersoftomorrow.com/" target="_blank" rel="opener" class="nav-dropdown-item" role="menuitem">Engineers Of Tomorrow</a>
-									<a href="https://wiki.ingeniumua.be/" target="_blank" rel="opener" class="nav-dropdown-item" role="menuitem">Wiki</a>
-									<a href="/vacatures" class="nav-dropdown-item" role="menuitem">Vacatures</a>
-									<a href="/info/clublied" class="nav-dropdown-item" role="menuitem">Clublied</a>
-									<a href="/info/contact" class="nav-dropdown-item" role="menuitem">Contact</a>
-								</div>
-							{/if}
-						</div>
-						<!-- INFO DROPDOWN END -->
-
 						<a href="/shop" class="nav-item" role="menuitem">Shop</a>
-						<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
 					</div>
 				</div>
 				<!-- DESKTOP MENU END -->
@@ -118,7 +94,7 @@
 					<!-- Profile dropdown menu -->
 					{#if accountDropdownOpen && isAuthenticated() }
 						<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
-							<a href="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
+							<a href="/account" class="nav-dropdown-item font-bold text-red-900" role="menuitem">Jouw profiel</a>
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 
 							{#if isStaff()}
@@ -172,7 +148,7 @@
   }
 
   nav {
-    @apply w-full bg-blue-950 border-b border-white/5;
+    @apply w-full bg-red-950 border-b border-white/5;
 
     a {
       @apply no-underline;
@@ -198,10 +174,10 @@
       @apply absolute right-0 z-40 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none;
 
       .nav-dropdown-item {
-        @apply rounded w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-blue-950 hover:text-white outline-none ring-offset-2 focus:ring-2 focus-visible:ring-4 ring-black transition-colors ease-in-out;
+        @apply rounded w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-red-950 hover:text-white outline-none ring-offset-2 focus:ring-2 focus-visible:ring-4 ring-black transition-colors ease-in-out;
 
         &.nav-item-active {
-          @apply bg-blue-50 hover:bg-blue-950;
+          @apply bg-red-50 hover:bg-red-950;
         }
       }
 
@@ -223,10 +199,10 @@
       background-color: white;
 
       .nav-item {
-        @apply rounded-lg block text-blue-900 hover:bg-blue-900 hover:text-white border-transparent focus-visible:ring-black;
+        @apply rounded-lg block text-red-900 hover:bg-red-900 hover:text-white border-transparent focus-visible:ring-black;
 
         &.nav-item-active {
-          @apply bg-blue-900 text-white;
+          @apply bg-red-900 text-white;
         }
       }
     }
@@ -238,7 +214,7 @@
         @apply text-gray-600 border-transparent hover:border-b-gray-900 hover:text-gray-900 ring-black;
 
         &.nav-item-active {
-          @apply text-blue-900 border-b-blue-900;
+          @apply text-red-900 border-b-red-900;
         }
       }
 

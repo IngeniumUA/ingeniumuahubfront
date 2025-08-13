@@ -129,7 +129,7 @@
 </header>
 
 <main class="ingenium-container">
-	<h1 class="white-section-title white-section-title-large white-section-title-blue">Winkelwagen</h1>
+	<h1 class="white-section-title white-section-title-large white-section-title-red">Winkelwagen</h1>
 	<p>Dit zijn alle producten in jouw winkelwagen.</p>
 
 	{#if cartProducts.length > 0}

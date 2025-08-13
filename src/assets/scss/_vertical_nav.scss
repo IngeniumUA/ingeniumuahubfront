@@ -2,7 +2,7 @@
   @apply space-y-0.5 rounded;
 
   a {
-    @apply w-full px-4 py-3 text-blue-900 hover:bg-blue-900 hover:text-white text-sm rounded inline-flex items-center
+    @apply w-full px-4 py-3 text-red-900 hover:bg-red-900 hover:text-white text-sm rounded inline-flex items-center
       transition-colors ease-in-out focus-visible:ring-black focus-visible:ring-4 focus:outline-none
       no-underline;
 
@@ -11,7 +11,7 @@
     }
 
     &.nav-item-active {
-      @apply bg-blue-900 text-white hover:bg-blue-950;
+      @apply bg-red-900 text-white hover:bg-red-950;
     }
   }
 }

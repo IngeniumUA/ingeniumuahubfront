@@ -13,16 +13,16 @@
 @use "badges";
 
 :root {
-  --mainblue: rgb(0, 5, 61); /* #00053D */
+  --mainblue: rgb(213,58,54); /* #00053D */
   --mainblue-90: rgba(0, 5, 61, 0.9); /*rgba(10, 31, 68, 0.9);*/
   --mainwhite: #ffffff;
 
-  --secondblue: #1f2980; /*rgb(31, 41, 128)*/
+  --secondblue: #d53a36; /*rgb(31, 41, 128)*/
 
   --error-red: #FF5000;
   --succes-green: #5cb85c;
 
-  --ingenium-blue: #1f2980;
+  --ingenium-red: #1f2980;
   --ingenium-grey: #d4dbe9;
   --ingenium-grey-75: rgba(212, 219, 233, 0.75);
   --ingenium-grey-9: rgba(212, 219, 233, 0.9);
@@ -96,8 +96,8 @@ h4 {
     @apply text-2xl;
   }
 
-  &.white-section-title-blue {
-    @apply text-blue-900;
+  &.white-section-title-red {
+    @apply text-red-900;
   }
 
   &.white-section-title--base {
@@ -135,7 +135,7 @@ p {
 }
 
 /* Button */
-.hubbutton-blue {
+.hubbutton-red {
   width: 100%;
   height: 100%;
 
@@ -147,12 +147,12 @@ p {
   transition: color 0.5s ease-out;
 }
 
-.hubbutton-blue:hover {
+.hubbutton-red:hover {
   color: var(--mainwhite);
   cursor: pointer;
 }
 
-.hubbutton-blue:disabled {
+.hubbutton-red:disabled {
   background-color: var(--ingenium-grey)
 }
 

@@ -14,7 +14,7 @@
     @apply absolute p-2 top-0 left-0 w-full h-full rounded bg-gray-300 bg-opacity-70 z-30 flex flex-col items-center justify-center;
 
     svg {
-      @apply w-6 h-6 me-2 text-gray-200 animate-spin fill-blue-900;
+      @apply w-6 h-6 me-2 text-gray-200 animate-spin fill-red-900;
     }
 
     span {

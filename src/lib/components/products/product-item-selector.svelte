@@ -86,7 +86,7 @@
     @apply flex items-center rounded-lg border;
 
     button {
-      @apply size-10 leading-10 font-bold transition text-blue-900 hover:text-gray-200 hover:bg-blue-900;
+      @apply size-10 leading-10 font-bold transition text-red-900 hover:text-gray-200 hover:bg-red-900;
 
       &:disabled {
         @apply cursor-not-allowed text-gray-500 hover:bg-transparent;

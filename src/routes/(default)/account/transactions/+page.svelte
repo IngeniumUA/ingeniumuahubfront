@@ -60,13 +60,13 @@
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="past-purchases">
     <div class="col-span-1 md:col-span-2 xl:col-span-4 -mb-6">
       <hr class="border-t border-gray-100 mb-4">
-      <h2 class="white-section-title white-section-title-blue white-section-title--base" id="past-purchases">Vorige aankopen</h2>
+      <h2 class="white-section-title white-section-title-red white-section-title--base" id="past-purchases">Vorige aankopen</h2>
       <p>Dit is jouw aankoop geschiedenis.</p>
     </div>
 
     {#if data.transactions.length === 0}
       <div class="alert alert-info alert-border mb-6 col-span-1 md:col-span-2 xl:col-span-4">
-        <p class="text-sm text-blue-300">Je hebt geen vorige aankopen</p>
+        <p class="text-sm text-red-300">Je hebt geen vorige aankopen</p>
       </div>
     {:else}
       {#each data.transactions as transaction}
@@ -101,7 +101,7 @@
           </dl>
 
           <!-- QR Code -->
-          <button onclick={ (e) => showQrCode(e, transaction) } type="button" class="button button-outline-blue button-sm button-full">
+          <button onclick={ (e) => showQrCode(e, transaction) } type="button" class="button button-outline-red button-sm button-full">
             Toon QR Code
             <svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" stroke-linecap="round" stroke-linejoin="round"></path>

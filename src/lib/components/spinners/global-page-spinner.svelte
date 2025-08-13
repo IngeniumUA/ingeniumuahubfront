@@ -54,14 +54,14 @@
     @apply absolute top-0 w-full z-40;
 
     .progress-bar {
-      @apply h-2 bg-blue-900 transition-all duration-200;
+      @apply h-2 bg-red-900 transition-all duration-200;
     }
 
     .spinner {
       @apply absolute top-4 left-1/2 transform -translate-x-1/2;
 
       svg {
-        @apply w-6 h-6 text-gray-200 animate-spin fill-blue-900;
+        @apply w-6 h-6 text-gray-200 animate-spin fill-red-900;
       }
     }
   }

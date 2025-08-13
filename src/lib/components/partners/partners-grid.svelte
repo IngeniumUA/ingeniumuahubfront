@@ -20,7 +20,7 @@
   }
 
   .partner-card {
-    @apply w-32 h-48 max-w-min flex flex-col flex-grow items-center justify-center text-blue-950 shadow-inner rounded-lg;
+    @apply w-32 h-48 max-w-min flex flex-col flex-grow items-center justify-center text-red-950 shadow-inner rounded-lg;
     border: solid var(--ingenium-grey) 2px;
 
     .partner-logo-wrapper {

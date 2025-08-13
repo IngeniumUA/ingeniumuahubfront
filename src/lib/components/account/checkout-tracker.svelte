@@ -52,7 +52,7 @@
 {#if trackedItems.length > 0}
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mt-4" aria-labelledby="in-progress-purchases">
     <div class="col-span-1 md:col-span-2 xl:col-span-4 -mb-6">
-      <h2 class="white-section-title white-section-title-blue white-section-title--base flex" id="in-progress-purchases">
+      <h2 class="white-section-title white-section-title-red white-section-title--base flex" id="in-progress-purchases">
         <span class="flex-1">Aankopen in behandeling</span>
         {#if loading} <InlineSpinner message="Updaten..." /> {/if}
       </h2>

@@ -12,7 +12,7 @@
 </svelte:head>
 
 <main id="main-content" class="ingenium-container">
-  <h1 class="white-section-title white-section-title-large white-section-title-blue text-center">Oh nee, daar ging iets mis!</h1>
+  <h1 class="white-section-title white-section-title-large white-section-title-red text-center">Oh nee, daar ging iets mis!</h1>
   <p class="text-center">500 - Internal server error</p>
 
   <p class="mb-4 font-bold text-xl text-center">Iemand uit deze lijst is verantwoordelijk voor het introduceren van de fout. Kies de persoon die jij denkt dat schuldig is.</p>

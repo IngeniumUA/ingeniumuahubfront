@@ -47,7 +47,7 @@
       </p>
     {/if}
 
-    <a href="/account/transactions" class="button button-outline-blue button-sm mt-4">Alle bestellingen bekijken</a>
+    <a href="/account/transactions" class="button button-outline-red button-sm mt-4">Alle bestellingen bekijken</a>
   {:else if data.paymentStatus === 'failed'}
     <div class="icon-wrapper bg-red-100 rounded-full">
       <svg class="text-red-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,7 +68,7 @@
     <h1 class="unknown">Onbekende betaal status</h1>
     <p>We zitten hier even in Schrödinger's kat situatie. De betaalprovider gaf ons geen status mee.</p>
 
-    <a href="/account/transactions" class="button button-outline-blue button-sm mt-4">Alle bestellingen bekijken</a>
+    <a href="/account/transactions" class="button button-outline-red button-sm mt-4">Alle bestellingen bekijken</a>
   {/if}
 </main>
 

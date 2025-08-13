@@ -1,23 +1,6 @@
 import type { PageLoad } from './$types';
-import type { RecSysPreviewI } from '$lib/models/RecSysI';
-import { PUBLIC_API_URL } from '$env/static/public';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageLoad = async ({ fetch }) => {
-	try {
-		const recommendationsReq = fetch(`${PUBLIC_API_URL}/item/event/list?limit=4`).then(r => r.json());
-		const sponsoredReq = fetch(`${PUBLIC_API_URL}/item/promo/list?limit=4`).then(r => r.json());
-
-		// Wait for all promises
-		const [recommendations, sponsored] = await Promise.all([
-			recommendationsReq, sponsoredReq
-		]);
-
-		return {
-			recommendations: recommendations as RecSysPreviewI[],
-			sponsored: sponsored as RecSysPreviewI[],
-			partnersReq: fetch(`${PUBLIC_API_URL}/partner/logo`).then(r => r.json()),
-		}
-	} catch (e) {
-		console.error(e);
-	}
+export const load: PageLoad = async () => {
+	redirect(307, 'https://biomedica-antwerpen.be');
 }

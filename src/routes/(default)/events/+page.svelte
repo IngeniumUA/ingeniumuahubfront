@@ -15,7 +15,7 @@
 </header>
 
 <main class="ingenium-container relative" id="main-content">
-  <h1 class="white-section-title white-section-title-blue white-section-title-large">Evenementen</h1>
+  <h1 class="white-section-title white-section-title-red white-section-title-large">Evenementen</h1>
   <p>TD's en andere evenementen kan je op deze pagina vinden.</p>
 
   {#if (Array.isArray(data.events) && data.events.length > 0)}
@@ -26,7 +26,7 @@
     </div>
   {:else}
     <div class="alert alert-info alert-border">
-      <p class="text-sm text-blue-700">Er staan momenteel geen evenementen online</p>
+      <p class="text-sm text-red-700">Er staan momenteel geen evenementen online</p>
     </div>
   {/if}
 </main>

@@ -135,7 +135,7 @@
     }
 
     .products {
-      @apply ml-2 border-l border-blue-900;
+      @apply ml-2 border-l border-red-900;
     }
 
     &:first-child {

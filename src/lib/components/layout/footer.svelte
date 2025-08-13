@@ -1,19 +1,19 @@
 <script lang="ts">
-	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
+	import schild from '$assets/svg/biomedica-schild.svg';
 
 	let { serverHostname = '' } = $props();
 </script>
 
 <footer>
 	<div class="footer-logo">
-		<img src={ingeniumSchild} alt="" aria-hidden="true" height="1024" width="1024">
+		<img src={schild} alt="" aria-hidden="true" height="1024" width="1024">
 	</div>
 	<div class="footer-content">
-		<address class="text-center mb-2">Ingenium UA vzw<br>Groenenborgerlaan 171/1, BE-2020 Antwerpen</address>
+		<address class="text-center mb-2">Biomedica UA vzw<br>Adres hierzo :)</address>
 
 		<div class="footer-end">
-			<p>BTW: BE 0699.697.622</p>
-			<p>Tel: +32 470 69 80 74</p>
+			<p>BTW nummer</p>
+			<p>Telefoon</p>
 			<div class="flex gap-x-4">
 				<a href="/info/contact">Meer contact info</a>
 				<a href="/info/credits">Credits</a>
@@ -37,15 +37,15 @@
     }
 
     &:before {
-      @apply block bg-blue-950 h-36 w-full;
+      @apply block bg-red-950 h-36 w-full;
       content: '';
     }
 
     .footer-content {
-      @apply bg-blue-950 -mt-8 pb-4 text-xs text-gray-300 relative;
+      @apply bg-red-950 -mt-8 pb-4 text-xs text-gray-300 relative;
 
       .footer-end {
-        @apply border-t border-blue-900 px-6 pt-4 flex flex-col md:flex-row gap-y-3 gap-x-6 items-center justify-center;
+        @apply border-t border-red-900 px-6 pt-4 flex flex-col md:flex-row gap-y-3 gap-x-6 items-center justify-center;
 
         p {
           @apply text-inherit;
@@ -53,7 +53,7 @@
       }
 
 			.server-info {
-				@apply text-blue-900/90 absolute right-0 bottom-0 px-6 pb-4;
+				@apply text-red-900/90 absolute right-0 bottom-0 px-6 pb-4;
 			}
     }
 

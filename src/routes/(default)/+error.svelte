@@ -9,7 +9,7 @@
 
 <main id="main-content">
   <div class="ingenium-container">
-    <h1 class="white-section-title white-section-title-blue white-section-title-large">{page.status} - {page.error?.message ?? 'No error message provided'}</h1>
+    <h1 class="white-section-title white-section-title-red white-section-title-large">{page.status} - {page.error?.message ?? 'No error message provided'}</h1>
     <p></p>
   </div>
 </main>

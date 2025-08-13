@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>Shop | Ingenium UA</title>
+  <title>Shop | Biomedica UA</title>
 </svelte:head>
 
 <header>
@@ -17,11 +17,11 @@
 <main class="ingenium-container" id="main-content">
   <div class="flex flex-row items-center">
     <div class="flex-1">
-      <h1 class="white-section-title white-section-title-blue white-section-title-large">Shop</h1>
-      <p>Hier kan je de producten van Ingenium bekijken en bestellen. Evenementen kan je <a href="/events">hier vinden</a>.</p>
+      <h1 class="white-section-title white-section-title-red white-section-title-large">Shop</h1>
+      <p>Hier kan je de producten van Biomedica bekijken en bestellen. Evenementen kan je <a href="/events">hier vinden</a>.</p>
     </div>
     <div>
-      <a href="/shop/cart" class="button button-sm button-outline-blue">
+      <a href="/shop/cart" class="button button-sm button-outline-red">
         Winkelwagen ({ cartProducts.length })
       </a>
     </div>
