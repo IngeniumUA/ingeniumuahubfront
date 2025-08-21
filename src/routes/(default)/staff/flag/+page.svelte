@@ -251,8 +251,7 @@
 				<p class="alert-text">Flags toevoegen is een operatie die je niet kan terugdraaien. Zeker configuration flags, zorg dat je weet wat je doet :).</p>
 			</div>
 
-			<form method="POST"
-						on:submit={handleSubmit}
+			<form on:submit={handleSubmit}
 						class="ingenium-form">
 				<fieldset>
 					<div class="form-field">
