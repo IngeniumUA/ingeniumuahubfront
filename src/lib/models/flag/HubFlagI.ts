@@ -20,10 +20,32 @@ export const HubFlagValueTypeList = [
 	HubFlagValueTypeEnum.dict,
 ]
 
-export interface HubFlag {
-	id: number;
-	name: string;
-	flag_type: HubFlagTypeEnum;
-	value: boolean | number | string;
-	flag_value_type: number;
-}
+export type HubFlag =
+	| {
+			id: number;
+			name: string;
+			flag_type: HubFlagTypeEnum;
+			flag_value_type: HubFlagValueTypeEnum.bool;
+			value: boolean;
+	  }
+	| {
+			id: number;
+			name: string;
+			flag_type: HubFlagTypeEnum;
+			flag_value_type: HubFlagValueTypeEnum.int;
+			value: number;
+	  }
+	| {
+			id: number;
+			name: string;
+			flag_type: HubFlagTypeEnum;
+			flag_value_type: HubFlagValueTypeEnum.string;
+			value: string;
+	  }
+	| {
+			id: number;
+			name: string;
+			flag_type: HubFlagTypeEnum;
+			flag_value_type: HubFlagValueTypeEnum.dict;
+			value: object;
+	  };
