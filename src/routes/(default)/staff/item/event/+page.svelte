@@ -42,7 +42,7 @@
 	async function patchAvailable(item_index: number) {
 		if (loadingHTTP) { return }
 
-		if (data.events.length >= item_index) {return}
+		if (data.events.length <= item_index) {return}
 		let eventitem = data.events.at(item_index)
 		if (eventitem === undefined) {return}
 		eventitem.item.availability.available = !eventitem.item.availability.available
@@ -50,6 +50,13 @@
 		loadingHTTP = true;
 		try {
 			await CoreItemAPI.putItem(eventitem.item.id, eventitem.item).catch(handleRequest);
+			toast.push("Item updated!", {
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgba(72,187,120,0.9)',
+					'--toastBarBackground': '#2F855A'
+				}
+			})
 			await refresh();
 		} catch (error) {
 			toast.push(`Failed ${error}`, {
@@ -147,7 +154,7 @@
 	</label>
 
 	<section class="flex flex-col gap-4">
-		{#each data.events as event (event.item.id)}
+		{#each data.events as event, index (event.item.id)}
 			<div class="bg-white p-4 rounded-lg
 						min-h-48
 						shadow-lg hover:shadow-xl transition-shadow">
@@ -178,7 +185,7 @@
 						<label class="inline-flex items-center cursor-pointer my-4">
 							<input type="checkbox" class="sr-only peer"
 										 bind:checked={event.item.availability.available}
-										 onclick="{() => patchAvailable(event.item.id)}"
+										 onclick="{() => patchAvailable(index)}"
 										>
 							<div class="
 					relative w-11 h-6
@@ -235,6 +242,12 @@
 							{/if}
 						{/await}
 					</div>
+				</div>
+
+				<div class="flex justify-end items-center my-2">
+					<button class="button button-primary w-28 button-inline">
+						<span class="text-white">Naar Event</span>
+					</button>
 				</div>
 			</div>
 		{/each}
