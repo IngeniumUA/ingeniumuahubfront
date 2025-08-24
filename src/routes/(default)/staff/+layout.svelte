@@ -25,8 +25,8 @@
 
 					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
 					<a href="/staff/item/event">Events</a>
-					<a href="/staff/vacatures">Vacatures</a>
-					<a href="/staff/lidkaarten">Lidkaarten</a>
+					<a href="/staff/item/vacatures">Vacatures</a>
+					<a href="/staff/item/lidkaarten">Lidkaarten</a>
 					<a href="/staff/item/notification">Email / App / SMS</a>
 
 				</div>
