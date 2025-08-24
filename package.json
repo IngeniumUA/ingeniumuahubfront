@@ -26,6 +26,7 @@
 		"@types/node": "^22.12.0",
 		"@types/pdfjs-dist": "^2.10.377",
 		"@types/qrcode": "^1.5.5",
+		"@zerodevx/svelte-toast": "^0.9.6",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",

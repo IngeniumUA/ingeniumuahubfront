@@ -3,6 +3,7 @@
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
+	import { toast } from '@zerodevx/svelte-toast'
 
 	let { hubFlag }: { hubFlag: HubFlag } = $props();
 
@@ -27,6 +28,13 @@
 		try {
 			hubflag = await CoreFlagAPI.patchFlag(hubflag.name, flagPatch).catch(handleRequest);
 			flagPutError = null;
+			toast.push("Flag updated!", {
+				theme: {
+					'--toastColor': 'mintcream',
+					'--toastBackground': 'rgba(72,187,120,0.9)',
+					'--toastBarBackground': '#2F855A'
+				}
+			})
 		} catch (error) {
 			flagPutError = error instanceof Error ? error.message : 'Error submitting form';
 		} finally {
