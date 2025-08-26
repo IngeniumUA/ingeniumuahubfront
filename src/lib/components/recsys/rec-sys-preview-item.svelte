@@ -54,7 +54,7 @@
       </div>
       <div class="content">
         <p class="title" style:color={ textStyle }>{ item.name }</p>
-        {#if item.date !== null}
+        {#if item.date !== null && item.date !== undefined}
           <p class="text-lg text-right font-bold" style:color={ textStyle }>{ prettyDate(item.date) }</p>
         {/if}
         {#if item.preview_description !== null}

@@ -6,6 +6,7 @@
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import type { EventItemWideI } from '$lib/models/item/eventI';
+	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -102,6 +103,7 @@
 		}
 	}
 
+	let showAddingNew = $state(false);
 
 	/**
 	 * TODO This method should be moved somewhere as abstraction
@@ -122,7 +124,10 @@
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
 		<h1>Events</h1>
-		<button class="button button-primary w-24 button-inline" onclick="{refresh}">
+		<button onclick={() => {showAddingNew = !showAddingNew}} class="ml-auto button button-primary w-24 button-inline">
+			<span class="text-white">Add New</span>
+		</button>
+		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
@@ -253,3 +258,5 @@
 		{/each}
 	</section>
 </main>
+
+<AddNewItem bind:isOpen={ showAddingNew } itemType="eventitem"></AddNewItem>
