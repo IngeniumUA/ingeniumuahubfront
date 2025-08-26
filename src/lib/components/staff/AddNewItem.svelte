@@ -31,7 +31,7 @@
 
 		let recsysItem: RecSysPreviewI = {
 			name: form.name,
-			follow_through_link: form.externalLink ? form.clickThroughLink: `/${itemType}/${form.name}`,
+			follow_through_link: form.externalLink ? form.clickThroughLink: `/${itemType === null ? "item": itemType.slice(0, itemType.length - 4)}/${form.name}`,
 			date: null,
 			color: 'rgb(255, 255, 255)',
 			image_square: null,
@@ -68,7 +68,7 @@
 		if (hasDisplayMixin) {
 			derived_item["display"] = {
 				color: form.color,
-				follow_through_link: form.externalLink ? form.clickThroughLink : `/${itemType}/${form.name}`,
+				follow_through_link: form.externalLink ? form.clickThroughLink : `/${itemType === null ? "item": itemType.slice(0, itemType.length - 4)}/${form.name}`,
 				image_square: form.image_square,
 				image_landscape: form.image_landscape,
 				preview_description: form.preview_description
