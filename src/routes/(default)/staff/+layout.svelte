@@ -18,6 +18,7 @@
 					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
 					<a href="/staff/flag">Flags</a>
 					<a href="/staff/dashboard">Dashboard</a>
+					<a href="/staff/group">Groups</a>
 				</div>
 
 				<div class="mt-16">
