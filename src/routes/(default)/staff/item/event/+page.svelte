@@ -26,10 +26,17 @@
 			item_type: "eventitem",
 			limit: '20',
 		});
-		if (!onlyShowAvailable) {
-			query.set("available", `${!onlyShowAvailable}`)
+		if (onlyShowAvailable) {
+			query.set("available", `${onlyShowAvailable}`)
 		}
 		data.events = await CoreItemWideAPI.queryEventItem(query);
+		toast.push("Refreshed!", {
+			theme: {
+				'--toastColor': 'mintcream',
+				'--toastBackground': 'rgba(72,187,120,0.9)',
+				'--toastBarBackground': '#2F855A'
+			}
+		})
 	}
 
 	/**
@@ -142,7 +149,7 @@
 	<!-- List of Events -->
 	<h2>Recent Events</h2>
 	<label class="inline-flex items-center cursor-pointer my-4">
-		<input type="checkbox" bind:checked={onlyShowAvailable} onclick={refresh} class="sr-only peer">
+		<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
 		<div class="
 				relative w-11 h-6
 				bg-gray-200 dark:bg-gray-700

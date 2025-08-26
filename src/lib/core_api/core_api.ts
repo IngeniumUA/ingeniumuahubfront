@@ -109,7 +109,20 @@ export class CoreItemWideAPI {
 		if (res.ok) {
 			return res.json();
 		} else {
-			return `Failed to create flag: ${await res.text()}`;
+			return `Failed to put item: ${await res.text()}`;
+		}
+	}
+
+	static async postItem(post_object: object) {
+		const res = await fetch(`${PUBLIC_API_URL}/item/wide`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(post_object)
+		});
+		if (res.ok) {
+			return res.json();
+		} else {
+			throw await res.json();
 		}
 	}
 }
