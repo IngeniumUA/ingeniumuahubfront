@@ -2,6 +2,8 @@
 import { PUBLIC_API_URL } from '$env/static/public';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { EventItemWideI } from '$lib/models/item/eventI';
+import type { ItemWideI } from '$lib/models/item/itemwideI';
+import type { ShopItemWideI } from '$lib/models/item/shopI';
 
 export class CoreItemAPI {
 	static async patchItem(item_identifier: string | number, patch_object: object) {
@@ -68,25 +70,27 @@ export class CoreItemAPI {
 }
 
 export class CoreItemWideAPI {
-	static async queryPromoItem(query_param: URLSearchParams): Promise<PromoItemWideI[]> {
+	static async queryItem(query_param: URLSearchParams): Promise<ItemWideI[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/item/wide?${query_param.toString()}`, {
 			headers: getAuthorizationHeaders(null)
 		});
 		if (!res.ok) {
 			const text = await res.text();
-			throw new Error(`Failed to load vacatures: ${text}`);
+			throw new Error(`Failed to load items: ${text}`);
 		}
 		return await res.json();
 	}
+	static async queryShopItem(query_param: URLSearchParams): Promise<ShopItemWideI[]> {
+		query_param.set("item_type", 'shopitem')
+		return (await this.queryItem(query_param)) as ShopItemWideI[]
+	}
+	static async queryPromoItem(query_param: URLSearchParams): Promise<PromoItemWideI[]> {
+		query_param.set("item_type", 'promoitem')
+		return (await this.queryItem(query_param)) as PromoItemWideI[]
+	}
 	static async queryEventItem(query_param: URLSearchParams): Promise<EventItemWideI[]> {
-		const res = await fetch(`${PUBLIC_API_URL}/item/wide?${query_param.toString()}`, {
-			headers: getAuthorizationHeaders(null)
-		});
-		if (!res.ok) {
-			const text = await res.text();
-			throw new Error(`Failed to load events: ${text}`);
-		}
-		return await res.json();
+		query_param.set("item_type", 'eventitem');
+		return (await this.queryItem(query_param)) as EventItemWideI[]
 	}
 
 	static async countItemWide(query_param: URLSearchParams): Promise<number> {
