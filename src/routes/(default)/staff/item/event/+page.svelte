@@ -169,24 +169,33 @@
 	</div>
 
 	<!-- List of Events -->
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 	<h2>Overzicht van Evenementen</h2>
-	<p>TODO: Aantal available count toevoegen (gewoon alle met available op True)</p>
-	<label class="inline-flex items-center cursor-pointer my-4">
-		<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
-		<div class="
-				relative w-11 h-6
-				bg-gray-200 dark:bg-gray-700
-				rounded-full
-				peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
-				after:content-['']
-				after:absolute after:top-[2px] after:start-[2px]
-				after:w-5 after:h-5
-				after:bg-white after:rounded-full
-				after:transition-transform
-				peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-				"></div>
-		<span class="ms-3 text-sm font-medium text-gray-600">Enkel Available</span>
-	</label>
+	<div class="py-4 flex justify-between items-center">
+		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+			<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
+			<p class="text-blue-900 font-bold">{data.available_count}</p>
+		</div>
+
+		<label class="inline-flex items-center cursor-pointer my-4">
+			<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
+			<div class="
+					relative w-11 h-6
+					bg-gray-200 dark:bg-gray-700
+					rounded-full
+					peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+					after:content-['']
+					after:absolute after:top-[2px] after:start-[2px]
+					after:w-5 after:h-5
+					after:bg-white after:rounded-full
+					after:transition-transform
+					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+					"></div>
+			<span class="ms-3 text-sm font-medium text-gray-600">Enkel Available</span>
+		</label>
+	</div>
+
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
 	<section class="flex flex-col gap-4">
 		{#each data.events as event, index (event.item.id)}
