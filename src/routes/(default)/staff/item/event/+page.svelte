@@ -7,6 +7,7 @@
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import type { EventItemWideI } from '$lib/models/item/eventI';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
+	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -110,7 +111,27 @@
 		}
 	}
 
+	/**
+	 * Boolean state for add new modal
+	 */
 	let showAddingNew = $state(false);
+
+	/**
+	 * Editting Modal State management
+	 * We have to code in an $effect property for when the user clicks the "close" button in the modal
+	 */
+	let showEditModal: boolean = $state(false);
+	let editItemIndex: number | null = $state(null);
+	function setEdit(item_index: number) {
+		editItemIndex = item_index;
+		showEditModal = true; // Open the modal
+	}
+	// Reset editItemIndex when showEditModal changes to false
+	$effect(() => {
+		if (!showEditModal) {
+			editItemIndex = null;
+		}
+	});
 
 	/**
 	 * TODO This method should be moved somewhere as abstraction
@@ -139,15 +160,17 @@
 		</button>
 	</div>
 
-	<div class="alert alert-info mb-4 max-w-2xl">
+	<div class="alert alert-info mb-4 max-w-3xl">
 		<p class="alert-text">Evenementen zijn een soort Item die producten kunnen aanbieden.
 			Ze hebben eerst en vooral een <span class="italic">display</span> mixin om te controleren hoe de pagina en de preview er uit ziet.
-		Via <span class="italic">HubProductBlueprints</span> kan je daarna ook instellen welke producten aangekocht worden.
-		Om te kunnen beperken wie er wanneer het item kan bekijken, is er de <span class="italic">Availability</span> mixin.</p>
+			Via <span class="italic">HubProductBlueprints</span> kan je daarna ook instellen welke producten aangekocht worden.
+			Om te kunnen beperken wie er wanneer het item kan bekijken, is er de <span class="italic">Availability</span> mixin.
+			Het is niet super verschillen van een event, enkel de start en einddatum atm (8/2025).</p>
 	</div>
 
 	<!-- List of Events -->
-	<h2>Recent Events</h2>
+	<h2>Overzicht van Evenementen</h2>
+	<p>TODO: Aantal available count toevoegen (gewoon alle met available op True)</p>
 	<label class="inline-flex items-center cursor-pointer my-4">
 		<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
 		<div class="
@@ -174,7 +197,7 @@
 				<!-- Title and edit -->
 				<div class="flex justify-between items-center">
 					<h2 class="font-semibold">{makePretty(event.item.name)}</h2>
-					<button aria-label="edit">
+					<button aria-label="edit" onclick="{() => setEdit(index)}">
 						<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 								 width="20px" height="20px" viewBox="0 0 528.899 528.899"
 								 xml:space="preserve">
@@ -267,3 +290,7 @@
 </main>
 
 <AddNewItem bind:isOpen={ showAddingNew } itemType="eventitem"></AddNewItem>
+
+{#if editItemIndex !== null && editItemIndex >= 0 && editItemIndex < data.events.length}
+	<ItemEditModal bind:isOpen={showEditModal} itemWide={data.events[editItemIndex]} />
+{/if}

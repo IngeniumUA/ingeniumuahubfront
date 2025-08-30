@@ -105,7 +105,7 @@ export class CoreItemWideAPI {
 	}
 
 	static async putItem(item_identifier: string | number, patch_object: object) {
-		const res = await fetch(`${PUBLIC_API_URL}/item/${item_identifier}`, {
+		const res = await fetch(`${PUBLIC_API_URL}/item/wide/${item_identifier}`, {
 			method: 'PUT',
 			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
 			body: JSON.stringify(patch_object)
@@ -113,7 +113,8 @@ export class CoreItemWideAPI {
 		if (res.ok) {
 			return res.json();
 		} else {
-			return `Failed to put item: ${await res.text()}`;
+			const text = await res.text();
+			throw new Error(`Failed to load items: ${text}`);
 		}
 	}
 

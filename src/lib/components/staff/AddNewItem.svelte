@@ -26,9 +26,12 @@
 		event_start: null,
 		event_end: null,
 	});
+
+	/**
+	 * Derived attribute reading for fields and creating a recsys component if the item allows it
+	 */
 	let recsysPreview = $derived.by(() => {
 		if (!hasDisplayMixin) {return null}
-
 		let recsysItem: RecSysPreviewI = {
 			name: form.name,
 			follow_through_link: form.externalLink ? form.clickThroughLink: `/${itemType === null ? "item": itemType.slice(0, itemType.length - 4)}/${form.name}`,
@@ -38,14 +41,11 @@
 			image_landscape: null,
 			preview_description: null
 		};
-
 		recsysItem.color = form.color;
 		recsysItem.preview_description = form.preview_description;
-
 		if (itemType === "eventitem") {
 			recsysItem.date = form.event_start;
 		}
-
 		return recsysItem;
 	});
 
