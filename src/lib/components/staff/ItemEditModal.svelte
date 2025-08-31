@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
 	import Modal from '$lib/components/layout/modal.svelte';
-	import { makePretty } from '$lib/utilities/style-utilities';
+	import { hexToRGB, makePretty } from '$lib/utilities/style-utilities';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import type { RecSysPreviewI } from '$lib/models/RecSysI';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -57,7 +57,7 @@
 			image_landscape: null,
 			preview_description: null
 		};
-		recsysItem.color = form.color;
+		recsysItem.color = hexToRGB(form.color) ?? form.color;
 		recsysItem.preview_description = form.preview_description;
 		if (itemType === "eventitem") {
 			recsysItem.date = form.event_start;
