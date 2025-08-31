@@ -5,6 +5,7 @@
 	import type { RecSysPreviewI } from "$lib/models/RecSysI";
 	import { toast } from '@zerodevx/svelte-toast'
 	import { CoreItemWideAPI } from '$lib/core_api/core_api';
+	import { PromoItemTypeEnum, PromoItemTypes } from '$lib/models/item/promoI';
 
 	let { itemType = null, isOpen = $bindable(false) }: { itemType: string | null, isOpen: boolean } = $props();
 
@@ -25,6 +26,7 @@
 		image_square: null,
 		event_start: null,
 		event_end: null,
+		promo_type: PromoItemTypes[0]
 	});
 
 	/**
@@ -82,6 +84,11 @@
 				event_start: form.event_start,
 			}
 			derived_item = { ...derived_item, ...event_specific}
+		} else if (itemType === "promoitem") {
+			const promo_specific = {
+				promo_type: form.promo_type
+			}
+			derived_item = { ...derived_item, ...promo_specific}
 		}
 
 		// Final construction and POST
@@ -103,6 +110,7 @@
 						'--toastBarBackground': '#2F855A'
 					}
 				});
+				isOpen = false; // Close the modal when the creation was a success :))
 			} else {
 				toast.push(`Failed`, {
 					theme: {
@@ -160,6 +168,19 @@
 							<p>Eind datum evenement</p>
 						</div>
 					</fieldset>
+				{:else if itemType === "promoitem"}
+					<fieldset>
+						<div class="form-field">
+							<label for="promo_type">Promo type</label>
+							<select id="promo_type" required bind:value={form.promo_type}>
+								<option value="" disabled selected>Select a promo</option>
+								{#each PromoItemTypes as promo_type}
+									<option value={promo_type}>{makePretty(PromoItemTypeEnum[promo_type])}</option>
+								{/each}
+							</select>
+							<p>Type van promoitem</p>
+						</div>
+					</fieldset>
 				{:else}
 					<p>Itemtype {itemType} heeft geen extra data nodig</p>
 				{/if}
@@ -212,6 +233,9 @@
 
 			<!-- RecSys Preview -->
 			{#if (recsysPreview !== null)}
+				<!-- Separator lijn -->
+				<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+
 				<div class="p-4 flex-1">
 					<RecSysPreviewItem item={recsysPreview} />
 				</div>
