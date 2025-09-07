@@ -4,6 +4,7 @@ import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { EventItemWideI } from '$lib/models/item/eventI';
 import type { ItemWideI } from '$lib/models/item/itemwideI';
 import type { ShopItemWideI } from '$lib/models/item/shopI';
+import type { ProductOutI } from '$lib/models/productsI';
 
 export class CoreItemAPI {
 	static async patchItem(item_identifier: string | number, patch_object: object) {
@@ -36,6 +37,18 @@ export class CoreItemAPI {
 			return await res.json();
 		} else {
 			throw `Failed to put item: ${await res.text()}`;
+		}
+	}
+
+	static async queryProductsForItem(item_identifier: string | number): Promise<ProductOutI[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/item/products/${item_identifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch product for item: ${await res.text()}`;
 		}
 	}
 
