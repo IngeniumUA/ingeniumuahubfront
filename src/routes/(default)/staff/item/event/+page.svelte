@@ -85,7 +85,7 @@
 		if (loadingHTTP) { return }
 
 		const put_model = {
-			"available": new_value
+			"available": !new_value
 		};
 		loadingHTTP = true;
 		try {
