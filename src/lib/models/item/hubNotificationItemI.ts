@@ -1,5 +1,5 @@
-import {ItemI} from "@ingenium/app/shared/models/item/itemI";
-import {EventItemI} from "@ingenium/app/shared/models/item/eventI";
+import type { ItemI } from '$lib/models/item/itemI';
+
 
 export interface NotificationItemInI {
   derived_type_enum: string
