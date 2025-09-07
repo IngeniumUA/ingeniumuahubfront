@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>Events | Ingenium UA</title>
+  <title>Events | Biomedica UA</title>
 </svelte:head>
 
 <header>
