@@ -177,6 +177,11 @@
 			<p class="text-blue-900 font-bold">{data.available_count}</p>
 		</div>
 
+		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+			<h4 class="text-ingenium-grey-800 font-bold">Aantal Inactieve:</h4>
+			<p class="text-blue-900 font-bold">{data.total_count}</p>
+		</div>
+
 		<label class="inline-flex items-center cursor-pointer my-4">
 			<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
 			<div class="

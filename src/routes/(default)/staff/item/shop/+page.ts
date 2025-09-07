@@ -12,5 +12,10 @@ export async function load() {
 	});
 	const available_count: number = await CoreItemWideAPI.countItemWide(countQuery);
 
-	return { shopitems, available_count };
+	const countQueryAll = new URLSearchParams({
+		item_type: 'shopitem',
+	});
+	const total_count: number = await CoreItemWideAPI.countItemWide(countQueryAll);
+
+	return { shopitems, available_count, total_count };
 }
