@@ -9,11 +9,10 @@ export const load = async ({ fetch }) => {
     return {
       items: data,
     }
-  } catch (e) {
-    if (e instanceof Response) {
-      error(e.status, e.statusText);
+  } catch (error) {
+    console.error(error);
+    return {
+      items: []
     }
-
-    error(500, 'Onbekende fout');
   }
 }
