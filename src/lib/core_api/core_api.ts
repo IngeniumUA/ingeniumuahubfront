@@ -19,6 +19,13 @@ export class CoreItemAPI {
 		}
 	}
 
+	static async patchAvailable(item_identifier: string | number, available: boolean) {
+		const patch_obj = {
+			"availability": {"available": available},
+		}
+		return await this.patchItem(item_identifier, patch_obj)
+	}
+
 	static async putItem(item_identifier: string | number, put_object: object) {
 		const res = await fetch(`${PUBLIC_API_URL}/item/${item_identifier}`, {
 			method: 'PUT',
