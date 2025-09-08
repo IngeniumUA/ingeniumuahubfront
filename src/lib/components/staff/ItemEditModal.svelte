@@ -32,8 +32,8 @@
 
 		// Display mixin
 		color: display?.color ?? "",
-		clickThroughLink: '',
-		externalLink: false,
+		clickThroughLink: display?.follow_through_link ?? "",
+		externalLink: display?.follow_through_link.startsWith("http"),
 		preview_description: display?.preview_description ?? "",
 		image_landscape: display?.image_landscape ?? null,
 		image_square: display?.image_square ?? null,
