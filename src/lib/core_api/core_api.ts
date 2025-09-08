@@ -64,6 +64,18 @@ export class CoreItemAPI {
 		}
 	}
 
+	static async countCheckoutTracker(item_identifier: string | number): Promise<number> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?item=${item_identifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch checkout tracker count: ${await res.text()}`;
+		}
+	}
+
 	static async countSuccessCheckout(item_identifier: string | number): Promise<number> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/count?item=${item_identifier}`, {
 			method: 'GET',
@@ -72,7 +84,7 @@ export class CoreItemAPI {
 		if (res.ok) {
 			return await res.json();
 		} else {
-			throw `Failed to fetch transaction count: ${await res.text()}`;
+			throw `Failed to fetch checkout count: ${await res.text()}`;
 		}
 	}
 
@@ -90,6 +102,17 @@ export class CoreItemAPI {
 }
 
 export class CoreItemWideAPI {
+	static async getItem(item_identifier: string | number): Promise<ItemWideI> {
+		const res = await fetch(`${PUBLIC_API_URL}/item/wide/${item_identifier}`, {
+			headers: getAuthorizationHeaders(null)
+		});
+		if (!res.ok) {
+			const text = await res.text();
+			throw new Error(`Failed to load items: ${text}`);
+		}
+		return await res.json();
+	}
+
 	static async queryItem(query_param: URLSearchParams): Promise<ItemWideI[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/item/wide?${query_param.toString()}`, {
 			headers: getAuthorizationHeaders(null)

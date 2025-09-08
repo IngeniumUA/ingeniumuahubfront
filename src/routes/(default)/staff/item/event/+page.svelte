@@ -8,6 +8,7 @@
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
+	import { goto } from '$app/navigation';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -276,7 +277,8 @@
 				</div>
 
 				<div class="flex justify-end items-center my-2">
-					<button class="button button-primary w-28 button-inline">
+					<button class="button button-primary w-28 button-inline"
+									onclick={() => goto(`/staff/item/${event.item.id}`)}>
 						<span class="text-white">Naar Event</span>
 					</button>
 				</div>

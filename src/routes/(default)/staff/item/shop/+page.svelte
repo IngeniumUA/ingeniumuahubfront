@@ -8,6 +8,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
+	import { goto } from '$app/navigation';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -284,7 +285,7 @@
 				</div>
 
 				<div class="flex justify-end items-center my-2">
-					<button class="button button-primary w-28 button-inline">
+					<button class="button button-primary w-28 button-inline" onclick={() => goto(`/staff/item/${shopItem.item.id}`)}>
 						<span class="text-white">Naar Shop Item</span>
 					</button>
 				</div>
