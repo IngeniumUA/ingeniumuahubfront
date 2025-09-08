@@ -5,9 +5,9 @@
 	import { toast } from '@zerodevx/svelte-toast'
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
-	import type { EventItemWideI } from '$lib/models/item/eventI';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
+	import { toRecsysPreview } from '$lib/models/RecSysI';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -83,10 +83,7 @@
 
 	async function toggleBlueprintAvailable(product_blueprint_id: number, new_value: boolean) {
 		if (loadingHTTP) { return }
-
-		const put_model = {
-			"available": !new_value
-		};
+		const put_model = { "available": !new_value };
 		loadingHTTP = true;
 		try {
 			await CoreProductBlueprintAPI.patchProductBlueprint(product_blueprint_id, put_model).catch(handleRequest);
@@ -132,21 +129,6 @@
 			editItemIndex = null;
 		}
 	});
-
-	/**
-	 * TODO This method should be moved somewhere as abstraction
-	 */
-	function toRecsysPreview(input: EventItemWideI) {
-		return {
-			follow_through_link: input.derived_type.display.follow_through_link,
-			name: input.item.name,
-			date: "",
-			color: input.derived_type.display.color,
-			image_square: input.derived_type.display.image_square,
-			image_landscape: input.derived_type.display.image_landscape,
-			preview_description: input.derived_type.display.preview_description
-		}
-	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
