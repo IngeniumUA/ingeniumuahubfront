@@ -55,7 +55,7 @@
 		if (loadingHTTP) { return }
 
 		if (shopItems.length <= item_index) {return}
-		let shopItem = data.events.at(item_index)
+		let shopItem = shopItems.at(item_index)
 		if (shopItem === undefined) {return}
 		shopItem.item.availability.available = !shopItem.item.availability.available
 

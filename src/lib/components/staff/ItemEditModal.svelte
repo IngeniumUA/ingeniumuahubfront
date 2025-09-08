@@ -236,7 +236,7 @@
 			</button>
 
 			<button class="button button-primary button-inline">
-				<span class="text-white">Naar Event</span>
+				<span class="text-white">Naar { makePretty(itemType) }</span>
 			</button>
 		</div>
 
