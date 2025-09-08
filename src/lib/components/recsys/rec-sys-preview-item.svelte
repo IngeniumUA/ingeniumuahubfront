@@ -47,7 +47,7 @@
         {#if item.image_square}
           <img src="{ item.image_square }" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
         {:else}
-          <enhanced:img src="$assets/svg/ingenium-schild.svg" />
+          <enhanced:img src="$assets/svg/biomedica-schild.svg" />
         {/if}
       </div>
       <div class="content">
