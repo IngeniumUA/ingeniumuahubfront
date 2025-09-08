@@ -188,7 +188,7 @@
 							<div class="form-field">
 								<label for="clickThroughLink">Click Through Link</label>
 								{#if (form.externalLink)}
-									<input id="clickThroughLink" type="text" required/>
+									<input id="clickThroughLink" type="text" required bind:value={form.clickThroughLink}/>
 								{/if}
 								<p>Waar je naartoe wordt gestuurd als je op het item klikt.</p>
 							</div>
