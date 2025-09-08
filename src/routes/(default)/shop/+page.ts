@@ -1,5 +1,4 @@
 import {PUBLIC_API_URL} from "$env/static/public";
-import {error, redirect} from "@sveltejs/kit";
 import {handleRequest} from "$lib/utilities/httpUtilities";
 
 export const load = async ({ fetch }) => {
