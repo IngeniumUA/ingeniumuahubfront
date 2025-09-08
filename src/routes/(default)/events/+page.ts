@@ -5,7 +5,7 @@ import {handleRequest} from "$lib/utilities/httpUtilities";
 
 export const load: PageLoad = async ({ fetch }) => {
   try {
-    const events = await fetch(`${PUBLIC_API_URL}/item/event/list?item_name_starts_with=Biomedica`).then(handleRequest);
+    const events = await fetch(`${PUBLIC_API_URL}/item/event/list?item_name_startswith=Biomedica`).then(handleRequest);
 
     return {
       events: events as RecSysPreviewI[]
