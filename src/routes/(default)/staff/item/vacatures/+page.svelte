@@ -6,6 +6,7 @@
 	import { handleRequest } from '$lib/utilities/httpUtilities';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { goto } from '$app/navigation';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -224,6 +225,16 @@
 						</g>
 						</svg>
 						</button>
+					</td>
+					<td class="align-middle">
+						<div class="flex justify-end items-center h-full">
+							<button
+								class="button button-primary button-inline"
+								onclick={() => goto(`/staff/item/${item.item.id}`)}
+							>
+								<span class="text-white">Naar Vacature</span>
+							</button>
+						</div>
 					</td>
 				</tr>
 				{/each}
