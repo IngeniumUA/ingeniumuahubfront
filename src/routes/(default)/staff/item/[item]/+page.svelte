@@ -8,6 +8,8 @@
 	import type { EventItemI } from '$lib/models/item/eventI';
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
+	import AddProductBlueprintModal from '$lib/components/staff/AddProductBlueprintModal.svelte';
+	import ProductBlueprintCard from '$lib/components/staff/ProductBlueprintCard.svelte';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -101,6 +103,16 @@
 		}
 	}
 
+	/**
+	 * Boolean state for add new product blueprint
+	 * Adding effect to query blueprints when modal closes
+	 */
+	let showAddingNew = $state(false);
+	$effect(() => {
+		if (!showAddingNew) {
+			refresh();
+		}
+	});
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -117,7 +129,7 @@
 
 	<h2>Item Configuration</h2>
 	<section class="flex flex-row">
-		<form class="ingenium-form grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-cols-fr">
+		<form class="ingenium-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 auto-cols-fr">
 			<div class="ingenium-form-card">
 				<h3 class="font-bold">Core Item</h3>
 				<fieldset>
@@ -222,11 +234,36 @@
 			{/if}
 		</form>
 
+		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+		<div class="w-1/3">
+			<h2>On this page</h2>
+			<aside class="py-6 px-4 sm:px-2 col-span-1 md:col-span-2 w-full">
+				<nav class="vertical-nav vertical-nav-transparent">
+					<div>
+						<a href="#item" class="font-semibold">Item</a>
+						{#if hasDisplay}
+							<a href="#item" class="font-semibold">Display</a>
+						{/if}
+
+						{#if productBlueprintCapable}
+							<a href="#payments" class="font-semibold">Payments</a>
+							<a href="#productblueprint" class="font-semibold">Product Blueprints</a>
+						{/if}
+						{#if hasCheckoutTrackers}
+							<a href="#checkouttracker" class="font-semibold">Checkout Trackers</a>
+						{/if}
+						{#if interactionCapable}
+						<a href="#interactions" class="font-semibold">Interactions</a>
+						{/if}
+					</div>
+				</nav>
+			</aside>
 		{#if hasDisplay}
-			<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 			<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={toRecsysPreview(itemWide)} /></div>
 		{/if}
+		</div>
 	</section>
+	<p>TODO Hier ergens nog de created_timetsamp en last_update_timestamp zetten</p>
 
 	<div class="flex justify-end">
 		<button class="button button-danger button-inline"
@@ -264,21 +301,24 @@
 			</div>
 		</section>
 
-		<h2>Product Blueprints</h2>
-		<p>TODO: Cards van Product Blueprints. Geen informatie, enkel configuratie, geen edit knop maar wel zo per price policy een 'open' knop die de card groter maakt</p>
-		<section>
-			{#each productBlueprints as productBlueprint}
-				<!-- TODO Aparte component voor maken -->
-				<div>
-					<h3>{productBlueprint.name}</h3>
-				</div>
-			{/each}
-		</section>
-		<div class="flex justify-end">
-			<button class="button button-primary button-inline">
-				<span class="text-white">Add New (wip)</span>
+		<div class="flex justify-between items-center mb-6">
+			<h2>Product Blueprints</h2>
+			<button onclick="{() => showAddingNew = true}" class="ml-2 button button-primary w-24 button-inline">
+				<span class="text-white">Add New</span>
 			</button>
 		</div>
+
+		<div class="alert alert-info mb-4 max-w-3xl">
+			<p class="alert-text">Een Product Blueprint is een beschrijving van een 'product'. Elk uniek 'iets' heeft (meestal*) een eigen blueprint.
+			Price policies laten je configureren hoe dat product kan worden aangekocht.</p>
+		</div>
+		<p>TODO: Cards van Product Blueprints. Geen informatie, enkel configuratie, geen edit knop maar wel zo per price policy een 'open' knop die de card groter maakt</p>
+
+		<section class="p-4 flex gap-6 bg-blue-950 dark:bg-blue-950 rounded-xl">
+			{#each productBlueprints as productBlueprint (productBlueprint.id)}
+				<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
+			{/each}
+		</section>
 
 		<div class="p-2 flex border-t dark:border-gray-600 border-gray-200"></div>
 
@@ -304,3 +344,5 @@
 		<p>TODO: Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
 	{/if}
 </main>
+
+<AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>
