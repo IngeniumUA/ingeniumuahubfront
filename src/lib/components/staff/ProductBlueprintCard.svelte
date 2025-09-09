@@ -1,5 +1,6 @@
 ﻿<script lang="ts">
 	import type { ProductBlueprintI } from '$lib/models/product_blueprint/ProductBlueprintI';
+	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 
 	let { productBlueprint = $bindable() }: { productBlueprint: ProductBlueprintI } = $props();
 
@@ -9,12 +10,33 @@
 		// selectedArray = Array.from({ length: selectedArray.length }, () => false);
 	}
 
+	/**
+	 * Form as a reactive state
+	 */
+	let form = $state({
+		name: productBlueprint.name,
+		description: productBlueprint.description,
+
+		ordering: productBlueprint.ordering,
+		allow_individualised: false,
+
+		// Availability
+		availability: {
+			available: productBlueprint.availability.available,
+			available_from: productBlueprint.availability.available_from,
+			available_until: productBlueprint.availability.available_until,
+			dynamic_policy_type: productBlueprint.availability.dynamic_policy_type,
+		},
+
+		track_checkout: productBlueprint.product_blueprint_metadata.upon_completion?.track_checkout !== null
+	})
+
 	let selectedArray = $state(Array.from({ length: productBlueprint.price_policies.length }, () => false));
 </script>
 
-<div class="bg-white p-4 rounded-lg
-							min-w-4xl
-							max-w-4xl min-h-48
+<div class="p-4 flex-1
+						bg-white rounded-lg
+							min-h-48
 							shadow-md hover:shadow-lg transition-shadow">
 	<div class="flex justify-between items-center">
 		<h2>{productBlueprint.name}</h2>
@@ -33,25 +55,83 @@
 	</div>
 
 	<p>{productBlueprint.description}</p>
-	<div class="flex flex-row gap-2">
-		<div class="w-1/2">
+	<div class="flex flex-row gap-8">
+		<div class="max-w-md">
 			<h3 class="font-bold">Allowed Counts</h3>
-			<span class="flex flex-row gap-1">
+			<span class="flex flex-row gap-1 mb-2">
 				{#each Object.entries({
 					"Max Total": productBlueprint.max_total,
 					"Max Individual": productBlueprint.max_individual,
 					"Max per Checkout": productBlueprint.max_per_checkout}) as [fieldName, fieldValue]}
-				<div class="p-4 w-1/3 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+				<div class="p-4 flex-1 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 					<h4 class="text-ingenium-grey-800 font-bold">{fieldName}:</h4>
 					<p class="text-blue-900 font-bold">{fieldValue}</p>
 				</div>
 				{/each}
 			</span>
+
+			<h3 class="font-bold">Misc Configuration</h3>
+				<div>
+				<label class="inline-flex items-center cursor-pointer my-4">
+					<input type="checkbox" class="sr-only peer"
+								 bind:checked={form.allow_individualised}
+					>
+					<div class="
+						relative w-11 h-6
+						bg-red-900 dark:bg-red-900
+						rounded-full
+						peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+						after:content-['']
+						after:absolute after:top-[2px] after:start-[2px]
+						after:w-5 after:h-5
+						after:bg-white after:rounded-full
+						after:transition-transform
+						peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+						"></div>
+					<span class="ms-3 text-sm font-medium text-gray-600">
+									Individualiseren {#if (form.allow_individualised)}Aan{:else}Uit{/if}
+								</span>
+				</label>
+				</div>
+				<div>
+				<label class="inline-flex items-center cursor-pointer my-4">
+					<input type="checkbox" class="sr-only peer"
+								 bind:checked={form.track_checkout}
+					>
+					<div class="
+						relative w-11 h-6
+						bg-red-900 dark:bg-red-900
+						rounded-full
+						peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+						after:content-['']
+						after:absolute after:top-[2px] after:start-[2px]
+						after:w-5 after:h-5
+						after:bg-white after:rounded-full
+						after:transition-transform
+						peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+						"></div>
+					<span class="ms-3 text-sm font-medium text-gray-600">
+									Ordertracking {#if (form.track_checkout)}Aan{:else}Uit{/if}
+								</span>
+				</label>
+
+					<div class="form-field max-w-64">
+						<label for="ordering">Ordering</label>
+						<input id="ordering" type="number" required bind:value={form.ordering}/>
+						<p>Weergave volgorde, hoger cijfer -> hoger/eerst op de pagina.</p>
+					</div>
+			</div>
 		</div>
 
-		<div class="w-1/2">
-			<h3 class="font-bold">Availability</h3>
+		<div>
+			<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
 		</div>
+	</div>
+
+	<div class="mt-4 flex justify-end">
+		<button class="button button-primary button-inline">
+			<span class="text-white">Update</span>
+		</button>
 	</div>
 
 	<div class="mt-8">
@@ -60,7 +140,7 @@
 		{#each productBlueprint.price_policies as pricePolicy, pricePolicyIndex (pricePolicy.id)}
 			<div>
 				<div class="flex justify-between items-center mb-6">
-					<h4 class="text-ingenium-grey-800 font-bold">Policy {pricePolicy.id}: {pricePolicy.name}</h4>
+					<h4 class="text-ingenium-grey-800 font-bold">Price {pricePolicyIndex + 1}: {pricePolicy.name}</h4>
 
 
 					<button type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center"
@@ -81,7 +161,7 @@
 				</div>
 				{#if selectedArray.at(pricePolicyIndex) ?? false}
 					Todo: Hierboven ook nog een toggle steken om price policy aan en uit te zetten
-					Todo: form hierzo, mis aparte component voor maken?
+					Todo: form hierzo, aparte component voor maken?
 				{/if}
 			</div>
 			<hr class="h-px mt-4 bg-gray-200 border-0 dark:bg-gray-800">

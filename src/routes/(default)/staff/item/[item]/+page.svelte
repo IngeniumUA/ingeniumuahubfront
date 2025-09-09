@@ -10,6 +10,8 @@
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import AddProductBlueprintModal from '$lib/components/staff/AddProductBlueprintModal.svelte';
 	import ProductBlueprintCard from '$lib/components/staff/ProductBlueprintCard.svelte';
+	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
+	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -34,6 +36,7 @@
 	 * Refreshing all data on the page
 	 */
 	async function refresh() {
+		console.log("refresh")
 		itemWide = await CoreItemWideAPI.getItem(itemWide.item.id);
 		trackerCount = await CoreItemAPI.countCheckoutTracker(itemWide.item.id);
 		const query = new URLSearchParams({
@@ -58,7 +61,7 @@
 			available: itemWide.item.availability.available,
 			available_from: itemWide.item.availability.available_from,
 			available_until: itemWide.item.availability.available_until,
-			dynamic_policy_type: itemWide.item.availability.dynamic_policy_type,
+			dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
 		},
 
 		// Display mixin
@@ -110,83 +113,48 @@
 	let showAddingNew = $state(false);
 	$effect(() => {
 		if (!showAddingNew) {
-			refresh();
+			// todo refresh
 		}
 	});
 </script>
 
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
-		<h1>{itemWide.item.name}</h1>
+		<h1 id="{itemWide.item.name}">{itemWide.item.name}</h1>
 		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
 
 	<div class="alert alert-info mb-4 max-w-3xl">
-		<p class="alert-text">Items vormen de basis van de website. :) Tekste todo hier.</p>
+		<p class="alert-text">Op deze pagina kan je <span class="italic">alles</span> over een item configureren.
+		Volledige configuratie van het item en zijn velden zelf, alle producten, transacties en betalingen die er aan zijn gekoppeld en zelfs enkele dashboarden voor grafieken.<br>
+		Gebruik de <span class="italic">'On this page'</span> hier rechts om snel je weg te vinden.</p>
 	</div>
 
 	<h2>Item Configuration</h2>
 	<section class="flex flex-row">
-		<form class="ingenium-form grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 auto-cols-fr">
+		<form class="ingenium-form">
 			<div class="ingenium-form-card">
 				<h3 class="font-bold">Core Item</h3>
 				<fieldset>
-					<div class="form-field">
+					<div class="form-field max-w-72 mb-2">
 						<label for="itemName">Name</label>
 						<input id="itemName" type="text" required bind:value={ form.name }/>
 						<p>Display naam van de item.</p>
 					</div>
 
-					<div class="form-field">
-						<label for="itemDescription">Description</label>
-						<input id="itemDescription" type="text" required bind:value={ form.description }/>
-						<p>Optioneel, een beschrijving.</p>
+					<label for="itemDescription">Description</label>
+					<p>Beschrijving die wordt weergegeven op de pagina.</p>
+					<div class="form-field min-h-72 flex">
+						<textarea class="flex-1" id="itemDescription" required bind:value={ form.description }></textarea>
 					</div>
-
-					TODO Rendered selector
 				</fieldset>
 			</div>
 
+			<div class="my-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 auto-cols-fr">
 			<div class="ingenium-form-card">
-				<h3 class="font-bold">Availability</h3>
-				<label class="inline-flex items-center cursor-pointer my-4">
-					<input type="checkbox" class="sr-only peer"
-								 bind:checked={form.availability.available}
-								 onclick="{() => toggleAvailable()}"
-					>
-					<div class="
-					relative w-11 h-6
-					bg-red-900 dark:bg-red-900
-					rounded-full
-					peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-					after:content-['']
-					after:absolute after:top-[2px] after:start-[2px]
-					after:w-5 after:h-5
-					after:bg-white after:rounded-full
-					after:transition-transform
-					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-					"></div>
-					<span class="ms-3 text-sm font-medium text-gray-600">
-								{#if (form.availability.available)}Beschikbaar{:else}Niet Beschikbaar{/if}
-							</span>
-				</label>
-
-				<fieldset class="flex flex-row">
-					<div class="form-field">
-						<label for="available_from">Available From</label>
-						<input id="available_from" type="date" required bind:value={form.availability.available_from}/>
-						<p>Beschikbaar vanaf</p>
-					</div>
-					<div class="form-field">
-						<label for="available_until">Available Until</label>
-						<input id="available_until" type="date" required bind:value={form.availability.available_until}/>
-						<p>Beschikbaar tot</p>
-					</div>
-				</fieldset>
-
-				TODO, Dropdown voor Dynamic Policy
+				<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
 			</div>
 
 			{#if hasDisplay}
@@ -232,28 +200,30 @@
 					</fieldset>
 				</div>
 			{/if}
+			</div>
 		</form>
 
 		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+
 		<div class="w-1/3">
 			<h2>On this page</h2>
 			<aside class="py-6 px-4 sm:px-2 col-span-1 md:col-span-2 w-full">
 				<nav class="vertical-nav vertical-nav-transparent">
 					<div>
-						<a href="#item" class="font-semibold">Item</a>
+						<a href="#{itemWide.item.name}" class="font-semibold">Item</a>
 						{#if hasDisplay}
 							<a href="#item" class="font-semibold">Display</a>
 						{/if}
 
 						{#if productBlueprintCapable}
-							<a href="#payments" class="font-semibold">Payments</a>
-							<a href="#productblueprint" class="font-semibold">Product Blueprints</a>
+							<a href="#Transacties en betalingen" class="font-semibold">Payments</a>
+							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
 						{/if}
 						{#if hasCheckoutTrackers}
-							<a href="#checkouttracker" class="font-semibold">Checkout Trackers</a>
+							<a href="#Checkout Trackers" class="font-semibold">Checkout Trackers</a>
 						{/if}
 						{#if interactionCapable}
-						<a href="#interactions" class="font-semibold">Interactions</a>
+						<a href="#Interactions" class="font-semibold">Interactions</a>
 						{/if}
 					</div>
 				</nav>
@@ -263,19 +233,23 @@
 		{/if}
 		</div>
 	</section>
-	<p>TODO Hier ergens nog de created_timetsamp en last_update_timestamp zetten</p>
 
-	<div class="flex justify-end">
-		<button class="button button-danger button-inline"
+	<div class="p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+		<h3 class="font-bold">Item Metadata</h3>
+		<p>TODO 1: Metadata voor andere payment account (nodig voor biomedica site)</p>
+		<p>TODO 2: Metadata voor FB / Instagram link</p>
+	</div>
+
+	<div class="flex justify-end mt-4 gap-4">
+		<button class="button button-primary button-inline"
 						disabled={loadingHTTP}>
-			<span class="text-white">Delete (wip)</span>
+			<span class="text-white">Update Item</span>
 		</button>
 	</div>
 
-
 	{#if productBlueprintCapable}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h2>Transacties en betalingen</h2>
+		<h2 id="Transacties en betalingen">Transacties en betalingen</h2>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Een transactie is de 'aankoop' van een product door een gebruiker.
 				Een Checkout is de daadwerkelijke betalingen daarvan.
@@ -301,28 +275,30 @@
 			</div>
 		</section>
 
+		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
-			<h2>Product Blueprints</h2>
+			<h2 id="Product Blueprints">Product Blueprints</h2>
 			<button onclick="{() => showAddingNew = true}" class="ml-2 button button-primary w-24 button-inline">
 				<span class="text-white">Add New</span>
 			</button>
 		</div>
 
 		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Een Product Blueprint is een beschrijving van een 'product'. Elk uniek 'iets' heeft (meestal*) een eigen blueprint.
-			Price policies laten je configureren hoe dat product kan worden aangekocht.</p>
+			<p class="alert-text">Een <span class="font-bold">Product Blueprint</span> is een beschrijving van een <span class="font-bold">product</span>.
+				Elk <span class="italic">uniek iets</span> heeft een eigen blueprint.
+			<span class="font-bold">Price policies</span> laten je configureren hoe dat product kan worden aangekocht.</p>
 		</div>
-		<p>TODO: Cards van Product Blueprints. Geen informatie, enkel configuratie, geen edit knop maar wel zo per price policy een 'open' knop die de card groter maakt</p>
 
-		<section class="p-4 flex gap-6 bg-blue-950 dark:bg-blue-950 rounded-xl">
+		{#if (productBlueprints.length > 0)}
+		<section class="p-6 py-12 flex flex-wrap gap-6 bg-blue-950 dark:bg-blue-950 rounded-3xl">
 			{#each productBlueprints as productBlueprint (productBlueprint.id)}
 				<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
 			{/each}
 		</section>
+		{/if}
 
-		<div class="p-2 flex border-t dark:border-gray-600 border-gray-200"></div>
-
-		<h2>Checkout Trackers</h2>
+		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+		<h2 id="Checkout Trackers">Checkout Trackers</h2>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Checkout Trackers zijn de 'ordertracking' van Pop-up Z. Er bestaat steeds één tracker per betaling.</p>
 		</div>
@@ -335,7 +311,7 @@
 
 	{#if interactionCapable}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h2>Interactions</h2>
+		<h2 id="Interactions">Interactions</h2>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Interactions worden aangemaakt telkens wanneer een gebruiker 'iets doet' met een Item.
 			Onder de mantel van 'iets doen' zit bijvoorbeeld een transactie.</p>
@@ -343,6 +319,19 @@
 
 		<p>TODO: Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
 	{/if}
+
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+	<h2>Webmaster Info</h2>
+	<p>TODO 1: Hier ergens nog de created_timetsamp en last_update_timestamp zetten</p>
+	<p>TODO 2: DBLogs voor dit item</p>
+
+
+	<div class="flex justify-end mt-4 gap-4">
+		<button class="button button-danger button-inline"
+						disabled={loadingHTTP}>
+			<span class="text-white">Delete (wip)</span>
+		</button>
+	</div>
 </main>
 
 <AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>
