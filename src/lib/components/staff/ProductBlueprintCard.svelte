@@ -1,7 +1,8 @@
 ﻿<script lang="ts">
 	import type { ProductBlueprintI } from '$lib/models/product_blueprint/ProductBlueprintI';
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
-
+	import AddPricePolicyModal from '$lib/components/staff/AddPricePolicyModal.svelte';
+	import PricePolicyCard from '$lib/components/staff/PricePolicyCard.svelte';
 	let { productBlueprint = $bindable() }: { productBlueprint: ProductBlueprintI } = $props();
 
 	let editing: boolean = $state(false);
@@ -20,7 +21,6 @@
 		ordering: productBlueprint.ordering,
 		allow_individualised: false,
 
-		// Availability
 		availability: {
 			available: productBlueprint.availability.available,
 			available_from: productBlueprint.availability.available_from,
@@ -32,6 +32,8 @@
 	})
 
 	let selectedArray = $state(Array.from({ length: productBlueprint.price_policies.length }, () => false));
+	let addingPricePolicy = $state(false);
+	let loadingHTTP = $state(false);
 </script>
 
 <div class="p-4 flex-1
@@ -98,7 +100,7 @@
 					<input type="checkbox" class="sr-only peer"
 								 bind:checked={form.track_checkout}
 					>
-					<div class="
+					<span class="
 						relative w-11 h-6
 						bg-red-900 dark:bg-red-900
 						rounded-full
@@ -109,7 +111,7 @@
 						after:bg-white after:rounded-full
 						after:transition-transform
 						peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-						"></div>
+						"></span>
 					<span class="ms-3 text-sm font-medium text-gray-600">
 									Ordertracking {#if (form.track_checkout)}Aan{:else}Uit{/if}
 								</span>
@@ -136,41 +138,22 @@
 
 	<div class="mt-8">
 		<h3 class="font-bold">Price Policies</h3>
-		<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-800">
+		<hr class="h-px mt-4 bg-gray-200 border-0 dark:bg-gray-800">
 		{#each productBlueprint.price_policies as pricePolicy, pricePolicyIndex (pricePolicy.id)}
-			<div>
-				<div class="flex justify-between items-center mb-6">
-					<h4 class="text-ingenium-grey-800 font-bold">Price {pricePolicyIndex + 1}: {pricePolicy.name}</h4>
-
-
-					<button type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center"
-									aria-controls="mobile-menu" aria-expanded="{selectedArray.at(pricePolicyIndex) ?? false}"
-									onclick={ () => selectedArray[pricePolicyIndex] = !selectedArray[pricePolicyIndex] }
-					>
-						<span class="sr-only">Open navigatie</span>
-						{#if selectedArray.at(pricePolicyIndex) ?? false}
-							<svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						{:else}
-							<svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-							</svg>
-						{/if}
-					</button>
-				</div>
-				{#if selectedArray.at(pricePolicyIndex) ?? false}
-					Todo: Hierboven ook nog een toggle steken om price policy aan en uit te zetten
-					Todo: form hierzo, aparte component voor maken?
-				{/if}
-			</div>
-			<hr class="h-px mt-4 bg-gray-200 border-0 dark:bg-gray-800">
+			<PricePolicyCard bind:loadingHTTP={loadingHTTP}
+											 isOpen={ selectedArray.at(pricePolicyIndex) ?? false }
+											 bind:pricePolicy={productBlueprint.price_policies[pricePolicyIndex]}
+											 pricePolicyIndex={pricePolicyIndex}></PricePolicyCard>
+			<hr class="h-px bg-gray-200 border-0 dark:bg-gray-800">
 		{/each}
 	</div>
 
 	<div class="mt-4 flex justify-end">
-		<button class="button button-primary button-inline">
-			<span class="text-white">Add New (wip)</span>
+		<button class="button button-primary button-inline"
+		onclick="{() => {addingPricePolicy = true}}">
+			<span class="text-white">Add New</span>
 		</button>
 	</div>
 </div>
+
+<AddPricePolicyModal bind:isOpen={addingPricePolicy} product_blueprint_id={productBlueprint.id}></AddPricePolicyModal>

@@ -2,6 +2,7 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import Modal from '$lib/components/layout/modal.svelte';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
 	let { isOpen = $bindable(false), origin_item_id }: { isOpen: boolean, origin_item_id: number } = $props();
 
@@ -42,24 +43,12 @@
 			createError = error instanceof Error ? error.message : 'Error submitting form';
 		} finally {
 			if (createError === null) {
-				toast.push("Blueprint created!", {
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgba(72,187,120,0.9)',
-						'--toastBarBackground': '#2F855A'
-					}
-				});
-				isOpen = false; // Close the modal when the creation was a success :))
+				successToast("Blueprint created!")
+				isOpen = false;
 			} else {
-				toast.push(`Failed`, {
-					theme: {
-						'--toastColor': 'mistyrose',
-						'--toastBackground': 'rgba(229, 62, 62, 0.9)', // red-600
-						'--toastBarBackground': '#C53030' // red-700
-					}
-				});
+				failedToast(`Failed`)
 			}
-			loadingHTTP = false; // Reset loading state
+			loadingHTTP = false;
 		}
 	}
 </script>
@@ -68,7 +57,7 @@
 	{#snippet children()}
 		<!-- Main body -->
 		<div class="alert alert-info m-4 max-w-3xl">
-			<p class="alert-text">Product Bleurpint aanmaken. Price policies en availability komen pas later.</p>
+			<p class="alert-text">Product Blueprint aanmaken. Price policies en availability komen pas later.</p>
 		</div>
 		<form class="p-4 ingenium-form">
 			<fieldset>
