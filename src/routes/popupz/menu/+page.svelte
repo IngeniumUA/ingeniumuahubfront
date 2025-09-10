@@ -75,6 +75,7 @@
 	</nav>
 
 	<!-- Product Selector	-->
+	{#if products.length > 0}
 	<section>
 		{#each products as product}
 			<div class="product-card">
@@ -88,4 +89,10 @@
 			</div>
 		{/each}
 	</section>
+	{:else}
+	<section>
+		<h1>De Shop staat niet aan!</h1>
+		<h2>'t Zal weer de schuld van de webmaster zijn</h2>
+	</section>
+	{/if}
 </main>
