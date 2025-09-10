@@ -3,6 +3,8 @@
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import AddPricePolicyModal from '$lib/components/staff/AddPricePolicyModal.svelte';
 	import PricePolicyCard from '$lib/components/staff/PricePolicyCard.svelte';
+	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	let { productBlueprint = $bindable() }: { productBlueprint: ProductBlueprintI } = $props();
 
 	let editing: boolean = $state(false);
@@ -34,6 +36,45 @@
 	let selectedArray = $state(Array.from({ length: productBlueprint.price_policies.length }, () => false));
 	let addingPricePolicy = $state(false);
 	let loadingHTTP = $state(false);
+
+	/**
+	 * 
+	 */
+	let putError: Error | null = $state(null);
+	async function update() {
+		if (loadingHTTP) {return}
+		// todo check for form errors
+
+		const putProductBlueprint = productBlueprint;
+		putProductBlueprint.name = form.name;
+		putProductBlueprint.description = form.description;
+
+		putProductBlueprint.max_total = 5;
+		putProductBlueprint.max_individual = 5;
+		putProductBlueprint.max_per_checkout = 5;
+
+		putProductBlueprint.ordering = form.ordering;
+
+		putProductBlueprint.availability.available = form.availability.available
+		putProductBlueprint.availability.available_from = form.availability.available_from
+		putProductBlueprint.availability.available_until = form.availability.available_until
+		putProductBlueprint.availability.dynamic_policy_type = form.availability.dynamic_policy_type
+
+		loadingHTTP = true;
+		try {
+			productBlueprint = await CoreProductBlueprintAPI.putProductBlueprint(putProductBlueprint);
+			putError = null;
+		} catch (error) {
+			putError = error instanceof Error ? error : Error('Error submitting form');
+		} finally {
+			if (putError === null) {
+				successToast("Updated!")
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <div class="p-4 flex-1
@@ -73,65 +114,65 @@
 			</span>
 
 			<h3 class="font-bold">Misc Configuration</h3>
-				<div>
-				<label class="inline-flex items-center cursor-pointer my-4">
-					<input type="checkbox" class="sr-only peer"
-								 bind:checked={form.allow_individualised}
-					>
-					<div class="
-						relative w-11 h-6
-						bg-red-900 dark:bg-red-900
-						rounded-full
-						peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-						after:content-['']
-						after:absolute after:top-[2px] after:start-[2px]
-						after:w-5 after:h-5
-						after:bg-white after:rounded-full
-						after:transition-transform
-						peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-						"></div>
-					<span class="ms-3 text-sm font-medium text-gray-600">
-									Individualiseren {#if (form.allow_individualised)}Aan{:else}Uit{/if}
-								</span>
-				</label>
-				</div>
-				<div>
-				<label class="inline-flex items-center cursor-pointer my-4">
-					<input type="checkbox" class="sr-only peer"
-								 bind:checked={form.track_checkout}
-					>
-					<span class="
-						relative w-11 h-6
-						bg-red-900 dark:bg-red-900
-						rounded-full
-						peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-						after:content-['']
-						after:absolute after:top-[2px] after:start-[2px]
-						after:w-5 after:h-5
-						after:bg-white after:rounded-full
-						after:transition-transform
-						peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-						"></span>
-					<span class="ms-3 text-sm font-medium text-gray-600">
-									Ordertracking {#if (form.track_checkout)}Aan{:else}Uit{/if}
-								</span>
-				</label>
+				<form class="ingenium-form">
+					<fieldset>
+					<label class="inline-flex items-center cursor-pointer my-4">
+						<input type="checkbox" class="sr-only peer"
+									 bind:checked={form.allow_individualised}
+						>
+						<span class="
+							relative w-11 h-6
+							bg-red-900 dark:bg-red-900
+							rounded-full
+							peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+							after:content-['']
+							after:absolute after:top-[2px] after:start-[2px]
+							after:w-5 after:h-5
+							after:bg-white after:rounded-full
+							after:transition-transform
+							peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+							"></span>
+						<span class="ms-3 text-sm font-medium text-gray-600">
+										Individualiseren {#if (form.allow_individualised)}Aan{:else}Uit{/if}
+									</span>
+					</label>
+
+					<label class="inline-flex items-center cursor-pointer my-4">
+						<input type="checkbox" class="sr-only peer"
+									 bind:checked={form.track_checkout}
+						>
+						<span class="
+							relative w-11 h-6
+							bg-red-900 dark:bg-red-900
+							rounded-full
+							peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+							after:content-['']
+							after:absolute after:top-[2px] after:start-[2px]
+							after:w-5 after:h-5
+							after:bg-white after:rounded-full
+							after:transition-transform
+							peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+							"></span>
+						<span class="ms-3 text-sm font-medium text-gray-600">
+										Ordertracking {#if (form.track_checkout)}Aan{:else}Uit{/if}
+									</span>
+					</label>
 
 					<div class="form-field max-w-64">
 						<label for="ordering">Ordering</label>
 						<input id="ordering" type="number" required bind:value={form.ordering}/>
 						<p>Weergave volgorde, hoger cijfer -> hoger/eerst op de pagina.</p>
 					</div>
-			</div>
+				</fieldset>
+			</form>
 		</div>
 
-		<div>
-			<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
-		</div>
+		<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
+
 	</div>
 
 	<div class="mt-4 flex justify-end">
-		<button class="button button-primary button-inline">
+		<button class="button button-primary button-inline" onclick={update}>
 			<span class="text-white">Update</span>
 		</button>
 	</div>

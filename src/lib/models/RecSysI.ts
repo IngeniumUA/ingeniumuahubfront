@@ -25,12 +25,12 @@ export const toRecsysPreview = (input: EventItemWideI | ShopItemWideI | ItemWide
 		follow_through_link: displayHolding.derived_type.display.follow_through_link ? displayHolding.derived_type.display.follow_through_link: `/${itemType.slice(0, itemType.length - 4)}/${displayHolding.item.name}`,
 		date: null,
 		color: 'rgb(255, 255, 255)',
-		image_square: null,
-		image_landscape: null,
-		preview_description: null
+		image_square: displayHolding.derived_type.display.image_square,
+		image_landscape: displayHolding.derived_type.display.image_landscape,
+		preview_description: displayHolding.derived_type.display.preview_description
 	};
-	recsysItem.color = hexToRGB(displayHolding.derived_type.display.color) ?? displayHolding.derived_type.display.color;
-	recsysItem.preview_description = displayHolding.derived_type.display.preview_description;
+	const color = hexToRGB(displayHolding.derived_type.display.color) ?? displayHolding.derived_type.display.color;
+	if (color !== null) recsysItem.color = color;
 	if (itemType === "eventitem") {
 		recsysItem.date = displayHolding.derived_type.event_start;
 	}

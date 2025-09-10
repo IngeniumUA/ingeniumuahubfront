@@ -1,4 +1,4 @@
-﻿import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
+﻿import type { AvailabilityCompositionI, AvailabilityCompositionInI } from '$lib/models/item/availabilityCompositionI';
 
 export interface PricePolicyInI {
 	product_blueprint_id: number
@@ -12,6 +12,8 @@ export interface PricePolicyInI {
 	max_valid_usages: number,
 
 	ordering: number
+
+	availability: AvailabilityCompositionInI | null
 }
 
 export interface PricePolicyI extends PricePolicyInI {

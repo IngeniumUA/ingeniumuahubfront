@@ -24,6 +24,19 @@ export class CoreProductBlueprintAPI {
 		if (res.ok) {
 			return await res.json();
 		} else {
+			throw `Failed to patch blueprint: ${await res.text()}`;
+		}
+	}
+
+	static async putProductBlueprint(putObject: ProductBlueprintI): Promise<ProductBlueprintI> {
+		const res = await fetch(`${PUBLIC_API_URL}/blueprint/${putObject.id}`, {
+			method: 'PUT',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(putObject)
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
 			throw `Failed to put blueprint: ${await res.text()}`;
 		}
 	}

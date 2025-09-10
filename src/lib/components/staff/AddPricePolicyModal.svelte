@@ -43,7 +43,13 @@
 			allow_invalid_access: form.allow_invalid_access,
 			allow_unauthenticated_access: form.allow_unauthenticated_access,
 			max_valid_usages: form.max_valid_usages,
-			ordering: form.ordering
+			ordering: form.ordering,
+			availability: {
+				disabled: false,
+				...form.availability,
+				dynamic_policy_content: null
+			},
+
 		};
 
 		loadingHTTP = true;

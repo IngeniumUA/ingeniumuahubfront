@@ -4,7 +4,6 @@
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
-	import { toast } from '@zerodevx/svelte-toast';
 	import type { EventItemI } from '$lib/models/item/eventI';
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
@@ -12,6 +11,8 @@
 	import ProductBlueprintCard from '$lib/components/staff/ProductBlueprintCard.svelte';
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
+	import { prettyDate } from '$lib/utilities/style-utilities';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -33,17 +34,19 @@
 	let hasCheckoutTrackers = $state(data.trackerCount > 0);
 
 	/**
-	 * Refreshing all data on the page
+	 * Refreshing functions
 	 */
-	async function refresh() {
-		console.log("refresh")
-		itemWide = await CoreItemWideAPI.getItem(itemWide.item.id);
-		trackerCount = await CoreItemAPI.countCheckoutTracker(itemWide.item.id);
+	async function refreshBlueprints() {
 		const query = new URLSearchParams({
 			item: itemWide.item.id.toString(),
 			limit: '100'
 		});
 		productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(query);
+	}
+	async function refresh() {
+		itemWide = await CoreItemWideAPI.getItem(itemWide.item.id);
+		trackerCount = await CoreItemAPI.countCheckoutTracker(itemWide.item.id);
+		await refreshBlueprints()
 
 		// Derived options
 		hasCheckoutTrackers = trackerCount > 0;
@@ -84,37 +87,61 @@
 		loadingHTTP = true;
 		try {
 			await CoreItemAPI.patchAvailable(itemWide.item.id, !itemWide.item.availability.available).catch(handleRequest);
-			toast.push("Item updated!", {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(72,187,120,0.9)',
-					'--toastBarBackground': '#2F855A'
-				}
-			})
+			successToast("Item updated!")
 			await refresh();
 		} catch (error) {
-			toast.push(`Failed ${error}`, {
-				theme: {
-					'--toastColor': 'mistyrose',
-					'--toastBackground': 'rgba(229, 62, 62, 0.9)', // red-600
-					'--toastBarBackground': '#C53030' // red-700
-				}
-			});
+			failedToast(`Failed ${error}`);
 			await refresh()
 		} finally {
 			loadingHTTP = false; // Reset loading state
 		}
 	}
+	
+	let putError: Error | null = $state(null);
+	async function putItem() {
+		if (loadingHTTP) {return}
+		// todo check for form errors
 
+		const putItemWide = itemWide;
+		putItemWide.item.name = form.name;
+		putItemWide.item.description = form.description;
+		putItemWide.item.availability.available = form.availability.available
+		putItemWide.item.availability.available_from = form.availability.available_from
+		putItemWide.item.availability.available_until = form.availability.available_until
+		putItemWide.item.availability.dynamic_policy_type = form.availability.dynamic_policy_type
+
+		loadingHTTP = true;
+		try {
+			itemWide = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
+			putError = null;
+		} catch (error) {
+			putError = error instanceof Error ? error : Error('Error submitting form');
+		} finally {
+			if (putError === null) {
+				successToast("Updated!")
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
+	
 	/**
 	 * Boolean state for add new product blueprint
 	 * Adding effect to query blueprints when modal closes
 	 */
 	let showAddingNew = $state(false);
+	let prevShowAddingNew = false;
+
 	$effect(() => {
-		if (!showAddingNew) {
-			// todo refresh
+		// So trigger on true->false transition
+		if (!showAddingNew && prevShowAddingNew) {
+			(async () => {
+				await refresh();
+			})();
 		}
+		// Setting the prev value to create the latching behavior
+		prevShowAddingNew = showAddingNew;
 	});
 </script>
 
@@ -137,13 +164,25 @@
 		<form class="ingenium-form">
 			<div class="ingenium-form-card">
 				<h3 class="font-bold">Core Item</h3>
-				<fieldset>
-					<div class="form-field max-w-72 mb-2">
+				<fieldset class="flex flex-row gap-4">
+					<div class="flex-1 form-field max-w-72 mb-2">
 						<label for="itemName">Name</label>
 						<input id="itemName" type="text" required bind:value={ form.name }/>
 						<p>Display naam van de item.</p>
 					</div>
 
+					<div class="flex-1">
+						<h3 class="font-bold pb-2">Info</h3>
+							{#each Object.entries({
+								"Item Id": itemWide.item.id,
+								"Last Update": prettyDate(itemWide.item.last_update_timestamp),
+								"Created": prettyDate(itemWide.item.created_timestamp)}) as [fieldName, fieldValue]}
+								<h4 class="pl-3 text-blue-900 font-bold">{fieldName}: <span class="text-ingenium-grey-800 font-bold">{fieldValue}</span></h4>
+							{/each}
+					</div>
+
+				</fieldset>
+				<fieldset>
 					<label for="itemDescription">Description</label>
 					<p>Beschrijving die wordt weergegeven op de pagina.</p>
 					<div class="form-field min-h-72 flex">
@@ -216,7 +255,8 @@
 						{/if}
 
 						{#if productBlueprintCapable}
-							<a href="#Transacties en betalingen" class="font-semibold">Payments</a>
+							<a href="#Dashboard" class="font-semibold">Dashboard</a>
+							<a href="#Transacties en Betalingen" class="font-semibold">Betalingen & Transacties</a>
 							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
 						{/if}
 						{#if hasCheckoutTrackers}
@@ -242,18 +282,17 @@
 
 	<div class="flex justify-end mt-4 gap-4">
 		<button class="button button-primary button-inline"
-						disabled={loadingHTTP}>
+						disabled={loadingHTTP}
+						onclick={putItem}>
 			<span class="text-white">Update Item</span>
 		</button>
 	</div>
 
 	{#if productBlueprintCapable}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h2 id="Transacties en betalingen">Transacties en betalingen</h2>
+		<h2 id="Dashboard">Dashboard</h2>
 		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Een transactie is de 'aankoop' van een product door een gebruiker.
-				Een Checkout is de daadwerkelijke betalingen daarvan.
-				Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
+			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
 		</div>
 		<section class="flex">
 			<div class="w-2/3">
@@ -274,6 +313,16 @@
 				</p>
 			</div>
 		</section>
+
+		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+		<h2 id="Transacties en Betalingen">Betalingen & Transacties</h2>
+		<div class="alert alert-info mb-4 max-w-3xl">
+			<p class="alert-text">Een transactie is de 'aankoop' van een product door een gebruiker.
+				Een Checkout is de daadwerkelijke betalingen daarvan.
+				Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
+		</div>
+
+		<p>TODO: Aparte CheckoutTransactionRefundTable component</p>
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
