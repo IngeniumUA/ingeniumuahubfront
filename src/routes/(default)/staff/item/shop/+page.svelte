@@ -285,7 +285,8 @@
 				</div>
 
 				<div class="flex justify-end items-center my-2">
-					<button class="button button-primary w-28 button-inline" onclick={() => goto(`/staff/item/${shopItem.item.id}`)}>
+					<button class="button button-primary w-28 button-inline"
+									onclick={() => goto(`/staff/item/${shopItem.item.id}#${shopItem.item.name}`)}>
 						<span class="text-white">Naar Shop Item</span>
 					</button>
 				</div>
