@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ProductOutI } from '$lib/models/productsI';
+	import type { ItemWideLimitedI } from '$lib/models/item/itemwideI';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -9,7 +10,8 @@
 	let categories: string[] = $state(["All", "Food", "Drinks", "Tickets"]);
 	let selectedCategory: string = $state("All");
 
-	let products: ProductOutI[] = $state(data.products.concat(data.products.concat(data.products)));
+	let item: ItemWideLimitedI = $state(data.item);
+	let products: ProductOutI[] = $state(data.products);
 
 	function getOrdering(ProductOutI: ProductOutI): number {
 		return 0
@@ -102,9 +104,11 @@
 		{/each}
 	</section>
 	{:else}
-	<section>
-		<h1>De Shop staat niet aan!</h1>
-		<h2>'t Zal weer de schuld van de webmaster zijn</h2>
-	</section>
+	<div class="w-screen h-max flex items-center justify-center">
+		<div class="pt-8">
+			<h1>De Shop staat niet aan!</h1>
+			<h2>'t Zal weer de schuld van de webmaster zijn</h2>
+		</div>
+	</div>
 	{/if}
 </main>
