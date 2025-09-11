@@ -3,7 +3,6 @@
 	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
-	import { handleRequest } from '$lib/utilities/httpUtilities';
 	import type { EventItemI } from '$lib/models/item/eventI';
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
@@ -12,7 +11,8 @@
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
-	import { prettyDate } from '$lib/utilities/style-utilities';
+	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
+	import { PaymentStatusEnum } from '$lib/models/enums';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -26,6 +26,11 @@
 	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum));
 
 	let productBlueprints = $state(data.productBlueprints);
+	let pricePolicyTable = $state(data.pricePoliciesTable);
+	let checkoutStatusTable = $state(data.checkoutStatusTable);
+
+	let checkoutTrackerStatusGrouped = $state([])
+	let checkoutTrackers = $state([])
 
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
@@ -47,6 +52,7 @@
 		itemWide = await CoreItemWideAPI.getItem(itemWide.item.id);
 		trackerCount = await CoreItemAPI.countCheckoutTracker(itemWide.item.id);
 		await refreshBlueprints()
+		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(itemWide.item.id);
 
 		// Derived options
 		hasCheckoutTrackers = trackerCount > 0;
@@ -67,6 +73,19 @@
 			dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
 		},
 
+		// Item metadata
+		item_metadata: {
+			payment_configuration: {
+				connected_account_id: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
+				application_fee_amount: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+			},
+			social_media_configuration: {
+				facebook_url: itemWide.item.item_metadata.social_media_configuration?.facebook_url,
+				instagram_url: itemWide.item.item_metadata.social_media_configuration?.instagram_url,
+				linkedin_url: itemWide.item.item_metadata.social_media_configuration?.linkedin_url,
+			}
+		},
+
 		// Display mixin
 		color: display?.color ?? "",
 		clickThroughLink: '',
@@ -83,19 +102,19 @@
 	/**
 	 *
 	 */
-	async function toggleAvailable() {
-		loadingHTTP = true;
-		try {
-			await CoreItemAPI.patchAvailable(itemWide.item.id, !itemWide.item.availability.available).catch(handleRequest);
-			successToast("Item updated!")
-			await refresh();
-		} catch (error) {
-			failedToast(`Failed ${error}`);
-			await refresh()
-		} finally {
-			loadingHTTP = false; // Reset loading state
-		}
-	}
+	// async function toggleAvailable() {
+	// 	loadingHTTP = true;
+	// 	try {
+	// 		await CoreItemAPI.patchAvailable(itemWide.item.id, !itemWide.item.availability.available).catch(handleRequest);
+	// 		successToast("Item updated!")
+	// 		await refresh();
+	// 	} catch (error) {
+	// 		failedToast(`Failed ${error}`);
+	// 		await refresh()
+	// 	} finally {
+	// 		loadingHTTP = false; // Reset loading state
+	// 	}
+	// }
 	
 	let putError: Error | null = $state(null);
 	async function putItem() {
@@ -109,6 +128,32 @@
 		putItemWide.item.availability.available_from = form.availability.available_from
 		putItemWide.item.availability.available_until = form.availability.available_until
 		putItemWide.item.availability.dynamic_policy_type = form.availability.dynamic_policy_type
+
+		// Payment configuration
+		if (form.item_metadata.payment_configuration.connected_account_id !== null && form.item_metadata.payment_configuration.connected_account_id !== "") {
+			putItemWide.item.item_metadata.payment_configuration = {
+				stripe_payment_configuration: {
+					connected_account_id: form.item_metadata.payment_configuration.connected_account_id,
+					application_fee_amount: form.item_metadata.payment_configuration.application_fee_amount,
+				}
+			}
+		} else {
+			putItemWide.item.item_metadata.payment_configuration = null;
+		}
+
+		// Social Media
+		if ([
+			form.item_metadata.social_media_configuration.facebook_url,
+			form.item_metadata.social_media_configuration.instagram_url,
+			form.item_metadata.social_media_configuration.linkedin_url].some(value => {return value?.startsWith("https")})) {
+			putItemWide.item.item_metadata.social_media_configuration = {
+				facebook_url: form.item_metadata.social_media_configuration.facebook_url?.startsWith("https") ? form.item_metadata.social_media_configuration.facebook_url: null,
+				instagram_url: form.item_metadata.social_media_configuration.instagram_url?.startsWith("https") ? form.item_metadata.social_media_configuration.instagram_url: null,
+				linkedin_url: form.item_metadata.social_media_configuration.linkedin_url?.startsWith("https") ? form.item_metadata.social_media_configuration.linkedin_url: null
+			}
+		} else {
+			putItemWide.item.item_metadata.social_media_configuration = null;
+		}
 
 		loadingHTTP = true;
 		try {
@@ -125,14 +170,49 @@
 			loadingHTTP = false;
 		}
 	}
-	
+
+	/**
+	 *
+	 */
+	interface PricePolicyGroupedMember {
+		price_policy_id: number
+		price_policy_name: string
+		price_eu: number
+		transaction_count: number
+	}
+	interface PricePolicyGrouped {
+		product_blueprint_id: number,
+		product_blueprint_name: string,
+		transaction_count: number,
+		price_policies: PricePolicyGroupedMember[]
+	}
+
+	/**
+	 * Return table is not grouped by the product blueprint
+	 * We quickly do that and return a sorted list with summed total transactions
+	 * @param input_array
+	 */
+	function groupPricePolicies(input_array: []): PricePolicyGrouped[] {
+		const groupedByBlueprint: Record<string, never[]> = Object.groupBy(input_array, value => value["product_blueprint_id"]);
+		return Object.entries(groupedByBlueprint).map(([blueprint_id, policies]) => {
+			return {
+				product_blueprint_id: parseInt(blueprint_id),
+				product_blueprint_name: input_array.find(value => {return value["product_blueprint_id"] === parseInt(blueprint_id)})!["product_blueprint_name"],
+				transaction_count: policies.reduce((sum, row) => {
+					return sum + row['transaction_count'];
+				}, 0),
+				price_policies: policies
+			}
+		})
+	}
+
 	/**
 	 * Boolean state for add new product blueprint
 	 * Adding effect to query blueprints when modal closes
+	 * We need the prev value to prevent continuous loops
 	 */
 	let showAddingNew = $state(false);
 	let prevShowAddingNew = false;
-
 	$effect(() => {
 		// So trigger on true->false transition
 		if (!showAddingNew && prevShowAddingNew) {
@@ -159,7 +239,7 @@
 		Gebruik de <span class="italic">'On this page'</span> hier rechts om snel je weg te vinden.</p>
 	</div>
 
-	<h2>Item Configuration</h2>
+	<h1>Item Configuration</h1>
 	<section class="flex flex-row">
 		<form class="ingenium-form">
 			<div class="ingenium-form-card">
@@ -276,8 +356,44 @@
 
 	<div class="p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 		<h3 class="font-bold">Item Metadata</h3>
-		<p>TODO 1: Metadata voor andere payment account (nodig voor biomedica site)</p>
-		<p>TODO 2: Metadata voor FB / Instagram link</p>
+
+		<div class="flex flex-row gap-4">
+			<fieldset class="flex-1">
+				<h3 class="font-bold">Payment Configuration</h3>
+				<div class="form-field">
+					<label for="connected_account_id">Stripe Connected Account ID</label>
+					<input id="connected_account_id" type="text" required bind:value={form.item_metadata.payment_configuration.connected_account_id}/>
+					<p>Connected Account ID waar het geld naar moet doorvloeien. Je kan die opzoeken via Stripe.
+						 Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
+				</div>
+
+				<div class="form-field">
+					<label for="application_fee_amount">Fee</label>
+					<input id="application_fee_amount" type="number" required bind:value={form.item_metadata.payment_configuration.application_fee_amount}/>
+					<p>Of er een vaste Fee is die moet worden aangerekend.
+						Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
+				</div>
+			</fieldset>
+
+			<fieldset class="flex-1">
+				<h3 class="font-bold">Social Media Configuration</h3>
+				<div class="form-field">
+					<label for="instagram_url">Instagram Link</label>
+					<input id="instagram_url" type="text" required bind:value={form.item_metadata.social_media_configuration.instagram_url}/>
+					<p>Deze link komt achter een instagram logo te staan op de item page.</p>
+				</div>
+				<div class="form-field">
+					<label for="facebook_url">Facebook Link</label>
+					<input id="facebook_url" type="text" required bind:value={form.item_metadata.social_media_configuration.facebook_url}/>
+					<p>Deze link komt achter een Facebook logo te staan op de item page.</p>
+				</div>
+				<div class="form-field">
+					<label for="linkedin_url">LinkedIn Link</label>
+					<input id="linkedin_url" type="text" required bind:value={form.item_metadata.social_media_configuration.linkedin_url}/>
+					<p>Deze link komt achter een LinkedIn logo te staan op de item page.</p>
+				</div>
+			</fieldset>
+		</div>
 	</div>
 
 	<div class="flex justify-end mt-4 gap-4">
@@ -290,24 +406,57 @@
 
 	{#if productBlueprintCapable}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h2 id="Dashboard">Dashboard</h2>
+		<h1 id="Dashboard">Dashboard</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
 		</div>
 		<section class="flex">
 			<div class="w-2/3">
-				<h3 class="font-bold">Overview</h3>
+				<h2 class="font-bold">Betalingen</h2>
+				<p>Het is normaal dat sommige betalingen falen. Een gefaalde betaling gebeurt bijvoorbeeld wanneer iemand een betaling start, maar niet genoed geld heeft. Of wanneer hij zijn bank app opent maar er daar iets fout gaat.</p>
+				<div class="flex flex-row flex-wrap  gap-x-4">
+					{#each Object.entries(checkoutStatusTable) as [status, count] (status)}
+						<div class="p-4 min-w-24 min-h-12 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+							<h4 class="text-ingenium-grey-800 font-bold">{makePretty(PaymentStatusEnum[parseInt(status)])}: </h4>
+							<p class="text-blue-900 font-bold"> {count}</p>
+						</div>
+					{/each}
+				</div>
+
 				<p>TODO Transacties en checkouts als aantallen
 					Grafiek ook? Doorheen de tijd
 					Mis ook met de pageviews enzo hier?
-					Toggle om de emails enzovoort te kunnen zien, maar enkel voor webmaster/manager
 				</p>
 			</div>
 
 			<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
 			<div class="w-1/3">
-				<h3 class="font-bold">Summarised</h3>
+				<h2 class="font-bold">Voltooide Transacties</h2>
+				{#each groupPricePolicies(pricePolicyTable) as row (row.product_blueprint_id)}
+					<div class="flex justify-between items-center">
+						<h3 class="text-blue-900 font-bold">{row.product_blueprint_name}</h3>
+						<h4 class="text-ingenium-grey-800 text-right font-bold mr-4">Subtotaal: {row.transaction_count}</h4>
+					</div>
+					<table class="ingenium-table">
+						<tbody>
+						{#each row.price_policies as pricePolicyRow, pricePolicyIndex (pricePolicyRow.price_policy_id)}
+							<tr>
+								<th scope="row">
+									<h4 class="text-ingenium-grey-800 font-bold">
+										Price {pricePolicyIndex + 1}: {#if pricePolicyRow.price_policy_name !== null}{pricePolicyRow.price_policy_name} -{/if}
+										{#if pricePolicyRow.price_eu === 0}Gratis{:else}€{pricePolicyRow.price_eu}{/if}
+									</h4>
+								</th>
+								<td class="text-right">{pricePolicyRow.transaction_count}</td>
+							</tr>
+						{/each}
+						</tbody>
+					</table>
+				{/each}
+				<p class="text-right font-bold mr-4">Eind totaal: {pricePolicyTable.reduce((sum, val) => {
+					return sum + val["transaction_count"]
+				}, 0)}</p>
 				<p>Vanalle beschrijven statistieken. Totalen van transactions/checkouts enzo, maar ook unique users, totaal €, totaal € na fee's.
 					Voor zo'n dingen best API calls doen naar de dpu?
 				</p>
@@ -315,7 +464,7 @@
 		</section>
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h2 id="Transacties en Betalingen">Betalingen & Transacties</h2>
+		<h1 id="Transacties en Betalingen">Betalingen & Transacties</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Een transactie is de 'aankoop' van een product door een gebruiker.
 				Een Checkout is de daadwerkelijke betalingen daarvan.
@@ -347,12 +496,69 @@
 		{/if}
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h2 id="Checkout Trackers">Checkout Trackers</h2>
+		<h1 id="Checkout Trackers">Checkout Trackers</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Checkout Trackers zijn de 'ordertracking' van Pop-up Z. Er bestaat steeds één tracker per betaling.</p>
 		</div>
 		{#if hasCheckoutTrackers}
-			<p>TODO Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
+			<div class="flex flex-row gap-4">
+				<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+					<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
+					<p class="text-blue-900 font-bold">0</p>
+				</div>
+				<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+					<h4 class="text-ingenium-grey-800 font-bold">Aantal Voltooid:</h4>
+					<p class="text-blue-900 font-bold">0</p>
+				</div>
+			</div>
+			<div class="flex flex-row">
+				{#each checkoutTrackerStatusGrouped as row (row["tracker_status"])}
+					<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+						<h4 class="text-ingenium-grey-800 font-bold">Status</h4>
+						<p class="text-blue-900 font-bold">Aantal in deze status</p>
+					</div>
+				{/each}
+			</div>
+			<p>Groupby per status van links naar rechts met pijlen tussen en aantallen.
+			Kleur van de "done" moet groen zijn imo</p>
+			<p>TODO Grafiekje hier? Dashboard embed best?</p>
+
+
+			<h2 class="font-bold">Trackers Table</h2>
+			<p>Table met alle checkout trackers -> component van maken</p>
+			<table class="ingenium-table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Email</th>
+						<th>Naam</th>
+					</tr>
+				</thead>
+				<tbody>
+				{#each checkoutTrackers as row}
+					<tr>
+						<th>{row["id"]}</th>
+
+						<td>{row["checkout"]["user_email"]}</td>
+						<td>{#if row["checkout"]["user_first_name"] !== null}{row["user_first_name"]}{/if}</td>
+
+						<td><a href="staff/checkout">Naar Checkout</a></td>
+
+						<td class="flex flex-row">
+							<button class="ml-2 button button-primary w-24 button-inline">
+								<span class="text-white">Prev Status</span>
+							</button>
+							<div>
+								{row["checkout_tracker_status"]}
+							</div>
+							<button class="ml-2 button button-primary w-24 button-inline">
+								<span class="text-white">Next Status</span>
+							</button>
+						</td>
+					</tr>
+				{/each}
+				</tbody>
+			</table>
 		{:else}
 			<p>Geen Trackers</p>
 		{/if}
@@ -360,7 +566,7 @@
 
 	{#if interactionCapable}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h2 id="Interactions">Interactions</h2>
+		<h1 id="Interactions">Interactions</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Interactions worden aangemaakt telkens wanneer een gebruiker 'iets doet' met een Item.
 			Onder de mantel van 'iets doen' zit bijvoorbeeld een transactie.</p>
@@ -370,10 +576,8 @@
 	{/if}
 
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-	<h2>Webmaster Info</h2>
-	<p>TODO 1: Hier ergens nog de created_timetsamp en last_update_timestamp zetten</p>
-	<p>TODO 2: DBLogs voor dit item</p>
-
+	<h1>Webmaster Info</h1>
+	<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
 
 	<div class="flex justify-end mt-4 gap-4">
 		<button class="button button-danger button-inline"

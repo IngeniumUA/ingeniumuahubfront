@@ -11,6 +11,18 @@
 
 	let products: ProductOutI[] = $state(data.products.concat(data.products.concat(data.products)));
 
+	function getOrdering(ProductOutI: ProductOutI): number {
+		return 0
+	}
+
+	let showProducts: ProductOutI[] = $derived.by(() => {
+		const productsForCategory = products.filter(prod => {return prod.product_meta.categorie == selectedCategory})
+		// productsForCategory.sort(
+		// 	(lhs, rhs) => {return getOrdering(lhs) getOrdering(rhs)}
+		// )
+		return productsForCategory;
+	})
+
 	/**
 	 * @param category
 	 */

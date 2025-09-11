@@ -101,4 +101,28 @@ export class CoreProductBlueprintAPI {
 		}
 		return await this.patchPricePolicy(pricePolicyId, patchObj);
 	}
+
+	static async queryProductBlueprintTable(query_param: URLSearchParams) {
+		const res = await fetch(`${PUBLIC_API_URL}/blueprint/table?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch product blueprint table: ${await res.text()}`;
+		}
+	}
+
+	static async queryPricePolicyTable(query_param: URLSearchParams) {
+		const res = await fetch(`${PUBLIC_API_URL}/blueprint/price_policy/table?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch price policies table: ${await res.text()}`;
+		}
+	}
 }

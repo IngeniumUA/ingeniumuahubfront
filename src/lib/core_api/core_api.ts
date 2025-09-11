@@ -5,6 +5,7 @@ import type { EventItemWideI } from '$lib/models/item/eventI';
 import type { ItemWideI } from '$lib/models/item/itemwideI';
 import type { ShopItemWideI } from '$lib/models/item/shopI';
 import type { ProductOutI } from '$lib/models/productsI';
+import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 
 export class CoreItemAPI {
 	static async patchItem(item_identifier: string | number, patch_object: object) {
@@ -53,14 +54,29 @@ export class CoreItemAPI {
 	}
 
 	static async attachedProductBlueprintTable(item_identifier: string | number): Promise<[]> {
-		const res = await fetch(`${PUBLIC_API_URL}/blueprint/table?item=${item_identifier}`, {
+		const query = new URLSearchParams({
+			source_item_id: item_identifier.toString(),
+		});
+		return await CoreProductBlueprintAPI.queryProductBlueprintTable(query);
+	}
+
+	static async attachedPricePolicyTable(item_identifier: string | number): Promise<[]> {
+		const query = new URLSearchParams({
+			source_item_id: item_identifier.toString(),
+		});
+		return await CoreProductBlueprintAPI.queryPricePolicyTable(query);
+	}
+
+
+	static async attachedCheckoutStatusTable(item_identifier: string | number): Promise<Record<string, number>> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/group_by?item=${item_identifier}`, {
 			method: 'GET',
 			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();
 		} else {
-			throw `Failed to fetch product blueprints table: ${await res.text()}`;
+			throw `Failed to fetch checkout status grouped: ${await res.text()}`;
 		}
 	}
 

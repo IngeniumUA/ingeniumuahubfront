@@ -10,6 +10,9 @@ export async function load({ params }) {
 		limit: '100'
 	});
 	const productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(query);
+	const pricePoliciesTable = await CoreItemAPI.attachedPricePolicyTable(itemWide.item.id);
 
-	return { itemWide, trackerCount, productBlueprints };
+	const checkoutStatusTable = await CoreItemAPI.attachedCheckoutStatusTable(itemWide.item.id);
+
+	return { itemWide, trackerCount, productBlueprints, pricePoliciesTable, checkoutStatusTable };
 }
