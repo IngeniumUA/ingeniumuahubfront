@@ -5,9 +5,10 @@
 	import { toast } from '@zerodevx/svelte-toast'
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
-	import type { EventItemWideI } from '$lib/models/item/eventI';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
+	import { toRecsysPreview } from '$lib/models/RecSysI';
+	import { goto } from '$app/navigation';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -83,10 +84,7 @@
 
 	async function toggleBlueprintAvailable(product_blueprint_id: number, new_value: boolean) {
 		if (loadingHTTP) { return }
-
-		const put_model = {
-			"available": new_value
-		};
+		const put_model = { "available": !new_value };
 		loadingHTTP = true;
 		try {
 			await CoreProductBlueprintAPI.patchProductBlueprint(product_blueprint_id, put_model).catch(handleRequest);
@@ -132,21 +130,6 @@
 			editItemIndex = null;
 		}
 	});
-
-	/**
-	 * TODO This method should be moved somewhere as abstraction
-	 */
-	function toRecsysPreview(input: EventItemWideI) {
-		return {
-			follow_through_link: input.derived_type.display.follow_through_link,
-			name: input.item.name,
-			date: "",
-			color: input.derived_type.display.color,
-			image_square: input.derived_type.display.image_square,
-			image_landscape: input.derived_type.display.image_landscape,
-			preview_description: input.derived_type.display.preview_description
-		}
-	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -175,6 +158,11 @@
 		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 			<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
 			<p class="text-blue-900 font-bold">{data.available_count}</p>
+		</div>
+
+		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+			<h4 class="text-ingenium-grey-800 font-bold">Aantal Inactieve:</h4>
+			<p class="text-blue-900 font-bold">{data.total_count}</p>
 		</div>
 
 		<label class="inline-flex items-center cursor-pointer my-4">
@@ -257,6 +245,7 @@
 
 					<div class="overflow-x-auto self-stretch flex-1">
 						<h3 class="font-bold">Producten</h3>
+						{#if index < 6}
 						{#await CoreItemAPI.attachedProductBlueprintTable(event.item.id) then productTable}
 							{#if (productTable.length >= 10)}
 								Bekijk de pagina
@@ -274,7 +263,7 @@
 													>
 													<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
 													<span class="ms-3 text-sm font-medium text-gray-600">
-														{#if (event.item.availability.available)}Beschikbaar{:else}Niet Beschikbaar{/if}
+														{#if row["available"]}Beschikbaar{:else}Niet Beschikbaar{/if}
 													</span>
 												</label>
 											</td>
@@ -285,11 +274,13 @@
 								</table>
 							{/if}
 						{/await}
+						{/if}
 					</div>
 				</div>
 
 				<div class="flex justify-end items-center my-2">
-					<button class="button button-primary w-28 button-inline">
+					<button class="button button-primary w-28 button-inline"
+									onclick={() => goto(`/staff/item/${event.item.id}`)}>
 						<span class="text-white">Naar Event</span>
 					</button>
 				</div>

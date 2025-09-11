@@ -5,6 +5,8 @@
 	import type { ItemI } from '$lib/models/item/itemI';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
+	import { goto } from '$app/navigation';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -39,6 +41,20 @@
 		}
 		available_vacatures_count = await CoreItemWideAPI.countItemWide(query);
 		await refreshTable();
+	}
+
+	/**
+	 * Patching availability
+	 */
+	async function toggleAvailable(item: ItemI) {
+		await CoreItemAPI.patchAvailable(item.id, !item.availability.available);
+		toast.push("Updated!", {
+			theme: {
+				'--toastColor': 'mintcream',
+				'--toastBackground': 'rgba(72,187,120,0.9)',
+				'--toastBarBackground': '#2F855A'
+			}
+		})
 	}
 
 	/**
@@ -175,7 +191,6 @@
 				<thead>
 					<tr>
 						<th scope="col"><h4>Item Name</h4></th>
-						<th scope="col"><h4>Description</h4></th>
 						<th scope="col"><h4>Availability</h4></th>
 					</tr>
 				</thead>
@@ -186,24 +201,16 @@
 						{item.item.name}
 					</th>
 					<td>
-						{item.item.description.slice(0, Math.min(item.item.description.length, 200))}
-					</td>
-					<td>
-						<div class="w-32 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg ">
-							<p class="block w-full px-1 py-0.5 border-b border-gray-200
-							{item.item.availability.available ? 'text-green-800' : 'text-red-800'}"
-								>
-								{item.item.availability.available ? "Available": "Not Available" }
-							</p>
-							{#if (item.item.availability.available_from !== null)}
-								<p class="block w-full px-1 py-0.5 border-b border-gray-200">
-									Available from: {item.item.availability.available_from}
-								</p>
-							{/if}
-							{#if (item.item.availability.available_until !== null)}
-								Available until: {item.item.availability.available_until}
-							{/if}
-						</div>
+						<label class="inline-flex items-center cursor-pointer my-4">
+							<input type="checkbox" class="sr-only peer"
+										 bind:checked={item.item.availability.available}
+										 onclick="{() => toggleAvailable(item.item)}"
+							>
+							<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
+							<span class="ms-3 text-sm font-medium text-gray-600">
+														{#if item.item.availability.available}Beschikbaar{:else}Niet Beschikbaar{/if}
+													</span>
+						</label>
 					</td>
 					<td>
 						<button aria-label="edit" onclick={() => setEditItemIndex(index)}>
@@ -218,6 +225,16 @@
 						</g>
 						</svg>
 						</button>
+					</td>
+					<td class="align-middle">
+						<div class="flex justify-end items-center h-full">
+							<button
+								class="button button-primary button-inline"
+								onclick={() => goto(`/staff/item/${item.item.id}`)}
+							>
+								<span class="text-white">Naar Vacature</span>
+							</button>
+						</div>
 					</td>
 				</tr>
 				{/each}

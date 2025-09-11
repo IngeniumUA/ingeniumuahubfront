@@ -1,5 +1,4 @@
 import {PUBLIC_API_URL} from "$env/static/public";
-import {error, redirect} from "@sveltejs/kit";
 import {handleRequest} from "$lib/utilities/httpUtilities";
 
 export const load = async ({ fetch }) => {
@@ -9,11 +8,10 @@ export const load = async ({ fetch }) => {
     return {
       items: data,
     }
-  } catch (e) {
-    if (e instanceof Response) {
-      error(e.status, e.statusText);
+  } catch (error) {
+    console.error(error);
+    return {
+      items: []
     }
-
-    error(500, 'Onbekende fout');
   }
 }

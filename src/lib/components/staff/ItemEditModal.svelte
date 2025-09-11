@@ -32,8 +32,8 @@
 
 		// Display mixin
 		color: display?.color ?? "",
-		clickThroughLink: '',
-		externalLink: false,
+		clickThroughLink: display?.follow_through_link ?? "",
+		externalLink: display?.follow_through_link.startsWith("http"),
 		preview_description: display?.preview_description ?? "",
 		image_landscape: display?.image_landscape ?? null,
 		image_square: display?.image_square ?? null,
@@ -188,7 +188,7 @@
 							<div class="form-field">
 								<label for="clickThroughLink">Click Through Link</label>
 								{#if (form.externalLink)}
-									<input id="clickThroughLink" type="text" required/>
+									<input id="clickThroughLink" type="text" required bind:value={form.clickThroughLink}/>
 								{/if}
 								<p>Waar je naartoe wordt gestuurd als je op het item klikt.</p>
 							</div>
@@ -236,7 +236,7 @@
 			</button>
 
 			<button class="button button-primary button-inline">
-				<span class="text-white">Naar Event</span>
+				<span class="text-white">Naar { makePretty(itemType) }</span>
 			</button>
 		</div>
 

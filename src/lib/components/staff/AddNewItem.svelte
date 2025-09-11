@@ -18,7 +18,7 @@
 	let form = $state({
 		name: '',
 		description: '',
-		color: "#FFFFFF",
+		color: "#1f2980",
 		clickThroughLink: '',
 		externalLink: false,
 		preview_description: null,

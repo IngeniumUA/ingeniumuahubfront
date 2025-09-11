@@ -4,6 +4,8 @@ import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { EventItemWideI } from '$lib/models/item/eventI';
 import type { ItemWideI } from '$lib/models/item/itemwideI';
 import type { ShopItemWideI } from '$lib/models/item/shopI';
+import type { ProductOutI } from '$lib/models/productsI';
+import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 
 export class CoreItemAPI {
 	static async patchItem(item_identifier: string | number, patch_object: object) {
@@ -19,6 +21,13 @@ export class CoreItemAPI {
 		}
 	}
 
+	static async patchAvailable(item_identifier: string | number, available: boolean) {
+		const patch_obj = {
+			"availability": {"available": available},
+		}
+		return await this.patchItem(item_identifier, patch_obj)
+	}
+
 	static async putItem(item_identifier: string | number, put_object: object) {
 		const res = await fetch(`${PUBLIC_API_URL}/item/${item_identifier}`, {
 			method: 'PUT',
@@ -32,15 +41,54 @@ export class CoreItemAPI {
 		}
 	}
 
-	static async attachedProductBlueprintTable(item_identifier: string | number): Promise<[]> {
-		const res = await fetch(`${PUBLIC_API_URL}/blueprint/table?item=${item_identifier}`, {
+	static async queryProductsForItem(item_identifier: string | number): Promise<ProductOutI[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/item/products/${item_identifier}`, {
 			method: 'GET',
 			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();
 		} else {
-			throw `Failed to fetch product blueprints table: ${await res.text()}`;
+			throw `Failed to fetch product for item: ${await res.text()}`;
+		}
+	}
+
+	static async attachedProductBlueprintTable(item_identifier: string | number): Promise<[]> {
+		const query = new URLSearchParams({
+			source_item_id: item_identifier.toString(),
+		});
+		return await CoreProductBlueprintAPI.queryProductBlueprintTable(query);
+	}
+
+	static async attachedPricePolicyTable(item_identifier: string | number): Promise<[]> {
+		const query = new URLSearchParams({
+			source_item_id: item_identifier.toString(),
+		});
+		return await CoreProductBlueprintAPI.queryPricePolicyTable(query);
+	}
+
+
+	static async attachedCheckoutStatusTable(item_identifier: string | number): Promise<Record<string, number>> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/group_by?item=${item_identifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch checkout status grouped: ${await res.text()}`;
+		}
+	}
+
+	static async countCheckoutTracker(item_identifier: string | number): Promise<number> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?item=${item_identifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch checkout tracker count: ${await res.text()}`;
 		}
 	}
 
@@ -52,7 +100,7 @@ export class CoreItemAPI {
 		if (res.ok) {
 			return await res.json();
 		} else {
-			throw `Failed to fetch transaction count: ${await res.text()}`;
+			throw `Failed to fetch checkout count: ${await res.text()}`;
 		}
 	}
 
@@ -70,6 +118,17 @@ export class CoreItemAPI {
 }
 
 export class CoreItemWideAPI {
+	static async getItem(item_identifier: string | number): Promise<ItemWideI> {
+		const res = await fetch(`${PUBLIC_API_URL}/item/wide/${item_identifier}`, {
+			headers: getAuthorizationHeaders(null)
+		});
+		if (!res.ok) {
+			const text = await res.text();
+			throw new Error(`Failed to load items: ${text}`);
+		}
+		return await res.json();
+	}
+
 	static async queryItem(query_param: URLSearchParams): Promise<ItemWideI[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/item/wide?${query_param.toString()}`, {
 			headers: getAuthorizationHeaders(null)

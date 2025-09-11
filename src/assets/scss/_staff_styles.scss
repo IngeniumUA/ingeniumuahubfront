@@ -26,6 +26,10 @@ h1, h2 {
       @apply m-0;
     }
   }
+
+  .ingenium-form-card {
+    @apply rounded-lg shadow-md hover:shadow-lg transition-shadow p-4;
+  }
 }
 
 .ingenium-table {

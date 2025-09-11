@@ -4,7 +4,7 @@ export async function load() {
 	const itemQuery = new URLSearchParams({
 		limit: '20'
 	});
-	const shopitems = await CoreItemWideAPI.queryShopItem(itemQuery);
+	const shopItems = await CoreItemWideAPI.queryShopItem(itemQuery);
 
 	const countQuery = new URLSearchParams({
 		item_type: 'shopitem',
@@ -12,5 +12,10 @@ export async function load() {
 	});
 	const available_count: number = await CoreItemWideAPI.countItemWide(countQuery);
 
-	return { shopitems, available_count };
+	const countQueryAll = new URLSearchParams({
+		item_type: 'shopitem',
+	});
+	const total_count: number = await CoreItemWideAPI.countItemWide(countQueryAll);
+
+	return { shopItems, available_count, total_count };
 }
