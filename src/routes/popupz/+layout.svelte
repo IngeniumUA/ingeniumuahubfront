@@ -10,9 +10,4 @@
 </style>
 
 <!-- Pop-up Z Custom Header -->
-<div class="flex items-center justify-center
-						pt-6 px-6 min-h-36
-						circle-arcs">
-	<h1 class="text-7xl">{item.item.name}</h1>
-</div>
 {@render children()}

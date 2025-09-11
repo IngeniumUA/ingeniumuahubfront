@@ -138,21 +138,19 @@
 				}
 			}
 		} else {
-			putItemWide.item.item_metadata.payment_configuration = null;
+			putItemWide.item.item_metadata.payment_configuration = {
+				stripe_payment_configuration: {
+					connected_account_id: null,
+					application_fee_amount: null
+				}
+			};
 		}
 
 		// Social Media
-		if ([
-			form.item_metadata.social_media_configuration.facebook_url,
-			form.item_metadata.social_media_configuration.instagram_url,
-			form.item_metadata.social_media_configuration.linkedin_url].some(value => {return value?.startsWith("https")})) {
-			putItemWide.item.item_metadata.social_media_configuration = {
-				facebook_url: form.item_metadata.social_media_configuration.facebook_url?.startsWith("https") ? form.item_metadata.social_media_configuration.facebook_url: null,
-				instagram_url: form.item_metadata.social_media_configuration.instagram_url?.startsWith("https") ? form.item_metadata.social_media_configuration.instagram_url: null,
-				linkedin_url: form.item_metadata.social_media_configuration.linkedin_url?.startsWith("https") ? form.item_metadata.social_media_configuration.linkedin_url: null
-			}
-		} else {
-			putItemWide.item.item_metadata.social_media_configuration = null;
+		putItemWide.item.item_metadata.social_media_configuration = {
+			facebook_url: form.item_metadata.social_media_configuration.facebook_url?.startsWith("https") ? form.item_metadata.social_media_configuration.facebook_url: null,
+			instagram_url: form.item_metadata.social_media_configuration.instagram_url?.startsWith("https") ? form.item_metadata.social_media_configuration.instagram_url: null,
+			linkedin_url: form.item_metadata.social_media_configuration.linkedin_url?.startsWith("https") ? form.item_metadata.social_media_configuration.linkedin_url: null
 		}
 
 		loadingHTTP = true;
@@ -240,8 +238,9 @@
 	</div>
 
 	<h1>Item Configuration</h1>
+	<form class="ingenium-form">
 	<section class="flex flex-row">
-		<form class="ingenium-form">
+		<div>
 			<div class="ingenium-form-card">
 				<h3 class="font-bold">Core Item</h3>
 				<fieldset class="flex flex-row gap-4">
@@ -320,7 +319,7 @@
 				</div>
 			{/if}
 			</div>
-		</form>
+		</div>
 
 		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
@@ -335,7 +334,7 @@
 						{/if}
 
 						{#if productBlueprintCapable}
-							<a href="#Dashboard" class="font-semibold">Dashboard</a>
+							<a href="#Dashboard" class="font-semibold">Transacties Dashboard</a>
 							<a href="#Transacties en Betalingen" class="font-semibold">Betalingen & Transacties</a>
 							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
 						{/if}
@@ -395,6 +394,7 @@
 			</fieldset>
 		</div>
 	</div>
+	</form>
 
 	<div class="flex justify-end mt-4 gap-4">
 		<button class="button button-primary button-inline"
@@ -412,6 +412,9 @@
 		</div>
 		<section class="flex">
 			<div class="w-2/3">
+				<h2>Transacties</h2>
+				<p>TODO: Transacties en validity hier?</p>
+
 				<h2 class="font-bold">Betalingen</h2>
 				<p>Het is normaal dat sommige betalingen falen. Een gefaalde betaling gebeurt bijvoorbeeld wanneer iemand een betaling start, maar niet genoed geld heeft. Of wanneer hij zijn bank app opent maar er daar iets fout gaat.</p>
 				<div class="flex flex-row flex-wrap  gap-x-4">

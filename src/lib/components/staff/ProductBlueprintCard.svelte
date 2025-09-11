@@ -81,95 +81,100 @@
 						bg-white rounded-lg
 							min-h-48
 							shadow-md hover:shadow-lg transition-shadow">
-	<div class="flex justify-between items-center">
-		<h2>{productBlueprint.name}</h2>
-		<button aria-label="edit" onclick="{toggleEdit}">
-			<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-					 width="20px" height="20px" viewBox="0 0 528.899 528.899"
-					 xml:space="preserve">
-						<g>
-							<path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
-								c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
-								C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069
-								L27.473,390.597L0.3,512.69z"/>
-						</g>
-						</svg>
-		</button>
-	</div>
 
-	<p>{productBlueprint.description}</p>
-	<div class="flex flex-row gap-8">
-		<div class="max-w-md">
-			<h3 class="font-bold">Allowed Counts</h3>
-			<span class="flex flex-row gap-1 mb-2">
-				{#each Object.entries({
-					"Max Total": productBlueprint.max_total,
-					"Max Individual": productBlueprint.max_individual,
-					"Max per Checkout": productBlueprint.max_per_checkout}) as [fieldName, fieldValue]}
-				<div class="p-4 flex-1 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-					<h4 class="text-ingenium-grey-800 font-bold">{fieldName}:</h4>
-					<p class="text-blue-900 font-bold">{fieldValue}</p>
-				</div>
-				{/each}
-			</span>
-
-			<h3 class="font-bold">Misc Configuration</h3>
-				<form class="ingenium-form">
-					<fieldset>
-					<label class="inline-flex items-center cursor-pointer my-4">
-						<input type="checkbox" class="sr-only peer"
-									 bind:checked={form.allow_individualised}
-						>
-						<span class="
-							relative w-11 h-6
-							bg-red-900 dark:bg-red-900
-							rounded-full
-							peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-							after:content-['']
-							after:absolute after:top-[2px] after:start-[2px]
-							after:w-5 after:h-5
-							after:bg-white after:rounded-full
-							after:transition-transform
-							peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-							"></span>
-						<span class="ms-3 text-sm font-medium text-gray-600">
-										Individualiseren {#if (form.allow_individualised)}Aan{:else}Uit{/if}
-									</span>
-					</label>
-
-					<label class="inline-flex items-center cursor-pointer my-4">
-						<input type="checkbox" class="sr-only peer"
-									 bind:checked={form.track_checkout}
-						>
-						<span class="
-							relative w-11 h-6
-							bg-red-900 dark:bg-red-900
-							rounded-full
-							peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-							after:content-['']
-							after:absolute after:top-[2px] after:start-[2px]
-							after:w-5 after:h-5
-							after:bg-white after:rounded-full
-							after:transition-transform
-							peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-							"></span>
-						<span class="ms-3 text-sm font-medium text-gray-600">
-										Ordertracking {#if (form.track_checkout)}Aan{:else}Uit{/if}
-									</span>
-					</label>
-
-					<div class="form-field max-w-64">
-						<label for="ordering">Ordering</label>
-						<input id="ordering" type="number" required bind:value={form.ordering}/>
-						<p>Weergave volgorde, hoger cijfer -> hoger/eerst op de pagina.</p>
-					</div>
-				</fieldset>
-			</form>
+	<form class="ingenium-form">
+		<div class="flex justify-between items-center">
+			<h2>{productBlueprint.name}</h2>
+			<button aria-label="edit" onclick="{toggleEdit}">
+				<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+						 width="20px" height="20px" viewBox="0 0 528.899 528.899"
+						 xml:space="preserve">
+							<g>
+								<path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
+									c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
+									C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069
+									L27.473,390.597L0.3,512.69z"/>
+							</g>
+							</svg>
+			</button>
 		</div>
 
-		<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
+		<p>{productBlueprint.description}</p>
 
-	</div>
+		<div class="flex flex-row gap-8">
+			<div class="max-w-md">
+				<h3 class="font-bold">Allowed Counts</h3>
+				<span class="flex flex-row gap-1 mb-2">
+					{#each Object.entries({
+						"Max Total": productBlueprint.max_total,
+						"Max Individual": productBlueprint.max_individual,
+						"Max per Checkout": productBlueprint.max_per_checkout}) as [fieldName, fieldValue]}
+					<div class="p-4 flex-1 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+						<h4 class="text-ingenium-grey-800 font-bold">{fieldName}:</h4>
+						<p class="text-blue-900 font-bold">{fieldValue}</p>
+					</div>
+					{/each}
+				</span>
+
+				<h3 class="font-bold">Misc Configuration</h3>
+						<fieldset>
+						<label class="inline-flex items-center cursor-pointer my-4">
+							<input type="checkbox" class="sr-only peer"
+										 bind:checked={form.allow_individualised}
+							>
+							<span class="
+								relative w-11 h-6
+								bg-red-900 dark:bg-red-900
+								rounded-full
+								peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+								after:content-['']
+								after:absolute after:top-[2px] after:start-[2px]
+								after:w-5 after:h-5
+								after:bg-white after:rounded-full
+								after:transition-transform
+								peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+								"></span>
+							<span class="ms-3 text-sm font-medium text-gray-600">
+											Individualiseren {#if (form.allow_individualised)}Aan{:else}Uit{/if}
+										</span>
+						</label>
+
+						<label class="inline-flex items-center cursor-pointer my-4">
+							<input type="checkbox" class="sr-only peer"
+										 bind:checked={form.track_checkout}
+							>
+							<span class="
+								relative w-11 h-6
+								bg-red-900 dark:bg-red-900
+								rounded-full
+								peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+								after:content-['']
+								after:absolute after:top-[2px] after:start-[2px]
+								after:w-5 after:h-5
+								after:bg-white after:rounded-full
+								after:transition-transform
+								peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+								"></span>
+							<span class="ms-3 text-sm font-medium text-gray-600">
+											Ordertracking {#if (form.track_checkout)}Aan{:else}Uit{/if}
+										</span>
+						</label>
+
+						<div class="form-field max-w-64">
+							<label for="ordering">Ordering</label>
+							<input id="ordering" type="number" required bind:value={form.ordering}/>
+							<p>Weergave volgorde, hoger cijfer -> hoger/eerst op de pagina.</p>
+						</div>
+					</fieldset>
+			</div>
+
+			<fieldset>
+				<h3 class="font-bold">Meta Config</h3>
+			</fieldset>
+
+			<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
+		</div>
+	</form>
 
 	<div class="mt-4 flex justify-end">
 		<button class="button button-primary button-inline" onclick={update}>
@@ -188,6 +193,7 @@
 			<hr class="h-px bg-gray-200 border-0 dark:bg-gray-800">
 		{/each}
 	</div>
+
 
 	<div class="mt-4 flex justify-end">
 		<button class="button button-primary button-inline"
