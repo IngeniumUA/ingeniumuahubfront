@@ -80,7 +80,7 @@
 	}
 
 	section {
-		@apply m-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-cols-fr bg-gray-100 gap-4;
+		@apply m-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-cols-fr bg-gray-100 gap-4 justify-items-center;
 
 		.product-card {
 				@apply flex flex-col rounded-2xl max-w-xs shadow-md hover:shadow-xl transition-shadow;
