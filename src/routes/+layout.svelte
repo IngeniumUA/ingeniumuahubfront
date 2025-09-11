@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-	<title>Ingenium UA - Studentenvereninging FTI</title>
+	<title>Ingenium UA - Studentenvereniging FTI</title>
 	{#if page.route.id !== '/events/[event]'} <!-- BYPASS FOR SVELTE NOT ABLE TO OVERWRITE THESE TAGS -->
 		<meta name="description" content="Sinds 2018 is Ingenium de officiële faculteitsvereniging van de faculteit Toegepaste Ingenieurswetenschappen aan de Universiteit Antwerpen.">
 		<meta property="og:image" content={ opengraphImg } />
