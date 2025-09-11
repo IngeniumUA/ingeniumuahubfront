@@ -245,6 +245,7 @@
 
 					<div class="overflow-x-auto self-stretch flex-1">
 						<h3 class="font-bold">Producten</h3>
+						{#if index < 6}
 						{#await CoreItemAPI.attachedProductBlueprintTable(event.item.id) then productTable}
 							{#if (productTable.length >= 10)}
 								Bekijk de pagina
@@ -273,6 +274,7 @@
 								</table>
 							{/if}
 						{/await}
+						{/if}
 					</div>
 				</div>
 
