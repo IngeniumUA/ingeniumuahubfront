@@ -1,5 +1,50 @@
 ﻿<script lang="ts">
+	import { type HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum } from '$lib/models/trackerI';
+	import { makePretty } from '$lib/utilities/style-utilities';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
+	import { CoreCheckoutTrackerAPI } from '$lib/core_api/checkout_tracker_api';
+	import type { ProductFormI } from '$lib/models/productsI';
 
+	/**
+	 * Assigning data from load function in +page.svelte
+	 */
+	let { data } = $props();
+	let orders: HubCheckoutTrackerI[] = $state(data.orders)
+
+	/**
+	 *
+	 */
+	function parseForm(form: ProductFormI | null | undefined): [] {
+		if (!form) return [];
+
+		const formString = ((form as unknown) as string);
+		return JSON.parse(formString);
+	}
+
+
+	let loadingHTTP: boolean = $state(false)
+	let stepError: Error | null = $state(null)
+	async function increaseStatus(index: number, order: HubCheckoutTrackerI) {
+		loadingHTTP = true;
+		try {
+			const returnOrder = await CoreCheckoutTrackerAPI.stepCheckoutTracker(order.id);
+			if (returnOrder.disabled) {
+				orders.splice(index, 1); // splice is *in place*
+			} else {
+				orders[index] = returnOrder
+			}
+			stepError = null;
+		} catch (error) {
+			stepError = error instanceof Error ? error : Error('Error submitting form');
+		} finally {
+			if (stepError === null) {
+				successToast("Updated!")
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />
@@ -33,7 +78,47 @@
 	</section>
 
 	<!-- Orders Section -->
-	<section>
+	<section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+		{#if orders.length === 0}<h1>Geen Trackers</h1>{/if}
+		{#each orders as order, index (order.id)}
+			<article class="flex flex-col p-4 rounded border border-blue-900">
+				<span class="text-xl font-bold">#{ order.id }</span>
+					<ul class="list-disc list-inside space-y-1 my-2 flex-1">
+						{#each order.checkout.transactions as transaction}
+							<li>
+								{ transaction.purchased_product.name }
+								{#if transaction.purchased_product.product_meta.other_meta_data.form !== null}
+									<ul class="ml-6 list-disc list-inside">
+										{#each Object.entries(parseForm(transaction.purchased_product.product_meta.other_meta_data.form)) as [form_field_key, form_field_value]}
+											<span class="capitalize font-light">{ form_field_key }</span>:
+											<span class="font-bold">{ form_field_value.value ?? "" }</span>
+										{/each}
+									</ul>
+								{/if}
+							</li>
+							<span>{ order.checkout.user_email }<br>{ makePretty(order.checkout.user_first_name ?? "") } { makePretty(order.checkout.user_last_name ?? "")}</span>
+						{/each}
+					</ul>
+					{#if order.checkout.note !== null && order.checkout.note !== '' }
+						<span class="text-sm underline">Opmerking:</span>
+						<span class="font-bold mb-4">{ order.checkout.note }</span>
+					{/if}
 
+					<button
+						type="button"
+						onclick={() => increaseStatus(index, order)} disabled={loadingHTTP}
+						class="button button-sm w-full button-inline"
+						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
+					>
+						{#if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready}
+							Markeer afgehaald
+						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending}
+							Klaar voor afhaling
+						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Finished}
+							Bestelling verwerkt
+						{/if}
+				</button>
+			</article>
+		{/each}
 	</section>
 </main>

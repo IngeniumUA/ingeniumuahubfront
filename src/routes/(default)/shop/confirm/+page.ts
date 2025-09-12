@@ -1,6 +1,7 @@
 import { handleRequest } from '$lib/utilities/httpUtilities';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import { PUBLIC_API_URL } from '$env/static/public';
+import type { PublicOrderTrackerI } from '$lib/models/trackerI';
 
 export const ssr = false;
 export const prerender = false;
@@ -11,19 +12,23 @@ export const load = async ({ url, params, fetch }) => {
     return {
       paymentStatus,
       checkoutUuid: null,
-      trackerId: NaN,
+      tracker: null
     }
   }
 
   // Only when the payment status is success we will fetch the checkout UUID and tracker id
   const checkoutUuid = url.searchParams.get('checkout_uuid');
-  let trackerId = parseInt(url.searchParams.get('tracker_id') || '', 10);
+  const trackerId = parseInt(url.searchParams.get('tracker_id') || '', 10);
 
+  let tracker: PublicOrderTrackerI = {
+    id: trackerId,
+    checkout_tracker_status: NaN
+  };
   if (checkoutUuid && !trackerId) {
     try {
-      trackerId = await fetch(`${PUBLIC_API_URL}/order_tracking/${checkoutUuid}`, {
+      tracker = await fetch(`${PUBLIC_API_URL}/order_tracking/${checkoutUuid}`, {
         headers: getAuthorizationHeaders(params),
-      }).then(handleRequest) as number;
+      }).then(handleRequest) as PublicOrderTrackerI;
     } catch (error) {
       if (error instanceof Response) {
         // If the result is a 406, ignore it as it means there is no tracker id
@@ -31,11 +36,33 @@ export const load = async ({ url, params, fetch }) => {
           return {
             paymentStatus,
             checkoutUuid,
-            trackerId: NaN,
+            tracker: null
           }
         }
       }
+      console.error(error);
+    }
+  }
 
+  if (isNaN(tracker.checkout_tracker_status)) {
+    try {
+      tracker = await fetch(`${PUBLIC_API_URL}/order_tracking/${checkoutUuid}`, {
+        headers: getAuthorizationHeaders(params),
+      }).then(handleRequest) as PublicOrderTrackerI;
+    } catch (error) {
+      if (error instanceof Response) {
+        // If the result is a 406, ignore it as it means there is no tracker id
+        if (error.status === 406) {
+          return {
+            paymentStatus,
+            checkoutUuid,
+            tracker: {
+              id: trackerId,
+              checkout_tracker_status: NaN,
+            },
+          }
+        }
+      }
       console.error(error);
     }
   }
@@ -43,6 +70,6 @@ export const load = async ({ url, params, fetch }) => {
   return {
     paymentStatus,
     checkoutUuid,
-    trackerId,
+    tracker,
   }
 }

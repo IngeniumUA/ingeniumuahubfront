@@ -1,11 +1,27 @@
-import type { TransactionLimitedI } from "./transactionI"
+import type { TransactionI } from './transactionI';
 
 export interface CheckoutI {
-  id: string
+  checkout_uuid: string
   date_completed: string
+
   amount: number
   currency: string
-  description: string
+
+  user_uuid: string
+  user_email: string | null
+  user_first_name: string | null
+  user_last_name: string | null
+
   note: string | null
-  transactions: TransactionLimitedI[]
+
+  payment_provider: number
+  checkout_metadata: Record<string, never>
+
+  completed_timestamp: string
+  last_updated_timestamp: string
+  created_timestamp: string
+}
+
+export interface CheckoutIWide extends CheckoutI {
+  transactions: TransactionI[]
 }
