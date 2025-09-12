@@ -1,11 +1,19 @@
 ﻿<script lang="ts">
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import Modal from '$lib/components/layout/modal.svelte';
-	import type { PricePolicyInI } from '$lib/models/product_blueprint/PricePolicyI';
+	import type { PricePolicyI, PricePolicyInI } from '$lib/models/product_blueprint/PricePolicyI';
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
-	let { isOpen = $bindable(false), product_blueprint_id }: { isOpen: boolean, product_blueprint_id: number } = $props();
+	let {
+		isOpen = $bindable(false),
+		product_blueprint_id,
+		createdCallback
+	}: {
+		isOpen: boolean,
+		product_blueprint_id: number,
+		createdCallback: (pricePolicy: PricePolicyI) => void
+	} = $props();
 
 	let loadingHTTP: boolean = $state(false);
 	let createError: string | null = $state(null);
@@ -54,8 +62,9 @@
 
 		loadingHTTP = true;
 		try {
-			await CoreProductBlueprintAPI.postPricePolicy(postPricePolicy);
+			const pricePolicy = await CoreProductBlueprintAPI.postPricePolicy(postPricePolicy);
 			createError = null;
+			createdCallback(pricePolicy);
 		} catch (error) {
 			createError = error instanceof Error ? error.message : 'Error submitting form';
 		} finally {

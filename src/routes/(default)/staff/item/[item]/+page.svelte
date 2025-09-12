@@ -13,6 +13,7 @@
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
 	import { PaymentStatusEnum } from '$lib/models/enums';
+	import { hasRole } from '$lib/states/auth.svelte';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -30,13 +31,14 @@
 	let checkoutStatusTable = $state(data.checkoutStatusTable);
 
 	let checkoutTrackerStatusGrouped = $state([])
-	let checkoutTrackers = $state([])
+	let checkoutTrackers = $state(data.trackers)
 
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
 
-	// fixme we kunnen dit ook vinden door alle productBlueprints ff te doorlopen en te kijken of er config is
-	let hasCheckoutTrackers = $state(data.trackerCount > 0);
+	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
+		return prod.product_blueprint_metadata.upon_completion?.track_checkout !== null;
+	}));
 
 	/**
 	 * Refreshing functions
@@ -53,9 +55,6 @@
 		trackerCount = await CoreItemAPI.countCheckoutTracker(itemWide.item.id);
 		await refreshBlueprints()
 		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(itemWide.item.id);
-
-		// Derived options
-		hasCheckoutTrackers = trackerCount > 0;
 	}
 
 	/**
@@ -344,6 +343,12 @@
 						{#if interactionCapable}
 						<a href="#Interactions" class="font-semibold">Interactions</a>
 						{/if}
+
+						{#if hasRole("webmaster")}
+							<a href="#webmaster-info" class="font-semibold">Webmaster</a>
+							<a href="#keycloak" class="font-semibold">Keycloak</a>
+							<a href="#changelog" class="font-semibold">Changelog</a>
+						{/if}
 					</div>
 				</nav>
 			</aside>
@@ -579,7 +584,11 @@
 	{/if}
 
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-	<h1>Webmaster Info</h1>
+	<h1 id="webmaster-info">Webmaster Info</h1>
+	<h2 id="keycloak">Keycloak</h2>
+	<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
+
+	<h2 id="changelog">Changelog</h2>
 	<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
 
 	<div class="flex justify-end mt-4 gap-4">
