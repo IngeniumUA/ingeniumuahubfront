@@ -26,7 +26,7 @@
 					<a href="/staff/item/event">Events</a>
 					<a href="/staff/item/shop">Shop</a>
 					<a href="/staff/item/vacatures">Vacatures</a>
-					<a href="/staff/item/lidkaarten">Lidkaarten</a>
+					<a href="/staff/lidkaarten">Lidkaarten</a>
 					<a href="/staff/item/notification">Email / App / SMS</a>
 				</div>
 			</nav>

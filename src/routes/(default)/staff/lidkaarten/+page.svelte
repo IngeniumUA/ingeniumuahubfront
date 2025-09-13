@@ -1,34 +1,75 @@
 ﻿<script lang="ts">
 	import { CoreCardAPI } from '$lib/core_api/card_api';
-	import { type CardItemWideI, CardMembershipEnum } from '$lib/models/item/cardI';
+	import { CardMembershipEnum } from '$lib/models/item/cardI';
 	import { makePretty } from '$lib/utilities/style-utilities';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
+	import type { CardI } from '$lib/models/cardI';
+	import Modal from '$lib/components/layout/modal.svelte';
 
-	export let data: {
-		card_table: [];
-		cards: CardItemWideI[]
-	};
+	/**
+	 * Assigning data from load function in +page.svelte
+	 */
+	let { data } = $props();
 
-	let onlyShowLinked: boolean = false;
+	let cardTable = $state(data.card_table)
+	let cards = $state(data.cards)
+
+	let onlyShowLinked: boolean = $state(false);
+	let loadingHTTP: boolean = $state(false)
 	async function refresh() {
-		data.card_table = await CoreCardAPI.queryCardTable(new URLSearchParams({}));
+		cardTable = await CoreCardAPI.queryCardTable(new URLSearchParams({}));
 		const query = new URLSearchParams({
 			limit: '100',
 		})
 		if (onlyShowLinked) {
 			query.set("is_linked", "true")
 		}
-		data.cards = await CoreCardAPI.queryCards(query);
+		cards = await CoreCardAPI.queryCards(query);
+		successToast("Refreshed")
 	}
 
-	function setEditItemIndex(index: number) {
 
+	/**
+	 * Edit Modal Code
+	 */
+	let putError: Error | null = $state(null)
+	let editSelectedIndex: null | number = $state(null);
+	let editSelected: CardI | null = $state(null);
+	let showEdit: boolean = $state(false);
+	function setEditItemIndex(index: number) {
+		putError = null;
+		editSelectedIndex = index;
+		if (editSelectedIndex !== null && editSelectedIndex < cards.length) {
+			editSelected = cards.at(editSelectedIndex)!;
+			showEdit = true;
+		}
+	}
+
+	async function handlePut() {
+		// Preliminary checks
+		if (editSelected === null) {
+			putError = Error("Card is null?")
+			return;
+		}
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+		// Perform put request
+		try {
+			await CoreCardAPI.putCard(editSelected)
+			successToast("Updated!")
+		} catch (error) {
+			putError = error instanceof Error ? error: Error(`Error during PUT ${error}`);
+			failedToast("Error during PUT");
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
 	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
 		<h1>Lidkaarten</h1>
-		<button class="button button-primary w-24 button-inline" on:click="{refresh}">
+		<button class="button button-primary w-24 button-inline" onclick={refresh}>
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
@@ -67,33 +108,34 @@
 			<table class="ingenium-table">
 				<thead>
 				<tr>
-					<th scope="col"><h4>Item Name</h4></th>
-					<th scope="col"><h4>Description</h4></th>
-					<th scope="col"><h4>User</h4></th>
-					<th scope="col"><h4>Linked ShopItem</h4></th>
+					<th scope="col"><h4>Card UUID</h4></th>
+					<th scope="col"><h4>Card Nr</h4></th>
+					<th scope="col"><h4>Linked User</h4></th>
+					<th scope="col"><h4>Member Type</h4></th>
+					<th scope="col"><h4>Edit</h4></th>
 				</tr>
 				</thead>
 				<tbody>
-				{#each data.cards as item, index (item.item.id)}
+				{#each cards as card, index (card.card_uuid)}
 				<tr>
 					<th scope="row">
-						{item.item.name}
+						{card.card_uuid.slice(0, 6)}
 					</th>
 					<td>
-						{item.item.description.slice(0, Math.min(item.item.description.length, 200))}
+						{card.card_nr}
 					</td>
 					<td>
-						{#if (item.derived_type.user_uuid === null)}
-							Link
+						{#if (card.user_uuid === null)}
+							Niet gelinkt
 						{:else}
-							<a class="text-blue-900" href="/staff/user/{item.derived_type.user_uuid}">{item.derived_type.user_email}</a>
+							<a class="text-blue-900" href="/staff/user/{card.user_uuid}">{card.user_email}</a>
 						{/if}
 					</td>
 					<td>
-						<a class="text-blue-900" href="/staff/item/{item.derived_type.source_item_id}">{item.derived_type.source_item_name}</a>
+						{makePretty(CardMembershipEnum[card.member_type])}
 					</td>
 					<td>
-						<button aria-label="edit" on:click={() => setEditItemIndex(index)}>
+						<button aria-label="edit" onclick={() => setEditItemIndex(index)}>
 							<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 									 width="20px" height="20px" viewBox="0 0 528.899 528.899"
 									 xml:space="preserve">
@@ -119,7 +161,7 @@
 		<div class="md:w-1/3">
 			<h2 class="font-bold">Overzicht</h2>
 
-			{#each data.card_table as card_count_dict (card_count_dict["member_type"])}
+			{#each cardTable as card_count_dict (card_count_dict["member_type"])}
 				<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 					<h4 class="text-ingenium-grey-800 font-bold">{makePretty(CardMembershipEnum[card_count_dict["member_type"]])}</h4>
 					<p class="text-blue-900 font-bold">Gelinkt: {card_count_dict["user_count"]}</p>
@@ -130,16 +172,23 @@
 	</div>
 
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-	<h2>Interactions Dashboard</h2>
-	<div class="alert alert-info mb-4 max-w-2xl">
-		<p class="alert-text"><a href="dashboard">Dashboard app</a> toont een interactie tussen een gebruiker en een lidkaart. 90% van de gevallen is dit wanneer die wordt gescant. Dit alles per timestamp.</p>
-	</div>
 
-	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 	<h2>Lidkaarten in bulk beheren</h2>
 	<div class="alert alert-info mb-4 max-w-2xl">
 		<p class="alert-text">Voor ingrijpende bulk operaties, vooral rond <a href="https://wiki.ingeniumua.be/staff/start_academiejaar">start academiejaar</a>.</p>
 	</div>
 </main>
+
+{#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length}
+	<Modal title="Lidkaart bewerken" maxWidth="max-w-5xl" bind:isOpen={ showEdit } closable={ true }>
+		{#snippet children()}
+			<div class="p-2 flex justify-between items-center">
+				<button type="button" class="button button-primary w-24 button-inline"
+								disabled={loadingHTTP}
+								onclick={handlePut}>
+					<span class="text-white">Update</span>
+				</button>
+			</div>
+		{/snippet}
+	</Modal>
+{/if}
