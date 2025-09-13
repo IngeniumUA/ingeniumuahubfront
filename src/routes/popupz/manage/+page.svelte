@@ -2,7 +2,7 @@
 	import { type HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum } from '$lib/models/trackerI';
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
-	import { CoreCheckoutTrackerAPI } from '$lib/core_api/checkout_tracker_api';
+	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { ProductFormI } from '$lib/models/productsI';
 
 	/**
@@ -18,16 +18,20 @@
 		if (!form) return [];
 
 		const formString = ((form as unknown) as string);
-		return JSON.parse(formString);
+		try {
+			return JSON.parse(formString);
+		} catch (error) {
+			console.log(error);
+			return []
+		}
 	}
-
 
 	let loadingHTTP: boolean = $state(false)
 	let stepError: Error | null = $state(null)
 	async function increaseStatus(index: number, order: HubCheckoutTrackerI) {
 		loadingHTTP = true;
 		try {
-			const returnOrder = await CoreCheckoutTrackerAPI.stepCheckoutTracker(order.id);
+			const returnOrder = await CoreCheckoutAPI.stepCheckoutTracker(order.id);
 			if (returnOrder.disabled) {
 				orders.splice(index, 1); // splice is *in place*
 			} else {
@@ -62,6 +66,13 @@
 </style>
 
 <main>
+	<!-- Menu	-->
+	<div class="p-6 min-h-36
+						circle-arcs bg-blue-900 border-none">
+		<h1 class="text-7xl text-white">{data.item.item.name}</h1>
+		<h1 class="text-3xl text-center underline text-white">Our Menu</h1>
+	</div>
+
 	<!-- Config Section -->
 	<section class="config_section">
 		<div>
@@ -107,15 +118,15 @@
 					<button
 						type="button"
 						onclick={() => increaseStatus(index, order)} disabled={loadingHTTP}
-						class="button button-sm w-full button-inline"
+						class="button button-primary w-32 button-inline"
 						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
 					>
 						{#if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready}
-							Markeer afgehaald
+							Afgehaald
 						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending}
-							Klaar voor afhaling
+							Klaar
 						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Finished}
-							Bestelling verwerkt
+							Verwerkt
 						{/if}
 				</button>
 			</article>
