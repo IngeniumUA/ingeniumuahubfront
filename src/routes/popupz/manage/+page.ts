@@ -1,4 +1,4 @@
-﻿import { CoreCheckoutTrackerAPI } from '$lib/core_api/checkout_tracker_api';
+﻿import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
 
 export async function load() {
@@ -7,8 +7,9 @@ export async function load() {
 	})
 	let orders: HubCheckoutTrackerI[];
 	try {
-		orders = await CoreCheckoutTrackerAPI.queryCheckoutTracker(query_param);
+		orders = await CoreCheckoutAPI.queryCheckoutTracker(query_param);
 	} catch (error) {
+		console.log(error)
 		orders = []
 	}
 

@@ -6,7 +6,6 @@
 	import { slide } from 'svelte/transition';
 	import { makePretty } from '$lib/utilities/style-utilities';
 
-
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
@@ -62,7 +61,7 @@
 
 <style>
 	nav {
-			@apply flex flex-row pb-2 bg-blue-950 rounded-t-xl;
+			@apply flex flex-row bg-blue-950 rounded-t-xl;
 
       button {
           @apply flex-1 flex justify-center items-center p-3 rounded-t-xl;
@@ -72,7 +71,7 @@
 			}
 
 			.selected {
-					@apply bg-white;
+					@apply bg-gray-100;
 					h3 {
               @apply text-blue-950;
 					}
@@ -124,7 +123,10 @@
 	<div class="p-6 min-h-36
 						circle-arcs bg-blue-900 border-none">
 		<h1 class="text-7xl text-white">{item.item.name}</h1>
-		<h1 class="text-3xl text-center underline text-white">Our Menu</h1>
+		<div class="flex flex-row gap-8 items-center justify-center">
+			<h1 class="text-3xl text-center underline text-white">Our Menu</h1>
+			<h1 class="text-3xl text-center underline text-white"><a href="orders">Volg Orders</a></h1>
+		</div>
 	</div>
 
 	<!-- Category Selector -->
