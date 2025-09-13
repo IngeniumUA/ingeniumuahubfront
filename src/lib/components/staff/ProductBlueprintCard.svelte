@@ -186,7 +186,7 @@
 								peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 								"></span>
 							<span class="ms-3 text-sm font-medium text-gray-600">
-											Individualiseren {#if (form.allow_individualised)}Aan{:else}Uit{/if}
+											Individualiseren (onder constructie) {#if (form.allow_individualised)}Aan{:else}Uit{/if}
 										</span>
 						</label>
 
@@ -213,8 +213,10 @@
 					<p>Display groep, voor event pagina groepering</p>
 				</div>
 
-				<label class="inline-flex items-center cursor-pointer my-4">
-					<input type="checkbox" class="sr-only peer"
+				<div class="form-field">
+				<label for="track_checkout">Track Checkout</label><br>
+				<label class="inline-flex items-center cursor-pointer mb-4">
+					<input type="checkbox" class="hidden peer"
 								 bind:checked={form.product_blueprint_metadata.track_checkout}
 					>
 					<span class="
@@ -233,9 +235,10 @@
 											Ordertracking {#if (form.product_blueprint_metadata.track_checkout)}Aan{:else}Uit{/if}
 										</span>
 				</label>
+				</div>
 
 				{#if form.product_blueprint_metadata.track_checkout}
-					FUTURE: Custom tracker settings hier
+					<p>FUTURE: Custom tracker settings hier</p>
 				{/if}
 
 			</fieldset>

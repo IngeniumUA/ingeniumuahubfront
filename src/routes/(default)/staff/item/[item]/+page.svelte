@@ -21,6 +21,7 @@
 	let { data } = $props();
 	let itemWide: ItemWideI = $state(data.itemWide);
 	let trackerCount: number = $state(data.trackerCount);
+	let checkoutTrackerStatusGrouped = $state([])
 
 	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
 	const interactionCapable: boolean = $derived(["eventitem", "shopitem", "linkitem"].includes(itemWide.derived_type.derived_type_enum));
@@ -29,9 +30,6 @@
 	let productBlueprints = $state(data.productBlueprints);
 	let pricePolicyTable = $state(data.pricePoliciesTable);
 	let checkoutStatusTable = $state(data.checkoutStatusTable);
-
-	let checkoutTrackerStatusGrouped = $state([])
-	let checkoutTrackers = $state(data.trackers)
 
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
@@ -530,45 +528,6 @@
 			<p>Groupby per status van links naar rechts met pijlen tussen en aantallen.
 			Kleur van de "done" moet groen zijn imo</p>
 			<p>TODO Grafiekje hier? Dashboard embed best?</p>
-
-
-			<h2 class="font-bold">Trackers Table</h2>
-			<p>Table met alle checkout trackers -> component van maken</p>
-			<table class="ingenium-table">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Email</th>
-						<th>Naam</th>
-					</tr>
-				</thead>
-				<tbody>
-				{#each checkoutTrackers as row}
-					<tr>
-						<th>{row["id"]}</th>
-
-						<td>{row["checkout"]["user_email"]}</td>
-						<td>{#if row["checkout"]["user_first_name"] !== null}{row["user_first_name"]}{/if}</td>
-
-						<td><a href="staff/checkout">Naar Checkout</a></td>
-
-						<td class="flex flex-row">
-							<button class="ml-2 button button-primary w-24 button-inline">
-								<span class="text-white">Prev Status</span>
-							</button>
-							<div>
-								{row["checkout_tracker_status"]}
-							</div>
-							<button class="ml-2 button button-primary w-24 button-inline">
-								<span class="text-white">Next Status</span>
-							</button>
-						</td>
-					</tr>
-				{/each}
-				</tbody>
-			</table>
-		{:else}
-			<p>Geen Trackers</p>
 		{/if}
 	{/if}
 
@@ -583,20 +542,23 @@
 		<p>TODO: Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
 	{/if}
 
-	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-	<h1 id="webmaster-info">Webmaster Info</h1>
-	<h2 id="keycloak">Keycloak</h2>
-	<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
 
-	<h2 id="changelog">Changelog</h2>
-	<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
+	{#if hasRole("webmaster")}
+		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+		<h1 id="webmaster-info">Webmaster Info</h1>
+		<h2 id="keycloak">Keycloak</h2>
+		<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
 
-	<div class="flex justify-end mt-4 gap-4">
-		<button class="button button-danger button-inline"
-						disabled={loadingHTTP}>
-			<span class="text-white">Delete (wip)</span>
-		</button>
-	</div>
+		<h2 id="changelog">Changelog</h2>
+		<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
+
+		<div class="flex justify-end mt-4 gap-4">
+			<button class="button button-danger button-inline"
+							disabled={loadingHTTP}>
+				<span class="text-white">Delete (wip)</span>
+			</button>
+		</div>
+	{/if}
 </main>
 
 <AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>

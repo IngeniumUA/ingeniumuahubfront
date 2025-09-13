@@ -6,6 +6,7 @@ export interface CheckoutI {
 
   amount: number
   currency: string
+  checkout_status: number
 
   user_uuid: string
   user_email: string | null

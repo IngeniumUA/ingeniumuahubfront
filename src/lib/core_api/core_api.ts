@@ -7,7 +7,7 @@ import type { ShopItemWideI } from '$lib/models/item/shopI';
 import type { ProductOutI } from '$lib/models/productsI';
 import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
-import { CoreCheckoutTrackerAPI } from '$lib/core_api/checkout_tracker_api';
+import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 
 export class CoreItemAPI {
 	static async patchItem(item_identifier: string | number, patch_object: object) {
@@ -86,14 +86,14 @@ export class CoreItemAPI {
 		const query = new URLSearchParams({
 			item_id: item_identifier.toString(),
 		});
-		return await CoreCheckoutTrackerAPI.countCheckoutTracker(query)
+		return await CoreCheckoutAPI.countCheckoutTracker(query)
 	}
 
 	static async queryCheckoutTracker(item_identifier: string | number): Promise<HubCheckoutTrackerI[]> {
 		const query = new URLSearchParams({
 			item_id: item_identifier.toString(),
 		});
-		return await CoreCheckoutTrackerAPI.queryCheckoutTracker(query)
+		return await CoreCheckoutAPI.queryCheckoutTracker(query)
 	}
 
 	static async countSuccessCheckout(item_identifier: string | number): Promise<number> {

@@ -1,8 +1,34 @@
 ﻿import { PUBLIC_API_URL } from '$env/static/public';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
+import type { CheckoutI, CheckoutIWide } from '$lib/models/checkoutI';
 
-export class CoreCheckoutTrackerAPI {
+export class CoreCheckoutAPI {
+	static async getCheckoutWide(checkoutIdentifier: string): Promise<CheckoutIWide> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch checkout: ${await res.text()}`;
+		}
+	}
+
+	static async patchCheckout(checkoutIdentifier: string, patchObj: any): Promise<CheckoutI> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
+			method: 'PATCH',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(patchObj)
+		});
+		if (res.ok) {
+			return res.json();
+		} else {
+			throw `Failed to patch checkout: ${await res.text()}`;
+		}
+	}
+
 	static async countCheckoutTracker(query_param: URLSearchParams): Promise<number> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?item=${query_param.toString()}`, {
 			method: 'GET',

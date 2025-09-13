@@ -2,6 +2,8 @@ import { getLoginUrlWithRedirect, hasValidToken } from '$lib/auth/auth';
 import { hasRole } from '$lib/states/auth.svelte';
 import { redirect } from '@sveltejs/kit';
 
+export const ssr = false;
+
 export const load = async ({ params, url }) => {
 	if (!hasValidToken(params)) {
 		redirect(307, getLoginUrlWithRedirect(url.href));
