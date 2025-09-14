@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
 	import { CoreCardAPI } from '$lib/core_api/card_api';
-	import { CardMembershipEnum } from '$lib/models/item/cardI';
+	import { CardMembershipEnum, CardTypeEnum } from '$lib/models/item/cardI';
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import type { CardI } from '$lib/models/cardI';
@@ -36,11 +36,25 @@
 	let editSelectedIndex: null | number = $state(null);
 	let editSelected: CardI | null = $state(null);
 	let showEdit: boolean = $state(false);
+
+	interface FormState {
+		cardNr: number;
+		user_email: string | null;
+	}
+	let editForm: FormState = $state({
+		cardNr: 0,
+		user_email: ""
+	})
+
 	function setEditItemIndex(index: number) {
 		putError = null;
 		editSelectedIndex = index;
 		if (editSelectedIndex !== null && editSelectedIndex < cards.length) {
 			editSelected = cards.at(editSelectedIndex)!;
+
+			editForm.cardNr = editSelected.card_nr;
+			editForm.user_email = editSelected.user_email;
+
 			showEdit = true;
 		}
 	}
@@ -179,16 +193,52 @@
 	</div>
 </main>
 
-{#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length}
-	<Modal title="Lidkaart bewerken" maxWidth="max-w-5xl" bind:isOpen={ showEdit } closable={ true }>
+{#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length && editSelected !== null}
+	<Modal title="Lidkaart bewerken" maxWidth="max-w-4xl" bind:isOpen={ showEdit } closable={ true }>
 		{#snippet children()}
-			<div class="p-2 flex justify-between items-center">
-				<button type="button" class="button button-primary w-24 button-inline"
-								disabled={loadingHTTP}
-								onclick={handlePut}>
-					<span class="text-white">Update</span>
-				</button>
-			</div>
+			<article class="m-4 ">
+				<div class="flex flew-row">
+					<div class="flex-1">
+						<h3 class="font-bold pb-2">Lidkaart Info</h3>
+
+						<h4 class="pl-3 text-blue-900 font-bold">UUID: <span class="text-ingenium-grey-800 font-bold">{editSelected.card_uuid}</span></h4>
+						<p class="pl-3 ">uuid die op de qr code van de lidkaart staat</p>
+
+						<h4 class="pl-3 text-blue-900 font-bold">Card Type: <span class="text-ingenium-grey-800 font-bold">{CardTypeEnum[editSelected.card_type]}</span></h4>
+						<p class="pl-3 ">Het type kaart (scannen, draadloos, ..)</p>
+
+						<h4 class="pl-3 text-blue-900 font-bold">MemberType: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected.member_type]}</span></h4>
+						<p class="pl-3 ">Soort lid</p>
+
+					</div>
+
+					<form class="flex-1 ingenium-form">
+						<fieldset class="flex flex-row gap-4">
+							<div class="flex-1 form-field max-w-72 mb-2">
+								<label for="itemName">Card Nr</label>
+								<input id="itemName" type="number" required bind:value={ editForm.cardNr }/>
+								<p>Typisch het nummer dat ook op de fysieke kaart staat</p>
+							</div>
+						</fieldset>
+
+						<fieldset class="flex flex-row gap-4">
+							<div class="flex-1 form-field max-w-72 mb-2">
+								<label for="itemName">User Email</label>
+								<input id="itemName" type="text" required bind:value={ editForm.user_email }/>
+								<p>Gekoppelde gebruiker</p>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+
+				<div class="p-2 flex justify-end items-center">
+					<button type="button" class="button button-primary w-24 button-inline"
+									disabled={loadingHTTP}
+									onclick={handlePut}>
+						<span class="text-white">Update</span>
+					</button>
+				</div>
+			</article>
 		{/snippet}
 	</Modal>
 {/if}
