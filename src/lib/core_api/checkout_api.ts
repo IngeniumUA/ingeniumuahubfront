@@ -2,12 +2,13 @@
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
 import type { CheckoutI, CheckoutIWide } from '$lib/models/checkoutI';
+import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreCheckoutAPI {
-	static async getCheckoutWide(checkoutIdentifier: string): Promise<CheckoutIWide> {
+	static async getCheckoutWide(params: RouteParams | null = null, checkoutIdentifier: string): Promise<CheckoutIWide> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();
