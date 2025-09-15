@@ -9,6 +9,7 @@
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 	import type { DBLogExplodedI } from '$lib/models/dblog';
 	import { DBLogAPI } from '$lib/core_api/dblog_api';
+	import type { TransactionI } from '$lib/models/transactionI';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -16,6 +17,39 @@
 	let { data } = $props();
 	let checkoutWide: CheckoutIWide = $state(data.checkout);
 	let explodedDBLogs: DBLogExplodedI[] = $state(data.logs);
+
+
+	let groupProductBlueprint = $derived.by(() => {
+		const groupedByProduct = checkoutWide.transactions.reduce<Record<number, TransactionI[]>>(
+			(acc, tx) => {
+				(acc[tx.product_blueprint_id] ??= []).push(tx);
+				return acc;
+			},
+			{}
+		);
+		return Object.values(groupedByProduct).map((transactions: TransactionI[]) => {
+			const groupedPricePolicy = transactions.reduce<Record<number, TransactionI[]>>(
+				(acc, tx) => {
+					(acc[tx.price_policy_id] ??= []).push(tx);
+					return acc;
+				},
+				{}
+			)
+			return {
+				product_blueprint_id: transactions[0].product_blueprint_id,
+				product_blueprint_name: transactions[0].product_blueprint_name,
+				transaction_count: transactions.length,
+				price_policies: Object.values(groupedPricePolicy).map((transactions: TransactionI[]) => {
+					return {
+						price_policy_id: transactions[0].price_policy_id,
+						price_policy_name: transactions[0]['purchased_product']['price_policy']!['name'],
+						price_eu: transactions[0]['purchased_product']['price_policy']!['price'],
+						transaction_count: transactions.length,
+					}
+				})
+			};
+		}
+		)})
 
 	let loadingHTTP: boolean = $state(false);
 	async function refreshLogs() {
@@ -139,7 +173,7 @@
 
 	async function sendEmail() {
 		try {
-			await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj);
+			await CoreCheckoutAPI.sendCheckoutEmail(checkoutWide.checkout_uuid);
 		} catch (error) {
 			if (error instanceof Error) {
 				failedToast(error.message);
@@ -165,14 +199,33 @@
 			</div>
 
 			<div class="flex flex-row gap-4">
-				<div class="flex-[2] p-2 border-2 border-ingenium-grey-300 rounded-lg">
-					<h3 class="font-bold mb-2">Transacties</h3>
-					<p><span class="font-bold">Aantal:</span> {checkoutWide.transactions.length}</p>
-					<p><span class="font-bold">Last Edit:</span> {prettyDateTime(checkoutWide.last_updated_timestamp)}</p>
-					<p><span class="font-bold">Completed:</span> {prettyDateTime(checkoutWide.completed_timestamp)}</p>
+				<div class="flex-[2] p-2">
+					<h2 class="font-bold mb-2">Transacties</h2>
+					{#each groupProductBlueprint as row (row.product_blueprint_id)}
+						<div class="flex justify-between items-center">
+							<h3 class="text-blue-900 font-bold">{row.product_blueprint_name}</h3>
+							<h4 class="text-ingenium-grey-800 text-right font-bold mr-4">Subtotaal: {row.transaction_count}</h4>
+						</div>
+						<table class="ingenium-table">
+							<tbody>
+							{#each row.price_policies as pricePolicyRow, pricePolicyIndex (pricePolicyRow.price_policy_id)}
+								<tr>
+									<th scope="row">
+										<h4 class="text-ingenium-grey-800 font-bold">
+											Price {pricePolicyIndex + 1}: {#if pricePolicyRow.price_policy_name !== null}{pricePolicyRow.price_policy_name} -{/if}
+											{#if pricePolicyRow.price_eu === 0}Gratis{:else}€{pricePolicyRow.price_eu}{/if}
+										</h4>
+									</th>
+									<td class="text-right">{pricePolicyRow.transaction_count}</td>
+								</tr>
+							{/each}
+							</tbody>
+						</table>
+					{/each}
+					<p class="text-right font-bold mr-4">Eind totaal: {checkoutWide.transactions.length}</p>
 				</div>
 
-				<div class="flex-[1] p-2 border-2 border-ingenium-grey-300 rounded-lg">
+				<div class="flex-[1] p-2">
 					<h3 class="font-bold mb-2">Voortgang:</h3>
 					<button
 						class="button button-primary button-inline"
@@ -191,7 +244,7 @@
 					</button>
 
 					<h3 class="font-bold mt-4 mb-2">Mail:</h3>
-					<button class="button button-primary button-inline">
+					<button class="button button-primary button-inline" onclick={sendEmail}>
 						<span class="text-white">Opnieuw Versturen</span>
 					</button>
 				</div>

@@ -1,8 +1,23 @@
 ﻿<script lang="ts">
 	import type { CheckoutI } from '$lib/models/checkoutI';
+	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
+	import { onMount } from 'svelte';
 
 	let checkouts: CheckoutI[] = $state([])
 	let checkoutStatusList = $state([])
+
+	let queryParam = $state(new URLSearchParams()) // todo bindable via input with default
+	let loadingHTTP = $state(false);
+
+	let queryError: Error | null = null
+	async function queryData(queryParam: URLSearchParams) {
+		if (loadingHTTP) return;
+		checkouts = await CoreCheckoutAPI.queryCheckoutWide(null, queryParam);
+	}
+
+	onMount(() => {
+		queryData(queryParam);
+	});
 
 	/**
 	 * Bulk Operations selection
@@ -40,6 +55,12 @@
 		Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>
 	</section>
 
+	{#if (queryError !== null)}
+		<div class="error-message p-4">
+			{JSON.stringify(queryError)}
+		</div>
+	{/if}
+
 	<table class="ingenium-table">
 		<thead>
 			<tr>
@@ -54,7 +75,7 @@
 						Doos voor deze rij
 					</th>
 					<th>
-						<a href={`staff/checkout/${checkout.checkout_uuid}`}>{checkout.checkout_uuid.slice(6)}</a>
+						<a href={`payment/${checkout.checkout_uuid}#overview`}>{checkout.checkout_uuid.slice(6)}</a>
 					</th>
 					<td>
 						{checkout.user_email}

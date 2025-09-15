@@ -17,6 +17,18 @@ export class CoreCheckoutAPI {
 		}
 	}
 
+	static async queryCheckoutWide(params: RouteParams | null = null, queryParam: URLSearchParams): Promise<CheckoutIWide[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout?${queryParam.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to query checkout: ${await res.text()}`;
+		}
+	}
+
 	static async patchCheckout(checkoutIdentifier: string, patchObj: any): Promise<CheckoutIWide> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
 			method: 'PATCH',
