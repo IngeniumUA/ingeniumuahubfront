@@ -6,6 +6,8 @@ import type { ItemWideI } from '$lib/models/item/itemwideI';
 import type { ShopItemWideI } from '$lib/models/item/shopI';
 import type { ProductOutI } from '$lib/models/productsI';
 import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
+import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
+import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 
 export class CoreItemAPI {
 	static async patchItem(item_identifier: string | number, patch_object: object) {
@@ -81,15 +83,17 @@ export class CoreItemAPI {
 	}
 
 	static async countCheckoutTracker(item_identifier: string | number): Promise<number> {
-		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?item=${item_identifier}`, {
-			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		const query = new URLSearchParams({
+			item_id: item_identifier.toString(),
 		});
-		if (res.ok) {
-			return await res.json();
-		} else {
-			throw `Failed to fetch checkout tracker count: ${await res.text()}`;
-		}
+		return await CoreCheckoutAPI.countCheckoutTracker(query)
+	}
+
+	static async queryCheckoutTracker(item_identifier: string | number): Promise<HubCheckoutTrackerI[]> {
+		const query = new URLSearchParams({
+			item_id: item_identifier.toString(),
+		});
+		return await CoreCheckoutAPI.queryCheckoutTracker(query)
 	}
 
 	static async countSuccessCheckout(item_identifier: string | number): Promise<number> {

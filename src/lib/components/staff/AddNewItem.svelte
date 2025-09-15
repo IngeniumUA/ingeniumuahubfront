@@ -244,7 +244,7 @@
 		</form>
 
 		<!-- Footer -->
-		<div class="p-2 flex border-t dark:border-gray-600 border-gray-200">
+		<div class="p-2 flex border-t border-gray-200">
 			<button class="button button-primary w-24 button-inline"
 							disabled={loadingHTTP}
 							onclick={createItem}>

@@ -13,6 +13,7 @@
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
 	import { PaymentStatusEnum } from '$lib/models/enums';
+	import { hasRole } from '$lib/states/auth.svelte';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -20,6 +21,7 @@
 	let { data } = $props();
 	let itemWide: ItemWideI = $state(data.itemWide);
 	let trackerCount: number = $state(data.trackerCount);
+	let checkoutTrackerStatusGrouped = $state([])
 
 	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
 	const interactionCapable: boolean = $derived(["eventitem", "shopitem", "linkitem"].includes(itemWide.derived_type.derived_type_enum));
@@ -29,14 +31,12 @@
 	let pricePolicyTable = $state(data.pricePoliciesTable);
 	let checkoutStatusTable = $state(data.checkoutStatusTable);
 
-	let checkoutTrackerStatusGrouped = $state([])
-	let checkoutTrackers = $state([])
-
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
 
-	// fixme we kunnen dit ook vinden door alle productBlueprints ff te doorlopen en te kijken of er config is
-	let hasCheckoutTrackers = $state(data.trackerCount > 0);
+	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
+		return prod.product_blueprint_metadata.upon_completion?.track_checkout !== null;
+	}));
 
 	/**
 	 * Refreshing functions
@@ -53,9 +53,6 @@
 		trackerCount = await CoreItemAPI.countCheckoutTracker(itemWide.item.id);
 		await refreshBlueprints()
 		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(itemWide.item.id);
-
-		// Derived options
-		hasCheckoutTrackers = trackerCount > 0;
 	}
 
 	/**
@@ -138,21 +135,19 @@
 				}
 			}
 		} else {
-			putItemWide.item.item_metadata.payment_configuration = null;
+			putItemWide.item.item_metadata.payment_configuration = {
+				stripe_payment_configuration: {
+					connected_account_id: null,
+					application_fee_amount: null
+				}
+			};
 		}
 
 		// Social Media
-		if ([
-			form.item_metadata.social_media_configuration.facebook_url,
-			form.item_metadata.social_media_configuration.instagram_url,
-			form.item_metadata.social_media_configuration.linkedin_url].some(value => {return value?.startsWith("https")})) {
-			putItemWide.item.item_metadata.social_media_configuration = {
-				facebook_url: form.item_metadata.social_media_configuration.facebook_url?.startsWith("https") ? form.item_metadata.social_media_configuration.facebook_url: null,
-				instagram_url: form.item_metadata.social_media_configuration.instagram_url?.startsWith("https") ? form.item_metadata.social_media_configuration.instagram_url: null,
-				linkedin_url: form.item_metadata.social_media_configuration.linkedin_url?.startsWith("https") ? form.item_metadata.social_media_configuration.linkedin_url: null
-			}
-		} else {
-			putItemWide.item.item_metadata.social_media_configuration = null;
+		putItemWide.item.item_metadata.social_media_configuration = {
+			facebook_url: form.item_metadata.social_media_configuration.facebook_url?.startsWith("https") ? form.item_metadata.social_media_configuration.facebook_url: null,
+			instagram_url: form.item_metadata.social_media_configuration.instagram_url?.startsWith("https") ? form.item_metadata.social_media_configuration.instagram_url: null,
+			linkedin_url: form.item_metadata.social_media_configuration.linkedin_url?.startsWith("https") ? form.item_metadata.social_media_configuration.linkedin_url: null
 		}
 
 		loadingHTTP = true;
@@ -240,8 +235,9 @@
 	</div>
 
 	<h1>Item Configuration</h1>
+	<form class="ingenium-form">
 	<section class="flex flex-row">
-		<form class="ingenium-form">
+		<div>
 			<div class="ingenium-form-card">
 				<h3 class="font-bold">Core Item</h3>
 				<fieldset class="flex flex-row gap-4">
@@ -320,7 +316,7 @@
 				</div>
 			{/if}
 			</div>
-		</form>
+		</div>
 
 		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
@@ -335,7 +331,7 @@
 						{/if}
 
 						{#if productBlueprintCapable}
-							<a href="#Dashboard" class="font-semibold">Dashboard</a>
+							<a href="#Dashboard" class="font-semibold">Transacties Dashboard</a>
 							<a href="#Transacties en Betalingen" class="font-semibold">Betalingen & Transacties</a>
 							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
 						{/if}
@@ -344,6 +340,12 @@
 						{/if}
 						{#if interactionCapable}
 						<a href="#Interactions" class="font-semibold">Interactions</a>
+						{/if}
+
+						{#if hasRole("webmaster")}
+							<a href="#webmaster-info" class="font-semibold">Webmaster</a>
+							<a href="#keycloak" class="font-semibold">Keycloak</a>
+							<a href="#changelog" class="font-semibold">Changelog</a>
 						{/if}
 					</div>
 				</nav>
@@ -395,6 +397,7 @@
 			</fieldset>
 		</div>
 	</div>
+	</form>
 
 	<div class="flex justify-end mt-4 gap-4">
 		<button class="button button-primary button-inline"
@@ -412,6 +415,9 @@
 		</div>
 		<section class="flex">
 			<div class="w-2/3">
+				<h2>Transacties</h2>
+				<p>TODO: Transacties en validity hier?</p>
+
 				<h2 class="font-bold">Betalingen</h2>
 				<p>Het is normaal dat sommige betalingen falen. Een gefaalde betaling gebeurt bijvoorbeeld wanneer iemand een betaling start, maar niet genoed geld heeft. Of wanneer hij zijn bank app opent maar er daar iets fout gaat.</p>
 				<div class="flex flex-row flex-wrap  gap-x-4">
@@ -522,45 +528,6 @@
 			<p>Groupby per status van links naar rechts met pijlen tussen en aantallen.
 			Kleur van de "done" moet groen zijn imo</p>
 			<p>TODO Grafiekje hier? Dashboard embed best?</p>
-
-
-			<h2 class="font-bold">Trackers Table</h2>
-			<p>Table met alle checkout trackers -> component van maken</p>
-			<table class="ingenium-table">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Email</th>
-						<th>Naam</th>
-					</tr>
-				</thead>
-				<tbody>
-				{#each checkoutTrackers as row}
-					<tr>
-						<th>{row["id"]}</th>
-
-						<td>{row["checkout"]["user_email"]}</td>
-						<td>{#if row["checkout"]["user_first_name"] !== null}{row["user_first_name"]}{/if}</td>
-
-						<td><a href="staff/checkout">Naar Checkout</a></td>
-
-						<td class="flex flex-row">
-							<button class="ml-2 button button-primary w-24 button-inline">
-								<span class="text-white">Prev Status</span>
-							</button>
-							<div>
-								{row["checkout_tracker_status"]}
-							</div>
-							<button class="ml-2 button button-primary w-24 button-inline">
-								<span class="text-white">Next Status</span>
-							</button>
-						</td>
-					</tr>
-				{/each}
-				</tbody>
-			</table>
-		{:else}
-			<p>Geen Trackers</p>
 		{/if}
 	{/if}
 
@@ -575,16 +542,23 @@
 		<p>TODO: Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
 	{/if}
 
-	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-	<h1>Webmaster Info</h1>
-	<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
 
-	<div class="flex justify-end mt-4 gap-4">
-		<button class="button button-danger button-inline"
-						disabled={loadingHTTP}>
-			<span class="text-white">Delete (wip)</span>
-		</button>
-	</div>
+	{#if hasRole("webmaster")}
+		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+		<h1 id="webmaster-info">Webmaster Info</h1>
+		<h2 id="keycloak">Keycloak</h2>
+		<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
+
+		<h2 id="changelog">Changelog</h2>
+		<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
+
+		<div class="flex justify-end mt-4 gap-4">
+			<button class="button button-danger button-inline"
+							disabled={loadingHTTP}>
+				<span class="text-white">Delete (wip)</span>
+			</button>
+		</div>
+	{/if}
 </main>
 
 <AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>

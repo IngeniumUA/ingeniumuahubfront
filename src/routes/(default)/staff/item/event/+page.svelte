@@ -280,7 +280,7 @@
 
 				<div class="flex justify-end items-center my-2">
 					<button class="button button-primary w-28 button-inline"
-									onclick={() => goto(`/staff/item/${event.item.id}`)}>
+									onclick={() => goto(`/staff/item/${event.item.id}#${event.item.name}`)}>
 						<span class="text-white">Naar Event</span>
 					</button>
 				</div>

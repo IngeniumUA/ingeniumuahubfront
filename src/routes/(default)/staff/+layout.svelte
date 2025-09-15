@@ -14,25 +14,22 @@
 			<nav class="vertical-nav vertical-nav-transparent">
 				<div>
 					<a class="font-semibold" href="/webmaster">Webmaster Home</a>
-
 					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
 					<a href="/staff/flag">Flags</a>
 					<a href="/staff/dashboard">Dashboard</a>
 					<a href="/staff/group">Groups</a>
+					<a href="/staff/payment">Payments</a>
 				</div>
 
 				<div class="mt-16">
 					<a class="font-semibold" href="/staff">Staff Home</a>
-
 					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
 					<a href="/staff/item/event">Events</a>
 					<a href="/staff/item/shop">Shop</a>
 					<a href="/staff/item/vacatures">Vacatures</a>
-					<a href="/staff/item/lidkaarten">Lidkaarten</a>
+					<a href="/staff/lidkaarten">Lidkaarten</a>
 					<a href="/staff/item/notification">Email / App / SMS</a>
-
 				</div>
-
 			</nav>
 		</aside>
 

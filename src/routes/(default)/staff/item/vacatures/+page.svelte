@@ -230,7 +230,7 @@
 						<div class="flex justify-end items-center h-full">
 							<button
 								class="button button-primary button-inline"
-								onclick={() => goto(`/staff/item/${item.item.id}`)}
+								onclick={() => goto(`/staff/item/${item.item.id}#${item.item.name}`)}
 							>
 								<span class="text-white">Naar Vacature</span>
 							</button>
