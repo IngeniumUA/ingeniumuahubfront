@@ -1,7 +1,7 @@
 ﻿import { PUBLIC_API_URL } from '$env/static/public';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
-import type { CheckoutI, CheckoutIWide } from '$lib/models/checkoutI';
+import type { CheckoutIWide } from '$lib/models/checkoutI';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreCheckoutAPI {
@@ -17,7 +17,7 @@ export class CoreCheckoutAPI {
 		}
 	}
 
-	static async patchCheckout(checkoutIdentifier: string, patchObj: any): Promise<CheckoutI> {
+	static async patchCheckout(checkoutIdentifier: string, patchObj: any): Promise<CheckoutIWide> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
 			method: 'PATCH',
 			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
@@ -77,5 +77,15 @@ export class CoreCheckoutAPI {
 		return await res.json();
 	}
 
-
+	static async sendCheckoutEmail(checkoutIdentifier: string): Promise<boolean> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/email/${checkoutIdentifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (!res.ok) {
+			const text = await res.text();
+			throw new Error(`Failed to send email: ${text}`);
+		}
+		return await res.json();
+	}
 }

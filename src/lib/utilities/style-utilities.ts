@@ -15,6 +15,10 @@ export const prettyDate = (input_str: string): string => {
     return input_str.split("T")[0]
 }
 
+export const prettyDateTime = (input_str: string): string => {
+	return `${prettyDate(input_str)} ${input_str.split('T')[1].split('.')[0]}`;
+};
+
 /**
  * 
  */

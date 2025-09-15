@@ -6,17 +6,41 @@
 	import Modal from '$lib/components/layout/modal.svelte';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { PaymentStatusEnum } from '$lib/models/enums';
+	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import type { DBLogExplodedI } from '$lib/models/dblog';
+	import { DBLogAPI } from '$lib/core_api/dblog_api';
 
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
 	let checkoutWide: CheckoutIWide = $state(data.checkout);
-	let dbLogs: [] = $state(data.logs);
+	let explodedDBLogs: DBLogExplodedI[] = $state(data.logs);
 
 	let loadingHTTP: boolean = $state(false);
+	async function refreshLogs() {
+		const queryParam = new URLSearchParams({
+			table_name: 'hubcheckout',
+			row_primary_key: `${checkoutWide.id}`
+		});
+		explodedDBLogs = await DBLogAPI.queryCoreDBLogExploded(null, queryParam)
+	}
 	async function refresh() {
-		checkoutWide = await CoreCheckoutAPI.getCheckoutWide(checkoutWide.checkout_uuid);
+		checkoutWide = await CoreCheckoutAPI.getCheckoutWide(null, checkoutWide.checkout_uuid);
+		await refreshLogs()
+		successToast("Refreshed!")
+	}
+
+	/**
+	 * Util
+	 */
+	function deducePlatform(referer: string | null, user_agent: string | null): string {
+		if (referer === null) return "geen info"
+		if (referer.startsWith("http://")) {
+			if (user_agent?.toLowerCase().includes("electron")) return "app"
+			return "local"
+		}
+		return referer
 	}
 
 	/**
@@ -29,12 +53,14 @@
 	})
 	let toggleEditUser: boolean = $state(false);
 	let newUserExist: boolean = $state(false)
+	let editUserButtonDisabled = $derived(loadingHTTP || form.email === "" || form.email === null)
 
 	let editingNote: boolean = $state(false);
 	let patchError: Error | null = $state(null)
 	async function toggleEditNote() {
 		editingNote = !editingNote;
 		if (editingNote) return;
+		if (checkoutWide.note === form.note) return;
 
 		loadingHTTP = true;
 		try {
@@ -42,6 +68,36 @@
 				note: form.note
 			}
 			checkoutWide.note = (await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj)).note;
+			patchError = null;
+		} catch (error) {
+			patchError = error instanceof Error ? error : Error('Error submitting form');
+		} finally {
+			if (patchError === null) {
+				successToast("Updated!")
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
+
+	function getPatchStatusValue() {
+		if (checkoutWide.checkout_status === PaymentStatusEnum.successful) return PaymentStatusEnum.refund_pending
+		if (checkoutWide.checkout_status === PaymentStatusEnum.pending) return PaymentStatusEnum.cancelled
+		return null
+	}
+	async function patchStatus(newStatus: PaymentStatusEnum | null) {
+		if (newStatus === null) return;
+		if (![PaymentStatusEnum.cancelled, PaymentStatusEnum.refund_pending].includes(newStatus)) {
+			failedToast("Kan enkel betaling Cancellen of Refunden")
+			return
+		}
+		let patchObj = {
+			checkout_status: newStatus
+		};
+		try {
+			checkoutWide = await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj);
+			await refreshLogs()
 			patchError = null;
 		} catch (error) {
 			patchError = error instanceof Error ? error : Error('Error submitting form');
@@ -64,12 +120,9 @@
 				const patchObj = {
 					user_email: form.email
 				}
-				const checkoutResp = await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj);
-				checkoutWide.user_uuid = checkoutResp.user_uuid
-				checkoutWide.user_email = checkoutResp.user_email
-				checkoutWide.user_first_name = checkoutResp.user_first_name
-				checkoutWide.user_last_name = checkoutResp.user_last_name
-
+				checkoutWide = await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj);
+				await refreshLogs()
+				toggleEditUser = false;
 				patchError = null;
 			} catch (error) {
 				patchError = error instanceof Error ? error : Error('Error submitting form');
@@ -83,6 +136,18 @@
 			}
 		}
 	}
+
+	async function sendEmail() {
+		try {
+			await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj);
+		} catch (error) {
+			if (error instanceof Error) {
+				failedToast(error.message);
+			}
+		} finally {
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -94,81 +159,121 @@
 	</div>
 
 	<section class="flex flex-row">
-		<div class="flex-grow">
+		<div class="flex-[2]">
 			<div class="alert alert-info mb-4">
 				<p class="alert-text">Een checkout is een uitgevoerde betaling.</p>
 			</div>
 
-			<p>TODO: Knoppen hier voor refund, email sturen, etc</p>
+			<div class="flex flex-row gap-4">
+				<div class="flex-[2] p-2 border-2 border-ingenium-grey-300 rounded-lg">
+					<h3 class="font-bold mb-2">Transacties</h3>
+					<p><span class="font-bold">Aantal:</span> {checkoutWide.transactions.length}</p>
+					<p><span class="font-bold">Last Edit:</span> {prettyDateTime(checkoutWide.last_updated_timestamp)}</p>
+					<p><span class="font-bold">Completed:</span> {prettyDateTime(checkoutWide.completed_timestamp)}</p>
+				</div>
+
+				<div class="flex-[1] p-2 border-2 border-ingenium-grey-300 rounded-lg">
+					<h3 class="font-bold mb-2">Voortgang:</h3>
+					<button
+						class="button button-primary button-inline"
+						onclick={() => {patchStatus(getPatchStatusValue())}}
+						disabled={loadingHTTP || ![PaymentStatusEnum.successful, PaymentStatusEnum.pending].includes(checkoutWide.checkout_status)}
+					>
+						<span class="text-white">
+							{#if checkoutWide.checkout_status === PaymentStatusEnum.successful}
+								Refund
+							{:else if checkoutWide.checkout_status === PaymentStatusEnum.pending}
+								Cancel
+							{:else}
+								{makePretty(PaymentStatusEnum[checkoutWide.checkout_status])}
+							{/if}
+						</span>
+					</button>
+
+					<h3 class="font-bold mt-4 mb-2">Mail:</h3>
+					<button class="button button-primary button-inline">
+						<span class="text-white">Opnieuw Versturen</span>
+					</button>
+				</div>
+			</div>
 		</div>
-		<aside class="flex-1 px-4 sm:px-2 col-span-1 md:col-span-2">
+
+		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+
+		<aside class="flex-1 px-4 col-span-1">
 			<nav class="vertical-nav vertical-nav-transparent">
 				<h2>On this page</h2>
-				<div>
-					<a href="#overview" class="font-semibold">Overzicht</a>
+				<a href="#overview" class="font-semibold">Overzicht</a>
 
-					<a href="#transactions" class="font-semibold">Transacties</a>
-					<a href="#transactions" class="font-semibold">Checkout Tracker</a>
+				<a href="#transactions" class="font-semibold">Transacties</a>
+				<a href="#transactions" class="font-semibold">Checkout Tracker</a>
 
-					{#if hasRole("webmaster")}
-						<a href="#webmaster-info" class="font-semibold">Webmaster</a>
-						<a href="#keycloak" class="font-semibold">Keycloak</a>
-						<a href="#changelog" class="font-semibold">Changelog</a>
-					{/if}
-				</div>
+				{#if hasRole("webmaster")}
+					<a href="#changelog" class="font-semibold">Changelog</a>
+				{/if}
 			</nav>
 		</aside>
 	</section>
 
 	<h1 id="overview">Overzicht</h1>
 	<section class="flex flex-row">
-		<div class="flex-grow">
-			<h2>Recente geschiedenis</h2>
-			<div class="flex flex-row">
-				<div>
-					<!--{#each ReconstructedCheckoutList as selectedReconstructedIndex, reconstructedObject}-->
-					<!--	<button onclick={setSelectedReconstructed(index)}>-->
-					<!--		{ReconstructedCheckoutList["request_id"]}-->
-					<!--	</button>-->
-					<!--{/each}-->
-				</div>
-				<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
-				<div>
-					<!--{JSON.stringify(ReconstructedCheckoutList.at(selectedReconstructedIndex))}-->
+		<div class="flex-[2]">
+			<h2>Tijdlijn</h2>
+			<div class="alert alert-info mb-4">
+				<p class="alert-text">Herinner dat we niet alle veranderingen bijhouden.<br>Hieronder enkele van de belangrijkste.</p>
+			</div>
+			<div class="tijdlijn-section">
+				{#each explodedDBLogs as statusOrUserLog}
+					<div class="tijdlijn-container">
+						<h4>{prettyDateTime(statusOrUserLog.created_timestamp)} <span>Edit</span></h4>
+						<p>{makePretty(statusOrUserLog.column_name)}: <span>{statusOrUserLog.value_new !== null ? makePretty(statusOrUserLog.value_new): statusOrUserLog.value_new}</span></p>
+						<p>Edit by: <span>{statusOrUserLog.dblog_metadata["user"] ?? "unknown"}</span></p>
+					</div>
+				{/each}
+
+				<!-- Onderste container, aanmaken van checkout-->
+				<div class="tijdlijn-container">
+					<h4>{prettyDateTime(checkoutWide.created_timestamp)} <span>Created</span></h4>
 				</div>
 			</div>
-			TODO, dit wordt een call naar DPU om met log reconstructie te zien hoe de checkout is veranderd
 
-			<h2>Checkout Metadata</h2>
+			<h2 class="mt-4">Checkout Metadata</h2>
 			{#if checkoutWide.payment_provider === PaymentProviderEnum.Stripe}
-				<div>
-					<a href={`https://dashboard.stripe.com/acct_1DHT0yBSXssFMR3b/payments/${checkoutWide.checkout_metadata["payment_provider_metadata"]["payment_intent_id"]}`}>Bekijk betaling op Stripe</a>
-				</div>
+				<div><a href={`https://dashboard.stripe.com/acct_1DHT0yBSXssFMR3b/payments/${checkoutWide.checkout_metadata["payment_provider_metadata"]["payment_intent_id"]}`}>Bekijk betaling op Stripe</a></div>
 			{/if}
 
-			{JSON.stringify(checkoutWide.checkout_metadata)}
+			<h3 class="font-bold">Checkout Flow Info</h3>
+			<p>{JSON.stringify(checkoutWide.checkout_metadata["checkout_flow_information"], null, 2)}</p>
 
-			<h2>User Information</h2>
+			<h3 class="font-bold">Payment Provider Metadata</h3>
+			<p>{JSON.stringify(checkoutWide.checkout_metadata["payment_provider_metadata"], null, 2)}</p>
+
+			<h2 class="mt-4">User Information</h2>
 			<p>Zo wat informatie die we over de gebruiker weten mis?</p>
 		</div>
 
 		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
-		<div class="flex-1 px-4 sm:px-2 col-span-1 md:col-span-2">
+		<div class="checkout-details-section">
 			<h2>Details</h2>
 
-			<h4>Checkout UUID</h4>
-			<p>{checkoutWide.checkout_uuid}</p>
-			<p>Uniek per betaling</p>
-
-			<h4>Payment status</h4>
-			<p>{PaymentStatusEnum[checkoutWide.checkout_status]}</p>
-			<p>Status van de betaling</p>
+			<fieldset>
+				<h4>Checkout UUID</h4>
+				<p class="bg-ingenium-grey-100 checkout-detail-value">{checkoutWide.checkout_uuid}</p>
+				<p>Uniek per betaling</p>
+			</fieldset>
 
 			<fieldset>
+				<h4>Payment status</h4>
+				<p class="bg-ingenium-grey-100 checkout-detail-value">{makePretty(PaymentStatusEnum[checkoutWide.checkout_status])}</p>
+				<p>Status van de betaling</p>
+			</fieldset>
+
+			<fieldset>
+				<h4>User</h4>
 				<div class="flex justify-between items-center">
-					<h4>{checkoutWide.user_email}</h4>
-						<button aria-label="edit" onclick="{() => toggleEditUser = !toggleEditUser}">
+					<p class="flex-1 checkout-detail-value">{checkoutWide.user_email}</p>
+						<button class="ml-2" aria-label="edit" onclick="{() => toggleEditUser = !toggleEditUser}">
 							<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 									 width="20px" height="20px" viewBox="0 0 528.899 528.899"
 									 xml:space="preserve">
@@ -185,9 +290,16 @@
 			</fieldset>
 
 			<fieldset>
+				<h4>Note</h4>
 				<div class="flex justify-between items-center">
-					<h4>Note</h4>
-					<button aria-label="edit" onclick={toggleEditNote}>
+					{#if editingNote}
+						<div class="form-field max-w-64">
+							<input id="note" type="text" required bind:value={ form.note }/>
+						</div>
+					{:else}
+						<p class="flex-1 checkout-detail-value">{checkoutWide.note ? checkoutWide.note: "geen notitie"}</p>
+					{/if}
+					<button class="ml-2" aria-label="edit" onclick={toggleEditNote}>
 						<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 								 width="20px" height="20px" viewBox="0 0 528.899 528.899"
 								 xml:space="preserve">
@@ -200,26 +312,64 @@
 									</svg>
 					</button>
 				</div>
-				<p>{checkoutWide.note ? checkoutWide.note: "geen notitie"}</p>
 				<p>Notitie die kan toegevoegd worden aan de betaling</p>
 			</fieldset>
 
 			<fieldset>
 				<h4>Betaling</h4>
-				<p><span class="font-bold">€{checkoutWide.amount}</span> via {PaymentProviderEnum[checkoutWide.payment_provider]}</p>
+				<p class="bg-ingenium-grey-100 checkout-detail-value">€{checkoutWide.amount} via {PaymentProviderEnum[checkoutWide.payment_provider]}</p>
+				<p>Bedrag en valuta</p>
+			</fieldset>
 
+			<fieldset>
+				<h4>Guest Checkout</h4>
+				<p class="bg-ingenium-grey-100 checkout-detail-value">{checkoutWide.checkout_metadata["checkout_flow_information"]["guest_checkout"] ?? "geen info"}</p>
+				<h4>Platform</h4>
+				<p class="bg-ingenium-grey-100 checkout-detail-value">{deducePlatform(
+					checkoutWide.checkout_metadata["checkout_flow_information"]["referer"] ?? null,
+					checkoutWide.checkout_metadata["checkout_flow_information"]["user_agent"] ?? null
+				)}</p>
+			</fieldset>
+
+			<fieldset>
 				<h4>Dates</h4>
-				<p><span class="font-bold">Created:</span> {checkoutWide.created_timestamp}</p>
-				<p><span class="font-bold">Last Edit:</span> {checkoutWide.last_updated_timestamp}</p>
-				<p><span class="font-bold">Completed:</span> {checkoutWide.completed_timestamp}</p>
+				<p><span class="font-bold">Created:</span> {prettyDateTime(checkoutWide.created_timestamp)}</p>
+				<p><span class="font-bold">Last Edit:</span> {prettyDateTime(checkoutWide.last_updated_timestamp)}</p>
+				<p><span class="font-bold">Completed:</span> {prettyDateTime(checkoutWide.completed_timestamp)}</p>
 			</fieldset>
 		</div>
 	</section>
 
+
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+
 	<section>
 		<h1 id="transactions">Transacties</h1>
-		<p>Zoals de price policy hier ook zo een opening. Het simpeler kaartje mag wel groter. Het grotere kaartje moet ook zo de history en dblogs enzo kunnen weergeven voor partial refunds bv</p>
+		<p>Zoals de price policy hier ook zo een opening. Het simpeler kaartje mag wel groter.
+			Het grotere kaartje moet ook zo de recent history enzo kunnen weergeven voor partial refunds bv.
+			Bij open kaartje identiek als hierboven zo de details in een sidebar?</p>
 	</section>
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+
+	<section>
+		<h1>Full History</h1>
+		<div class="flex flex-row">
+			<div>
+				<!--{#each ReconstructedCheckoutList as selectedReconstructedIndex, reconstructedObject}-->
+				<!--	<button onclick={setSelectedReconstructed(index)}>-->
+				<!--		{ReconstructedCheckoutList["request_id"]}-->
+				<!--	</button>-->
+				<!--{/each}-->
+			</div>
+			<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+			<div>
+				<!--{JSON.stringify(ReconstructedCheckoutList.at(selectedReconstructedIndex))}-->
+			</div>
+		</div>
+		<p>TODO, dit wordt een call naar DPU om met log reconstructie te zien hoe de checkout is veranderd (en ook transactions!)</p>
+	</section>
+
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
 	<section>
 		<h1 id="checkout-tracker">Checkout Tracker</h1>
@@ -228,25 +378,19 @@
 
 	{#if hasRole("webmaster")}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h1 id="webmaster-info">Webmaster Info</h1>
-		<h2 id="keycloak">Keycloak</h2>
-		<p>TODO 1: Keycloak info (kan dat zelfs?)</p>
 
-		<h2 id="changelog">Changelog</h2>
+		<h1 id="changelog">Changelog</h1>
 		<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
-		{#each dbLogs as log}
-			{JSON.stringify(log, null, 2)}
-		{/each}
 	{/if}
 </main>
 
-<Modal title="Gebruiker aanpassen" maxWidth="max-w-7xl" bind:isOpen={ toggleEditUser } closable={ true }>
+<Modal title="Gebruiker aanpassen" maxWidth="max-w-2xl" bind:isOpen={ toggleEditUser } closable={ true }>
 	{#snippet children()}
-		<div class="flex-2 alert alert-info mb-4 max-w-3xl">
+		<div class="alert alert-info mx-4 mb-2 max-w-3xl">
 			<p class="alert-text">Hiermee kan je de eigenaar van de betaling veranderen. Een van de enigste gevallen dat je dat doet is wanneer iemand zijn email fout heeft ingevuld.</p>
 		</div>
 
-		<form class="ingenium-form">
+		<form class="ingenium-form p-4">
 			<fieldset>
 				<div class="form-field">
 					<label for="name">Email van de gebruiker</label>
@@ -256,14 +400,17 @@
 
 				{#if newUserExist}
 					<p>Gebruiker bestaat</p>
-				{:else}
+				{:else if form.email === ""}
 					Bevestigen dat je een nieuwe gebruiker aanmaakt
 				{/if}
 			</fieldset>
 
+			<h4 class="font-bold text-blue-900">Extra opties</h4>
+			<p>TODO: "Ook alle transacties naar deze gebruiker overzetten"</p>
+
 			<div class="p-2 flex border-t border-gray-200">
-				<button class="button button-primary w-24 button-inline"
-								disabled={loadingHTTP}
+				<button class="button button-primary button-inline"
+								disabled={editUserButtonDisabled}
 								onclick={patchUserEmail}>
 					<span class="text-white">Aanpassen</span>
 				</button>
@@ -271,3 +418,46 @@
 		</form>
 	{/snippet}
 </Modal>
+
+<style>
+	.checkout-details-section {
+			@apply flex-1 px-4 col-span-1;
+
+			fieldset {
+					@apply mb-4;
+
+          .checkout-detail-value {
+							@apply ml-0 px-2 rounded-md border-2 border-ingenium-grey-300 font-bold inline-block;
+					}
+
+			}
+
+			h4 {
+					@apply font-bold text-blue-900;
+      }
+	}
+
+	.tijdlijn-section {
+			@apply flex flex-col gap-4 p-4 pl-0 relative;
+
+      /* Vertical line */
+      &::before {
+          content: "";
+          @apply absolute left-4 border-2 bg-ingenium-grey-300 w-px;
+          top: 1rem;
+          bottom: 1rem;
+					z-index: -1;
+      }
+
+      .tijdlijn-container {
+				@apply max-w-72 p-2 bg-white border-2 border-ingenium-grey-300 rounded-lg text-ingenium-grey-600;
+				p {
+					@apply text-ingenium-grey-600;
+				}
+
+				span {
+					@apply font-bold text-blue-900 opacity-90;
+			}
+			}
+	}
+</style>

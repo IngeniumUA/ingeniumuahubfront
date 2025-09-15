@@ -1,12 +1,14 @@
 import type { TransactionI } from './transactionI';
+import { PaymentStatusEnum } from '$lib/models/enums';
 
 export interface CheckoutI {
+  id: number
   checkout_uuid: string
   date_completed: string
 
   amount: number
   currency: string
-  checkout_status: number
+  checkout_status: PaymentStatusEnum
 
   user_uuid: string
   user_email: string | null
