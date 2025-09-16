@@ -39,4 +39,19 @@ export class CoreCardAPI {
 			throw new Error(`Failed to PUT: ${text}`);
 		}
 	}
+
+	static async patchCard(cardIdentifier: string, cardObj: CardI): Promise<CardI> {
+		const res = await fetch(`${PUBLIC_API_URL}/card/${cardIdentifier}`, {
+			method: 'PATCH',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(cardObj)
+		});
+		if (res.ok) {
+			return res.json();
+		} else {
+			const text = await res.text();
+			throw new Error(`Failed to PATCH: ${text}`);
+		}
+	}
+
 }

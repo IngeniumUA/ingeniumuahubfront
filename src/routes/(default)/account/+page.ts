@@ -12,12 +12,11 @@ export const load = async ({ fetch, params, url }) => {
     const options = {
       headers: getAuthorizationHeaders(params),
     }
-
     return {
       account: fetch(`${PUBLIC_API_URL}/account`, options).then(handleRequest),
-      memberCard: fetch(`${PUBLIC_API_URL}/account/card`, options).then(handleRequest),
+      cardImageUrl: await fetch(`${PUBLIC_API_URL}/account/card/image`, options).then(handleRequest),
     }
   } catch (error) {
-
+      console.log(error);
   }
 }

@@ -59,17 +59,25 @@
 		}
 	}
 
-	async function handlePut() {
+	async function handlePatch() {
 		// Preliminary checks
 		if (editSelected === null) {
 			putError = Error("Card is null?")
 			return;
 		}
+		const patchObj = {
+			user_email: editForm.user_email,
+		}
+		if (patchObj.user_email === null || patchObj.user_email === "" || patchObj.user_email === editSelected.user_email) {
+			failedToast("Email not good, not patching");
+			return
+		}
+
 		if (loadingHTTP) return;
 		loadingHTTP = true;
 		// Perform put request
 		try {
-			await CoreCardAPI.putCard(editSelected)
+			await CoreCardAPI.patchCard(editSelected.card_uuid, patchObj)
 			successToast("Updated!")
 		} catch (error) {
 			putError = error instanceof Error ? error: Error(`Error during PUT ${error}`);
@@ -234,7 +242,7 @@
 				<div class="p-2 flex justify-end items-center">
 					<button type="button" class="button button-primary w-24 button-inline"
 									disabled={loadingHTTP}
-									onclick={handlePut}>
+									onclick={handlePatch}>
 						<span class="text-white">Update</span>
 					</button>
 				</div>
