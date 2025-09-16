@@ -17,14 +17,14 @@
 	let onlyShowLinked: boolean = $state(false);
 	let loadingHTTP: boolean = $state(false)
 	async function refresh() {
-		cardTable = await CoreCardAPI.queryCardTable(new URLSearchParams({}));
+		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
 		const query = new URLSearchParams({
 			limit: '100',
 		})
 		if (onlyShowLinked) {
 			query.set("is_linked", "true")
 		}
-		cards = await CoreCardAPI.queryCards(query);
+		cards = await CoreCardAPI.queryCards(null, query);
 		successToast("Refreshed")
 	}
 

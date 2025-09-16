@@ -29,10 +29,10 @@ export class CoreCheckoutAPI {
 		}
 	}
 
-	static async patchCheckout(checkoutIdentifier: string, patchObj: any): Promise<CheckoutIWide> {
+	static async patchCheckout(params: RouteParams | null = null, checkoutIdentifier: string, patchObj: any): Promise<CheckoutIWide> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
 			method: 'PATCH',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 			body: JSON.stringify(patchObj)
 		});
 		if (res.ok) {
@@ -42,10 +42,10 @@ export class CoreCheckoutAPI {
 		}
 	}
 
-	static async countCheckoutTracker(query_param: URLSearchParams): Promise<number> {
+	static async countCheckoutTracker(params: RouteParams | null = null, query_param: URLSearchParams): Promise<number> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?item=${query_param.toString()}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();
@@ -54,10 +54,10 @@ export class CoreCheckoutAPI {
 		}
 	}
 
-	static async queryCheckoutTracker(query_param: URLSearchParams): Promise<HubCheckoutTrackerI[]> {
+	static async queryCheckoutTracker(params: RouteParams | null = null, query_param: URLSearchParams): Promise<HubCheckoutTrackerI[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker?${query_param.toString()}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();
@@ -66,9 +66,9 @@ export class CoreCheckoutAPI {
 		}
 	}
 
-	static async groupByCheckoutTracker(query_param: URLSearchParams): Promise<Record<number, number>[]> {
+	static async groupByCheckoutTracker(params: RouteParams | null = null, query_param: URLSearchParams): Promise<Record<number, number>[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/group_by?${query_param.toString()}`, {
-			headers: getAuthorizationHeaders(null)
+			headers: getAuthorizationHeaders(params)
 		});
 		if (!res.ok) {
 			const text = await res.text();
@@ -77,10 +77,10 @@ export class CoreCheckoutAPI {
 		return await res.json();
 	}
 
-	static async stepCheckoutTracker(trackerID: number): Promise<HubCheckoutTrackerI> {
+	static async stepCheckoutTracker(params: RouteParams | null = null, trackerID: number): Promise<HubCheckoutTrackerI> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/step/${trackerID}`, {
 			method: 'POST',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (!res.ok) {
 			const text = await res.text();
@@ -89,10 +89,10 @@ export class CoreCheckoutAPI {
 		return await res.json();
 	}
 
-	static async sendCheckoutEmail(checkoutIdentifier: string): Promise<boolean> {
+	static async sendCheckoutEmail(params: RouteParams | null = null, checkoutIdentifier: string): Promise<boolean> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/email/${checkoutIdentifier}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (!res.ok) {
 			const text = await res.text();

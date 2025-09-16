@@ -1,11 +1,12 @@
 ﻿import { PUBLIC_API_URL } from '$env/static/public';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { CardI } from '$lib/models/cardI';
+import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreCardAPI {
-	static async queryCards(query_param: URLSearchParams): Promise<CardI[]> {
+	static async queryCards(params: RouteParams | null = null, query_param: URLSearchParams): Promise<CardI[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/card?${query_param.toString()}`, {
-			headers: getAuthorizationHeaders(null)
+			headers: getAuthorizationHeaders(params)
 		});
 		if (!res.ok) {
 			const text = await res.text();
@@ -14,9 +15,9 @@ export class CoreCardAPI {
 		return await res.json();
 	}
 
-	static async queryCardTable(query_param: URLSearchParams): Promise<[]> {
+	static async queryCardTable(params: RouteParams | null = null, query_param: URLSearchParams): Promise<[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/card/table?${query_param.toString()}`, {
-			headers: getAuthorizationHeaders(null)
+			headers: getAuthorizationHeaders(params)
 		});
 		if (!res.ok) {
 			const text = await res.text();

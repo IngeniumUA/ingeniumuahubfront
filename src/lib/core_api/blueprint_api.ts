@@ -2,11 +2,12 @@
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { ProductBlueprintI, ProductBlueprintInI } from '$lib/models/product_blueprint/ProductBlueprintI';
 import type { PricePolicyI, PricePolicyInI } from '$lib/models/product_blueprint/PricePolicyI';
+import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreProductBlueprintAPI {
-	static async queryProductBlueprints(query_param: URLSearchParams): Promise<ProductBlueprintI[]> {
+	static async queryProductBlueprints(params: RouteParams | null = null, query_param: URLSearchParams): Promise<ProductBlueprintI[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/blueprint?${query_param.toString()}`, {
-			headers: getAuthorizationHeaders(null)
+			headers: getAuthorizationHeaders(params)
 		});
 		if (!res.ok) {
 			const text = await res.text();
@@ -114,10 +115,10 @@ export class CoreProductBlueprintAPI {
 		}
 	}
 
-	static async queryPricePolicyTable(query_param: URLSearchParams) {
+	static async queryPricePolicyTable(params: RouteParams | null = null, query_param: URLSearchParams) {
 		const res = await fetch(`${PUBLIC_API_URL}/blueprint/price_policy/table?${query_param.toString()}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();
