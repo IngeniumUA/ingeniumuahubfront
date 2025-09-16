@@ -136,7 +136,7 @@
 	</div>
 
 	<h2>Overzicht van Shop items</h2>
-	<div class="py-4 flex justify-between items-center">
+	<div class="py-4 gap-4 sm:flex-row sm:items-center flex flex-col justify-between">
 		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 			<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
 			<p class="text-blue-900 font-bold">{availableCount}</p>
@@ -147,7 +147,7 @@
 			<p class="text-blue-900 font-bold">{totalCount}</p>
 		</div>
 
-		<label class="inline-flex items-center cursor-pointer my-4">
+		<label class="inline-flex items-center cursor-pointer my-4 ml-auto">
 			<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
 			<div class="
 					relative w-11 h-6

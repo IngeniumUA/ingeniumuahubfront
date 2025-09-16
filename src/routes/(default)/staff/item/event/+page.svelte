@@ -117,14 +117,13 @@
 		<p class="alert-text">Evenementen zijn een soort Item die producten kunnen aanbieden.
 			Ze hebben eerst en vooral een <span class="italic">display</span> mixin om te controleren hoe de pagina en de preview er uit ziet.
 			Via <span class="italic">HubProductBlueprints</span> kan je daarna ook instellen welke producten aangekocht worden.
-			Om te kunnen beperken wie er wanneer het item kan bekijken, is er de <span class="italic">Availability</span> mixin.
-			Het is niet super verschillen van een event, enkel de start en einddatum atm (8/2025).</p>
+			Om te kunnen beperken wie er wanneer het item kan bekijken, is er de <span class="italic">Availability</span> mixin.</p>
 	</div>
 
 	<!-- List of Events -->
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 	<h2>Overzicht van Evenementen</h2>
-	<div class="py-4 gap-4 sm:flex-col md:flex-col flex justify-between items-center">
+	<div class="py-4 gap-4 sm:flex-row sm:items-center flex flex-col justify-between">
 		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 			<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
 			<p class="text-blue-900 font-bold">{data.available_count}</p>
@@ -135,7 +134,7 @@
 			<p class="text-blue-900 font-bold">{data.total_count}</p>
 		</div>
 
-		<label class="inline-flex items-center cursor-pointer my-4">
+		<label class="inline-flex items-center cursor-pointer my-4 ml-auto">
 			<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
 			<div class="
 					relative w-11 h-6

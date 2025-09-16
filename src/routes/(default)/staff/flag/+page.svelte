@@ -11,31 +11,40 @@
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 	import FlagCard from "$lib/components/staff/FlagCard.svelte"
 
+	/**
+	 * Assigning data from load function in +page.svelte
+	 */
+	let { data } = $props();
+	let configFlags = $state(data.configFlags)
+	let featureFlags = $state(data.featureFlags)
+
 	async function refresh() {
-		data.configFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
+		configFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
 			flag_type: '1',
 			limit: '100'
 		}));
-		data.featureFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
+		featureFlags = await CoreFlagAPI.queryFlag(new URLSearchParams({
 			flag_type: '2',
 			limit: '100'
 		}));
 	}
 
-	let loadingHTTP: boolean = false;
+	let loadingHTTP: boolean = $state(false);
 	function toggleAddNew() {
 		addingNew = !addingNew;
 	}
-	let addingNew = false;
-	let newFlagError: string | null = null;
+
+	// fixme this was the first page I wrote in sveltekit -> needs the refactoring train
+	let addingNew = $state(false);
+	let newFlagError: string | null = $state(null);
 	// Bindings
-	let newFlagName: string = '';
-	let newFlagType: HubFlagTypeEnum = HubFlagTypeEnum.configuration;
-	let newFlagValueType = HubFlagValueTypeEnum.bool;
+	let newFlagName: string = $state('');
+	let newFlagType: HubFlagTypeEnum = $state(HubFlagTypeEnum.configuration);
+	let newFlagValueType = $state(HubFlagValueTypeEnum.bool);
 	// Might be terribly inefficient but hey, we're still learning
-	let booleanNewFlagValue: boolean = false;
-	let numberNewFlagValue: number = 0;
-	let stringNewFlagValue: boolean = false;
+	let booleanNewFlagValue: boolean = $state(false);
+	let numberNewFlagValue: number = $state(0);
+	let stringNewFlagValue: boolean = $state(false);
 
 	async function handleSubmit() {
 		// Resetting error and preventing double POST with flag
@@ -58,9 +67,9 @@
 				break;
 			}
 			case HubFlagValueTypeEnum.dict: {
-				newFlagError = "Dict nog niet geimplementeerd";
+				parsedValue = JSON.parse('{}');
 				loadingHTTP = false;
-				return;
+				break;
 			}
 			default: {
 				loadingHTTP = false;
@@ -92,17 +101,12 @@
 			loadingHTTP = false; // Reset loading state
 		}
 	}
-
-	export let data: {
-		configFlags: HubFlag[];
-		featureFlags: HubFlag[];
-	};
 </script>
 
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
 		<h1>HubFlag</h1>
-		<button class="button button-primary w-24 button-inline" on:click={refresh}>
+		<button class="button button-primary w-24 button-inline" onclick={refresh}>
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
@@ -114,8 +118,8 @@
 				Ze geven ons de optie om razendsnel het platform te configureren. Denk aan betalingen uitzetten, sms notifications toelaten, etc.</p>
 		</div>
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-cols-fr">
-			{#each data.configFlags as flag (flag.id)}
-				<FlagCard hubFlag="{flag}"></FlagCard>
+			{#each configFlags as flag (flag.id)}
+				<FlagCard hubFlag={flag}></FlagCard>
 			{/each}
 		</div>
 	</div>
@@ -129,8 +133,8 @@
 			<p class="alert-text">Bij het ontwikkelen van nieuwe features is het vaak handig om die snel aan en af te kunnen zetten als een test.
 				Feature flags geven ons de optie om met de klik van een knop een nieuwe feature te activeren.</p>
 		</div>
-		{#each data.featureFlags as flag (flag.id)}
-			<FlagCard hubFlag="{flag}"></FlagCard>
+		{#each featureFlags as flag (flag.id)}
+			<FlagCard hubFlag={flag}></FlagCard>
 		{/each}
 	</div>
 
@@ -144,7 +148,7 @@
 				<p class="alert-text">Flags toevoegen is een operatie die je niet kan terugdraaien. Zeker configuration flags, zorg dat je weet wat je doet :).</p>
 			</div>
 
-			<form on:submit={handleSubmit}
+			<form onsubmit={handleSubmit}
 						class="ingenium-form">
 				<fieldset>
 					<div class="form-field">
@@ -202,14 +206,14 @@
 					</button>
 					<button class="button button-primary w-24 button-inline"
 									disabled={loadingHTTP}
-									on:click={toggleAddNew}>
+									onclick={toggleAddNew}>
 						<span class="text-white">Cancel</span>
 					</button>
 				</div>
 			</form>
 		{:else}
 			<button class="button button-primary w-24 button-inline"
-							on:click={toggleAddNew}>
+							onclick={toggleAddNew}>
 				<span class="text-white">Add New</span>
 			</button>
 		{/if}

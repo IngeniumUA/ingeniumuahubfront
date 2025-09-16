@@ -1,5 +1,4 @@
 ﻿<script lang="ts">
-	import { toast } from '@zerodevx/svelte-toast';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import Modal from '$lib/components/layout/modal.svelte';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';

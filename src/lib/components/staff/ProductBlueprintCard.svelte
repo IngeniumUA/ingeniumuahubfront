@@ -1,5 +1,5 @@
 ﻿<script lang="ts">
-	import type { ProductBlueprintI } from '$lib/models/product_blueprint/ProductBlueprintI';
+	import type { ProductBlueprintI, UponCompletionMetaData } from '$lib/models/product_blueprint/ProductBlueprintI';
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import AddPricePolicyModal from '$lib/components/staff/AddPricePolicyModal.svelte';
 	import PricePolicyCard from '$lib/components/staff/PricePolicyCard.svelte';
@@ -31,7 +31,11 @@
 		},
 
 		product_blueprint_metadata: {
-			track_checkout: productBlueprint.product_blueprint_metadata.upon_completion?.track_checkout !== null,
+			track_checkout: (productBlueprint.product_blueprint_metadata.upon_completion?.track_checkout ?? null) !== null,
+
+			add_to_group: (productBlueprint.product_blueprint_metadata.upon_completion?.add_to_group ?? null) !== null,
+			add_to_group_value: "",
+
 			category: productBlueprint.product_blueprint_metadata.categorie,
 			group: productBlueprint.product_blueprint_metadata.group,
 		}
@@ -78,16 +82,20 @@
 		putProductBlueprint.product_blueprint_metadata.group = form.product_blueprint_metadata.group;
 
 		// Upon completion
-		if (form.product_blueprint_metadata.track_checkout) {
-			putProductBlueprint.product_blueprint_metadata.upon_completion = {
-				track_checkout: {
-					status_queue: [1, 2, 3],
-					disabled_on_status: 3
-				}
-			}
-		} else {
-			putProductBlueprint.product_blueprint_metadata.upon_completion = null;
+		let upon_completion: UponCompletionMetaData = {
+			track_checkout: null,
+			add_to_group: null
 		}
+		if (form.product_blueprint_metadata.track_checkout) {
+			upon_completion.track_checkout = {
+				status_queue: [1, 2, 3],
+				disabled_on_status: 3
+			}
+		}
+		if (form.product_blueprint_metadata.add_to_group) {
+			upon_completion.add_to_group = form.product_blueprint_metadata.add_to_group_value
+		}
+		putProductBlueprint.product_blueprint_metadata.upon_completion = upon_completion
 
 		loadingHTTP = true;
 		try {
@@ -214,33 +222,45 @@
 				</div>
 
 				<div class="form-field">
-				<label for="track_checkout">Track Checkout</label><br>
-				<label class="inline-flex items-center cursor-pointer mb-4">
-					<input type="checkbox" class="hidden peer"
-								 bind:checked={form.product_blueprint_metadata.track_checkout}
-					>
-					<span class="
-								relative w-11 h-6
-								bg-red-900 dark:bg-red-900
-								rounded-full
-								peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-								after:content-['']
-								after:absolute after:top-[2px] after:start-[2px]
-								after:w-5 after:h-5
-								after:bg-white after:rounded-full
-								after:transition-transform
-								peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-								"></span>
-					<span class="ms-3 text-sm font-medium text-gray-600">
-											Ordertracking {#if (form.product_blueprint_metadata.track_checkout)}Aan{:else}Uit{/if}
-										</span>
-				</label>
+					<label for="track_checkout">Track Checkout</label><br>
+					<label class="inline-flex items-center cursor-pointer mb-4">
+						<input type="checkbox" class="hidden peer"
+									 bind:checked={form.product_blueprint_metadata.track_checkout}
+						>
+						<span class="
+									relative w-11 h-6
+									bg-red-900 dark:bg-red-900
+									rounded-full
+									peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+									after:content-['']
+									after:absolute after:top-[2px] after:start-[2px]
+									after:w-5 after:h-5
+									after:bg-white after:rounded-full
+									after:transition-transform
+									peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+									"></span>
+						<span class="ms-3 text-sm font-medium text-gray-600">
+												Ordertracking {#if (form.product_blueprint_metadata.track_checkout)}Aan{:else}Uit{/if}
+											</span>
+					</label>
 				</div>
 
 				{#if form.product_blueprint_metadata.track_checkout}
 					<p>FUTURE: Custom tracker settings hier</p>
 				{/if}
 
+				<div class="form-field">
+					<label for="track_checkout">Add to Group</label><br>
+					<span class="ms-3 text-sm font-medium text-gray-600">
+												{#if (form.product_blueprint_metadata.add_to_group)}Aan{:else}Uit{/if}
+											</span>
+				</div>
+
+				{#if form.product_blueprint_metadata.add_to_group}
+					<label for="add_to_group">Keycloak group uuid</label>
+					<input id="add_to_group" type="text" required bind:value={form.product_blueprint_metadata.add_to_group_value}/>
+					<p>UUID van de groep in keycloak</p>
+				{/if}
 			</fieldset>
 
 			<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>

@@ -3,7 +3,7 @@
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
-	import { toast } from '@zerodevx/svelte-toast'
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
 	let { hubFlag }: { hubFlag: HubFlag } = $props();
 
@@ -14,6 +14,11 @@
 
 	let flagPutError: string | null = $state(null);
 	let loadingHTTP: boolean = false;
+
+	let form = $state({
+		form_value: JSON.stringify(hubFlag.value)
+	})
+
 	async function updateFlag(hubflag: HubFlag) {
 		if (loadingHTTP) {return}
 		loadingHTTP = true;
@@ -24,17 +29,21 @@
 			flag_value_type: hubflag.flag_value_type
 		};
 
+		if (hubflag.flag_value_type === HubFlagValueTypeEnum.dict) {
+			try {
+				flagPatch.value = JSON.parse(form.form_value as string);
+			} catch (error) {
+				flagPutError = error instanceof Error ? error.message : 'Geen valid json';
+				failedToast("Geen valid json")
+				return;
+			}
+		}
+
 		// Performing request
 		try {
 			hubflag = await CoreFlagAPI.patchFlag(hubflag.name, flagPatch).catch(handleRequest);
 			flagPutError = null;
-			toast.push("Flag updated!", {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(72,187,120,0.9)',
-					'--toastBarBackground': '#2F855A'
-				}
-			})
+			successToast("Flag updated!")
 		} catch (error) {
 			flagPutError = error instanceof Error ? error.message : 'Error submitting form';
 		} finally {
@@ -103,7 +112,7 @@
 				{:else if hubFlag.flag_value_type === HubFlagValueTypeEnum.string}
 					<input name="value" type="text" required bind:value={hubFlag.value}/>
 				{:else if hubFlag.flag_value_type === HubFlagValueTypeEnum.dict}
-					Object
+					<textarea class="w-full" required bind:value={ form.form_value }></textarea>
 				{:else}
 					Error
 				{/if}
