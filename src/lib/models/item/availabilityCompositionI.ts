@@ -1,11 +1,11 @@
-import {AccessPolicyEnum} from "@ingenium/app/shared/models/access_policies/accessPolicyI";
+import type { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
+
 
 export interface AccessPolicyI {
   access_policy_config: object
 }
 
 export interface AvailabilityCompositionI {
-  disabled: boolean
   available: boolean
   available_from: string | null
   available_until: string | null
@@ -14,7 +14,6 @@ export interface AvailabilityCompositionI {
 }
 
 export interface AvailabilityCompositionInI {
-  disabled: boolean | null
   available: boolean | null
   dynamic_policy_type: AccessPolicyEnum | null
   dynamic_policy_content: AccessPolicyI | null

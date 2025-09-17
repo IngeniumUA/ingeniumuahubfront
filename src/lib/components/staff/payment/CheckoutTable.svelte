@@ -87,7 +87,6 @@
 			{/each}
 		</tbody>
 	</table>
-
 </article>
 
 <style>

@@ -6,7 +6,7 @@
 		available: boolean;
 		available_from: string | null;
 		available_until: string | null;
-		dynamic_policy_type: number
+		dynamic_policy_type: AccessPolicyEnum | null
 	}
 
 	let { formState = $bindable() }: { formState: FormState } = $props();

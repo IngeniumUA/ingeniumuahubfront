@@ -74,7 +74,6 @@
 
 		putProductBlueprint.availability = {
 			...form.availability,
-			disabled: false,
 			dynamic_policy_content: null
 		}
 

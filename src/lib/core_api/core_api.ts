@@ -9,8 +9,33 @@ import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
 import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
+import type { ItemI } from '$lib/models/item/itemI';
 
 export class CoreItemAPI {
+	static async countItems(params: RouteParams | null = null, query_param: URLSearchParams): Promise<number> {
+		const res = await fetch(`${PUBLIC_API_URL}/item/count?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch item count: ${await res.text()}`;
+		}
+	}
+
+	static async queryItem(params: RouteParams | null = null, query_param: URLSearchParams): Promise<ItemI[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/item?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch items: ${await res.text()}`;
+		}
+	}
+
 	static async patchItem(item_identifier: string | number, patch_object: object) {
 		const res = await fetch(`${PUBLIC_API_URL}/item/${item_identifier}`, {
 			method: 'PATCH',
@@ -21,6 +46,19 @@ export class CoreItemAPI {
 			return res.json();
 		} else {
 			throw `Failed to patch item: ${await res.text()}`;
+		}
+	}
+
+	static async restoreItem(item_identifier: string | number) {
+		const res = await fetch(`${PUBLIC_API_URL}/item/restore/${item_identifier}`, {
+			method: 'PATCH',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify({"disabled": true})
+		});
+		if (res.ok) {
+			return res.json();
+		} else {
+			throw `Failed to restore item: ${await res.text()}`;
 		}
 	}
 
