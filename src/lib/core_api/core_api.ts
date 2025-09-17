@@ -8,6 +8,7 @@ import type { ProductOutI } from '$lib/models/productsI';
 import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
 import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
+import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreItemAPI {
 	static async patchItem(item_identifier: string | number, patch_object: object) {
@@ -62,18 +63,18 @@ export class CoreItemAPI {
 		return await CoreProductBlueprintAPI.queryProductBlueprintTable(query);
 	}
 
-	static async attachedPricePolicyTable(item_identifier: string | number): Promise<[]> {
+	static async attachedPricePolicyTable(params: RouteParams | null = null, item_identifier: string | number): Promise<[]> {
 		const query = new URLSearchParams({
 			source_item_id: item_identifier.toString(),
 		});
-		return await CoreProductBlueprintAPI.queryPricePolicyTable(query);
+		return await CoreProductBlueprintAPI.queryPricePolicyTable(params, query);
 	}
 
 
-	static async attachedCheckoutStatusTable(item_identifier: string | number): Promise<Record<string, number>> {
+	static async attachedCheckoutStatusTable(params: RouteParams | null = null, item_identifier: string | number): Promise<Record<string, number>> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/group_by?item=${item_identifier}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();
@@ -82,18 +83,18 @@ export class CoreItemAPI {
 		}
 	}
 
-	static async countCheckoutTracker(item_identifier: string | number): Promise<number> {
+	static async countCheckoutTracker(params: RouteParams | null = null, item_identifier: string | number): Promise<number> {
 		const query = new URLSearchParams({
 			item_id: item_identifier.toString(),
 		});
-		return await CoreCheckoutAPI.countCheckoutTracker(query)
+		return await CoreCheckoutAPI.countCheckoutTracker(params, query)
 	}
 
-	static async queryCheckoutTracker(item_identifier: string | number): Promise<HubCheckoutTrackerI[]> {
+	static async queryCheckoutTracker(params: RouteParams | null = null, item_identifier: string | number): Promise<HubCheckoutTrackerI[]> {
 		const query = new URLSearchParams({
 			item_id: item_identifier.toString(),
 		});
-		return await CoreCheckoutAPI.queryCheckoutTracker(query)
+		return await CoreCheckoutAPI.queryCheckoutTracker(params, query)
 	}
 
 	static async countSuccessCheckout(item_identifier: string | number): Promise<number> {
@@ -122,9 +123,9 @@ export class CoreItemAPI {
 }
 
 export class CoreItemWideAPI {
-	static async getItem(item_identifier: string | number): Promise<ItemWideI> {
+	static async getItem(params: RouteParams | null = null, item_identifier: string | number): Promise<ItemWideI> {
 		const res = await fetch(`${PUBLIC_API_URL}/item/wide/${item_identifier}`, {
-			headers: getAuthorizationHeaders(null)
+			headers: getAuthorizationHeaders(params)
 		});
 		if (!res.ok) {
 			const text = await res.text();
@@ -133,9 +134,9 @@ export class CoreItemWideAPI {
 		return await res.json();
 	}
 
-	static async queryItem(query_param: URLSearchParams): Promise<ItemWideI[]> {
+	static async queryItem(params: RouteParams | null = null, query_param: URLSearchParams): Promise<ItemWideI[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/item/wide?${query_param.toString()}`, {
-			headers: getAuthorizationHeaders(null)
+			headers: getAuthorizationHeaders(params)
 		});
 		if (!res.ok) {
 			const text = await res.text();
@@ -143,22 +144,22 @@ export class CoreItemWideAPI {
 		}
 		return await res.json();
 	}
-	static async queryShopItem(query_param: URLSearchParams): Promise<ShopItemWideI[]> {
+	static async queryShopItem(params: RouteParams | null = null, query_param: URLSearchParams): Promise<ShopItemWideI[]> {
 		query_param.set("item_type", 'shopitem')
-		return (await this.queryItem(query_param)) as ShopItemWideI[]
+		return (await this.queryItem(params, query_param)) as ShopItemWideI[]
 	}
-	static async queryPromoItem(query_param: URLSearchParams): Promise<PromoItemWideI[]> {
+	static async queryPromoItem(params: RouteParams | null = null, query_param: URLSearchParams): Promise<PromoItemWideI[]> {
 		query_param.set("item_type", 'promoitem')
-		return (await this.queryItem(query_param)) as PromoItemWideI[]
+		return (await this.queryItem(params, query_param)) as PromoItemWideI[]
 	}
-	static async queryEventItem(query_param: URLSearchParams): Promise<EventItemWideI[]> {
+	static async queryEventItem(params: RouteParams | null = null, query_param: URLSearchParams): Promise<EventItemWideI[]> {
 		query_param.set("item_type", 'eventitem');
-		return (await this.queryItem(query_param)) as EventItemWideI[]
+		return (await this.queryItem(params, query_param)) as EventItemWideI[]
 	}
 
-	static async countItemWide(query_param: URLSearchParams): Promise<number> {
+	static async countItemWide(params: RouteParams | null = null, query_param: URLSearchParams): Promise<number> {
 		const res = await fetch(`${PUBLIC_API_URL}/item/count?${query_param.toString()}`, {
-			headers: getAuthorizationHeaders(null)
+			headers: getAuthorizationHeaders(params)
 		});
 		if (!res.ok) {
 			const text = await res.text();

@@ -101,7 +101,7 @@
 			const patchObj = {
 				note: form.note
 			}
-			checkoutWide.note = (await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj)).note;
+			checkoutWide.note = (await CoreCheckoutAPI.patchCheckout(null, checkoutWide.checkout_uuid, patchObj)).note;
 			patchError = null;
 		} catch (error) {
 			patchError = error instanceof Error ? error : Error('Error submitting form');
@@ -130,7 +130,7 @@
 			checkout_status: newStatus
 		};
 		try {
-			checkoutWide = await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj);
+			checkoutWide = await CoreCheckoutAPI.patchCheckout(null, checkoutWide.checkout_uuid, patchObj);
 			await refreshLogs()
 			patchError = null;
 		} catch (error) {
@@ -154,7 +154,7 @@
 				const patchObj = {
 					user_email: form.email
 				}
-				checkoutWide = await CoreCheckoutAPI.patchCheckout(checkoutWide.checkout_uuid, patchObj);
+				checkoutWide = await CoreCheckoutAPI.patchCheckout(null, checkoutWide.checkout_uuid, patchObj);
 				await refreshLogs()
 				toggleEditUser = false;
 				patchError = null;
@@ -173,7 +173,7 @@
 
 	async function sendEmail() {
 		try {
-			await CoreCheckoutAPI.sendCheckoutEmail(checkoutWide.checkout_uuid);
+			await CoreCheckoutAPI.sendCheckoutEmail(null, checkoutWide.checkout_uuid);
 		} catch (error) {
 			if (error instanceof Error) {
 				failedToast(error.message);
@@ -295,14 +295,23 @@
 				<div><a href={`https://dashboard.stripe.com/acct_1DHT0yBSXssFMR3b/payments/${checkoutWide.checkout_metadata["payment_provider_metadata"]["payment_intent_id"]}`}>Bekijk betaling op Stripe</a></div>
 			{/if}
 
-			<h3 class="font-bold">Checkout Flow Info</h3>
+			<h3 class="font-bold mt-2">Checkout Flow Info</h3>
 			<p>{JSON.stringify(checkoutWide.checkout_metadata["checkout_flow_information"], null, 2)}</p>
 
-			<h3 class="font-bold">Payment Provider Metadata</h3>
+			<h3 class="font-bold mt-2">Payment Provider Metadata</h3>
 			<p>{JSON.stringify(checkoutWide.checkout_metadata["payment_provider_metadata"], null, 2)}</p>
 
 			<h2 class="mt-4">User Information</h2>
 			<p>Zo wat informatie die we over de gebruiker weten mis?</p>
+
+			{#if checkoutWide.payment_provider === PaymentProviderEnum.Stripe}
+				<h3>Payment Provider Customer Info</h3>
+				<p>TODO: We kunnen via een stripe endpoint informatie ophalen voor deze user, kan hier worden weergegeven</p>
+			{/if}
+
+			<h3>Recent payment like this one</h3>
+			<p>Todo: Checkout table voor checkouts van max een week geleden, zelfde bedrag, en user</p>
+			<p></p>
 		</div>
 
 		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
@@ -388,11 +397,10 @@
 				<h4>Dates</h4>
 				<p><span class="font-bold">Created:</span> {prettyDateTime(checkoutWide.created_timestamp)}</p>
 				<p><span class="font-bold">Last Edit:</span> {prettyDateTime(checkoutWide.last_updated_timestamp)}</p>
-				<p><span class="font-bold">Completed:</span> {prettyDateTime(checkoutWide.completed_timestamp)}</p>
+				<p><span class="font-bold">Completed:</span> {checkoutWide.completed_timestamp === null ? "onafgewerkt": prettyDateTime(checkoutWide.completed_timestamp)}</p>
 			</fieldset>
 		</div>
 	</section>
-
 
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
@@ -475,16 +483,12 @@
 <style>
 	.checkout-details-section {
 			@apply flex-1 px-4 col-span-1;
-
 			fieldset {
-					@apply mb-4;
-
+					@apply mb-2;
           .checkout-detail-value {
 							@apply ml-0 px-2 rounded-md border-2 border-ingenium-grey-300 font-bold inline-block;
 					}
-
 			}
-
 			h4 {
 					@apply font-bold text-blue-900;
       }

@@ -2,13 +2,13 @@
 	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
-	import { toast } from '@zerodevx/svelte-toast'
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
 	import { goto } from '$app/navigation';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -26,19 +26,13 @@
 	async function refresh() {
 		const query = new URLSearchParams({
 			item_type: "eventitem",
-			limit: '20',
+			limit: '10',
 		});
 		if (onlyShowAvailable) {
 			query.set("available", `${onlyShowAvailable}`)
 		}
-		data.events = await CoreItemWideAPI.queryEventItem(query);
-		toast.push("Refreshed!", {
-			theme: {
-				'--toastColor': 'mintcream',
-				'--toastBackground': 'rgba(72,187,120,0.9)',
-				'--toastBarBackground': '#2F855A'
-			}
-		})
+		data.events = await CoreItemWideAPI.queryEventItem(null, query);
+		successToast("Refreshed!")
 	}
 
 	/**
@@ -60,25 +54,13 @@
 		loadingHTTP = true;
 		try {
 			await CoreItemAPI.putItem(eventitem.item.id, eventitem.item).catch(handleRequest);
-			toast.push("Item updated!", {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(72,187,120,0.9)',
-					'--toastBarBackground': '#2F855A'
-				}
-			})
+			successToast("Item updated!")
 			await refresh();
 		} catch (error) {
-			toast.push(`Failed ${error}`, {
-				theme: {
-					'--toastColor': 'mistyrose',
-					'--toastBackground': 'rgba(229, 62, 62, 0.9)', // red-600
-					'--toastBarBackground': '#C53030' // red-700
-				}
-			});
+			failedToast(`Failed ${error}`);
 			await refresh()
 		} finally {
-			loadingHTTP = false; // Reset loading state
+			loadingHTTP = false;
 		}
 	}
 
@@ -88,24 +70,12 @@
 		loadingHTTP = true;
 		try {
 			await CoreProductBlueprintAPI.patchProductBlueprint(product_blueprint_id, put_model).catch(handleRequest);
-			toast.push("Product updated!", {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(72,187,120,0.9)',
-					'--toastBarBackground': '#2F855A'
-				}
-			})
+			successToast("Product updated!")
 		} catch (error) {
-			toast.push(`Failed ${error}`, {
-				theme: {
-					'--toastColor': 'mistyrose',
-					'--toastBackground': 'rgba(229, 62, 62, 0.9)', // red-600
-					'--toastBarBackground': '#C53030' // red-700
-				}
-			});
+			failedToast(`Failed ${error}`);
 			await refresh()
 		} finally {
-			loadingHTTP = false; // Reset loading state
+			loadingHTTP = false;
 		}
 	}
 
@@ -147,14 +117,13 @@
 		<p class="alert-text">Evenementen zijn een soort Item die producten kunnen aanbieden.
 			Ze hebben eerst en vooral een <span class="italic">display</span> mixin om te controleren hoe de pagina en de preview er uit ziet.
 			Via <span class="italic">HubProductBlueprints</span> kan je daarna ook instellen welke producten aangekocht worden.
-			Om te kunnen beperken wie er wanneer het item kan bekijken, is er de <span class="italic">Availability</span> mixin.
-			Het is niet super verschillen van een event, enkel de start en einddatum atm (8/2025).</p>
+			Om te kunnen beperken wie er wanneer het item kan bekijken, is er de <span class="italic">Availability</span> mixin.</p>
 	</div>
 
 	<!-- List of Events -->
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 	<h2>Overzicht van Evenementen</h2>
-	<div class="py-4 flex justify-between items-center">
+	<div class="py-4 gap-4 sm:flex-row sm:items-center flex flex-col justify-between">
 		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 			<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
 			<p class="text-blue-900 font-bold">{data.available_count}</p>
@@ -165,7 +134,7 @@
 			<p class="text-blue-900 font-bold">{data.total_count}</p>
 		</div>
 
-		<label class="inline-flex items-center cursor-pointer my-4">
+		<label class="inline-flex items-center cursor-pointer my-4 ml-auto">
 			<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
 			<div class="
 					relative w-11 h-6

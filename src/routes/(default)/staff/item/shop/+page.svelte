@@ -5,10 +5,10 @@
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
-	import { toast } from '@zerodevx/svelte-toast';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
 	import { goto } from '$app/navigation';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -33,15 +33,15 @@
 		if (onlyShowAvailable) {
 			query.set("available", `${onlyShowAvailable}`)
 		}
-		shopItems = await CoreItemWideAPI.queryShopItem(query);
+		shopItems = await CoreItemWideAPI.queryShopItem(null, query);
 
 		const countQuery = new URLSearchParams({
 			item_type: 'shopitem',
 		});
-		totalCount = await CoreItemWideAPI.countItemWide(countQuery);
+		totalCount = await CoreItemWideAPI.countItemWide(null, countQuery);
 
 		countQuery.set('available', 'true');
-		availableCount = await CoreItemWideAPI.countItemWide(countQuery);
+		availableCount = await CoreItemWideAPI.countItemWide(null, countQuery);
 	}
 
 	/**
@@ -63,22 +63,10 @@
 		loadingHTTP = true;
 		try {
 			await CoreItemAPI.putItem(shopItem.item.id, shopItem.item).catch(handleRequest);
-			toast.push("Item updated!", {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(72,187,120,0.9)',
-					'--toastBarBackground': '#2F855A'
-				}
-			})
+			successToast("Item updated!")
 			await refresh();
 		} catch (error) {
-			toast.push(`Failed ${error}`, {
-				theme: {
-					'--toastColor': 'mistyrose',
-					'--toastBackground': 'rgba(229, 62, 62, 0.9)', // red-600
-					'--toastBarBackground': '#C53030' // red-700
-				}
-			});
+			failedToast(`Failed ${error}`);
 			await refresh()
 		} finally {
 			loadingHTTP = false; // Reset loading state
@@ -96,21 +84,9 @@
 		loadingHTTP = true;
 		try {
 			await CoreProductBlueprintAPI.patchProductBlueprint(product_blueprint_id, put_model).catch(handleRequest);
-			toast.push("Product updated!", {
-				theme: {
-					'--toastColor': 'mintcream',
-					'--toastBackground': 'rgba(72,187,120,0.9)',
-					'--toastBarBackground': '#2F855A'
-				}
-			})
+			successToast("Product updated!")
 		} catch (error) {
-			toast.push(`Failed ${error}`, {
-				theme: {
-					'--toastColor': 'mistyrose',
-					'--toastBackground': 'rgba(229, 62, 62, 0.9)', // red-600
-					'--toastBarBackground': '#C53030' // red-700
-				}
-			});
+			failedToast(`Failed ${error}`);
 			await refresh()
 		} finally {
 			loadingHTTP = false; // Reset loading state
@@ -118,7 +94,7 @@
 	}
 
 	/**
-	 * Editting Modal State management
+	 * Editing Modal State management
 	 * We have to code in an $effect property for when the user clicks the "close" button in the modal
 	 */
 	let showEditModal: boolean = $state(false);
@@ -160,7 +136,7 @@
 	</div>
 
 	<h2>Overzicht van Shop items</h2>
-	<div class="py-4 flex justify-between items-center">
+	<div class="py-4 gap-4 sm:flex-row sm:items-center flex flex-col justify-between">
 		<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 			<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
 			<p class="text-blue-900 font-bold">{availableCount}</p>
@@ -171,7 +147,7 @@
 			<p class="text-blue-900 font-bold">{totalCount}</p>
 		</div>
 
-		<label class="inline-flex items-center cursor-pointer my-4">
+		<label class="inline-flex items-center cursor-pointer my-4 ml-auto">
 			<input type="checkbox" bind:checked={onlyShowAvailable} class="sr-only peer">
 			<div class="
 					relative w-11 h-6

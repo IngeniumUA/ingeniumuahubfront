@@ -46,13 +46,13 @@
 			item: itemWide.item.id.toString(),
 			limit: '100'
 		});
-		productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(query);
+		productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(null, query);
 	}
 	async function refresh() {
-		itemWide = await CoreItemWideAPI.getItem(itemWide.item.id);
-		trackerCount = await CoreItemAPI.countCheckoutTracker(itemWide.item.id);
+		itemWide = await CoreItemWideAPI.getItem(null, itemWide.item.id);
+		trackerCount = await CoreItemAPI.countCheckoutTracker(null, itemWide.item.id);
 		await refreshBlueprints()
-		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(itemWide.item.id);
+		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(null, itemWide.item.id);
 	}
 
 	/**

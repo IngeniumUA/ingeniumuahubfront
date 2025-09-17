@@ -3,7 +3,7 @@ import {handleRequest} from "$lib/utilities/httpUtilities";
 
 export const load = async ({ fetch }) => {
   try {
-    const data = await fetch(`${PUBLIC_API_URL}/item/shop/list`).then(handleRequest);
+    const data = await fetch(`${PUBLIC_API_URL}/item/shop/list?item_name_not_startswith=Biomedica`).then(handleRequest);
 
     return {
       items: data,

@@ -32,7 +32,7 @@
 	async function increaseStatus(index: number, order: HubCheckoutTrackerI) {
 		loadingHTTP = true;
 		try {
-			const returnOrder = await CoreCheckoutAPI.stepCheckoutTracker(order.id);
+			const returnOrder = await CoreCheckoutAPI.stepCheckoutTracker(null, order.id);
 			if (returnOrder.disabled) {
 				orders.splice(index, 1); // splice is *in place*
 			} else {

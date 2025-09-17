@@ -15,7 +15,8 @@ export interface ProductBlueprintInI {
 }
 
 export interface UponCompletionMetaData {
-	track_checkout: object | null // fixme
+	track_checkout: object | null | undefined // fixme
+	add_to_group: string | null | undefined
 }
 
 export interface ProductBlueprintMetaDataI {

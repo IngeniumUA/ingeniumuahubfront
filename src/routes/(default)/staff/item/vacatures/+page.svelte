@@ -5,8 +5,8 @@
 	import type { ItemI } from '$lib/models/item/itemI';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
-	import { toast } from '@zerodevx/svelte-toast';
 	import { goto } from '$app/navigation';
+	import { successToast } from '$lib/components/toast/defined_toast';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -23,23 +23,23 @@
 	async function refreshTable() {
 		const query = new URLSearchParams({
 			item_type: "promoitem",
-			limit: '100',
+			limit: '50',
 		});
 		if (!onlyShowActive) {
 			query.set("available", `${!onlyShowActive}`)
 		}
-		vacatures = await CoreItemWideAPI.queryPromoItem(query);
+		vacatures = await CoreItemWideAPI.queryPromoItem(null, query);
 	}
 	async function refresh() {
 		const query = new URLSearchParams({
 			item_type: "promoitem",
-			limit: '100',
+			limit: '50',
 		});
-		total_vacatures_count = await CoreItemWideAPI.countItemWide(query);
+		total_vacatures_count = await CoreItemWideAPI.countItemWide(null, query);
 		if (!onlyShowActive) {
 			query.set("available", `${!onlyShowActive}`)
 		}
-		available_vacatures_count = await CoreItemWideAPI.countItemWide(query);
+		available_vacatures_count = await CoreItemWideAPI.countItemWide(null, query);
 		await refreshTable();
 	}
 
@@ -48,13 +48,7 @@
 	 */
 	async function toggleAvailable(item: ItemI) {
 		await CoreItemAPI.patchAvailable(item.id, !item.availability.available);
-		toast.push("Updated!", {
-			theme: {
-				'--toastColor': 'mintcream',
-				'--toastBackground': 'rgba(72,187,120,0.9)',
-				'--toastBarBackground': '#2F855A'
-			}
-		})
+		successToast("Updated!")
 	}
 
 	/**

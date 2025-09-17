@@ -20,7 +20,7 @@ export interface CheckoutI {
   payment_provider: number
   checkout_metadata: Record<string, never>
 
-  completed_timestamp: string
+  completed_timestamp: string | null
   last_updated_timestamp: string
   created_timestamp: string
 }

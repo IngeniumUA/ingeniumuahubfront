@@ -5,6 +5,8 @@
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import type { CardI } from '$lib/models/cardI';
 	import Modal from '$lib/components/layout/modal.svelte';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import { getAuthorizationHeaders } from '$lib/auth/auth';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -17,14 +19,14 @@
 	let onlyShowLinked: boolean = $state(false);
 	let loadingHTTP: boolean = $state(false)
 	async function refresh() {
-		cardTable = await CoreCardAPI.queryCardTable(new URLSearchParams({}));
+		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
 		const query = new URLSearchParams({
 			limit: '100',
 		})
 		if (onlyShowLinked) {
 			query.set("is_linked", "true")
 		}
-		cards = await CoreCardAPI.queryCards(query);
+		cards = await CoreCardAPI.queryCards(null, query);
 		successToast("Refreshed")
 	}
 
@@ -59,17 +61,25 @@
 		}
 	}
 
-	async function handlePut() {
+	async function handlePatch() {
 		// Preliminary checks
 		if (editSelected === null) {
 			putError = Error("Card is null?")
 			return;
 		}
+		const patchObj = {
+			user_email: editForm.user_email,
+		}
+		if (patchObj.user_email === null || patchObj.user_email === "" || patchObj.user_email === editSelected.user_email) {
+			failedToast("Email not good, not patching");
+			return
+		}
+
 		if (loadingHTTP) return;
 		loadingHTTP = true;
 		// Perform put request
 		try {
-			await CoreCardAPI.putCard(editSelected)
+			await CoreCardAPI.patchCard(editSelected.card_uuid, patchObj)
 			successToast("Updated!")
 		} catch (error) {
 			putError = error instanceof Error ? error: Error(`Error during PUT ${error}`);
@@ -78,11 +88,49 @@
 			loadingHTTP = false; // Reset loading state
 		}
 	}
+
+	/**
+	 * Bulk importing state and functions
+	 */
+	let showBulkImport: boolean = $state(false);
+	let files: FileList | undefined = $state()
+	let uploadError: Error | null = $state(null);
+
+	async function handleUpload() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+		if (files === undefined) return;
+
+		try {
+			const formData = new FormData();
+			formData.append('file', files[0]);
+			const res = await fetch(`${PUBLIC_API_URL}/card/import`, {
+				method: 'POST',
+				headers: getAuthorizationHeaders(null),
+				body: formData
+			});
+			if (res.ok) {
+				showBulkImport = false;
+				successToast("Imported!")
+				return res.json();
+			} else {
+				const text = await res.text();
+				uploadError = new Error(`Failed to Upload: ${text}`);
+			}
+		} catch (error) {
+			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
+		} finally {
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
-	<div class="flex justify-between items-center mb-6">
+	<div class="flex justify-between items-center gap-2 mb-6">
 		<h1>Lidkaarten</h1>
+		<button class="ml-auto button button-primary w-24 button-inline" onclick={() => {showBulkImport = true}}>
+			<span class="text-white">Import</span>
+		</button>
 		<button class="button button-primary w-24 button-inline" onclick={refresh}>
 			<span class="text-white">Refresh</span>
 		</button>
@@ -196,18 +244,18 @@
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length && editSelected !== null}
 	<Modal title="Lidkaart bewerken" maxWidth="max-w-4xl" bind:isOpen={ showEdit } closable={ true }>
 		{#snippet children()}
-			<article class="m-4 ">
+			<article class="m-4">
 				<div class="flex flew-row">
 					<div class="flex-1">
 						<h3 class="font-bold pb-2">Lidkaart Info</h3>
 
-						<h4 class="pl-3 text-blue-900 font-bold">UUID: <span class="text-ingenium-grey-800 font-bold">{editSelected.card_uuid}</span></h4>
+						<h4 class="pl-3 text-blue-900 font-bold">UUID: <span class="text-ingenium-grey-800 font-bold">{editSelected?.card_uuid}</span></h4>
 						<p class="pl-3 ">uuid die op de qr code van de lidkaart staat</p>
 
-						<h4 class="pl-3 text-blue-900 font-bold">Card Type: <span class="text-ingenium-grey-800 font-bold">{CardTypeEnum[editSelected.card_type]}</span></h4>
+						<h4 class="pl-3 text-blue-900 font-bold">Card Type: <span class="text-ingenium-grey-800 font-bold">{CardTypeEnum[editSelected?.card_type ?? 0]}</span></h4>
 						<p class="pl-3 ">Het type kaart (scannen, draadloos, ..)</p>
 
-						<h4 class="pl-3 text-blue-900 font-bold">MemberType: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected.member_type]}</span></h4>
+						<h4 class="pl-3 text-blue-900 font-bold">MemberType: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected?.member_type ?? 0]}</span></h4>
 						<p class="pl-3 ">Soort lid</p>
 
 					</div>
@@ -234,11 +282,40 @@
 				<div class="p-2 flex justify-end items-center">
 					<button type="button" class="button button-primary w-24 button-inline"
 									disabled={loadingHTTP}
-									onclick={handlePut}>
+									onclick={handlePatch}>
 						<span class="text-white">Update</span>
 					</button>
 				</div>
+
+				{#if putError !== null}
+					{putError.message}
+				{/if}
 			</article>
 		{/snippet}
 	</Modal>
 {/if}
+
+<Modal title="Bulk Import" maxWidth="max-w-xl" bind:isOpen={ showBulkImport } closable={ true }>
+	{#snippet children()}
+		<article class="m-4">
+			<label for="file">Upload lidkaarten</label>
+			<input accept="text/csv" bind:files id="file" name="avatar" type="file" />
+
+			{#each Array.from(files ?? []) as file}
+				<p>{file.name} ({file.size} bytes)</p>
+			{/each}
+
+			<div class="p-2 flex justify-end items-center">
+				<button type="button" class="button button-primary w-24 button-inline"
+								disabled={loadingHTTP || files === undefined}
+								onclick={handleUpload}>
+					<span class="text-white">Upload</span>
+				</button>
+			</div>
+
+			{#if uploadError !== null}
+				{uploadError.message}
+			{/if}
+		</article>
+	{/snippet}
+</Modal>
