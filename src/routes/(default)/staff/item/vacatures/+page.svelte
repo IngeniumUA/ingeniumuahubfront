@@ -7,6 +7,7 @@
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 	import { goto } from '$app/navigation';
 	import { successToast } from '$lib/components/toast/defined_toast';
+	import { slice } from '$lib/utilities/style-utilities';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -192,7 +193,7 @@
 				{#each vacatures as item, index (item.item.id)}
 				<tr>
 					<th scope="row">
-						{item.item.name}
+						{slice(item.item.name, 64)}
 					</th>
 					<td>
 						<label class="inline-flex items-center cursor-pointer my-4">

@@ -1,3 +1,8 @@
+
+export const slice = (input_str: string, max_length: number): string => {
+    return `${input_str.slice(0, max_length)}${input_str.length == max_length ? " ...": ""}`;
+}
+
 /**
  * Uusally used when converting enum names to something nice to displau
  * @param input_str
