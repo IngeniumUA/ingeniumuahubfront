@@ -40,7 +40,7 @@ export class CoreCardAPI {
 		}
 	}
 
-	static async patchCard(cardIdentifier: string, cardObj: CardI): Promise<CardI> {
+	static async patchCard(cardIdentifier: string, cardObj: Partial<CardI>): Promise<CardI> {
 		const res = await fetch(`${PUBLIC_API_URL}/card/${cardIdentifier}`, {
 			method: 'PATCH',
 			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
