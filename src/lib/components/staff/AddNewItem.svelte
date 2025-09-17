@@ -6,6 +6,7 @@
 	import { toast } from '@zerodevx/svelte-toast'
 	import { CoreItemWideAPI } from '$lib/core_api/core_api';
 	import { PromoItemTypeEnum, PromoItemTypes } from '$lib/models/item/promoI';
+	import { successToast } from '$lib/components/toast/defined_toast';
 
 	let { itemType = null, isOpen = $bindable(false) }: { itemType: string | null, isOpen: boolean } = $props();
 
@@ -99,27 +100,12 @@
 		loadingHTTP = true;
 		try {
 			await CoreItemWideAPI.postItem(itemWide);
+			itemCreateError = null;
+			successToast("Item Created!")
+			isOpen = false; // Close the modal when the creation was a success :))
 		} catch (error) {
 			itemCreateError = error instanceof Error ? error.message : 'Error submitting form';
 		} finally {
-			if (itemCreateError === null) {
-				toast.push("Item created!", {
-					theme: {
-						'--toastColor': 'mintcream',
-						'--toastBackground': 'rgba(72,187,120,0.9)',
-						'--toastBarBackground': '#2F855A'
-					}
-				});
-				isOpen = false; // Close the modal when the creation was a success :))
-			} else {
-				toast.push(`Failed`, {
-					theme: {
-						'--toastColor': 'mistyrose',
-						'--toastBackground': 'rgba(229, 62, 62, 0.9)', // red-600
-						'--toastBarBackground': '#C53030' // red-700
-					}
-				});
-			}
 			loadingHTTP = false; // Reset loading state
 		}
 	}

@@ -53,7 +53,6 @@
 			max_valid_usages: form.max_valid_usages,
 			ordering: form.ordering,
 			availability: {
-				disabled: false,
 				...form.availability,
 				dynamic_policy_content: null
 			},
