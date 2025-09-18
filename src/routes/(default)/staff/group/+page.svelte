@@ -18,7 +18,8 @@
 	 * Refreshing all data on the page
 	 */
 	async function refresh() {
-
+		groupTable = await CoreGroupAPI.groupTable(null);
+		keycloakGroups = await CoreGroupAPI.queryKeycloakGroup(null)
 	}
 
 	/**
@@ -87,7 +88,7 @@
 						{#if (group["keycloak_group_uuid"] === null)}
 							Nee
 						{:else}
-							Ja
+							{group["keycloak_group_uuid"].slice(0, 12)}
 						{/if}
 					</td>
 					<td>

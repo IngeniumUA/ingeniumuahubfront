@@ -30,7 +30,7 @@ export class CoreGroupAPI {
 
 	static async putGroup(params: RouteParams | null = null, putGroup: GroupI): Promise<GroupI> {
 		const res = await fetch(`${PUBLIC_API_URL}/group/${putGroup.id}`, {
-			method: 'GET',
+			method: 'PUT',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 			body: JSON.stringify(putGroup)
 		});
