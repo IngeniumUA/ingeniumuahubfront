@@ -35,7 +35,7 @@
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
-		return prod.product_blueprint_metadata.upon_completion?.track_checkout !== null;
+		return (prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null) !== null;
 	}));
 
 	/**
@@ -236,8 +236,45 @@
 
 	<h1>Item Configuration</h1>
 	<form class="ingenium-form">
-	<section class="flex flex-row">
-		<div>
+	<section class="flex flex-col lg:flex-row">
+		<div class="order-1 lg:flex-[1] lg:order-3">
+			<h2>On this page</h2>
+			<aside class="py-6 px-4 sm:px-2 col-span-1 md:col-span-2 w-full">
+				<nav class="vertical-nav vertical-nav-transparent">
+					<div>
+						<a href="#{itemWide.item.name}" class="font-semibold">Item</a>
+						{#if hasDisplay}
+							<a href="#item" class="font-semibold">Display</a>
+						{/if}
+
+						{#if productBlueprintCapable}
+							<a href="#Dashboard" class="font-semibold">Transacties Dashboard</a>
+							<a href="#Transacties en Betalingen" class="font-semibold">Betalingen & Transacties</a>
+							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
+						{/if}
+						{#if hasCheckoutTrackers}
+							<a href="#Checkout Trackers" class="font-semibold">Checkout Trackers</a>
+						{/if}
+						{#if interactionCapable}
+							<a href="#Interactions" class="font-semibold">Interactions</a>
+						{/if}
+
+						{#if hasRole("webmaster")}
+							<a href="#webmaster-info" class="font-semibold">Webmaster</a>
+							<a href="#keycloak" class="font-semibold">Keycloak</a>
+							<a href="#changelog" class="font-semibold">Changelog</a>
+						{/if}
+					</div>
+				</nav>
+			</aside>
+			{#if hasDisplay}
+				<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={toRecsysPreview(itemWide)} /></div>
+			{/if}
+		</div>
+
+		<div class="order-2 hidden lg:block w-px mx-4 bg-gray-200 "></div>
+
+		<div class="order-3 lg:flex-[2] lg:order-1">
 			<div class="ingenium-form-card">
 				<h3 class="font-bold">Core Item</h3>
 				<fieldset class="flex flex-row gap-4">
@@ -317,49 +354,12 @@
 			{/if}
 			</div>
 		</div>
-
-		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
-
-		<div class="w-1/3">
-			<h2>On this page</h2>
-			<aside class="py-6 px-4 sm:px-2 col-span-1 md:col-span-2 w-full">
-				<nav class="vertical-nav vertical-nav-transparent">
-					<div>
-						<a href="#{itemWide.item.name}" class="font-semibold">Item</a>
-						{#if hasDisplay}
-							<a href="#item" class="font-semibold">Display</a>
-						{/if}
-
-						{#if productBlueprintCapable}
-							<a href="#Dashboard" class="font-semibold">Transacties Dashboard</a>
-							<a href="#Transacties en Betalingen" class="font-semibold">Betalingen & Transacties</a>
-							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
-						{/if}
-						{#if hasCheckoutTrackers}
-							<a href="#Checkout Trackers" class="font-semibold">Checkout Trackers</a>
-						{/if}
-						{#if interactionCapable}
-						<a href="#Interactions" class="font-semibold">Interactions</a>
-						{/if}
-
-						{#if hasRole("webmaster")}
-							<a href="#webmaster-info" class="font-semibold">Webmaster</a>
-							<a href="#keycloak" class="font-semibold">Keycloak</a>
-							<a href="#changelog" class="font-semibold">Changelog</a>
-						{/if}
-					</div>
-				</nav>
-			</aside>
-		{#if hasDisplay}
-			<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={toRecsysPreview(itemWide)} /></div>
-		{/if}
-		</div>
 	</section>
 
 	<div class="p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 		<h3 class="font-bold">Item Metadata</h3>
 
-		<div class="flex flex-row gap-4">
+		<div class="flex flex-col md:flex-row gap-4">
 			<fieldset class="flex-1">
 				<h3 class="font-bold">Payment Configuration</h3>
 				<div class="form-field">
@@ -413,31 +413,8 @@
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
 		</div>
-		<section class="flex">
-			<div class="w-2/3">
-				<h2>Transacties</h2>
-				<p>TODO: Transacties en validity hier?</p>
-
-				<h2 class="font-bold">Betalingen</h2>
-				<p>Het is normaal dat sommige betalingen falen. Een gefaalde betaling gebeurt bijvoorbeeld wanneer iemand een betaling start, maar niet genoed geld heeft. Of wanneer hij zijn bank app opent maar er daar iets fout gaat.</p>
-				<div class="flex flex-row flex-wrap  gap-x-4">
-					{#each Object.entries(checkoutStatusTable) as [status, count] (status)}
-						<div class="p-4 min-w-24 min-h-12 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-							<h4 class="text-ingenium-grey-800 font-bold">{makePretty(PaymentStatusEnum[parseInt(status)])}: </h4>
-							<p class="text-blue-900 font-bold"> {count}</p>
-						</div>
-					{/each}
-				</div>
-
-				<p>TODO Transacties en checkouts als aantallen
-					Grafiek ook? Doorheen de tijd
-					Mis ook met de pageviews enzo hier?
-				</p>
-			</div>
-
-			<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
-
-			<div class="w-1/3">
+		<section class="flex flex-col lg:flex-row gap-4">
+			<div class="order-1 lg:order-3 lg:flex-[1]">
 				<h2 class="font-bold">Voltooide Transacties</h2>
 				{#each groupPricePolicies(pricePolicyTable) as row (row.product_blueprint_id)}
 					<div class="flex justify-between items-center">
@@ -463,8 +440,31 @@
 				<p class="text-right font-bold mr-4">Eind totaal: {pricePolicyTable.reduce((sum, val) => {
 					return sum + val["transaction_count"]
 				}, 0)}</p>
-				<p>Vanalle beschrijven statistieken. Totalen van transactions/checkouts enzo, maar ook unique users, totaal €, totaal € na fee's.
+				<p>TODO: Vanalle extra beschrijven statistieken. Totalen van transactions/checkouts enzo (DONE), maar ook unique users, totaal €, totaal € na fee's.
 					Voor zo'n dingen best API calls doen naar de dpu?
+				</p>
+			</div>
+
+			<div class="order-2 hidden md:block w-px mx-4 bg-gray-200"></div>
+
+			<div class="order-3 lg:order-1 lg:flex-[2]">
+				<h2>Transacties</h2>
+				<p>TODO: Transacties en validity hier?</p>
+
+				<h2 class="font-bold">Betalingen</h2>
+				<p>Het is normaal dat sommige betalingen falen. Een gefaalde betaling gebeurt bijvoorbeeld wanneer iemand een betaling start, maar niet genoed geld heeft. Of wanneer hij zijn bank app opent maar er daar iets fout gaat.</p>
+				<div class="flex flex-row flex-wrap  gap-x-4">
+					{#each Object.entries(checkoutStatusTable) as [status, count] (status)}
+						<div class="p-4 min-w-24 min-h-12 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+							<h4 class="text-ingenium-grey-800 font-bold">{makePretty(PaymentStatusEnum[parseInt(status)])}: </h4>
+							<p class="text-blue-900 font-bold"> {count}</p>
+						</div>
+					{/each}
+				</div>
+
+				<p>TODO Transacties en checkouts als aantallen
+					Grafiek ook? Doorheen de tijd
+					Mis ook met de pageviews enzo hier?
 				</p>
 			</div>
 		</section>

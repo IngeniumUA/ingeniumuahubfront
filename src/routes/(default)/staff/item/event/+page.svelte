@@ -178,10 +178,9 @@
 				</div>
 
 				<!-- Main Body -->
-				<div class="container flex flex-col md:flex-row mr-12">
-					<div class="md:w-1/3">
+				<div class="container flex flex-col lg:flex-row mr-12">
+					<div class="lg:md:w-1/3">
 						<h3 class="font-bold">Event Info</h3>
-						<p>Description</p>
 
 						<label class="inline-flex items-center cursor-pointer my-4">
 							<input type="checkbox" class="sr-only peer"
@@ -200,7 +199,7 @@
 					after:transition-transform
 					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 					"></div>
-							<span class="ms-3 text-sm font-medium text-gray-600">
+							<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">
 								{#if (event.item.availability.available)}Beschikbaar{:else}Niet Beschikbaar{/if}
 							</span>
 						</label>
@@ -212,7 +211,7 @@
 					<!-- Vertical divider -->
 					<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
-					<div class="overflow-x-auto self-stretch flex-1">
+					<div class="overflow-x-auto self-stretch flex-1 mt-4 lg:mt-0">
 						<h3 class="font-bold">Producten</h3>
 						{#if index < 6}
 						{#await CoreItemAPI.attachedProductBlueprintTable(event.item.id) then productTable}
@@ -243,6 +242,8 @@
 								</table>
 							{/if}
 						{/await}
+						{:else}
+							Bekijk Item hiervoor!
 						{/if}
 					</div>
 				</div>
