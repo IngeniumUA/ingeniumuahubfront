@@ -21,7 +21,7 @@
   let postError: Error | null = $state(null)
   let loadingHTTP: boolean = $state(false);
   let cardButtonDisabled: boolean = $derived.by(() => {
-    return loadingHTTP
+    return loadingHTTP || form.email === ""
   });
 
   /**
@@ -47,10 +47,9 @@
         headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
         body: JSON.stringify(postObject)
       }).then(handleRequest) as CardLimitedI;
-      await goto("/account?link_status=success");
     } catch (error) {
       console.log(error);
-      await goto("/account?link_status=error");
+      postError = Error("Er is iets fout gegaan! Probeer het later opnieuw of contacteer ons.")
     } finally {
       loadingHTTP = false;
     }
