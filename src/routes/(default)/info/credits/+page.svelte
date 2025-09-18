@@ -16,15 +16,18 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
     <div>
-      <p class="font-bold text-black">List of students</p>
+      <p class="font-bold text-black">List of core maintainers</p>
       <ul class="list-disc list-inside">
-        <li>Robbe De Helt</li>
-        <li>Yorben Joosen</li>
+        <li>Robbe De Helt - Broke prod: 1</li>
+        <li>Yorben Joosen - Broke prod: 0</li>
+        <li>Sigfried Seldeslachts - Broke prod: 0</li>
+        <li>Wout De Smit - Broke prod: 0</li>
+      </ul>
+      <p class="font-bold text-black">List of contributors</p>
+      <ul class="list-disc list-inside">
         <li>Inias De Belder</li>
-        <li>Sigfried Seldeslachts</li>
         <li>Bas Calders</li>
         <li>Nicolas Grupping</li>
-        <li>Wout De Smit</li>
       </ul>
     </div>
     <div>

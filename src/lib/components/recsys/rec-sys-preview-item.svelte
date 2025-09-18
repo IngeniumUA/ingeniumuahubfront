@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { calcColorIntensity, transformColorToRGBA } from "$lib/utilities/style-utilities";
+  import { calcColorIntensity, prettyDate, transformColorToRGBA } from '$lib/utilities/style-utilities';
 
   /** @type {{ item: RecSysPreviewI|null, loading: boolean }} */
   const { item, loading = false } = $props();
@@ -44,14 +44,22 @@
     <article class="event-card" style="{cardStyle}">
       <div class="image">
         <!-- Image might not be given (either could optionally be null), if null is passed the page breaks -->
-        {#if item.image_square}
-          <img src="{ item.image_square }" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
+        {#if item.image_square !== null && item.image_square}
+          <img src="{ item.image_square}" loading="lazy" width="1024" height="1024" alt="" aria-hidden="true">
+        {:else if item.image_landscape}
+          <img src="{ item.image_landscape !== null && item.image_landscape }" loading="lazy" width="1920" height="1024" alt="" aria-hidden="true">
         {:else}
           <enhanced:img src="$assets/svg/ingenium-schild.svg" />
         {/if}
       </div>
       <div class="content">
         <p class="title" style:color={ textStyle }>{ item.name }</p>
+        {#if item.date !== null && item.date !== undefined}
+          <p class="text-lg text-right font-bold" style:color={ textStyle }>{ prettyDate(item.date) }</p>
+        {/if}
+        {#if item.preview_description !== null}
+          <p class="text-lg text-right font-bold" style:color={ textStyle }>{ item.preview_description }</p>
+        {/if}
       </div>
     </article>
   </a>

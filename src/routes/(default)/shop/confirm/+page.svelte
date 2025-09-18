@@ -2,16 +2,50 @@
   import {onMount} from "svelte";
   import Header from "$lib/components/layout/header.svelte";
   import { PUBLIC_API_URL } from '$env/static/public';
+  import { HubCheckoutTrackerStatusEnum, type PublicOrderTrackerI } from '$lib/models/trackerI';
+  import { getAuthorizationHeaders } from '$lib/auth/auth';
+  import { handleRequest } from '$lib/utilities/httpUtilities';
 
   let { data } = $props();
 
+  let tracker = $state(data.tracker);
+
   onMount(() => {
-    if (data.trackerId) {
-      const sseEvent = new EventSource(`${PUBLIC_API_URL}/api/v1/trackers/${data.trackerId}/events`, {
+    if (data.tracker?.id) {
+      const eventSource  = new EventSource(`${PUBLIC_API_URL}/sse/checkout_tracking`, {
         withCredentials: true,
       });
+
+      // Handle messages
+      eventSource.onmessage = (event) => {
+        console.log('SSE message:', event.data);
+        const parsedTracker = JSON.parse(event.data);
+        const keys = Object.keys(parsedTracker);
+        if (keys.includes("id") &&
+            keys.includes("checkout_tracker_status") &&
+            parsedTracker.checkout_tracker_id === tracker?.id) {
+          tracker = parsedTracker;
+        }
+
+      };
     }
   });
+
+  let httpPending: boolean = $state(false);
+  async function refreshTracker() {
+    if (!tracker?.id) return;
+    tracker = await fetch(`${PUBLIC_API_URL}/order_tracking/${data.checkoutUuid}`, {
+      headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+    }).then(handleRequest) as PublicOrderTrackerI;
+
+    // Spinning
+    spinning = true
+    setTimeout(() => spinning = false, 500);
+  }
+
+  let spinning = $state(false);
+
+
 </script>
 
 <svelte:head>
@@ -31,13 +65,29 @@
       </svg>
     </div>
     <h1 class="success">Betaling gelukt</h1>
-    {#if data.trackerId}
+    {#if tracker && tracker.id}
       <p>
         Jouw bestellingsnummer is <br>
-        <span class="inline-block text-center text-3xl text-black font-bold rounded-lg px-4 py-2 mt-4 mb-1 border-2 border-gray-300 bg-gray-50 animate-bounce">
-          { data.trackerId }
+        <button disabled={httpPending}
+                onclick={refreshTracker}
+                class="inline-block text-center text-3xl
+        text-black font-bold rounded-lg px-4 py-2 mt-4 mb-1 border-2
+        border-gray-300 bg-gray-50
+        animate-bounce">
+        <span class:animate-spin-once={spinning} class="block">
+          {tracker.id}
         </span>
+        </button>
       </p>
+
+      {#if tracker.checkout_tracker_status}
+        <h3
+          class:text-orange-700={tracker.checkout_tracker_status !== 2}
+          class:text-green-800={tracker.checkout_tracker_status === 2}
+          class="text-center font-bold">
+          {HubCheckoutTrackerStatusEnum[tracker.checkout_tracker_status]}!
+        </h3>
+      {/if}
 
       <p>Volg het via je telefoon of via ons eigen scherm.</p>
     {:else}
@@ -47,7 +97,7 @@
       </p>
     {/if}
 
-    <a href="/account/transactions" class="button button-outline-blue button-sm mt-4">Alle bestellingen bekijken</a>
+    <a href="/account/transactions" class="button button-outline-blue button-sm mt-4">Al je bestellingen bekijken</a>
   {:else if data.paymentStatus === 'failed'}
     <div class="icon-wrapper bg-red-100 rounded-full">
       <svg class="text-red-600" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,5 +149,15 @@
 
   p {
     @apply max-w-sm;
+  }
+
+  /* One-time spin animation */
+  @keyframes spin-once {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .animate-spin-once {
+    animation: spin-once 0.25s linear forwards;
   }
 </style>

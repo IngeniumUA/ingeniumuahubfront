@@ -1,4 +1,4 @@
-import type { CheckoutI } from "./checkoutI"
+import type { CheckoutIWide } from './checkoutI';
 
 export enum HubCheckoutTrackerStatusEnum {
   Pending = 1,
@@ -11,7 +11,8 @@ export enum HubCheckoutTrackerStatusEnum {
 
 export interface HubCheckoutTrackerI {
   id: number,
-  checkout: CheckoutI
+  disabled: boolean,
+  checkout: CheckoutIWide
   checkout_tracker_status: HubCheckoutTrackerStatusEnum
 }
 

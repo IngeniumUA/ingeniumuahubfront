@@ -1,4 +1,5 @@
-import type { ItemI } from '$lib/models/item/itemI.ts';
+import type { ItemI } from '$lib/models/item/itemI';
+
 
 export interface NotificationItemInI {
   derived_type_enum: string

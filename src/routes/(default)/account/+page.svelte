@@ -5,5 +5,5 @@
   let { data } = $props();
 </script>
 
-<MemberCard response={ data.memberCard } />
+<MemberCard imageString={ data.cardImageUrl } />
 <AccountDetails response={ data.account } />

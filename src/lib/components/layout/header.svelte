@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { auth, isAuthenticated } from "$lib/states/auth.svelte";
+	import { auth, hasRole, isAuthenticated } from '$lib/states/auth.svelte';
 	import { getLoginUrlWithRedirect, doLogout } from "$lib/auth/auth";
 
 	import ingeniumSchild from '$assets/svg/ingenium-schild.svg';
@@ -16,6 +16,10 @@
 		}
 		return whiteTheme ? 'nav-white' : 'nav-dark';
 	});
+
+	function isStaff() {
+		return hasRole("staff")
+	}
 </script>
 
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
@@ -118,6 +122,14 @@
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 							<a href="/account/notification-options" class="nav-dropdown-item" role="menuitem">Notificatie opties</a>
 
+							{#if isStaff()}
+								<hr class="nav-dropdown-divider">
+								<a href="/cloud_verify" class="nav-dropdown-item" role="menuitem">Cloud uploads</a>
+								<a href="/staff" class="nav-dropdown-item" role="menuitem">Staff</a>
+								<a href="/staff" class="nav-dropdown-item" role="menuitem">Webmaster</a>
+								<hr class="nav-dropdown-divider">
+							{/if}
+
 							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
 
 							<hr class="nav-dropdown-divider">
@@ -147,11 +159,11 @@
 				<a href="/events" class="nav-item" role="menuitem">Events</a>
 				<a href="/shop" class="nav-item" role="menuitem">Shop</a>
 				<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
+				<a href="https://wiki.ingeniumua.be" class="nav-item" role="menuitem">Wiki</a>
 				<a href="/info" class="nav-item" role="menuitem">Over ons</a>
 				<a href="/info/praesidium" class="nav-item" role="menuitem">Praesidium</a>
 				<a href="/info/relations" class="nav-item" role="menuitem">Partner relations</a>
 				<a href="/vacatures" class="nav-item" role="menuitem">Vacatures</a>
-				<a href="/info/clublied" class="nav-item" role="menuitem">Clublied</a>
 				<a href="/info/contact" class="nav-item" role="menuitem">Contact</a>
 			</div>
 		</div>
@@ -218,7 +230,7 @@
 
     .mobile-nav {
       @apply sm:hidden;
-      background-color: #d4dbe9fa;
+      background-color: white;
 
       .nav-item {
         @apply rounded-lg block text-blue-900 hover:bg-blue-900 hover:text-white border-transparent focus-visible:ring-black;
