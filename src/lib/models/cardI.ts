@@ -12,5 +12,6 @@ export interface CardI extends CardLimitedI {
 	availability: AvailabilityCompositionI
 	created_timestamp: string
 	last_update_timestamp: string
-	user_uuid: string
+	user_uuid: string | null
+	linked_group: string | null
 }
