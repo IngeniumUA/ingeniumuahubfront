@@ -21,7 +21,7 @@
 	async function refresh() {
 		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
 		const query = new URLSearchParams({
-			limit: '100',
+			limit: '150',
 		})
 		if (onlyShowLinked) {
 			query.set("is_linked", "true")
