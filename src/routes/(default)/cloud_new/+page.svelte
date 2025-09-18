@@ -25,7 +25,7 @@
   let showOverlay = $state(false);
   let isModalOpen = $state(false);
   let isLocationModalOpen = $state(false);
-  let uploadedFile: FileList | null = null
+  let uploadedFile: FileList | null = $state(null)
   let uploadedFileName: string | null = $state(null)
   let folder_tree: any = {}
   let current_folders_select: string[] = $state([]);
@@ -120,23 +120,22 @@
     }, 300); // 300ms debounce
   });
 
-  onMount(()=>{
-    (async () => {
+  onMount(async () => {
       const module = await import('$lib/components/cloud/PdfRender.svelte');
       PdfRender = module.default;
 
-    const url_path = page?.url.searchParams.get('path');
-    if (url_path) {
-      path = url_path
-      if (url_path.includes('.')) {
-        await downloadAndOpenFile(url_path)
+      const url_path = page?.url.searchParams.get('path');
+      if (url_path) {
+        path = url_path
+        if (url_path.includes('.')) {
+          await downloadAndOpenFile(url_path)
+        } else {
+          get_current_files()
+        }
       } else {
         get_current_files()
       }
-    } else {
-      get_current_files()
-    }
-  })
+    })
 
   function openSubFolder(folder: string) {
     path = path + folder + "/"
@@ -324,57 +323,29 @@
     return false
   }
 
-
-  // File upload via drag/drop
-  const handleDragEnter = (e: DragEvent) => {
-    e.preventDefault();
-    showOverlay = true;
-  };
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault(); // Required to trigger drop
-  };
-  const handleDragLeave = (e: DragEvent) => {
-    e.preventDefault();
-    // Only hide overlay when truly leaving window
-    if (e.relatedTarget === null) {
-      showOverlay = false;
-    }
-  };
-  const handleDrop = (e: DragEvent) => {
-    e.preventDefault();
-    showOverlay = false;
-    const files = e.dataTransfer?.files;
-    if (files && files.length > 0) {
-      uploadedFile = files;
-      uploadedFileName = files[0].name;
-      selected_folder_path = path
-      isModalOpen = true
-    }
-  };
-
-  async function get_folder_tree() {
-    let response
-    try {
-      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/folder_tree.json?being_downloaded=false`, {
-        method: 'GET',
-        headers: getAuthorizationHeaders(null)
-      });
-    } catch (err) {
-      console.error('Fetch error:', err);
-    }
-
-    if (!response) {
-      alert('No response from the server');
-      return;
-    }
-    if (!response.ok) {
-      alert('Failed to fetch the file: ' + response.statusText);
-      return;
-    }
-
-    folder_tree = await response.json();
-    folder_tree = {"": folder_tree}
-  }
+  // async function get_folder_tree() {
+  //   let response
+  //   try {
+  //     response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/folder_tree.json?being_downloaded=false`, {
+  //       method: 'GET',
+  //       headers: getAuthorizationHeaders(null)
+  //     });
+  //   } catch (err) {
+  //     console.error('Fetch error:', err);
+  //   }
+  //
+  //   if (!response) {
+  //     alert('No response from the server');
+  //     return;
+  //   }
+  //   if (!response.ok) {
+  //     alert('Failed to fetch the file: ' + response.statusText);
+  //     return;
+  //   }
+  //
+  //   folder_tree = await response.json();
+  //   folder_tree = {"": folder_tree}
+  // }
 
   function handleFiles(files: FileList | null) {
 
