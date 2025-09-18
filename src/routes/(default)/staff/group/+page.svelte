@@ -8,6 +8,10 @@
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
+
+	let groupTable = $state(data.groupTable)
+	let keycloakGroups = $state(data.keycloakGroups)
+
 	let httpLoading: boolean = $state(false);
 
 	/**
@@ -42,8 +46,29 @@
 		Die data 'synchroniseren' we (dupliceren) op de Core om minder requests te moeten uitvoeren en die data heir beschikbaar te hebben?</p>
 	</div>
 
+	<h2>Keycloak Groups</h2>
+	<table class="ingenium-table">
+		<thead>
+		<tr>
+			<th scope="col"><h4>Name</h4></th>
+			<th scope="col"><h4>Keycloak ID</h4></th>
+		</tr>
+		</thead>
+		<tbody>
+		{#each keycloakGroups as group (group["id"])}
+			<tr>
+				<th scope="row">
+					{makePretty(group["name"])}
+				</th>
+				<td>
+					{group["id"]}
+				</td>
+			</tr>
+		{/each}
+		</tbody>
+	</table>
 
-	<h2>Groups</h2>
+	<h2>HubGroups</h2>
 	<table class="ingenium-table">
 		<thead>
 		<tr>
@@ -53,7 +78,7 @@
 		</tr>
 		</thead>
 		<tbody>
-			{#each data.groupTable as group (group["id"])}
+			{#each groupTable as group (group["id"])}
 				<tr>
 					<th scope="row">
 						{makePretty(group["name"])}

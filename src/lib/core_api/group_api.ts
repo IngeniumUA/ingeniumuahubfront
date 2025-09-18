@@ -41,7 +41,15 @@ export class CoreGroupAPI {
 		}
 	}
 
-	// static async queryGroup(): Promise<GroupI[]> {
-	//
-	// }
+	static async queryKeycloakGroup(params: RouteParams | null = null): Promise<[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/keycloak/group`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch keycloak group: ${await res.text()}`;
+		}
+	}
 }

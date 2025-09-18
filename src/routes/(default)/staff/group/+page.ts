@@ -2,5 +2,7 @@
 
 export async function load({ params }) {
 	const groupTable = await CoreGroupAPI.groupTable(params);
-	return { groupTable };
+	const keycloakGroups = await CoreGroupAPI.queryKeycloakGroup(params)
+
+	return { groupTable, keycloakGroups };
 }
