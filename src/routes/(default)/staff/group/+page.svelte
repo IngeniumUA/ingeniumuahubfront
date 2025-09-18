@@ -1,16 +1,31 @@
 ﻿<script lang="ts">
 	import { makePretty } from '$lib/utilities/style-utilities';
+	import type { GroupI } from '$lib/models/user/GroupI';
+	import { CoreGroupAPI } from '$lib/core_api/group_api';
+	import GroupModal from '$lib/components/staff/GroupModal.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
+	let httpLoading: boolean = $state(false);
 
 	/**
 	 * Refreshing all data on the page
 	 */
 	async function refresh() {
 
+	}
+
+	/**
+	 * Editting state management
+	 */
+	let showEditModal: boolean = $state(false);
+	let editGroup: null | GroupI = $state(null)
+	async function setEditGroup(groupId: number) {
+		if (httpLoading) return httpLoading;
+		showEditModal = true;
+		editGroup = await CoreGroupAPI.getGroup(null, groupId);
 	}
 </script>
 
@@ -54,7 +69,7 @@
 						{group["user_count"]}
 					</td>
 					<td>
-						<button aria-label="edit">
+						<button aria-label="edit" onclick={() => setEditGroup(group["id"])}>
 							<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 									 width="20px" height="20px" viewBox="0 0 528.899 528.899"
 									 xml:space="preserve">
@@ -72,3 +87,7 @@
 		</tbody>
 	</table>
 </main>
+
+{#if editGroup !== null && showEditModal}
+	<GroupModal bind:isOpen={showEditModal} group={editGroup} ></GroupModal>
+{/if}
