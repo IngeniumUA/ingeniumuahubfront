@@ -116,6 +116,10 @@ export const updateProductMeta = (productIdx: number, formKey: string, meta: Pro
 	storeProductsInLocalStorage();
 }
 
+export const updateProductMetaForm = (productIdx: number, formData: Record<string, any>) =>  {
+	cartProducts[productIdx].product_meta.other_meta_data.form = formData;
+	storeProductsInLocalStorage();
+}
 
 /**
  * Clears the cart
