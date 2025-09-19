@@ -51,6 +51,7 @@
 				body: JSON.stringify({})
 			});
 			if (res.ok) {
+				successToast("Syncronised group successfully!")
 				return await res.json();
 			}
 		} catch (error) {

@@ -28,10 +28,20 @@
 	let showEditModal: boolean = $state(false);
 	let editGroup: null | GroupI = $state(null)
 	async function setEditGroup(groupId: number) {
+		editGroup = null;
 		if (httpLoading) return httpLoading;
 		showEditModal = true;
 		editGroup = await CoreGroupAPI.getGroup(null, groupId);
 	}
+
+	let showEditBuffer = false;
+	$effect(() => {
+		if (showEditBuffer && !showEditModal) {
+			editGroup = null;
+			refresh().then(() => {})
+		}
+		showEditBuffer = showEditModal
+	})
 </script>
 
 <main class="ingenium-container relative" id="main-content">
