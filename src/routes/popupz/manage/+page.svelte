@@ -75,22 +75,22 @@
 	</div>
 
 	<!-- Config Section -->
-	<section class="config_section">
-		<div>
-			<h2>Next Five Orders</h2>
-		</div>
+<!--	<section class="hidden config_section">-->
+<!--		<div>-->
+<!--			<h2>Next Five Orders</h2>-->
+<!--		</div>-->
 
-		<div>
-			<h2>Upcoming Orders</h2>
-		</div>
+<!--		<div>-->
+<!--			<h2>Upcoming Orders</h2>-->
+<!--		</div>-->
 
-		<div>
-			<h2>Filters</h2>
-		</div>
-	</section>
+<!--		<div>-->
+<!--			<h2>Filters</h2>-->
+<!--		</div>-->
+<!--	</section>-->
 
 	<!-- Orders Section -->
-	<section class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+	<section class="m-8 grid grid-cols-1 md:grid-cols-3 gap-6">
 		{#if orders.length === 0}<h1>Geen Trackers</h1>{/if}
 		{#each orders as order, index (order.id)}
 			<article class="flex flex-col p-4 rounded border border-blue-900">
@@ -116,20 +116,31 @@
 						<span class="font-bold mb-4">{ order.checkout.note }</span>
 					{/if}
 
+				<div class="flex flex-row">
+					<button
+						type="button"
+						disabled={true}
+						class="button button-primary w-32 button-inline flex-[1]"
+						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
+					><span>WIP</span></button>
+
+					<h3 class="font-bold text-center text-blue-900 flex-[1]">{HubCheckoutTrackerStatusEnum[order.checkout_tracker_status]}</h3>
+
 					<button
 						type="button"
 						onclick={() => increaseStatus(index, order)} disabled={loadingHTTP}
-						class="button button-primary w-32 button-inline"
+						class="button button-primary w-32 button-inline flex-[1]"
 						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
 					>
 						{#if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready}
 							Afgehaald
 						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending}
-							Klaar
+							Klaar om af te halen
 						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Finished}
 							Verwerkt
 						{/if}
-				</button>
+					</button>
+				</div>
 			</article>
 		{/each}
 	</section>
