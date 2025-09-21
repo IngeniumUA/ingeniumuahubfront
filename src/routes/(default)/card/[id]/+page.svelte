@@ -4,7 +4,6 @@
   import { PUBLIC_API_URL } from '$env/static/public';
   import { getAuthorizationHeaders, getLoginUrlWithRedirect } from '$lib/auth/auth';
   import { handleRequest } from '$lib/utilities/httpUtilities';
-  import type { CardLimitedI } from '$lib/models/cardI';
   import { goto } from '$app/navigation';
 
   /**
@@ -21,13 +20,13 @@
   let postError: Error | null = $state(null)
   let loadingHTTP: boolean = $state(false);
   let cardButtonDisabled: boolean = $derived.by(() => {
-    return loadingHTTP
+    return loadingHTTP || form.email === ""
   });
 
   /**
    * POST for card
    */
-  let card: CardLimitedI | null = $state(null)
+  let cardResponse: boolean = $state(false)
   async function postCard() {
     if (loadingHTTP) return;
 
@@ -42,15 +41,15 @@
 
     loadingHTTP = true;
     try {
-      card = await fetch(`${PUBLIC_API_URL}/account/card/${data.params.id}`, {
+      await fetch(`${PUBLIC_API_URL}/account/card/${data.params.id}`, {
         method: "POST",
         headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
         body: JSON.stringify(postObject)
-      }).then(handleRequest) as CardLimitedI;
-      await goto("/account?link_status=success");
+      }).then(handleRequest);
+      cardResponse = true;
     } catch (error) {
       console.log(error);
-      await goto("/account?link_status=error");
+      postError = Error("Er is iets fout gegaan! Probeer het later opnieuw of contacteer ons.")
     } finally {
       loadingHTTP = false;
     }
@@ -73,23 +72,26 @@
       <div>
         Laden .. !
       </div>
-    {:else if card !== null}
-      <h1>Verstuurd!</h1>
-      <div class="flex flex-row items-center justify-center">
-        <button
-          class="button button-primary w-32 button-inline"
-          onclick={() => goto("/account")}
-        >
-          <span>Bekijk Account</span>
-        </button>
+    {:else if cardResponse}
+      <div class="flex flex-col gap-4 my-8 p-6 rounded-3xl shadow-md hover:shadow-lg transition-shadow">
+        <h1 class="text-center">Aanvraag Verstuurd!</h1>
+        <div class="flex flex-row items-center justify-center">
+          <button
+            class="button button-primary w-32 button-inline"
+            onclick={() => goto("/account")}
+          >
+            <span>Naar Account</span>
+          </button>
+        </div>
+        <p>Je zal een mail ontvangen wanneer je je lidkaart hebt gelinkt!</p>
+        <p class="text-center">Niet gekregen? Stuur ons een berichtje!</p>
       </div>
-      <p>Je kan ook een mail ontvangen waar we dit bevestigen! (Als de webmaster dat niet vergeten is)</p>
     {:else}
       <form class="ingenium-form my-8 p-6 rounded-3xl shadow-md hover:shadow-lg transition-shadow">
         <h1 class="text-center">Lidkaart Linken</h1>
         <p class="text-center">Hier kan je je lidkaart linken!</p>
 
-        <h3 class="font-bold text-center w-full mt-4 mb-2">Eenvoudig via inloggen</h3>
+        <h3 class="font-bold text-center w-full mt-4 mb-2">via inloggen</h3>
         <div class="flex flex-row items-center justify-center">
           <button
             class="button button-primary w-32 button-inline"

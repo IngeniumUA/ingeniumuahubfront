@@ -3,6 +3,7 @@
 export async function load({ params }) {
 	const itemQuery = new URLSearchParams({
 		item_type: 'eventitem',
+		available: 'true',
 		limit: '10'
 	});
 	const events = await CoreItemWideAPI.queryEventItem(params, itemQuery);

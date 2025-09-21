@@ -21,7 +21,7 @@
 	async function refresh() {
 		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
 		const query = new URLSearchParams({
-			limit: '100',
+			limit: '150',
 		})
 		if (onlyShowLinked) {
 			query.set("is_linked", "true")
@@ -42,10 +42,12 @@
 	interface FormState {
 		cardNr: number;
 		user_email: string | null;
+		linked_group: string | null
 	}
 	let editForm: FormState = $state({
 		cardNr: 0,
-		user_email: ""
+		user_email: "",
+		linked_group: null
 	})
 
 	function setEditItemIndex(index: number) {
@@ -56,6 +58,7 @@
 
 			editForm.cardNr = editSelected.card_nr;
 			editForm.user_email = editSelected.user_email;
+			editForm.linked_group = editSelected.linked_group
 
 			showEdit = true;
 		}
@@ -67,19 +70,22 @@
 			putError = Error("Card is null?")
 			return;
 		}
-		const patchObj = {
-			user_email: editForm.user_email,
+		const patchObj: Partial<FormState> = {}
+		if (editForm.user_email !== editSelected.user_email) {
+			if (editForm.user_email === "") editForm.user_email = null;
+			patchObj["user_email"] = editForm.user_email;
 		}
-		if (patchObj.user_email === null || patchObj.user_email === "" || patchObj.user_email === editSelected.user_email) {
-			failedToast("Email not good, not patching");
-			return
+		if (editForm.linked_group !== editSelected.linked_group) {
+			if (editForm.linked_group === "") editForm.linked_group = null;
+			patchObj["linked_group"] = editForm.linked_group;
 		}
+		if (editForm.cardNr !== editSelected.card_nr) patchObj["cardNr"] = editForm.cardNr;
 
 		if (loadingHTTP) return;
 		loadingHTTP = true;
 		// Perform put request
 		try {
-			await CoreCardAPI.patchCard(editSelected.card_uuid, patchObj)
+			cards[editSelectedIndex!] = await CoreCardAPI.patchCard(editSelected.card_uuid, patchObj)
 			successToast("Updated!")
 		} catch (error) {
 			putError = error instanceof Error ? error: Error(`Error during PUT ${error}`);
@@ -119,6 +125,38 @@
 			}
 		} catch (error) {
 			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
+		} finally {
+			loadingHTTP = false;
+		}
+	}
+
+	/**
+	 * Bulk patch
+	 */
+	async function bulkPatch() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+
+		const patchObj = {
+			available: false
+		}
+
+		try {
+			const res = await fetch(`${PUBLIC_API_URL}/card/bulk`, {
+				method: 'PATCH',
+				headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+				body: JSON.stringify(patchObj)
+			});
+			if (res.ok) {
+				showBulkImport = false;
+				successToast("Bulk patched!")
+				await refresh();
+			} else {
+				const text = await res.text();
+				failedToast(`Failed to patch: ${text}`)
+			}
+		} catch (error) {
+			failedToast(`Failed to patch: ${error instanceof Error ? error : Error(`Error during Patch: ${error}`)}`);
 		} finally {
 			loadingHTTP = false;
 		}
@@ -239,6 +277,9 @@
 	<div class="alert alert-info mb-4 max-w-2xl">
 		<p class="alert-text">Voor ingrijpende bulk operaties, vooral rond <a href="https://wiki.ingeniumua.be/staff/start_academiejaar">start academiejaar</a>.</p>
 	</div>
+	<button class="button button-primary button-inline" onclick={bulkPatch}>
+		<span class="text-white">De-activate all current</span>
+	</button>
 </main>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length && editSelected !== null}
@@ -261,7 +302,7 @@
 					</div>
 
 					<form class="flex-1 ingenium-form">
-						<fieldset class="flex flex-row gap-4">
+						<fieldset>
 							<div class="flex-1 form-field max-w-72 mb-2">
 								<label for="itemName">Card Nr</label>
 								<input id="itemName" type="number" required bind:value={ editForm.cardNr }/>
@@ -269,11 +310,17 @@
 							</div>
 						</fieldset>
 
-						<fieldset class="flex flex-row gap-4">
+						<fieldset>
 							<div class="flex-1 form-field max-w-72 mb-2">
-								<label for="itemName">User Email</label>
-								<input id="itemName" type="text" required bind:value={ editForm.user_email }/>
+								<label for="email">User Email</label>
+								<input id="email" type="text" required bind:value={ editForm.user_email }/>
 								<p>Gekoppelde gebruiker</p>
+							</div>
+
+							<div class="flex-1 form-field max-w-72 mb-2">
+								<label for="group">Keycloak Group ID</label>
+								<input id="group" type="text" required bind:value={ editForm.linked_group }/>
+								<p>UUID van de keycloak group</p>
 							</div>
 						</fieldset>
 					</form>

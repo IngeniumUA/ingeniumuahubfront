@@ -65,7 +65,7 @@
       </svg>
     </div>
     <h1 class="success">Betaling gelukt</h1>
-    {#if tracker}
+    {#if tracker && tracker.id}
       <p>
         Jouw bestellingsnummer is <br>
         <button disabled={httpPending}

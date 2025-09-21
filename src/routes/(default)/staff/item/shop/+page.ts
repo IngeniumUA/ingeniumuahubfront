@@ -2,6 +2,7 @@
 
 export async function load({ params }) {
 	const itemQuery = new URLSearchParams({
+		available: 'true',
 		limit: '10'
 	});
 	const shopItems = await CoreItemWideAPI.queryShopItem(params, itemQuery);

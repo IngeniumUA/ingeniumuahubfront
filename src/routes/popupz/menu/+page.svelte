@@ -5,6 +5,7 @@
 	import popupImg from '$assets/images/popupz/popupz_default.png';
 	import { slide } from 'svelte/transition';
 	import { makePretty } from '$lib/utilities/style-utilities';
+	import { addProductToCart, cartProducts, updateProductMetaForm } from '$lib/states/cart.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -28,6 +29,7 @@
 		return Object.entries(grouped).map(([key, value]) => {
 			const blueprint = value!.at(0)!
 			return {
+				product_blueprint: blueprint,
 				product_blueprint_name: blueprint.name,
 				origin_item_id: blueprint.origin_item_id,
 				form: (blueprint.product_meta.other_meta_data.form as ProductFormI),
@@ -53,8 +55,24 @@
 	function showProduct(index: number) {
 		selectedArray[index] = true;
 	}
-	function addToCard(product, pricePolicy: PricePolicyLimitedI | null) {
-		successToast(`${product.product_blueprint_name} toegevoegd!`)
+	function addToCard(productGrouped, pricePolicy: PricePolicyLimitedI | null) {
+		if (pricePolicy === null) return;
+
+		// Translating separate product and price policy back to ProductOut
+		const productOut: ProductOutI = {
+			...productGrouped["product_blueprint"],
+		}
+		productOut.price_policy = { ...pricePolicy }
+		productOut.product_meta = JSON.parse(JSON.stringify(productOut.product_meta))
+
+		addProductToCart(productOut, 1);
+
+		// Also setting correct form value
+		if (productOut.product_meta.other_meta_data.form !== undefined) {
+			const productInCartIndex = cartProducts.length - 1;
+			updateProductMetaForm(productInCartIndex, productOut.product_meta.other_meta_data.form);
+		}
+		successToast(`${productGrouped.product_blueprint_name} toegevoegd!`)
 	}
 
 </script>
@@ -79,7 +97,7 @@
 	}
 
 	section {
-		@apply m-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 auto-cols-fr bg-gray-100 gap-4 justify-items-center;
+		@apply m-4 flex flex-col bg-gray-100 gap-4 items-center md:flex-row md:items-start;
 
 		.product-card {
 				@apply flex flex-col rounded-2xl max-w-xs shadow-md hover:shadow-xl transition-shadow;
@@ -101,7 +119,15 @@
 
 						h2 {
 								@apply font-bold text-white;
-						}
+                flex: 0 1 auto;
+                text-align: left;
+                transition: flex-grow 0.3s ease, text-align 0.3s ease;
+            }
+
+            h2.moved {
+                flex-grow: 1;
+                text-align: right;
+            }
 
 						button {
 								@apply bg-white;
@@ -145,7 +171,7 @@
 	<!-- Product Selector	-->
 	{#if products.length > 0}
 	<section>
-		{#each groupedProducts as product, index}
+		{#each groupedProducts as groupedProduct, index}
 			<div class="product-card">
 				<div class="product-card-image">
 					<img src={popupImg} alt="Popup Image" loading="lazy" width="1024" height="1024" aria-hidden="true" />
@@ -155,7 +181,7 @@
 					<div class="product-card-prices"
 							 in:slide={{ duration: 400, axis: 'y' }}
 							 out:slide={{ duration: 300, axis: 'y' }}>
-						{#each product.price_policies as pricePolicy}
+						{#each groupedProduct.price_policies as pricePolicy}
 							<div class="price-policies">
 								<h3 class="text-ingenium-grey-800 font-bold">
 									{#if pricePolicy !== null}
@@ -166,21 +192,22 @@
 
 								<button
 									class="button button-primary w-32 button-inline"
-									onclick="{() => {addToCard(product, pricePolicy)}}">
+									onclick="{() => {addToCard(groupedProduct, pricePolicy)}}">
 									<span>Voeg Toe ▶</span>
 								</button>
-
 							</div>
 						{/each}
 
-						{#if product.form !== null && product.form !== undefined}
+						{#if groupedProduct.form !== null && groupedProduct.form !== undefined}
 							<form class="ingenium-form">
 								<fieldset>
-									{#each Object.entries(product.form) as [formKey, formField] }
+									{#each Object.entries(groupedProduct.form) as [formKey, formField] }
 										{#if formField['type'] === "option" }
 											<div class="form-field">
-												<label for="dynamic_policy_enum">{makePretty(formKey)}</label>
-												<select id="dynamic_policy_enum" required>
+												<label for={`form-field-${formKey}`}>{makePretty(formKey)}</label>
+												<select id={`form-field-${formKey}`}
+																bind:value={formField.value}
+																required>
 													{#each formField["options"] ?? [] as option}
 														<option value={option}>{makePretty(option)}</option>
 													{/each}
@@ -198,14 +225,16 @@
 				{/if}
 
 				<div class="product-card-content">
-					<h2>{product["product_blueprint_name"]}</h2>
-					<button
-						class="button button-primary w-32 button-inline"
-						onclick="{() => {showProduct(index)}}"
-						disabled="{product.max_count <= 0}"
-					>
-						<span>Bestel nu ▶</span>
-					</button>
+					<h2 class:moved={(selectedArray.at(index) ?? false)}>{groupedProduct["product_blueprint_name"]}</h2>
+					{#if !(selectedArray.at(index) ?? false)}
+						<button
+							class="button button-primary w-32 button-inline"
+							onclick="{() => {showProduct(index)}}"
+							disabled="{groupedProduct.max_count <= 0}"
+						>
+							<span>Bestel nu ▶</span>
+						</button>
+					{/if}
 				</div>
 			</div>
 		{/each}
@@ -218,4 +247,13 @@
 		</div>
 	</div>
 	{/if}
+
+	<a href="/shop/cart" class="absolute bottom-4 right-4 text-white bg-blue-900 hover:bg-blue-950 focus:ring-4
+	focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center
+	inline-flex items-center me-2 py-4 px-6">
+		<svg class="w-8 h-8 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+			<path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
+		</svg>
+		<span class="text-lg">Naar Winkelkar</span>
+	</a>
 </main>

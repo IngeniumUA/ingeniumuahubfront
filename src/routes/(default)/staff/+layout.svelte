@@ -33,7 +33,7 @@
 			</nav>
 		</aside>
 
-		<main class="flex-1 max-w-full mx-4">
+		<main class="flex-1 max-w-full md:mx-4">
 			{@render children()}
 		</main>
 	</div>
