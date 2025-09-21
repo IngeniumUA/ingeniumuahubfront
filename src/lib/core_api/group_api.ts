@@ -49,7 +49,32 @@ export class CoreGroupAPI {
 		if (res.ok) {
 			return await res.json();
 		} else {
+			throw `Failed to fetch keycloak groups: ${await res.text()}`;
+		}
+	}
+
+	static async getKeycloakGroup(params: RouteParams | null = null, groupId: string): Promise<any> {
+		const res = await fetch(`${PUBLIC_API_URL}/keycloak/group/${groupId}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
 			throw `Failed to fetch keycloak group: ${await res.text()}`;
 		}
 	}
+
+	static async countMembers(params: RouteParams | null = null, groupId: number | string): Promise<number> {
+		const res = await fetch(`${PUBLIC_API_URL}/user/count?group=${groupId}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch user count for group: ${await res.text()}`;
+		}
+	}
+
 }

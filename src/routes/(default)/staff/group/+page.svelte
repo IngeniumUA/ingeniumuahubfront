@@ -92,7 +92,7 @@
 			{#each groupTable as group (group["id"])}
 				<tr>
 					<th scope="row">
-						{makePretty(group["name"])}
+						<a href="group/{group['id']}">{makePretty(group["name"])}</a>
 					</th>
 					<td>
 						{#if (group["keycloak_group_uuid"] === null)}
