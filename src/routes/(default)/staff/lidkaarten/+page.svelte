@@ -129,6 +129,38 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 * Bulk patch
+	 */
+	async function bulkPatch() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+
+		const patchObj = {
+			available: false
+		}
+
+		try {
+			const res = await fetch(`${PUBLIC_API_URL}/card/bulk`, {
+				method: 'PATCH',
+				headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+				body: JSON.stringify(patchObj)
+			});
+			if (res.ok) {
+				showBulkImport = false;
+				successToast("Bulk patched!")
+				await refresh();
+			} else {
+				const text = await res.text();
+				failedToast(`Failed to patch: ${text}`)
+			}
+		} catch (error) {
+			failedToast(`Failed to patch: ${error instanceof Error ? error : Error(`Error during Patch: ${error}`)}`);
+		} finally {
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -245,6 +277,9 @@
 	<div class="alert alert-info mb-4 max-w-2xl">
 		<p class="alert-text">Voor ingrijpende bulk operaties, vooral rond <a href="https://wiki.ingeniumua.be/staff/start_academiejaar">start academiejaar</a>.</p>
 	</div>
+	<button class="button button-primary button-inline" onclick={bulkPatch}>
+		<span class="text-white">De-activate all current</span>
+	</button>
 </main>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length && editSelected !== null}
