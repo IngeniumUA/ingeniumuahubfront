@@ -15,6 +15,9 @@
 
 	let cardTable = $state(data.card_table)
 	let cards = $state(data.cards)
+	let cardCountAvailable = $state(data.cardCountAvailable)
+	let cardCountNotAvailable = $state(data.cardCountNotAvailable)
+	let cardCount = $state(data.cardCount)
 
 	let onlyShowLinked: boolean = $state(false);
 	let loadingHTTP: boolean = $state(false)
@@ -27,6 +30,15 @@
 			query.set("is_linked", "true")
 		}
 		cards = await CoreCardAPI.queryCards(null, query);
+
+		cardCountAvailable = await CoreCardAPI.countCards(params, new URLSearchParams({
+			available: 'true',
+		}));
+		cardCountNotAvailable = await CoreCardAPI.countCards(params, new URLSearchParams({
+			available: 'true',
+		}));
+		cardCount = cardCountAvailable + cardCountNotAvailable;
+
 		successToast("Refreshed")
 	}
 
@@ -268,6 +280,13 @@
 					<p class="text-blue-900 font-bold">Ongelinkt: {card_count_dict["card_count"]}</p>
 				</div>
 			{/each}
+
+			<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+				<h4 class="text-ingenium-grey-800 font-bold">Totaal</h4>
+				<p class="text-blue-900 font-bold">Available: {cardCountAvailable}</p>
+				<p class="text-blue-900 font-bold">Niet Available: {cardCountNotAvailable}</p>
+				<p class="text-blue-900 font-bold">All: {cardCount}</p>
+			</div>
 		</div>
 	</div>
 
