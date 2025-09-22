@@ -31,10 +31,10 @@
 		}
 		cards = await CoreCardAPI.queryCards(null, query);
 
-		cardCountAvailable = await CoreCardAPI.countCards(params, new URLSearchParams({
+		cardCountAvailable = await CoreCardAPI.countCards(null, new URLSearchParams({
 			available: 'true',
 		}));
-		cardCountNotAvailable = await CoreCardAPI.countCards(params, new URLSearchParams({
+		cardCountNotAvailable = await CoreCardAPI.countCards(null, new URLSearchParams({
 			available: 'true',
 		}));
 		cardCount = cardCountAvailable + cardCountNotAvailable;
@@ -318,7 +318,7 @@
 						<h4 class="pl-3 text-blue-900 font-bold">MemberType: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected?.member_type ?? 0]}</span></h4>
 						<p class="pl-3 ">Soort lid</p>
 
-						<h4 class="pl-3 text-blue-900 font-bold">Available: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected?.availability.available ?? false]}</span></h4>
+						<h4 class="pl-3 text-blue-900 font-bold">Available: <span class="text-ingenium-grey-800 font-bold">{editSelected?.availability.available ?? false}</span></h4>
 						<p class="pl-3 ">Beschikbaarheid</p>
 					</div>
 
