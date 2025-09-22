@@ -147,9 +147,9 @@
 									</ul>
 								{/if}
 							</li>
-							<span>{ order.checkout.user_email }<br>{ makePretty(order.checkout.user_first_name ?? "") } { makePretty(order.checkout.user_last_name ?? "")}</span>
 						{/each}
 					</ul>
+					<span>{ order.checkout.user_email }<br>{ makePretty(order.checkout.user_first_name ?? "") } { makePretty(order.checkout.user_last_name ?? "")}</span>
 					{#if order.checkout.note !== null && order.checkout.note !== '' }
 						<span class="text-sm underline">Opmerking:</span>
 						<span class="font-bold mb-4">{ order.checkout.note }</span>
