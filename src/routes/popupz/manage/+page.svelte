@@ -75,7 +75,7 @@
 	 */
 	let interval: ReturnType<typeof setInterval>;
 	onMount(() => {
-		if (data.doRefresh) return;
+		if (!data.doRefresh) return;
 
 		refresh();
 
