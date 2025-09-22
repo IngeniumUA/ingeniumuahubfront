@@ -17,12 +17,17 @@
 	function parseForm(form: ProductFormI | null | undefined): [] {
 		if (!form) return [];
 
-		const formString = ((form as unknown) as string);
 		try {
-			return JSON.parse(formString);
+			// If form is a string, parse it
+			if (typeof form === "string") {
+				return JSON.parse(form);
+			}
+
+			// If form is already an object, return it directly
+			return form;
 		} catch (error) {
-			console.log(error);
-			return []
+			console.error("Failed to parse form:", error);
+			return [];
 		}
 	}
 
