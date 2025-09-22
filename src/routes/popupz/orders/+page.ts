@@ -8,5 +8,10 @@ export const load: PageLoad = async ({ fetch, params }) => {
 		headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 	});
 	const orders = ordersRes.ok ? await ordersRes.json(): [];
-	return { orders }
+	const itemRes = await fetch(`${PUBLIC_API_URL}/popupz`, {
+		method: 'GET',
+		headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+	});
+	const item = itemRes.ok ? await itemRes.json(): [];
+	return { item, orders }
 }
