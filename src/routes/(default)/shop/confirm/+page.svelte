@@ -93,7 +93,7 @@
       <p>Volg het via je telefoon of via ons eigen scherm.</p>
 
       {#if hasRole("webmaster")}
-        <a href="popupz/menu" class="button button-primary w-32 button-inline">
+        <a href="/popupz/menu" class="button button-primary w-32 button-inline my-4">
           <span>Volgende Bestelling</span>
         </a>
       {/if}
