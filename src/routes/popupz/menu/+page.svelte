@@ -243,7 +243,6 @@
 						<button
 							class="button button-primary w-32 button-inline"
 							onclick="{() => {showProduct(index)}}"
-							disabled="{groupedProduct.max_count <= 0}"
 						>
 							<span>Bestel nu ▶</span>
 						</button>
