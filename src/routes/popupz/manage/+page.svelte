@@ -4,12 +4,26 @@
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { ProductFormI } from '$lib/models/productsI';
+	import { onDestroy, onMount } from 'svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
 	let orders: HubCheckoutTrackerI[] = $state(data.orders)
+
+	async function refresh() {
+		const query_param = new URLSearchParams({
+			limit: '100'
+		})
+		if (data.filterStatus !== null) query_param.set('checkout_tracker_status', data.filterStatus);
+		try {
+			orders = await CoreCheckoutAPI.queryCheckoutTracker(null, query_param);
+		} catch (error) {
+			console.log(error)
+			orders = []
+		}
+	}
 
 	/**
 	 *
@@ -55,6 +69,25 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 * Refreshing code
+	 */
+	let interval: ReturnType<typeof setInterval>;
+	onMount(() => {
+		if (data.doRefresh) return;
+
+		refresh();
+
+		// Set interval to call every 5 seconds
+		interval = setInterval(() => {
+			refresh();
+		}, 5000);
+	});
+
+	onDestroy(() => {
+		clearInterval(interval);
+	});
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />

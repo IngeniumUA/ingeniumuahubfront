@@ -1,7 +1,7 @@
 ﻿import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
 
-export async function load({ params }) {
+export async function load({ params, url }) {
 	const query_param = new URLSearchParams({
 		limit: '100'
 	})
@@ -13,5 +13,8 @@ export async function load({ params }) {
 		orders = []
 	}
 
-	return { orders }
+	const doRefresh = url.searchParams.get('refresh') === 'true'
+	const filterStatus = url.searchParams.get('filter')
+
+	return { orders, doRefresh, filterStatus }
 }
