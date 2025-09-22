@@ -21,7 +21,7 @@
 	async function refresh() {
 		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
 		const query = new URLSearchParams({
-			limit: '150',
+			limit: '300',
 		})
 		if (onlyShowLinked) {
 			query.set("is_linked", "true")
@@ -299,6 +299,8 @@
 						<h4 class="pl-3 text-blue-900 font-bold">MemberType: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected?.member_type ?? 0]}</span></h4>
 						<p class="pl-3 ">Soort lid</p>
 
+						<h4 class="pl-3 text-blue-900 font-bold">Available: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected?.availability.available ?? false]}</span></h4>
+						<p class="pl-3 ">Beschikbaarheid</p>
 					</div>
 
 					<form class="flex-1 ingenium-form">
