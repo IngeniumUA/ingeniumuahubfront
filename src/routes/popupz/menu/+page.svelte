@@ -81,12 +81,7 @@
 	 * Cart functions
 	 */
 	function handleCartClick() {
-		if (hasRole("webmaster")) {
-			// Open in a new tab
-			window.open('/shop/cart', '_blank');
-		} else {
-			goto('/shop/cart');
-		}
+		goto('/shop/cart');
 	}
 </script>
 

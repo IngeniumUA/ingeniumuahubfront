@@ -5,6 +5,7 @@
   import { HubCheckoutTrackerStatusEnum, type PublicOrderTrackerI } from '$lib/models/trackerI';
   import { getAuthorizationHeaders } from '$lib/auth/auth';
   import { handleRequest } from '$lib/utilities/httpUtilities';
+  import { hasRole } from '$lib/states/auth.svelte';
 
   let { data } = $props();
 
@@ -90,6 +91,12 @@
       {/if}
 
       <p>Volg het via je telefoon of via ons eigen scherm.</p>
+
+      {#if hasRole("webmaster")}
+        <a href="popupz/menu" class="button button-primary w-32 button-inline">
+          <span>Volgende Bestelling</span>
+        </a>
+      {/if}
     {:else}
       <p>
         Er is een e-mail verstuurd met een bevestiging <span class="font-bold">Krijg zeker in je spam folder!</span> <br>
