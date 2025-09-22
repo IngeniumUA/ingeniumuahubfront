@@ -13,6 +13,7 @@
 	let orders: HubCheckoutTrackerI[] = $state(data.orders)
 
 	async function refresh() {
+		loadingHTTP = true
 		const query_param = new URLSearchParams({
 			limit: '100'
 		})
@@ -22,6 +23,8 @@
 		} catch (error) {
 			console.log(error)
 			orders = []
+		} finally {
+			loadingHTTP = false
 		}
 	}
 
@@ -75,8 +78,6 @@
 	 */
 	let interval: ReturnType<typeof setInterval>;
 	onMount(() => {
-		if (!data.doRefresh) return;
-
 		refresh();
 
 		// Set interval to call every 5 seconds
