@@ -99,7 +99,7 @@
 						{#each order.checkout.transactions as transaction}
 							<li>
 								{ transaction.purchased_product.name }
-								{#if transaction.purchased_product.product_meta.other_meta_data.form !== null}
+								{#if transaction.purchased_product.product_meta.other_meta_data.form ?? null !== null}
 									<ul class="ml-6 list-disc list-inside">
 										{#each Object.entries(parseForm(transaction.purchased_product.product_meta.other_meta_data.form)) as [form_field_key, form_field_value]}
 											<span class="capitalize font-light">{ form_field_key }</span>:
