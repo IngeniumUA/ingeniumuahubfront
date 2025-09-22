@@ -15,6 +15,17 @@ export class CoreCardAPI {
 		return await res.json();
 	}
 
+	static async countCards(params: RouteParams | null = null, query_param: URLSearchParams): Promise<number> {
+		const res = await fetch(`${PUBLIC_API_URL}/card/count?${query_param.toString()}`, {
+			headers: getAuthorizationHeaders(params)
+		});
+		if (!res.ok) {
+			const text = await res.text();
+			throw new Error(`Failed to load card count: ${text}`);
+		}
+		return await res.json();
+	}
+
 	static async queryCardTable(params: RouteParams | null = null, query_param: URLSearchParams): Promise<[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/card/table?${query_param.toString()}`, {
 			headers: getAuthorizationHeaders(params)
