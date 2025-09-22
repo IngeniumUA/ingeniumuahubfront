@@ -65,4 +65,8 @@ export class CoreCardAPI {
 		}
 	}
 
+	static async setAvailable(card: CardI, available: boolean) {
+		card.availability.available = available
+		return await this.putCard(card)
+	}
 }

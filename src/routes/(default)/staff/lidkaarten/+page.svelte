@@ -35,7 +35,7 @@
 			available: 'true',
 		}));
 		cardCountNotAvailable = await CoreCardAPI.countCards(null, new URLSearchParams({
-			available: 'true',
+			available: 'false',
 		}));
 		cardCount = cardCountAvailable + cardCountNotAvailable;
 
@@ -143,6 +143,14 @@
 	}
 
 	/**
+	 * Patching availability
+	 */
+	async function toggleAvailable(cardIndex: number, card: CardI) {
+		cards[cardIndex] = await CoreCardAPI.setAvailable(card, !card.availability.available);
+		successToast("Updated!")
+	}
+
+	/**
 	 * Bulk patch
 	 */
 	async function bulkPatch() {
@@ -245,6 +253,18 @@
 					</td>
 					<td>
 						{makePretty(CardMembershipEnum[card.member_type])}
+					</td>
+					<td>
+						<label class="inline-flex items-center cursor-pointer my-4">
+							<input type="checkbox" class="sr-only peer"
+										 bind:checked={card.availability.available}
+										 onclick="{() => toggleAvailable(index, card)}"
+							>
+							<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
+							<span class="ms-3 text-sm font-medium text-gray-600">
+														{#if card.availability.available}Beschikbaar{:else}Niet Beschikbaar{/if}
+													</span>
+						</label>
 					</td>
 					<td>
 						<button aria-label="edit" onclick={() => setEditItemIndex(index)}>
