@@ -190,7 +190,7 @@
 						{/if}
 					</button>
 				</div>
-				<p>{secondsSinceUtc(order.created_timestamp)}</p>
+				<p class="text-right">{secondsSinceUtc(order.created_timestamp)}s geleden</p>
 			</article>
 		{/each}
 	</section>
