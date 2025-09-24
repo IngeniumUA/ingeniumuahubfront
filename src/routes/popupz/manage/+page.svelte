@@ -97,7 +97,7 @@
 		const eventTime = new Date(utcString).getTime(); // UTC timestamp in ms
 		const now = Date.now(); // Current local time in ms
 
-		return Math.floor((now - eventTime) / 60000);
+		return Math.floor((now - eventTime) / 60000) - 120;
 	}
 </script>
 
