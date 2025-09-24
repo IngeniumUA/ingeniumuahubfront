@@ -48,7 +48,7 @@
 	</fieldset>
 
 	<fieldset>
-		<div class="form-field">
+		<div class="form-field max-w-72">
 			<label for="dynamic_policy_enum">Dynamic Policy</label>
 			<select id="dynamic_policy_enum" required bind:value={formState.dynamic_policy_type}>
 				{#each AccessPolicyEnumList as policyType}

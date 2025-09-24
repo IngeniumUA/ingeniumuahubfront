@@ -124,7 +124,7 @@
 	</button>
 </div>
 {#if isOpen}
-		<form class="ingenium-form flex flex-row gap-4">
+		<form class="ingenium-form flex flex-col lg:flex-row gap-4">
 			<fieldset class="flex-1">
 				<div class="form-field">
 					<label for="name">Name</label>
