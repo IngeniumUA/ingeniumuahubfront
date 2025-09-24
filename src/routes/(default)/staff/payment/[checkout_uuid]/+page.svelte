@@ -228,7 +228,7 @@
 				<div class="flex-[1] p-2">
 					<h3 class="font-bold mb-2">Voortgang:</h3>
 					<button
-						class="button button-primary button-inline"
+						class="button button-danger button-inline"
 						onclick={() => {patchStatus(getPatchStatusValue())}}
 						disabled={loadingHTTP || ![PaymentStatusEnum.successful, PaymentStatusEnum.pending].includes(checkoutWide.checkout_status)}
 					>
@@ -253,7 +253,7 @@
 
 		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
-		<aside class="flex-1 px-4 col-span-1">
+		<aside class="flex-[1] px-4 col-span-1">
 			<nav class="vertical-nav vertical-nav-transparent">
 				<h2>On this page</h2>
 				<a href="#overview" class="font-semibold">Overzicht</a>
@@ -482,7 +482,7 @@
 
 <style>
 	.checkout-details-section {
-			@apply flex-1 px-4 col-span-1;
+			@apply flex-[1] px-4 col-span-1;
 			fieldset {
 					@apply mb-2;
           .checkout-detail-value {
