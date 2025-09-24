@@ -168,6 +168,10 @@
 								<input id="staffCheckout" type="checkbox" bind:checked={ cartDetails.staffCheckout } disabled={ loading } />
 								<label for="staffCheckout">Dit is een kassa bestelling</label>
 							</div>
+							<div class="form-field">
+								<label for="email">Tracker Priority</label>
+								<input type="number" id="tracker_ordering" name="tracker_ordering" class="w-full" required bind:value={ cartDetails.tracker_ordering } />
+							</div>
 						{/if}
 
 						<button class="mt-4 button button-sm button-primary button-full" onclick={ checkCart } disabled={ loading || modalOpen }>

@@ -42,8 +42,20 @@ export class CoreCheckoutAPI {
 		}
 	}
 
+	static async countCheckout(params: RouteParams | null = null, query_param: URLSearchParams): Promise<number> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/count?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch checkout count: ${await res.text()}`;
+		}
+	}
+
 	static async countCheckoutTracker(params: RouteParams | null = null, query_param: URLSearchParams): Promise<number> {
-		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?item=${query_param.toString()}`, {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?${query_param.toString()}`, {
 			method: 'GET',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});

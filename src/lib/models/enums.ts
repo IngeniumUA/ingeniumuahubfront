@@ -1,4 +1,4 @@
-export enum Enums {
+export enum ValidityEnum {
   forbidden= 1,
   valid = 2,
   invalid = 3,
@@ -7,11 +7,11 @@ export enum Enums {
 }
 
 export const ValidityList = [
-  Enums.forbidden,
-  Enums.valid,
-  Enums.invalid,
-  Enums.manually_verified,
-  Enums.consumed,
+  ValidityEnum.forbidden,
+  ValidityEnum.valid,
+  ValidityEnum.invalid,
+  ValidityEnum.manually_verified,
+  ValidityEnum.consumed,
 ]
 
 export enum PaymentStatusEnum {

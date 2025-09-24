@@ -89,6 +89,16 @@
 	onDestroy(() => {
 		clearInterval(interval);
 	});
+
+	/**
+	 * Utility
+	 */
+	export function secondsSinceUtc(utcString: string) {
+		const eventTime = new Date(utcString).getTime(); // UTC timestamp in ms
+		const now = Date.now(); // Current local time in ms
+
+		return Math.floor((now - eventTime) / 60000) - 120;
+	}
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />
@@ -149,7 +159,7 @@
 							</li>
 						{/each}
 					</ul>
-					<span>{ order.checkout.user_email }<br>{ makePretty(order.checkout.user_first_name ?? "") } { makePretty(order.checkout.user_last_name ?? "")}</span>
+					<span class="text-center">{ order.checkout.user_email }</span>
 					{#if order.checkout.note !== null && order.checkout.note !== '' }
 						<span class="text-sm underline">Opmerking:</span>
 						<span class="font-bold mb-4">{ order.checkout.note }</span>
@@ -168,8 +178,7 @@
 					<button
 						type="button"
 						onclick={() => increaseStatus(index, order)} disabled={loadingHTTP}
-						class="button button-primary w-32 button-inline flex-[1]"
-						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
+						class="button button-primary w-32 button-inline flex-[1] {order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}"
 					>
 						{#if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready}
 							Afgehaald
@@ -180,6 +189,7 @@
 						{/if}
 					</button>
 				</div>
+				<p class="text-right mt-2">{secondsSinceUtc(order.created_timestamp)}m geleden</p>
 			</article>
 		{/each}
 	</section>

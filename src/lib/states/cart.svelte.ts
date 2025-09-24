@@ -10,6 +10,7 @@ import type { CartFailedI, CartSuccessI, CheckoutSmallI } from '$lib/models/cart
 import {goto} from "$app/navigation";
 
 export interface CartDetailsState {
+	tracker_ordering: number;
 	guestEmail: string;
 	note: string;
 	staffCheckout: boolean;
@@ -24,6 +25,7 @@ export const cartDetails: CartDetailsState = $state({
 	guestEmail: '',
 	note: '',
 	staffCheckout: false,
+	tracker_ordering: 0,
 	isPaying: false,
 	turnstileToken: null,
 	stripePayment: false,
@@ -164,6 +166,7 @@ export const checkoutCart = async () => {
 					products: cartProducts,
 					checkout_note: cartDetails.note,
 					user_email: auth ? null : cartDetails.guestEmail,
+					tracker_ordering: cartDetails.tracker_ordering
 				},
 				captcha_token: auth ? null : cartDetails.turnstileToken,
 			}),

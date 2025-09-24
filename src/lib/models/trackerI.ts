@@ -14,6 +14,8 @@ export interface HubCheckoutTrackerI {
   disabled: boolean,
   checkout: CheckoutIWide
   checkout_tracker_status: HubCheckoutTrackerStatusEnum
+
+  created_timestamp: string
 }
 
 export interface PublicOrderTrackerI {

@@ -481,7 +481,7 @@
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
-			<h2 id="Product Blueprints">Product Blueprints</h2>
+			<h1 id="Product Blueprints">Product Blueprints</h1>
 			<button onclick="{() => showAddingNew = true}" class="ml-2 button button-primary w-24 button-inline">
 				<span class="text-white">Add New</span>
 			</button>
@@ -494,7 +494,7 @@
 		</div>
 
 		{#if (productBlueprints.length > 0)}
-		<section class="p-6 py-12 flex flex-wrap gap-6 bg-blue-950 dark:bg-blue-950 rounded-3xl">
+		<section class="flex flex-wrap gap-6">
 			{#each productBlueprints as productBlueprint (productBlueprint.id)}
 				<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
 			{/each}
