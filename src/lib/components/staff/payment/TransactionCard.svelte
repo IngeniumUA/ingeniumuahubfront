@@ -1,14 +1,55 @@
 ﻿<script lang="ts">
 	import type { TransactionI } from '$lib/models/transactionI';
-	import { ValidityEnum } from '$lib/models/productsI';
+	import { ValidityEnum, ValidityList } from '$lib/models/productsI';
+	import { makePretty } from '$lib/utilities/style-utilities';
+	import { successToast } from '$lib/components/toast/defined_toast';
+	import { CoreTransactionAPI } from '$lib/core_api/transaction';
 
 	let { isOpen = $bindable(), loadingHTTP = $bindable(), transaction = $bindable(), transactionIndex = null }: { isOpen: boolean, loadingHTTP: boolean, transaction: TransactionI, transactionIndex: number | null } = $props();
 
+	let transactionPatchError: Error | null = $state(null);
+	async function patchValidity(validity: ValidityEnum) {
+		if (loadingHTTP) return;
+		const patchObject = {
+			validity: validity
+		}
+		loadingHTTP = true;
+		try {
+			const transResult = await CoreTransactionAPI.patchTransaction(null,
+				transaction.interaction.interaction_id,
+				patchObject);
+			transaction.validity = transResult.validity;
+			transactionPatchError = null;
+			successToast("Validity Patched!")
+			isOpen = false; // Close the modal when the creation was a success :))
+		} catch (error) {
+			transactionPatchError = error instanceof Error ? error : Error('Error validity');
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
+	}
 
-	let putError: Error | null = $state(null);
-	async function update() {
-		if (loadingHTTP) {return}
-		// todo check for form errors
+	function validityToColor(validity: ValidityEnum) {
+		switch (validity) {
+			case ValidityEnum.valid: {
+				return 'green'
+			}
+		case ValidityEnum.invalid: {
+				return 'orange'
+			}
+		case ValidityEnum.forbidden: {
+				return 'red'
+			}
+		case ValidityEnum.consumed: {
+				return 'gray'
+			}
+		}
+	}
+
+	function validityToStyle(validity: ValidityEnum) {
+		const intensity = validity === transaction.validity ? 900: 700;
+		const color = validityToColor(validity);
+		return `text-${color}-${intensity} bg-${color}-${intensity-200}`;
 	}
 </script>
 
@@ -21,10 +62,15 @@
 	</h4>
 
 	<div class="transaction-validity-selector">
-		{ValidityEnum[transaction.validity]}
+		{#each ValidityList as validity}
+			<button type="button"
+							class="first:rounded-l-md last:rounded-r-md {validityToStyle(validity)}"
+							onclick={() => patchValidity(validity)}
+							disabled={loadingHTTP}>
+				<span>{makePretty(ValidityEnum[validity])}</span>
+			</button>
+		{/each}
 	</div>
-
-
 
 	<button type="button" class="button button-primary button-icon-only relative inline-flex items-center justify-center"
 					aria-controls="mobile-menu" aria-expanded="{isOpen}"
@@ -47,51 +93,23 @@
 		</form>
 
 	<div class="mt-4 flex justify-end">
-		<button class="button button-primary button-inline" onclick={update}>
+		<button class="button button-primary button-inline">
 			<span class="text-white">Update</span>
 		</button>
 	</div>
 
-	{#if (putError !== null)}
+	{#if (transactionPatchError !== null)}
 		<div class="error-message p-4">
-			{JSON.stringify(putError)}
+			{JSON.stringify(transactionPatchError)}
 		</div>
 	{/if}
 {/if}
 
 <style>
 	.transaction-validity-selector {
-			@apply flex flex-row ml-auto;
-
-			input {
-					@apply py-4 px-8 rounded-none
+			button {
+					@apply text-sm text-white py-2 px-4 inline-flex items-center justify-center whitespace-nowrap align-middle font-semibold disabled:cursor-not-allowed  w-full  drop-shadow;
 			}
-
-      /* Hide the actual radio buttons */
-      .transaction-validity-selector input[type="radio"] {
-          display: none;
-      }
-
-      /* Style the label to look like a button */
-      .transaction-validity-selector label {
-          padding: 10px 20px;
-          border: 2px solid #ccc;
-          border-radius: 8px;
-          background-color: #f9f9f9;
-          cursor: pointer;
-          font-size: 14px;
-          transition: all 0.2s ease-in-out;
-          user-select: none;
-          text-align: center;
-          min-width: 100px;
-      }
-
-      /* When the radio is selected, style the label as active */
-      .transaction-validity-selector input[type="radio"]:checked + label {
-          background-color: #007bff;
-          color: white;
-          border-color: #007bff;
-          font-weight: bold;
-      }
+			@apply ml-auto mr-4 rounded-lg bg-gray-100 flex flex-row;
 	}
 </style>
