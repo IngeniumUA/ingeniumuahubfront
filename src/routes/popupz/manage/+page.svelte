@@ -89,6 +89,16 @@
 	onDestroy(() => {
 		clearInterval(interval);
 	});
+
+	/**
+	 * Utility
+	 */
+	export function secondsSinceUtc(utcString: string) {
+		const eventTime = new Date(utcString).getTime(); // UTC timestamp in ms
+		const now = Date.now(); // Current local time in ms
+
+		return Math.floor((now - eventTime) / 1000); // Difference in seconds
+	}
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />
@@ -180,6 +190,7 @@
 						{/if}
 					</button>
 				</div>
+				<p>{secondsSinceUtc(order.created_timestamp)}</p>
 			</article>
 		{/each}
 	</section>
