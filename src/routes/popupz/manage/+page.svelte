@@ -97,7 +97,7 @@
 		const eventTime = new Date(utcString).getTime(); // UTC timestamp in ms
 		const now = Date.now(); // Current local time in ms
 
-		return Math.floor((now - eventTime) / 1000); // Difference in seconds
+		return Math.floor((now - eventTime) / 60000);
 	}
 </script>
 
@@ -159,7 +159,7 @@
 							</li>
 						{/each}
 					</ul>
-					<span>{ order.checkout.user_email }<br>{ makePretty(order.checkout.user_first_name ?? "") } { makePretty(order.checkout.user_last_name ?? "")}</span>
+					<span class="text-center">{ order.checkout.user_email }</span>
 					{#if order.checkout.note !== null && order.checkout.note !== '' }
 						<span class="text-sm underline">Opmerking:</span>
 						<span class="font-bold mb-4">{ order.checkout.note }</span>
@@ -189,7 +189,7 @@
 						{/if}
 					</button>
 				</div>
-				<p class="text-right">{secondsSinceUtc(order.created_timestamp)}s geleden</p>
+				<p class="text-right mt-2">{secondsSinceUtc(order.created_timestamp)}m geleden</p>
 			</article>
 		{/each}
 	</section>
