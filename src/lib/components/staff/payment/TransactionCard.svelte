@@ -46,13 +46,10 @@
 		}
 	}
 
-	function validityToStyle(validity: ValidityEnum) {
-		const intensity = validity === transaction.validity ? 900: 700;
-		const color = validityToColor(validity);
-		return `text-${color}-${intensity} bg-${color}-${intensity-200}`;
+	function isSelected(valitity: ValidityEnum) {
+		return valitity === transaction.validity
 	}
 </script>
-
 
 <div class="flex justify-between items-center">
 	<h4 class="text-ingenium-grey-800 font-bold">
@@ -64,10 +61,11 @@
 	<div class="transaction-validity-selector">
 		{#each ValidityList as validity}
 			<button type="button"
-							class="first:rounded-l-md last:rounded-r-md {validityToStyle(validity)}"
+							class="first:rounded-l-md last:rounded-r-md {validityToColor(validity)} {isSelected(validity) ? 'border-2': 'border-0'}"
 							onclick={() => patchValidity(validity)}
 							disabled={loadingHTTP}>
-				<span>{makePretty(ValidityEnum[validity])}</span>
+				<span class="block md:hidden">{makePretty(ValidityEnum[validity]).substring(0, 1)}</span>
+				<span class="hidden md:block">{makePretty(ValidityEnum[validity])}</span>
 			</button>
 		{/each}
 	</div>
@@ -110,6 +108,20 @@
 			button {
 					@apply text-sm text-white py-2 px-4 inline-flex items-center justify-center whitespace-nowrap align-middle font-semibold disabled:cursor-not-allowed  w-full  drop-shadow;
 			}
+
+			.red {
+					@apply border-red-700 text-red-700 bg-red-300;
+			}
+      .orange {
+          @apply  border-orange-700 text-orange-700 bg-orange-300;
+      }
+      .green {
+          @apply  border-green-700 text-green-700 bg-green-300;
+      }
+			.gray {
+          @apply  border-gray-700 text-gray-700 bg-gray-300;
+			}
+
 			@apply ml-auto mr-4 rounded-lg bg-gray-100 flex flex-row;
 	}
 </style>
