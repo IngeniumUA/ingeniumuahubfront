@@ -275,8 +275,8 @@
 	</section>
 
 	<h1 id="overview">Overzicht</h1>
-	<section class="flex flex-row">
-		<div class="flex-[2]">
+	<section class="flex flex-col lg:flex-row">
+		<div class="order-3 lg:order-2 flex-[2]">
 			<h2>Tijdlijn</h2>
 			<div class="alert alert-info mb-4">
 				<p class="alert-text">Herinner dat we niet alle veranderingen bijhouden.<br>Hieronder enkele van de belangrijkste.</p>
@@ -320,7 +320,7 @@
 			<p></p>
 		</div>
 
-		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+		<div class="order-2 hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
 		<div class="checkout-details-section">
 			<h2>Details</h2>
@@ -497,7 +497,7 @@
 
 <style>
 	.checkout-details-section {
-			@apply flex-[1] px-4 col-span-1;
+			@apply flex-[1] order-1 lg:order-3 px-4 col-span-1;
 			fieldset {
 					@apply mb-2;
           .checkout-detail-value {

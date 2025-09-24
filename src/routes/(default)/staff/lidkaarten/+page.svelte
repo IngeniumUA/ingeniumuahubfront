@@ -201,7 +201,7 @@
 
 	<div class="container flex flex-col md:flex-row">
 		<!-- Left hand side, list of vacatures -->
-		<div class="md:w-2/3">
+		<div class="md:flex-[2] order-3 md:order-1">
 			<h2>Actieve Lidkaarten</h2>
 
 			<h3 class="font-bold">Filters</h3>
@@ -287,10 +287,10 @@
 		</div>
 
 		<!-- Vertical divider -->
-		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+		<div class="order-2 hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
 		<!-- Right hand side, brief statistics-->
-		<div class="md:w-1/3">
+		<div class="md:flex-[1] order-1 md:order-3">
 			<h2 class="font-bold">Overzicht</h2>
 
 			{#each cardTable as card_count_dict (card_count_dict["member_type"])}
