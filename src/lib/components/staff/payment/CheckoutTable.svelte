@@ -2,6 +2,7 @@
 	import type { CheckoutI } from '$lib/models/checkoutI';
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import { onMount } from 'svelte';
+	import { PaymentStatusEnum } from '$lib/models/enums';
 
 	let checkouts: CheckoutI[] = $state([])
 	let checkoutStatusList = $state([])
@@ -64,24 +65,31 @@
 	<table class="ingenium-table">
 		<thead>
 			<tr>
-				<th>Doos voor alles</th>
+				<th>Select <input type="checkbox"/></th>
 				<th>Checkout</th>
+				<th>Status</th>
+				<th>User</th>
 			</tr>
 		</thead>
 		<tbody>
 			{#each checkouts as checkout (checkout.checkout_uuid)}
 				<tr>
 					<th>
-						Doos voor deze rij
+						<input type="checkbox"/>
 					</th>
 					<th>
-						<a href={`payment/${checkout.checkout_uuid}#overview`}>{checkout.checkout_uuid.slice(6)}</a>
+						<a href={`payment/${checkout.checkout_uuid}#overview`}>{checkout.checkout_uuid.slice(0, 6)}</a>
 					</th>
+					<td>
+						{PaymentStatusEnum[checkout.checkout_status]}
+					</td>
 					<td>
 						{checkout.user_email}
 					</td>
 					<td>
-						... Button voor opties
+						<button>
+							<span>...</span>
+						</button>
 					</td>
 				</tr>
 			{/each}
@@ -90,15 +98,19 @@
 </article>
 
 <style>
-	.status-selector {
+		h3 {
+				@apply font-bold;
+		}
 
-	}
+		.status-selector {
 
-	.filter-selector {
+		}
 
-	}
+		.filter-selector {
 
-	.bulk-operation {
+		}
 
-	}
+		.bulk-operation {
+
+		}
 </style>
