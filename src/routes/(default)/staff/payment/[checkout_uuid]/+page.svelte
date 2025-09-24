@@ -192,7 +192,7 @@
 		</button>
 	</div>
 
-	<section class="flex flex-row">
+	<section class="flex flex-col md:flex-row">
 		<div class="flex-[2]">
 			<div class="alert alert-info mb-4">
 				<p class="alert-text">Een checkout is een uitgevoerde betaling.</p>
@@ -226,7 +226,12 @@
 				</div>
 
 				<div class="flex-[1] p-2">
-					<h3 class="font-bold mb-2">Voortgang:</h3>
+					<h3 class="font-bold mb-2">Mail:</h3>
+					<button class="button button-primary button-inline" onclick={sendEmail}>
+						<span class="text-white">Opnieuw Versturen</span>
+					</button>
+
+					<h3 class="font-bold mt-4 mb-2">Voortgang:</h3>
 					<button
 						class="button button-danger button-inline"
 						onclick={() => {patchStatus(getPatchStatusValue())}}
@@ -241,11 +246,6 @@
 								{makePretty(PaymentStatusEnum[checkoutWide.checkout_status])}
 							{/if}
 						</span>
-					</button>
-
-					<h3 class="font-bold mt-4 mb-2">Mail:</h3>
-					<button class="button button-primary button-inline" onclick={sendEmail}>
-						<span class="text-white">Opnieuw Versturen</span>
 					</button>
 				</div>
 			</div>

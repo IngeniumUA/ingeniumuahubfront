@@ -3,22 +3,46 @@
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import { onMount } from 'svelte';
 	import { PaymentStatusEnum } from '$lib/models/enums';
+	import { successToast } from '$lib/components/toast/defined_toast';
 
+	let checkoutCount: number = $state(0);
 	let checkouts: CheckoutI[] = $state([])
 	let checkoutStatusList = $state([])
 
-	let queryParam = $state(new URLSearchParams()) // todo bindable via input with default
+	onMount(() => {
+		queryData(queryParam);
+	});
+
+	/**
+	 * Query logic
+	 */
+	interface QueryFormI {
+		user_email: string | null;
+	}
+	let queryForm: QueryFormI = $state({
+		user_email: null
+	})
+	let queryParam = $derived.by(() => {
+		let searchParam = new URLSearchParams()
+		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
+		return searchParam
+	})
 	let loadingHTTP = $state(false);
 
 	let queryError: Error | null = null
 	async function queryData(queryParam: URLSearchParams) {
 		if (loadingHTTP) return;
 		checkouts = await CoreCheckoutAPI.queryCheckoutWide(null, queryParam);
+		checkoutCount = await CoreCheckoutAPI.countCheckout(null, queryParam);
 	}
 
-	onMount(() => {
-		queryData(queryParam);
-	});
+	/**
+	 *
+	 */
+	async function refresh() {
+		await queryData(queryParam)
+		successToast("Refreshed!")
+	}
 
 	/**
 	 * Bulk Operations selection
@@ -27,7 +51,12 @@
 </script>
 
 <article>
-	<h2>Checkouts</h2>
+	<div class="flex justify-between items-center mb-6">
+		<h1 id="checkout-table">Checkouts</h1>
+		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
+			<span class="text-white">Refresh</span>
+		</button>
+	</div>
 	<div class="alert alert-info mb-4 max-w-3xl">
 		<p class="alert-text">Een Checkout is een daadwerkelijke betaling, uitgevoerd met een <span class="italic">payment provider</span>.
 			Die betalingen kan worden uitgevoerd via stripe, maar bijvoorbeeld ook gewoon hier gelogd als 'kassa betaling'.
@@ -65,10 +94,16 @@
 	<table class="ingenium-table">
 		<thead>
 			<tr>
-				<th>Select <input type="checkbox"/></th>
-				<th>Checkout</th>
-				<th>Status</th>
-				<th>User</th>
+				<th><h4>Select</h4> <input type="checkbox"/></th>
+				<th><h4>Checkout</h4></th>
+				<th><h4>Status</h4></th>
+				<th>
+					<div>
+						<h4>User</h4>
+						<input type="text" placeholder="Email" bind:value={queryForm.user_email}>
+					</div>
+				</th>
+				<th><h4>Showing {checkouts.length} / {checkoutCount}</h4></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -101,6 +136,16 @@
 		h3 {
 				@apply font-bold;
 		}
+
+    th {
+        div {
+            @apply h-14 flex flex-col;
+        }
+
+        input {
+            @apply p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin;
+        }
+    }
 
 		.status-selector {
 
