@@ -10,6 +10,7 @@
 	import type { DBLogExplodedI } from '$lib/models/dblog';
 	import { DBLogAPI } from '$lib/core_api/dblog_api';
 	import type { TransactionI } from '$lib/models/transactionI';
+	import TransactionCard from '$lib/components/staff/payment/TransactionCard.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -182,6 +183,11 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 *
+	 */
+	let selectedArray = $state(Array.from({ length: data.checkout.transactions.length }, () => false));
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -409,6 +415,15 @@
 		<p>Zoals de price policy hier ook zo een opening. Het simpeler kaartje mag wel groter.
 			Het grotere kaartje moet ook zo de recent history enzo kunnen weergeven voor partial refunds bv.
 			Bij open kaartje identiek als hierboven zo de details in een sidebar?</p>
+
+		<hr class="h-px mt-4 bg-gray-200 border-0 dark:bg-gray-800">
+		{#each checkoutWide.transactions as transaction, transactionIndex (transaction.interaction.interaction_id)}
+			<TransactionCard bind:loadingHTTP={loadingHTTP}
+											 isOpen={ selectedArray.at(transactionIndex) ?? false }
+											 bind:transaction={checkoutWide.transactions[transactionIndex]}
+											 transactionIndex={transactionIndex}></TransactionCard>
+			<hr class="h-px bg-gray-200 border-0 dark:bg-gray-800">
+		{/each}
 	</section>
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
