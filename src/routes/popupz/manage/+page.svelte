@@ -178,8 +178,7 @@
 					<button
 						type="button"
 						onclick={() => increaseStatus(index, order)} disabled={loadingHTTP}
-						class="button button-primary w-32 button-inline flex-[1]"
-						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
+						class="button button-primary w-32 button-inline flex-[1] {order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}"
 					>
 						{#if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready}
 							Afgehaald
