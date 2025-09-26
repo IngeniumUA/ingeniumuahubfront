@@ -103,11 +103,30 @@
 			case ValidityEnum.consumed: return 'gray';
 		}
 	}
+
+	/**
+	 * Downloading
+	 */
+	async function download() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+		try {
+			await CoreTransactionAPI.downloadTransactions(null, queryParam);
+			transactionPatchError = null;
+		} catch (error) {
+			transactionPatchError = error instanceof Error ? error : Error('Error download');
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
+	}
 </script>
 
 <article>
 	<div class="flex justify-between items-center">
 		<h2 id="transaction-table">Transactions</h2>
+		<button onclick={download} class="ml-auto button button-primary w-24 button-inline">
+			<span class="text-white">Download</span>
+		</button>
 		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
