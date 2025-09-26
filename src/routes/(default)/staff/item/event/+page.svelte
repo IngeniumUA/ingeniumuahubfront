@@ -14,6 +14,7 @@
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
+	let events = $state(data.events)
 
 	/**
 	 * Query parameter for showing available
@@ -31,7 +32,7 @@
 		if (onlyShowAvailable) {
 			query.set("available", `${onlyShowAvailable}`)
 		}
-		data.events = await CoreItemWideAPI.queryEventItem(null, query);
+		events = await CoreItemWideAPI.queryEventItem(null, query);
 		successToast("Refreshed!")
 	}
 
@@ -155,7 +156,7 @@
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
 	<section class="flex flex-col gap-4">
-		{#each data.events as event, index (event.item.id)}
+		{#each events as event, index (event.item.id)}
 			<div class="bg-white p-4 rounded-lg
 						min-h-48
 						shadow-lg hover:shadow-xl transition-shadow">

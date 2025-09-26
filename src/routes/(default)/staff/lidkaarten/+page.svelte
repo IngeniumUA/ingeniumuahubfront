@@ -20,28 +20,48 @@
 	let cardCount = $state(data.cardCount)
 
 	let onlyShowLinked: boolean = $state(false);
+	let onlyShowAvailable: boolean = $state(true);
 	let loadingHTTP: boolean = $state(false)
+
+	/**
+	 * Query logic
+	 */
+	interface QueryFormI {
+		user_email: string | null;
+	}
+	let queryForm: QueryFormI = $state({
+		user_email: null
+	})
+	let baseQueryParam = $derived.by(() => {
+		let queryParam = new URLSearchParams({
+			limit: '300',
+		});
+		if (onlyShowLinked) {
+			queryParam.set("is_linked", "true")
+		}
+		if (onlyShowAvailable) {
+			queryParam.set("available", "true")
+		}
+		if (queryForm.user_email !== null && queryForm.user_email !== "") queryParam.set('user', queryForm.user_email);
+
+		return queryParam;
+	})
+
 	async function refresh() {
 		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
-		const query = new URLSearchParams({
-			limit: '300',
-		})
-		if (onlyShowLinked) {
-			query.set("is_linked", "true")
-		}
-		cards = await CoreCardAPI.queryCards(null, query);
 
-		cardCountAvailable = await CoreCardAPI.countCards(null, new URLSearchParams({
-			available: 'true',
-		}));
-		cardCountNotAvailable = await CoreCardAPI.countCards(null, new URLSearchParams({
-			available: 'false',
-		}));
+		cards = await CoreCardAPI.queryCards(null, baseQueryParam);
+		let queryParam = baseQueryParam;
+
+		queryParam.set('available', "true")
+		cardCountAvailable = await CoreCardAPI.countCards(null, queryParam);
+
+		queryParam.set('available', "false")
+		cardCountNotAvailable = await CoreCardAPI.countCards(null, queryParam);
 		cardCount = cardCountAvailable + cardCountNotAvailable;
 
 		successToast("Refreshed")
 	}
-
 
 	/**
 	 * Edit Modal Code
@@ -222,6 +242,22 @@
 							"></div>
 					<span class="ms-3 text-sm font-medium text-gray-600">Toon Enkel Gelinkt</span>
 				</label>
+				<label class="inline-flex items-center cursor-pointer my-4">
+					<input type="checkbox" class="sr-only peer" bind:checked="{onlyShowAvailable}" />
+					<div class="
+							relative w-11 h-6
+							bg-gray-200 dark:bg-gray-700
+							rounded-full
+							peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+							after:content-['']
+							after:absolute after:top-[2px] after:start-[2px]
+							after:w-5 after:h-5
+							after:bg-white after:rounded-full
+							after:transition-transform
+							peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+							"></div>
+					<span class="ms-3 text-sm font-medium text-gray-600">Only show Available</span>
+				</label>
 			</div>
 
 			<h3 class="font-bold">Lijst</h3>
@@ -230,7 +266,10 @@
 				<tr>
 					<th scope="col"><h4>Card UUID</h4></th>
 					<th scope="col"><h4>Card Nr</h4></th>
-					<th scope="col"><h4>Linked User</h4></th>
+					<th scope="col" class="form-field"><div>
+						<h4>Linked User</h4>
+						<input type="text" placeholder="Email" bind:value={queryForm.user_email}>
+					</div></th>
 					<th scope="col"><h4>Member Type</h4></th>
 					<th scope="col"><h4>Edit</h4></th>
 				</tr>
