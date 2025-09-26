@@ -28,9 +28,11 @@
 	 */
 	interface QueryFormI {
 		user_email: string | null;
+		card_nr: number | null
 	}
 	let queryForm: QueryFormI = $state({
-		user_email: null
+		user_email: null,
+		card_nr: null
 	})
 	let baseQueryParam = $derived.by(() => {
 		let queryParam = new URLSearchParams({
@@ -43,6 +45,7 @@
 			queryParam.set("available", "true")
 		}
 		if (queryForm.user_email !== null && queryForm.user_email !== "") queryParam.set('user', queryForm.user_email);
+		if (queryForm.card_nr !== null) queryParam.set('card_nr', queryForm.card_nr.toString());
 
 		return queryParam;
 	})
@@ -265,13 +268,16 @@
 				<thead>
 				<tr>
 					<th scope="col"><h4>Card UUID</h4></th>
-					<th scope="col"><h4>Card Nr</h4></th>
-					<th scope="col" class="form-field"><div>
+					<td><div>
+						<h4>Card Nr</h4>
+						<input type="text" placeholder="Cald nr" bind:value={queryForm.card_nr}>
+					</div></td>
+					<td class="form-field"><div>
 						<h4>Linked User</h4>
 						<input type="text" placeholder="Email" bind:value={queryForm.user_email}>
-					</div></th>
-					<th scope="col"><h4>Member Type</h4></th>
-					<th scope="col"><h4>Edit</h4></th>
+					</div></td>
+					<td><h4>Member Type</h4></td>
+					<td><h4>Edit</h4></td>
 				</tr>
 				</thead>
 				<tbody>
