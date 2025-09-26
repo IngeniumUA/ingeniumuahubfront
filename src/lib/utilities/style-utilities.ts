@@ -12,16 +12,28 @@ export const makePretty = (input_str: string): string => {
     return input_str.substring(0, 1).toUpperCase().concat(input_str.substring(1).replace("_", " "));
 }
 
+
 /**
- * TODO Function, quick and dirty at the moment
- * @param input_str
+ * Formats a date string into YYYY-MM-DD in local timezone
+ * @param input_str - An ISO 8601 date string (e.g., 2025-09-26T14:32:00Z)
  */
 export const prettyDate = (input_str: string): string => {
-    return input_str.split("T")[0]
-}
+    const date = new Date(input_str); // Automatically converts to local timezone
+    return date.toLocaleDateString("en-CA"); // en-CA gives YYYY-MM-DD
+};
 
+/**
+ * Formats a datetime string into YYYY-MM-DD HH:mm:ss in local timezone
+ * @param input_str - An ISO 8601 date string
+ */
 export const prettyDateTime = (input_str: string): string => {
-	return `${prettyDate(input_str)} ${input_str.split('T')[1].split('.')[0]}`;
+    const date = new Date(input_str);
+    return `${prettyDate(input_str)} ${date.toLocaleTimeString("en-GB", {
+        hour12: false, // 24-hour format
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    })}`;
 };
 
 /**

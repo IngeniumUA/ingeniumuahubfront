@@ -4,6 +4,9 @@
 	import { onMount } from 'svelte';
 	import { PaymentStatusEnum } from '$lib/models/enums';
 	import { successToast } from '$lib/components/toast/defined_toast';
+	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+
+	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
 
 	let checkoutCount: number = $state(0);
 	let checkouts: CheckoutI[] = $state([])
@@ -25,7 +28,15 @@
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
-		return searchParam
+
+		let queryParam = new URLSearchParams()
+		for (const [key, value] of baseQueryParam) {
+			queryParam.append(key, value);
+		}
+		for (const [key, value] of searchParam) {
+			queryParam.append(key, value);
+		}
+		return queryParam
 	})
 	let loadingHTTP = $state(false);
 
@@ -51,8 +62,8 @@
 </script>
 
 <article>
-	<div class="flex justify-between items-center mb-6">
-		<h1 id="checkout-table">Checkouts</h1>
+	<div class="flex justify-between items-center">
+		<h2 id="checkout-table">Checkouts</h2>
 		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
@@ -103,6 +114,7 @@
 						<input type="text" placeholder="Email" bind:value={queryForm.user_email}>
 					</div>
 				</th>
+				<th><h4>Created</h4></th>
 				<th><h4>Showing {checkouts.length} / {checkoutCount}</h4></th>
 			</tr>
 		</thead>
@@ -116,10 +128,13 @@
 						<a href={`payment/${checkout.checkout_uuid}#overview`}>{checkout.checkout_uuid.slice(0, 6)}</a>
 					</th>
 					<td>
-						{PaymentStatusEnum[checkout.checkout_status]}
+						{makePretty(PaymentStatusEnum[checkout.checkout_status])}
 					</td>
 					<td>
 						{checkout.user_email}
+					</td>
+					<td>
+						{prettyDateTime(checkout.created_timestamp)}
 					</td>
 					<td>
 						<button>
