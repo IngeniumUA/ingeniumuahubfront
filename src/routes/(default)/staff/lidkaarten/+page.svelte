@@ -268,9 +268,9 @@
 				<thead>
 				<tr>
 					<th scope="col"><h4>Card UUID</h4></th>
-					<td><div>
+					<td class="form-field"><div>
 						<h4>Card Nr</h4>
-						<input type="text" placeholder="Cald nr" bind:value={queryForm.card_nr}>
+						<input class="max-w-20" type="text" placeholder="Card nr" bind:value={queryForm.card_nr}>
 					</div></td>
 					<td class="form-field"><div>
 						<h4>Linked User</h4>
