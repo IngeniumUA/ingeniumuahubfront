@@ -4,6 +4,23 @@
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
 	import { successToast } from '$lib/components/toast/defined_toast';
+	import TransactionTable from '$lib/components/staff/payment/TransactionTable.svelte';
+	import { makePretty } from '$lib/utilities/style-utilities';
+	import { onMount } from 'svelte';
+
+	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
+
+	/**
+	 *
+	 */
+	let selectedTable = $state(0);
+	onMount(() => {
+		const params = new URLSearchParams(window.location.search);
+		const queryParams = Object.fromEntries(params.entries());
+		if (queryParams["selected_table"]) {
+			selectedTable = parseInt(queryParams["selected_table"]);
+		}
+	});
 
 	/**
 	 * Bulk importing state and functions
@@ -46,7 +63,17 @@
 	<button class="ml-auto button button-primary w-24 button-inline" onclick={() => {showBulkImport = true}}>
 		<span class="text-white">Import</span>
 	</button>
-	<CheckoutTable></CheckoutTable>
+
+	<div class="flex flex-col sm:flex-row gap-2">{#each ["betalingen", "transacties", "refunds"] as tableOption, index}
+		<button onclick={() => selectedTable = index}><span
+			class="text-blue-900 font-bold {index === selectedTable ? '': 'opacity-75'}">{makePretty(tableOption)}</span></button>
+	{/each}</div>
+	{#if selectedTable === 0}
+		<CheckoutTable baseQueryParam={baseQueryParam}></CheckoutTable>
+	{:else if selectedTable === 1}
+		<TransactionTable baseQueryParam={baseQueryParam}></TransactionTable>
+	{/if}
+
 </main>
 
 <Modal title="Bulk Import" maxWidth="max-w-xl" bind:isOpen={ showBulkImport } closable={ true }>

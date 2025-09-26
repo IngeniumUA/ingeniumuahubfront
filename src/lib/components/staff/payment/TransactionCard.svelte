@@ -21,7 +21,6 @@
 			transaction.validity = transResult.validity;
 			transactionPatchError = null;
 			successToast("Validity Patched!")
-			isOpen = false; // Close the modal when the creation was a success :))
 		} catch (error) {
 			transactionPatchError = error instanceof Error ? error : Error('Error validity');
 		} finally {
@@ -45,10 +44,6 @@
 			}
 		}
 	}
-
-	function isSelected(valitity: ValidityEnum) {
-		return valitity === transaction.validity
-	}
 </script>
 
 <div class="flex justify-between items-center">
@@ -61,7 +56,7 @@
 	<div class="transaction-validity-selector">
 		{#each ValidityList as validity}
 			<button type="button"
-							class="first:rounded-l-md last:rounded-r-md {validityToColor(validity)} {isSelected(validity) ? 'border-2': 'border-0'}"
+							class="first:rounded-l-md last:rounded-r-md {validityToColor(validity)} {transaction.validity === validity ? 'border-2': 'border-0'}"
 							onclick={() => patchValidity(validity)}
 							disabled={loadingHTTP}>
 				<span class="block md:hidden">{makePretty(ValidityEnum[validity]).substring(0, 1)}</span>

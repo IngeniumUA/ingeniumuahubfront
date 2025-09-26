@@ -14,6 +14,8 @@
 	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
 	import { PaymentStatusEnum } from '$lib/models/enums';
 	import { hasRole } from '$lib/states/auth.svelte';
+	import TransactionTable from '$lib/components/staff/payment/TransactionTable.svelte';
+	import PaymentTable from '$lib/components/staff/payment/PaymentTable.svelte';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -439,6 +441,8 @@
 				{/each}
 				<p class="text-right font-bold mr-4">Eind totaal: {pricePolicyTable.reduce((sum, val) => {
 					return sum + val["transaction_count"]
+				}, 0)} &nbsp &nbsp &nbsp Inkomsten: €{pricePolicyTable.reduce((sum, val) => {
+					return sum + val["transaction_count"] * val["price_eu"]
 				}, 0)}</p>
 				<p>TODO: Vanalle extra beschrijven statistieken. Totalen van transactions/checkouts enzo (DONE), maar ook unique users, totaal €, totaal € na fee's.
 					Voor zo'n dingen best API calls doen naar de dpu?
@@ -448,9 +452,6 @@
 			<div class="order-2 hidden md:block w-px mx-4 bg-gray-200"></div>
 
 			<div class="order-3 lg:order-1 lg:flex-[2]">
-				<h2>Transacties</h2>
-				<p>TODO: Transacties en validity hier?</p>
-
 				<h2 class="font-bold">Betalingen</h2>
 				<p>Het is normaal dat sommige betalingen falen. Een gefaalde betaling gebeurt bijvoorbeeld wanneer iemand een betaling start, maar niet genoed geld heeft. Of wanneer hij zijn bank app opent maar er daar iets fout gaat.</p>
 				<div class="flex flex-row flex-wrap  gap-x-4">
@@ -476,8 +477,7 @@
 				Een Checkout is de daadwerkelijke betalingen daarvan.
 				Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
 		</div>
-
-		<p>TODO: Aparte CheckoutTransactionRefundTable component</p>
+		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${itemWide.item.id}`, limit: '20'})}></PaymentTable>
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
