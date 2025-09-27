@@ -210,7 +210,7 @@
 				<fieldset>
 					<div class="form-field">
 						<label for="preview_description">Preview Description</label>
-						<input id="preview_description" type="text" required bind:value={form.preview_description}/>
+						<input id="preview_description" type="text" bind:value={form.preview_description}/>
 						<p>Extra display beschrijving</p>
 					</div>
 				</fieldset>
