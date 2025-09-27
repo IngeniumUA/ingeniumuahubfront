@@ -47,11 +47,11 @@
 </script>
 
 <div class="flex justify-between items-center">
-	<h4 class="text-ingenium-grey-800 font-bold">
+	<h3 class="text-ingenium-grey-700 font-bold">
 		{#if transactionIndex !== null}{(transactionIndex ?? 0) + 1}){/if} {transaction.product_blueprint_name} at
 		{#if transaction.purchased_product.price_policy?.name !== null}{transaction.purchased_product.price_policy?.name} -{/if}
 		{#if transaction.purchased_product.price_policy?.price === 0}Gratis{:else}€{transaction.purchased_product.price_policy?.price}{/if}
-	</h4>
+	</h3>
 
 	<div class="transaction-validity-selector">
 		{#each ValidityList as validity}
@@ -82,8 +82,12 @@
 	</button>
 </div>
 {#if isOpen}
-		<form class="ingenium-form flex flex-row gap-4">
-		</form>
+	<form class="ingenium-form flex flex-row gap-4">
+	</form>
+
+	<h4>Purchased Product</h4>
+	<p>Momentopname van het gekochte product</p>
+	<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(transaction.purchased_product, null, 2)}</pre>
 
 	<div class="mt-4 flex justify-end">
 		<button class="button button-primary button-inline">
@@ -99,9 +103,13 @@
 {/if}
 
 <style>
+		h4 {
+        @apply text-ingenium-grey-800 font-bold
+		}
+
 	.transaction-validity-selector {
 			button {
-					@apply text-sm text-white py-2 px-4 inline-flex items-center justify-center whitespace-nowrap align-middle font-semibold disabled:cursor-not-allowed  w-full  drop-shadow;
+					@apply text-sm text-white py-1 px-2 inline-flex items-center justify-center whitespace-nowrap align-middle font-semibold disabled:cursor-not-allowed  w-full  drop-shadow;
 			}
 
 			.red {
