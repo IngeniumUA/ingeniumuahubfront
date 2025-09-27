@@ -104,7 +104,7 @@
 
 <style>
 		h4 {
-        @apply text-ingenium-grey-800 font-bold
+        @apply text-ingenium-grey-800 font-bold;
 		}
 
 	.transaction-validity-selector {
