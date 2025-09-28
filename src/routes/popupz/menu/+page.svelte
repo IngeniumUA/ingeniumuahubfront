@@ -185,7 +185,7 @@
 	}
 </style>
 
-<main class="bg-gray-100">
+<main class="bg-gray-100 pb-40">
 	<!-- Menu	-->
 	<div class="p-6 min-h-36
 						circle-arcs bg-blue-900 border-none">
