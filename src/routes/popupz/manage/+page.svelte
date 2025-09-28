@@ -5,6 +5,7 @@
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { ProductFormI } from '$lib/models/productsI';
 	import { onDestroy, onMount } from 'svelte';
+	import { hasRole } from '$lib/states/auth.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -120,7 +121,11 @@
 	<div class="p-6 min-h-36
 						circle-arcs bg-blue-900 border-none">
 		<h1 class="text-7xl text-white">{data.item.item.name}</h1>
-		<h1 class="text-3xl text-center underline text-white">Our Menu</h1>
+		<div class="flex flex-row gap-8 items-center justify-center">
+			<h1 class="text-3xl text-center underline text-white"><a href="menu">Our Menu</a></h1>
+			<h1 class="text-3xl text-center underline text-white"><a href="orders">Volg Orders</a></h1>
+			<h1 class="text-3xl text-center underline text-white"><a href="manage">Staff</a></h1>
+		</div>
 	</div>
 
 	<!-- Config Section -->
