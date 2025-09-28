@@ -5,7 +5,6 @@
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { ProductFormI } from '$lib/models/productsI';
 	import { onDestroy, onMount } from 'svelte';
-	import { hasRole } from '$lib/states/auth.svelte';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 
 	/**
@@ -127,6 +126,23 @@
 
 	}
 
+	/**
+	 * Groupbing count
+	 */
+	function groupedByProduct(orders: HubCheckoutTrackerI[]) {
+		return orders.reduce<Record<string, number>>((acc, order) => {
+			order.checkout.transactions.forEach(transaction => {
+				const productName = transaction.product_blueprint_name;
+
+				// Increment count for this product
+				acc[productName] = (acc[productName] || 0) + 1;
+			});
+			return acc;
+		}, {});
+	}
+
+	let nextFiveOrder: [] = $derived(groupedByProduct(orders.slice(0, 5)))
+	let summarisedOrders: [] = $derived(groupedByProduct(orders))
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />
@@ -136,9 +152,7 @@
 			@apply flex flex-row gap-2;
 
 			div {
-					@apply w-1/3;
-
-
+					@apply pt-4 flex-[1];
 			}
 	}
 </style>
@@ -155,12 +169,15 @@
 		</div>
 	</div>
 
-	<label class="inline-flex items-center cursor-pointer my-4">
-		<input type="checkbox" class="sr-only peer" disabled={loadingHTTP}
-					 bind:checked={publicCheckoutEnabled}
-					 onclick="{() => togglePublicCheckoutEnabled()}"
-		>
-		<div class="
+	<!-- Config Section -->
+	<section class="hidden config_section">
+		<div>
+			<label class="inline-flex items-center cursor-pointer">
+				<input type="checkbox" class="sr-only peer" disabled={loadingHTTP}
+							 bind:checked={publicCheckoutEnabled}
+							 onclick="{() => togglePublicCheckoutEnabled()}"
+				>
+				<div class="
 					ml-8
 					relative w-11 h-6
 					bg-red-900 dark:bg-red-900
@@ -173,25 +190,30 @@
 					after:transition-transform
 					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 					"></div>
-		<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">
+				<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">
 								Publiek bestellen {#if (publicCheckoutEnabled)}Aan{:else}Uit{/if}
 							</span>
-	</label>
+			</label>
+		</div>
 
-	<!-- Config Section -->
-<!--	<section class="hidden config_section">-->
-<!--		<div>-->
-<!--			<h2>Next Five Orders</h2>-->
-<!--		</div>-->
+		<div>
+			<h2>Next Five Orders</h2>
+			{#each Object.entries(nextFiveOrder) as [key, value]}
+				<h3 class="text-ingenium-grey-800"><span class="font-bold">{key}</span>: {value}</h3>
+			{/each}
+		</div>
 
-<!--		<div>-->
-<!--			<h2>Upcoming Orders</h2>-->
-<!--		</div>-->
+		<div>
+			<h2>Upcoming Orders</h2>
+			{#each Object.entries(summarisedOrders) as [key, value]}
+				<h3 class="text-ingenium-grey-800"><span class="font-bold">{key}</span>: {value}</h3>
+			{/each}
+		</div>
 
-<!--		<div>-->
-<!--			<h2>Filters</h2>-->
-<!--		</div>-->
-<!--	</section>-->
+		<div>
+			<h2>Filters</h2>
+		</div>
+	</section>
 
 	<!-- Orders Section -->
 	<section class="m-8 grid grid-cols-1 md:grid-cols-3 gap-6">
