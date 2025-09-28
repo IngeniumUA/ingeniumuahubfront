@@ -2,6 +2,7 @@
 import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
 import { getLoginUrlWithRedirect, getTokens, getUserFromToken, hasValidToken } from '$lib/auth/auth';
 import { redirect } from '@sveltejs/kit';
+import { CoreFlagAPI } from '$lib/core_api/flag_api';
 
 export async function load({ params, url }) {
 	if (!hasValidToken(params)) {
@@ -29,8 +30,19 @@ export async function load({ params, url }) {
 		orders = []
 	}
 
+	let publicCheckoutEnabled: boolean = false;
+	try {
+		const flag = await CoreFlagAPI.getFlag(params, "popupz_shop_enabled");
+		if (flag !== null) {
+			publicCheckoutEnabled = (flag.value as boolean);
+		}
+	} catch (error) {
+		console.log(error)
+		orders = []
+	}
+
 	const doRefresh = url.searchParams.get('refresh') === 'true'
 	const filterStatus = url.searchParams.get('filter')
 
-	return { orders, doRefresh, filterStatus }
+	return { orders, publicCheckoutEnabled, doRefresh, filterStatus }
 }

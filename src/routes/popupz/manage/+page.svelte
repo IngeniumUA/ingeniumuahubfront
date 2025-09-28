@@ -6,6 +6,7 @@
 	import type { ProductFormI } from '$lib/models/productsI';
 	import { onDestroy, onMount } from 'svelte';
 	import { hasRole } from '$lib/states/auth.svelte';
+	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -100,6 +101,32 @@
 
 		return Math.floor((now - eventTime) / 60000) - 120;
 	}
+
+	/**
+	 *
+	 */
+	let publicCheckoutEnabled = $state(data.publicCheckoutEnabled)
+	async function togglePublicCheckoutEnabled() {
+		if (loadingHTTP) return;
+
+		loadingHTTP = true;
+		try {
+			const patchObject = {
+				value: !publicCheckoutEnabled,
+				flag_value_type: 1
+			}
+			await CoreFlagAPI.patchFlag("popupz_shop_enabled", patchObject)
+			successToast("Updated!")
+		} catch (error) {
+			failedToast(`Failed ${error}`);
+			publicCheckoutEnabled = !publicCheckoutEnabled
+			await refresh()
+		}finally {
+			loadingHTTP = false;
+		}
+
+	}
+
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />
@@ -127,6 +154,29 @@
 			<h1 class="text-3xl text-center underline text-white"><a href="manage">Staff</a></h1>
 		</div>
 	</div>
+
+	<label class="inline-flex items-center cursor-pointer my-4">
+		<input type="checkbox" class="sr-only peer" disabled={loadingHTTP}
+					 bind:checked={publicCheckoutEnabled}
+					 onclick="{() => togglePublicCheckoutEnabled()}"
+		>
+		<div class="
+					ml-8
+					relative w-11 h-6
+					bg-red-900 dark:bg-red-900
+					rounded-full
+					peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+					after:content-['']
+					after:absolute after:top-[2px] after:start-[2px]
+					after:w-5 after:h-5
+					after:bg-white after:rounded-full
+					after:transition-transform
+					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+					"></div>
+		<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">
+								Publiek bestellen {#if (publicCheckoutEnabled)}Aan{:else}Uit{/if}
+							</span>
+	</label>
 
 	<!-- Config Section -->
 <!--	<section class="hidden config_section">-->
