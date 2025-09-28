@@ -285,7 +285,7 @@
 	{:else}
 	<div class="w-screen h-max flex items-center justify-center">
 		<div class="pt-8">
-			<h1>De Shop staat momenteel niet aan!</h1>
+			<h1>De Shop staat niet aan vandaag.</h1>
 			<h2>Kom naar de kassa!</h2>
 		</div>
 	</div>

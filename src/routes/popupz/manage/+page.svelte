@@ -220,7 +220,7 @@
 		{#if orders.length === 0}<h1>Geen Trackers</h1>{/if}
 		{#each orders as order, index (order.id)}
 			<article class="flex flex-col p-4 rounded border border-blue-900">
-				<span class="text-xl font-bold">#{ order.id }</span>
+				<span class="text-xl font-bold">#{ order.order_counter }</span>
 					<ul class="list-disc list-inside space-y-1 my-2 flex-1">
 						{#each order.checkout.transactions as transaction}
 							<li>

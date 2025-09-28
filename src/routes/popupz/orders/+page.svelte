@@ -57,7 +57,7 @@
 			<h2 class="text-blue-900 bg-ingenium-grey-200">We zijn er mee bezig!</h2>
 			<ol class="border-ingenium-grey-200">
 				{#each pendingOrders as order (order["id"])}
-					<li>{order["id"]}</li>
+					<li>{order["order_counter"]}</li>
 				{/each}
 			</ol>
 		</section>
@@ -66,7 +66,7 @@
 				<h2 class="text-white bg-blue-900">Klaar om op te halen!</h2>
 			<ol class="border-blue-900">
 				{#each finishedOrders as order (order["id"])}
-					<li>{order["id"]}</li>
+					<li>{order["order_counter"]}</li>
 				{/each}
 			</ol>
 		</section>

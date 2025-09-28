@@ -12,7 +12,7 @@
   let tracker = $state(data.tracker);
 
   onMount(() => {
-    if (data.tracker?.id) {
+    if (data.tracker?.order_counter) {
       const eventSource  = new EventSource(`${PUBLIC_API_URL}/sse/checkout_tracking`, {
         withCredentials: true,
       });
@@ -24,7 +24,7 @@
         const keys = Object.keys(parsedTracker);
         if (keys.includes("id") &&
             keys.includes("checkout_tracker_status") &&
-            parsedTracker.checkout_tracker_id === tracker?.id) {
+            parsedTracker.checkout_tracker_id === tracker?.order_counter) {
           tracker = parsedTracker;
         }
 
@@ -34,7 +34,7 @@
 
   let httpPending: boolean = $state(false);
   async function refreshTracker() {
-    if (!tracker?.id) return;
+    if (!tracker?.order_counter) return;
     tracker = await fetch(`${PUBLIC_API_URL}/order_tracking/${data.checkoutUuid}`, {
       headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
     }).then(handleRequest) as PublicOrderTrackerI;
@@ -66,7 +66,7 @@
       </svg>
     </div>
     <h1 class="success">Betaling gelukt</h1>
-    {#if tracker && tracker.id}
+    {#if tracker && tracker.order_counter}
       <p>
         Jouw bestellingsnummer is <br>
         <button disabled={httpPending}
@@ -76,7 +76,7 @@
         border-gray-300 bg-gray-50
         animate-bounce">
         <span class:animate-spin-once={spinning} class="block">
-          {tracker.id}
+          {tracker}
         </span>
         </button>
       </p>
