@@ -113,7 +113,8 @@
 		<thead>
 		<tr>
 			<th><h4>Select</h4> <input type="checkbox"/></th>
-			<th><h4>Order</h4></th>
+			<th><h4>Order ID</h4></th>
+			<th><h4>Order Counter</h4></th>
 			<th><h4>Checkout</h4></th>
 			<th><h4>Status</h4></th>
 			<th>
@@ -133,6 +134,7 @@
 					<input type="checkbox"/>
 				</th>
 				<th>{order.id}</th>
+				<th>{order.order_counter}</th>
 				<th>
 					<a href={`/staff/payment/${order.checkout.checkout_uuid}#overview`}>{order.checkout.checkout_uuid.slice(0, 6)}</a>
 				</th>
