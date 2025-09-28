@@ -125,7 +125,7 @@
 						<input type="checkbox"/>
 					</th>
 					<th>
-						<a href={`payment/${checkout.checkout_uuid}#overview`}>{checkout.checkout_uuid.slice(0, 6)}</a>
+						<a href={`/staff/payment/${checkout.checkout_uuid}#overview`}>{checkout.checkout_uuid.slice(0, 6)}</a>
 					</th>
 					<td>
 						{makePretty(PaymentStatusEnum[checkout.checkout_status])}

@@ -23,6 +23,10 @@
 		ordering: productBlueprint.ordering,
 		allow_individualised: false,
 
+		max_total: productBlueprint.max_total,
+		max_per_checkout: productBlueprint.max_per_checkout,
+		max_individual: productBlueprint.max_individual,
+
 		availability: {
 			available: productBlueprint.availability.available,
 			available_from: productBlueprint.availability.available_from,
@@ -66,9 +70,9 @@
 		putProductBlueprint.name = form.name;
 		putProductBlueprint.description = form.description;
 
-		putProductBlueprint.max_total = 5;
-		putProductBlueprint.max_individual = 5;
-		putProductBlueprint.max_per_checkout = 5;
+		putProductBlueprint.max_total = form.max_total;
+		putProductBlueprint.max_individual = form.max_individual;
+		putProductBlueprint.max_per_checkout = form.max_per_checkout;
 
 		putProductBlueprint.ordering = form.ordering;
 
@@ -153,7 +157,22 @@
 				<input id="ordering" type="number" required bind:value={form.ordering}/>
 				<p>Weergave volgorde, hoger cijfer -> hoger/eerst op de pagina.</p>
 			</div>
-		</fieldset>
+
+			<div class="form-field max-w-72">
+				<label for="max_total">Max Total</label>
+				<input id="max_total" type="number" required bind:value={form.max_total}/>
+				<p>Totaal maximum aantal.</p>
+
+				<label for="max_total">Max per betaling</label>
+				<input id="max_total" type="number" required bind:value={form.max_per_checkout}/>
+				<p>Maximum per payment.</p>
+
+				<label for="max_total">Max per account</label>
+				<input id="max_total" type="number" required bind:value={form.max_individual}/>
+				<p>Maximum per person.</p>
+			</div>
+
+			</fieldset>
 			<fieldset>
 				<h3 class="font-bold">Meta Config</h3>
 
