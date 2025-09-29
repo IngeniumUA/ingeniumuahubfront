@@ -76,7 +76,7 @@
         border-gray-300 bg-gray-50
         animate-bounce">
         <span class:animate-spin-once={spinning} class="block">
-          {tracker}
+          {tracker.order_counter}
         </span>
         </button>
       </p>
