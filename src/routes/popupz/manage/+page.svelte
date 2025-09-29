@@ -1,32 +1,37 @@
 ﻿<script lang="ts">
 	import { type HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum } from '$lib/models/trackerI';
-	import { makePretty } from '$lib/utilities/style-utilities';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { ProductFormI } from '$lib/models/productsI';
 	import { onDestroy, onMount } from 'svelte';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
+	import Modal from '$lib/components/layout/modal.svelte';
+	import { AccessPolicyEnum, AccessPolicyEnumList } from '$lib/models/access_policy/AccessPolicyI';
+	import { makePretty } from '$lib/utilities/style-utilities';
 
-	let onlyPending = $state(false)
-	function toggleOnlyPending() {
-		onlyPending = !onlyPending;
-	}
-
-	// let onlyFood = $state(false)
-	// function toggleOnlyFood() {
-	// 	onlyFood = !onlyFood;
-	// }
-
+	let statusFilter: null | number = $state(null)
+	let categoryFilter: null | string = $state(null)
 
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
 	let orders: HubCheckoutTrackerI[] = $state(data.orders)
+
+	function showOrder(order: HubCheckoutTrackerI): boolean {
+		return (statusFilter === null ? true: order.checkout_tracker_status === statusFilter) &&
+			(categoryFilter === null ? true: order.checkout.transactions.some(trans => {
+				return trans.purchased_product.product_meta.categorie === categoryFilter;
+			})) && !order.disabled;
+	}
+
 	let showOrders = $derived(orders.filter(value => {
-		return onlyPending ? value.checkout_tracker_status === 1: true;
+		return showOrder(value)
 	}))
 
+	/**
+	 * Refresh query
+	 */
 	async function refresh() {
 		loadingHTTP = true
 		const query_param = new URLSearchParams({
@@ -44,7 +49,7 @@
 	}
 
 	/**
-	 *
+	 * Display logic
 	 */
 	function parseForm(form: ProductFormI | null | undefined): [] {
 		if (!form) return [];
@@ -63,14 +68,13 @@
 		}
 	}
 
-
 	let loadingHTTP: boolean = $state(false)
 	let stepError: Error | null = $state(null)
 	async function increaseStatus(index: number, order: HubCheckoutTrackerI) {
 		loadingHTTP = true;
 		try {
 			const returnOrder = await CoreCheckoutAPI.stepCheckoutTracker(null, order.id);
-			if (returnOrder.disabled || onlyPending) {
+			if (!showOrder(returnOrder)) {
 				orders.splice(index, 1); // splice is *in place*
 			} else {
 				orders[index] = returnOrder
@@ -163,10 +167,10 @@
 
 <style>
 	.config_section {
-			@apply flex flex-row gap-2;
+			@apply p-6 flex flex-col md:flex-row gap-2;
 
 			div {
-					@apply pt-4 flex-[1];
+					@apply md:flex-[1];
 			}
 	}
 </style>
@@ -184,9 +188,11 @@
 	</div>
 
 	<!-- Config Section -->
-	<section class="hidden config_section">
+	<section class="config_section">
 		<div>
+			<h2>Filters</h2>
 			<label class="inline-flex items-center cursor-pointer">
+				<p>Online Bestellen</p>
 				<input type="checkbox" class="sr-only peer" disabled={loadingHTTP}
 							 bind:checked={publicCheckoutEnabled}
 							 onclick="{() => togglePublicCheckoutEnabled()}"
@@ -204,32 +210,26 @@
 					after:transition-transform
 					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 					"></div>
-				<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">
-								Publiek bestellen {#if (publicCheckoutEnabled)}Aan{:else}Uit{/if}
-							</span>
+				<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">{#if (publicCheckoutEnabled)}Aan{:else}Uit{/if}</span>
 			</label>
-			<label class="inline-flex items-center cursor-pointer">
-				<input type="checkbox" class="sr-only peer" disabled={loadingHTTP}
-							 bind:checked={onlyPending}
-							 onclick="{() => toggleOnlyPending()}"
-				>
-				<div class="
-					ml-8
-					relative w-11 h-6
-					bg-red-900 dark:bg-red-900
-					rounded-full
-					peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-					after:content-['']
-					after:absolute after:top-[2px] after:start-[2px]
-					after:w-5 after:h-5
-					after:bg-white after:rounded-full
-					after:transition-transform
-					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-					"></div>
-				<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">
-								Enkel Pending {#if (onlyPending)}Aan{:else}Uit{/if}
-							</span>
-			</label>
+
+			<div class="form-field max-w-72">
+				<label for="status_filter">Filter voor status</label>
+				<select id="status_filter" required bind:value={statusFilter}>
+					{#each [null, 1, 2] as status}
+						<option value={status}>{HubCheckoutTrackerStatusEnum[status] ?? "All"}</option>
+					{/each}
+				</select>
+			</div>
+
+			<div class="form-field max-w-72">
+				<label for="category_filter">Filter voor categorie</label>
+				<select id="category_filter" required bind:value={categoryFilter}>
+					{#each [null, "Food", "Drinks"] as category}
+						<option value={category}>{category ?? "All"}</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 
 		<div>
@@ -245,17 +245,13 @@
 				<h3 class="text-ingenium-grey-800"><span class="font-bold">{key}</span>: {value}</h3>
 			{/each}
 		</div>
-
-		<div>
-			<h2>Filters</h2>
-		</div>
 	</section>
 
 	<!-- Orders Section -->
-	<section class="m-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+	<section class="m-8 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 		{#if orders.length === 0}<h1>Geen Trackers</h1>{/if}
 		{#each showOrders as order, index (order.id)}
-			<article class="flex flex-col p-4 rounded border border-blue-900">
+			<article class="flex flex-col p-2 rounded-md border border-blue-900">
 				<span class="text-xl font-bold">#{ order.order_counter }</span>
 					<ul class="list-disc list-inside space-y-1 my-2 flex-1">
 						{#each order.checkout.transactions as transaction}
@@ -278,15 +274,13 @@
 						<span class="font-bold mb-4">{ order.checkout.note }</span>
 					{/if}
 
-				<div class="flex flex-row">
+				<div class="flex flex-row gap-4">
 					<button
 						type="button"
 						disabled={true}
 						class="button button-primary w-32 button-inline flex-[1]"
 						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
-					><span>WIP</span></button>
-
-					<h3 class="font-bold text-center text-blue-900 flex-[1]">{HubCheckoutTrackerStatusEnum[order.checkout_tracker_status]}</h3>
+					><span>Terug</span></button>
 
 					<button
 						type="button"
@@ -296,7 +290,7 @@
 						{#if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready}
 							Afgehaald
 						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Pending}
-							Klaar om af te halen
+							Klaar
 						{:else if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Finished}
 							Verwerkt
 						{/if}
