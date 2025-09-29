@@ -5,9 +5,6 @@
 	import type { ProductFormI } from '$lib/models/productsI';
 	import { onDestroy, onMount } from 'svelte';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
-	import Modal from '$lib/components/layout/modal.svelte';
-	import { AccessPolicyEnum, AccessPolicyEnumList } from '$lib/models/access_policy/AccessPolicyI';
-	import { makePretty } from '$lib/utilities/style-utilities';
 
 	let statusFilter: null | number = $state(null)
 	let categoryFilter: null | string = $state(null)
@@ -102,7 +99,7 @@
 		// Set interval to call every 5 seconds
 		interval = setInterval(() => {
 			refresh();
-		}, 5000);
+		}, 10000);
 	});
 
 	onDestroy(() => {
