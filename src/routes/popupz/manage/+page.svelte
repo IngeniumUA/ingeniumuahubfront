@@ -70,7 +70,7 @@
 		loadingHTTP = true;
 		try {
 			const returnOrder = await CoreCheckoutAPI.stepCheckoutTracker(null, order.id);
-			if (returnOrder.disabled) {
+			if (returnOrder.disabled || onlyPending) {
 				orders.splice(index, 1); // splice is *in place*
 			} else {
 				orders[index] = returnOrder
