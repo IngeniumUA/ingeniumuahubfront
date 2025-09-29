@@ -1,13 +1,19 @@
 <script lang="ts">
 	import type { PricePolicyLimitedI, ProductFormI, ProductOutI } from '$lib/models/productsI';
 	import type { ItemWideLimitedI } from '$lib/models/item/itemwideI';
-	import { successToast } from '$lib/components/toast/defined_toast';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import popupImg from '$assets/images/popupz/popupz_default.png';
 	import { slide } from 'svelte/transition';
 	import { makePretty } from '$lib/utilities/style-utilities';
-	import { addProductToCart, cartProducts, updateProductMetaForm } from '$lib/states/cart.svelte';
-	import { hasRole } from '$lib/states/auth.svelte';
+	import {
+		addProductToCart, cartDetails,
+		cartProducts, clearCart, failedCart,
+		updateProductMetaForm
+	} from '$lib/states/cart.svelte';
 	import { goto } from '$app/navigation';
+	import type { CartSuccessI } from '$lib/models/cartI';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import { getAuthorizationHeaders } from '$lib/auth/auth';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -83,6 +89,33 @@
 	function handleCartClick() {
 		goto('/shop/cart');
 	}
+
+	let httpLoading: boolean = $state(false)
+	async function handleCheckoutNow() {
+		if (httpLoading) return;
+		if (cartProducts.length === 0) {
+			failedToast("Geen producten!")
+		}
+		const data: CartSuccessI = await fetch(`${PUBLIC_API_URL}/cart/checkout?requested_payment_provider=2`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(null, {
+				'Content-Type': 'application/json',
+				'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+			}),
+			body: JSON.stringify({
+				cart: {
+					products: cartProducts,
+					checkout_note: cartDetails.note,
+					tracker_ordering: cartDetails.tracker_ordering
+				},
+			}),
+		}).then((res) => {
+			if (!res.ok) throw res;
+			clearCart()
+			successToast("Besteld!")
+			return res.json();
+		});
+	}
 </script>
 
 <style>
@@ -152,7 +185,7 @@
 	}
 </style>
 
-<main class="bg-gray-100">
+<main class="bg-gray-100 pb-40">
 	<!-- Menu	-->
 	<div class="p-6 min-h-36
 						circle-arcs bg-blue-900 border-none">
@@ -160,20 +193,23 @@
 		<div class="flex flex-row gap-8 items-center justify-center">
 			<h1 class="text-3xl text-center underline text-white">Our Menu</h1>
 			<h1 class="text-3xl text-center underline text-white"><a href="orders">Volg Orders</a></h1>
+			{#if data.isStaff}
+				<h1 class="text-3xl text-center underline text-white"><a href="manage">Staff</a></h1>
+			{/if}
 		</div>
 	</div>
 
 	<!-- Category Selector -->
 	<div class="bg-blue-900">
-	<nav>
-		{#each categories as category}
-		<button
-			class="{category === selectedCategory ? 'selected': ''}"
-			onclick="{() => setCategory(category)}">
-			<h3>{category}</h3>
-		</button>
-		{/each}
-	</nav>
+		<nav>
+			{#each categories as category}
+			<button
+				class="{category === selectedCategory ? 'selected': ''}"
+				onclick="{() => setCategory(category)}">
+				<h3>{category}</h3>
+			</button>
+			{/each}
+		</nav>
 	</div>
 
 	<!-- Product Selector	-->
@@ -185,52 +221,52 @@
 					<img src={popupImg} alt="Popup Image" loading="lazy" width="1024" height="1024" aria-hidden="true" />
 				</div>
 
-				{#if selectedArray.at(index) ?? false}
-					<div class="product-card-prices"
-							 in:slide={{ duration: 400, axis: 'y' }}
-							 out:slide={{ duration: 300, axis: 'y' }}>
-						{#each groupedProduct.price_policies as pricePolicy}
-							<div class="price-policies">
-								<h3 class="text-ingenium-grey-800 font-bold">
-									{#if pricePolicy !== null}
-									Price: {#if pricePolicy["name"] !== null}{pricePolicy["name"]} -{/if}
-									{#if pricePolicy["price"] === 0}Gratis{:else}€{pricePolicy["price"]}{/if}
-									{/if}
-								</h3>
-
-								<button
-									class="button button-primary w-32 button-inline"
-									onclick="{() => {addToCard(groupedProduct, pricePolicy)}}">
-									<span>Voeg Toe ▶</span>
-								</button>
-							</div>
-						{/each}
-
-						{#if groupedProduct.form !== null && groupedProduct.form !== undefined}
-							<form class="ingenium-form">
-								<fieldset>
-									{#each Object.entries(groupedProduct.form) as [formKey, formField] }
-										{#if formField['type'] === "option" }
-											<div class="form-field">
-												<label for={`form-field-${formKey}`}>{makePretty(formKey)}</label>
-												<select id={`form-field-${formKey}`}
-																bind:value={formField.value}
-																required>
-													{#each formField["options"] ?? [] as option}
-														<option value={option}>{makePretty(option)}</option>
-													{/each}
-												</select>
-												<p>Selecteer {formKey}</p>
-											</div>
-										{:else}
-											<p>Unknown field input</p>
+					{#if selectedArray.at(index) ?? false}
+						<div class="product-card-prices"
+								 in:slide={{ duration: 400, axis: 'y' }}
+								 out:slide={{ duration: 300, axis: 'y' }}>
+							{#each groupedProduct.price_policies as pricePolicy}
+								<div class="price-policies">
+									<h3 class="text-ingenium-grey-800 font-bold">
+										{#if pricePolicy !== null}
+										Price: {#if pricePolicy["name"] !== null}{pricePolicy["name"]} -{/if}
+										{#if pricePolicy["price"] === 0}Gratis{:else}€{pricePolicy["price"]}{/if}
 										{/if}
-									{/each}
-								</fieldset>
-							</form>
-						{/if}
-					</div>
-				{/if}
+									</h3>
+
+									<button
+										class="button button-primary w-32 button-inline"
+										onclick="{() => {addToCard(groupedProduct, pricePolicy)}}">
+										<span>Voeg Toe ▶</span>
+									</button>
+								</div>
+							{/each}
+
+							{#if groupedProduct.form !== null && groupedProduct.form !== undefined}
+								<form class="ingenium-form">
+									<fieldset>
+										{#each Object.entries(groupedProduct.form) as [formKey, formField] }
+											{#if formField['type'] === "option" }
+												<div class="form-field">
+													<label for={`form-field-${formKey}`}>{makePretty(formKey)}</label>
+													<select id={`form-field-${formKey}`}
+																	bind:value={formField.value}
+																	required>
+														{#each formField["options"] ?? [] as option}
+															<option value={option}>{makePretty(option)}</option>
+														{/each}
+													</select>
+													<p>Selecteer {formKey}</p>
+												</div>
+											{:else}
+												<p>Unknown field input</p>
+											{/if}
+										{/each}
+									</fieldset>
+								</form>
+							{/if}
+						</div>
+					{/if}
 
 				<div class="product-card-content">
 					<h2 class:moved={(selectedArray.at(index) ?? false)}>{groupedProduct["product_blueprint_name"]}</h2>
@@ -249,18 +285,28 @@
 	{:else}
 	<div class="w-screen h-max flex items-center justify-center">
 		<div class="pt-8">
-			<h1>De Shop staat niet aan!</h1>
-			<h2>'t Zal weer de schuld van de webmaster zijn</h2>
+			<h1>De Shop staat niet aan vandaag.</h1>
+			<h2>Kom naar de kassa!</h2>
 		</div>
 	</div>
 	{/if}
 
-	<button onclick={handleCartClick} class="absolute bottom-4 right-4 text-white bg-blue-900 hover:bg-blue-950 focus:ring-4
+	<article class="absolute bottom-4 right-4 flex flex-col gap-4">
+		{#if data.isStaff}
+			<button disabled={cartProducts.length === 0 || httpLoading} onclick={handleCheckoutNow} class="text-white bg-blue-900 hover:bg-blue-950 focus:ring-4
+		focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center
+		inline-flex items-center me-2 py-4 px-6 disabled:bg-ingenium-grey-800">
+				<span class="text-lg">Bestel meteen</span>
+			</button>
+		{/if}
+
+		<button disabled={httpLoading} onclick={handleCartClick} class="text-white bg-blue-900 hover:bg-blue-950 focus:ring-4
 	focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center
 	inline-flex items-center me-2 py-4 px-6">
-		<svg class="w-8 h-8 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
-			<path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
-		</svg>
-		<span class="text-lg">Naar Winkelkar ({cartProducts.length})</span>
-	</button>
+			<svg class="w-8 h-8 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 21">
+				<path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z"/>
+			</svg>
+			<span class="text-lg">Naar Winkelkar ({cartProducts.length})</span>
+		</button>
+	</article>
 </main>

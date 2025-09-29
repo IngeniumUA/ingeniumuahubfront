@@ -46,6 +46,9 @@
 		<div class="flex flex-row gap-8 items-center justify-center">
 			<h1 class="text-3xl text-center underline text-white"><a href="menu">Our Menu</a></h1>
 			<h1 class="text-3xl text-center underline text-white"><a href="orders">Volg Orders</a></h1>
+			{#if data.isStaff}
+				<h1 class="text-3xl text-center underline text-white"><a href="manage">Staff</a></h1>
+			{/if}
 		</div>
 	</div>
 
@@ -54,7 +57,7 @@
 			<h2 class="text-blue-900 bg-ingenium-grey-200">We zijn er mee bezig!</h2>
 			<ol class="border-ingenium-grey-200">
 				{#each pendingOrders as order (order["id"])}
-					<li>{order["id"]}</li>
+					<li>{order["order_counter"]}</li>
 				{/each}
 			</ol>
 		</section>
@@ -63,7 +66,7 @@
 				<h2 class="text-white bg-blue-900">Klaar om op te halen!</h2>
 			<ol class="border-blue-900">
 				{#each finishedOrders as order (order["id"])}
-					<li>{order["id"]}</li>
+					<li>{order["order_counter"]}</li>
 				{/each}
 			</ol>
 		</section>

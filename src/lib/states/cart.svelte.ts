@@ -160,6 +160,7 @@ export const checkoutCart = async () => {
 			method: 'POST',
 			headers: getAuthorizationHeaders(null, {
 				'Content-Type': 'application/json',
+				'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
 			}),
 			body: JSON.stringify({
 				cart: {

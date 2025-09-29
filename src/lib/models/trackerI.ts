@@ -11,6 +11,8 @@ export enum HubCheckoutTrackerStatusEnum {
 
 export interface HubCheckoutTrackerI {
   id: number,
+  order_counter: number,
+
   disabled: boolean,
   checkout: CheckoutIWide
   checkout_tracker_status: HubCheckoutTrackerStatusEnum
@@ -19,6 +21,6 @@ export interface HubCheckoutTrackerI {
 }
 
 export interface PublicOrderTrackerI {
-  id: number;
+  order_counter: number;
   checkout_tracker_status: HubCheckoutTrackerStatusEnum,
 }
