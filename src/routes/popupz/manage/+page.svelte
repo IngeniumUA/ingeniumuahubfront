@@ -12,6 +12,12 @@
 		onlyPending = !onlyPending;
 	}
 
+	// let onlyFood = $state(false)
+	// function toggleOnlyFood() {
+	// 	onlyFood = !onlyFood;
+	// }
+
+
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
@@ -149,8 +155,8 @@
 		}, {});
 	}
 
-	let nextFiveOrder = $derived(groupedByProduct(orders.slice(0, 5)))
-	let summarisedOrders = $derived(groupedByProduct(orders))
+	let nextFiveOrder = $derived(groupedByProduct(showOrders.slice(0, 5)))
+	let summarisedOrders = $derived(groupedByProduct(showOrders))
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />
