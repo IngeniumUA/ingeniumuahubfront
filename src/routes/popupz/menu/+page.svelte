@@ -138,7 +138,7 @@
 	}
 
 	section {
-		@apply m-4 flex flex-col bg-gray-100 gap-4 items-center md:flex-row md:items-start;
+		@apply m-4 flex flex-col bg-gray-100 gap-4 items-center md:flex-row md:flex-wrap md:items-start;
 
 		.product-card {
 				@apply flex flex-col rounded-2xl max-w-xs shadow-md hover:shadow-xl transition-shadow;
