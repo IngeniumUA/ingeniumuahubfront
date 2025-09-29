@@ -7,11 +7,19 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 
+	let onlyPending = $state(false)
+	function toggleOnlyPending() {
+		onlyPending = !onlyPending;
+	}
+
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
 	let orders: HubCheckoutTrackerI[] = $state(data.orders)
+	let showOrders = $derived(orders.filter(value => {
+		return onlyPending ? value.checkout_tracker_status === 1: true;
+	}))
 
 	async function refresh() {
 		loadingHTTP = true
@@ -127,7 +135,7 @@
 	}
 
 	/**
-	 * Groupbing count
+	 * Grouping count
 	 */
 	function groupedByProduct(orders: HubCheckoutTrackerI[]) {
 		return orders.reduce<Record<string, number>>((acc, order) => {
@@ -141,8 +149,8 @@
 		}, {});
 	}
 
-	let nextFiveOrder: [] = $derived(groupedByProduct(orders.slice(0, 5)))
-	let summarisedOrders: [] = $derived(groupedByProduct(orders))
+	let nextFiveOrder = $derived(groupedByProduct(orders.slice(0, 5)))
+	let summarisedOrders = $derived(groupedByProduct(orders))
 </script>
 
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Signika" />
@@ -194,6 +202,28 @@
 								Publiek bestellen {#if (publicCheckoutEnabled)}Aan{:else}Uit{/if}
 							</span>
 			</label>
+			<label class="inline-flex items-center cursor-pointer">
+				<input type="checkbox" class="sr-only peer" disabled={loadingHTTP}
+							 bind:checked={onlyPending}
+							 onclick="{() => toggleOnlyPending()}"
+				>
+				<div class="
+					ml-8
+					relative w-11 h-6
+					bg-red-900 dark:bg-red-900
+					rounded-full
+					peer-checked:bg-green-900 dark:peer-checked:bg-green-900
+					after:content-['']
+					after:absolute after:top-[2px] after:start-[2px]
+					after:w-5 after:h-5
+					after:bg-white after:rounded-full
+					after:transition-transform
+					peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+					"></div>
+				<span class="hidden lg:inline ms-3 text-sm font-medium text-gray-600">
+								Enkel Pending {#if (onlyPending)}Aan{:else}Uit{/if}
+							</span>
+			</label>
 		</div>
 
 		<div>
@@ -218,7 +248,7 @@
 	<!-- Orders Section -->
 	<section class="m-8 grid grid-cols-1 md:grid-cols-3 gap-6">
 		{#if orders.length === 0}<h1>Geen Trackers</h1>{/if}
-		{#each orders as order, index (order.id)}
+		{#each showOrders as order, index (order.id)}
 			<article class="flex flex-col p-4 rounded border border-blue-900">
 				<span class="text-xl font-bold">#{ order.order_counter }</span>
 					<ul class="list-disc list-inside space-y-1 my-2 flex-1">
