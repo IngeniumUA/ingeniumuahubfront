@@ -7,7 +7,7 @@
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import {
 		addProductToCart, cartDetails,
-		cartProducts, clearCart, failedCart,
+		cartProducts, clearCart,
 		updateProductMetaForm
 	} from '$lib/states/cart.svelte';
 	import { goto } from '$app/navigation';
@@ -82,6 +82,12 @@
 		}
 		successToast(`${productGrouped.product_blueprint_name} toegevoegd!`)
 	}
+
+	const totalPrice = $derived.by(() => {
+		return cartProducts.reduce((total, product) => {
+			return total + product.price_policy!.price;
+		}, 0);
+	})
 
 	/**
 	 * Cart functions
@@ -303,7 +309,7 @@
 			<button disabled={cartProducts.length === 0 || httpLoading} onclick={handleCheckoutNow} class="text-white bg-blue-900 hover:bg-blue-950 focus:ring-4
 		focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center
 		inline-flex items-center me-2 py-4 px-6 disabled:bg-ingenium-grey-800">
-				<span class="text-lg">Bestel meteen ({cartProducts.length})</span>
+				<span class="text-lg">Bestel meteen (€{totalPrice})</span>
 			</button>
 		{/if}
 
