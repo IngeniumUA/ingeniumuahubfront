@@ -85,7 +85,7 @@
 					}
 
 					ol {
-							@apply border-l-8 p-4 flex gap-4 bg-white h-screen;
+							@apply border-l-8 p-4 flex flex-wrap gap-4 bg-white h-screen;
 
 							li {
 									@apply text-blue-900 font-extrabold text-4xl;
