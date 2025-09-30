@@ -51,7 +51,9 @@
 
         // Sort the products
         acc[groupIdx].products = acc[groupIdx].products.sort((a, b) => {
-          return b.price_policy.ordering - a.price_policy.ordering;
+          const orderingA = Math.max(a.ordering, a.price_policy?.ordering ?? Number.MIN_SAFE_INTEGER);
+          const orderingB = Math.max(b.ordering, b.price_policy?.ordering ?? Number.MIN_SAFE_INTEGER);
+          return orderingB - orderingA;
         });
       }
 
