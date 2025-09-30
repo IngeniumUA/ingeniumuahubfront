@@ -7,7 +7,7 @@
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import {
 		addProductToCart, cartDetails,
-		cartProducts, clearCart, failedCart,
+		cartProducts, clearCart,
 		updateProductMetaForm
 	} from '$lib/states/cart.svelte';
 	import { goto } from '$app/navigation';
@@ -83,6 +83,12 @@
 		successToast(`${productGrouped.product_blueprint_name} toegevoegd!`)
 	}
 
+	const totalPrice = $derived.by(() => {
+		return cartProducts.reduce((total, product) => {
+			return total + product.price_policy!.price;
+		}, 0);
+	})
+
 	/**
 	 * Cart functions
 	 */
@@ -96,6 +102,8 @@
 		if (cartProducts.length === 0) {
 			failedToast("Geen producten!")
 		}
+
+		httpLoading = true;
 		const data: CartSuccessI = await fetch(`${PUBLIC_API_URL}/cart/checkout?requested_payment_provider=2`, {
 			method: 'POST',
 			headers: getAuthorizationHeaders(null, {
@@ -110,11 +118,16 @@
 				},
 			}),
 		}).then((res) => {
-			if (!res.ok) throw res;
-			clearCart()
-			successToast("Besteld!")
+			if (!res.ok) {
+				httpLoading = false;
+				throw res;
+			};
 			return res.json();
 		});
+		clearCart()
+		selectedArray = Array.from({ length: products.length }, () => false)
+		successToast(`${data.tracker_id} Besteld!`)
+		httpLoading = false;
 	}
 </script>
 
@@ -296,7 +309,7 @@
 			<button disabled={cartProducts.length === 0 || httpLoading} onclick={handleCheckoutNow} class="text-white bg-blue-900 hover:bg-blue-950 focus:ring-4
 		focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center
 		inline-flex items-center me-2 py-4 px-6 disabled:bg-ingenium-grey-800">
-				<span class="text-lg">Bestel meteen</span>
+				<span class="text-lg">Bestel meteen (€{totalPrice})</span>
 			</button>
 		{/if}
 
