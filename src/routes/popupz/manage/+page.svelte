@@ -88,6 +88,27 @@
 			loadingHTTP = false;
 		}
 	}
+	async function setStatus(index: number, order: HubCheckoutTrackerI, nextStatus: HubCheckoutTrackerStatusEnum) {
+		loadingHTTP = true;
+		try {
+			const returnOrder = await CoreCheckoutAPI.setCheckoutTracker(null, order.id, nextStatus);
+			if (!showOrder(returnOrder)) {
+				orders.splice(index, 1); // splice is *in place*
+			} else {
+				orders[index] = returnOrder
+			}
+			stepError = null;
+		} catch (error) {
+			stepError = error instanceof Error ? error : Error('Error submitting form');
+		} finally {
+			if (stepError === null) {
+				successToast("Updated!")
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
 
 	/**
 	 * Refreshing code
@@ -274,14 +295,15 @@
 				<div class="flex flex-row gap-4">
 					<button
 						type="button"
-						disabled={true}
+						disabled={loadingHTTP || order.checkout_tracker_status === 1}
+						onclick={() => setStatus(index, order, order.checkout_tracker_status - 1)}
 						class="button button-primary w-32 button-inline flex-[1]"
 						style={order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}
 					><span>Terug</span></button>
 
 					<button
 						type="button"
-						onclick={() => increaseStatus(index, order)} disabled={loadingHTTP}
+						onclick={() => setStatus(index, order, order.checkout_tracker_status + 1)} disabled={loadingHTTP}
 						class="button button-primary w-32 button-inline flex-[1] {order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready ? 'button-danger': 'button-primary'}"
 					>
 						{#if order.checkout_tracker_status === HubCheckoutTrackerStatusEnum.Ready}
