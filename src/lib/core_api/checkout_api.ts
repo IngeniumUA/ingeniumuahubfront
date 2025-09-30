@@ -1,6 +1,6 @@
 ﻿import { PUBLIC_API_URL } from '$env/static/public';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
-import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
+import { type HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum } from '$lib/models/trackerI';
 import type { CheckoutIWide } from '$lib/models/checkoutI';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
@@ -93,6 +93,22 @@ export class CoreCheckoutAPI {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/step/${trackerID}`, {
 			method: 'POST',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (!res.ok) {
+			const text = await res.text();
+			throw new Error(`Failed to step checkout tracker: ${text}`);
+		}
+		return await res.json();
+	}
+
+	static async setCheckoutTracker(params: RouteParams | null = null, trackerID: number, nextStatus: HubCheckoutTrackerStatusEnum): Promise<HubCheckoutTrackerI> {
+		const patchObj = {
+			checkout_tracker_status: nextStatus
+		}
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/set/${trackerID}`, {
+			method: 'PATCH',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(patchObj)
 		});
 		if (!res.ok) {
 			const text = await res.text();
