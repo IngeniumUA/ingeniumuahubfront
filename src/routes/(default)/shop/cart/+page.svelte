@@ -22,7 +22,7 @@
 
 	const totalPrice = $derived.by(() => {
 		return cartProducts.reduce((total, product) => {
-			return total + product.price_policy.price;
+			return total + (product.price_policy?.price ?? 0);
 		}, 0);
 	})
 	const guestButtonDisabled = $derived.by(() => {
@@ -68,9 +68,14 @@
 			error = true;
 
 			if (e instanceof Response && e.status === 406) {
+				// todo -> backend should return more types of errors in hubexception, when we add that we can do custom messages here
 				errorMsg = 'er zijn producten in je winkelwagen die je niet kan bestellen.';
+			} else if (e instanceof Response && e.status === 429) {
+				errorMsg = 'je moet even wachten voor je weer kan bestellen bestellen.';
 			} else if (e instanceof Error) {
 				errorMsg = e.message;
+			} else if (e instanceof Response) {
+				errorMsg = (await e.json())["error_nl"] ?? "Unkown core error";
 			} else {
 				errorMsg = 'Unknown error';
 			}
