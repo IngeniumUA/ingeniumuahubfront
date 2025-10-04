@@ -128,4 +128,31 @@ export class CoreCheckoutAPI {
 		}
 		return await res.json();
 	}
+
+	static async downloadOrderTrackers(
+		params: RouteParams | null = null,
+		query_param: URLSearchParams
+	): Promise<void> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/export?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'text/csv' })
+		});
+		if (!res.ok) {
+			throw new Error(`Failed to fetch checkout tracker export: ${await res.text()}`);
+		}
+		const blob = await res.blob();
+		const url = window.URL.createObjectURL(blob);
+		const contentDisposition = res.headers.get('Content-Disposition');
+
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = contentDisposition
+			? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
+			: 'checkout_trackers.csv';
+		document.body.appendChild(a);
+
+		a.click();
+		a.remove();
+		window.URL.revokeObjectURL(url);
+	}
 }
