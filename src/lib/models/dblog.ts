@@ -12,7 +12,7 @@ export interface DBLogI {
 	table_name: string
 	row_primary_key: number
 
-	dblog_fields_edited: DBLogFieldEditI[]
+	fields_edited: DBLogFieldEditI[]
 	dblog_metadata: Record<string, never>
 
 	created_timestamp: string
