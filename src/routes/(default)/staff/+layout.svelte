@@ -19,7 +19,6 @@
 					<a href="/staff/logs">Logs</a>
 					<a href="/staff/group">Groups</a>
 					<a href="/staff/payment">Payments</a>
-					<a href="/staff/payment/orders">Order Trackers</a>
 				</div>
 
 				<div class="mt-16">
