@@ -40,6 +40,18 @@ export class DBLogAPI {
 		}
 	}
 
+	static async describeTableName(params: RouteParams | null = null): Promise<string[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/dblog/describe/table_name`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch describe dblogs table_names: ${await res.text()}`;
+		}
+	}
+
 	static async downloadDblog(
 		params: RouteParams | null = null,
 		query_param: URLSearchParams

@@ -5,10 +5,11 @@
 	import { DBLogAPI } from '$lib/core_api/dblog_api';
 	import type { DBLogI } from '$lib/models/dblog';
 
-	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
+	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'0' })) }: { baseQueryParam: URLSearchParams } = $props();
 
 	let dblogCount: number = $state(0);
 	let dblogs: DBLogI[] = $state([])
+	let dblogTableOptions: string[] = $state([])
 
 	onMount(() => {
 		queryData(queryParam);
@@ -29,7 +30,7 @@
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
-		if (queryForm.requestIdQuery !== null && queryForm.requestIdQuery !== "") searchParam.set('request_id', queryForm.requestIdQuery);
+		if (queryForm.requestIdQuery !== null && queryForm.requestIdQuery !== "") searchParam.set('request_id_starts_with', queryForm.requestIdQuery);
 		if (queryForm.tableNameQuery !== null && queryForm.tableNameQuery !== "") searchParam.set('table_name', queryForm.tableNameQuery);
 		if (queryForm.rowPrimaryKeyQuery !== null && queryForm.rowPrimaryKeyQuery) searchParam.set('row_primary_key', queryForm.rowPrimaryKeyQuery.toString());
 
@@ -49,6 +50,7 @@
 		if (loadingHTTP) return;
 		dblogs = await DBLogAPI.queryCoreDBLog(null, queryParam);
 		dblogCount = await DBLogAPI.countCoreDBLog(null, queryParam);
+		dblogTableOptions = await DBLogAPI.describeTableName(null)
 	}
 
 	/**
@@ -90,8 +92,10 @@
         }
     }
 
-    form {
-        @apply flex flex-col md:flex-row gap-4;
+    table {
+				input {
+						@apply p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin;
+				}
     }
 </style>
 
@@ -106,18 +110,35 @@
 		</button>
 	</div>
 
-	<section class="filter-selector">
-		<h3>Filter</h3>
-		<form class="ingenium-form">
-			<fieldset>
-			</fieldset>
-		</form>
-	</section>
+	<div class="alert alert-info max-w-3xl">
+		<p class="alert-text">DBLogs houden enkele veranderingen van modellen in de database bij.
+			Zo'n verandering heeft steeds een bijhorende 'request', 'table name' en 'row primary key'. Denk er aan dat er meerdere 'edits' kunnen voorkomen per log.
+			</p>
+	</div>
 
-	<section class="bulk-operation">
-		<h3>Apply</h3>
+	<div class="flex flex-col lg:flex-row">
+		<section class="order-1 lg:order-2 lg:flex-[1]">
+			<h3>Table Names</h3>
+			{#each dblogTableOptions as dblogTableOption}
+				<p>{makePretty(dblogTableOption)}</p>
+			{/each}
+			TODO Dit mis omzetten in een group by?
+		</section>
+		<div class="flex-[3]">
+			<section class="filter-selector">
+				<h3>Filter</h3>
+				<form class="ingenium-form">
+					<fieldset>
+					</fieldset>
+				</form>
+			</section>
 
-	</section>
+			<section class="bulk-operation">
+				<h3>Apply</h3>
+
+			</section>
+		</div>
+	</div>
 
 	{#if (queryError !== null)}
 		<div class="error-message p-4">
@@ -127,41 +148,64 @@
 
 	<section>
 		<h3>Table</h3>
-		<table class="ingenium-table">
-			<thead>
-			<tr>
-				<th><h4>Select</h4> <input type="checkbox"/></th>
-				<th><h4>Dblog ID</h4></th>
-				<th><h4>Request</h4></th>
-				<th><h4>Table</h4></th>
-				<th><h4>Row Primary Key</h4></th>
-				<th><h4>Edits</h4></th>
-				<th><h4>Created</h4></th>
-				<th><h4>Showing {dblogs.length} / {dblogCount}</h4></th>
-			</tr>
-			</thead>
-			<tbody>
-			{#each dblogs as dblog (dblog.log_id)}
+			<table class="ingenium-table order-2 lg:order-1 lg:flex-[2]">
+				<thead>
 				<tr>
+					<th><h4>Select</h4> <input type="checkbox"/></th>
+					<th><h4>Dblog ID</h4></th>
 					<th>
-						<input type="checkbox"/>
+						<div class="form-field">
+							<h4>Request</h4>
+							<input class="max-w-32" type="text" bind:value={queryForm.requestIdQuery}>
+						</div>
 					</th>
-					<th>{dblog.log_id}</th>
-					<td>{dblog.request_id.slice(0, 6)}</td>
-					<td>{makePretty(dblog.table_name)}</td>
-					<td>{dblog.row_primary_key}</td>
-					<td>{dblog.fields_edited.length} edits</td>
-					<td>
-						{prettyDateTime(dblog.created_timestamp)}
-					</td>
-					<td>
-						<button>
-							<span>...</span>
-						</button>
-					</td>
+					<th>
+						<div class="form-field">
+							<h4>Table</h4>
+							<div class="form-field max-w-32">
+								<select id="table_name" required bind:value={queryForm.tableNameQuery}>
+									{#each [null, ...dblogTableOptions] as tableName}
+										<option value={tableName}>
+											{tableName === null ? "All": makePretty(tableName)}
+										</option>
+									{/each}
+								</select>
+							</div>
+						</div>
+					</th>
+					<th>
+						<div class="form-field">
+							<h4>Row Primary Key</h4>
+							<input class="max-w-16" type="number" bind:value={queryForm.rowPrimaryKeyQuery}>
+						</div>
+					</th>
+					<th><h4>Edits</h4></th>
+					<th><h4>Created</h4></th>
+					<th><h4>Showing {dblogs.length} / {dblogCount}</h4></th>
 				</tr>
-			{/each}
-			</tbody>
-		</table>
+				</thead>
+				<tbody>
+				{#each dblogs as dblog (dblog.log_id)}
+					<tr>
+						<th>
+							<input type="checkbox"/>
+						</th>
+						<th>{dblog.log_id}</th>
+						<td>{dblog.request_id.slice(0, 6)}</td>
+						<td>{makePretty(dblog.table_name)}</td>
+						<td>{dblog.row_primary_key}</td>
+						<td>{dblog.fields_edited.length} edits</td>
+						<td>
+							{prettyDateTime(dblog.created_timestamp)}
+						</td>
+						<td>
+							<button>
+								<span>...</span>
+							</button>
+						</td>
+					</tr>
+				{/each}
+				</tbody>
+			</table>
 	</section>
 </article>
