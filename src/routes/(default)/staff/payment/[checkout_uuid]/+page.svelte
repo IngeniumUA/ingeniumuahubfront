@@ -11,6 +11,7 @@
 	import { DBLogAPI } from '$lib/core_api/dblog_api';
 	import type { TransactionI } from '$lib/models/transactionI';
 	import TransactionCard from '$lib/components/staff/payment/TransactionCard.svelte';
+	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -456,7 +457,7 @@
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
 		<h1 id="changelog">Changelog</h1>
-		<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
+		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubcheckout', row_primary_key: checkoutWide.id.toString()})}></DBLogTable>
 	{/if}
 </main>
 

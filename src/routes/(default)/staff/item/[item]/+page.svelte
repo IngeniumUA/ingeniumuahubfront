@@ -18,6 +18,7 @@
 	import Modal from '$lib/components/layout/modal.svelte';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -590,7 +591,7 @@
 		<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
 
 		<h2 id="changelog">Changelog</h2>
-		<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
+		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: itemWide.item.id.toString()})}></DBLogTable>
 
 		<div class="flex justify-end mt-4 gap-4">
 			<button class="button button-danger button-inline"
