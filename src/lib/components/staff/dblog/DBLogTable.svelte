@@ -150,7 +150,7 @@
 					<td>{dblog.request_id.slice(0, 6)}</td>
 					<td>{makePretty(dblog.table_name)}</td>
 					<td>{dblog.row_primary_key}</td>
-					<td>{dblog.dblog_fields_edited.length} edits</td>
+					<td>{dblog.fields_edited.length} edits</td>
 					<td>
 						{prettyDateTime(dblog.created_timestamp)}
 					</td>
