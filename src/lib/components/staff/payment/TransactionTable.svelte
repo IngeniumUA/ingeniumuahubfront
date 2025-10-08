@@ -11,7 +11,22 @@
 
 	let transactionCount: number = $state(0);
 	let transactions: TransactionI[] = $state([])
-	let transactionStatusTable = $state([])
+	let groupedPaymentStatus: Record<string, number> = $state({})
+
+	let displayPaymentStatus = [
+		PaymentStatusEnum.all,
+		PaymentStatusEnum.successful,
+		PaymentStatusEnum.pending,
+		PaymentStatusEnum.failed,
+		PaymentStatusEnum.cancelled
+	] // Which payment status to display
+	let groupedPaymentStatusDisplay = $derived(Object.entries(groupedPaymentStatus)
+		.map(([key, value]) => [parseInt(key), value])
+		.filter(([key]) => {
+			return displayPaymentStatus.includes(key);
+		})
+	)
+	let selectedStatus = $state(PaymentStatusEnum.all);
 
 	onMount(() => {
 		queryData(queryParam);
@@ -30,6 +45,10 @@
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
+		// From status button
+		if (selectedStatus !== PaymentStatusEnum.all) searchParam.set('transaction_status', selectedStatus.toString());
+
+		// From query form
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
 		if (queryForm.validity !== null) searchParam.set('validity', queryForm.validity.toString());
 
@@ -50,6 +69,11 @@
 		transactions = await CoreTransactionAPI.queryTransactions(null, queryParam);
 		transactionCount = await CoreTransactionAPI.countTransactions(null, queryParam);
 
+		// Shallow copy and then making sure we don't filter by checkout_status
+		const queryParamNoStatus = new URLSearchParams(queryParam);
+		queryParamNoStatus.delete('transaction_status');
+		groupedPaymentStatus = await CoreTransactionAPI.groupByStatus(null, queryParamNoStatus);
+
 		selectedArray = Array.from({ length: transactions.length }, () => false)
 	}
 
@@ -58,7 +82,6 @@
 	 */
 	async function refresh() {
 		await queryData(queryParam)
-		successToast("Refreshed!")
 	}
 
 	/**
@@ -132,17 +155,8 @@
 		</button>
 	</div>
 	<div class="alert alert-info max-w-3xl">
-		<p class="alert-text">TODO: Wat is een transaction</p>
+		<p class="alert-text">Een transactie is de 'aankoop' van een product door een gebruiker. Het overdragen van geld zit in een checkout (dus er kunnen meerdere transactions in één checkout zitten). Een Transactie heeft ook een validity, die zegt of het product 'geldig' is aangekocht. Bv. Lid prijs wanneer je geen lid bent -> invalid.</p>
 	</div>
-
-	<section class="status-selector">
-		{#each transactionStatusTable as paymentStatusGrouped (paymentStatusGrouped["checkout_status"])}
-			<div>
-				<p>{paymentStatusGrouped["transaction_status"]}</p>
-			</div>
-		{/each}
-		<p>Hier de stripe stijl van status selector</p>
-	</section>
 
 	<section class="filter-selector">
 		<h3>Filter</h3>
@@ -167,6 +181,20 @@
 			{JSON.stringify(transactionPatchError)}
 		</div>
 	{/if}
+
+	<section class="status-selector">
+		{#each groupedPaymentStatusDisplay as [paymentStatus, checkoutStatusCount] (paymentStatus)}
+			<button class="status-selector-button {paymentStatus === selectedStatus ? 'status-button-selected': ''}"
+							onclick={() => {
+								selectedStatus = paymentStatus;
+								refresh()
+							}}
+			>
+				<span class={paymentStatus === selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'}>{makePretty(PaymentStatusEnum[paymentStatus])}</span>
+				<span class="font-bold">{checkoutStatusCount}</span>
+			</button>
+		{/each}
+	</section>
 
 	<table class="ingenium-table">
 		<thead>
@@ -244,10 +272,24 @@
 	</table>
 </article>
 
-<style>
+<style lang="scss">
 	h3 {
 			@apply font-bold;
 	}
+
+  section {
+    @apply my-4;
+  }
+
+  .status-selector {
+      @apply flex flex-col md:flex-row gap-2;
+      .status-selector-button {
+          @apply flex flex-col items-start flex-grow p-2 pt-3 pb-3 border border-ingenium-grey-700 rounded-lg;
+      };
+      .status-button-selected {
+          @apply border-blue-900 border-2 font-bold;
+      };
+  }
 
   .transaction-validity-selector {
       button {
