@@ -4,6 +4,7 @@
 	import TransactionTable from '$lib/components/staff/payment/TransactionTable.svelte';
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { onMount } from 'svelte';
+	import { PaymentStatusEnum } from '$lib/models/enums';
 
 	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
 
@@ -26,9 +27,24 @@
 			class="text-blue-900 font-bold {index === selectedTable ? '': 'opacity-75'}">{makePretty(tableOption)}</span></button>
 	{/each}</div>
 	{#if selectedTable === 0}
-		<CheckoutTable baseQueryParam={baseQueryParam}></CheckoutTable>
+		<CheckoutTable baseQueryParam={baseQueryParam} displayPaymentStatus={
+		[
+			PaymentStatusEnum.all,
+			PaymentStatusEnum.successful,
+			PaymentStatusEnum.pending,
+			PaymentStatusEnum.failed,
+			PaymentStatusEnum.cancelled
+		]
+		}></CheckoutTable>
 	{:else if selectedTable === 1}
 		<TransactionTable baseQueryParam={baseQueryParam}></TransactionTable>
+	{:else if selectedTable === 2}
+		<CheckoutTable baseQueryParam={baseQueryParam} displayPaymentStatus={
+		[
+			PaymentStatusEnum.refunded,
+			PaymentStatusEnum.refund_pending
+		]
+		}></CheckoutTable>
 	{/if}
 
 </main>

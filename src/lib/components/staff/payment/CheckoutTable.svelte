@@ -3,14 +3,30 @@
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import { onMount } from 'svelte';
 	import { PaymentStatusEnum } from '$lib/models/enums';
-	import { successToast } from '$lib/components/toast/defined_toast';
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 
-	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
+	let {
+		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })),
+		displayPaymentStatus = $bindable([
+			PaymentStatusEnum.all,
+			PaymentStatusEnum.successful,
+			PaymentStatusEnum.pending,
+			PaymentStatusEnum.failed,
+			PaymentStatusEnum.cancelled
+		])
+	}: { baseQueryParam: URLSearchParams, displayPaymentStatus: PaymentStatusEnum[] } = $props();
 
 	let checkoutCount: number = $state(0);
 	let checkouts: CheckoutI[] = $state([])
-	let checkoutStatusList = $state([])
+	let groupedPaymentStatus: Record<string, number> = $state({})
+
+	let groupedPaymentStatusDisplay = $derived(Object.entries(groupedPaymentStatus)
+			.map(([key, value]) => [parseInt(key), value])
+			.filter(([key]) => {
+				return displayPaymentStatus.includes(key);
+			})
+	)
+	let selectedStatus = $state(displayPaymentStatus[0]);
 
 	onMount(() => {
 		queryData(queryParam);
@@ -27,8 +43,13 @@
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
+		// From status button
+		if (selectedStatus !== PaymentStatusEnum.all) searchParam.set('checkout_status', selectedStatus.toString());
+
+		// From query form
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
 
+		// Combining
 		let queryParam = new URLSearchParams()
 		for (const [key, value] of baseQueryParam) {
 			queryParam.append(key, value);
@@ -45,6 +66,11 @@
 		if (loadingHTTP) return;
 		checkouts = await CoreCheckoutAPI.queryCheckoutWide(null, queryParam);
 		checkoutCount = await CoreCheckoutAPI.countCheckout(null, queryParam);
+
+		// Shallow copy and then making sure we don't filter by checkout_status
+		const queryParamNoStatus = new URLSearchParams(queryParam);
+		queryParamNoStatus.delete('checkout_status');
+		groupedPaymentStatus = await CoreCheckoutAPI.groupByStatus(null, queryParamNoStatus);
 	}
 
 	/**
@@ -52,7 +78,6 @@
 	 */
 	async function refresh() {
 		await queryData(queryParam)
-		successToast("Refreshed!")
 	}
 
 	/**
@@ -68,20 +93,11 @@
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
-	<div class="alert alert-info mb-4 max-w-3xl">
+	<div class="alert alert-info max-w-3xl">
 		<p class="alert-text">Een Checkout is een daadwerkelijke betaling, uitgevoerd met een <span class="italic">payment provider</span>.
 			Die betalingen kan worden uitgevoerd via stripe, maar bijvoorbeeld ook gewoon hier gelogd als 'kassa betaling'.
 			Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
 	</div>
-
-	<section class="status-selector">
-		{#each checkoutStatusList as checkoutStatusBox (checkoutStatusBox["checkout_status"])}
-		<div>
-			<p>{checkoutStatusBox["checkout_status"]}</p>
-		</div>
-		{/each}
-		<p>Hier de stripe stijl van status selector</p>
-	</section>
 
 	<section class="filter-selector">
 		<h3>Filter</h3>
@@ -101,6 +117,20 @@
 			{JSON.stringify(queryError)}
 		</div>
 	{/if}
+
+	<section class="status-selector">
+		{#each groupedPaymentStatusDisplay as [paymentStatus, checkoutStatusCount] (paymentStatus)}
+			<button class="status-selector-button {paymentStatus === selectedStatus ? 'status-button-selected': ''}"
+							onclick={() => {
+								selectedStatus = paymentStatus;
+								refresh()
+							}}
+			>
+				<span class={paymentStatus === selectedStatus ? 'text-blue-900': 'text-ingenium-grey-700'}>{makePretty(PaymentStatusEnum[paymentStatus])}</span>
+				<span class="font-bold">{checkoutStatusCount}</span>
+			</button>
+		{/each}
+	</section>
 
 	<table class="ingenium-table">
 		<thead>
@@ -147,9 +177,13 @@
 	</table>
 </article>
 
-<style>
+<style lang="scss">
 		h3 {
 				@apply font-bold;
+		}
+
+		section {
+			@apply my-4;
 		}
 
     th {
@@ -163,7 +197,15 @@
     }
 
 		.status-selector {
+				@apply flex flex-col md:flex-row gap-2;
 
+				.status-selector-button {
+						@apply flex flex-col items-start flex-grow p-2 pt-3 pb-3 border border-ingenium-grey-700 rounded-lg;
+				};
+
+				.status-button-selected {
+						@apply border-blue-900 border-2 font-bold;
+				};
 		}
 
 		.filter-selector {

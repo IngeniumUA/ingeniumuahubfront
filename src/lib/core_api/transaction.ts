@@ -34,6 +34,19 @@ export class CoreTransactionAPI {
 		}
 	}
 
+	static async groupByStatus(params: RouteParams | null = null, query_param: URLSearchParams): Promise<Record<string, number>> {
+		// Return is like {'0': 78, ...}
+		const res = await fetch(`${PUBLIC_API_URL}/transaction/group_by?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch transaction grouped: ${await res.text()}`;
+		}
+	}
+
 	static async patchTransaction(
 		params: RouteParams | null = null,
 		transactionIdentifier: number,

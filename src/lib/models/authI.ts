@@ -3,6 +3,7 @@ import { Configuration, type TokenEndpointResponse } from 'openid-client';
 export interface AuthUser {
 	'allowed-origins': string[],
 	exp: number,
+	sub: string,
 	email: string,
 	family_name: string,
 	given_name: string,

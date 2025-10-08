@@ -22,6 +22,11 @@
 	 * Query parameter for showing available
 	 */
 	let onlyShowAvailable: boolean = $state(true);
+	$effect(() => {
+		if (onlyShowAvailable !== undefined) {
+			refresh();
+		}
+	});
 
 	/**
 	 * Refreshing all data on the page

@@ -54,6 +54,19 @@ export class CoreCheckoutAPI {
 		}
 	}
 
+	static async groupByStatus(params: RouteParams | null = null, query_param: URLSearchParams): Promise<Record<string, number>> {
+		// Return is like {'0': 78, ...}
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/group_by?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch checkout grouped: ${await res.text()}`;
+		}
+	}
+
 	static async countCheckoutTracker(params: RouteParams | null = null, query_param: URLSearchParams): Promise<number> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/count?${query_param.toString()}`, {
 			method: 'GET',
