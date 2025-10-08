@@ -209,7 +209,7 @@
 			<fieldset class="flex-1">
 				<div class="form-field">
 					<label for="max_valid_usages">Max valid usages</label>
-					<input id="max_valid_usages" type="number" required bind:value={form.ordering}/>
+					<input id="max_valid_usages" type="number" required bind:value={form.max_valid_usages}/>
 					<p><span class="italic">Zet 0 voor oneindig</span>, hoe vaak je iemand deze prijs valid kan aankopen (bv één ledenticket per persoon).</p>
 				</div>
 
