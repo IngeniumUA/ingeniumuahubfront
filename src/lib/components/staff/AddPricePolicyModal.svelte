@@ -98,7 +98,6 @@
 					<input id="price_eu" type="text" required bind:value={form.price_eu}/>
 					<p>Prijs in euro (0 voor gratis)</p>
 				</div>
-
 			</fieldset>
 
 			<fieldset class="flex-1">
@@ -123,7 +122,7 @@
 					<p>Of deze prijs <span class="font-bold">altijd</span> te zien moet zijn.</p>
 				</div>
 
-				<label for="allow_unauthenticated_access">Always Display</label>
+				<label for="allow_unauthenticated_access">Allow Unauthenticated access</label>
 				<div class="form-field mb-4">
 					<label class="inline-flex items-center cursor-pointer">
 						<input type="checkbox" class="hidden peer"
@@ -171,7 +170,7 @@
 			<fieldset class="flex-1">
 				<div class="form-field max-w-32">
 					<label for="max_valid_usages">Max valid usages</label>
-					<input id="max_valid_usages" type="number" required bind:value={form.ordering}/>
+					<input id="max_valid_usages" type="number" required bind:value={form.max_valid_usages}/>
 					<p><span class="italic">Zet 0 voor oneindig</span>, hoe vaak je iemand deze prijs valid kan aankopen (bv één ledenticket per persoon).</p>
 				</div>
 
