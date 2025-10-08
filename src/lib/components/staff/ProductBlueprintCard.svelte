@@ -142,7 +142,7 @@
 			<div class="flex-1 form-field max-w-72 mb-2">
 				<label for="itemName">Name</label>
 				<input id="itemName" type="text" required bind:value={ form.name }/>
-				<p>Display naam van de item.</p>
+				<p>Display naam van de product.</p>
 			</div>
 			<div class="flex-1 form-field max-w-72 mb-2">
 				<label for="description">Description</label>
@@ -161,15 +161,15 @@
 			<div class="form-field max-w-72">
 				<label for="max_total">Max Total</label>
 				<input id="max_total" type="number" required bind:value={form.max_total}/>
-				<p>Totaal maximum aantal.</p>
+				<p>Totaal maximum.</p>
 
 				<label for="max_total">Max per betaling</label>
 				<input id="max_total" type="number" required bind:value={form.max_per_checkout}/>
-				<p>Maximum per payment.</p>
+				<p>Maximum per betaling.</p>
 
 				<label for="max_total">Max per account</label>
 				<input id="max_total" type="number" required bind:value={form.max_individual}/>
-				<p>Maximum per person.</p>
+				<p>Maximum per account (bij betalen zonder inloggen kan dit overschreden worden, maar dat geeft validity 'rood')</p>
 			</div>
 
 			</fieldset>
@@ -210,24 +210,24 @@
 												Ordertracking {#if (form.product_blueprint_metadata.track_checkout)}Aan{:else}Uit{/if}
 											</span>
 					</label>
+					<p>Voor Pop-up Z ordertracking</p>
 				</div>
 
 				{#if form.product_blueprint_metadata.track_checkout}
 					<p>FUTURE: Custom tracker settings hier</p>
 				{/if}
 
-				<div class="form-field">
-					<label for="track_checkout">Add to Group</label><br>
-					<span class="ms-3 text-sm font-medium text-gray-600">
-												{#if (form.product_blueprint_metadata.add_to_group)}Aan{:else}Uit{/if}
-											</span>
-				</div>
-
-				{#if form.product_blueprint_metadata.add_to_group}
-					<label for="add_to_group">Keycloak group uuid</label>
-					<input id="add_to_group" type="text" required bind:value={form.product_blueprint_metadata.add_to_group_value}/>
-					<p>UUID van de groep in keycloak</p>
-				{/if}
+<!--				<div class="form-field">-->
+<!--					<label for="track_checkout">Add to Group</label><br>-->
+<!--					<span class="ms-3 text-sm font-medium text-gray-600">-->
+<!--												{#if (form.product_blueprint_metadata.add_to_group)}Aan{:else}Uit{/if}-->
+<!--											</span>-->
+<!--				</div>-->
+<!--				{#if form.product_blueprint_metadata.add_to_group}-->
+<!--					<label for="add_to_group">Keycloak group uuid</label>-->
+<!--					<input id="add_to_group" type="text" required bind:value={form.product_blueprint_metadata.add_to_group_value}/>-->
+<!--					<p>UUID van de groep in keycloak</p>-->
+<!--				{/if}-->
 			</fieldset>
 
 			<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>

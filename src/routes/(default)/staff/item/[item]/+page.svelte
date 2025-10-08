@@ -40,7 +40,8 @@
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
-		return (prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null) !== null;
+		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
+		return trackCheckout !== null && trackCheckout !== undefined;
 	}));
 
 	/**
