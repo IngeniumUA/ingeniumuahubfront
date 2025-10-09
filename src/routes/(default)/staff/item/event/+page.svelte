@@ -38,7 +38,6 @@
 			query.set("available", `${onlyShowAvailable}`)
 		}
 		events = await CoreItemWideAPI.queryEventItem(null, query);
-		successToast("Refreshed!")
 	}
 
 	/**
@@ -114,7 +113,7 @@
 		<button onclick={() => {showAddingNew = !showAddingNew}} class="ml-auto button button-primary w-24 button-inline">
 			<span class="text-white">Add New</span>
 		</button>
-		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
+		<button onclick={() => {refresh(); successToast("Refreshed!")}} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
