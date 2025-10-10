@@ -103,10 +103,10 @@ export class CoreProductBlueprintAPI {
 		return await this.patchPricePolicy(pricePolicyId, patchObj);
 	}
 
-	static async queryProductBlueprintTable(query_param: URLSearchParams) {
+	static async queryProductBlueprintTable(params: RouteParams | null = null,query_param: URLSearchParams) {
 		const res = await fetch(`${PUBLIC_API_URL}/blueprint/table?${query_param.toString()}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
 		if (res.ok) {
 			return await res.json();

@@ -6,12 +6,55 @@
 	import { CoreTransactionAPI } from '$lib/core_api/transaction';
 	import { ValidityEnum, ValidityList } from '$lib/models/productsI';
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
+	import type { ProductBlueprintI } from '$lib/models/product_blueprint/ProductBlueprintI';
 
-	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
+	let {
+		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' }))
+	}: {
+		baseQueryParam: URLSearchParams
+	} = $props();
 
 	let transactionCount: number = $state(0);
 	let transactions: TransactionI[] = $state([])
 	let groupedPaymentStatus: Record<string, number> = $state({})
+
+	let pricePolicyTable: [] = $state([])
+	let productBlueprintIdList = $derived.by(() => {
+		return pricePolicyTable.reduce(
+			(acc: { product_blueprint_id: number; product_blueprint_name: string }[],
+			 val: { product_blueprint_id: number; product_blueprint_name: string }
+			)=> {
+			// val is object with properties
+			if (!acc.some((entry) => {
+				return entry.product_blueprint_id === val.product_blueprint_id;
+			})) {
+				acc.push({
+					product_blueprint_name: val.product_blueprint_name,
+					product_blueprint_id: val.product_blueprint_id,
+				})
+			}
+			return acc
+		}, [])
+	})
+	let pricePolicyIdList = $derived.by(() => {
+		return pricePolicyTable.reduce(
+			(acc: { price_policy_id: number; price_policy_name: string, price_eu: number }[],
+			 val: { price_policy_id: number; price_policy_name: string, price_eu: number }
+			)=> {
+				// val is object with properties
+				if (!acc.some((entry) => {
+					return entry.price_policy_id === val.price_policy_id;
+				})) {
+					acc.push({
+						price_policy_name: val.price_policy_name,
+						price_policy_id: val.price_policy_id,
+						price_eu: val.price_eu,
+					})
+				}
+				return acc
+			}, [])
+	})
 
 	let displayPaymentStatus = [
 		PaymentStatusEnum.all,
@@ -38,10 +81,14 @@
 	interface QueryFormI {
 		user_email: string | null;
 		validity: ValidityEnum | null;
+		productBlueprintId: number | null;
+		pricePolicyId: number | null;
 	}
 	let queryForm: QueryFormI = $state({
 		user_email: null,
-		validity: null
+		validity: null,
+		productBlueprintId: null,
+		pricePolicyId: null
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
@@ -51,6 +98,8 @@
 		// From query form
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
 		if (queryForm.validity !== null) searchParam.set('validity', queryForm.validity.toString());
+		if (queryForm.productBlueprintId !== null) searchParam.set('product_blueprint_id', queryForm.productBlueprintId.toString());
+		if (queryForm.pricePolicyId !== null) searchParam.set('price_policy_id', queryForm.pricePolicyId.toString());
 
 		let queryParam = new URLSearchParams()
 		for (const [key, value] of baseQueryParam) {
@@ -68,6 +117,10 @@
 		if (loadingHTTP) return;
 		transactions = await CoreTransactionAPI.queryTransactions(null, queryParam);
 		transactionCount = await CoreTransactionAPI.countTransactions(null, queryParam);
+
+		const queryParamItem = new URLSearchParams(queryParam);
+		if (queryParamItem.has('item_id')) queryParamItem.set('source_item_id', queryParamItem.get('item_id')!);
+		pricePolicyTable = await CoreProductBlueprintAPI.queryPricePolicyTable(null, queryParamItem);
 
 		// Shallow copy and then making sure we don't filter by checkout_status
 		const queryParamNoStatus = new URLSearchParams(queryParam);
@@ -204,6 +257,30 @@
 			<th><h4>Checkout</h4></th>
 			<th><h4>Status</h4></th>
 			<th>
+				<h4>Product Blueprint</h4>
+				<div class="form-field max-w-32">
+					<select id="product_blueprint_id" required bind:value={queryForm.productBlueprintId}>
+						{#each [null, ...productBlueprintIdList] as productBlueprint}
+							<option value={productBlueprint?.product_blueprint_id ?? null}>
+								{productBlueprint === null ? "All": makePretty(productBlueprint?.product_blueprint_name)}
+							</option>
+						{/each}
+					</select>
+				</div>
+			</th>
+			<th>
+				<h4>Price Policy</h4>
+				<div class="form-field max-w-32">
+					<select id="price_policy_id" required bind:value={queryForm.pricePolicyId}>
+						{#each [null, ...pricePolicyIdList] as pricePolicy}
+							<option value={pricePolicy?.price_policy_id ?? null}>
+								{pricePolicy === null ? "All": `€${pricePolicy.price_eu} ${pricePolicy.price_policy_name === null ? "": makePretty(pricePolicy.price_policy_name)}`}
+							</option>
+						{/each}
+					</select>
+				</div>
+			</th>
+			<th>
 				<div class="form-field">
 					<h4>Validity</h4>
 					<div class="form-field max-w-32">
@@ -241,6 +318,12 @@
 				</td>
 				<td>
 					{makePretty(PaymentStatusEnum[transaction.transaction_status])}
+				</td>
+				<td>
+					{transaction.purchased_product['name']}
+				</td>
+				<td>
+					{transaction.purchased_product.price_policy?.name ?? transaction.purchased_product.price_policy?.id}
 				</td>
 				<td>
 					<div class="transaction-validity-selector">
