@@ -311,10 +311,10 @@
 					<input class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" type="checkbox" checked={selectedArray[tableIndex]}/>
 				</th>
 				<td>
-					<a href={`payment/transaction/${transaction.interaction.interaction_id}#overview`}>{transaction.interaction.interaction_id}</a>
+					<a href={`/staff/payment/${transaction.checkout_uuid}#transaction-${transaction.interaction.interaction_id}`}>{transaction.interaction.interaction_id}</a>
 				</td>
 				<td>
-					<a href={`payment/${transaction.checkout_uuid}#overview`}>{transaction.checkout_uuid.slice(0, 6)}</a>
+					<a href={`/staff/payment/${transaction.checkout_uuid}#overview`}>{transaction.checkout_uuid.slice(0, 6)}</a>
 				</td>
 				<td>
 					{makePretty(PaymentStatusEnum[transaction.transaction_status])}
@@ -339,7 +339,7 @@
 					</div>
 				</td>
 				<td>
-					<a href={`user/${transaction.interaction.user_uuid}#overview`}>{transaction.interaction.user_email}</a>
+					<a href={`/staff/user/${transaction.interaction.user_email}#overview`}>{transaction.interaction.user_email}</a>
 				</td>
 				<td>
 					{prettyDateTime(transaction.created_timestamp)}
