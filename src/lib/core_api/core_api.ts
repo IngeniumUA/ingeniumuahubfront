@@ -98,7 +98,7 @@ export class CoreItemAPI {
 		const query = new URLSearchParams({
 			source_item_id: item_identifier.toString(),
 		});
-		return await CoreProductBlueprintAPI.queryProductBlueprintTable(query);
+		return await CoreProductBlueprintAPI.queryProductBlueprintTable(null, query);
 	}
 
 	static async attachedPricePolicyTable(params: RouteParams | null = null, item_identifier: string | number): Promise<[]> {
