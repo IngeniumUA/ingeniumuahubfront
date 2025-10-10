@@ -161,7 +161,7 @@
 						{makePretty(PaymentStatusEnum[checkout.checkout_status])}
 					</td>
 					<td>
-						{checkout.user_email}
+						<a href={`/staff/user/${checkout.user_email}#overview`}>{checkout.user_email}</a>
 					</td>
 					<td>
 						{prettyDateTime(checkout.created_timestamp)}

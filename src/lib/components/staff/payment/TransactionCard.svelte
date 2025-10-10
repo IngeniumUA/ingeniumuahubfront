@@ -47,7 +47,7 @@
 </script>
 
 <div class="flex justify-between items-center">
-	<h3 class="text-ingenium-grey-700 font-bold">
+	<h3 id="transaction-{transaction.interaction.interaction_id}" class="text-ingenium-grey-700 font-bold">
 		{#if transactionIndex !== null}{(transactionIndex ?? 0) + 1}){/if} {transaction.product_blueprint_name} at
 		{#if transaction.purchased_product.price_policy?.name !== null}{transaction.purchased_product.price_policy?.name} -{/if}
 		{#if transaction.purchased_product.price_policy?.price === 0}Gratis{:else}€{transaction.purchased_product.price_policy?.price}{/if}

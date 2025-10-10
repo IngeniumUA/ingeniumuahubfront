@@ -273,7 +273,7 @@
 			<table class="ingenium-table">
 				<thead>
 				<tr>
-					<th scope="col"><div>
+					<th scope="col" class="form-field"><div>
 						<h4>Card UUID</h4>
 						<input class="max-w-16" type="text" placeholder="uuid" bind:value={queryForm.card_uuid}>
 					</div></th>
@@ -283,7 +283,7 @@
 					</div></th>
 					<th class="form-field"><div>
 						<h4>Linked User</h4>
-						<input class="max-w-32" type="email" placeholder="Email" bind:value={queryForm.user_email}>
+						<input class="max-w-48" type="email" placeholder="Email" bind:value={queryForm.user_email}>
 					</div></th>
 					<th>
 						<h4>Member Type</h4>

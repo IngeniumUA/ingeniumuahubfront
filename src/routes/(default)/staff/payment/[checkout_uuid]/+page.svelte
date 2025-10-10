@@ -12,6 +12,7 @@
 	import type { TransactionI } from '$lib/models/transactionI';
 	import TransactionCard from '$lib/components/staff/payment/TransactionCard.svelte';
 	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
+	import ExplodedLogPreview from '$lib/components/staff/dblog/ExplodedLogPreview.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -282,20 +283,7 @@
 			<div class="alert alert-info mb-4">
 				<p class="alert-text">Herinner dat we niet alle veranderingen bijhouden.<br>Hieronder enkele van de belangrijkste.</p>
 			</div>
-			<div class="tijdlijn-section">
-				{#each explodedDBLogs as statusOrUserLog}
-					<div class="tijdlijn-container">
-						<h4>{prettyDateTime(statusOrUserLog.created_timestamp)} <span>Edit</span></h4>
-						<p>{makePretty(statusOrUserLog.column_name)}: <span>{statusOrUserLog.value_new !== null ? makePretty(statusOrUserLog.value_new): statusOrUserLog.value_new}</span></p>
-						<p>Edit by: <span>{statusOrUserLog.dblog_metadata["user"] ?? "unknown"}</span></p>
-					</div>
-				{/each}
-
-				<!-- Onderste container, aanmaken van checkout-->
-				<div class="tijdlijn-container">
-					<h4>{prettyDateTime(checkoutWide.created_timestamp)} <span>Created</span></h4>
-				</div>
-			</div>
+			<ExplodedLogPreview explodedDBLogs={explodedDBLogs} targetObject={checkoutWide}></ExplodedLogPreview>
 
 			<h2 class="mt-4">Checkout Metadata</h2>
 			{#if checkoutWide.payment_provider === PaymentProviderEnum.Stripe}
@@ -508,29 +496,5 @@
 			h4 {
 					@apply font-bold text-blue-900;
       }
-	}
-
-	.tijdlijn-section {
-			@apply flex flex-col gap-4 p-4 pl-0 relative;
-
-      /* Vertical line */
-      &::before {
-          content: "";
-          @apply absolute left-4 border-2 bg-ingenium-grey-300 w-px;
-          top: 1rem;
-          bottom: 1rem;
-					z-index: -1;
-      }
-
-      .tijdlijn-container {
-				@apply max-w-72 p-2 bg-white border-2 border-ingenium-grey-300 rounded-lg text-ingenium-grey-600;
-				p {
-					@apply text-ingenium-grey-600;
-				}
-
-				span {
-					@apply font-bold text-blue-900 opacity-90;
-			}
-			}
 	}
 </style>
