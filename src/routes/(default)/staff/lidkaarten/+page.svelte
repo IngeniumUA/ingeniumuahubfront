@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
 	import { CoreCardAPI } from '$lib/core_api/card_api';
-	import { CardMembershipEnum, CardTypeEnum } from '$lib/models/item/cardI';
+	import { CardMembershipEnum, CardMembershipEnumList, CardTypeEnum } from '$lib/models/item/cardI';
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import type { CardI } from '$lib/models/cardI';
@@ -30,11 +30,13 @@
 		user_email: string | null;
 		card_nr: number | null;
 		card_uuid: string | null;
+		memberType: CardMembershipEnum | null;
 	}
 	let queryForm: QueryFormI = $state({
 		user_email: null,
 		card_nr: null,
 		card_uuid: null,
+		memberType: null,
 	})
 	let baseQueryParam = $derived.by(() => {
 		let queryParam = new URLSearchParams({
@@ -49,6 +51,7 @@
 		if (queryForm.user_email !== null && queryForm.user_email !== "") queryParam.set('user', queryForm.user_email);
 		if (queryForm.card_nr !== null) queryParam.set('card_nr', queryForm.card_nr.toString());
 		if (queryForm.card_uuid !== null) queryParam.set('card_uuid', queryForm.card_uuid.toString());
+		if (queryForm.memberType !== null) queryParam.set('member_type', queryForm.memberType.toString());
 
 		return queryParam;
 	})
@@ -272,18 +275,29 @@
 				<tr>
 					<th scope="col"><div>
 						<h4>Card UUID</h4>
-						<input type="text" placeholder="uuid" bind:value={queryForm.card_uuid}>
+						<input class="max-w-16" type="text" placeholder="uuid" bind:value={queryForm.card_uuid}>
 					</div></th>
-					<td class="form-field"><div>
+					<th class="form-field"><div>
 						<h4>Card Nr</h4>
 						<input class="max-w-20" type="text" placeholder="Card nr" bind:value={queryForm.card_nr}>
-					</div></td>
-					<td class="form-field"><div>
+					</div></th>
+					<th class="form-field"><div>
 						<h4>Linked User</h4>
-						<input type="email" placeholder="Email" bind:value={queryForm.user_email}>
-					</div></td>
-					<td><h4>Member Type</h4></td>
-					<td><h4>Edit</h4></td>
+						<input class="max-w-32" type="email" placeholder="Email" bind:value={queryForm.user_email}>
+					</div></th>
+					<th>
+						<h4>Member Type</h4>
+						<div class="form-field max-w-32">
+							<select id="member_type" required bind:value={queryForm.memberType}>
+								{#each [null, ...CardMembershipEnumList] as membershipEnum}
+									<option value={membershipEnum ?? null}>
+										{membershipEnum === null ? "All": makePretty(CardMembershipEnum[membershipEnum])}
+									</option>
+								{/each}
+							</select>
+						</div>
+					</th>
+					<th><h4>Edit</h4></th>
 				</tr>
 				</thead>
 				<tbody>
