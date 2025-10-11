@@ -1,8 +1,6 @@
 ﻿<script lang="ts">
 	import { hasRole } from '$lib/states/auth.svelte';
 	import { successToast } from '$lib/components/toast/defined_toast';
-	import type { DBLogExplodedI } from '$lib/models/dblog';
-	import { DBLogAPI } from '$lib/core_api/dblog_api';
 	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
 	import type { UserWideI } from '$lib/models/user/userI';
 	import { CoreUserAPI } from '$lib/core_api/user_api';
@@ -12,6 +10,7 @@
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { CardMembershipEnum } from '$lib/models/item/cardI';
 	import { onMount } from 'svelte';
+	import { CoreCardAPI } from '$lib/core_api/card_api';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -31,6 +30,10 @@
 	}
 	async function refresh() {
 		userWide = await CoreUserAPI.getUserWide(null, userWide.user_uuid)
+		cards = await CoreCardAPI.queryCards(null, new URLSearchParams({
+			limit: '5',
+			user: userWide.user_uuid,
+		}));
 		await refreshKeycloak()
 		successToast("Refreshed!")
 	}

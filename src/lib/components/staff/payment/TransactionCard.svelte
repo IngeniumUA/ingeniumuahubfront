@@ -4,8 +4,27 @@
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { successToast } from '$lib/components/toast/defined_toast';
 	import { CoreTransactionAPI } from '$lib/core_api/transaction';
+	import ExplodedLogPreview from '$lib/components/staff/dblog/ExplodedLogPreview.svelte';
+	import { DBLogAPI } from '$lib/core_api/dblog_api';
+	import type { DBLogExplodedI } from '$lib/models/dblog';
 
 	let { isOpen = $bindable(), loadingHTTP = $bindable(), transaction = $bindable(), transactionIndex = null }: { isOpen: boolean, loadingHTTP: boolean, transaction: TransactionI, transactionIndex: number | null } = $props();
+	let logs: DBLogExplodedI[] = $state([])
+
+	let isOpenBuffer = $state(isOpen);
+	$effect(() => {
+		if (isOpen && !isOpenBuffer) { // Only on 'open' procedure
+			refreshLogs()
+		}
+		isOpenBuffer = isOpen;
+	})
+	async function refreshLogs() {
+		const queryParam = new URLSearchParams({
+			table_name: 'hubtransaction',
+			row_primary_key: `${transaction.interaction.interaction_id}`
+		});
+		logs = await DBLogAPI.queryCoreDBLogExploded(null, queryParam)
+	}
 
 	let transactionPatchError: Error | null = $state(null);
 	async function patchValidity(validity: ValidityEnum) {
@@ -85,9 +104,20 @@
 	<form class="ingenium-form flex flex-row gap-4">
 	</form>
 
-	<h4>Purchased Product</h4>
-	<p>Momentopname van het gekochte product</p>
-	<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(transaction.purchased_product, null, 2)}</pre>
+	<div class="flex flex-col md:flex-row gap-2">
+		<div class="order-1 md:order-3 md:flex-[1]">
+			<h4>Purchased Product</h4>
+			<p>Momentopname van het gekochte product</p>
+			<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(transaction.purchased_product, null, 2)}</pre>
+		</div>
+
+		<div class="hidden md:block w-px mx-4 bg-gray-200 order-2"></div>
+
+		<div class="order-3 md:order-1 md:flex-[2]">
+			<h4>Recent History</h4>
+			<ExplodedLogPreview targetObject={transaction} explodedDBLogs={logs}></ExplodedLogPreview>
+		</div>
+	</div>
 
 	<div class="mt-4 flex justify-end">
 		<button class="button button-primary button-inline">
