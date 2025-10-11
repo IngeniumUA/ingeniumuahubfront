@@ -4,15 +4,14 @@
 	import { failedToast } from '$lib/components/toast/defined_toast';
 	import { onMount } from 'svelte';
 
-	let data: { platform: string, query: {transaction_uuid: string}} = $props()
+	let { data } = $props()
 	let httpLoading = $state(false);
 	async function downloadAppleWallet() {
 		if (httpLoading) return;
 		try {
 			httpLoading = true;
-
 			const res = await fetch(
-				`${PUBLIC_API_URL}/account/wallet/apple?transaction_uuid=${data.query.transaction_uuid}`,
+				`${PUBLIC_API_URL}/account/wallet/apple?transaction_uuid=${data.transaction_uuid}`,
 				{
 					method: 'GET',
 					headers: getAuthorizationHeaders(null),

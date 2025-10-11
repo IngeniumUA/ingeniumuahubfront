@@ -7,15 +7,15 @@ import { getAuthorizationHeaders } from "$lib/auth/auth";
 export const load: PageServerLoad = async ({ params, url, fetch }) => {
   try {
     const platform = url.searchParams.get('platform');
-    const uuid = url.searchParams.get('transaction_uuid');
+    const transaction_uuid = url.searchParams.get('transaction_uuid');
 
     // If any of these values are null, redirect to the homepage
-    if (!platform || !uuid) {
+    if (!platform || !transaction_uuid) {
       return redirect(307, '/');
     }
 
 		if (platform === "google") {
-			const redirectUrl: string = await fetch(`${PUBLIC_API_URL}/account/wallet/${platform}?transaction_uuid=${uuid}`,
+			const redirectUrl: string = await fetch(`${PUBLIC_API_URL}/account/wallet/${platform}?transaction_uuid=${transaction_uuid}`,
 			{
 				method: "GET",
 				headers: getAuthorizationHeaders(params),
@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ params, url, fetch }) => {
 		if (platform === "apple") {
 			return {
 				platform,
-				query: {transaction_uuid: uuid},
+				transaction_uuid,
 			};
 		}
 
