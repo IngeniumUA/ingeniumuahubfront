@@ -3,7 +3,8 @@ import { CoreUserAPI } from '$lib/core_api/user_api';
 
 export async function load({ params }) {
 	const cards = await CoreCardAPI.queryCards(params, new URLSearchParams({
-		limit: '300',
+		limit: '5',
+		user: params.user,
 	}));
 	const userWide = await CoreUserAPI.getUserWide(params, params.user)
 	const checkoutTrackers = await CoreUserAPI.queryCheckoutTracker(params, params.user)
