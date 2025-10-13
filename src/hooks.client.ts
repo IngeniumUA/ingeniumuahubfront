@@ -10,8 +10,12 @@ Sentry.init({
   // for finer control
   tracesSampleRate: 0.5,
 
-  // Optional: Initialize Session Replay:
-  integrations: [Sentry.replayIntegration()],
+  integrations: [
+    // Initialize Distributed Tracing on the client side
+    Sentry.browserTracingIntegration(),
+    // Initialize Session Replay
+    Sentry.replayIntegration()
+  ],
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
