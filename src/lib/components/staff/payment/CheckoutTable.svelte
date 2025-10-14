@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { PaymentStatusEnum } from '$lib/models/enums';
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import * as http from 'node:http';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })),
@@ -89,7 +90,14 @@
 <article>
 	<div class="flex justify-between items-center">
 		<h2 id="checkout-table">Checkouts</h2>
-		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
+
+		<button class="ml-auto button button-primary w-24 button-inline">
+			<span class="text-white">Add (todo)</span>
+		</button>
+		<button onclick={refresh} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
+			<span class="text-white">Download</span>
+		</button>
+		<button onclick={refresh} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
