@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { PaymentStatusEnum } from '$lib/models/enums';
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import AddCheckoutModal from '$lib/components/staff/payment/AddCheckoutModal.svelte';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })),
@@ -79,6 +80,11 @@
 	async function refresh() {
 		await queryData(queryParam)
 	}
+
+	/**
+	 * Boolean state for add new modal
+	 */
+	let showAddingNew = $state(false);
 
 	/**
 	 * Bulk Operations selection
@@ -183,6 +189,8 @@
 		</tbody>
 	</table>
 </article>
+
+<AddCheckoutModal bind:isOpen={ showAddingNew } bind:startingUserEmail={queryForm.user_email} startingItemId={parseInt(baseQueryParam.get('item_id') ?? "") ?? null}></AddCheckoutModal>
 
 <style lang="scss">
 		h3 {
