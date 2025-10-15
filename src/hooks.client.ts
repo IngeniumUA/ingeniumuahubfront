@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/sveltekit";
-import {PUBLIC_SENTRY_DSN} from "$env/static/public";
+import { PUBLIC_API_URL, PUBLIC_SENTRY_DSN } from '$env/static/public';
 import {dev} from "$app/environment";
 
 Sentry.init({
@@ -16,6 +16,15 @@ Sentry.init({
     // Initialize Session Replay
     Sentry.replayIntegration()
   ],
+
+  // Enabling traces to be added to external API
+  tracePropagationTargets: [
+    // same-origin requests
+    /^\/(?!\/)/,
+    // external API(s)
+    PUBLIC_API_URL,
+  ],
+
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 });
