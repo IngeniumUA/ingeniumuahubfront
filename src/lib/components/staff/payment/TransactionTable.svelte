@@ -15,6 +15,9 @@
 		baseQueryParam: URLSearchParams
 	} = $props();
 
+	let showUserColumn = $derived(!baseQueryParam.keys().some(value => {return value.toLowerCase().includes('user')}))
+	let showItemColumn = $derived(!baseQueryParam.keys().some(value => {return value.toLowerCase().includes('item')}))
+
 	let transactionCount: number = $state(0);
 	let transactions: TransactionI[] = $state([])
 	let groupedPaymentStatus: Record<string, number> = $state({})
@@ -80,6 +83,7 @@
 	 */
 	interface QueryFormI {
 		user_email: string | null;
+		itemName: string | null;
 		validity: ValidityEnum | null;
 		productBlueprintId: number | null;
 		pricePolicyId: number | null;
@@ -88,6 +92,7 @@
 	}
 	let queryForm: QueryFormI = $state({
 		user_email: null,
+		itemName: null,
 		validity: null,
 		productBlueprintId: null,
 		pricePolicyId: null,
@@ -103,6 +108,7 @@
 		searchParam.set('offset', (queryForm.queryOffset * queryForm.queryLimit).toString());
 		searchParam.set('limit', queryForm.queryLimit.toString());
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
+		if (queryForm.itemName !== null && queryForm.itemName !== "") searchParam.set('item_name_contains', queryForm.itemName);
 		if (queryForm.validity !== null) searchParam.set('validity', queryForm.validity.toString());
 		if (queryForm.productBlueprintId !== null) searchParam.set('product_blueprint_id', queryForm.productBlueprintId.toString());
 		if (queryForm.pricePolicyId !== null) searchParam.set('price_policy_id', queryForm.pricePolicyId.toString());
@@ -300,12 +306,22 @@
 					</div>
 				</div>
 			</th>
+			{#if showItemColumn}
+			<th>
+				<div class="form-field">
+					<h4>Item</h4>
+					<input class="max-w-32" type="text" placeholder="Item name" bind:value={queryForm.itemName}>
+				</div>
+			</th>
+			{/if}
+			{#if showUserColumn}
 			<th>
 				<div class="form-field">
 					<h4>User</h4>
 					<input class="max-w-32" type="email" placeholder="Email" bind:value={queryForm.user_email}>
 				</div>
 			</th>
+			{/if}
 			<th><h4>Created</h4></th>
 			<th class="p-0"><PaginationComponent
 				bind:maxTotal={transactionCount}
@@ -351,9 +367,16 @@
 						{/each}
 					</div>
 				</td>
+				{#if showItemColumn}
 				<td>
-					<a href={`/staff/user/${transaction.interaction.user_email}#overview`}>{transaction.interaction.user_email}</a>
+					<a href={`/staff/item/${transaction.interaction.item_id}#overview`}>{transaction.interaction.item_name}</a>
 				</td>
+				{/if}
+				{#if showUserColumn}
+					<td>
+						<a href={`/staff/user/${transaction.interaction.user_email}#overview`}>{transaction.interaction.user_email}</a>
+					</td>
+				{/if}
 				<td>
 					{prettyDateTime(transaction.created_timestamp)}
 				</td>

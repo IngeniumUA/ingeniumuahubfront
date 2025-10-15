@@ -7,23 +7,42 @@
 	let loadingHTTP: boolean = $state(false);
 	let createError: string | null = $state(null);
 
+	interface TransactionForm {
+		user: string | null,
+	}
+
 	interface Form {
 		user: string | null,
 		itemId: number | null,
 		paymentProvider: PaymentProviderEnum | null,
+		transactions: TransactionForm[]
 	}
 	let form: Form = $state({
 		user: startingUserEmail,
 		itemId: startingItemId,
-		paymentProvider: null
+		paymentProvider: null,
+		transactions: [],
 	})
 
+	async function createButton() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+	}
 </script>
 
-<Modal title="Checkout Toevoegen" maxWidth="max-w-7xl" bind:isOpen={ isOpen } closable={ true }>
+<style lang="scss">
+	form {
+		@apply p-4 flex flex-col md:flex-row gap-4;
+	}
+	h3 {
+		@apply font-bold;
+	}
+</style>
+
+<Modal title="Checkout Toevoegen" maxWidth="max-w-5xl" bind:isOpen={ isOpen } closable={ true }>
 	{#snippet children()}
 		<!-- Main body -->
-		<form class="p-4 flex flex-col md:flex-row gap:4 ingenium-form">
+		<form class="ingenium-form">
 			<fieldset>
 				<h3>Core information</h3>
 				<div class="form-field">
@@ -48,9 +67,33 @@
 			</fieldset>
 
 			<fieldset>
-				<h3>Transactions</h3>
+				<h3>Add Transaction</h3>
 				<p>Todow :)</p>
 			</fieldset>
+
+			<div>
+				<h3>Transactions</h3>
+				{#each form.transactions as transaction}
+					<div>
+						{JSON.stringify(transaction)}
+					</div>
+				{/each}
+			</div>
 		</form>
+
+		<div class="p-2 flex border-t dark:border-gray-600 border-gray-200">
+			<button class="ml-auto button button-primary w-24 button-inline"
+							disabled={loadingHTTP}
+							onclick={createButton}>
+				<span class="text-white">Create</span>
+			</button>
+		</div>
+
+		{#if (createError !== null)}
+			<div class="error-message p-4">
+				{JSON.stringify(createError)}
+			</div>
+		{/if}
+
 	{/snippet}
 </Modal>

@@ -103,7 +103,7 @@
 	<div class="flex justify-between items-center">
 		<h2 id="checkout-table">Checkouts</h2>
 
-		<button class="ml-auto button button-primary w-24 button-inline">
+		<button onclick={() => showAddingNew = !showAddingNew} class="ml-auto button button-primary w-24 button-inline">
 			<span class="text-white">Add</span>
 		</button>
 		<button onclick={refresh} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
