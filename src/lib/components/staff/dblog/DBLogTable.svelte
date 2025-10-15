@@ -4,6 +4,7 @@
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { DBLogAPI } from '$lib/core_api/dblog_api';
 	import type { DBLogI } from '$lib/models/dblog';
+	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 
 	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'0' })) }: { baseQueryParam: URLSearchParams } = $props();
 
@@ -22,11 +23,15 @@
 		requestIdQuery: null | string,
 		tableNameQuery: null | string,
 		rowPrimaryKeyQuery: null | number,
+		queryOffset: number,
+		queryLimit: number,
 	}
 	let queryForm: QueryFormI = $state({
 		requestIdQuery: null,
 		tableNameQuery: null,
 		rowPrimaryKeyQuery: null,
+		queryOffset: 0,
+		queryLimit: parseInt(baseQueryParam.get('limit') ?? '50')
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
@@ -34,12 +39,15 @@
 		if (queryForm.tableNameQuery !== null && queryForm.tableNameQuery !== "") searchParam.set('table_name', queryForm.tableNameQuery);
 		if (queryForm.rowPrimaryKeyQuery !== null && queryForm.rowPrimaryKeyQuery) searchParam.set('row_primary_key', queryForm.rowPrimaryKeyQuery.toString());
 
+		searchParam.set('offset', (queryForm.queryOffset * queryForm.queryLimit).toString());
+		searchParam.set('limit', queryForm.queryLimit.toString());
+
 		let queryParam = new URLSearchParams()
 		for (const [key, value] of baseQueryParam) {
-			queryParam.append(key, value);
+			queryParam.set(key, value);
 		}
 		for (const [key, value] of searchParam) {
-			queryParam.append(key, value);
+			queryParam.set(key, value);
 		}
 		return queryParam
 	})
@@ -181,7 +189,14 @@
 					</th>
 					<th><h4>Edits</h4></th>
 					<th><h4>Created</h4></th>
-					<th><h4>Showing {dblogs.length} / {dblogCount}</h4></th>
+					<th class="p-0"><PaginationComponent
+						bind:maxTotal={dblogCount}
+						bind:fetchedTotal={dblogs.length}
+						bind:currentOffset={queryForm.queryOffset}
+						bind:currentLimit={queryForm.queryLimit}
+						bind:httpLoading={loadingHTTP}
+					>
+					</PaginationComponent></th>
 				</tr>
 				</thead>
 				<tbody>

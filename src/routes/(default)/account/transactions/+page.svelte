@@ -1,11 +1,14 @@
 <script lang="ts">
-  import dayjs from "dayjs";
-  import QRCode from "qrcode";
-  import Modal from "$lib/components/layout/modal.svelte";
-  import CheckoutTracker from "$lib/components/account/checkout-tracker.svelte";
-  import type {TransactionLimitedI} from "$lib/models/transactionI";
+	import dayjs from 'dayjs';
+	import QRCode from 'qrcode';
+	import Modal from '$lib/components/layout/modal.svelte';
+	import CheckoutTracker from '$lib/components/account/checkout-tracker.svelte';
+	import type { TransactionLimitedI } from '$lib/models/transactionI';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import { failedToast } from '$lib/components/toast/defined_toast';
 
-  let { data }: { data: { transactions: TransactionLimitedI[] }} = $props();
+	let { data }: { data: { transactions: TransactionLimitedI[] }} = $props();
   let isModalOpen = $state(false);
   let modalTitle = $state('');
   let qrCode = $state('');
@@ -29,18 +32,52 @@
     isModalOpen = true;
   }
 
-  // TODO: Fix this
-  function getWalletLink(transaction: TransactionLimitedI, platform: string) {
-    const transaction_uuid: string = transaction.interaction.interaction_uuid
-    let nummer: number = + transaction_uuid.replace(/\D/g, "")
-    let nummer_str = "" + nummer
-    nummer_str = nummer_str.split("e")[0].replace(".", "")
-    nummer = +nummer_str
-    const locatie_naam: string = "Ingenium" //TODO fix once location is implemented
+	function getGoogleWallet(transaction: TransactionLimitedI, platform: string){
+		const transaction_uuid: string = transaction.interaction.interaction_uuid
+		return `/wallet/?transaction_uuid=${transaction_uuid}&platform=${platform}`;
+	}
 
-    // Get and redirect to wallet link
-    return `/wallet/?transaction_uuid=${transaction_uuid}&nummer=${nummer}&locatie_naam=${locatie_naam}&platform=${platform}`;
-  }
+	let httpLoading = $state(false);
+	async function downloadAppleWallet(transaction: TransactionLimitedI) {
+		if (httpLoading) return;
+		try {
+				httpLoading = true;
+
+				const res = await fetch(
+					`${PUBLIC_API_URL}/account/wallet/apple?transaction_uuid=${transaction.interaction.interaction_uuid}`,
+					{
+						method: 'GET',
+						headers: getAuthorizationHeaders(null),
+					}
+				);
+
+				if (!res.ok) {
+					throw new Error('Download failed');
+				}
+
+				const blob = await res.blob();
+				const url = window.URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+
+				// Extract filename from header or fallback
+				const contentDisposition = res.headers.get('Content-Disposition');
+				a.download = contentDisposition
+					? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
+					: 'wallet.pkpass';
+
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+
+				window.URL.revokeObjectURL(url);
+
+			} catch (err) {
+				failedToast(err instanceof Error ? err.message : ('Error validity'));
+			} finally {
+				httpLoading = false;
+			}
+	}
 </script>
 
 <Modal title={ modalTitle } bind:isOpen={ isModalOpen }>
@@ -110,12 +147,12 @@
           </button>
 
           <div class="flex gap-4 items-center justify-center mt-3">
-            <a href={ getWalletLink(transaction, 'google') } data-sveltekit-preload-data="tap">
+            <a href={ getGoogleWallet(transaction, 'google') } data-sveltekit-preload-data="tap">
               <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
             </a>
-            <a href={ getWalletLink(transaction, 'apple') } data-sveltekit-preload-data="tap">
+            <button onclick={() => downloadAppleWallet(transaction)} data-sveltekit-preload-data="tap">
               <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
-            </a>
+            </button>
           </div>
         </article>
       {/each}

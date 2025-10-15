@@ -7,13 +7,16 @@
 	import { ValidityEnum, ValidityList } from '$lib/models/productsI';
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
-	import type { ProductBlueprintI } from '$lib/models/product_blueprint/ProductBlueprintI';
+	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' }))
 	}: {
 		baseQueryParam: URLSearchParams
 	} = $props();
+
+	let showUserColumn = $derived(!baseQueryParam.keys().some(value => {return value.toLowerCase().includes('user')}))
+	let showItemColumn = $derived(!baseQueryParam.keys().some(value => {return value.toLowerCase().includes('item')}))
 
 	let transactionCount: number = $state(0);
 	let transactions: TransactionI[] = $state([])
@@ -80,15 +83,21 @@
 	 */
 	interface QueryFormI {
 		user_email: string | null;
+		itemName: string | null;
 		validity: ValidityEnum | null;
 		productBlueprintId: number | null;
 		pricePolicyId: number | null;
+		queryOffset: number;
+		queryLimit: number;
 	}
 	let queryForm: QueryFormI = $state({
 		user_email: null,
+		itemName: null,
 		validity: null,
 		productBlueprintId: null,
-		pricePolicyId: null
+		pricePolicyId: null,
+		queryOffset: 0,
+		queryLimit: parseInt(baseQueryParam.get('limit') ?? '50')
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
@@ -96,17 +105,20 @@
 		if (selectedStatus !== PaymentStatusEnum.all) searchParam.set('transaction_status', selectedStatus.toString());
 
 		// From query form
+		searchParam.set('offset', (queryForm.queryOffset * queryForm.queryLimit).toString());
+		searchParam.set('limit', queryForm.queryLimit.toString());
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
+		if (queryForm.itemName !== null && queryForm.itemName !== "") searchParam.set('item_name_contains', queryForm.itemName);
 		if (queryForm.validity !== null) searchParam.set('validity', queryForm.validity.toString());
 		if (queryForm.productBlueprintId !== null) searchParam.set('product_blueprint_id', queryForm.productBlueprintId.toString());
 		if (queryForm.pricePolicyId !== null) searchParam.set('price_policy_id', queryForm.pricePolicyId.toString());
 
 		let queryParam = new URLSearchParams()
 		for (const [key, value] of baseQueryParam) {
-			queryParam.append(key, value);
+			queryParam.set(key, value);
 		}
 		for (const [key, value] of searchParam) {
-			queryParam.append(key, value);
+			queryParam.set(key, value);
 		}
 		return queryParam
 	})
@@ -294,14 +306,31 @@
 					</div>
 				</div>
 			</th>
+			{#if showItemColumn}
+			<th>
+				<div class="form-field">
+					<h4>Item</h4>
+					<input class="max-w-32" type="text" placeholder="Item name" bind:value={queryForm.itemName}>
+				</div>
+			</th>
+			{/if}
+			{#if showUserColumn}
 			<th>
 				<div class="form-field">
 					<h4>User</h4>
 					<input class="max-w-32" type="email" placeholder="Email" bind:value={queryForm.user_email}>
 				</div>
 			</th>
+			{/if}
 			<th><h4>Created</h4></th>
-			<th><h4>{transactions.length} / {transactionCount}</h4></th>
+			<th class="p-0"><PaginationComponent
+				bind:maxTotal={transactionCount}
+				bind:fetchedTotal={transactions.length}
+				bind:currentOffset={queryForm.queryOffset}
+				bind:currentLimit={queryForm.queryLimit}
+				bind:httpLoading={loadingHTTP}
+			>
+			</PaginationComponent></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -338,9 +367,16 @@
 						{/each}
 					</div>
 				</td>
+				{#if showItemColumn}
 				<td>
-					<a href={`/staff/user/${transaction.interaction.user_email}#overview`}>{transaction.interaction.user_email}</a>
+					<a href={`/staff/item/${transaction.interaction.item_id}#overview`}>{transaction.interaction.item_name}</a>
 				</td>
+				{/if}
+				{#if showUserColumn}
+					<td>
+						<a href={`/staff/user/${transaction.interaction.user_email}#overview`}>{transaction.interaction.user_email}</a>
+					</td>
+				{/if}
 				<td>
 					{prettyDateTime(transaction.created_timestamp)}
 				</td>
