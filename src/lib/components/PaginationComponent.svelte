@@ -30,7 +30,8 @@
 		@apply m-0 p-0 flex flex-row items-center justify-center;
 
 		button {
-      @apply px-1.5 py-1 border border-gray-200;
+      @apply px-1.5 py-1 border border-gray-200 text-ingenium-grey-700;
+
 		}
 		p {
 			@apply text-nowrap normal-case m-0 px-2 border border-gray-200;
@@ -39,10 +40,12 @@
 </style>
 
 <article>
-	<p class="text-ingenium-grey-700 normal-case text-center w-full">{fetchedTotal} out of {maxTotal}</p>
+	<p class="text-ingenium-grey-700 normal-case text-center w-full">{fetchedTotal} out of {maxTotal} rows</p>
 	<div>
-		<button disabled={httpLoading} onclick={() => {tick(-1)}} class="border-l rounded-l-md">Prev</button>
+		<button disabled={httpLoading} onclick={() => {currentOffset = 0}} class="border-l rounded-l-md">&lt&lt</button>
+		<button disabled={httpLoading} onclick={() => {tick(-1)}} class="border-l">Prev</button>
 		<p>Page {currentOffset + 1}/{maxPage}</p>
-		<button disabled={httpLoading} onclick={() => {tick(1)}} class="border-r rounded-r-md">Next</button>
+		<button disabled={httpLoading} onclick={() => {tick(1)}} class="border-r">Next</button>
+		<button disabled={httpLoading} onclick={() => {currentOffset = maxPage - 1}} class="border-r rounded-r-md">&gt&gt</button>
 	</div>
 </article>
