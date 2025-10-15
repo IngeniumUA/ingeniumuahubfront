@@ -5,6 +5,7 @@
 	import { PaymentStatusEnum } from '$lib/models/enums';
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 	import AddCheckoutModal from '$lib/components/staff/payment/AddCheckoutModal.svelte';
+	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })),
@@ -38,9 +39,13 @@
 	 */
 	interface QueryFormI {
 		user_email: string | null;
+		queryOffset: number;
+		queryLimit: number;
 	}
 	let queryForm: QueryFormI = $state({
-		user_email: null
+		user_email: null,
+		queryOffset: 0,
+		queryLimit: parseInt(baseQueryParam.get('limit') ?? '50')
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
@@ -48,15 +53,17 @@
 		if (selectedStatus !== PaymentStatusEnum.all) searchParam.set('checkout_status', selectedStatus.toString());
 
 		// From query form
+		searchParam.set('offset', (queryForm.queryOffset * queryForm.queryLimit).toString());
+		searchParam.set('limit', queryForm.queryLimit.toString());
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
 
 		// Combining
 		let queryParam = new URLSearchParams()
 		for (const [key, value] of baseQueryParam) {
-			queryParam.append(key, value);
+			queryParam.set(key, value);
 		}
 		for (const [key, value] of searchParam) {
-			queryParam.append(key, value);
+			queryParam.set(key, value);
 		}
 		return queryParam
 	})
@@ -97,7 +104,7 @@
 		<h2 id="checkout-table">Checkouts</h2>
 
 		<button class="ml-auto button button-primary w-24 button-inline">
-			<span class="text-white">Add (todo)</span>
+			<span class="text-white">Add</span>
 		</button>
 		<button onclick={refresh} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Download</span>
@@ -158,7 +165,14 @@
 					</div>
 				</th>
 				<th><h4>Created</h4></th>
-				<th><h4>Showing {checkouts.length} / {checkoutCount}</h4></th>
+				<th class="p-0"><PaginationComponent
+					bind:maxTotal={checkoutCount}
+					bind:fetchedTotal={checkouts.length}
+					bind:currentOffset={queryForm.queryOffset}
+					bind:currentLimit={queryForm.queryLimit}
+					bind:httpLoading={loadingHTTP}
+				>
+				</PaginationComponent></th>
 			</tr>
 		</thead>
 		<tbody>
