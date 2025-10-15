@@ -34,6 +34,7 @@
 					<a href="/staff/flag">Flags</a>
 					<a href="/staff/logs">Logs</a>
 					<a href="/staff/group">Groups</a>
+					<a href="/staff/item">Items</a>
 					<a href="/staff/payment">Payments</a>
 				</div>
 

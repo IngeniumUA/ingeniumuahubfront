@@ -2,6 +2,7 @@
 	import { CoreItemAPI } from '$lib/core_api/core_api';
 	import type { ItemI } from '$lib/models/item/itemI';
 	import { failedToast } from '$lib/components/toast/defined_toast';
+	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -11,12 +12,18 @@
 	let itemCount: number = $state(data.itemCount);
 
 	let httpLoading = $state(false);
+
+	let queryForm = $state({
+		queryLimit: 100,
+		queryOffset: 0
+	})
 	async function refresh() {
 		if (httpLoading) return;
 		httpLoading = true;
 		const queryParam = new URLSearchParams({
 			disabled: 'None',
-			limit: '20'
+			limit: queryForm.queryLimit.toString(),
+			offset: queryForm.queryOffset.toString(),
 		});
 		items = await CoreItemAPI.queryItem(null, queryParam);
 		itemCount = await CoreItemAPI.countItems(null, queryParam);
@@ -42,7 +49,6 @@
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
-	<p>Totaal van {itemCount}</p>
 
 	<table class="ingenium-table">
 		<thead>
@@ -51,13 +57,21 @@
 			<th>Name</th>
 			<th>Available</th>
 			<th>Disabled</th>
+			<th class="p-0"><PaginationComponent
+				bind:maxTotal={itemCount}
+				bind:fetchedTotal={items.length}
+				bind:currentOffset={queryForm.queryOffset}
+				bind:currentLimit={queryForm.queryLimit}
+				bind:httpLoading={httpLoading}
+			>
+			</PaginationComponent></th>
 		</tr>
 		</thead>
 		<tbody>
 		{#each items as item (item.id)}
 			<tr>
 				<th>
-					<a href={`${item.id}#overview`}>{item.id}</a>
+					<a href={`/${item.id}#overview`}>{item.id}</a>
 				</th>
 				<td>
 					{item.name}
@@ -68,9 +82,10 @@
 				<td>
 					<button onclick={() => {restore(item.id)}} disabled={httpLoading}
 									class="ml-2 button button-primary button-inline">
-						<span class="text-white">Reenabled</span>
+						<span class="text-white">Reenable</span>
 					</button>
 				</td>
+				<td>...</td>
 			</tr>
 		{/each}
 		</tbody>
