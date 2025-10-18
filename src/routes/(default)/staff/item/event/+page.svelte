@@ -221,7 +221,7 @@
 						{#if index < 6}
 						{#await CoreItemAPI.attachedProductBlueprintTable(event.item.id) then productTable}
 							{#if (productTable.length >= 10)}
-								Bekijk de pagina
+								...
 							{:else}
 								<table class="ingenium-table">
 									<tbody>
@@ -246,6 +246,9 @@
 									</tbody>
 								</table>
 							{/if}
+							<p class="text-right font-bold">Eind totaal: {productTable.reduce((sum, val) => {
+								return sum + val["transaction_count"]
+							}, 0)}</p>
 						{/await}
 						{:else}
 							Bekijk Item hiervoor!
