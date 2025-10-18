@@ -158,6 +158,7 @@
 				<th><h4>Select</h4> <input type="checkbox"/></th>
 				<th><h4>Checkout</h4></th>
 				<th><h4>Status</h4></th>
+				<th><h4>Amount</h4></th>
 				<th>
 					<div>
 						<h4>User</h4>
@@ -187,6 +188,7 @@
 					<td>
 						{makePretty(PaymentStatusEnum[checkout.checkout_status])}
 					</td>
+					<td>€{checkout.amount}</td>
 					<td>
 						<a href={`/staff/user/${checkout.user_email}#overview`}>{checkout.user_email}</a>
 					</td>
