@@ -71,7 +71,7 @@
 		{#each items as item (item.id)}
 			<tr>
 				<th>
-					<a href={`/${item.id}#overview`}>{item.id}</a>
+					<a href={`/staff/item/${item.id}#overview`}>{item.id}</a>
 				</th>
 				<td>
 					{item.name}
