@@ -246,7 +246,7 @@
 									</tbody>
 								</table>
 							{/if}
-							<p class="text-right font-bold">Eind totaal: {productTable.reduce((sum, val) => {
+							<p class="text-right font-bold">Totaal: {productTable.reduce((sum, val) => {
 								return sum + val["transaction_count"]
 							}, 0)}</p>
 						{/await}
