@@ -11,8 +11,7 @@
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
-	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
-	import { PaymentStatusEnum } from '$lib/models/enums';
+	import { prettyDate } from '$lib/utilities/style-utilities';
 	import { hasRole } from '$lib/states/auth.svelte';
 	import PaymentTable from '$lib/components/staff/payment/PaymentTable.svelte';
 	import Modal from '$lib/components/layout/modal.svelte';

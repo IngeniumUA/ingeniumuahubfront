@@ -1,16 +1,18 @@
 ﻿<script lang="ts">
 	import { hasRole } from '$lib/states/auth.svelte';
-	import { successToast } from '$lib/components/toast/defined_toast';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
 	import type { UserWideI } from '$lib/models/user/userI';
 	import { CoreUserAPI } from '$lib/core_api/user_api';
 	import type { CardI } from '$lib/models/cardI';
 	import PaymentTable from '$lib/components/staff/payment/PaymentTable.svelte';
 	import type { HubCheckoutTrackerI } from '$lib/models/trackerI';
-	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import { makePretty, prettyDate, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { CardMembershipEnum } from '$lib/models/item/cardI';
 	import { onMount } from 'svelte';
 	import { CoreCardAPI } from '$lib/core_api/card_api';
+	import { CoreGroupAPI } from '$lib/core_api/group_api';
+	import type { GroupI } from '$lib/models/user/GroupI';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -21,12 +23,23 @@
 	let checkoutTrackers: HubCheckoutTrackerI[] = $state(data.checkoutTrackers);
 	let keycloakUser = $state(data.keycloakUser);
 
+	let availableGroups: GroupI[] = $state([]);
+	let groupOptions: GroupI[] = $derived.by(() => {
+		return availableGroups.filter(group => {
+			return !userWide.groups.map(value => value.id).includes(group.id);
+		})
+	});
+	let selectedGroup: number | null = $state(null);
+
 	let loadingHTTP: boolean = $state(false);
 
 	async function refreshKeycloak() {
 		if (userWide.manager) {
 			keycloakUser = await CoreUserAPI.getUserKeycloak(null, userWide.sso_uuid)
 		}
+	}
+	async function refreshGroups() {
+		availableGroups = await CoreGroupAPI.queryGroup(null)
 	}
 	async function refresh() {
 		userWide = await CoreUserAPI.getUserWide(null, userWide.user_uuid)
@@ -40,7 +53,53 @@
 
 	onMount(() => {
 		refreshKeycloak();
+		refreshGroups();
 	});
+
+	/**
+	 * Editting
+	 */
+	let patchError: Error | null = $state(null)
+	async function addUserToGroup() {
+		if (loadingHTTP) return;
+		if (selectedGroup === null) return;
+
+		loadingHTTP = true;
+		try {
+			await CoreUserAPI.addUserToGroup(selectedGroup, userWide.user_uuid);
+			await refresh();
+			patchError = null;
+		} catch (error) {
+			patchError = error instanceof Error ? error : Error('Error submitting user');
+		} finally {
+			if (patchError === null) {
+				successToast("Added!")
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
+
+	async function removeUserFromGroup(groupId: number) {
+		if (loadingHTTP) return;
+
+		loadingHTTP = true;
+		try {
+			await CoreUserAPI.removeUserFromGroup(groupId, userWide.user_uuid);
+			await refresh();
+			patchError = null;
+		} catch (error) {
+			patchError = error instanceof Error ? error : Error('Error submitting user');
+		} finally {
+			if (patchError === null) {
+				successToast("Removed!")
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <style lang="scss">
@@ -72,7 +131,7 @@
 				<p class="alert-text">Een gebruiker op ons platform.</p>
 			</div>
 
-			<div class="flex flex-row gap-4">
+			<div class="flex flex-row">
 				<div class="flex-[2] p-2">
 					<h2 class="font-bold mb-2">Gebruiker</h2>
 					<p>Algemene statistieken hier mis. users, transactions, .. die dingen</p>
@@ -84,13 +143,37 @@
 					{#if cards.length === 0}
 						<p>Geen lidkaarten</p>
 					{:else}
-						{#each cards as card (card.card_uuid)}
-							<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-								<h4 class="text-ingenium-grey-800 font-bold">Card Nr {card.card_nr.toString()}</h4>
-								<p class="text-blue-900 font-bold">Member type: {makePretty(CardMembershipEnum[card.member_type])}</p>
-								<p class="text-blue-900 font-bold">UUID: {card.card_uuid.slice(0, 6)}</p>
-							</div>
-						{/each}
+						<table class="ingenium-table">
+							<thead>
+							<tr>
+								<th scope="col"><h4>UUID</h4></th>
+								<th scope="col"><h4>Card Nr</h4></th>
+								<th scope="col"><h4>Member Type</h4></th>
+							</tr>
+							</thead>
+							<tbody>
+							{#each cards as card (card.card_uuid)}
+								<tr>
+									<td>
+										{card.card_uuid.slice(0, 6)}
+									</td>
+									<th scope="row" class="text-center">
+										{card.card_nr.toString()}
+									</th>
+									<td>
+										{makePretty(CardMembershipEnum[card.member_type])}
+									</td>
+								</tr>
+							{/each}
+							</tbody>
+						</table>
+						<!--{#each cards as card (card.card_uuid)}-->
+						<!--	<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">-->
+						<!--		<h4 class="text-ingenium-grey-800 font-bold">Card Nr {card.card_nr.toString()}</h4>-->
+						<!--		<p class="text-blue-900 font-bold">Member type: {makePretty(CardMembershipEnum[card.member_type])}</p>-->
+						<!--		<p class="text-blue-900 font-bold">UUID: {card.card_uuid.slice(0, 6)}</p>-->
+						<!--	</div>-->
+						<!--{/each}-->
 					{/if}
 				</div>
 			</div>
@@ -122,13 +205,60 @@
 			{/if}
 
 			<h2>Groups</h2>
-			{#each userWide.groups as group (group.id)}
-				<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-					<h4 class="text-ingenium-grey-800 font-bold">Group {group.name}</h4>
-					<p class="text-blue-900 font-bold">Id: {group.id}</p>
-					<p class="text-blue-900 font-bold">UUID: {group.keycloak_group_uuid?.slice(0, 6)}</p>
+			<div class="flex flex-col md:flex-row">
+				<div class="order-2 md:flex-[1]">
+					<form class="ingenium-form">
+						<fieldset class="flex flex-col gap-4">
+							<h3 class="font-bold">Add to group</h3>
+							<div class="form-field">
+								<select id="group_id" required bind:value={selectedGroup}>
+									{#each [null, ...groupOptions] as group}
+										<option value={group?.id ?? null}>
+											{group === null ? "none selected": makePretty(group?.name)}
+										</option>
+									{/each}
+								</select>
+							</div>
+						</fieldset>
+
+						<button
+							class="button button-primary"
+							disabled={loadingHTTP || (selectedGroup === null)}
+							onclick={addUserToGroup}
+						>
+							Add
+						</button>
+					</form>
 				</div>
-			{/each}
+				<div class="order-1 md:flex-[2]">
+					<h3 class="font-bold">Current Groups</h3>
+					<table class="ingenium-table">
+						<thead>
+						<tr>
+							<th scope="col"><h4>ID</h4><th scope="col"><h4>Name</h4></th><th scope="col"><h4>Added on</h4></th>
+						</tr>
+						</thead>
+						<tbody>
+						{#each userWide.groups as group (group.id)}
+							<tr>
+								<td>
+									{group.id}
+								</td>
+								<th scope="row">
+									<a href="/staff/group/{group.id}">{makePretty(group.name)}</a>
+								</th>
+								<td>
+									{prettyDate(group.created_timestamp)}
+								</td>
+								<td>
+									<button onclick={() => {removeUserFromGroup(group.id)}}>Remove</button>
+								</td>
+							</tr>
+						{/each}
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 		<div class="order-2 hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>

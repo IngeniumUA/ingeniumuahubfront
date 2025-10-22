@@ -4,6 +4,19 @@ import type { GroupI } from '$lib/models/user/GroupI';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreGroupAPI {
+	static async queryGroup(params: RouteParams | null = null): Promise<[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/group`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch groups: ${await res.text()}`;
+		}
+	}
+
+
 	static async groupTable(params: RouteParams | null = null): Promise<[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/group/table`, {
 			method: 'GET',

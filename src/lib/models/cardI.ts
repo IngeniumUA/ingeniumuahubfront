@@ -9,6 +9,7 @@ export interface CardLimitedI {
 }
 
 export interface CardI extends CardLimitedI {
+	id: number
 	availability: AvailabilityCompositionI
 	created_timestamp: string
 	last_update_timestamp: string
