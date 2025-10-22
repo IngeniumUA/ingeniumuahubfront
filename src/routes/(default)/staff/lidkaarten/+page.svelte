@@ -7,6 +7,9 @@
 	import Modal from '$lib/components/layout/modal.svelte';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import ExplodedLogPreview from '$lib/components/staff/dblog/ExplodedLogPreview.svelte';
+	import type { DBLogExplodedI } from '$lib/models/dblog';
+	import { DBLogAPI } from '$lib/core_api/dblog_api';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -78,6 +81,8 @@
 	let putError: Error | null = $state(null)
 	let editSelectedIndex: null | number = $state(null);
 	let editSelected: CardI | null = $state(null);
+	let explodedDBLogs: DBLogExplodedI[] = $state([])
+
 	let showEdit: boolean = $state(false);
 
 	interface FormState {
@@ -91,7 +96,7 @@
 		linked_group: null
 	})
 
-	function setEditItemIndex(index: number) {
+	async function setEditItemIndex(index: number) {
 		putError = null;
 		editSelectedIndex = index;
 		if (editSelectedIndex !== null && editSelectedIndex < cards.length) {
@@ -99,7 +104,13 @@
 
 			editForm.cardNr = editSelected.card_nr;
 			editForm.user_email = editSelected.user_email;
-			editForm.linked_group = editSelected.linked_group
+			editForm.linked_group = editSelected.linked_group;
+
+			const logParams = new URLSearchParams({
+				table_name: 'hubcard',
+				row_primary_key: `${editSelected.id}`
+			})
+			explodedDBLogs = await DBLogAPI.queryCoreDBLogExploded(null, logParams)
 
 			showEdit = true;
 		}
@@ -387,10 +398,10 @@
 </main>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length && editSelected !== null}
-	<Modal title="Lidkaart bewerken" maxWidth="max-w-4xl" bind:isOpen={ showEdit } closable={ true }>
+	<Modal title="Lidkaart bewerken" maxWidth="max-w-5xl" bind:isOpen={ showEdit } closable={ true }>
 		{#snippet children()}
 			<article class="m-4">
-				<div class="flex flew-row">
+				<div class="flex flew-row gap-4">
 					<div class="flex-1">
 						<h3 class="font-bold pb-2">Lidkaart Info</h3>
 
@@ -430,6 +441,10 @@
 							</div>
 						</fieldset>
 					</form>
+
+					<div>
+						<ExplodedLogPreview targetObject={editSelected} explodedDBLogs={explodedDBLogs}></ExplodedLogPreview>
+					</div>
 				</div>
 
 				<div class="p-2 flex justify-end items-center">
