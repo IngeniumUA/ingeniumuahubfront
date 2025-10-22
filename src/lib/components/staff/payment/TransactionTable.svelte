@@ -348,6 +348,11 @@
 				<td>
 					{makePretty(PaymentStatusEnum[transaction.transaction_status])}
 				</td>
+				{#if showItemColumn}
+					<td>
+						<a href={`/staff/item/${transaction.interaction.item_id}#overview`}>{transaction.interaction.item_name}</a>
+					</td>
+				{/if}
 				<td>
 					{transaction.purchased_product['name']}
 				</td>
@@ -367,11 +372,6 @@
 						{/each}
 					</div>
 				</td>
-				{#if showItemColumn}
-				<td>
-					<a href={`/staff/item/${transaction.interaction.item_id}#overview`}>{transaction.interaction.item_name}</a>
-				</td>
-				{/if}
 				{#if showUserColumn}
 					<td>
 						<a href={`/staff/user/${transaction.interaction.user_email}#overview`}>{transaction.interaction.user_email}</a>
