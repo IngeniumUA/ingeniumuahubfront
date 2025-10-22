@@ -131,7 +131,7 @@
 				<p class="alert-text">Een gebruiker op ons platform.</p>
 			</div>
 
-			<div class="flex flex-row gap-4">
+			<div class="flex flex-row">
 				<div class="flex-[2] p-2">
 					<h2 class="font-bold mb-2">Gebruiker</h2>
 					<p>Algemene statistieken hier mis. users, transactions, .. die dingen</p>
@@ -143,13 +143,37 @@
 					{#if cards.length === 0}
 						<p>Geen lidkaarten</p>
 					{:else}
-						{#each cards as card (card.card_uuid)}
-							<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-								<h4 class="text-ingenium-grey-800 font-bold">Card Nr {card.card_nr.toString()}</h4>
-								<p class="text-blue-900 font-bold">Member type: {makePretty(CardMembershipEnum[card.member_type])}</p>
-								<p class="text-blue-900 font-bold">UUID: {card.card_uuid.slice(0, 6)}</p>
-							</div>
-						{/each}
+						<table class="ingenium-table">
+							<thead>
+							<tr>
+								<th scope="col"><h4>UUID</h4></th>
+								<th scope="col"><h4>Card Nr</h4></th>
+								<th scope="col"><h4>Member Type</h4></th>
+							</tr>
+							</thead>
+							<tbody>
+							{#each cards as card (card.card_uuid)}
+								<tr>
+									<td>
+										{card.card_uuid.slice(0, 6)}
+									</td>
+									<th scope="row" class="text-center">
+										{card.card_nr.toString()}
+									</th>
+									<td>
+										{makePretty(CardMembershipEnum[card.member_type])}
+									</td>
+								</tr>
+							{/each}
+							</tbody>
+						</table>
+						<!--{#each cards as card (card.card_uuid)}-->
+						<!--	<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">-->
+						<!--		<h4 class="text-ingenium-grey-800 font-bold">Card Nr {card.card_nr.toString()}</h4>-->
+						<!--		<p class="text-blue-900 font-bold">Member type: {makePretty(CardMembershipEnum[card.member_type])}</p>-->
+						<!--		<p class="text-blue-900 font-bold">UUID: {card.card_uuid.slice(0, 6)}</p>-->
+						<!--	</div>-->
+						<!--{/each}-->
 					{/if}
 				</div>
 			</div>
@@ -181,8 +205,8 @@
 			{/if}
 
 			<h2>Groups</h2>
-			<div class="flex flex-col md:flex-row gap-4">
-				<div class="order-1 md:flex-[1]">
+			<div class="flex flex-col md:flex-row">
+				<div class="order-2 md:flex-[1]">
 					<form class="ingenium-form">
 						<fieldset class="flex flex-col gap-4">
 							<h3 class="font-bold">Add to group</h3>
@@ -206,7 +230,7 @@
 						</button>
 					</form>
 				</div>
-				<div class="order-2 md:flex-[1]">
+				<div class="order-1 md:flex-[2]">
 					<h3 class="font-bold">Current Groups</h3>
 					<table class="ingenium-table">
 						<thead>
