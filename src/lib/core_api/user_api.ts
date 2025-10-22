@@ -72,4 +72,30 @@ export class CoreUserAPI {
 		});
 		return await CoreCheckoutAPI.queryCheckoutTracker(params, query)
 	}
+
+	static async addUserToGroup(groupIdentifier: number, userIdentifier: string): Promise<boolean> {
+		const res = await fetch(`${PUBLIC_API_URL}/group/add/${groupIdentifier}/${userIdentifier}`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify({})
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to add user to group: ${await res.text()}`;
+		}
+	}
+
+	static async removeUserFromGroup(groupIdentifier: number, userIdentifier: string): Promise<boolean> {
+		const res = await fetch(`${PUBLIC_API_URL}/group/remove/${groupIdentifier}/${userIdentifier}`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify({})
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to remove user from group: ${await res.text()}`;
+		}
+	}
 }
