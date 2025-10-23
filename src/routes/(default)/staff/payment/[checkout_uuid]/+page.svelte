@@ -291,7 +291,7 @@
 			{/if}
 
 			<h3 class="font-bold mt-2">Checkout Flow Info</h3>
-			<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(checkoutWide.checkout_metadata["checkout_flow_information"], null, 2)}</pre>
+			<pre class="text-xs text-ingenium-grey-900 text-wrap">User Agent{checkoutWide.checkout_metadata["checkout_flow_information"]["user_agent"]}</pre>
 
 			<h3 class="font-bold mt-2">Payment Provider Metadata</h3>
 			<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(checkoutWide.checkout_metadata["payment_provider_metadata"], null, 2)}</pre>
