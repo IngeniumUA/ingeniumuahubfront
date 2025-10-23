@@ -268,6 +268,14 @@
 			<th><h4>ID</h4></th>
 			<th><h4>Checkout</h4></th>
 			<th><h4>Status</h4></th>
+			{#if showItemColumn}
+				<th>
+					<div class="form-field">
+						<h4>Item</h4>
+						<input class="max-w-32" type="text" placeholder="Item name" bind:value={queryForm.itemName}>
+					</div>
+				</th>
+			{/if}
 			<th>
 				<h4>Product Blueprint</h4>
 				<div class="form-field max-w-32">
@@ -306,14 +314,6 @@
 					</div>
 				</div>
 			</th>
-			{#if showItemColumn}
-			<th>
-				<div class="form-field">
-					<h4>Item</h4>
-					<input class="max-w-32" type="text" placeholder="Item name" bind:value={queryForm.itemName}>
-				</div>
-			</th>
-			{/if}
 			{#if showUserColumn}
 			<th>
 				<div class="form-field">
@@ -357,7 +357,7 @@
 					{transaction.purchased_product['name']}
 				</td>
 				<td>
-					{transaction.purchased_product.price_policy?.name ?? transaction.purchased_product.price_policy?.id}
+					{transaction.purchased_product.price_policy?.name ?? transaction.purchased_product.price_policy?.price}
 				</td>
 				<td>
 					<div class="transaction-validity-selector">

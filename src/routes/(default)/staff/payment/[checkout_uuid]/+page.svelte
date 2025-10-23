@@ -291,10 +291,10 @@
 			{/if}
 
 			<h3 class="font-bold mt-2">Checkout Flow Info</h3>
-			<p>{JSON.stringify(checkoutWide.checkout_metadata["checkout_flow_information"], null, 2)}</p>
+			<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(checkoutWide.checkout_metadata["checkout_flow_information"], null, 2)}</pre>
 
 			<h3 class="font-bold mt-2">Payment Provider Metadata</h3>
-			<p>{JSON.stringify(checkoutWide.checkout_metadata["payment_provider_metadata"], null, 2)}</p>
+			<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(checkoutWide.checkout_metadata["payment_provider_metadata"], null, 2)}</pre>
 
 			<h2 class="mt-4">User Information</h2>
 			<p>Zo wat informatie die we over de gebruiker weten mis?</p>
