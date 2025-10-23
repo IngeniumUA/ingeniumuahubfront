@@ -11,13 +11,15 @@
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
-	import { prettyDate } from '$lib/utilities/style-utilities';
+	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
 	import { hasRole } from '$lib/states/auth.svelte';
 	import PaymentTable from '$lib/components/staff/payment/PaymentTable.svelte';
 	import Modal from '$lib/components/layout/modal.svelte';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
 	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
+	import { CardMembershipEnum } from '$lib/models/item/cardI';
+	import { ValidityEnum } from '$lib/models/enums';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -35,6 +37,7 @@
 	let productBlueprints = $state(data.productBlueprints);
 	let pricePolicyTable = $state(data.pricePoliciesTable);
 	let checkoutStatusTable = $state(data.checkoutStatusTable);
+	let transactionValidityGrouped = $state(data.transactionValidityGrouped)
 
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
@@ -58,6 +61,7 @@
 	async function refresh() {
 		itemWide = await CoreItemWideAPI.getItem(null, itemWide.item.id);
 		trackerCount = await CoreItemAPI.countCheckoutTracker(null, itemWide.item.id);
+		transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, itemWide.item.id);
 		await refreshBlueprints()
 		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(null, itemWide.item.id);
 	}
@@ -546,6 +550,27 @@
 
 			<div class="order-3 lg:flex-[1]">
 				<h2 class="font-bold">Extra</h2>
+				<table class="ingenium-table">
+					<thead>
+					<tr>
+						<th scope="col"><h4>Validity</h4></th>
+						<th scope="col"><h4>Aantal</h4></th>
+					</tr>
+					</thead>
+					<tbody>
+					{#each Object.entries(transactionValidityGrouped) as validityPair}
+						<tr>
+							<th scope="row">
+								{makePretty(ValidityEnum[validityPair[0]])}
+							</th>
+							<td>
+								{validityPair[1]}
+							</td>
+						</tr>
+					{/each}
+					</tbody>
+				</table>
+
 				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.
 					Voor zo'n dingen best API calls doen naar de dpu? -> Of gwn op core houden .. zonder polars gaat da best nog wel
 				</p>

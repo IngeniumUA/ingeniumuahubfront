@@ -121,6 +121,18 @@ export class CoreItemAPI {
 		}
 	}
 
+	static async attachedValidityGrouped(params: RouteParams | null = null, item_identifier: string | number): Promise<Record<string, number>> {
+		const res = await fetch(`${PUBLIC_API_URL}/transaction/group_by?on=validity&item=${item_identifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch transactions per validity: ${await res.text()}`;
+		}
+	}
+
 	static async countCheckoutTracker(params: RouteParams | null = null, item_identifier: string | number): Promise<number> {
 		const query = new URLSearchParams({
 			item_id: item_identifier.toString(),

@@ -1,4 +1,5 @@
 export enum ValidityEnum {
+  all = 0,
   forbidden= 1,
   valid = 2,
   invalid = 3,
