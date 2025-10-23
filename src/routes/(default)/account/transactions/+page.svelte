@@ -7,6 +7,7 @@
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
 	import { failedToast } from '$lib/components/toast/defined_toast';
+  import { prettyDateTime } from '$lib/utilities/style-utilities';
 
 	let { data }: { data: { transactions: TransactionLimitedI[] }} = $props();
   let isModalOpen = $state(false);
@@ -133,7 +134,7 @@
             {#if transaction.completed_timestamp === null}
               <dd class="not-paid">Niet betaald</dd>
             {:else}
-              <dd>{ parseDate(transaction.completed_timestamp) }</dd>
+              <dd>{ prettyDateTime(transaction.completed_timestamp) }</dd>
             {/if}
           </dl>
 

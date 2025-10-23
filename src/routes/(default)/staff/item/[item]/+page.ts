@@ -13,6 +13,7 @@ export async function load({ params }) {
 	const pricePoliciesTable = await CoreItemAPI.attachedPricePolicyTable(params, itemWide.item.id);
 
 	const checkoutStatusTable = await CoreItemAPI.attachedCheckoutStatusTable(params, itemWide.item.id);
+	const transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(params, itemWide.item.id);
 
-	return { itemWide, trackerCount, productBlueprints, pricePoliciesTable, checkoutStatusTable };
+	return { itemWide, trackerCount, productBlueprints, pricePoliciesTable, checkoutStatusTable, transactionValidityGrouped };
 }

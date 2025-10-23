@@ -191,6 +191,17 @@
 			case ValidityEnum.consumed: return 'gray';
 		}
 	}
+	function transactionToColor(status: PaymentStatusEnum) {
+		switch (status) {
+			case PaymentStatusEnum.successful: return 'green';
+			case PaymentStatusEnum.pending: return 'orange';
+			case PaymentStatusEnum.failed: return 'red';
+			case PaymentStatusEnum.cancelled: return 'gray';
+			case PaymentStatusEnum.refund_pending: return 'orange';
+			case PaymentStatusEnum.partially_refunded: return 'gray';
+			case PaymentStatusEnum.refunded: return 'gray';
+		}
+	}
 
 	/**
 	 * Downloading
@@ -346,7 +357,7 @@
 					<a href={`/staff/payment/${transaction.checkout_uuid}#overview`}>{transaction.checkout_uuid.slice(0, 6)}</a>
 				</td>
 				<td>
-					{makePretty(PaymentStatusEnum[transaction.transaction_status])}
+					<span class="rounded-lg py-1 px-2 {transactionToColor(transaction.transaction_status)}">{makePretty(PaymentStatusEnum[transaction.transaction_status])}</span>
 				</td>
 				{#if showItemColumn}
 					<td>
@@ -406,7 +417,7 @@
           @apply flex flex-col items-start flex-grow p-2 pt-3 pb-3 border border-ingenium-grey-700 rounded-lg;
       };
       .status-button-selected {
-          @apply border-blue-900 border-2 font-bold;
+          @apply border-blue-900 bg-blue-50 border-2 font-bold;
       };
   }
 
@@ -414,11 +425,17 @@
       button {
           @apply text-xs text-white py-1 px-2 inline-flex items-center justify-center whitespace-nowrap align-middle font-semibold disabled:cursor-not-allowed  w-full  drop-shadow;
       }
-      .red {@apply border-red-700 text-red-700 bg-red-100;}
-      .orange {@apply  border-orange-700 text-orange-700 bg-orange-100;}
-      .green {@apply  border-green-700 text-green-700 bg-green-100;}
-      .gray {@apply  border-gray-700 text-gray-700 bg-gray-100;}
+
+			.red {@apply border-red-700 text-red-700 bg-red-100;}
+			.orange {@apply  border-orange-700 text-orange-700 bg-orange-100;}
+			.green {@apply  border-green-700 text-green-700 bg-green-100;}
+			.gray {@apply  border-gray-700 text-gray-700 bg-gray-100;}
 
       @apply ml-auto mr-4 rounded-lg bg-gray-100 flex flex-row;
   }
+
+  .red {@apply border-red-700 text-red-700 bg-red-100;}
+  .orange {@apply  border-orange-700 text-orange-700 bg-orange-100;}
+  .green {@apply  border-green-700 text-green-700 bg-green-100;}
+  .gray {@apply  border-gray-700 text-gray-700 bg-gray-100;}
 </style>
