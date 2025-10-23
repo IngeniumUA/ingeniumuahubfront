@@ -8,6 +8,7 @@
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
+	import TransactionModal from '$lib/components/staff/payment/TransactionModal.svelte';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' }))
@@ -218,6 +219,21 @@
 			loadingHTTP = false; // Reset loading state
 		}
 	}
+
+	/**
+	 * Edit Modal Code
+	 */
+	let editSelectedIndex: null | number = $state(null);
+	let editSelected: TransactionI | null = $state(null);
+	let showEdit: boolean = $state(false);
+
+	async function setEditItemIndex(index: number) {
+		editSelectedIndex = index;
+		if (editSelectedIndex !== null && editSelectedIndex < transactions.length) {
+			editSelected = transactions.at(editSelectedIndex)!;
+			showEdit = true;
+		}
+	}
 </script>
 
 <article>
@@ -392,7 +408,7 @@
 					{prettyDateTime(transaction.created_timestamp)}
 				</td>
 				<td>
-					<button>
+					<button onclick={() => setEditItemIndex(tableIndex)}>
 						<span>...</span>
 					</button>
 				</td>
@@ -401,6 +417,10 @@
 		</tbody>
 	</table>
 </article>
+
+{#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < transactions.length && editSelected !== null}
+	<TransactionModal transaction={editSelected} isOpen={showEdit}></TransactionModal>
+{/if}
 
 <style lang="scss">
 	h3 {
