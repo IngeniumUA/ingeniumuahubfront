@@ -122,7 +122,7 @@ export class CoreItemAPI {
 	}
 
 	static async attachedValidityGrouped(params: RouteParams | null = null, item_identifier: string | number): Promise<Record<string, number>> {
-		const res = await fetch(`${PUBLIC_API_URL}/transaction/group_by?on=validity&item=${item_identifier}`, {
+		const res = await fetch(`${PUBLIC_API_URL}/transaction/group_by?on=validity&transaction_status=1&item=${item_identifier}`, {
 			method: 'GET',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 		});
