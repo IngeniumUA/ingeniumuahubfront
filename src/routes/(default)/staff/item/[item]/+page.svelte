@@ -18,7 +18,6 @@
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
 	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
-	import { CardMembershipEnum } from '$lib/models/item/cardI';
 	import { ValidityEnum } from '$lib/models/enums';
 	
 	/**
@@ -36,7 +35,6 @@
 
 	let productBlueprints = $state(data.productBlueprints);
 	let pricePolicyTable = $state(data.pricePoliciesTable);
-	let checkoutStatusTable = $state(data.checkoutStatusTable);
 	let transactionValidityGrouped = $state(data.transactionValidityGrouped)
 
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
@@ -561,7 +559,7 @@
 					{#each Object.entries(transactionValidityGrouped) as validityPair}
 						<tr>
 							<th scope="row">
-								{makePretty(ValidityEnum[validityPair[0]])}
+								{makePretty(ValidityEnum[parseInt(validityPair[0])])}
 							</th>
 							<td>
 								{validityPair[1]}
@@ -584,7 +582,7 @@
 				Een Checkout is de daadwerkelijke betalingen daarvan.
 				Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
 		</div>
-		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${itemWide.item.id}`, limit: '20'})}></PaymentTable>
+		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${itemWide.item.id}`, limit: '20'})} baseSelectedTable="transacties"></PaymentTable>
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
