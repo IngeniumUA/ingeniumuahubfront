@@ -150,6 +150,16 @@
 		await queryData(queryParam)
 	}
 
+	let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+	$effect(() => {
+		const { user_email, itemName, validity, productBlueprintId, pricePolicyId, queryOffset, queryLimit } = queryForm;
+		void [user_email, itemName, validity, productBlueprintId, pricePolicyId, queryOffset, queryLimit];
+
+		if (debounceTimer) clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(refresh, 1000);
+	});
+
+
 	/**
 	 * Bulk Operations selection
 	 */
@@ -305,7 +315,7 @@
 			{/if}
 			<th>
 				<h4>Product Blueprint</h4>
-				<div class="form-field max-w-32">
+				<div class="form-field min-w-24 max-w-32">
 					<select id="product_blueprint_id" required bind:value={queryForm.productBlueprintId}>
 						{#each [null, ...productBlueprintIdList] as productBlueprint}
 							<option value={productBlueprint?.product_blueprint_id ?? null}>
@@ -317,7 +327,7 @@
 			</th>
 			<th>
 				<h4>Price Policy</h4>
-				<div class="form-field max-w-32">
+				<div class="form-field min-w-24 max-w-32">
 					<select id="price_policy_id" required bind:value={queryForm.pricePolicyId}>
 						{#each [null, ...pricePolicyIdList] as pricePolicy}
 							<option value={pricePolicy?.price_policy_id ?? null}>
@@ -349,7 +359,6 @@
 				</div>
 			</th>
 			{/if}
-			<th><h4>Created</h4></th>
 			<th class="p-0"><PaginationComponent
 				bind:maxTotal={transactionCount}
 				bind:fetchedTotal={transactions.length}
@@ -384,7 +393,7 @@
 					{transaction.purchased_product['name']}
 				</td>
 				<td>
-					{transaction.purchased_product.price_policy?.name ?? transaction.purchased_product.price_policy?.price}
+					{transaction.purchased_product.price_policy?.name ?? `€${transaction.purchased_product.price_policy?.price}`}
 				</td>
 				<td>
 					<div class="transaction-validity-selector">

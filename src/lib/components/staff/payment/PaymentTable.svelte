@@ -1,32 +1,32 @@
 ﻿<script lang="ts">
 	import CheckoutTable from '$lib/components/staff/payment/CheckoutTable.svelte';
-	import Modal from '$lib/components/layout/modal.svelte';
 	import TransactionTable from '$lib/components/staff/payment/TransactionTable.svelte';
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { onMount } from 'svelte';
 	import { PaymentStatusEnum } from '$lib/models/enums';
 
-	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
+	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })), baseSelectedTable = null }
+		: { baseQueryParam: URLSearchParams, baseSelectedTable: string | null } = $props();
 
 	/**
 	 *
 	 */
-	let selectedTable = $state(0);
+	let selectedTable = $state(baseSelectedTable);
 	onMount(() => {
 		const params = new URLSearchParams(window.location.search);
 		const queryParams = Object.fromEntries(params.entries());
 		if (queryParams["selected_table"]) {
-			selectedTable = parseInt(queryParams["selected_table"]);
+			selectedTable = queryParams["selected_table"];
 		}
 	});
 </script>
 
 <main>
-	<div class="flex flex-col sm:flex-row gap-2">{#each ["betalingen", "transacties", "refunds"] as tableOption, index}
-		<button onclick={() => selectedTable = index}><span
-			class="text-blue-900 font-bold {index === selectedTable ? '': 'opacity-75'}">{makePretty(tableOption)}</span></button>
+	<div class="flex flex-row gap-2">{#each ["betalingen", "transacties", "refunds"] as tableOption}
+		<button onclick={() => selectedTable = tableOption}><span
+			class="text-blue-900 font-bold {tableOption === selectedTable ? '': 'opacity-75'}">{makePretty(tableOption)}</span></button>
 	{/each}</div>
-	{#if selectedTable === 0}
+	{#if selectedTable === "betalingen"}
 		<CheckoutTable baseQueryParam={baseQueryParam} displayPaymentStatus={
 		[
 			PaymentStatusEnum.all,
@@ -36,9 +36,9 @@
 			PaymentStatusEnum.cancelled
 		]
 		}></CheckoutTable>
-	{:else if selectedTable === 1}
+	{:else if selectedTable === "transacties"}
 		<TransactionTable baseQueryParam={baseQueryParam}></TransactionTable>
-	{:else if selectedTable === 2}
+	{:else if selectedTable === "refunds"}
 		<CheckoutTable baseQueryParam={baseQueryParam} displayPaymentStatus={
 		[
 			PaymentStatusEnum.refunded,
