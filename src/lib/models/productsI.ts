@@ -84,7 +84,6 @@ export const ValidityList = [
   ValidityEnum.forbidden,
   ValidityEnum.valid,
   ValidityEnum.invalid,
-  ValidityEnum.manually_verified,
   ValidityEnum.consumed,
 ]
 

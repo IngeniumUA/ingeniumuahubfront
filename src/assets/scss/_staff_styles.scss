@@ -42,7 +42,18 @@ h1, h2 {
         h4 {
           @apply text-blue-900 font-bold text-sm;
         }
+        a {
+          @apply text-blue-800;
+        }
         @apply pr-6 py-3;
+      }
+      td {
+        h4 {
+          @apply text-blue-900;
+        }
+        a {
+          @apply text-blue-800;
+        }
       }
     }
   }

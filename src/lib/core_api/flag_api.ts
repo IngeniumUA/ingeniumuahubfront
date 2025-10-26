@@ -1,6 +1,7 @@
 ﻿import { PUBLIC_API_URL } from '$env/static/public';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { HubFlag } from '$lib/models/flag/HubFlagI';
+import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreFlagAPI {
 	static async queryFlag(query_param: URLSearchParams): Promise<HubFlag[]> {
@@ -10,6 +11,17 @@ export class CoreFlagAPI {
 		if (!res.ok) {
 			const text = await res.text();
 			throw new Error(`Failed to load flags: ${text}`);
+		}
+		return await res.json();
+	}
+
+	static async getFlag(params: RouteParams | null = null, flagIdentifier: string): Promise<HubFlag> {
+		const res = await fetch(`${PUBLIC_API_URL}/flag/${flagIdentifier}`, {
+			headers: getAuthorizationHeaders(params)
+		});
+		if (!res.ok) {
+			const text = await res.text();
+			throw new Error(`Failed to load flag: ${text}`);
 		}
 		return await res.json();
 	}

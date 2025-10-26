@@ -22,6 +22,11 @@
 	 * Query parameter for showing available
 	 */
 	let onlyShowAvailable: boolean = $state(true);
+	$effect(() => {
+		if (onlyShowAvailable !== undefined) {
+			refresh();
+		}
+	});
 
 	/**
 	 * Refreshing all data on the page
@@ -231,7 +236,7 @@
 						<h3 class="font-bold">Producten</h3>
 						{#await CoreItemAPI.attachedProductBlueprintTable(shopItem.item.id) then productTable}
 							{#if (productTable.length >= 10)}
-								Bekijk de pagina
+								...
 							{:else}
 								<table class="ingenium-table">
 									<tbody>
@@ -256,6 +261,9 @@
 									</tbody>
 								</table>
 							{/if}
+							<p class="text-right font-bold">Totaal: {productTable.reduce((sum, val) => {
+								return sum + val["transaction_count"]
+							}, 0)}</p>
 						{/await}
 					</div>
 				</div>

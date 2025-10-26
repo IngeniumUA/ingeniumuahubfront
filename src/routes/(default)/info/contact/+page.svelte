@@ -25,7 +25,6 @@
           <dt>Yorben Joosen</dt>
           <dd>
             Mail: yorben.joosen&#64;ingeniumua.be <br>
-            Tel: +32 468 10 37 94
           </dd>
 
           <dt>Renzo Craeymeersch</dt>

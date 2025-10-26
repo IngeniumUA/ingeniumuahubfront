@@ -1,12 +1,15 @@
 ﻿<script lang="ts">
 	import { CoreCardAPI } from '$lib/core_api/card_api';
-	import { CardMembershipEnum, CardTypeEnum } from '$lib/models/item/cardI';
+	import { CardMembershipEnum, CardMembershipEnumList, CardTypeEnum } from '$lib/models/item/cardI';
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import type { CardI } from '$lib/models/cardI';
 	import Modal from '$lib/components/layout/modal.svelte';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import ExplodedLogPreview from '$lib/components/staff/dblog/ExplodedLogPreview.svelte';
+	import type { DBLogExplodedI } from '$lib/models/dblog';
+	import { DBLogAPI } from '$lib/core_api/dblog_api';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -15,21 +18,62 @@
 
 	let cardTable = $state(data.card_table)
 	let cards = $state(data.cards)
+	let cardCountAvailable = $state(data.cardCountAvailable)
+	let cardCountNotAvailable = $state(data.cardCountNotAvailable)
+	let cardCount = $state(data.cardCount)
 
 	let onlyShowLinked: boolean = $state(false);
+	let onlyShowAvailable: boolean = $state(true);
 	let loadingHTTP: boolean = $state(false)
+
+	/**
+	 * Query logic
+	 */
+	interface QueryFormI {
+		user_email: string | null;
+		card_nr: number | null;
+		card_uuid: string | null;
+		memberType: CardMembershipEnum | null;
+	}
+	let queryForm: QueryFormI = $state({
+		user_email: null,
+		card_nr: null,
+		card_uuid: null,
+		memberType: null,
+	})
+	let baseQueryParam = $derived.by(() => {
+		let queryParam = new URLSearchParams({
+			limit: '300',
+		});
+		if (onlyShowLinked) {
+			queryParam.set("is_linked", "true")
+		}
+		if (onlyShowAvailable) {
+			queryParam.set("available", "true")
+		}
+		if (queryForm.user_email !== null && queryForm.user_email !== "") queryParam.set('user', queryForm.user_email);
+		if (queryForm.card_nr !== null) queryParam.set('card_nr', queryForm.card_nr.toString());
+		if (queryForm.card_uuid !== null) queryParam.set('card_uuid', queryForm.card_uuid.toString());
+		if (queryForm.memberType !== null) queryParam.set('member_type', queryForm.memberType.toString());
+
+		return queryParam;
+	})
+
 	async function refresh() {
 		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
-		const query = new URLSearchParams({
-			limit: '150',
-		})
-		if (onlyShowLinked) {
-			query.set("is_linked", "true")
-		}
-		cards = await CoreCardAPI.queryCards(null, query);
+
+		cards = await CoreCardAPI.queryCards(null, baseQueryParam);
+		let queryParam = baseQueryParam;
+
+		queryParam.set('available', "true")
+		cardCountAvailable = await CoreCardAPI.countCards(null, queryParam);
+
+		queryParam.set('available', "false")
+		cardCountNotAvailable = await CoreCardAPI.countCards(null, queryParam);
+		cardCount = cardCountAvailable + cardCountNotAvailable;
+
 		successToast("Refreshed")
 	}
-
 
 	/**
 	 * Edit Modal Code
@@ -37,6 +81,8 @@
 	let putError: Error | null = $state(null)
 	let editSelectedIndex: null | number = $state(null);
 	let editSelected: CardI | null = $state(null);
+	let explodedDBLogs: DBLogExplodedI[] = $state([])
+
 	let showEdit: boolean = $state(false);
 
 	interface FormState {
@@ -50,7 +96,7 @@
 		linked_group: null
 	})
 
-	function setEditItemIndex(index: number) {
+	async function setEditItemIndex(index: number) {
 		putError = null;
 		editSelectedIndex = index;
 		if (editSelectedIndex !== null && editSelectedIndex < cards.length) {
@@ -58,7 +104,13 @@
 
 			editForm.cardNr = editSelected.card_nr;
 			editForm.user_email = editSelected.user_email;
-			editForm.linked_group = editSelected.linked_group
+			editForm.linked_group = editSelected.linked_group;
+
+			const logParams = new URLSearchParams({
+				table_name: 'hubcard',
+				row_primary_key: `${editSelected.id}`
+			})
+			explodedDBLogs = await DBLogAPI.queryCoreDBLogExploded(null, logParams)
 
 			showEdit = true;
 		}
@@ -129,6 +181,46 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 * Patching availability
+	 */
+	async function toggleAvailable(cardIndex: number, card: CardI) {
+		cards[cardIndex] = await CoreCardAPI.setAvailable(card, !card.availability.available);
+		successToast("Updated!")
+	}
+
+	/**
+	 * Bulk patch
+	 */
+	async function bulkPatch() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+
+		const patchObj = {
+			available: false
+		}
+
+		try {
+			const res = await fetch(`${PUBLIC_API_URL}/card/bulk`, {
+				method: 'PATCH',
+				headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+				body: JSON.stringify(patchObj)
+			});
+			if (res.ok) {
+				showBulkImport = false;
+				successToast("Bulk patched!")
+				await refresh();
+			} else {
+				const text = await res.text();
+				failedToast(`Failed to patch: ${text}`)
+			}
+		} catch (error) {
+			failedToast(`Failed to patch: ${error instanceof Error ? error : Error(`Error during Patch: ${error}`)}`);
+		} finally {
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -149,7 +241,7 @@
 
 	<div class="container flex flex-col md:flex-row">
 		<!-- Left hand side, list of vacatures -->
-		<div class="md:w-2/3">
+		<div class="md:flex-[2] order-3 md:order-1">
 			<h2>Actieve Lidkaarten</h2>
 
 			<h3 class="font-bold">Filters</h3>
@@ -170,17 +262,53 @@
 							"></div>
 					<span class="ms-3 text-sm font-medium text-gray-600">Toon Enkel Gelinkt</span>
 				</label>
+				<label class="inline-flex items-center cursor-pointer my-4">
+					<input type="checkbox" class="sr-only peer" bind:checked="{onlyShowAvailable}" />
+					<div class="
+							relative w-11 h-6
+							bg-gray-200 dark:bg-gray-700
+							rounded-full
+							peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+							after:content-['']
+							after:absolute after:top-[2px] after:start-[2px]
+							after:w-5 after:h-5
+							after:bg-white after:rounded-full
+							after:transition-transform
+							peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+							"></div>
+					<span class="ms-3 text-sm font-medium text-gray-600">Only show Available</span>
+				</label>
 			</div>
 
 			<h3 class="font-bold">Lijst</h3>
 			<table class="ingenium-table">
 				<thead>
 				<tr>
-					<th scope="col"><h4>Card UUID</h4></th>
-					<th scope="col"><h4>Card Nr</h4></th>
-					<th scope="col"><h4>Linked User</h4></th>
-					<th scope="col"><h4>Member Type</h4></th>
-					<th scope="col"><h4>Edit</h4></th>
+					<th scope="col" class="form-field"><div>
+						<h4>Card UUID</h4>
+						<input class="max-w-16" type="text" placeholder="uuid" bind:value={queryForm.card_uuid}>
+					</div></th>
+					<th class="form-field"><div>
+						<h4>Card Nr</h4>
+						<input class="max-w-20" type="text" placeholder="Card nr" bind:value={queryForm.card_nr}>
+					</div></th>
+					<th class="form-field"><div>
+						<h4>Linked User</h4>
+						<input class="max-w-48" type="email" placeholder="Email" bind:value={queryForm.user_email}>
+					</div></th>
+					<th>
+						<h4>Member Type</h4>
+						<div class="form-field max-w-32">
+							<select id="member_type" required bind:value={queryForm.memberType}>
+								{#each [null, ...CardMembershipEnumList] as membershipEnum}
+									<option value={membershipEnum ?? null}>
+										{membershipEnum === null ? "All": makePretty(CardMembershipEnum[membershipEnum])}
+									</option>
+								{/each}
+							</select>
+						</div>
+					</th>
+					<th><h4>Edit</h4></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -203,6 +331,18 @@
 						{makePretty(CardMembershipEnum[card.member_type])}
 					</td>
 					<td>
+						<label class="inline-flex items-center cursor-pointer my-4">
+							<input type="checkbox" class="sr-only peer"
+										 bind:checked={card.availability.available}
+										 onclick="{() => toggleAvailable(index, card)}"
+							>
+							<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
+							<span class="ms-3 text-sm font-medium text-gray-600">
+														{#if card.availability.available}Beschikbaar{:else}Niet Beschikbaar{/if}
+													</span>
+						</label>
+					</td>
+					<td>
 						<button aria-label="edit" onclick={() => setEditItemIndex(index)}>
 							<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 									 width="20px" height="20px" viewBox="0 0 528.899 528.899"
@@ -223,10 +363,10 @@
 		</div>
 
 		<!-- Vertical divider -->
-		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+		<div class="order-2 hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
 		<!-- Right hand side, brief statistics-->
-		<div class="md:w-1/3">
+		<div class="md:flex-[1] order-1 md:order-3">
 			<h2 class="font-bold">Overzicht</h2>
 
 			{#each cardTable as card_count_dict (card_count_dict["member_type"])}
@@ -236,6 +376,13 @@
 					<p class="text-blue-900 font-bold">Ongelinkt: {card_count_dict["card_count"]}</p>
 				</div>
 			{/each}
+
+			<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+				<h4 class="text-ingenium-grey-800 font-bold">Totaal</h4>
+				<p class="text-blue-900 font-bold">Available: {cardCountAvailable}</p>
+				<p class="text-blue-900 font-bold">Niet Available: {cardCountNotAvailable}</p>
+				<p class="text-blue-900 font-bold">All: {cardCount}</p>
+			</div>
 		</div>
 	</div>
 
@@ -245,13 +392,16 @@
 	<div class="alert alert-info mb-4 max-w-2xl">
 		<p class="alert-text">Voor ingrijpende bulk operaties, vooral rond <a href="https://wiki.ingeniumua.be/staff/start_academiejaar">start academiejaar</a>.</p>
 	</div>
+	<button class="button button-primary button-inline" onclick={bulkPatch}>
+		<span class="text-white">De-activate all current</span>
+	</button>
 </main>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length && editSelected !== null}
-	<Modal title="Lidkaart bewerken" maxWidth="max-w-4xl" bind:isOpen={ showEdit } closable={ true }>
+	<Modal title="Lidkaart bewerken" maxWidth="max-w-5xl" bind:isOpen={ showEdit } closable={ true }>
 		{#snippet children()}
 			<article class="m-4">
-				<div class="flex flew-row">
+				<div class="flex flew-row gap-4">
 					<div class="flex-1">
 						<h3 class="font-bold pb-2">Lidkaart Info</h3>
 
@@ -264,6 +414,8 @@
 						<h4 class="pl-3 text-blue-900 font-bold">MemberType: <span class="text-ingenium-grey-800 font-bold">{CardMembershipEnum[editSelected?.member_type ?? 0]}</span></h4>
 						<p class="pl-3 ">Soort lid</p>
 
+						<h4 class="pl-3 text-blue-900 font-bold">Available: <span class="text-ingenium-grey-800 font-bold">{editSelected?.availability.available ?? false}</span></h4>
+						<p class="pl-3 ">Beschikbaarheid</p>
 					</div>
 
 					<form class="flex-1 ingenium-form">
@@ -289,6 +441,10 @@
 							</div>
 						</fieldset>
 					</form>
+
+					<div>
+						<ExplodedLogPreview targetObject={editSelected} explodedDBLogs={explodedDBLogs}></ExplodedLogPreview>
+					</div>
 				</div>
 
 				<div class="p-2 flex justify-end items-center">

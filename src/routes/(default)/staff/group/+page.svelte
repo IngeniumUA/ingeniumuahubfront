@@ -8,13 +8,18 @@
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
+
+	let groupTable = $state(data.groupTable)
+	let keycloakGroups = $state(data.keycloakGroups)
+
 	let httpLoading: boolean = $state(false);
 
 	/**
 	 * Refreshing all data on the page
 	 */
 	async function refresh() {
-
+		groupTable = await CoreGroupAPI.groupTable(null);
+		keycloakGroups = await CoreGroupAPI.queryKeycloakGroup(null)
 	}
 
 	/**
@@ -23,10 +28,20 @@
 	let showEditModal: boolean = $state(false);
 	let editGroup: null | GroupI = $state(null)
 	async function setEditGroup(groupId: number) {
+		editGroup = null;
 		if (httpLoading) return httpLoading;
 		showEditModal = true;
 		editGroup = await CoreGroupAPI.getGroup(null, groupId);
 	}
+
+	let showEditBuffer = false;
+	$effect(() => {
+		if (showEditBuffer && !showEditModal) {
+			editGroup = null;
+			refresh().then(() => {})
+		}
+		showEditBuffer = showEditModal
+	})
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -42,8 +57,29 @@
 		Die data 'synchroniseren' we (dupliceren) op de Core om minder requests te moeten uitvoeren en die data heir beschikbaar te hebben?</p>
 	</div>
 
+	<h2>Keycloak Groups</h2>
+	<table class="ingenium-table">
+		<thead>
+		<tr>
+			<th scope="col"><h4>Name</h4></th>
+			<th scope="col"><h4>Keycloak ID</h4></th>
+		</tr>
+		</thead>
+		<tbody>
+		{#each keycloakGroups as group (group["id"])}
+			<tr>
+				<th scope="row">
+					{makePretty(group["name"])}
+				</th>
+				<td>
+					{group["id"]}
+				</td>
+			</tr>
+		{/each}
+		</tbody>
+	</table>
 
-	<h2>Groups</h2>
+	<h2>HubGroups</h2>
 	<table class="ingenium-table">
 		<thead>
 		<tr>
@@ -53,16 +89,16 @@
 		</tr>
 		</thead>
 		<tbody>
-			{#each data.groupTable as group (group["id"])}
+			{#each groupTable as group (group["id"])}
 				<tr>
 					<th scope="row">
-						{makePretty(group["name"])}
+						<a href="group/{group['id']}">{makePretty(group["name"])}</a>
 					</th>
 					<td>
 						{#if (group["keycloak_group_uuid"] === null)}
 							Nee
 						{:else}
-							Ja
+							{group["keycloak_group_uuid"].slice(0, 12)}
 						{/if}
 					</td>
 					<td>

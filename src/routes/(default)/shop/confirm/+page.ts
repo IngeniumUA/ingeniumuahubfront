@@ -31,7 +31,7 @@ export const load = async ({ url, params, fetch }) => {
   const trackerId = parseInt(url.searchParams.get('tracker_id') || '', 10);
 
   let tracker: PublicOrderTrackerI = {
-    id: trackerId,
+    order_counter: trackerId,
     checkout_tracker_status: NaN
   };
   if (checkoutUuid && !trackerId) {
@@ -67,7 +67,7 @@ export const load = async ({ url, params, fetch }) => {
             paymentStatus,
             checkoutUuid,
             tracker: {
-              id: trackerId,
+              order_counter: trackerId,
               checkout_tracker_status: NaN,
             },
           }

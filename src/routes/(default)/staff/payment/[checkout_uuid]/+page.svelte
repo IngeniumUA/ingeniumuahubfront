@@ -10,6 +10,9 @@
 	import type { DBLogExplodedI } from '$lib/models/dblog';
 	import { DBLogAPI } from '$lib/core_api/dblog_api';
 	import type { TransactionI } from '$lib/models/transactionI';
+	import TransactionCard from '$lib/components/staff/payment/TransactionCard.svelte';
+	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
+	import ExplodedLogPreview from '$lib/components/staff/dblog/ExplodedLogPreview.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -182,6 +185,11 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 *
+	 */
+	let selectedArray = $state(Array.from({ length: data.checkout.transactions.length }, () => false));
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -192,7 +200,7 @@
 		</button>
 	</div>
 
-	<section class="flex flex-row">
+	<section class="flex flex-col md:flex-row">
 		<div class="flex-[2]">
 			<div class="alert alert-info mb-4">
 				<p class="alert-text">Een checkout is een uitgevoerde betaling.</p>
@@ -226,9 +234,14 @@
 				</div>
 
 				<div class="flex-[1] p-2">
-					<h3 class="font-bold mb-2">Voortgang:</h3>
+					<h3 class="font-bold mb-2">Mail:</h3>
+					<button class="button button-primary button-inline" onclick={sendEmail}>
+						<span class="text-white">Opnieuw Versturen</span>
+					</button>
+
+					<h3 class="font-bold mt-4 mb-2">Voortgang:</h3>
 					<button
-						class="button button-primary button-inline"
+						class="button button-danger button-inline"
 						onclick={() => {patchStatus(getPatchStatusValue())}}
 						disabled={loadingHTTP || ![PaymentStatusEnum.successful, PaymentStatusEnum.pending].includes(checkoutWide.checkout_status)}
 					>
@@ -242,18 +255,13 @@
 							{/if}
 						</span>
 					</button>
-
-					<h3 class="font-bold mt-4 mb-2">Mail:</h3>
-					<button class="button button-primary button-inline" onclick={sendEmail}>
-						<span class="text-white">Opnieuw Versturen</span>
-					</button>
 				</div>
 			</div>
 		</div>
 
 		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
-		<aside class="flex-1 px-4 col-span-1">
+		<aside class="flex-[1] px-4 col-span-1">
 			<nav class="vertical-nav vertical-nav-transparent">
 				<h2>On this page</h2>
 				<a href="#overview" class="font-semibold">Overzicht</a>
@@ -269,26 +277,13 @@
 	</section>
 
 	<h1 id="overview">Overzicht</h1>
-	<section class="flex flex-row">
-		<div class="flex-[2]">
+	<section class="flex flex-col lg:flex-row">
+		<div class="order-3 lg:order-2 flex-[2]">
 			<h2>Tijdlijn</h2>
 			<div class="alert alert-info mb-4">
 				<p class="alert-text">Herinner dat we niet alle veranderingen bijhouden.<br>Hieronder enkele van de belangrijkste.</p>
 			</div>
-			<div class="tijdlijn-section">
-				{#each explodedDBLogs as statusOrUserLog}
-					<div class="tijdlijn-container">
-						<h4>{prettyDateTime(statusOrUserLog.created_timestamp)} <span>Edit</span></h4>
-						<p>{makePretty(statusOrUserLog.column_name)}: <span>{statusOrUserLog.value_new !== null ? makePretty(statusOrUserLog.value_new): statusOrUserLog.value_new}</span></p>
-						<p>Edit by: <span>{statusOrUserLog.dblog_metadata["user"] ?? "unknown"}</span></p>
-					</div>
-				{/each}
-
-				<!-- Onderste container, aanmaken van checkout-->
-				<div class="tijdlijn-container">
-					<h4>{prettyDateTime(checkoutWide.created_timestamp)} <span>Created</span></h4>
-				</div>
-			</div>
+			<ExplodedLogPreview explodedDBLogs={explodedDBLogs} targetObject={checkoutWide}></ExplodedLogPreview>
 
 			<h2 class="mt-4">Checkout Metadata</h2>
 			{#if checkoutWide.payment_provider === PaymentProviderEnum.Stripe}
@@ -296,10 +291,10 @@
 			{/if}
 
 			<h3 class="font-bold mt-2">Checkout Flow Info</h3>
-			<p>{JSON.stringify(checkoutWide.checkout_metadata["checkout_flow_information"], null, 2)}</p>
+			<pre class="text-xs text-ingenium-grey-900 text-wrap">User Agent{checkoutWide.checkout_metadata["checkout_flow_information"]["user_agent"]}</pre>
 
 			<h3 class="font-bold mt-2">Payment Provider Metadata</h3>
-			<p>{JSON.stringify(checkoutWide.checkout_metadata["payment_provider_metadata"], null, 2)}</p>
+			<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(checkoutWide.checkout_metadata["payment_provider_metadata"], null, 2)}</pre>
 
 			<h2 class="mt-4">User Information</h2>
 			<p>Zo wat informatie die we over de gebruiker weten mis?</p>
@@ -314,7 +309,7 @@
 			<p></p>
 		</div>
 
-		<div class="hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
+		<div class="order-2 hidden md:block w-px mx-4 bg-gray-200 dark:bg-gray-800"></div>
 
 		<div class="checkout-details-section">
 			<h2>Details</h2>
@@ -409,6 +404,15 @@
 		<p>Zoals de price policy hier ook zo een opening. Het simpeler kaartje mag wel groter.
 			Het grotere kaartje moet ook zo de recent history enzo kunnen weergeven voor partial refunds bv.
 			Bij open kaartje identiek als hierboven zo de details in een sidebar?</p>
+
+		<hr class="h-px mt-4 bg-gray-200 border-0 dark:bg-gray-800">
+		{#each checkoutWide.transactions as transaction, transactionIndex (transaction.interaction.interaction_id)}
+			<TransactionCard bind:loadingHTTP={loadingHTTP}
+											 isOpen={ selectedArray.at(transactionIndex) ?? false }
+											 bind:transaction={checkoutWide.transactions[transactionIndex]}
+											 transactionIndex={transactionIndex}></TransactionCard>
+			<hr class="h-px bg-gray-200 border-0 dark:bg-gray-800">
+		{/each}
 	</section>
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
@@ -441,7 +445,7 @@
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
 		<h1 id="changelog">Changelog</h1>
-		<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
+		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubcheckout', row_primary_key: checkoutWide.id.toString()})}></DBLogTable>
 	{/if}
 </main>
 
@@ -482,7 +486,7 @@
 
 <style>
 	.checkout-details-section {
-			@apply flex-1 px-4 col-span-1;
+			@apply flex-[1] order-1 lg:order-3 px-4 col-span-1;
 			fieldset {
 					@apply mb-2;
           .checkout-detail-value {
@@ -492,29 +496,5 @@
 			h4 {
 					@apply font-bold text-blue-900;
       }
-	}
-
-	.tijdlijn-section {
-			@apply flex flex-col gap-4 p-4 pl-0 relative;
-
-      /* Vertical line */
-      &::before {
-          content: "";
-          @apply absolute left-4 border-2 bg-ingenium-grey-300 w-px;
-          top: 1rem;
-          bottom: 1rem;
-					z-index: -1;
-      }
-
-      .tijdlijn-container {
-				@apply max-w-72 p-2 bg-white border-2 border-ingenium-grey-300 rounded-lg text-ingenium-grey-600;
-				p {
-					@apply text-ingenium-grey-600;
-				}
-
-				span {
-					@apply font-bold text-blue-900 opacity-90;
-			}
-			}
 	}
 </style>

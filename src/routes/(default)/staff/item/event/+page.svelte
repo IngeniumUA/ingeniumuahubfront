@@ -14,11 +14,17 @@
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
+	let events = $state(data.events)
 
 	/**
 	 * Query parameter for showing available
 	 */
 	let onlyShowAvailable: boolean = $state(true);
+	$effect(() => {
+		if (onlyShowAvailable !== undefined) {
+			refresh();
+		}
+	});
 
 	/**
 	 * Refreshing all data on the page
@@ -31,8 +37,7 @@
 		if (onlyShowAvailable) {
 			query.set("available", `${onlyShowAvailable}`)
 		}
-		data.events = await CoreItemWideAPI.queryEventItem(null, query);
-		successToast("Refreshed!")
+		events = await CoreItemWideAPI.queryEventItem(null, query);
 	}
 
 	/**
@@ -108,7 +113,7 @@
 		<button onclick={() => {showAddingNew = !showAddingNew}} class="ml-auto button button-primary w-24 button-inline">
 			<span class="text-white">Add New</span>
 		</button>
-		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
+		<button onclick={() => {refresh(); successToast("Refreshed!")}} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
@@ -155,7 +160,7 @@
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 
 	<section class="flex flex-col gap-4">
-		{#each data.events as event, index (event.item.id)}
+		{#each events as event, index (event.item.id)}
 			<div class="bg-white p-4 rounded-lg
 						min-h-48
 						shadow-lg hover:shadow-xl transition-shadow">
@@ -216,7 +221,7 @@
 						{#if index < 6}
 						{#await CoreItemAPI.attachedProductBlueprintTable(event.item.id) then productTable}
 							{#if (productTable.length >= 10)}
-								Bekijk de pagina
+								...
 							{:else}
 								<table class="ingenium-table">
 									<tbody>
@@ -241,6 +246,9 @@
 									</tbody>
 								</table>
 							{/if}
+							<p class="text-right font-bold">Totaal: {productTable.reduce((sum, val) => {
+								return sum + val["transaction_count"]
+							}, 0)}</p>
 						{/await}
 						{:else}
 							Bekijk Item hiervoor!

@@ -12,6 +12,7 @@ import { getNotifications } from '$lib/utilities/notificationUtilities.ts';
 import { notification_token } from '../../hooks.client.ts';
 
 export interface CartDetailsState {
+	tracker_ordering: number;
 	guestEmail: string;
 	note: string;
 	staffCheckout: boolean;
@@ -26,6 +27,7 @@ export const cartDetails: CartDetailsState = $state({
 	guestEmail: '',
 	note: '',
 	staffCheckout: false,
+	tracker_ordering: 0,
 	isPaying: false,
 	turnstileToken: null,
 	stripePayment: false,
@@ -118,6 +120,10 @@ export const updateProductMeta = (productIdx: number, formKey: string, meta: Pro
 	storeProductsInLocalStorage();
 }
 
+export const updateProductMetaForm = (productIdx: number, formData: Record<string, any>) =>  {
+	cartProducts[productIdx].product_meta.other_meta_data.form = formData;
+	storeProductsInLocalStorage();
+}
 
 /**
  * Clears the cart
@@ -163,13 +169,15 @@ export const checkoutCart = async () => {
 			method: 'POST',
 			headers: getAuthorizationHeaders(null, {
 				'Content-Type': 'application/json',
+				'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
 			}),
 			body: JSON.stringify({
 				cart: {
 					products: cartProducts,
 					checkout_note: cartDetails.note,
 					user_email: auth ? null : cartDetails.guestEmail,
-					notification_token: notification_token_cart
+					notification_token: notification_token_cart,
+					tracker_ordering: cartDetails.tracker_ordering
 				},
 				captcha_token: auth ? null : cartDetails.turnstileToken,
 			}),

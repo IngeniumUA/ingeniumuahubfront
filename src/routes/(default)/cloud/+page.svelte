@@ -1,44 +1,901 @@
 <script lang="ts">
-  import Header from "$lib/components/layout/header.svelte";
-  import { Browser } from '@capacitor/browser';
+  import Header from '$lib/components/layout/header.svelte';
+  import { onDestroy, onMount } from 'svelte';
+  import { page } from '$app/state';
+  import { goto } from '$app/navigation';
+  import { PUBLIC_API_URL } from '$env/static/public';
+  import { getAuthorizationHeaders } from '$lib/auth/auth';
+  import Modal from '$lib/components/layout/modal.svelte';
 
-  function openCloud() {
-    Browser.open({url: "https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/"})
-    return null
+
+  let PdfRender: any = $state(null);
+  let { data } = $props();
+  let current_folders: string[] = $state([])
+  let current_files: string[][] = $state([])
+  let current_metadata: { [key: string]: {last_modified: string} } = $state({})
+  let path: string = $state("")
+  let openedFile: {open: boolean, url: string, type: string, file: string} = $state({open: false, url: '', type: '', file: ''})
+  let fileHtml = $state('');
+  let query = $state('');
+  let timeout: ReturnType<typeof setTimeout>;
+  let cleared_query = $state(true);
+  let loading_file = $state(false);
+  let grid_mode = $state(false)
+  let showOverlay = $state(false);
+  let isModalOpen = $state(false);
+  let isLocationModalOpen = $state(false);
+  let uploadedFile: FileList | null = null
+  let uploadedFileName: string | null = $state(null)
+  let folder_tree: any = {}
+  let current_folders_select: string[] = $state([]);
+  let folder_path: string = $state("")
+  let selected_folder_path: string = $state("")
+  let upload_file_err = $state(false)
+
+
+  function get_current_files(update_params=true) {
+    query = ''
+    openedFile = {open: false, url: '', type: '', file: ''};
+    if (data.file_list === undefined) {return}
+    for (const blob of data.file_list) {
+      if (blob.startsWith(path)) {
+        const blob_in_folder = blob.replace(path, "")
+        if (blob_in_folder.includes("/") && !current_folders.includes(blob_in_folder.split("/")[0])) {
+          current_folders.push(blob_in_folder.split("/")[0])
+        } else if (!blob_in_folder.includes("/")) {
+          current_files.push([blob_in_folder, blob])
+          getFileMetadata(blob)
+        }
+      }
+    }
+    if (update_params) {
+      updateSearchParam()
+    }
   }
+
+  function search_files(search: string) {
+    if (search === "") {
+      if (!cleared_query) {
+        const url_path = page?.url.searchParams.get('path');
+        if (url_path) {
+          path = url_path
+        } else {
+          path = ""
+        }
+        current_folders = []
+        current_files = []
+        get_current_files()
+        cleared_query = true
+      }
+      return
+    }
+    cleared_query = false
+    path = ""
+    current_folders = []
+    current_files= []
+    for (const blob of data.file_list) {
+      if (blob.toLowerCase().includes(search.toLowerCase())) {
+        const split_blob = blob.split("/")
+        if (split_blob[split_blob.length - 1].toLowerCase().includes(search.toLowerCase())) {
+          current_files.push([split_blob[split_blob.length - 1], blob])
+          getFileMetadata(blob)
+        } else {
+          let folder_path = ""
+          const folder_path_index = split_blob.findIndex(blob_in_split => blob_in_split.toLowerCase().includes(search.toLowerCase()))
+          for (let i = 0; i <= folder_path_index; i++) {
+            folder_path = folder_path + split_blob[i] + "/"
+          }
+          folder_path = folder_path.slice(0, folder_path.length - 1)
+          if (!current_folders.includes(folder_path)) {
+            current_folders.push(folder_path)
+          }
+        }
+      }
+    }
+  }
+  let currentSearch: string | null = null;
+  $effect(() => {
+    const newSearch = page?.url.searchParams.get('path');
+    if (newSearch !== currentSearch) {
+      currentSearch = newSearch;
+      const url_path = page?.url.searchParams.get('path');
+      current_folders = []
+      current_files= []
+      if (url_path) {
+        path = url_path
+        if (!url_path.includes('.')) {
+          get_current_files(false)
+        }
+      } else {
+        path = ""
+        get_current_files(false)
+      }
+    }
+
+    const q = query;
+    clearTimeout(timeout); // clear any previous debounce
+    timeout = setTimeout(() => {
+      search_files(q);
+    }, 300); // 300ms debounce
+  });
+
+  onMount(()=>{
+    (async () => {
+      const module = await import('$lib/components/cloud/PdfRender.svelte');
+      PdfRender = module.default;
+
+      const url_path = page?.url.searchParams.get('path');
+      if (url_path) {
+        path = url_path
+        if (url_path.includes('.')) {
+          await downloadOrOpenFile(url_path)
+        } else {
+          get_current_files()
+        }
+      } else {
+        get_current_files()
+      }
+    })();
+
+    get_folder_tree()
+    window.addEventListener('dragenter', handleDragEnter);
+    window.addEventListener('dragleave', handleDragLeave);
+    window.addEventListener('dragover', handleDragOver);
+    window.addEventListener('drop', handleDrop);
+
+    return () => {
+      window.removeEventListener('dragenter', handleDragEnter);
+      window.removeEventListener('dragleave', handleDragLeave);
+      window.removeEventListener('dragover', handleDragOver);
+      window.removeEventListener('drop', handleDrop);
+    };
+  })
+
+  onDestroy(() => {
+    URL.revokeObjectURL(openedFile.url);
+  });
+
+  function openSubFolder(folder: string) {
+    path = path + folder + "/"
+    current_folders = []
+    current_files= []
+    get_current_files()
+  }
+
+  function openSpecificFolder(folder_pos_in_array: number, folder_name: string) {
+    URL.revokeObjectURL(openedFile.url);
+    if ((path.endsWith(folder_name + '/') && folder_name !== "") || folder_name.includes(".")) {return}
+    const pathlist = path.slice(0, path.length - 2).split("/")
+    let temppath = ""
+    for (let i = 0; i < folder_pos_in_array+1; i++) {
+      temppath = temppath + pathlist[i] + "/"
+    }
+    path = temppath
+    current_folders = []
+    current_files= []
+    get_current_files()
+  }
+
+  function backFolder() {
+    const pathlist = path.slice(0, path.length - 2).split("/")
+    let temppath = ""
+    for (let i = 0; i < pathlist.length-1; i++) {
+      temppath = temppath + pathlist[i] + "/"
+    }
+    path = temppath
+    current_folders = []
+    current_files= []
+    get_current_files()
+  }
+
+  function updateSearchParam() {
+    const url = new URL(page.url);
+    url.searchParams.set('path', path);
+    goto(`${url.pathname}?${url.searchParams.toString()}`, { keepFocus: true, replaceState: false });
+  }
+
+
+  async function downloadOrOpenFile(file: string) {
+    let response
+    try {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=false`, {
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
+
+    if (!response) {
+      alert('No response from the server');
+      return;
+    }
+    if (!response.ok) {
+      alert('Failed to fetch the file: ' + response.statusText);
+      return;
+    }
+
+    const blob = await response.blob();
+    let url = URL.createObjectURL(blob);
+
+    // Open the file locally
+    if (fileIsOpenable(file)) {
+      loading_file = true
+      path = file
+      current_folders = []
+      current_files= []
+      updateSearchParam()
+
+      if (fileIsConverted(file)) {
+        try {
+          const formData = new FormData();
+          formData.append('file', blob, file);
+          const res = await fetch(`${PUBLIC_API_URL}/cloud/convert`, {
+            method: 'POST',
+            headers: getAuthorizationHeaders(null),
+            body: formData
+          });
+
+          if (!res.ok) {
+            const { error } = await res.json();
+            alert(error || 'Unknown error');
+          }
+
+          const data = await res.json();
+          fileHtml = data.html;
+        } catch (err) {
+          console.error('Fetch error:', err);
+        }
+      }
+
+      openedFile = {open: true, url: url, type: blob.type, file: file};
+      loading_file = false
+      return
+    }
+
+    // Download the file
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.split("/").reverse()[0];
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+  async function downloadFile(file: string) {
+    if (fileIsOpenable(file)) {return}
+    let response
+    try {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=true`, {
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
+
+    if (!response) {
+      alert('No response from the server');
+      return;
+    }
+    if (!response.ok) {
+      alert('Failed to fetch the file: ' + response.statusText);
+      return;
+    }
+
+    const blob = await response.blob();
+    let url = URL.createObjectURL(blob);
+    downloadFileWithUrl(url, file, true);
+  }
+  function downloadFileWithUrl(url: string, file: string, fetched: boolean = false) {
+    if (!fetched) {
+      try {
+        fetch(`${PUBLIC_API_URL}/cloud/get_file/${file}?being_downloaded=true`, {  // let backend know a file is being downloaded
+          method: 'GET',
+          headers: getAuthorizationHeaders(null)
+        });
+      } catch (err) {
+        console.error('Fetch error:', err);
+      }
+    }
+    // Download the file
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.split("/").reverse()[0];
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  async function getFileMetadata(file: string) {
+    try {
+      const metadata = await fetch(`${PUBLIC_API_URL}/cloud/get_file_metadata/${file}`, {  // let backend know a file is being downloaded
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+      current_metadata[file] = await metadata.json();
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
+  }
+
+  function checkFileType(file: string, allowed_types: string[]) {
+    for (const allowed_type of allowed_types) {
+      if (file.endsWith(allowed_type)) {
+        return true
+      }
+    }
+    return false
+  }
+
+
+  // File upload via drag/drop
+  const handleDragEnter = (e: DragEvent) => {
+    e.preventDefault();
+    showOverlay = true;
+  };
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault(); // Required to trigger drop
+  };
+  const handleDragLeave = (e: DragEvent) => {
+    e.preventDefault();
+    // Only hide overlay when truly leaving window
+    if (e.relatedTarget === null) {
+      showOverlay = false;
+    }
+  };
+  const handleDrop = (e: DragEvent) => {
+    e.preventDefault();
+    showOverlay = false;
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      uploadedFile = files;
+      uploadedFileName = files[0].name;
+      selected_folder_path = path
+      isModalOpen = true
+    }
+  };
+
+  async function get_folder_tree() {
+    let response
+    try {
+      response = await fetch(`${PUBLIC_API_URL}/cloud/get_file/folder_tree.json?being_downloaded=false`, {
+        method: 'GET',
+        headers: getAuthorizationHeaders(null)
+      });
+    } catch (err) {
+      console.error('Fetch error:', err);
+    }
+
+    if (!response) {
+      alert('No response from the server');
+      return;
+    }
+    if (!response.ok) {
+      alert('Failed to fetch the file: ' + response.statusText);
+      return;
+    }
+
+    folder_tree = await response.json();
+    folder_tree = {"": folder_tree}
+  }
+
+  function handleFiles(files: FileList | null) {
+
+    if (files === null ) {
+      upload_file_err = true
+      return
+    }
+    isModalOpen = false;
+    upload_file_err = false
+
+    for (const file of files) {
+      uploadFile(file);
+    }
+  }
+
+  async function uploadFile(file: File) {
+    const file_name = selected_folder_path + file.name
+    try {
+      const formData = new FormData();
+      formData.append('blob_data', file, file_name);
+      await fetch(`${PUBLIC_API_URL}/cloud/upload_for_review`, {
+        method: 'POST',
+        headers: getAuthorizationHeaders(null),
+        body: formData
+      });
+      uploadedFile = null;
+      uploadedFileName = null;
+      selected_folder_path = ""
+      folder_path = ""
+    } catch (err) {
+      console.error('Upload error:', err);
+    }
+  }
+
+  function handleFileChange(event: Event) {
+    upload_file_err = false
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      uploadedFile = input.files;
+      uploadedFileName = input.files[0].name;
+    }
+  }
+
+  function openSelectFolder() {
+    upload_file_err = false
+    openSubFolderSelect("")
+    isLocationModalOpen = true;
+  }
+
+  function get_current_location_folders() {
+    current_folders_select = []
+
+    let parts: string[] = []
+    parts = parts.concat([""], folder_path.split('/'));
+    parts.pop()
+    let current = folder_tree;
+
+    for (const part of parts) {
+      if (!current || !(part in current)) {
+        return;
+      }
+      current = current[part];
+    }
+
+    const current_folder = Object.keys(current);
+
+    for (const iter_folder of current_folder) {
+      current_folders_select.push(iter_folder)
+    }
+  }
+
+  function openSubFolderSelect(folder: string) {
+    if (folder !== "") {
+      folder_path = folder_path + folder + "/"
+    }
+    get_current_location_folders()
+  }
+
+  function backLocationFolder() {
+    const pathlist = folder_path.slice(0, folder_path.length - 2).split("/")
+    let temppath = ""
+    for (let i = 0; i < pathlist.length-1; i++) {
+      temppath = temppath + pathlist[i] + "/"
+    }
+    folder_path = temppath
+    get_current_location_folders()
+  }
+
+  function openSpecificLocationFolder(folder_pos_in_array: number, folder_name: string) {
+    if ((folder_path.endsWith(folder_name + '/') && folder_name !== "") || folder_name.includes(".")) {return}
+    const pathlist = folder_path.slice(0, folder_path.length - 2).split("/")
+    let temppath = ""
+    for (let i = 0; i < folder_pos_in_array+1; i++) {
+      temppath = temppath + pathlist[i] + "/"
+    }
+    folder_path = temppath
+    get_current_location_folders()
+  }
+
+
+  function isPathEmpty() {
+    return path === ""
+  }
+  function splitPath() {
+    return path.split("/")
+  }
+  function pathHasFile() {
+    return path.includes(".")
+  }
+  function folderIsFile(folder: string) {
+    return folder.includes(".")
+  }
+  function fileIsConverted(file: string) {
+    return checkFileType(file, [".docx", ".odt", ".md", ".markdown", ".tex"])
+  }
+  function fileIsImg(file: string) {
+    return checkFileType(file, [".jpg", ".png", ".jpeg"])
+  }
+  function fileIsPdf(file: string) {
+    return checkFileType(file, [".pdf"])
+  }
+  function fileIsOpenable(file: string) {
+    return checkFileType(file, [".pdf", ".jpg", ".png", ".jpeg", ".txt", ".csv", ".docx", ".odt", ".md", ".markdown", ".tex"])
+  }
+  function isLocationPathEmpty() {
+    return folder_path === ""
+  }
+  function splitLocationPath() {
+    return folder_path.split("/")
+  }
+  function locationPathHasFile() {
+    return folder_path.includes(".")
+  }
+
 </script>
 
 <svelte:head>
-  <title>Cloud | Ingenium UA</title>
+	<title>Cloud | Ingenium UA</title>
 </svelte:head>
 
 <header>
-  <Header whiteTheme={true} />
+	<Header whiteTheme={true} />
 </header>
+
+<Modal title="Bestand Uploaden" bind:isOpen={ isModalOpen }>
+  {#snippet children()}
+    <div class="p-4 md:p-5">
+      <form action="#" onsubmit={ (e) => { e.preventDefault(); handleFiles(uploadedFile) } } class="mt-4 space-y-3 text-left">
+
+        {#if uploadedFileName === null}
+          <p>Geen bestand geselecteerd</p>
+        {:else}
+          <p>{uploadedFileName}</p>
+        {/if}
+        <div class="form-field button button-outline-blue button-sm labelcolor">
+          <label class="labelcolor" for="file">Bestand uploaden</label>
+          <input type="file" id="file" onchange={handleFileChange} bind:value={uploadedFile} />
+        </div>
+
+        <div class="form-field">
+          <p>Huidige locatie: Cloud/{selected_folder_path.slice(0, selected_folder_path.length - 1)}</p>
+          <button type="button" class="button button-outline-blue button-sm" onclick="{()=>{openSelectFolder()}}">Kies locatie</button>
+        </div>
+
+        <div class="form-field">
+          <button type="submit" class="button button-primary button-full">Uploaden</button>
+        </div>
+        {#if upload_file_err}
+          <p style="color: darkred">Niet alle velden werden ingevuld!</p>
+        {/if}
+      </form>
+    </div>
+  {/snippet}
+</Modal>
+
+<Modal title="Locatie kiezen" bind:isOpen={ isLocationModalOpen }>
+  {#snippet children()}
+    <div class="p-4 md:p-5">
+      <div class="cloud_container" style="height: 40vh">
+        <div class="breadcrumb">
+          <p>Locatie:</p>
+          <button class="breadcrumb-button-link" onclick="{()=>{openSpecificLocationFolder(-1, '')}}">Cloud</button>
+          {#if splitLocationPath().length > 1 || locationPathHasFile()}
+            <p>/</p>
+          {/if}
+          {#each splitLocationPath() as folder, i (folder)}
+            <button class="breadcrumb-button-link" onclick="{()=>{openSpecificLocationFolder(i, folder)}}">{folder}</button>
+            {#if (i < splitLocationPath().length - 2 || locationPathHasFile()) &&  !folderIsFile(folder)}
+              <p>/</p>
+            {/if}
+          {/each}
+        </div>
+        <div class="browse_file_container_list">
+          {#if !isLocationPathEmpty()}
+            <button class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}"  onclick="{()=>{backLocationFolder()}}">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <span class="icon-text-{grid_mode ? 'grid' : 'list'}">Terug</span>
+            </button>
+          {/if}
+          {#each current_folders_select as folder}
+            <button class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{openSubFolderSelect(folder)}}">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <span class="icon-text-{grid_mode ? 'grid' : 'list'}">{folder}</span>
+            </button>
+          {/each}
+        </div>
+      </div>
+      <div class="form-field pt-4">
+        <button type="button" class="button button-primary button-full" onclick="{()=>{selected_folder_path = folder_path; isLocationModalOpen = false}}">Huidige locatie selecteren</button>
+      </div>
+    </div>
+  {/snippet}
+</Modal>
 
 <main class="ingenium-container relative h-full" id="main-content">
   <div class="flex flex-col items-center">
-    <h1>Gebruik password: Ingenium2018</h1>
-    <h2>De cloud is voor studenten, van studenten. Upload zelf ook studiemateriaal!</h2>
-    <a href="https://forms.gle/CoXVk2Rwk5QMKYLU6" target="_blank" rel="noopener" class="button button-primary button-sm my-4">
-      Zelf bestanden uploaden
-    </a>
-		<a href="/cloud_new" rel="noopener" class="button button-education button-sm my-4">
-			Nieuwe cloud
-		</a>
+    <h1>De cloud is voor studenten, van studenten. Upload zelf ook studiemateriaal!</h1>
+    <div class="flex-row flex-1">
+      <button onclick="{()=>{isModalOpen = true}}" class="button button-primary button-sm my-4">
+        Zelf bestanden uploaden
+      </button>
+      <a href="https://forms.gle/ExgeXheiDvoip2AZ9" target="_blank" rel="noopener" class="button button-education button-sm my-4">
+        Geef feedback!
+      </a>
+    </div>
   </div>
-  <br>
-<!--  <iframe src="https://eu.ingeniumua.be/d/038d6736ad4b450bbee3/" width="100%" height="70%"></iframe>-->
-  <div class="flex flex-col items-center">
-    <button on:click="{() => openCloud()}" class="button button-outline-blue button-sm my-4">
-      Open Cloud
+
+  <div class="style_buttons">
+    <button onclick="{()=>{grid_mode = true}}" class="{grid_mode ? 'style_button_selected' : 'style_button_deselected'}" aria-label="grid">
+      <svg class="w-6 h-6 text-gray-800 dark:text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+        <path fill-rule="evenodd" d="M4.857 3A1.857 1.857 0 0 0 3 4.857v4.286C3 10.169 3.831 11 4.857 11h4.286A1.857 1.857 0 0 0 11 9.143V4.857A1.857 1.857 0 0 0 9.143 3H4.857Zm10 0A1.857 1.857 0 0 0 13 4.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 9.143V4.857A1.857 1.857 0 0 0 19.143 3h-4.286Zm-10 10A1.857 1.857 0 0 0 3 14.857v4.286C3 20.169 3.831 21 4.857 21h4.286A1.857 1.857 0 0 0 11 19.143v-4.286A1.857 1.857 0 0 0 9.143 13H4.857Zm10 0A1.857 1.857 0 0 0 13 14.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 21 19.143v-4.286A1.857 1.857 0 0 0 19.143 13h-4.286Z" clip-rule="evenodd"/>
+      </svg>
+    </button>
+    <button onclick="{()=>{grid_mode = false}}" class="{!grid_mode ? 'style_button_selected' : 'style_button_deselected'}" aria-label="list">
+      <svg class="w-6 h-6 text-gray-800 dark:text-gray-700" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"/>
+      </svg>
     </button>
   </div>
+  <div class="cloud_container">
+    {#if showOverlay}
+      <div class="file-upload-overlay">
+        Drop file to upload to the cloud!
+      </div>
+    {/if}
+
+    <div class="breadcrumb">
+      <p>Map:</p>
+      <button class="breadcrumb-button-link" onclick="{()=>{openSpecificFolder(-1, '')}}">Cloud</button>
+      {#if splitPath().length > 1 || pathHasFile()}
+        <p>/</p>
+      {/if}
+      {#each splitPath() as folder, i (folder)}
+        <button class="breadcrumb-button-link" onclick="{()=>{openSpecificFolder(i, folder)}}">{folder}</button>
+        {#if (i < splitPath().length - 2 || pathHasFile()) &&  !folderIsFile(folder)}
+          <p>/</p>
+        {/if}
+      {/each}
+
+      {#if openedFile.open}
+        <div class="ml-auto pr-2">
+          <button type="button" onclick="{()=>{downloadFileWithUrl(openedFile.url, openedFile.file)}}" class="button button-education button-icon button-icon-only cursor-pointer" aria-label="download">
+            <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
+              <path fill-rule="evenodd" d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+            </svg>
+          </button>
+        </div>
+      {/if}
+    </div>
+    <div class="breadcrumb form-field">
+      <input type="text" bind:value={query} placeholder="Zoeken in de cloud">
+    </div>
+    {#if openedFile.open}
+      <div class="file_container">
+        {#if fileIsConverted(openedFile.file)}
+          <iframe
+            title="cloud document"
+            srcdoc={fileHtml}
+            style="width: 100%; height: 100%; border: none; min-height: 400px; border-radius: 5px"
+            sandbox="allow-same-origin allow-scripts"
+          ></iframe>
+        {:else if fileIsImg(openedFile.file)}
+          <img src="{openedFile.url}" alt="Cloud">
+        {:else if fileIsPdf(openedFile.file)}
+          <PdfRender pdfUrl={openedFile.url}></PdfRender>
+        {:else}
+          <embed title="cloud bestand" src={openedFile.url} width="100%" height="100%" style="min-height: 400px; border-radius: 5px">
+        {/if}
+      </div>
+    {:else}
+      {#if loading_file}
+        <p>We zijn je bestand aan het openen...</p>
+      {:else}
+        {#if data.file_list === undefined}
+          <p>We zijn de cloud aan het laden...</p>
+        {/if}
+
+        <div class="browse_file_container_{grid_mode ? 'grid' : 'list'}">
+          {#if !isPathEmpty()}
+            <button class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}"  onclick="{()=>{backFolder()}}">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m15 19-7-7 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <span class="icon-text-{grid_mode ? 'grid' : 'list'}">Terug</span>
+            </button>
+          {/if}
+          {#each current_folders as folder}
+            <button class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}" onclick="{()=>{openSubFolder(folder)}}">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 8H4m0-2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-5.032a1 1 0 0 1-.768-.36l-1.9-2.28a1 1 0 0 0-.768-.36H5a1 1 0 0 0-1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <span class="icon-text-{grid_mode ? 'grid' : 'list'}">{folder}</span>
+            </button>
+          {/each}
+          {#each current_files as file}
+            <div class="icon-text-wrapper-{grid_mode ? 'grid' : 'list'}"  onclick="{()=>{downloadOrOpenFile(file[1])}}" onkeyup={()=>{}} role="button" tabindex="0">
+              <svg style="cursor: pointer" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 3v4a1 1 0 0 1-1 1H5m14-4v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <p class="icon-text-{grid_mode ? 'grid' : 'list'}">{file[0]}</p>
+              {#if !grid_mode}
+                <div class="ml-auto">
+                  {#if current_metadata[file[1]] !== null && current_metadata[file[1]] !== undefined}
+                    <p>{current_metadata[file[1]].last_modified.split("T")[0].split("-").reverse().join("/")}</p>
+                  {/if}
+                </div>
+                <div class="ml-auto pr-2 pl-2 leftline">
+                  <button type="button" onclick="{()=>{downloadFile(file[1])}}" class="button button-education button-icon button-icon-only cursor-pointer" aria-label="download">
+                    <svg class="w-5 h-5 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                      <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
+                      <path fill-rule="evenodd" d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                </div>
+              {/if}
+            </div>
+          {/each}
+        </div>
+      {/if}
+    {/if}
+  </div>
+
 </main>
 
-<!--<style>-->
-<!--  iframe {-->
-<!--    height: 70vh;-->
-<!--    @apply w-full;-->
-<!--  }-->
-<!--</style>-->
+<style>
+  .style_buttons {
+    display: flex;
+    width: fit-content;
+    flex-direction: row;
+    margin-bottom: 0.25rem;
+    /*padding: 0.5rem 1rem;*/
+    /*border: 1px solid #ddd;*/
+    /*border-radius: 6px;*/
+    /*transition: background 0.2s;*/
+  }
+  .style_button_deselected {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+  .style_button_selected {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
+    background-color: #f5f5f5;
+  }
+  .style_button_deselected:hover {
+    background-color: #f5f5f5;
+  }
+  .leftline {
+    @media (min-width: 500px) {
+      border-left: 2px solid #ddd;
+    }
+    @media (max-width: 500px) {
+      visibility: hidden;
+      width: 0;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .cloud_container {
+    touch-action: pinch-zoom;
+    display: flex;
+    flex-direction: column;
+    height: 120vh;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+  }
+
+  .browse_file_container_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 1rem;
+    overflow-y: auto;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    /*flex: 1;*/
+  }
+  .browse_file_container_list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    overflow-y: auto;
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .file_container {
+    height: 100%;
+    gap: 1rem;
+    overflow-y: auto;
+    padding: 0.25rem;
+    box-sizing: border-box;
+    flex: 1;
+  }
+
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    border-bottom: 2px solid lightgray;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  .breadcrumb-button-link {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .breadcrumb p {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .icon-text-wrapper-grid {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+
+  .icon-text-wrapper-grid:hover {
+    background-color: #f5f5f5;
+  }
+
+  .icon-text-grid {
+    padding: 0.01rem 0.05rem;
+    max-width: 70px;
+    margin-top: 0.1rem;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  .icon-text-wrapper-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .icon-text-wrapper-list svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .icon-text-wrapper-list:hover {
+    background-color: #f5f5f5;
+  }
+
+  .icon-text-list {
+    max-width: none;
+    margin-top: 0;
+    text-align: left;
+    word-break: break-word;
+    white-space: normal;
+    flex: 1;
+  }
+
+  .file-upload-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(128, 128, 128, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    pointer-events: none; /* So it doesn’t block drop events */
+    z-index: 10;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+  .labelcolor:hover {
+    color: white;
+    cursor: pointer;
+  }
+</style>

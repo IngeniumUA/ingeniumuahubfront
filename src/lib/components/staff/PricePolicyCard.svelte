@@ -33,7 +33,7 @@
 
 		const putPricePolicy = pricePolicy;
 		putPricePolicy.name = form.name === "" ? null: form.name;
-		putPricePolicy.price_eu = form.price_eu;
+		putPricePolicy.price = form.price_eu;
 		putPricePolicy.always_display = form.always_display;
 		putPricePolicy.allow_invalid_access = form.allow_invalid_access;
 		putPricePolicy.allow_unauthenticated_access = form.allow_unauthenticated_access;
@@ -124,7 +124,7 @@
 	</button>
 </div>
 {#if isOpen}
-		<form class="ingenium-form flex flex-row gap-4">
+		<form class="ingenium-form flex flex-col lg:flex-row gap-4">
 			<fieldset class="flex-1">
 				<div class="form-field">
 					<label for="name">Name</label>
@@ -134,7 +134,7 @@
 
 				<div class="form-field">
 					<label for="price_eu">Price</label>
-					<input id="price_eu" type="text" required bind:value={form.price_eu}/>
+					<input id="price_eu" type="number" required bind:value={form.price_eu}/>
 					<p>Prijs in euro (0 voor gratis)</p>
 				</div>
 
@@ -161,7 +161,7 @@
 						<p>Of deze prijs <span class="font-bold">altijd</span> te zien moet zijn.</p>
 					</div>
 
-					<label for="allow_unauthenticated_access">Always Display</label>
+					<label for="allow_unauthenticated_access">Allow Unauthenticated</label>
 					<div class="form-field mb-4">
 						<label class="inline-flex items-center cursor-pointer">
 							<input type="checkbox" class="hidden peer"
@@ -209,7 +209,7 @@
 			<fieldset class="flex-1">
 				<div class="form-field">
 					<label for="max_valid_usages">Max valid usages</label>
-					<input id="max_valid_usages" type="number" required bind:value={form.ordering}/>
+					<input id="max_valid_usages" type="number" required bind:value={form.max_valid_usages}/>
 					<p><span class="italic">Zet 0 voor oneindig</span>, hoe vaak je iemand deze prijs valid kan aankopen (bv één ledenticket per persoon).</p>
 				</div>
 

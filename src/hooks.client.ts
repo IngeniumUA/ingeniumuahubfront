@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/sveltekit";
-import { PUBLIC_SENTRY_DSN, PUBLIC_SENTRY_ENVIRONMENT, PUBLIC_STRIPE_RETURN_URL } from '$env/static/public';
+import {PUBLIC_API_URL, PUBLIC_SENTRY_DSN, PUBLIC_SENTRY_ENVIRONMENT, PUBLIC_STRIPE_RETURN_URL} from "$env/static/public";
 import { Browser } from '@capacitor/browser';
 import { App } from '@capacitor/app';
 import { goto } from '$app/navigation';
@@ -22,7 +22,21 @@ Sentry.init({
   // for finer control
   tracesSampleRate: 0.5,
 
-  // Optional: Initialize Session Replay:
+  integrations: [
+    // Initialize Distributed Tracing on the client side
+    Sentry.browserTracingIntegration(),
+    // Initialize Session Replay
+    Sentry.replayIntegration()
+  ],
+
+  // Enabling traces to be added to external API
+  tracePropagationTargets: [
+    // same-origin requests
+    /^\/(?!\/)/,
+    // external API(s)
+    PUBLIC_API_URL,
+  ],
+
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
 

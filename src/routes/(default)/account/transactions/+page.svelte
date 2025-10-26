@@ -4,10 +4,13 @@
   import Modal from "$lib/components/layout/modal.svelte";
   import CheckoutTracker from "$lib/components/account/checkout-tracker.svelte";
   import type {TransactionLimitedI} from "$lib/models/transactionI";
-  import { goto } from '$app/navigation';
   import { ScreenBrightness } from '@capacitor-community/screen-brightness';
   import { onMount } from 'svelte';
-  import { Capacitor } from '@capacitor/core';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import { failedToast } from '$lib/components/toast/defined_toast';
+	import { prettyDateTime } from '$lib/utilities/style-utilities';
+
 
   let startup = true;
   let brightness: number
@@ -18,14 +21,10 @@
     startup = false;
   });
 
-  let { data }: { data: { transactions: TransactionLimitedI[] }} = $props();
+	let { data }: { data: { transactions: TransactionLimitedI[] }} = $props();
   let isModalOpen = $state(false);
   let modalTitle = $state('');
   let qrCode = $state('');
-
-  function parseDate(date: string) {
-    return dayjs(date).format('D MMM YYYY, H:mm');
-  }
 
   function sleep(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -67,33 +66,61 @@
     document.body.style.overflow = 'hidden'; // Disable scrolling
   }
 
-  $effect(() => {
-    if (!isModalOpen) {
-      document.body.style.overflow = ''; // Restore scrolling
-      if (!startup) {
-        ScreenBrightness.setBrightness({brightness: brightness})
-      }
-    }
-  });
+	$effect(() => {
+		if (!isModalOpen) {
+			document.body.style.overflow = ''; // Restore scrolling
+			if (!startup) {
+				ScreenBrightness.setBrightness({brightness: brightness})
+			}
+		}
+	});
 
+	function getGoogleWallet(transaction: TransactionLimitedI, platform: string){
+		const transaction_uuid: string = transaction.interaction.interaction_uuid
+		return `/wallet/?transaction_uuid=${transaction_uuid}&platform=${platform}`;
+	}
 
-  function getWalletLink(transaction: TransactionLimitedI, platform: string) {
-    const transaction_uuid: string = transaction.interaction.interaction_uuid
-    let nummer: number = + transaction_uuid.replace(/\D/g, "")
-    let nummer_str = "" + nummer
-    nummer_str = nummer_str.split("e")[0].replace(".", "")
-    nummer = +nummer_str
-    const locatie_naam: string = "Ingenium" //TODO fix once location is implemented
+	let httpLoading = $state(false);
+	async function downloadAppleWallet(transaction: TransactionLimitedI) {
+		if (httpLoading) return;
+		try {
+				httpLoading = true;
 
-    // Get and redirect to wallet link
-    return `/wallet/?transaction_uuid=${transaction_uuid}&nummer=${nummer}&locatie_naam=${locatie_naam}&platform=${platform}`;
-  }
+				const res = await fetch(
+					`${PUBLIC_API_URL}/account/wallet/apple?transaction_uuid=${transaction.interaction.interaction_uuid}`,
+					{
+						method: 'GET',
+						headers: getAuthorizationHeaders(null),
+					}
+				);
 
-  function gotoWalletLink(transaction: TransactionLimitedI, platform: string) {
-    goto(getWalletLink(transaction, platform));
-    return null
-  }
+				if (!res.ok) {
+					throw new Error('Download failed');
+				}
 
+				const blob = await res.blob();
+				const url = window.URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+
+				// Extract filename from header or fallback
+				const contentDisposition = res.headers.get('Content-Disposition');
+				a.download = contentDisposition
+					? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
+					: 'wallet.pkpass';
+
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+
+				window.URL.revokeObjectURL(url);
+
+			} catch (err) {
+				failedToast(err instanceof Error ? err.message : ('Error validity'));
+			} finally {
+				httpLoading = false;
+			}
+	}
 </script>
 
 <Modal title={ modalTitle } bind:isOpen={ isModalOpen }>
@@ -149,7 +176,7 @@
             {#if transaction.completed_timestamp === null}
               <dd class="not-paid">Niet betaald</dd>
             {:else}
-              <dd>{ parseDate(transaction.completed_timestamp) }</dd>
+              <dd>{ prettyDateTime(transaction.completed_timestamp) }</dd>
             {/if}
           </dl>
 
@@ -163,15 +190,12 @@
           </button>
 
           <div class="flex gap-4 items-center justify-center mt-3">
-            {#if Capacitor.getPlatform() === 'android' || Capacitor.getPlatform() === 'web'}
-              <button onclick="{() => gotoWalletLink(transaction, 'google')}" data-sveltekit-preload-data="tap">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
-              </button>
-            {:else if Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'web'}
-              <button onclick="{() => gotoWalletLink(transaction, 'apple')}" data-sveltekit-preload-data="tap">
-                <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
-              </button>
-            {/if}
+            <a href={ getGoogleWallet(transaction, 'google') } data-sveltekit-preload-data="tap">
+              <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/nl_add_to_google_wallet_add-wallet-badge.png" alt="add to wallet" style="height: 30px; cursor: pointer">
+            </a>
+            <button onclick={() => downloadAppleWallet(transaction)} data-sveltekit-preload-data="tap">
+              <img src="https://storage.googleapis.com/ingeniumuahubbucket/hub/items/NL_Add_to_Apple_Wallet_RGB_101921.png" alt="add to wallet" style="height: 30px; cursor: pointer">
+            </button>
           </div>
         </article>
       {/each}

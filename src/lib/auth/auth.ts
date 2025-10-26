@@ -5,6 +5,7 @@ import {
   PUBLIC_KC_REDIRECT_URL
 } from '$env/static/public';
 import { browser } from '$app/environment';
+import * as Sentry from '@sentry/sveltekit';
 
 import * as client from 'openid-client';
 import { jwtDecode } from 'jwt-decode';
@@ -78,6 +79,16 @@ export const getUserFromToken = (token: string): AuthUser => {
   d.setUTCSeconds(decoded.exp);
   if (d < new Date()) {
     throw new Error('Token is expired');
+  }
+
+  // Store to sentry
+  try {
+    Sentry.setUser({
+      id: decoded.sub,
+      email: decoded.email,
+    });
+  } catch (e) {
+    console.warn('Failed to set Sentry user:', e);
   }
 
   return decoded;

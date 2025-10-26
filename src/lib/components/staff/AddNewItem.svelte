@@ -3,7 +3,6 @@
 	import { hexToRGB, makePretty } from '$lib/utilities/style-utilities';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import type { RecSysPreviewI } from "$lib/models/RecSysI";
-	import { toast } from '@zerodevx/svelte-toast'
 	import { CoreItemWideAPI } from '$lib/core_api/core_api';
 	import { PromoItemTypeEnum, PromoItemTypes } from '$lib/models/item/promoI';
 	import { successToast } from '$lib/components/toast/defined_toast';
@@ -210,7 +209,7 @@
 				<fieldset>
 					<div class="form-field">
 						<label for="preview_description">Preview Description</label>
-						<input id="preview_description" type="text" required bind:value={form.preview_description}/>
+						<input id="preview_description" type="text" bind:value={form.preview_description}/>
 						<p>Extra display beschrijving</p>
 					</div>
 				</fieldset>

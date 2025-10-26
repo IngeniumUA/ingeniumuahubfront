@@ -3,7 +3,7 @@
 	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
-	import type { EventItemI } from '$lib/models/item/eventI';
+	import type { EventItemI, LocationCompositionI } from '$lib/models/item/eventI';
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import AddProductBlueprintModal from '$lib/components/staff/AddProductBlueprintModal.svelte';
@@ -12,8 +12,13 @@
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
-	import { PaymentStatusEnum } from '$lib/models/enums';
 	import { hasRole } from '$lib/states/auth.svelte';
+	import PaymentTable from '$lib/components/staff/payment/PaymentTable.svelte';
+	import Modal from '$lib/components/layout/modal.svelte';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import { getAuthorizationHeaders } from '$lib/auth/auth';
+	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
+	import { ValidityEnum } from '$lib/models/enums';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -26,16 +31,19 @@
 	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
 	const interactionCapable: boolean = $derived(["eventitem", "shopitem", "linkitem"].includes(itemWide.derived_type.derived_type_enum));
 	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum));
+	const hasLocation: boolean = $derived(["eventitem"].includes(itemWide.derived_type.derived_type_enum));
 
 	let productBlueprints = $state(data.productBlueprints);
 	let pricePolicyTable = $state(data.pricePoliciesTable);
-	let checkoutStatusTable = $state(data.checkoutStatusTable);
+	let transactionValidityGrouped = $state(data.transactionValidityGrouped)
 
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
 	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
+	let location: LocationCompositionI | null = $derived(hasLocation ? (itemWide.derived_type as EventItemI).location : null);
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
-		return (prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null) !== null;
+		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
+		return trackCheckout !== null && trackCheckout !== undefined;
 	}));
 
 	/**
@@ -51,6 +59,7 @@
 	async function refresh() {
 		itemWide = await CoreItemWideAPI.getItem(null, itemWide.item.id);
 		trackerCount = await CoreItemAPI.countCheckoutTracker(null, itemWide.item.id);
+		transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, itemWide.item.id);
 		await refreshBlueprints()
 		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(null, itemWide.item.id);
 	}
@@ -58,40 +67,80 @@
 	/**
 	 * Form as a reactive state
 	 */
-	let form = $derived({
-		name: itemWide.item.name,
-		description: itemWide.item.description,
-
-		// Availability
-		availability: {
-			available: itemWide.item.availability.available,
-			available_from: itemWide.item.availability.available_from,
-			available_until: itemWide.item.availability.available_until,
-			dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
-		},
-
-		// Item metadata
-		item_metadata: {
-			payment_configuration: {
-				connected_account_id: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
-				application_fee_amount: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+	interface FormState {
+		item: {
+			name: string;
+			description: string;
+			availability: {
+				available: boolean;
+				available_from: string | null;
+				available_until: string | null;
+				dynamic_policy_type: AccessPolicyEnum | null
+			};
+			item_metadata: {
+				payment_configuration: {
+					connected_account_id: string | number | null,
+					application_fee_amount: number | string | null,
+				},
+				social_media_configuration: {
+					facebook_url: string | null,
+					instagram_url: string | null,
+					linkedin_url: string | null,
+				}
 			},
-			social_media_configuration: {
-				facebook_url: itemWide.item.item_metadata.social_media_configuration?.facebook_url,
-				instagram_url: itemWide.item.item_metadata.social_media_configuration?.instagram_url,
-				linkedin_url: itemWide.item.item_metadata.social_media_configuration?.linkedin_url,
-			}
+		}
+		derived_type: {
+			externalLink: boolean,
+			display: Partial<DisplayCompositionI>
+			location: Partial<LocationCompositionI>
+		}
+	}
+
+	let form: FormState = $derived({
+		item: {
+			name: itemWide.item.name,
+			description: itemWide.item.description,
+
+			// Availability
+			availability: {
+				available: itemWide.item.availability.available,
+				available_from: itemWide.item.availability.available_from,
+				available_until: itemWide.item.availability.available_until,
+				dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
+			},
+
+			// Item metadata
+			item_metadata: {
+				payment_configuration: {
+					connected_account_id: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
+					application_fee_amount: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+				},
+				social_media_configuration: {
+					facebook_url: itemWide.item.item_metadata.social_media_configuration?.facebook_url ?? null,
+					instagram_url: itemWide.item.item_metadata.social_media_configuration?.instagram_url ?? null,
+					linkedin_url: itemWide.item.item_metadata.social_media_configuration?.linkedin_url ?? null,
+				}
+			},
 		},
-
-		// Display mixin
-		color: display?.color ?? "",
-		clickThroughLink: '',
-		externalLink: false,
-		preview_description: display?.preview_description ?? "",
-		image_landscape: display?.image_landscape ?? null,
-		image_square: display?.image_square ?? null,
-
-		// todo Event and other derived
+		derived_type: {
+			externalLink: false,
+			display: {
+				// Display mixin
+				color: display?.color ?? "",
+				clickThroughLink: '',
+				externalLink: false,
+				preview_description: display?.preview_description ?? "",
+				image_landscape: display?.image_landscape ?? null,
+				image_square: display?.image_square ?? null,
+			},
+			// Location mixin
+			location: {
+				location_display_name: location?.location_display_name ?? null,
+				location_search_name: location?.location_search_name ?? null,
+				latitude: location?.latitude ?? null,
+				longitude: location?.longitude ?? null,
+			}
+		}
 	});
 
 	let loadingHTTP: boolean = $state(false);
@@ -119,19 +168,19 @@
 		// todo check for form errors
 
 		const putItemWide = itemWide;
-		putItemWide.item.name = form.name;
-		putItemWide.item.description = form.description;
-		putItemWide.item.availability.available = form.availability.available
-		putItemWide.item.availability.available_from = form.availability.available_from
-		putItemWide.item.availability.available_until = form.availability.available_until
-		putItemWide.item.availability.dynamic_policy_type = form.availability.dynamic_policy_type
+		putItemWide.item.name = form.item.name;
+		putItemWide.item.description = form.item.description;
+		putItemWide.item.availability.available = form.item.availability.available
+		putItemWide.item.availability.available_from = form.item.availability.available_from
+		putItemWide.item.availability.available_until = form.item.availability.available_until
+		putItemWide.item.availability.dynamic_policy_type = form.item.availability.dynamic_policy_type
 
 		// Payment configuration
-		if (form.item_metadata.payment_configuration.connected_account_id !== null && form.item_metadata.payment_configuration.connected_account_id !== "") {
+		if (form.item.item_metadata.payment_configuration.connected_account_id !== null && form.item.item_metadata.payment_configuration.connected_account_id !== "") {
 			putItemWide.item.item_metadata.payment_configuration = {
 				stripe_payment_configuration: {
-					connected_account_id: form.item_metadata.payment_configuration.connected_account_id,
-					application_fee_amount: form.item_metadata.payment_configuration.application_fee_amount,
+					connected_account_id: form.item.item_metadata.payment_configuration.connected_account_id,
+					application_fee_amount: form.item.item_metadata.payment_configuration.application_fee_amount,
 				}
 			}
 		} else {
@@ -145,9 +194,9 @@
 
 		// Social Media
 		putItemWide.item.item_metadata.social_media_configuration = {
-			facebook_url: form.item_metadata.social_media_configuration.facebook_url?.startsWith("https") ? form.item_metadata.social_media_configuration.facebook_url: null,
-			instagram_url: form.item_metadata.social_media_configuration.instagram_url?.startsWith("https") ? form.item_metadata.social_media_configuration.instagram_url: null,
-			linkedin_url: form.item_metadata.social_media_configuration.linkedin_url?.startsWith("https") ? form.item_metadata.social_media_configuration.linkedin_url: null
+			facebook_url: form.item.item_metadata.social_media_configuration.facebook_url?.startsWith("https") ? form.item.item_metadata.social_media_configuration.facebook_url: null,
+			instagram_url: form.item.item_metadata.social_media_configuration.instagram_url?.startsWith("https") ? form.item.item_metadata.social_media_configuration.instagram_url: null,
+			linkedin_url: form.item.item_metadata.social_media_configuration.linkedin_url?.startsWith("https") ? form.item.item_metadata.social_media_configuration.linkedin_url: null
 		}
 
 		loadingHTTP = true;
@@ -218,6 +267,41 @@
 		// Setting the prev value to create the latching behavior
 		prevShowAddingNew = showAddingNew;
 	});
+
+	/**
+	 * Bulk importing state and functions
+	 */
+	let showBulkImport: boolean = $state(false);
+	let files: FileList | undefined = $state()
+	let uploadError: Error | null = $state(null);
+
+	async function handleUpload() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+		if (files === undefined) return;
+
+		try {
+			const formData = new FormData();
+			formData.append('file', files[0]);
+			const res = await fetch(`${PUBLIC_API_URL}/blueprint/import`, {
+				method: 'POST',
+				headers: getAuthorizationHeaders(null),
+				body: formData
+			});
+			if (res.ok) {
+				showBulkImport = false;
+				successToast("Imported!")
+				return res.json();
+			} else {
+				const text = await res.text();
+				uploadError = new Error(`Failed to Upload: ${text}`);
+			}
+		} catch (error) {
+			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
+		} finally {
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -280,7 +364,7 @@
 				<fieldset class="flex flex-row gap-4">
 					<div class="flex-1 form-field max-w-72 mb-2">
 						<label for="itemName">Name</label>
-						<input id="itemName" type="text" required bind:value={ form.name }/>
+						<input id="itemName" type="text" required bind:value={ form.item.name }/>
 						<p>Display naam van de item.</p>
 					</div>
 
@@ -299,14 +383,14 @@
 					<label for="itemDescription">Description</label>
 					<p>Beschrijving die wordt weergegeven op de pagina.</p>
 					<div class="form-field min-h-72 flex">
-						<textarea class="flex-1" id="itemDescription" required bind:value={ form.description }></textarea>
+						<textarea class="flex-1" id="itemDescription" required bind:value={ form.item.description }></textarea>
 					</div>
 				</fieldset>
 			</div>
 
 			<div class="my-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 auto-cols-fr">
 			<div class="ingenium-form-card">
-				<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
+				<AvailabilityForm bind:formState={form.item.availability}></AvailabilityForm>
 			</div>
 
 			{#if hasDisplay}
@@ -315,14 +399,14 @@
 					<fieldset>
 						<div class="form-field">
 							<label for="itemColor">Color</label>
-							<input id="itemColor" type="text" required bind:value={form.color}/>
+							<input id="itemColor" type="text" required bind:value={form.derived_type.display.color}/>
 							<p>Kleur voor de weergave</p>
 						</div>
 					</fieldset>
 					<fieldset>
 						<div class="form-field">
 							<label for="clickThroughLink">Click Through Link</label>
-							{#if (form.externalLink)}
+							{#if (form.derived_type.externalLink)}
 								<input id="clickThroughLink" type="text" required/>
 							{/if}
 							<p>Waar je naartoe wordt gestuurd als je op het item klikt.</p>
@@ -330,7 +414,7 @@
 					</fieldset>
 					<label class="inline-flex items-center cursor-pointer">
 						<input type="checkbox"
-									 bind:checked={form.externalLink} class="hidden peer">
+									 bind:checked={form.derived_type.externalLink} class="hidden peer">
 						<div class="relative w-11 h-6 bg-blue-900 dark:bg-gray-700 rounded-full
 											peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
 											after:content-['']
@@ -340,13 +424,13 @@
 											after:transition-transform
 											peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 											"></div>
-						<span class="ms-3 text-sm font-medium text-gray-600">{#if (form.externalLink)}Extern{:else}Item zelf{/if}</span>
+						<span class="ms-3 text-sm font-medium text-gray-600">{#if (form.derived_type.display.follow_through_link)}Extern{:else}Item zelf{/if}</span>
 					</label>
 
 					<fieldset>
 						<div class="form-field">
 							<label for="preview_description">Preview Description</label>
-							<input id="preview_description" type="text" required bind:value={form.preview_description}/>
+							<input id="preview_description" type="text" required bind:value={form.derived_type.display.preview_description}/>
 							<p>Extra display beschrijving</p>
 						</div>
 					</fieldset>
@@ -360,18 +444,28 @@
 		<h3 class="font-bold">Item Metadata</h3>
 
 		<div class="flex flex-col md:flex-row gap-4">
+			{#if hasLocation}
+				<fieldset class="flex-1">
+					<h3 class="font-bold">Location</h3>
+					<p>{form.derived_type.location.location_display_name}</p>
+					<p>{form.derived_type.location.location_search_name}</p>
+					<p>{form.derived_type.location.longitude}</p>
+					<p>{form.derived_type.location.latitude}</p>
+				</fieldset>
+			{/if}
+
 			<fieldset class="flex-1">
 				<h3 class="font-bold">Payment Configuration</h3>
 				<div class="form-field">
 					<label for="connected_account_id">Stripe Connected Account ID</label>
-					<input id="connected_account_id" type="text" required bind:value={form.item_metadata.payment_configuration.connected_account_id}/>
+					<input id="connected_account_id" type="text" required bind:value={form.item.item_metadata.payment_configuration.connected_account_id}/>
 					<p>Connected Account ID waar het geld naar moet doorvloeien. Je kan die opzoeken via Stripe.
 						 Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
 				</div>
 
 				<div class="form-field">
 					<label for="application_fee_amount">Fee</label>
-					<input id="application_fee_amount" type="number" required bind:value={form.item_metadata.payment_configuration.application_fee_amount}/>
+					<input id="application_fee_amount" type="number" required bind:value={form.item.item_metadata.payment_configuration.application_fee_amount}/>
 					<p>Of er een vaste Fee is die moet worden aangerekend.
 						Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
 				</div>
@@ -381,17 +475,17 @@
 				<h3 class="font-bold">Social Media Configuration</h3>
 				<div class="form-field">
 					<label for="instagram_url">Instagram Link</label>
-					<input id="instagram_url" type="text" required bind:value={form.item_metadata.social_media_configuration.instagram_url}/>
+					<input id="instagram_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.instagram_url}/>
 					<p>Deze link komt achter een instagram logo te staan op de item page.</p>
 				</div>
 				<div class="form-field">
 					<label for="facebook_url">Facebook Link</label>
-					<input id="facebook_url" type="text" required bind:value={form.item_metadata.social_media_configuration.facebook_url}/>
+					<input id="facebook_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.facebook_url}/>
 					<p>Deze link komt achter een Facebook logo te staan op de item page.</p>
 				</div>
 				<div class="form-field">
 					<label for="linkedin_url">LinkedIn Link</label>
-					<input id="linkedin_url" type="text" required bind:value={form.item_metadata.social_media_configuration.linkedin_url}/>
+					<input id="linkedin_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.linkedin_url}/>
 					<p>Deze link komt achter een LinkedIn logo te staan op de item page.</p>
 				</div>
 			</fieldset>
@@ -413,8 +507,9 @@
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
 		</div>
+
 		<section class="flex flex-col lg:flex-row gap-4">
-			<div class="order-1 lg:order-3 lg:flex-[1]">
+			<div class="order-1 lg:flex-[2]">
 				<h2 class="font-bold">Voltooide Transacties</h2>
 				{#each groupPricePolicies(pricePolicyTable) as row (row.product_blueprint_id)}
 					<div class="flex justify-between items-center">
@@ -437,34 +532,45 @@
 						</tbody>
 					</table>
 				{/each}
-				<p class="text-right font-bold mr-4">Eind totaal: {pricePolicyTable.reduce((sum, val) => {
+				<p class="text-right font-bold mr-4">Inkomsten: €{pricePolicyTable.reduce((sum, val) => {
+					return sum + val["transaction_count"] * val["price_eu"]
+				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {pricePolicyTable.reduce((sum, val) => {
 					return sum + val["transaction_count"]
 				}, 0)}</p>
-				<p>TODO: Vanalle extra beschrijven statistieken. Totalen van transactions/checkouts enzo (DONE), maar ook unique users, totaal €, totaal € na fee's.
-					Voor zo'n dingen best API calls doen naar de dpu?
+
+				<p>TODO Transacties en checkouts als aantallen
+					Grafiek ook? Doorheen de tijd
+					Mis ook met de pageviews enzo hier?
 				</p>
 			</div>
 
 			<div class="order-2 hidden md:block w-px mx-4 bg-gray-200"></div>
 
-			<div class="order-3 lg:order-1 lg:flex-[2]">
-				<h2>Transacties</h2>
-				<p>TODO: Transacties en validity hier?</p>
-
-				<h2 class="font-bold">Betalingen</h2>
-				<p>Het is normaal dat sommige betalingen falen. Een gefaalde betaling gebeurt bijvoorbeeld wanneer iemand een betaling start, maar niet genoed geld heeft. Of wanneer hij zijn bank app opent maar er daar iets fout gaat.</p>
-				<div class="flex flex-row flex-wrap  gap-x-4">
-					{#each Object.entries(checkoutStatusTable) as [status, count] (status)}
-						<div class="p-4 min-w-24 min-h-12 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-							<h4 class="text-ingenium-grey-800 font-bold">{makePretty(PaymentStatusEnum[parseInt(status)])}: </h4>
-							<p class="text-blue-900 font-bold"> {count}</p>
-						</div>
+			<div class="order-3 lg:flex-[1]">
+				<h2 class="font-bold">Extra</h2>
+				<table class="ingenium-table">
+					<thead>
+					<tr>
+						<th scope="col"><h4>Validity</h4></th>
+						<th scope="col"><h4>Aantal</h4></th>
+					</tr>
+					</thead>
+					<tbody>
+					{#each Object.entries(transactionValidityGrouped) as validityPair}
+						<tr>
+							<th scope="row">
+								{makePretty(ValidityEnum[parseInt(validityPair[0])])}
+							</th>
+							<td>
+								{validityPair[1]}
+							</td>
+						</tr>
 					{/each}
-				</div>
+					</tbody>
+				</table>
 
-				<p>TODO Transacties en checkouts als aantallen
-					Grafiek ook? Doorheen de tijd
-					Mis ook met de pageviews enzo hier?
+				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.
+					Voor zo'n dingen best API calls doen naar de dpu? -> Of gwn op core houden .. zonder polars gaat da best nog wel
 				</p>
 			</div>
 		</section>
@@ -476,12 +582,14 @@
 				Een Checkout is de daadwerkelijke betalingen daarvan.
 				Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
 		</div>
-
-		<p>TODO: Aparte CheckoutTransactionRefundTable component</p>
+		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${itemWide.item.id}`, limit: '20'})} baseSelectedTable="transacties"></PaymentTable>
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
-			<h2 id="Product Blueprints">Product Blueprints</h2>
+			<h1 id="Product Blueprints">Product Blueprints</h1>
+			<button class="ml-auto button button-primary w-24 button-inline" onclick={() => {showBulkImport = true}}>
+				<span class="text-white">Import</span>
+			</button>
 			<button onclick="{() => showAddingNew = true}" class="ml-2 button button-primary w-24 button-inline">
 				<span class="text-white">Add New</span>
 			</button>
@@ -494,7 +602,7 @@
 		</div>
 
 		{#if (productBlueprints.length > 0)}
-		<section class="p-6 py-12 flex flex-wrap gap-6 bg-blue-950 dark:bg-blue-950 rounded-3xl">
+		<section class="flex flex-wrap gap-6">
 			{#each productBlueprints as productBlueprint (productBlueprint.id)}
 				<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
 			{/each}
@@ -550,7 +658,7 @@
 		<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
 
 		<h2 id="changelog">Changelog</h2>
-		<p>TODO 2: DBLogs voor dit item (als aparte component)</p>
+		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: itemWide.item.id.toString()})}></DBLogTable>
 
 		<div class="flex justify-end mt-4 gap-4">
 			<button class="button button-danger button-inline"
@@ -562,3 +670,28 @@
 </main>
 
 <AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>
+
+<Modal title="Bulk Import" maxWidth="max-w-xl" bind:isOpen={ showBulkImport } closable={ true }>
+	{#snippet children()}
+		<article class="m-4">
+			<label for="file">Upload Product Blueprints</label>
+			<input accept="text/csv" bind:files id="file" name="avatar" type="file" />
+
+			{#each Array.from(files ?? []) as file}
+				<p>{file.name} ({file.size} bytes)</p>
+			{/each}
+
+			<div class="p-2 flex justify-end items-center">
+				<button type="button" class="button button-primary w-24 button-inline"
+								disabled={loadingHTTP || files === undefined}
+								onclick={handleUpload}>
+					<span class="text-white">Upload</span>
+				</button>
+			</div>
+
+			{#if uploadError !== null}
+				{uploadError.message}
+			{/if}
+		</article>
+	{/snippet}
+</Modal>

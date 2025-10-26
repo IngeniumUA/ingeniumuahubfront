@@ -1,0 +1,226 @@
+﻿<script lang="ts">
+	import { onMount } from 'svelte';
+	import { successToast } from '$lib/components/toast/defined_toast';
+	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import { DBLogAPI } from '$lib/core_api/dblog_api';
+	import type { DBLogI } from '$lib/models/dblog';
+	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
+
+	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'0' })) }: { baseQueryParam: URLSearchParams } = $props();
+
+	let dblogCount: number = $state(0);
+	let dblogs: DBLogI[] = $state([])
+	let dblogTableOptions: string[] = $state([])
+
+	onMount(() => {
+		queryData(queryParam);
+	});
+
+	/**
+	 * Query logic
+	 */
+	interface QueryFormI {
+		requestIdQuery: null | string,
+		tableNameQuery: null | string,
+		rowPrimaryKeyQuery: null | number,
+		queryOffset: number,
+		queryLimit: number,
+	}
+	let queryForm: QueryFormI = $state({
+		requestIdQuery: null,
+		tableNameQuery: null,
+		rowPrimaryKeyQuery: null,
+		queryOffset: 0,
+		queryLimit: parseInt(baseQueryParam.get('limit') ?? '50')
+	})
+	let queryParam = $derived.by(() => {
+		let searchParam = new URLSearchParams()
+		if (queryForm.requestIdQuery !== null && queryForm.requestIdQuery !== "") searchParam.set('request_id_starts_with', queryForm.requestIdQuery);
+		if (queryForm.tableNameQuery !== null && queryForm.tableNameQuery !== "") searchParam.set('table_name', queryForm.tableNameQuery);
+		if (queryForm.rowPrimaryKeyQuery !== null && queryForm.rowPrimaryKeyQuery) searchParam.set('row_primary_key', queryForm.rowPrimaryKeyQuery.toString());
+
+		searchParam.set('offset', (queryForm.queryOffset * queryForm.queryLimit).toString());
+		searchParam.set('limit', queryForm.queryLimit.toString());
+
+		let queryParam = new URLSearchParams()
+		for (const [key, value] of baseQueryParam) {
+			queryParam.set(key, value);
+		}
+		for (const [key, value] of searchParam) {
+			queryParam.set(key, value);
+		}
+		return queryParam
+	})
+	let loadingHTTP = $state(false);
+
+	let queryError: Error | null = $state(null)
+	async function queryData(queryParam: URLSearchParams) {
+		if (loadingHTTP) return;
+		dblogs = await DBLogAPI.queryCoreDBLog(null, queryParam);
+		dblogCount = await DBLogAPI.countCoreDBLog(null, queryParam);
+		dblogTableOptions = await DBLogAPI.describeTableName(null)
+	}
+
+	/**
+	 *
+	 */
+	async function refresh() {
+		await queryData(queryParam)
+		successToast("Refreshed!")
+	}
+
+	/**
+	 * Bulk Operations selection
+	 */
+	// let selectedArray: boolean[] = $state([])
+
+	/**
+	 * Downloading
+	 */
+	async function download() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+		try {
+			await DBLogAPI.downloadDblog(null, queryParam);
+			queryError = null;
+		} catch (error) {
+			queryError = error instanceof Error ? error : Error('Error download');
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
+	}
+</script>
+
+<style>
+    section {
+        @apply mt-4 p-4 pl-0 rounded-lg shadow-sm;
+
+        h3 {
+            @apply font-bold;
+        }
+    }
+
+    table {
+				input {
+						@apply p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin;
+				}
+    }
+</style>
+
+<article>
+	<div class="flex justify-between items-center">
+		<h2 id="dblog-table">Dblogs</h2>
+		<button onclick={download} disabled={loadingHTTP} class="ml-auto button button-primary button-inline">
+			<span class="text-white">Export</span>
+		</button>
+		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
+			<span class="text-white">Refresh</span>
+		</button>
+	</div>
+
+	<div class="alert alert-info max-w-3xl">
+		<p class="alert-text">DBLogs houden enkele veranderingen van modellen in de database bij.
+			Zo'n verandering heeft steeds een bijhorende 'request', 'table name' en 'row primary key'. Denk er aan dat er meerdere 'edits' kunnen voorkomen per log.
+			</p>
+	</div>
+
+	<div class="flex flex-col lg:flex-row">
+		<section class="order-1 lg:order-2 lg:flex-[1]">
+			<h3>Table Names</h3>
+			{#each dblogTableOptions as dblogTableOption}
+				<p>{makePretty(dblogTableOption)}</p>
+			{/each}
+			TODO Dit mis omzetten in een group by?
+		</section>
+		<div class="flex-[3]">
+			<section class="filter-selector">
+				<h3>Filter</h3>
+				<form class="ingenium-form">
+					<fieldset>
+					</fieldset>
+				</form>
+			</section>
+
+			<section class="bulk-operation">
+				<h3>Apply</h3>
+
+			</section>
+		</div>
+	</div>
+
+	{#if (queryError !== null)}
+		<div class="error-message p-4">
+			{JSON.stringify(queryError)}
+		</div>
+	{/if}
+
+	<section>
+		<h3>Table</h3>
+			<table class="ingenium-table order-2 lg:order-1 lg:flex-[2]">
+				<thead>
+				<tr>
+					<th><h4>Select</h4> <input type="checkbox"/></th>
+					<th><h4>Dblog ID</h4></th>
+					<th>
+						<div class="form-field">
+							<h4>Request</h4>
+							<input class="max-w-32" type="text" bind:value={queryForm.requestIdQuery}>
+						</div>
+					</th>
+					<th>
+						<div class="form-field">
+							<h4>Table</h4>
+							<div class="form-field max-w-32">
+								<select id="table_name" required bind:value={queryForm.tableNameQuery}>
+									{#each [null, ...dblogTableOptions] as tableName}
+										<option value={tableName}>
+											{tableName === null ? "All": makePretty(tableName)}
+										</option>
+									{/each}
+								</select>
+							</div>
+						</div>
+					</th>
+					<th>
+						<div class="form-field">
+							<h4>Row Primary Key</h4>
+							<input class="max-w-16" type="number" bind:value={queryForm.rowPrimaryKeyQuery}>
+						</div>
+					</th>
+					<th><h4>Edits</h4></th>
+					<th><h4>Created</h4></th>
+					<th class="p-0"><PaginationComponent
+						bind:maxTotal={dblogCount}
+						bind:fetchedTotal={dblogs.length}
+						bind:currentOffset={queryForm.queryOffset}
+						bind:currentLimit={queryForm.queryLimit}
+						bind:httpLoading={loadingHTTP}
+					>
+					</PaginationComponent></th>
+				</tr>
+				</thead>
+				<tbody>
+				{#each dblogs as dblog (dblog.log_id)}
+					<tr>
+						<th>
+							<input type="checkbox"/>
+						</th>
+						<th>{dblog.log_id}</th>
+						<td>{dblog.request_id.slice(0, 6)}</td>
+						<td>{makePretty(dblog.table_name)}</td>
+						<td>{dblog.row_primary_key}</td>
+						<td>{dblog.fields_edited.length} edits</td>
+						<td>
+							{prettyDateTime(dblog.created_timestamp)}
+						</td>
+						<td>
+							<button>
+								<span>...</span>
+							</button>
+						</td>
+					</tr>
+				{/each}
+				</tbody>
+			</table>
+	</section>
+</article>

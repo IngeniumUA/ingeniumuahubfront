@@ -11,12 +11,16 @@ export enum HubCheckoutTrackerStatusEnum {
 
 export interface HubCheckoutTrackerI {
   id: number,
+  order_counter: number,
+
   disabled: boolean,
   checkout: CheckoutIWide
   checkout_tracker_status: HubCheckoutTrackerStatusEnum
+
+  created_timestamp: string
 }
 
 export interface PublicOrderTrackerI {
-  id: number;
+  order_counter: number;
   checkout_tracker_status: HubCheckoutTrackerStatusEnum,
 }

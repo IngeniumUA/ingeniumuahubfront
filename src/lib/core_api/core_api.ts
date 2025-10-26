@@ -98,7 +98,7 @@ export class CoreItemAPI {
 		const query = new URLSearchParams({
 			source_item_id: item_identifier.toString(),
 		});
-		return await CoreProductBlueprintAPI.queryProductBlueprintTable(query);
+		return await CoreProductBlueprintAPI.queryProductBlueprintTable(null, query);
 	}
 
 	static async attachedPricePolicyTable(params: RouteParams | null = null, item_identifier: string | number): Promise<[]> {
@@ -118,6 +118,18 @@ export class CoreItemAPI {
 			return await res.json();
 		} else {
 			throw `Failed to fetch checkout status grouped: ${await res.text()}`;
+		}
+	}
+
+	static async attachedValidityGrouped(params: RouteParams | null = null, item_identifier: string | number): Promise<Record<string, number>> {
+		const res = await fetch(`${PUBLIC_API_URL}/transaction/group_by?on=validity&transaction_status=1&item=${item_identifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch transactions per validity: ${await res.text()}`;
 		}
 	}
 

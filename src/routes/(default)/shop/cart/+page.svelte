@@ -24,7 +24,7 @@
 
 	const totalPrice = $derived.by(() => {
 		return cartProducts.reduce((total, product) => {
-			return total + product.price_policy.price;
+			return total + (product.price_policy?.price ?? 0);
 		}, 0);
 	})
 	const guestButtonDisabled = $derived.by(() => {
@@ -70,9 +70,14 @@
 			error = true;
 
 			if (e instanceof Response && e.status === 406) {
+				// todo -> backend should return more types of errors in hubexception, when we add that we can do custom messages here
 				errorMsg = 'er zijn producten in je winkelwagen die je niet kan bestellen.';
+			} else if (e instanceof Response && e.status === 429) {
+				errorMsg = 'je moet even wachten voor je weer kan bestellen bestellen.';
 			} else if (e instanceof Error) {
 				errorMsg = e.message;
+			} else if (e instanceof Response) {
+				errorMsg = (await e.json())["error_nl"] ?? "Unkown core error";
 			} else {
 				errorMsg = 'Unknown error';
 			}
@@ -178,6 +183,10 @@
 							<div class="form-field form-field-checkbox mt-4">
 								<input id="staffCheckout" type="checkbox" bind:checked={ cartDetails.staffCheckout } disabled={ loading } />
 								<label for="staffCheckout">Dit is een kassa bestelling</label>
+							</div>
+							<div class="form-field">
+								<label for="email">Tracker Priority</label>
+								<input type="number" id="tracker_ordering" name="tracker_ordering" class="w-full" required bind:value={ cartDetails.tracker_ordering } />
 							</div>
 						{/if}
 

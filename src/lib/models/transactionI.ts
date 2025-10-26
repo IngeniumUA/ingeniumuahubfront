@@ -1,5 +1,5 @@
 import type {ProductOutI} from "$lib/models/productsI";
-import {type Enums, PaymentStatusEnum} from "$lib/models/enums";
+import { PaymentStatusEnum, ValidityEnum } from '$lib/models/enums';
 import type {InteractionI, InteractionLimitedI} from "$lib/models/interactionI";
 
 export interface TransactionInI {
@@ -8,7 +8,7 @@ export interface TransactionInI {
   product_blueprint_id: number;
   price_policy_id: number;
   status: number
-  validity: number
+  validity: ValidityEnum
 }
 
 export interface TransactionI {
@@ -17,7 +17,7 @@ export interface TransactionI {
   created_timestamp: string
 
   transaction_status: PaymentStatusEnum
-  validity: Enums
+  validity: ValidityEnum
 
   product_blueprint_id: number
   price_policy_id: number

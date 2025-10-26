@@ -46,11 +46,12 @@
 		loadingHTTP = true;
 		try {
 			const res = await fetch(`${PUBLIC_API_URL}/group/sync_to_keycloak/${group.id}`, {
-				method: 'GET',
+				method: 'PATCH',
 				headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
 				body: JSON.stringify({})
 			});
 			if (res.ok) {
+				successToast("Syncronised group successfully!")
 				return await res.json();
 			}
 		} catch (error) {
