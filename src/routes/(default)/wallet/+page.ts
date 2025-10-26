@@ -2,7 +2,7 @@
 import { handleRequest } from "$lib/utilities/httpUtilities";
 import { PUBLIC_API_URL } from "$env/static/public";
 import { getAuthorizationHeaders } from "$lib/auth/auth";
-import type { PageLoad } from '../../../.svelte-kit/types/src/routes/$types';
+import type { PageLoad } from '../../../../.svelte-kit/types/src/routes/$types';
 
 export const load: PageLoad = async ({ params, url, fetch }) => {
 	try {
