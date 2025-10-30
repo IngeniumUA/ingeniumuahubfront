@@ -161,13 +161,26 @@
 	// 		loadingHTTP = false; // Reset loading state
 	// 	}
 	// }
-	
+
+	function assembleDerivedItem() {
+		let derivedItem = itemWide.derived_type;
+		if (hasDisplay) {
+			(derivedItem as EventItemI).display.image_square = form.derived_type.display.image_square === "" ? null: form.derived_type.display.image_square ?? null;
+			(derivedItem as EventItemI).display.image_landscape = form.derived_type.display.image_landscape === "" ? null: form.derived_type.display.image_landscape ?? null;
+			(derivedItem as EventItemI).display.color = form.derived_type.display.color === "" ? "#FFF": form.derived_type.display.color ?? "#FFF";
+			(derivedItem as EventItemI).display.preview_description = form.derived_type.display.preview_description === "" ? "": form.derived_type.display.preview_description ?? "";
+		}
+		return derivedItem
+	}
+
 	let putError: Error | null = $state(null);
 	async function putItem() {
 		if (loadingHTTP) {return}
 		// todo check for form errors
 
-		const putItemWide = itemWide;
+		let putItemWide = itemWide;
+		putItemWide.derived_type = assembleDerivedItem()
+
 		putItemWide.item.name = form.item.name;
 		putItemWide.item.description = form.item.description;
 		putItemWide.item.availability.available = form.item.availability.available
@@ -432,6 +445,19 @@
 							<label for="preview_description">Preview Description</label>
 							<input id="preview_description" type="text" required bind:value={form.derived_type.display.preview_description}/>
 							<p>Extra display beschrijving</p>
+						</div>
+					</fieldset>
+
+					<fieldset>
+						<div class="form-field">
+							<label for="image_landscape">Image Landscape</label>
+							<input id="image_landscape" type="text" required bind:value={form.derived_type.display.image_landscape}/>
+							<p>Landscape Image :)</p>
+						</div>
+						<div class="form-field">
+							<label for="image_square">Image Square</label>
+							<input id="image_square" type="text" required bind:value={form.derived_type.display.image_square}/>
+							<p>Square Image :)</p>
 						</div>
 					</fieldset>
 				</div>
