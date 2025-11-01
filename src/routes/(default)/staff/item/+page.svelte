@@ -15,21 +15,30 @@
 
 	let queryForm = $state({
 		queryLimit: 100,
-		queryOffset: 0
+		queryOffset: 0,
+		itemName: null
 	})
 	async function refresh() {
 		if (httpLoading) return;
 		httpLoading = true;
-		const queryParam = new URLSearchParams({
+
+		let queryParam = new URLSearchParams({
 			disabled: 'None',
 			limit: queryForm.queryLimit.toString(),
 			offset: queryForm.queryOffset.toString(),
 		});
+		if (queryForm.itemName !== null && queryForm.itemName !== "") {
+			queryParam.set('item_name_contains', queryForm.itemName);
+		}
+
 		items = await CoreItemAPI.queryItem(null, queryParam);
 		itemCount = await CoreItemAPI.countItems(null, queryParam);
 		httpLoading = false;
 	}
 
+	/**
+	 * Operations
+	 */
 	async function restore(item_identifier: number | string) {
 		if (httpLoading) return;
 		try {
@@ -54,7 +63,12 @@
 		<thead>
 		<tr>
 			<th>ID</th>
-			<th>Name</th>
+			<th>
+				<div class="form-field">
+					<h4>Name</h4>
+					<input class="max-w-32" type="text" placeholder="Item name" bind:value={queryForm.itemName}>
+				</div>
+			</th>
 			<th>Available</th>
 			<th>Disabled</th>
 			<th class="p-0"><PaginationComponent
