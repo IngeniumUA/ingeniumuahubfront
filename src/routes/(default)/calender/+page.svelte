@@ -2,7 +2,7 @@
 import Header from '$lib/components/layout/header.svelte';
 </script>
 <svelte:head>
-	<title>Events | Ingenium UA</title>
+	<title>Calender | Ingenium UA</title>
 </svelte:head>
 
 <header>
