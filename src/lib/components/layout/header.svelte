@@ -62,7 +62,7 @@
 					<div class="flex space-x-4">
 						<a href="/" class="nav-item" role="menuitem">Home</a>
 						<a href="/events" class="nav-item" role="menuitem">Events</a>
-						<a href="/calender" class="nav-item" role="menuitem">Calender</a>
+						<a href="/calendar" class="nav-item" role="menuitem">Calendar</a>
 
 						<!-- INFO DROPDOWN -->
 						<div class="relative">
@@ -150,7 +150,7 @@
 			<div class="space-y-1 px-2 pb-3 pt-2">
 				<a href="/" class="nav-item" role="menuitem">Home</a>
 				<a href="/events" class="nav-item" role="menuitem">Events</a>
-				<a href="/calender" class="nav-item" role="menuitem">Calender</a>
+				<a href="/calendar" class="nav-item" role="menuitem">Calendar</a>
 				<a href="/shop" class="nav-item" role="menuitem">Shop</a>
 				<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
 				<a href="https://wiki.ingeniumua.be" class="nav-item" role="menuitem">Wiki</a>
