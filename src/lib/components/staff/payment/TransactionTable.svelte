@@ -5,7 +5,7 @@
 	import type { TransactionI } from '$lib/models/transactionI';
 	import { CoreTransactionAPI } from '$lib/core_api/transaction';
 	import { ValidityEnum, ValidityList } from '$lib/models/productsI';
-	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import { makePretty, paymentStatusToColor, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 	import TransactionModal from '$lib/components/staff/payment/TransactionModal.svelte';
@@ -86,6 +86,8 @@
 		user_email: string | null;
 		itemName: string | null;
 		validity: ValidityEnum | null;
+		checkoutUUID: string | null;
+		interactionID: number | null;
 		productBlueprintId: number | null;
 		pricePolicyId: number | null;
 		queryOffset: number;
@@ -95,6 +97,8 @@
 		user_email: null,
 		itemName: null,
 		validity: null,
+		checkoutUUID: null,
+		interactionID: null,
 		productBlueprintId: null,
 		pricePolicyId: null,
 		queryOffset: 0,
@@ -113,6 +117,8 @@
 		if (queryForm.validity !== null) searchParam.set('validity', queryForm.validity.toString());
 		if (queryForm.productBlueprintId !== null) searchParam.set('product_blueprint_id', queryForm.productBlueprintId.toString());
 		if (queryForm.pricePolicyId !== null) searchParam.set('price_policy_id', queryForm.pricePolicyId.toString());
+		if (queryForm.checkoutUUID !== null) searchParam.set('checkout_uuid', queryForm.checkoutUUID);
+		if (queryForm.interactionID !== null) searchParam.set('interaction_id', queryForm.interactionID.toString());
 
 		let queryParam = new URLSearchParams()
 		for (const [key, value] of baseQueryParam) {
@@ -200,17 +206,6 @@
 			case ValidityEnum.invalid: return 'orange';
 			case ValidityEnum.forbidden: return 'red';
 			case ValidityEnum.consumed: return 'gray';
-		}
-	}
-	function transactionToColor(status: PaymentStatusEnum) {
-		switch (status) {
-			case PaymentStatusEnum.successful: return 'green';
-			case PaymentStatusEnum.pending: return 'orange';
-			case PaymentStatusEnum.failed: return 'red';
-			case PaymentStatusEnum.cancelled: return 'gray';
-			case PaymentStatusEnum.refund_pending: return 'orange';
-			case PaymentStatusEnum.partially_refunded: return 'gray';
-			case PaymentStatusEnum.refunded: return 'gray';
 		}
 	}
 
@@ -301,9 +296,24 @@
 	<table class="ingenium-table">
 		<thead>
 		<tr>
-			<th><h4>Select</h4> <input type="checkbox" class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" checked={allSelected} onclick={() => toggleAllSelected(!allSelected)}/></th>
-			<th><h4>ID</h4></th>
-			<th><h4>Checkout</h4></th>
+			<th>
+				<div class="flex flex-col items-center justify-end h-full">
+				<h4 class="flex-end">Select</h4>
+				<input type="checkbox" class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" checked={allSelected} onclick={() => toggleAllSelected(!allSelected)}/>
+				</div>
+			</th>
+			<th>
+				<div class="form-field">
+					<h4>ID</h4>
+					<input class="max-w-32" type="number" placeholder="ID" bind:value={queryForm.interactionID}>
+				</div>
+			</th>
+			<th>
+				<div class="form-field">
+					<h4>Checkout</h4>
+					<input class="max-w-40" type="text" placeholder="Checkout uuid" bind:value={queryForm.checkoutUUID}>
+				</div>
+			</th>
 			<th><h4>Status</h4></th>
 			{#if showItemColumn}
 				<th>
@@ -372,7 +382,7 @@
 		<tbody>
 		{#each transactions as transaction, tableIndex (transaction.interaction.interaction_id)}
 			<tr>
-				<th>
+				<th class="flex justify-center">
 					<input class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" type="checkbox" checked={selectedArray[tableIndex]}/>
 				</th>
 				<td>
@@ -382,7 +392,7 @@
 					<a href={`/staff/payment/${transaction.checkout_uuid}#overview`}>{transaction.checkout_uuid.slice(0, 6)}</a>
 				</td>
 				<td>
-					<span class="rounded-lg py-1 px-2 {transactionToColor(transaction.transaction_status)}">{makePretty(PaymentStatusEnum[transaction.transaction_status])}</span>
+					<span class="rounded-lg py-1 px-2 {paymentStatusToColor(transaction.transaction_status)}">{makePretty(PaymentStatusEnum[transaction.transaction_status])}</span>
 				</td>
 				{#if showItemColumn}
 					<td>
@@ -436,6 +446,10 @@
 			@apply font-bold;
 	}
 
+	th {
+		@apply align-bottom;
+	}
+
   section {
     @apply my-4;
   }
@@ -454,13 +468,12 @@
       button {
           @apply text-xs text-white py-1 px-2 inline-flex items-center justify-center whitespace-nowrap align-middle font-semibold disabled:cursor-not-allowed  w-full  drop-shadow;
       }
-
 			.red {@apply border-red-700 text-red-700 bg-red-100;}
 			.orange {@apply  border-orange-700 text-orange-700 bg-orange-100;}
 			.green {@apply  border-green-700 text-green-700 bg-green-100;}
 			.gray {@apply  border-gray-700 text-gray-700 bg-gray-100;}
 
-      @apply ml-auto mr-4 rounded-lg bg-gray-100 flex flex-row;
+      @apply ml-auto mr-4 rounded-lg flex flex-row;
   }
 
   .red {@apply border-red-700 text-red-700 bg-red-100;}

@@ -5,12 +5,14 @@
 		currentLimit = $bindable(20),
 		maxTotal = $bindable(0),
 		httpLoading = $bindable(false),
+		refresh = $bindable<(() => void) | null>(null),
 	}: {
 		httpLoading: boolean
 		fetchedTotal: number
 		currentOffset: number
 		currentLimit: number
 		maxTotal: number
+		refresh?: (() => void) | null
 	} = $props();
 
 	let maxPage = $derived(Math.ceil(maxTotal / currentLimit))
@@ -20,6 +22,11 @@
 		currentOffset = Math.min(currentOffset, maxPage-1);
 		currentOffset = Math.max(currentOffset, 0);
 	}
+	$effect(() => {
+		if (refresh) {
+			refresh();
+		}
+	});
 </script>
 
 <style lang="scss">
