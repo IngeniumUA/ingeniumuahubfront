@@ -5,7 +5,6 @@
 	import type { ItemI } from '$lib/models/item/itemI';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
-	import { goto } from '$app/navigation';
 	import { successToast } from '$lib/components/toast/defined_toast';
 	import { slice } from '$lib/utilities/style-utilities';
 
@@ -223,12 +222,12 @@
 					</td>
 					<td class="align-middle">
 						<div class="flex justify-end items-center h-full">
-							<button
+							<a
 								class="button button-primary button-inline"
-								onclick={() => goto(`/staff/item/${item.item.id}#${item.item.name}`)}
+								href={`/staff/item/${item.item.id}#${item.item.name}`}
 							>
 								<span class="text-white">Naar Vacature</span>
-							</button>
+							</a>
 						</div>
 					</td>
 				</tr>

@@ -7,7 +7,6 @@
 	import { handleRequest } from '$lib/utilities/httpUtilities';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
-	import { goto } from '$app/navigation';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
 	/**
@@ -269,10 +268,10 @@
 				</div>
 
 				<div class="flex justify-end items-center my-2">
-					<button class="button button-primary w-28 button-inline"
-									onclick={() => goto(`/staff/item/${shopItem.item.id}#${shopItem.item.name}`)}>
+					<a class="button button-primary w-28 button-inline"
+									href={`/staff/item/${shopItem.item.id}#${shopItem.item.name}`}>
 						<span class="text-white">Naar Shop Item</span>
-					</button>
+					</a>
 				</div>
 			</div>
 		{/each}

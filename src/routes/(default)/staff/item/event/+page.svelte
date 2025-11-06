@@ -7,7 +7,6 @@
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
 	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
-	import { goto } from '$app/navigation';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
 	/**
@@ -257,10 +256,10 @@
 				</div>
 
 				<div class="flex justify-end items-center my-2">
-					<button class="button button-primary w-28 button-inline"
-									onclick={() => goto(`/staff/item/${event.item.id}#${event.item.name}`)}>
+					<a class="button button-primary w-28 button-inline"
+									href={`/staff/item/${event.item.id}#${event.item.name}`}>
 						<span class="text-white">Naar Event</span>
-					</button>
+					</a>
 				</div>
 			</div>
 		{/each}
