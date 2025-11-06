@@ -8,7 +8,7 @@
 	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { hasRole } from '$lib/states/auth.svelte';
-	import { PaymentProviderEnum } from '$lib/models/productsI';
+	import { PaymentProviderEnum, PaymentProviderList } from '$lib/models/productsI';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })),
@@ -45,12 +45,14 @@
 		checkoutUUID: string | null;
 		queryOffset: number;
 		queryLimit: number;
+		paymentProvider: PaymentProviderEnum | null;
 	}
 	let queryForm: QueryFormI = $state({
 		user_email: null,
 		checkoutUUID: null,
 		queryOffset: 0,
-		queryLimit: parseInt(baseQueryParam.get('limit') ?? '50')
+		queryLimit: parseInt(baseQueryParam.get('limit') ?? '50'),
+		paymentProvider: null,
 	})
 	let queryParam = $derived.by(() => {
 		let searchParam = new URLSearchParams()
@@ -62,6 +64,7 @@
 		searchParam.set('limit', queryForm.queryLimit.toString());
 		if (queryForm.user_email !== null && queryForm.user_email !== "") searchParam.set('user_email_contains', queryForm.user_email);
 		if (queryForm.checkoutUUID !== null && queryForm.checkoutUUID !== "") searchParam.set('checkout_uuid', queryForm.checkoutUUID);
+		if (queryForm.paymentProvider !== null) searchParam.set("payment_provider", queryForm.paymentProvider.toString())
 
 		// Combining
 		let queryParam = new URLSearchParams()
@@ -212,7 +215,18 @@
 				</th>
 				{#if hasRole('webmaster')}
 					<th>
-						<h4>Payment Provider</h4>
+						<div class="form-field">
+							<h4>Payment Provider</h4>
+							<div class="form-field max-w-32">
+								<select id="payment_provider" required bind:value={queryForm.paymentProvider}>
+									{#each [null, ...PaymentProviderList] as paymentProvider}
+										<option value={paymentProvider}>
+											{paymentProvider === null ? "All": makePretty(PaymentProviderEnum[paymentProvider])}
+										</option>
+									{/each}
+								</select>
+							</div>
+						</div>
 					</th>
 				{/if}
 				<th class="p-0"><PaginationComponent
