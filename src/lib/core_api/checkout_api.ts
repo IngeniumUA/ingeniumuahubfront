@@ -5,6 +5,19 @@ import type { CheckoutIWide } from '$lib/models/checkoutI';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreCheckoutAPI {
+
+	static async analyseBreakdown(params: RouteParams | null = null, queryParam: URLSearchParams): Promise<Record<string, number>> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/analyse/breakdown?${queryParam.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch analyzed profits: ${await res.text()}`;
+		}
+	}
+
 	static async getCheckoutWide(params: RouteParams | null = null, checkoutIdentifier: string): Promise<CheckoutIWide> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
 			method: 'GET',
