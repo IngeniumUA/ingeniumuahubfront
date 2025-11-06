@@ -47,7 +47,7 @@
 </style>
 
 <article>
-	<p class="text-ingenium-grey-700 normal-case text-center w-full">{fetchedTotal} out of {maxTotal} rows</p>
+	<p class="text-ingenium-grey-700 normal-case text-center w-full">showing {fetchedTotal} out of {maxTotal} rows</p>
 	<div>
 		<button disabled={httpLoading} onclick={() => {currentOffset = 0}} class="border-l rounded-l-md">&lt&lt</button>
 		<button disabled={httpLoading} onclick={() => {tick(-1)}} class="border-l">Prev</button>
