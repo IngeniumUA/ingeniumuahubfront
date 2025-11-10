@@ -72,6 +72,13 @@ export enum PaymentProviderEnum {
   Stripe = 4,
 }
 
+export const PaymentProviderList = [
+  PaymentProviderEnum.Dev,
+  PaymentProviderEnum.Kassa,
+  PaymentProviderEnum.Free,
+  PaymentProviderEnum.Stripe,
+]
+
 export enum ValidityEnum {
   forbidden= 1,
   valid = 2,

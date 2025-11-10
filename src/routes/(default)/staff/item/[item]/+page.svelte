@@ -19,6 +19,8 @@
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
 	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
 	import { ValidityEnum } from '$lib/models/enums';
+	import { PaymentProviderEnum } from '$lib/models/productsI';
+	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -315,6 +317,34 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 * Special state (showing modal) and query for profit calculation
+	 */
+	let profitError: Error | null = $state(null)
+	let profitStruct: { [s: string]: number; } | null = $state(null)
+	let showProfitModal = $state(false)
+	async function calculateProfit() {
+		if (loadingHTTP) return;
+		showProfitModal = true;
+
+		const queryParam = new URLSearchParams({
+			'payment_provider': PaymentProviderEnum.Stripe.toString(),
+			'from_created_timestamp': itemWide.item.created_timestamp,
+			'until_created_timestamp': new Date().toISOString(),
+			'item_id': itemWide.item.id.toString()
+		});
+
+		loadingHTTP = true;
+		try {
+			profitStruct = await CoreCheckoutAPI.analyseBreakdown(null, queryParam);
+			profitError = null;
+		} catch (error) {
+			profitError = error instanceof Error ? error : Error('Error fetching profit');
+		} finally {
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -345,7 +375,7 @@
 						{/if}
 
 						{#if productBlueprintCapable}
-							<a href="#Dashboard" class="font-semibold">Transacties Dashboard</a>
+							<a href="#Dashboard" class="font-semibold">Dashboard</a>
 							<a href="#Transacties en Betalingen" class="font-semibold">Betalingen & Transacties</a>
 							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
 						{/if}
@@ -534,6 +564,26 @@
 			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
 		</div>
 
+		<article class={`my-4 py-2 ${profitStruct !== null ? 'rounded-lg shadow-md hover:shadow-lg transition-shadow': ''}`}>
+			{#if (profitStruct !== null)}
+				<h3>Profit Analysis</h3>
+
+				<p class="font-bold">
+					Inkomsten: {profitStruct?.amount}<br>
+					Transactiekosten: {profitStruct?.fee}<br>
+					Winst: {profitStruct?.net}<br>
+				</p>
+
+				<p class="font-bold">
+					Checkout Count: {profitStruct?.checkout_count}<br>
+					Charge Count: {profitStruct?.charge_count}<br>
+					Als deze twee getallen niet overeen komen is het bedrag waarschijnlijk ook niet juist.
+				</p>
+			{/if}
+
+			<button class="button button-primary" onclick={calculateProfit}>Profit</button>
+		</article>
+
 		<section class="flex flex-col lg:flex-row gap-4">
 			<div class="order-1 lg:flex-[2]">
 				<h2 class="font-bold">Voltooide Transacties</h2>
@@ -558,7 +608,9 @@
 						</tbody>
 					</table>
 				{/each}
-				<p class="text-right font-bold mr-4">Inkomsten: €{pricePolicyTable.reduce((sum, val) => {
+				<p class="text-right font-bold mr-4">
+					{#if (profitStruct !== null)}Winst: {profitStruct["net"]} &nbsp &nbsp &nbsp {/if}
+					Inkomsten: €{pricePolicyTable.reduce((sum, val) => {
 					return sum + val["transaction_count"] * val["price_eu"]
 				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {pricePolicyTable.reduce((sum, val) => {
 					return sum + val["transaction_count"]
@@ -717,6 +769,40 @@
 
 			{#if uploadError !== null}
 				{uploadError.message}
+			{/if}
+		</article>
+	{/snippet}
+</Modal>
+
+<Modal title="Profit analysis" maxWidth="max-w-xl" bind:isOpen={ showProfitModal } closable={ true }>
+	{#snippet children()}
+		<article class="m-4">
+			<div class="alert alert-info mb-4 max-w-3xl">
+				<p class="alert-text">Berekening van de fee is niet super eenvoudig om efficient te doen. Als je het exacte getal wilt best op stripe zelf kijken.</p>
+			</div>
+
+			<p class="font-bold">
+				Inkomsten: {profitStruct?.amount}<br>
+				Transactiekosten: {profitStruct?.fee}<br>
+				Winst: {profitStruct?.net}<br>
+			</p>
+
+			<p class="font-bold">
+				Checkout Count: {profitStruct?.checkout_count}<br>
+				Charge Count: {profitStruct?.charge_count}<br>
+				Als deze twee getallen niet overeen komen is het bedrag waarschijnlijk ook niet juist.
+			</p>
+
+			<div class="p-2 flex justify-end items-center">
+				<button type="button" class="button button-primary w-24 button-inline"
+								disabled={loadingHTTP}
+								onclick={handleUpload}>
+					<span class="text-white">Refresh</span>
+				</button>
+			</div>
+
+			{#if profitError !== null}
+				{profitError.message}
 			{/if}
 		</article>
 	{/snippet}

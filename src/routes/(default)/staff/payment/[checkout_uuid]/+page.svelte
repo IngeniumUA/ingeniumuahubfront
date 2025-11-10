@@ -287,7 +287,7 @@
 
 			<h2 class="mt-4">Checkout Metadata</h2>
 			{#if checkoutWide.payment_provider === PaymentProviderEnum.Stripe}
-				<div><a href={`https://dashboard.stripe.com/acct_1DHT0yBSXssFMR3b/payments/${checkoutWide.checkout_metadata["payment_provider_metadata"]["payment_intent_id"]}`}>Bekijk betaling op Stripe</a></div>
+				<div><a href={`https://dashboard.stripe.com/acct_1DHT0yBSXssFMR3b/payments/${checkoutWide.checkout_metadata["payment_provider_metadata"]["payment_intent"]["payment_intent_id"]}`}>Bekijk betaling op Stripe</a></div>
 			{/if}
 
 			<h3 class="font-bold mt-2">Checkout Flow Info</h3>

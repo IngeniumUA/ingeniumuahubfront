@@ -5,6 +5,19 @@ import type { CheckoutIWide } from '$lib/models/checkoutI';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 
 export class CoreCheckoutAPI {
+
+	static async analyseBreakdown(params: RouteParams | null = null, queryParam: URLSearchParams): Promise<Record<string, number>> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/analyse/breakdown?${queryParam.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch analyzed profits: ${await res.text()}`;
+		}
+	}
+
 	static async getCheckoutWide(params: RouteParams | null = null, checkoutIdentifier: string): Promise<CheckoutIWide> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
 			method: 'GET',
@@ -165,6 +178,36 @@ export class CoreCheckoutAPI {
 		document.body.appendChild(a);
 
 		a.click();
+		a.remove();
+		window.URL.revokeObjectURL(url);
+	}
+
+	static async downloadCheckouts(
+		params: RouteParams | null = null,
+		query_param: URLSearchParams
+	): Promise<void> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/export?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'text/csv' })
+		});
+		if (!res.ok) {
+			throw new Error(`Failed to fetch checkouts export: ${await res.text()}`);
+		}
+		const blob = await res.blob();
+		const url = window.URL.createObjectURL(blob);
+		// Create a hidden <a> element
+		const a = document.createElement('a');
+		a.href = url;
+
+		// Extract filename from Content-Disposition header OR fallback
+		const contentDisposition = res.headers.get('Content-Disposition');
+		a.download = contentDisposition
+			? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
+			: 'checkouts.csv'; // download instead of navigating
+		document.body.appendChild(a);
+		a.click();
+
+		// Clean up
 		a.remove();
 		window.URL.revokeObjectURL(url);
 	}
