@@ -181,4 +181,34 @@ export class CoreCheckoutAPI {
 		a.remove();
 		window.URL.revokeObjectURL(url);
 	}
+
+	static async downloadCheckouts(
+		params: RouteParams | null = null,
+		query_param: URLSearchParams
+	): Promise<void> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout/export?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'text/csv' })
+		});
+		if (!res.ok) {
+			throw new Error(`Failed to fetch checkouts export: ${await res.text()}`);
+		}
+		const blob = await res.blob();
+		const url = window.URL.createObjectURL(blob);
+		// Create a hidden <a> element
+		const a = document.createElement('a');
+		a.href = url;
+
+		// Extract filename from Content-Disposition header OR fallback
+		const contentDisposition = res.headers.get('Content-Disposition');
+		a.download = contentDisposition
+			? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
+			: 'checkouts.csv'; // download instead of navigating
+		document.body.appendChild(a);
+		a.click();
+
+		// Clean up
+		a.remove();
+		window.URL.revokeObjectURL(url);
+	}
 }

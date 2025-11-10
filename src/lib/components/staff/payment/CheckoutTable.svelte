@@ -108,6 +108,22 @@
 	// let selectedArray: boolean[] = $state([])
 
 	/**
+	 * Downloading
+	 */
+	async function download() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+		try {
+			await CoreCheckoutAPI.downloadCheckouts(null, queryParam);
+			checkoutPatchError = null;
+		} catch (error) {
+			checkoutPatchError = error instanceof Error ? error : Error('Error download');
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
+	}
+
+	/**
 	 * Checkout operations
 	 */
 	let checkoutPatchError: Error | null = null
@@ -149,7 +165,7 @@
 		<button onclick={() => showAddingNew = !showAddingNew} class="ml-auto button button-primary w-24 button-inline">
 			<span class="text-white">Add</span>
 		</button>
-		<button onclick={refresh} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
+		<button onclick={download} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Download</span>
 		</button>
 		<button onclick={refresh} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
