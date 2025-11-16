@@ -177,6 +177,7 @@
 	async function sendEmail() {
 		try {
 			await CoreCheckoutAPI.sendCheckoutEmail(null, checkoutWide.checkout_uuid);
+			successToast("Mail sent!")
 		} catch (error) {
 			if (error instanceof Error) {
 				failedToast(error.message);
@@ -235,7 +236,7 @@
 
 				<div class="flex-[1] p-2">
 					<h3 class="font-bold mb-2">Mail:</h3>
-					<button class="button button-primary button-inline" onclick={sendEmail}>
+					<button class="button button-primary button-inline" onclick={sendEmail} disabled={loadingHTTP}>
 						<span class="text-white">Opnieuw Versturen</span>
 					</button>
 
@@ -327,7 +328,7 @@
 			</fieldset>
 
 			<fieldset>
-				<h4>User</h4>
+				<a href="/staff/user/{checkoutWide.user_email}"><h4>User</h4></a>
 				<div class="flex justify-between items-center">
 					<p class="flex-1 checkout-detail-value">{checkoutWide.user_email}</p>
 						<button class="ml-2" aria-label="edit" onclick="{() => toggleEditUser = !toggleEditUser}">
