@@ -375,6 +375,7 @@
 				bind:currentOffset={queryForm.queryOffset}
 				bind:currentLimit={queryForm.queryLimit}
 				bind:httpLoading={loadingHTTP}
+				refresh={refresh}
 			>
 			</PaginationComponent></th>
 		</tr>

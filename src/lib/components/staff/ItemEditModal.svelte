@@ -215,9 +215,9 @@
 				<span class="text-white">Update</span>
 			</button>
 
-			<button class="button button-primary button-inline">
+			<a href={`/staff/item/${itemWide.item.id}#${itemWide.item.name}`} class="button button-primary button-inline">
 				<span class="text-white">Naar { makePretty(itemType) }</span>
-			</button>
+			</a>
 		</div>
 
 		{#if (itemUpdateError !== null)}
