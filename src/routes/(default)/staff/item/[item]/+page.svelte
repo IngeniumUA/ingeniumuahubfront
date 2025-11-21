@@ -31,7 +31,6 @@
 	let checkoutTrackerStatusGrouped = $state([])
 
 	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
-	const interactionCapable: boolean = $derived(["eventitem", "shopitem", "linkitem"].includes(itemWide.derived_type.derived_type_enum));
 	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum));
 	const hasLocation: boolean = $derived(["eventitem"].includes(itemWide.derived_type.derived_type_enum));
 
@@ -45,7 +44,7 @@
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
-		return trackCheckout !== null && trackCheckout !== undefined;
+		return trackCheckout !== null || trackCheckout !== undefined;
 	}));
 
 	/**
@@ -373,9 +372,8 @@
 						{#if hasCheckoutTrackers}
 							<a href="#Checkout Trackers" class="font-semibold">Checkout Trackers</a>
 						{/if}
-						{#if interactionCapable}
-							<a href="#Interactions" class="font-semibold">Interactions</a>
-						{/if}
+
+						<a href="#traffic" class="font-semibold">Traffic</a>
 
 						{#if hasRole("webmaster")}
 							<a href="#webmaster-info" class="font-semibold">Webmaster</a>
@@ -708,17 +706,14 @@
 		{/if}
 	{/if}
 
-	{#if interactionCapable}
-		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h1 id="Interactions">Interactions</h1>
-		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Interactions worden aangemaakt telkens wanneer een gebruiker 'iets doet' met een Item.
-			Onder de mantel van 'iets doen' zit bijvoorbeeld een transactie.</p>
-		</div>
-
-		<p>TODO: Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
-	{/if}
-
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+	<h1 id="traffic">Traffic</h1>
+	<div class="alert alert-info mb-4 max-w-3xl">
+		<p class="alert-text">Met Umami houden we analytics bij over wie er onze site bezoekt.
+			Die gegevens kan je rechstreeks <a href="https://traffic.ingeniumua.be">op umami bekijken</a>.
+			Hieronder enkele cijfers opgehaald uit umami.</p>
+	</div>
+	<p>TODO: https://umami.is/docs/api/website-stats#get-apiwebsiteswebsiteidstats</p>
 
 	{#if hasRole("webmaster")}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
