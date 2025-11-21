@@ -129,7 +129,7 @@
 			display: {
 				// Display mixin
 				color: display?.color ?? "",
-				clickThroughLink: '',
+				follow_through_link: '',
 				externalLink: false,
 				preview_description: display?.preview_description ?? "",
 				image_landscape: display?.image_landscape ?? null,
@@ -150,27 +150,18 @@
 	/**
 	 *
 	 */
-	// async function toggleAvailable() {
-	// 	loadingHTTP = true;
-	// 	try {
-	// 		await CoreItemAPI.patchAvailable(itemWide.item.id, !itemWide.item.availability.available).catch(handleRequest);
-	// 		successToast("Item updated!")
-	// 		await refresh();
-	// 	} catch (error) {
-	// 		failedToast(`Failed ${error}`);
-	// 		await refresh()
-	// 	} finally {
-	// 		loadingHTTP = false; // Reset loading state
-	// 	}
-	// }
-
 	function assembleDerivedItem() {
 		let derivedItem = itemWide.derived_type;
+		const itemType = derivedItem.derived_type_enum
+		const externalLink = (derivedItem as EventItemI).display.follow_through_link.includes('http')
+		const internalLink = `/${itemType.slice(0, itemType.length - 4)}/${form.item.name}`
+
 		if (hasDisplay) {
 			(derivedItem as EventItemI).display.image_square = form.derived_type.display.image_square === "" ? null: form.derived_type.display.image_square ?? null;
 			(derivedItem as EventItemI).display.image_landscape = form.derived_type.display.image_landscape === "" ? null: form.derived_type.display.image_landscape ?? null;
 			(derivedItem as EventItemI).display.color = form.derived_type.display.color === "" ? "#FFF": form.derived_type.display.color ?? "#FFF";
 			(derivedItem as EventItemI).display.preview_description = form.derived_type.display.preview_description === "" ? "": form.derived_type.display.preview_description ?? "";
+			(derivedItem as EventItemI).display.follow_through_link = externalLink ? form.derived_type.display.follow_through_link ?? internalLink: internalLink
 		}
 		return derivedItem
 	}
