@@ -50,14 +50,14 @@
 	async function patchAvailable(item_index: number) {
 		if (loadingHTTP) { return }
 
-		if (data.events.length <= item_index) {return}
-		let eventitem = data.events.at(item_index)
+		if (events.length <= item_index) {return}
+		let eventitem = events.at(item_index)
 		if (eventitem === undefined) {return}
 		eventitem.item.availability.available = !eventitem.item.availability.available
 
 		loadingHTTP = true;
 		try {
-			await CoreItemAPI.putItem(eventitem.item.id, eventitem.item).catch(handleRequest);
+			events[item_index] = await CoreItemAPI.putItem(eventitem.item.id, eventitem.item).catch(handleRequest);
 			successToast("Item updated!")
 			await refresh();
 		} catch (error) {
@@ -268,6 +268,6 @@
 
 <AddNewItem bind:isOpen={ showAddingNew } itemType="eventitem"></AddNewItem>
 
-{#if editItemIndex !== null && editItemIndex >= 0 && editItemIndex < data.events.length}
-	<ItemEditModal bind:isOpen={showEditModal} itemWide={data.events[editItemIndex]} />
+{#if editItemIndex !== null && editItemIndex >= 0 && editItemIndex < events.length}
+	<ItemEditModal bind:isOpen={showEditModal} itemWide={events[editItemIndex]} />
 {/if}
