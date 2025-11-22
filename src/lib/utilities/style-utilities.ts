@@ -88,3 +88,23 @@ export function paymentStatusToColor(status: PaymentStatusEnum) {
         case PaymentStatusEnum.refunded: return 'gray';
     }
 }
+
+// Source - https://stackoverflow.com/a
+// Why doesn't typescript have this
+export function parseBool(string: string): boolean | undefined {
+    switch (String(string).toLowerCase()) {
+        case "true":
+        case "1":
+        case "yes":
+        case "y":
+            return true;
+        case "false":
+        case "0":
+        case "no":
+        case "n":
+            return false;
+        default:
+            //you could throw an error, but 'undefined' seems a more logical reply
+            return undefined
+    }
+}
