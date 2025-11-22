@@ -21,12 +21,11 @@
 		currentOffset += tickValue;
 		currentOffset = Math.min(currentOffset, maxPage-1);
 		currentOffset = Math.max(currentOffset, 0);
-	}
-	$effect(() => {
+
 		if (refresh) {
 			refresh();
 		}
-	});
+	}
 </script>
 
 <style lang="scss">

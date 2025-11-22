@@ -31,7 +31,6 @@
 	let checkoutTrackerStatusGrouped = $state([])
 
 	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
-	const interactionCapable: boolean = $derived(["eventitem", "shopitem", "linkitem"].includes(itemWide.derived_type.derived_type_enum));
 	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum));
 	const hasLocation: boolean = $derived(["eventitem"].includes(itemWide.derived_type.derived_type_enum));
 
@@ -45,7 +44,7 @@
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
-		return trackCheckout !== null && trackCheckout !== undefined;
+		return trackCheckout !== null || trackCheckout !== undefined;
 	}));
 
 	/**
@@ -129,7 +128,7 @@
 			display: {
 				// Display mixin
 				color: display?.color ?? "",
-				clickThroughLink: '',
+				follow_through_link: '',
 				externalLink: false,
 				preview_description: display?.preview_description ?? "",
 				image_landscape: display?.image_landscape ?? null,
@@ -150,27 +149,18 @@
 	/**
 	 *
 	 */
-	// async function toggleAvailable() {
-	// 	loadingHTTP = true;
-	// 	try {
-	// 		await CoreItemAPI.patchAvailable(itemWide.item.id, !itemWide.item.availability.available).catch(handleRequest);
-	// 		successToast("Item updated!")
-	// 		await refresh();
-	// 	} catch (error) {
-	// 		failedToast(`Failed ${error}`);
-	// 		await refresh()
-	// 	} finally {
-	// 		loadingHTTP = false; // Reset loading state
-	// 	}
-	// }
-
 	function assembleDerivedItem() {
 		let derivedItem = itemWide.derived_type;
+		const itemType = derivedItem.derived_type_enum
+		const externalLink = (derivedItem as EventItemI).display.follow_through_link.includes('http')
+		const internalLink = `/${itemType.slice(0, itemType.length - 4)}/${form.item.name}`
+
 		if (hasDisplay) {
 			(derivedItem as EventItemI).display.image_square = form.derived_type.display.image_square === "" ? null: form.derived_type.display.image_square ?? null;
 			(derivedItem as EventItemI).display.image_landscape = form.derived_type.display.image_landscape === "" ? null: form.derived_type.display.image_landscape ?? null;
 			(derivedItem as EventItemI).display.color = form.derived_type.display.color === "" ? "#FFF": form.derived_type.display.color ?? "#FFF";
 			(derivedItem as EventItemI).display.preview_description = form.derived_type.display.preview_description === "" ? "": form.derived_type.display.preview_description ?? "";
+			(derivedItem as EventItemI).display.follow_through_link = externalLink ? form.derived_type.display.follow_through_link ?? internalLink: internalLink
 		}
 		return derivedItem
 	}
@@ -382,9 +372,8 @@
 						{#if hasCheckoutTrackers}
 							<a href="#Checkout Trackers" class="font-semibold">Checkout Trackers</a>
 						{/if}
-						{#if interactionCapable}
-							<a href="#Interactions" class="font-semibold">Interactions</a>
-						{/if}
+
+						<a href="#traffic" class="font-semibold">Traffic</a>
 
 						{#if hasRole("webmaster")}
 							<a href="#webmaster-info" class="font-semibold">Webmaster</a>
@@ -717,17 +706,14 @@
 		{/if}
 	{/if}
 
-	{#if interactionCapable}
-		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h1 id="Interactions">Interactions</h1>
-		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Interactions worden aangemaakt telkens wanneer een gebruiker 'iets doet' met een Item.
-			Onder de mantel van 'iets doen' zit bijvoorbeeld een transactie.</p>
-		</div>
-
-		<p>TODO: Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
-	{/if}
-
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+	<h1 id="traffic">Traffic</h1>
+	<div class="alert alert-info mb-4 max-w-3xl">
+		<p class="alert-text">Met Umami houden we analytics bij over wie er onze site bezoekt.
+			Die gegevens kan je rechstreeks <a href="https://traffic.ingeniumua.be">op umami bekijken</a>.
+			Hieronder enkele cijfers opgehaald uit umami.</p>
+	</div>
+	<p>TODO: https://umami.is/docs/api/website-stats#get-apiwebsiteswebsiteidstats</p>
 
 	{#if hasRole("webmaster")}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
