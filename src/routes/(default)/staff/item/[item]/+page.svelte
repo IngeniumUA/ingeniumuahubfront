@@ -169,8 +169,7 @@
 	async function putItem() {
 		if (loadingHTTP) {return}
 		// todo check for form errors
-
-		let putItemWide = itemWide;
+		let putItemWide = structuredClone($state.snapshot(itemWide));
 		putItemWide.derived_type = assembleDerivedItem()
 
 		putItemWide.item.name = form.item.name;
