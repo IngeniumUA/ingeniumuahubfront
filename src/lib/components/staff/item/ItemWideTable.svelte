@@ -9,6 +9,7 @@
 	import { makePretty, parseBool, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { hasRole } from '$lib/states/auth.svelte';
 	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
+	import type { ItemI } from '$lib/models/item/itemI';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })),
@@ -157,6 +158,18 @@
 			await CoreItemAPI.restoreItem(item_identifier)
 		} catch (error) {
 			failedToast(error instanceof Error ? error.message : "error");
+		} finally {
+			httpLoading = false;
+		}
+	}
+
+	async function toggleAvailable(itemIndex: number, item: ItemI) {
+		if (httpLoading) return;
+		try {
+			items[itemIndex] = await CoreItemAPI.patchAvailable(item.id, !item.availability.available);
+			successToast("Updated!")
+		} catch (error) {
+			failedToast(error instanceof Error ? error.message : "Update failed");
 		} finally {
 			httpLoading = false;
 		}
@@ -332,7 +345,17 @@
 					{makePretty(itemWide.derived_type.derived_type_enum)}
 				</td>
 				<td>
-					{itemWide.item.availability.available ? "Available": "Not Available"}
+					<label class="inline-flex items-center cursor-pointer my-4">
+						<input type="checkbox" class="sr-only peer"
+									 disabled={httpLoading}
+									 bind:checked={itemWide.item.availability.available}
+									 onclick="{() => toggleAvailable(tableIndex, itemWide.item)}"
+						>
+						<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
+						<span class="ms-3 text-sm font-medium text-gray-600">
+														{#if itemWide.item.availability.available}Beschikbaar{:else}Niet Beschikbaar{/if}
+													</span>
+					</label>
 				</td>
 
 				{#if isWebmaster}
