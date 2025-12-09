@@ -111,7 +111,7 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <section class="col-span-1 md:col-span-2">
       <h1 class="white-section-title white-section-title-large">{ data.event.item.name }</h1>
-      <p class="!mb-0">{ data.event.item.description }</p>
+      <p class="!mb-0 whitespace-pre-line">{ data.event.item.description }</p>
       <div class="flex flex-row items-center justify-end mb-4">
         {#if ((data.event.item.item_metadata.social_media_configuration?.instagram_url ?? null) !== null)}
           <a href={data.event.item.item_metadata.social_media_configuration?.instagram_url ?? null} aria-label="instagram">
