@@ -65,7 +65,7 @@
     return transformColorToRGBA(data.shop?.derived_type.display.color);
   });
   let secondaryColor = $derived.by(() => {
-    return calcColorIntensity(data.shop?.derived_type.display.color, -0.1) < 180 ? 'white' : 'black';
+    return calcColorIntensity(data.shop?.derived_type.display.color) < 180 ? 'white' : 'black';
   });
 
   function buttonStyle(category: number) {
@@ -76,7 +76,7 @@
 </script>
 
 <svelte:head>
-  <title>{ data.shop.item.name ?? 'Onbekend evenement' } | IngeniumUA</title>
+  <title>{ data.shop.item.name ?? 'Onbekend shopitem' } | IngeniumUA</title>
 </svelte:head>
 
 <header>
@@ -87,7 +87,7 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <section class="col-span-1 md:col-span-2">
       <h1 class="white-section-title white-section-title-large">{ data.shop.item.name }</h1>
-      <p>{ data.shop.item.description }</p>
+      <p class="!mb-0 whitespace-pre-line">{ data.shop.item.description }</p>
 
       {#if Array.isArray(data.products) && data.products.length > 0}
         <nav class="categorie-section" style:background-color={ primaryColor }>
