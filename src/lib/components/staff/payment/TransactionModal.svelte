@@ -19,6 +19,8 @@
 	let explodedDBLogs: DBLogExplodedI[] = $state([])
 
 	let loadingHTTP: boolean = $state(false);
+	let toggleEditUser: boolean = $state(false);
+
 	async function refreshLogs() {
 		const queryParam = new URLSearchParams({
 			table_name: 'hubtransaction',
@@ -67,12 +69,32 @@
 	let putError: Error | null = $state(null)
 </script>
 
-<Modal title="Lidkaart bewerken" maxWidth="max-w-5xl" bind:isOpen={ isOpen } closable={ true }>
+<Modal title="Transactie bewerken" maxWidth="max-w-5xl" bind:isOpen={ isOpen } closable={ true }>
 	{#snippet children()}
 		<article class="m-4">
 			<div class="flex flew-row gap-4">
 				<form class="flex-1 ingenium-form">
-					<h3 class="font-bold pb-2">Transactie Info</h3>
+					<h3 class="font-bold pb-2">Overview</h3>
+					<fieldset>
+						<a href="/staff/user/{transaction.interaction.user_email}"><h4>User</h4></a>
+						<div class="flex justify-between items-center">
+							<p class="flex-1 checkout-detail-value">{transaction.interaction.user_email}</p>
+							<button class="ml-2" aria-label="edit" onclick="{() => toggleEditUser = !toggleEditUser}">
+								<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+										 width="20px" height="20px" viewBox="0 0 528.899 528.899"
+										 xml:space="preserve">
+									<g>
+										<path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
+											c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
+											C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069
+											L27.473,390.597L0.3,512.69z"/>
+									</g>
+									</svg>
+							</button>
+						</div>
+						<p>Gebruiker aan wie de betaling is gekoppeld</p>
+
+					</fieldset>
 					<fieldset>
 						<h4>Note</h4>
 						<div class="flex justify-between items-center">
@@ -101,10 +123,12 @@
 				</form>
 
 				<div>
+					<h3 class="font-bold pb-2">Recent history</h3>
 					<ExplodedLogPreview targetObject={transaction} explodedDBLogs={explodedDBLogs}></ExplodedLogPreview>
 				</div>
 
 				<div>
+					<h3 class="font-bold pb-2">Transactie Snapshot</h3>
 					<pre class="text-xs text-ingenium-grey-900">{JSON.stringify(transaction.purchased_product, null, 2)}</pre>
 				</div>
 			</div>
