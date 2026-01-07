@@ -52,12 +52,11 @@
 			follow_through_link: form.externalLink ? form.clickThroughLink: `/${itemType.slice(0, itemType.length - 4)}/${form.name}`,
 			date: null,
 			color: 'rgb(255, 255, 255)',
-			image_square: null,
-			image_landscape: null,
-			preview_description: null
+			image_square: form.image_square,
+			image_landscape: form.image_landscape,
+			preview_description: form.preview_description
 		};
 		recsysItem.color = hexToRGB(form.color) ?? form.color;
-		recsysItem.preview_description = form.preview_description;
 		if (itemType === "eventitem") {
 			recsysItem.date = form.event_start;
 		}
