@@ -165,7 +165,6 @@
 		debounceTimer = setTimeout(refresh, 1000);
 	});
 
-
 	/**
 	 * Bulk Operations selection
 	 */
@@ -226,7 +225,7 @@
 	}
 
 	/**
-	 * Edit Modal Code
+	 * State management for transaction edit model
 	 */
 	let editSelectedIndex: null | number = $state(null);
 	let editSelected: TransactionI | null = $state(null);
@@ -439,7 +438,7 @@
 </article>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < transactions.length && editSelected !== null}
-	<TransactionModal transaction={editSelected} isOpen={showEdit}></TransactionModal>
+	<TransactionModal transaction={editSelected} bind:isOpen={showEdit}></TransactionModal>
 {/if}
 
 <style lang="scss">

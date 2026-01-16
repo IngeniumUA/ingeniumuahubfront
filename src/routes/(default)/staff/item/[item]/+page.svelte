@@ -30,6 +30,8 @@
 	let trackerCount: number = $state(data.trackerCount);
 	let checkoutTrackerStatusGrouped = $state([])
 
+	let showExtraTab: boolean = $state(false);
+
 	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
 	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum));
 	const hasLocation: boolean = $derived(["eventitem"].includes(itemWide.derived_type.derived_type_enum));
@@ -485,54 +487,73 @@
 	</section>
 
 	<div class="p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-		<h3 class="font-bold">Item Metadata</h3>
+		{#if showExtraTab}
+			<h3 class="font-bold">Item Metadata</h3>
 
-		<div class="flex flex-col md:flex-row gap-4">
-			{#if hasLocation}
+			<div class="flex flex-col md:flex-row gap-4">
+				{#if hasLocation}
+					<fieldset class="flex-1">
+						<h3 class="font-bold">Location</h3>
+						<p>{form.derived_type.location.location_display_name}</p>
+						<p>{form.derived_type.location.location_search_name}</p>
+						<p>{form.derived_type.location.longitude}</p>
+						<p>{form.derived_type.location.latitude}</p>
+					</fieldset>
+				{/if}
+
 				<fieldset class="flex-1">
-					<h3 class="font-bold">Location</h3>
-					<p>{form.derived_type.location.location_display_name}</p>
-					<p>{form.derived_type.location.location_search_name}</p>
-					<p>{form.derived_type.location.longitude}</p>
-					<p>{form.derived_type.location.latitude}</p>
+					<h3 class="font-bold">Payment Configuration</h3>
+					<div class="form-field">
+						<label for="connected_account_id">Stripe Connected Account ID</label>
+						<input id="connected_account_id" type="text" required bind:value={form.item.item_metadata.payment_configuration.connected_account_id}/>
+						<p>Connected Account ID waar het geld naar moet doorvloeien. Je kan die opzoeken via Stripe.
+							 Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
+					</div>
+
+					<div class="form-field">
+						<label for="application_fee_amount">Fee</label>
+						<input id="application_fee_amount" type="number" required bind:value={form.item.item_metadata.payment_configuration.application_fee_amount}/>
+						<p>Of er een vaste Fee is die moet worden aangerekend.
+							Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
+					</div>
 				</fieldset>
-			{/if}
 
-			<fieldset class="flex-1">
-				<h3 class="font-bold">Payment Configuration</h3>
-				<div class="form-field">
-					<label for="connected_account_id">Stripe Connected Account ID</label>
-					<input id="connected_account_id" type="text" required bind:value={form.item.item_metadata.payment_configuration.connected_account_id}/>
-					<p>Connected Account ID waar het geld naar moet doorvloeien. Je kan die opzoeken via Stripe.
-						 Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
-				</div>
-
-				<div class="form-field">
-					<label for="application_fee_amount">Fee</label>
-					<input id="application_fee_amount" type="number" required bind:value={form.item.item_metadata.payment_configuration.application_fee_amount}/>
-					<p>Of er een vaste Fee is die moet worden aangerekend.
-						Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
-				</div>
-			</fieldset>
-
-			<fieldset class="flex-1">
-				<h3 class="font-bold">Social Media Configuration</h3>
-				<div class="form-field">
-					<label for="instagram_url">Instagram Link</label>
-					<input id="instagram_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.instagram_url}/>
-					<p>Deze link komt achter een instagram logo te staan op de item page.</p>
-				</div>
-				<div class="form-field">
-					<label for="facebook_url">Facebook Link</label>
-					<input id="facebook_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.facebook_url}/>
-					<p>Deze link komt achter een Facebook logo te staan op de item page.</p>
-				</div>
-				<div class="form-field">
-					<label for="linkedin_url">LinkedIn Link</label>
-					<input id="linkedin_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.linkedin_url}/>
-					<p>Deze link komt achter een LinkedIn logo te staan op de item page.</p>
-				</div>
-			</fieldset>
+				<fieldset class="flex-1">
+					<h3 class="font-bold">Social Media Configuration</h3>
+					<div class="form-field">
+						<label for="instagram_url">Instagram Link</label>
+						<input id="instagram_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.instagram_url}/>
+						<p>Deze link komt achter een instagram logo te staan op de item page.</p>
+					</div>
+					<div class="form-field">
+						<label for="facebook_url">Facebook Link</label>
+						<input id="facebook_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.facebook_url}/>
+						<p>Deze link komt achter een Facebook logo te staan op de item page.</p>
+					</div>
+					<div class="form-field">
+						<label for="linkedin_url">LinkedIn Link</label>
+						<input id="linkedin_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.linkedin_url}/>
+						<p>Deze link komt achter een LinkedIn logo te staan op de item page.</p>
+					</div>
+				</fieldset>
+			</div>
+		{/if}
+		<div class="flex flex-row">
+			<button type="button" class="ml-auto button button-primary button-icon-only relative inline-flex items-center justify-center"
+							aria-controls="mobile-menu" aria-expanded="{showExtraTab}"
+							onclick={ () => showExtraTab = !showExtraTab }
+			>
+				<span class="sr-only">Open navigatie</span>
+				{#if showExtraTab}
+					<svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				{:else}
+					<svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+					</svg>
+				{/if}
+			</button>
 		</div>
 	</div>
 	</form>

@@ -84,8 +84,6 @@
 	<!-- Main Body -->
 	<div class="container flex flex-col lg:flex-row mr-12">
 		<div class="lg:md:w-1/3">
-			<h3 class="font-bold">itemWide Info</h3>
-
 			<label class="inline-flex items-center cursor-pointer my-4">
 				<input type="checkbox" class="sr-only peer"
 							 bind:checked={itemWide.item.availability.available}
@@ -122,39 +120,49 @@
 				<h3 class="font-bold">Producten</h3>
 				{#if tableIndex < 6}
 					{#await CoreItemAPI.attachedProductBlueprintTable(itemWide.item.id) then productTable}
-						{#if (productTable.length >= 10)}
-							...
-						{:else}
-							<table class="ingenium-table">
-								<tbody>
-								{#each productTable as row (row["product_blueprint_id"])}
+						<table class="ingenium-table">
+							<tbody>
+								{#if (productTable.length >= 5)}
 									<tr>
-										<th scope="row">{row["product_blueprint_name"]}</th>
+										<th scope="row">Totaal transactions</th>
 										<td class="text-right">
-											<label class="inline-flex items-center cursor-pointer my-4">
-												<input type="checkbox" class="sr-only peer"
-															 bind:checked={row["available"]}
-															 onclick="{() => toggleBlueprintAvailable(row['product_blueprint_id'], row['available'])}"
-												>
-												<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
-												<span class="ms-3 text-sm font-medium text-gray-600">
-														{#if row["available"]}Beschikbaar{:else}Niet Beschikbaar{/if}
-													</span>
-											</label>
+											{productTable.reduce((sum, val) => {
+												return sum + val["transaction_count"]
+											}, 0)}
 										</td>
-										<td>{row["transaction_count"]} / {row["max_available"]}</td>
 									</tr>
-								{/each}
-								</tbody>
-							</table>
-						{/if}
+								{:else}
+									{#each productTable as row (row["product_blueprint_id"])}
+										<tr>
+											<th scope="row">{row["product_blueprint_name"]}</th>
+											<td class="text-right">
+												<label class="inline-flex items-center cursor-pointer my-4">
+													<input type="checkbox" class="sr-only peer"
+																 bind:checked={row["available"]}
+																 onclick="{() => toggleBlueprintAvailable(row['product_blueprint_id'], row['available'])}"
+													>
+													<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
+													<span class="ms-3 text-sm font-medium text-gray-600">
+															{#if row["available"]}Beschikbaar{:else}Niet Beschikbaar{/if}
+														</span>
+												</label>
+											</td>
+											<td>{row["transaction_count"]} / {row["max_available"]}</td>
+										</tr>
+									{/each}
+								{/if}
+							</tbody>
+						</table>
+
 						<p class="text-right font-bold">Totaal: {productTable.reduce((sum, val) => {
 							return sum + val["transaction_count"]
 						}, 0)}</p>
 					{/await}
 				{:else}
-					Bekijk Item hiervoor!
+					...
 				{/if}
+
+			<!-- Else case for 'productCapable' -->
 			{:else}
 				<h3 class="font-bold">Idk</h3>
 				<p>Idk wat hier te zetten, dit is enkel promoitems op dit moment.

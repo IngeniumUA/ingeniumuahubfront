@@ -63,7 +63,7 @@ export class CoreTransactionAPI {
 		if (res.ok) {
 			return await res.json();
 		} else {
-			throw `Failed to patch transaction: ${await res.text()}`;
+			throw Error(`Failed to patch transaction: ${await res.text()}`);
 		}
 	}
 
