@@ -42,6 +42,19 @@ export class CoreCheckoutAPI {
 		}
 	}
 
+	static async postCheckout(params: RouteParams | null = null, checkoutIn: any, queryParam: URLSearchParams): Promise<CheckoutIWide> {
+		const res = await fetch(`${PUBLIC_API_URL}/checkout?${queryParam.toString()}`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(checkoutIn)
+		});
+		if (res.ok) {
+			return res.json();
+		} else {
+			throw `Failed to create checkout: ${await res.text()}`;
+		}
+	}
+
 	static async patchCheckout(params: RouteParams | null = null, checkoutIdentifier: string, patchObj: any): Promise<CheckoutIWide> {
 		const res = await fetch(`${PUBLIC_API_URL}/checkout/${checkoutIdentifier}`, {
 			method: 'PATCH',
