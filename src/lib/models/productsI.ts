@@ -72,6 +72,24 @@ export enum PaymentProviderEnum {
   Stripe = 4,
 }
 
+export const PaymentProviderUtils = {
+  isExternal(provider: PaymentProviderEnum | null): boolean {
+    if (provider === null) throw Error("No input");
+    switch (provider) {
+      case PaymentProviderEnum.Dev:
+        return false;
+      case PaymentProviderEnum.Kassa:
+        return false;
+      case PaymentProviderEnum.Free:
+        return false;
+      case PaymentProviderEnum.Stripe:
+        return true;
+      default:
+        throw Error(`Payment provider ${provider} not recognised`);
+    }
+  }
+};
+
 export const PaymentProviderList = [
   PaymentProviderEnum.Dev,
   PaymentProviderEnum.Kassa,
