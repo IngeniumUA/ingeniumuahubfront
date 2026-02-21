@@ -246,5 +246,27 @@
         }
       }
     ]
+  },
+  {
+    "groupName": "Ski-team",
+    "groupDescription": "Het Ingenium Ski-team!",
+    "categories": [
+      {
+        "categorieName": "Ski's",
+        "categorieDescription": "De ski's organiseren onze zotte jaarlijkse skireis!",
+        "praesidia": [
+          {
+            "name": "Nico Verstappen",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NicoVerstappen.webp"
+          },
+          {
+            "name": "Niels Selleslagh",
+            "functie": "Ski",
+            "image": "https://storage.googleapis.com/ingeniumuahubbucket/hub/praesidium/NielsSelleslagh.webp"
+          }
+        ]
+      }
+    ]
   }
 ]
