@@ -29,7 +29,7 @@
 			<nav class={`vertical-nav vertical-nav-transparent
 									transform transition-transform duration-300 ${sidebar ? 'translate-x-0' : '-translate-x-[18rem]'}`}>
 				<div>
-					<a class="font-semibold" href="/webmaster">Webmaster Home</a>
+					<a class="font-semibold" href="/staff/webmaster">Webmaster Home</a>
 					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
 					<a href="/staff/flag">Flags</a>
 					<a href="/staff/logs">Logs</a>
