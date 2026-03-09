@@ -127,9 +127,9 @@
 		if (loadingHTTP) return;
 		loadingHTTP = true;
 
-		let item_id = 22;
-		let blueprint_id = 27;
-		let price_policy_id = 39;
+		let item_id = 725;
+		let blueprint_id = 241;
+		let price_policy_id = 342;
 
 		const body = {
 			captcha_token: turnstileToken,
