@@ -1,5 +1,4 @@
-﻿
-<svelte:head>
+﻿<svelte:head>
 	<script
 		src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"
 		async
@@ -16,13 +15,18 @@
 	import type { CartSuccessI } from '$lib/models/cartI';
 	import { goto } from '$app/navigation';
 
+	interface Banner {
+		badge_type: string;
+		affiniteit: string;
+		logo: string;
+	}
 	interface RegisterForm {
 		email: string;
 		name: string;
 		voornaam: string;
 		badgy_type: string;
 		affiniteit: string;
-		banner: object | null;
+		banner: Banner | null;
 	}
 	let registerForm: RegisterForm = $state({
 		email: '',
@@ -76,21 +80,16 @@
 			)
 	);
 
-	function selectCompany(banner) {
+	function selectCompany(banner: Banner) {
 		registerForm.banner = banner;
 		open = false;
 	}
 
 	/**
-	 * Submit logic
+	 * Turnstile
 	 */
-	let loadingHTTP = $state(false)
-	let submitError: Error | null = $state(null)
-
-	let modalOpen = $state(false);
-
 	let turnstileLoaded: boolean = $state(false);
-	let turnstileElement;
+	let turnstileElement: HTMLElement | undefined = $state();
 	let turnstileWidgetId = '';
 
 	if (browser) {
@@ -100,6 +99,15 @@
 	}
 
 	let turnstileToken: string | null = $state(null)
+
+	/**
+	 * Submit logic
+	 */
+	let loadingHTTP = $state(false)
+	let submitError: Error | null = $state(null)
+
+	let modalOpen = $state(false);
+
 	const confirmButtonDisabled = $derived.by(() => {
 		return loadingHTTP || turnstileToken == null || registerForm.email.trim() === '';
 	});
@@ -127,6 +135,8 @@
 		if (loadingHTTP) return;
 		loadingHTTP = true;
 
+		if (registerForm.banner === null) return;
+
 		let item_id = 725;
 		let blueprint_id = 241;
 		let price_policy_id = 342;
@@ -151,9 +161,9 @@
 									email: registerForm.email,
 									naam: registerForm.name,
 									voornaam: registerForm.voornaam,
-									badge_type: registerForm.badgy_type,
-									affiniteit: registerForm.affiniteit,
-									banner: registerForm.banner,
+									badge_type: registerForm.banner["badge_type"],
+									affiniteit: registerForm.banner["affiniteit"],
+									banner: registerForm.banner["logo"],
 								}
 							},
 						},
