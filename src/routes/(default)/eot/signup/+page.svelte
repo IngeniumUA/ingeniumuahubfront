@@ -37,37 +37,46 @@
 		banner: null,
 	})
 
-	const rollen = ['Student', 'Bedrijfsvertegenwoordiger', 'Alumnus', 'Organisatie', 'Andere']
+	const rollen = ['Masterstudent', 'Bachelorstudent', 'Bedrijfsvertegenwoordiger', 'Alumnus', 'Organisatie']
 
 	const bannerBedrijven = [
-		{badge_type: 'bedrijf', affiniteit: 'Port of Antwerp Bruges', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/port_of_antwerp_bruges.webp'},
-		{badge_type: 'bedrijf', affiniteit: 'DEME', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/deme.webp'},
-		{badge_type: 'bedrijf', affiniteit: 'Jan De Nul', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/jandenul.webp'},
+		{form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Port of Antwerp Bruges', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/port_of_antwerp_bruges.webp'},
+		{form_field_name: null, badge_type: 'bedrijf', affiniteit: 'DEME', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/deme.webp'},
+		{form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Jan De Nul', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/jandenul.webp'},
 	]
 
 	const bannerBestuur = [
-		{badge_type: 'organisatie', affiniteit: 'Ingenium', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/ingenium.png'},
-		{badge_type: 'organisatie', affiniteit: 'DavingA', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/davinga.png'},
-		{badge_type: 'organisatie', affiniteit: 'FTI', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/fti.png'},
-		{badge_type: 'organisatie', affiniteit: 'Engineers of Tomorrow', logo: '/fti.png'},
+		{form_field_name: null, badge_type: 'organisatie', affiniteit: 'Ingenium', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/ingenium.png'},
+		{form_field_name: null, badge_type: 'organisatie', affiniteit: 'DavingA', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/davinga.png'},
+		{form_field_name: null, badge_type: 'organisatie', affiniteit: 'FTI', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/fti.png'},
+		{form_field_name: null, badge_type: 'organisatie', affiniteit: 'Engineers of Tomorrow', logo: '/fti.png'},
 	]
 
-	const bannerStudenten = [
-		{badge_type: 'student', affiniteit: 'Elektromechanica', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/em_logo.png'},
-		{badge_type: 'student', affiniteit: 'Chemie', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
-		{badge_type: 'student', affiniteit: 'Biochemie', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
-		{badge_type: 'student', affiniteit: 'Bouwkunde', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bk_logo.png'},
-		{badge_type: 'student', affiniteit: 'Elektronica-ICT', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ei_logo.png'},
-		{badge_type: 'student', affiniteit: 'Wetenschappen', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/wet_logo.png'},
-		{badge_type: 'student', affiniteit: 'Andere', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/geen_richting.png'},
+	const bannerMasterStudenten = [
+		{form_field_name: 'Elektromechanica', affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/em_logo.png'},
+		{form_field_name: 'Chemie', 				  affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
+		{form_field_name: 'Biochemie', 				affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
+		{form_field_name: 'Bouwkunde', 				affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bk_logo.png'},
+		{form_field_name: 'Elektronica-ICT',  affiniteit: 'Masterstudent', badge_type: 'student', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ei_logo.png'},
+		{form_field_name: 'Wetenschappen', 		affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/wet_logo.png'},
+		{form_field_name: 'Andere',					  affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/geen_richting.png'},
+	]
+	const bannerBachelorStudenten = [
+		{form_field_name: 'Elektromechanica', affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/em_logo.png'},
+		{form_field_name: 'Chemie', 				  affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
+		{form_field_name: 'Biochemie', 				affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
+		{form_field_name: 'Bouwkunde', 				affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bk_logo.png'},
+		{form_field_name: 'Elektronica-ICT',  affiniteit: 'Bachelorstudent', badge_type: 'student', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ei_logo.png'},
+		{form_field_name: 'Wetenschappen', 		affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/wet_logo.png'},
+		{form_field_name: 'Andere',					  affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/geen_richting.png'},
 	]
 
 	const bannerAlumnus = [
-		{badge_type: 'alumnus', affiniteit: 'Elektromechanica', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/em_alum.png'},
-		{badge_type: 'alumnus', affiniteit: 'Chemie', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/ch_alum.png'},
-		{badge_type: 'alumnus', affiniteit: 'Bouwkunde', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/bk_alum.png'},
-		{badge_type: 'alumnus', affiniteit: 'Elektronica-ICT', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/ei_alum.png'},
-		{badge_type: 'alumnus', affiniteit: 'Andere', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/geen_alum.png'},
+		{form_field_name: 'Elektromechanica', affiniteit: 'Alumni', badge_type: 'alumnus', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/em_alum.png'},
+		{form_field_name: 'Chemie', affiniteit: 'Alumni', badge_type: 'alumnus', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/ch_alum.png'},
+		{form_field_name: 'Bouwkunde', affiniteit: 'Alumni', badge_type: 'alumnus', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/bk_alum.png'},
+		{form_field_name: 'Elektronica-ICT', affiniteit: 'Alumni', badge_type: 'alumnus', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/ei_alum.png'},
+		{form_field_name: 'Andere', affiniteit: 'Alumni', badge_type: 'alumnus', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/geen_alum.png'},
 	]
 
 	/**
@@ -249,7 +258,7 @@
 
 		<div class="flex flex-col justify-center items-center">
 			<article class="bg-white">
-				<p>Beschrijving voor hoe je je registreert. Dit moet eindigen met <span class="font-bold">verwacht een email met een QR code binnen vijf minuten.</span></p>
+				<p>How to register: <span class="font-bold">you will receive an email with a QR-code within the minute. This QR-code can then be used to print your personalized badge..</span></p>
 			</article>
 		</div>
 
@@ -295,15 +304,15 @@
 			</fieldset>
 
 			{#if (registerForm.badgy_type === rollen[0])}
-				<!-- Student #179b83 -->
+				<!-- Masterstudent #179b83 -->
 				<article style="background-color: #0a7791">
 					<fieldset>
 						<h4>Selecteer je afstudeerrichting</h4>
 						<div class="form-field">
 							<select required bind:value={registerForm.banner}>
-								{#each [null, ...bannerStudenten] as bannerObj}
+								{#each [null, ...bannerMasterStudenten] as bannerObj}
 									<option value={bannerObj}>
-										{bannerObj === null ? "---": bannerObj.affiniteit}
+										{bannerObj === null ? "---": bannerObj.form_field_name}
 									</option>
 								{/each}
 							</select>
@@ -317,6 +326,28 @@
 					{/if}
 				</article>
 			{:else if (registerForm.badgy_type === rollen[1])}
+				<!-- Bachelorstudent #179b83 -->
+				<article style="background-color: #0a7791">
+					<fieldset>
+						<h4>Selecteer je afstudeerrichting</h4>
+						<div class="form-field">
+							<select required bind:value={registerForm.banner}>
+								{#each [null, ...bannerBachelorStudenten] as bannerObj}
+									<option value={bannerObj}>
+										{bannerObj === null ? "---": bannerObj.form_field_name}
+									</option>
+								{/each}
+							</select>
+						</div>
+					</fieldset>
+
+					{#if registerForm.banner !== null}
+						<div>
+							<img src={registerForm.banner['logo']} alt={registerForm.banner['logo']}>
+						</div>
+					{/if}
+				</article>
+			{:else if (registerForm.badgy_type === rollen[2])}
 				<!-- Bedrijf #cc7056-->
 				<article style="background-color: #ffffff">
 					<h2>Selecteer je bedrijf</h2>
@@ -356,7 +387,7 @@
 					{/if}
 
 				</article>
-			{:else if (registerForm.badgy_type === rollen[2])}
+			{:else if (registerForm.badgy_type === rollen[3])}
 				<!-- Alumnus #3083dc -->
 				<article style="background-color: #0a7791">
 					<fieldset>
@@ -365,7 +396,7 @@
 							<select required bind:value={registerForm.banner}>
 								{#each [null, ...bannerAlumnus] as bannerObj}
 									<option value={bannerObj}>
-										{bannerObj === null ? "---": bannerObj.affiniteit}
+										{bannerObj === null ? "---": bannerObj.form_field_name}
 									</option>
 								{/each}
 							</select>
@@ -378,7 +409,7 @@
 						</div>
 					{/if}
 				</article>
-			{:else if (registerForm.badgy_type === rollen[3])}
+			{:else if (registerForm.badgy_type === rollen[4])}
 				<!-- Organisatie bg-ingenium-grey-700 -->
 				<article class="bg-ingenium-grey-700">
 					<fieldset>
