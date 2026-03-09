@@ -403,7 +403,11 @@
 					{transaction.purchased_product['name']}
 				</td>
 				<td>
-					{transaction.purchased_product.price_policy?.name ?? `€${transaction.purchased_product.price_policy?.price}`}
+					{#if transaction.purchased_product.price_policy?.name === null || transaction.purchased_product.price_policy?.name === undefined}
+						{`€${transaction.purchased_product.price_policy?.price}`}
+					{:else}
+						{`€${transaction.purchased_product.price_policy?.price} ${transaction.purchased_product.price_policy?.name}`}
+					{/if}
 				</td>
 				<td>
 					<div class="transaction-validity-selector">

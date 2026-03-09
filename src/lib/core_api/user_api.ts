@@ -98,4 +98,31 @@ export class CoreUserAPI {
 			throw `Failed to remove user from group: ${await res.text()}`;
 		}
 	}
+
+	static async queryManagers(
+		params: RouteParams | null = null
+	): Promise<UserWideI[]> {
+		const res = await fetch(`${PUBLIC_API_URL}/manager`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' })
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch managers: ${await res.text()}`;
+		}
+	}
+
+	static async addUserToManager(params: RouteParams | null = null, userIdentifier: string): Promise<boolean> {
+		const res = await fetch(`${PUBLIC_API_URL}/manager/add/${userIdentifier}`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify({})
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to add user to manager: ${await res.text()}`;
+		}
+	}
 }
