@@ -46,24 +46,28 @@
 	]
 
 	const bannerBestuur = [
-		{badge_type: 'organisatie', affiniteit: 'Ingenium', logo: 'ingenium.png'},
-		{badge_type: 'organisatie', affiniteit: 'DavingA', logo: 'davinga.png'},
-		{badge_type: 'organisatie', affiniteit: 'FTI', logo: 'fti.png'},
+		{badge_type: 'organisatie', affiniteit: 'Ingenium', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/ingenium.png'},
+		{badge_type: 'organisatie', affiniteit: 'DavingA', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/davinga.png'},
+		{badge_type: 'organisatie', affiniteit: 'FTI', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/fti.png'},
+		{badge_type: 'organisatie', affiniteit: 'Engineers of Tomorrow', logo: '/fti.png'},
 	]
 
 	const bannerStudenten = [
-		{badge_type: 'student', affiniteit: 'Elektromechanica', logo: 'em_logo.png'},
-		{badge_type: 'student', affiniteit: 'Chemie', logo: 'ch_logo.png'},
-		{badge_type: 'student', affiniteit: 'Bouwkunde', logo: 'bk_logo.png'},
-		{badge_type: 'student', affiniteit: 'Elektronica-ICT', logo: 'ei_logo.png'},
+		{badge_type: 'student', affiniteit: 'Elektromechanica', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/em_logo.png'},
+		{badge_type: 'student', affiniteit: 'Chemie', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
+		{badge_type: 'student', affiniteit: 'Biochemie', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
+		{badge_type: 'student', affiniteit: 'Bouwkunde', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bk_logo.png'},
+		{badge_type: 'student', affiniteit: 'Elektronica-ICT', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ei_logo.png'},
+		{badge_type: 'student', affiniteit: 'Wetenschappen', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/wet_logo.png'},
+		{badge_type: 'student', affiniteit: 'Andere', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/geen_richting.png'},
 	]
 
 	const bannerAlumnus = [
-		{badge_type: 'alumnus', affiniteit: 'Elektromechanica', logo: 'em_logo.png'},
-		{badge_type: 'alumnus', affiniteit: 'Chemie', logo: 'ch_logo.png'},
-		{badge_type: 'alumnus', affiniteit: 'Bouwkunde', logo: 'bk_logo.png'},
-		{badge_type: 'alumnus', affiniteit: 'Elektronica-ICT', logo: 'ei_logo.png'},
-		{badge_type: 'alumnus', affiniteit: 'andere', logo: 'geen_logo.png'},
+		{badge_type: 'alumnus', affiniteit: 'Elektromechanica', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/em_alum.png'},
+		{badge_type: 'alumnus', affiniteit: 'Chemie', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/ch_alum.png'},
+		{badge_type: 'alumnus', affiniteit: 'Bouwkunde', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/bk_alum.png'},
+		{badge_type: 'alumnus', affiniteit: 'Elektronica-ICT', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/ei_alum.png'},
+		{badge_type: 'alumnus', affiniteit: 'Andere', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/alumni_logo/geen_alum.png'},
 	]
 
 	/**
@@ -163,7 +167,7 @@
 									voornaam: registerForm.voornaam,
 									badge_type: registerForm.banner["badge_type"],
 									affiniteit: registerForm.banner["affiniteit"],
-									banner: registerForm.banner["logo"],
+									banner: registerForm.banner["logo"].split("/").slice(-1),
 								}
 							},
 						},
@@ -291,8 +295,8 @@
 			</fieldset>
 
 			{#if (registerForm.badgy_type === rollen[0])}
-				<!-- Student -->
-				<article style="background-color: #179b83">
+				<!-- Student #179b83 -->
+				<article style="background-color: #0a7791">
 					<fieldset>
 						<h4>Selecteer je afstudeerrichting</h4>
 						<div class="form-field">
@@ -313,8 +317,8 @@
 					{/if}
 				</article>
 			{:else if (registerForm.badgy_type === rollen[1])}
-				<!-- Bedrijf -->
-				<article style="background-color: #cc7056">
+				<!-- Bedrijf #cc7056-->
+				<article style="background-color: #ffffff">
 					<h2>Selecteer je bedrijf</h2>
 
 					<input
@@ -353,8 +357,8 @@
 
 				</article>
 			{:else if (registerForm.badgy_type === rollen[2])}
-				<!-- Alumnus -->
-				<article style="background-color: #3083dc">
+				<!-- Alumnus #3083dc -->
+				<article style="background-color: #0a7791">
 					<fieldset>
 						<h4>Selecteer je afstudeerrichting</h4>
 						<div class="form-field">
@@ -375,7 +379,7 @@
 					{/if}
 				</article>
 			{:else if (registerForm.badgy_type === rollen[3])}
-				<!-- Organisatie -->
+				<!-- Organisatie bg-ingenium-grey-700 -->
 				<article class="bg-ingenium-grey-700">
 					<fieldset>
 						<h4>Van welke organisatie?</h4>
