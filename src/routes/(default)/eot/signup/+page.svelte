@@ -350,7 +350,7 @@
 						<input bind:value={registerForm.name}>
 					</div>
 				</div>
-				<p class="text-center">Achternaam & Voornaam</p>
+				<p class="text-center">Voornaam & Achternaam</p>
 			</fieldset>
 
 			<fieldset>
