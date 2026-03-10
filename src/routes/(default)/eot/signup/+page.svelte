@@ -240,7 +240,7 @@
 									voornaam: registerForm.voornaam,
 									badge_type: registerForm.banner["badge_type"],
 									affiniteit: registerForm.banner["affiniteit"],
-									banner: registerForm.banner["logo"].split("/").slice(-1),
+									banner: registerForm.banner["logo"].split("/").slice(-1)[0],
 								}
 							},
 						},
