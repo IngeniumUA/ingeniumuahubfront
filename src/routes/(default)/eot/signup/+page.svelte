@@ -40,10 +40,74 @@
 	const rollen = ['Masterstudent', 'Bachelorstudent', 'Bedrijfsvertegenwoordiger', 'Alumnus', 'Organisatie']
 
 	const bannerBedrijven = [
-		{form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Port of Antwerp Bruges', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/port_of_antwerp_bruges.webp'},
-		{form_field_name: null, badge_type: 'bedrijf', affiniteit: 'DEME', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/deme.webp'},
-		{form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Jan De Nul', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/partner_logo/25_26/jandenul.webp'},
-	]
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'ACE', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/ACE.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'AG Solutions', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/AGSolutions.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'AMS', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/AMS.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'AZO', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/AZO.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Absolem', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Absolem.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Actemium', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Actemium.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Aertssen', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Aertssen.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Agidens', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Agidens.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Akkodis', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Akkodis.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Antea group', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Anteagroup.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Aquafin', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Aquafin.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Arcadis', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Arcadis.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Artes', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Artes.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Atlas Copco Group', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/AtlasCopcoGroup.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'BDO', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/BDO.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Besix', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Besix.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Bilfinger', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Bilfinger.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Cegelec', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Cegelec.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Colsen', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Colsen.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Contec', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Contec.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'DAF', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/DAF.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'DCA', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/DCA.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'DEME', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/DEME.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Dataminded', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Dataminded.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'De roeve industries', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Deroeveindustries.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Denys', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Denys.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Dosign', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Dosign.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Elia', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Elia.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Equans', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Equans.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Evonik', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Evonik.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'FAC', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/FAC.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Ferranti', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Ferranti.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'HYE', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/HYE.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'IBS', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/IBS.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'IE-net', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/IE-net.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Ikos', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Ikos.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Infrabel', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Infrabel.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Ingenium Group', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/IngeniumGroup.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Jan De Nul', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/JanDeNul.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Johnson and Johnson', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/JohnsonandJohnson.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Pringels - Mars inc.', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/MarsSnacking.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Mervers', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Mervers.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Mindcapture', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Mindcapture.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Monizze', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Monizze.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Mourik', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Mourik.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Multi engineering', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Multiengineering.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Normec', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Normec.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Pfizer', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Pfizer.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Port of Antwerp-Bruges', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/PortofAntwerp-Bruges.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Projective group', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Projectivegroup.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Redwire', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Redwire.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Renotec', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Renotec.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'SBE', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/SBE.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Sarens', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Sarens.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Sea-invest', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Sea-invest.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Smulders', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Smulders.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Stadsbader', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Stadsbader.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Star', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Star.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Sweco', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Sweco.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Syngenia', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Syngenia.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Umicore', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Umicore.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Verhaert', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Verhaert.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Viro', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Viro.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Witteveen Bos', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/WitteveenBos.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Yitch', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Yitch.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Universiteit Antwerpen', logo: 'UAntwerpen.png'},
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Engineers of Tomorrow', logo: 'EoT.jpg'},
+	];
 
 	const bannerBestuur = [
 		{form_field_name: null, badge_type: 'organisatie', affiniteit: 'Ingenium', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/organisatie_logo/ingenium.png'},
@@ -360,16 +424,21 @@
 					/>
 
 					{#if open}
-						<ul class="absolute z-10 bg-white max-h-60 overflow-y-auto rounded shadow">
+						<ul
+							class="absolute left-0 top-full mt-1 w-full bg-white max-h-60 overflow-y-auto rounded shadow border z-10"
+						>
 							{#each filtered as company}
 								<li
 									class="px-3 py-2 hover:bg-gray-200 cursor-pointer"
+									onclick={() => selectCompany(company)}
 								>
-									<button onclick={() => selectCompany(company)}>
-										{company.affiniteit}
-									</button>
+									{company.affiniteit}
 								</li>
 							{/each}
+
+							{#if filtered.length === 0}
+								<li class="px-3 py-2 text-gray-400">Geen bedrijven gevonden</li>
+							{/if}
 						</ul>
 					{/if}
 
@@ -385,7 +454,6 @@
 							<h4 class="font-bold text-center">{registerForm.banner['affiniteit']}</h4>
 						</div>
 					{/if}
-
 				</article>
 			{:else if (registerForm.badgy_type === rollen[3])}
 				<!-- Alumnus #3083dc -->

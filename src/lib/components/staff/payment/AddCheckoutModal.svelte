@@ -26,6 +26,7 @@
 	interface Form {
 		forceCreate: boolean;
 		createUserIfMissing: boolean;
+		sendEmail: boolean;
 
 		user: string | null,
 		itemId: number | null,
@@ -37,6 +38,7 @@
 	let form: Form = $state({
 		forceCreate: false,
 		createUserIfMissing: true,
+		sendEmail: true,
 		user: startingUserEmail,
 		itemId: startingItemId,
 		paymentProvider: null,
@@ -71,6 +73,8 @@
 			price_policy_id: transactionForm.productOut.price_policy?.id,
 			validity: transactionForm.validity,
 			user: user,
+			// Using product_out for preview displaying on this page
+			product_out: transactionForm.productOut,
 		}
 		form.transactions.push(transactionIn);
 		addingTransaction = false;
@@ -103,19 +107,33 @@
 
 		const queryParam = new URLSearchParams({
 			force_create: `${form.forceCreate}`,
-			create_user_if_none: `${form.createUserIfMissing}`
+			create_user_if_none: `${form.createUserIfMissing}`,
+			send_email: `${form.sendEmail}`
 		});
 
 		loadingHTTP = true;
 		try {
 			await CoreCheckoutAPI.postCheckout(null, checkoutIn, queryParam).catch(handleRequest);
 			isOpen = false;
+
 			successToast("Checkout created!")
 		} catch (error) {
 			failedToast(`Failed ${error}`);
 			createError = (error as Error).message;
 		} finally {
 			loadingHTTP = false; // Reset loading state
+		}
+	}
+
+	/**
+	 * Style function
+	 */
+	function validityToColor(validity: ValidityEnum) {
+		switch (validity) {
+			case ValidityEnum.valid: return 'green';
+			case ValidityEnum.invalid: return 'orange';
+			case ValidityEnum.forbidden: return 'red';
+			case ValidityEnum.consumed: return 'gray';
 		}
 	}
 </script>
@@ -127,6 +145,19 @@
 	h3 {
 		@apply font-bold;
 	}
+
+	.transaction-preview {
+		@apply flex flex-row;
+
+		li {
+			@apply px-4 py-2;
+		}
+	}
+
+  .red {@apply border-red-700 text-red-700 bg-red-100;}
+  .orange {@apply  border-orange-700 text-orange-700 bg-orange-100;}
+  .green {@apply  border-green-700 text-green-700 bg-green-100;}
+  .gray {@apply  border-gray-700 text-gray-700 bg-gray-100;}
 </style>
 
 <Modal title="Checkout Toevoegen" maxWidth="max-w-5xl" bind:isOpen={ isOpen } closable={ true }>
@@ -166,9 +197,20 @@
 			<form class="ingenium-form" onsubmit={(e) => { e.preventDefault(); addTransaction(); }}>
 				<h3>Transactions</h3>
 				{#each form.transactions as transaction}
-					<div>
-						{JSON.stringify(transaction)}
-					</div>
+					<ul class="transaction-preview">
+						<li>{transaction.product_out["name"]}</li>
+						<li>
+							€{transaction.product_out["price_policy"]["price"]}
+							{#if (transaction.product_out["price_policy"]["name"] !== null)}
+								{transaction.product_out["price_policy"]["name"]}
+
+							{/if}
+						</li>
+						<li>
+							<span class="rounded-lg py-1 px-2 {validityToColor(transaction.validity)}">{makePretty(ValidityEnum[transaction.validity])}</span>
+						</li>
+						<!--{JSON.stringify(transaction)}-->
+					</ul>
 				{/each}
 
 				{#if addingTransaction}
@@ -250,7 +292,7 @@
 			</form>
 		</article>
 
-		<div class="p-2 flex border-t dark:border-gray-600 border-gray-200">
+		<div class="p-2 flex gap-4 border-t dark:border-gray-600 border-gray-200">
 			<label class="inline-flex items-center cursor-pointer my-4">
 				<input type="checkbox"
 							 class="hidden peer"
@@ -268,6 +310,25 @@
 									peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 									"></div>
 				<span class="ms-3 text-sm font-medium text-gray-600">Create user if missing {#if (form.createUserIfMissing)}On{:else}Off{/if}</span>
+			</label>
+
+			<label class="inline-flex items-center cursor-pointer my-4">
+				<input type="checkbox"
+							 class="hidden peer"
+							 bind:checked={form.sendEmail}>
+				<div class="
+									relative w-11 h-6
+									bg-gray-200 dark:bg-gray-700
+									rounded-full
+									peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
+									after:content-['']
+									after:absolute after:top-[2px] after:start-[2px]
+									after:w-5 after:h-5
+									after:bg-white after:rounded-full
+									after:transition-transform
+									peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
+									"></div>
+				<span class="ms-3 text-sm font-medium text-gray-600">Send Email {#if (form.sendEmail)}On{:else}Off{/if}</span>
 			</label>
 
 			<label class="inline-flex items-center cursor-pointer my-4">
