@@ -105,7 +105,8 @@
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Viro', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Viro.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Witteveen Bos', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/WitteveenBos.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Yitch', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Yitch.png' },
-		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Universiteit Antwerpen', logo: 'UAntwerpen.png'}
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Universiteit Antwerpen', logo: 'UAntwerpen.png'},
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Engineers of Tomorrow', logo: 'EoT.jpg'},
 	];
 
 	const bannerBestuur = [
