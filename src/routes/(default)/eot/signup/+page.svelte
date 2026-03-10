@@ -80,7 +80,7 @@
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Ingenium Group', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/IngeniumGroup.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Jan De Nul', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/JanDeNul.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Johnson and Johnson', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/JohnsonandJohnson.png' },
-		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Mars Snacking', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/MarsSnacking.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Pringels - Mars inc.', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/MarsSnacking.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Mervers', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Mervers.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Mindcapture', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Mindcapture.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Monizze', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Monizze.png' },
@@ -105,6 +105,7 @@
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Viro', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Viro.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Witteveen Bos', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/WitteveenBos.png' },
 		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Yitch', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/bedrijven_logo/Yitch.png' },
+		{ form_field_name: null, badge_type: 'bedrijf', affiniteit: 'Universiteit Antwerpen', logo: 'UAntwerpen.png'}
 	];
 
 	const bannerBestuur = [
