@@ -9,6 +9,7 @@
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { hasRole } from '$lib/states/auth.svelte';
 	import { PaymentProviderEnum, PaymentProviderList } from '$lib/models/productsI';
+	import AddCheckoutBulk from '$lib/components/staff/payment/AddCheckoutBulk.svelte';
 
 	let {
 		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })),
@@ -101,6 +102,7 @@
 	 * Boolean state for add new modal
 	 */
 	let showAddingNew = $state(false);
+	let bulkUploadModal = $state(false);
 
 	/**
 	 * Bulk Operations selection
@@ -162,7 +164,10 @@
 	<div class="flex justify-between items-center">
 		<h2 id="checkout-table">Checkouts</h2>
 
-		<button onclick={() => showAddingNew = !showAddingNew} class="ml-auto button button-primary w-24 button-inline">
+		<button onclick={() => bulkUploadModal = !bulkUploadModal} class="ml-auto button button-primary w-24 button-inline">
+			<span class="text-white">Bulk Add</span>
+		</button>
+		<button onclick={() => showAddingNew = !showAddingNew} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Add</span>
 		</button>
 		<button onclick={download} disabled={loadingHTTP} class="ml-2 button button-primary w-24 button-inline">
@@ -302,6 +307,8 @@
 </article>
 
 <AddCheckoutModal bind:isOpen={ showAddingNew } bind:startingUserEmail={queryForm.user_email} startingItemId={parseInt(baseQueryParam.get('item_id') ?? "") ?? null}></AddCheckoutModal>
+
+<AddCheckoutBulk bind:isOpen={ bulkUploadModal } startingItemId={parseInt(baseQueryParam.get('item_id') ?? "") ?? null}></AddCheckoutBulk>
 
 <style lang="scss">
 		h3 {
