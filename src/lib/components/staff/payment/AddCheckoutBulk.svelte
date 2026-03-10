@@ -12,7 +12,7 @@
 	// Define a type for the parsed CSV rows
 	interface CheckoutIn {
 		product_blueprint_id: string;
-		price_policy_in: string;
+		price_policy_id: string;
 		product_meta: string;
 	}
 
@@ -65,7 +65,7 @@
 					item_id: startingItemId,
 					validity: 1,
 					product_blueprint_id: columns[blueprintIdx],
-					price_policy_in: columns[policyIdx],
+					price_policy_id: columns[policyIdx],
 					other_meta_data: {
 						eot_signup: {
 							affiniteit: columns[affiniteitIdx],
@@ -77,7 +77,7 @@
 						}
 					},
 					status: PaymentStatusEnum.successful,
-					user: columns[userIdx]
+					user_email: columns[userIdx]
 				});
 			}
 			parsedCheckouts = parsed;
