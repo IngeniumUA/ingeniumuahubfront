@@ -444,7 +444,7 @@
 
 					{#if registerForm.banner !== null}
 						<div class="p-4 flex flex-col justify-center items-center">
-							<div class="w-48 h-48">
+							<div class="w-48">
 								<img
 									src={registerForm.banner['logo']}
 									alt={registerForm.banner['logo']}
