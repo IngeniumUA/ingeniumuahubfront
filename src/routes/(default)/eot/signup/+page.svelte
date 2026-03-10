@@ -119,18 +119,20 @@
 	const bannerMasterStudenten = [
 		{form_field_name: 'Elektromechanica', affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/em_logo.png'},
 		{form_field_name: 'Chemie', 				  affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
-		{form_field_name: 'Biochemie', 				affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
+		{form_field_name: 'Biochemie', 				affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
 		{form_field_name: 'Bouwkunde', 				affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bk_logo.png'},
 		{form_field_name: 'Elektronica-ICT',  affiniteit: 'Masterstudent', badge_type: 'student', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ei_logo.png'},
+		{form_field_name: 'Bio-ingenieur', 		affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
 		{form_field_name: 'Wetenschappen', 		affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/wet_logo.png'},
 		{form_field_name: 'Andere',					  affiniteit: 'Masterstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/geen_richting.png'},
 	]
 	const bannerBachelorStudenten = [
 		{form_field_name: 'Elektromechanica', affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/em_logo.png'},
 		{form_field_name: 'Chemie', 				  affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
-		{form_field_name: 'Biochemie', 				affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
+		{form_field_name: 'Biochemie', 				affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ch_logo.png'},
 		{form_field_name: 'Bouwkunde', 				affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bk_logo.png'},
 		{form_field_name: 'Elektronica-ICT',  affiniteit: 'Bachelorstudent', badge_type: 'student', logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/ei_logo.png'},
+		{form_field_name: 'Bio-ingenieur', 		affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/bch_logo.png'},
 		{form_field_name: 'Wetenschappen', 		affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/wet_logo.png'},
 		{form_field_name: 'Andere',					  affiniteit: 'Bachelorstudent', badge_type: 'student',  logo: 'https://storage.googleapis.com/ingeniumuahubbucket/hub/eot/2026/studenten_logo/geen_richting.png'},
 	]
