@@ -282,6 +282,13 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 *
+	 */
+	const studentEmailError: boolean = $derived(
+		registerForm.email.includes('student')
+	)
 </script>
 
 <style lang="scss">
@@ -341,6 +348,11 @@
 					<input bind:value={registerForm.email}>
 				</div>
 				<p class="text-center">Hier versturen we je registratie</p>
+				{#if (studentEmailError)}
+					<div class="error-message p-4">
+						Geen studenten email!
+					</div>
+				{/if}
 
 				<h4>Naam & Voornaam</h4>
 				<div class="flex flex-row gap-4">
