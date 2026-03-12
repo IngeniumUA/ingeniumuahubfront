@@ -126,4 +126,24 @@ export class CoreProductBlueprintAPI {
 			throw `Failed to fetch price policies table: ${await res.text()}`;
 		}
 	}
+
+	/**
+	 * Meant for staff use
+	 * For example when switching the product blueprint of a transaction for a user
+	 * i.e. Dropdown shouldn't have all blueprints in the system, only those linked to the give source item
+	 *     
+	 * @param params
+	 * @param query_param
+	 */
+	static async queryProducts(params: RouteParams | null = null,query_param: URLSearchParams) {
+		const res = await fetch(`${PUBLIC_API_URL}/blueprint/products?${query_param.toString()}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to fetch products: ${await res.text()}`;
+		}
+	}
 }

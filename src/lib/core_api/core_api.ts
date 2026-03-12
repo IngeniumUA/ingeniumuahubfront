@@ -94,6 +94,13 @@ export class CoreItemAPI {
 		}
 	}
 
+	static async queryProductsForcedForItem(item_identifier: string | number): Promise<ProductOutI[]> {
+		const query = new URLSearchParams({
+			source_item_id: item_identifier.toString(),
+		});
+		return await CoreProductBlueprintAPI.queryProducts(null, query);
+	}
+
 	static async attachedProductBlueprintTable(item_identifier: string | number): Promise<[]> {
 		const query = new URLSearchParams({
 			source_item_id: item_identifier.toString(),

@@ -215,7 +215,7 @@
 
 				{#if addingTransaction}
 					{#if form.transactions !== null}
-						{#await CoreItemAPI.queryProductsForItem(form.itemId ?? 0) then productOutList}
+						{#await CoreItemAPI.queryProductsForcedForItem(form.itemId ?? 0) then productOutList}
 							<div class="flex flex-row gap-2">
 								<fieldset>
 									<div class="form-field">
