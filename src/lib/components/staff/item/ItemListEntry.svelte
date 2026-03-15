@@ -27,6 +27,22 @@
 	let displayCapable = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum))
 
 	/**
+	 * Will filter blueprint table entries *ONLY IF THEY EXCEED BASE LENGTH*
+	 */
+	interface ProductTableEntry {
+		product_blueprint_id: number;
+		product_blueprint_name: string;
+		available: boolean;
+		transaction_count: number;
+		max_available: number
+	}
+	const productTableMaxSize = 8;
+	function resizeLength(productTable: ProductTableEntry[]): ProductTableEntry[] {
+		if (productTable.length < productTableMaxSize) return productTable;
+		return productTable.filter((row) => {return row['available']})
+	}
+
+	/**
 	 * Operations
 	 */
 	async function patchAvailable() {
@@ -122,7 +138,7 @@
 					{#await CoreItemAPI.attachedProductBlueprintTable(itemWide.item.id) then productTable}
 						<table class="ingenium-table">
 							<tbody>
-								{#if (productTable.length >= 5)}
+								{#if (resizeLength(productTable).length >= productTableMaxSize)}
 									<tr>
 										<th scope="row">Totaal transactions</th>
 										<td class="text-right">
@@ -132,7 +148,7 @@
 										</td>
 									</tr>
 								{:else}
-									{#each productTable as row (row["product_blueprint_id"])}
+									{#each resizeLength(productTable) as row (row["product_blueprint_id"])}
 										<tr>
 											<th scope="row">{row["product_blueprint_name"]}</th>
 											<td class="text-right">
