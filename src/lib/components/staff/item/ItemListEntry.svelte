@@ -36,7 +36,10 @@
 		transaction_count: number;
 		max_available: number
 	}
+
+	const productTableForItemLimit = 10; // How many items down the list will have their products prefetched
 	const productTableMaxSize = 8;
+
 	function resizeLength(productTable: ProductTableEntry[]): ProductTableEntry[] {
 		if (productTable.length < productTableMaxSize) return productTable;
 		return productTable.filter((row) => {return row['available']})
@@ -134,7 +137,7 @@
 		<div class="overflow-x-auto self-stretch flex-1 mt-4 lg:mt-0">
 			{#if productCapable}
 				<h3 class="font-bold">Producten</h3>
-				{#if tableIndex < 6}
+				{#if tableIndex < productTableForItemLimit}
 					{#await CoreItemAPI.attachedProductBlueprintTable(itemWide.item.id) then productTable}
 						<table class="ingenium-table">
 							<tbody>
@@ -175,7 +178,8 @@
 						}, 0)}</p>
 					{/await}
 				{:else}
-					...
+					<p>Only showing products for first {productTableForItemLimit} items in the list.
+					Smarter pagination could be a todo :)</p>
 				{/if}
 
 			<!-- Else case for 'productCapable' -->
