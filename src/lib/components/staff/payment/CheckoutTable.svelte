@@ -183,18 +183,18 @@
 			Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
 	</div>
 
-	<section class="filter-selector">
-		<h3>Filter</h3>
-		<p>Hier vanalle filters om toe te passen op de table.
-		Mis zoals price policy ook zo knop om een dropdown te openen
-		(met dan al zo, de waarden die via props zijn ingevoerd op disabled? Da like ik wel</p>
-	</section>
+<!--	<section class="filter-selector">-->
+<!--		<h3>Filter</h3>-->
+<!--		<p>Hier vanalle filters om toe te passen op de table.-->
+<!--		Mis zoals price policy ook zo knop om een dropdown te openen-->
+<!--		(met dan al zo, de waarden die via props zijn ingevoerd op disabled? Da like ik wel</p>-->
+<!--	</section>-->
 
-	<section class="bulk-operation">
-		<h3>Apply</h3>
-		<p>Om bulk operaties uit te voeren zoals refunds. Hier ook de export knop zetten?
-		Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>
-	</section>
+<!--	<section class="bulk-operation">-->
+<!--		<h3>Apply</h3>-->
+<!--		<p>Om bulk operaties uit te voeren zoals refunds. Hier ook de export knop zetten?-->
+<!--		Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>-->
+<!--	</section>-->
 
 	{#if (queryError !== null)}
 		<div class="error-message p-4">

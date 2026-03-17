@@ -46,7 +46,7 @@
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
-		return trackCheckout !== null || trackCheckout !== undefined;
+		return trackCheckout !== null;
 	}));
 
 	/**
@@ -570,7 +570,7 @@
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<h1 id="Dashboard">Dashboard</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
+			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken. Aantal transacties per product, per price policy, etc.</p>
 		</div>
 
 		<article class={`my-4 py-2 ${profitStruct !== null ? 'rounded-lg shadow-md hover:shadow-lg transition-shadow': ''}`}>
@@ -656,9 +656,7 @@
 					</tbody>
 				</table>
 
-				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.
-					Voor zo'n dingen best API calls doen naar de dpu? -> Of gwn op core houden .. zonder polars gaat da best nog wel
-				</p>
+				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.</p>
 			</div>
 		</section>
 

@@ -254,18 +254,18 @@
 		<p class="alert-text">Een transactie is de 'aankoop' van een product door een gebruiker. Het overdragen van geld zit in een checkout (dus er kunnen meerdere transactions in één checkout zitten). Een Transactie heeft ook een validity, die zegt of het product 'geldig' is aangekocht. Bv. Lid prijs wanneer je geen lid bent -> invalid.</p>
 	</div>
 
-	<section class="filter-selector">
-		<h3>Filter</h3>
-		<p>Hier vanalle filters om toe te passen op de table.
-			Mis zoals price policy ook zo knop om een dropdown te openen
-			(met dan al zo, de waarden die via props zijn ingevoerd op disabled? Da like ik wel</p>
-	</section>
+<!--	<section class="filter-selector">-->
+<!--		<h3>Filter</h3>-->
+<!--		<p>Hier vanalle filters om toe te passen op de table.-->
+<!--			Mis zoals price policy ook zo knop om een dropdown te openen-->
+<!--			(met dan al zo, de waarden die via props zijn ingevoerd op disabled? Da like ik wel</p>-->
+<!--	</section>-->
 
-	<section class="bulk-operation">
-		<h3>Apply</h3>
-		<p>Om bulk operaties uit te voeren zoals refunds. Hier ook de export knop zetten?
-			Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>
-	</section>
+<!--	<section class="bulk-operation">-->
+<!--		<h3>Apply</h3>-->
+<!--		<p>Om bulk operaties uit te voeren zoals refunds.-->
+<!--			Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>-->
+<!--	</section>-->
 
 	{#if (queryError !== null)}
 		<div class="error-message p-4">
