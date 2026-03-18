@@ -1,5 +1,4 @@
 ﻿<script lang="ts">
-	import type { ItemWideI } from '$lib/models/item/itemwideI';
 	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
 	import { toRecsysPreview } from '$lib/models/RecSysI';
@@ -21,32 +20,36 @@
 	import { ValidityEnum } from '$lib/models/enums';
 	import { PaymentProviderEnum } from '$lib/models/productsI';
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
+	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
 	
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
-	let itemWide: ItemWideI = $state(data.itemWide);
 	let trackerCount: number = $state(data.trackerCount);
 	let checkoutTrackerStatusGrouped = $state([])
 
 	let showExtraTab: boolean = $state(false);
 
-	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
-	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum));
-	const hasLocation: boolean = $derived(["eventitem"].includes(itemWide.derived_type.derived_type_enum));
+	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(data.itemWide.derived_type.derived_type_enum));
+	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(data.itemWide.derived_type.derived_type_enum));
+	const hasLocation: boolean = $derived(["eventitem"].includes(data.itemWide.derived_type.derived_type_enum));
 
 	let productBlueprints = $state(data.productBlueprints);
 	let pricePolicyTable = $state(data.pricePoliciesTable);
 	let transactionValidityGrouped = $state(data.transactionValidityGrouped)
 
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
-	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
-	let location: LocationCompositionI | null = $derived(hasLocation ? (itemWide.derived_type as EventItemI).location : null);
+	function parseDisplay() {
+		return hasDisplay ? (data.itemWide.derived_type as EventItemI).display : {}
+	}
+	function parseLocation() {
+		return hasLocation ? (data.itemWide.derived_type as EventItemI).location : {}
+	}
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
-		return trackCheckout !== null || trackCheckout !== undefined;
+		return trackCheckout !== null;
 	}));
 
 	/**
@@ -54,17 +57,17 @@
 	 */
 	async function refreshBlueprints() {
 		const query = new URLSearchParams({
-			item: itemWide.item.id.toString(),
+			item: data.itemWide.item.id.toString(),
 			limit: '100'
 		});
 		productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(null, query);
 	}
 	async function refresh() {
-		itemWide = await CoreItemWideAPI.getItem(null, itemWide.item.id);
-		trackerCount = await CoreItemAPI.countCheckoutTracker(null, itemWide.item.id);
-		transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, itemWide.item.id);
+		data.itemWide = await CoreItemWideAPI.getItem(null, data.itemWide.item.id);
+		trackerCount = await CoreItemAPI.countCheckoutTracker(null, data.itemWide.item.id);
+		transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, data.itemWide.item.id);
 		await refreshBlueprints()
-		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(null, itemWide.item.id);
+		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(null, data.itemWide.item.id);
 	}
 
 	/**
@@ -74,12 +77,7 @@
 		item: {
 			name: string;
 			description: string;
-			availability: {
-				available: boolean;
-				available_from: string | null;
-				available_until: string | null;
-				dynamic_policy_type: AccessPolicyEnum | null
-			};
+			availability: AvailabilityCompositionI
 			item_metadata: {
 				payment_configuration: {
 					connected_account_id: string | number | null,
@@ -99,50 +97,37 @@
 		}
 	}
 
-	let form: FormState = $derived({
+	let form: FormState = $state({
 		item: {
-			name: itemWide.item.name,
-			description: itemWide.item.description,
+			name: data.itemWide.item.name,
+			description: data.itemWide.item.description,
 
 			// Availability
 			availability: {
-				available: itemWide.item.availability.available,
-				available_from: itemWide.item.availability.available_from,
-				available_until: itemWide.item.availability.available_until,
-				dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
+				available: data.itemWide.item.availability.available,
+				available_from: data.itemWide.item.availability.available_from,
+				available_until: data.itemWide.item.availability.available_until,
+				dynamic_policy_type: data.itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
+				dynamic_policy_content: data.itemWide.item.availability.dynamic_policy_content
 			},
 
 			// Item metadata
 			item_metadata: {
 				payment_configuration: {
-					connected_account_id: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
-					application_fee_amount: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+					connected_account_id: data.itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
+					application_fee_amount: data.itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
 				},
 				social_media_configuration: {
-					facebook_url: itemWide.item.item_metadata.social_media_configuration?.facebook_url ?? null,
-					instagram_url: itemWide.item.item_metadata.social_media_configuration?.instagram_url ?? null,
-					linkedin_url: itemWide.item.item_metadata.social_media_configuration?.linkedin_url ?? null,
+					facebook_url: data.itemWide.item.item_metadata.social_media_configuration?.facebook_url ?? null,
+					instagram_url: data.itemWide.item.item_metadata.social_media_configuration?.instagram_url ?? null,
+					linkedin_url: data.itemWide.item.item_metadata.social_media_configuration?.linkedin_url ?? null,
 				}
 			},
 		},
 		derived_type: {
 			externalLink: false,
-			display: {
-				// Display mixin
-				color: display?.color ?? "",
-				follow_through_link: '',
-				externalLink: false,
-				preview_description: display?.preview_description ?? "",
-				image_landscape: display?.image_landscape ?? null,
-				image_square: display?.image_square ?? null,
-			},
-			// Location mixin
-			location: {
-				location_display_name: location?.location_display_name ?? null,
-				location_search_name: location?.location_search_name ?? null,
-				latitude: location?.latitude ?? null,
-				longitude: location?.longitude ?? null,
-			}
+			display: parseDisplay(),
+			location: parseLocation()
 		}
 	});
 
@@ -152,7 +137,7 @@
 	 *
 	 */
 	function assembleDerivedItem() {
-		let derivedItem = itemWide.derived_type;
+		let derivedItem = data.itemWide.derived_type;
 		const itemType = derivedItem.derived_type_enum
 		const externalLink = (derivedItem as EventItemI).display.follow_through_link.includes('http')
 		const internalLink = `/${itemType.slice(0, itemType.length - 4)}/${form.item.name}`
@@ -171,15 +156,12 @@
 	async function putItem() {
 		if (loadingHTTP) {return}
 		// todo check for form errors
-		let putItemWide = structuredClone($state.snapshot(itemWide));
+		let putItemWide = structuredClone($state.snapshot(data.itemWide));
 		putItemWide.derived_type = assembleDerivedItem()
 
 		putItemWide.item.name = form.item.name;
 		putItemWide.item.description = form.item.description;
-		putItemWide.item.availability.available = form.item.availability.available
-		putItemWide.item.availability.available_from = form.item.availability.available_from
-		putItemWide.item.availability.available_until = form.item.availability.available_until
-		putItemWide.item.availability.dynamic_policy_type = form.item.availability.dynamic_policy_type
+		putItemWide.item.availability = form.item.availability
 
 		// Payment configuration
 		if (form.item.item_metadata.payment_configuration.connected_account_id !== null && form.item.item_metadata.payment_configuration.connected_account_id !== "") {
@@ -207,7 +189,7 @@
 
 		loadingHTTP = true;
 		try {
-			itemWide = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
+			form = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
 			putError = null;
 		} catch (error) {
 			putError = error instanceof Error ? error : Error('Error submitting form');
@@ -321,9 +303,9 @@
 
 		const queryParam = new URLSearchParams({
 			'payment_provider': PaymentProviderEnum.Stripe.toString(),
-			'from_created_timestamp': itemWide.item.created_timestamp,
+			'from_created_timestamp': data.itemWide.item.created_timestamp,
 			'until_created_timestamp': new Date().toISOString(),
-			'item_id': itemWide.item.id.toString()
+			'item_id': data.itemWide.item.id.toString()
 		});
 
 		loadingHTTP = true;
@@ -340,7 +322,7 @@
 
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
-		<h1 id="{itemWide.item.name}">{itemWide.item.name}</h1>
+		<h1 id="{data.itemWide.item.name}">{data.itemWide.item.name}</h1>
 		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
@@ -360,7 +342,7 @@
 			<aside class="py-6 px-4 sm:px-2 col-span-1 md:col-span-2 w-full">
 				<nav class="vertical-nav vertical-nav-transparent">
 					<div>
-						<a href="#{itemWide.item.name}" class="font-semibold">Item</a>
+						<a href="#{data.itemWide.item.name}" class="font-semibold">Item</a>
 						{#if hasDisplay}
 							<a href="#item" class="font-semibold">Display</a>
 						{/if}
@@ -385,7 +367,7 @@
 				</nav>
 			</aside>
 			{#if hasDisplay}
-				<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={toRecsysPreview(itemWide)} /></div>
+				<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={toRecsysPreview(data.itemWide)} /></div>
 			{/if}
 		</div>
 
@@ -404,9 +386,9 @@
 					<div class="flex-1">
 						<h3 class="font-bold pb-2">Info</h3>
 							{#each Object.entries({
-								"Item Id": itemWide.item.id,
-								"Last Update": prettyDate(itemWide.item.last_update_timestamp),
-								"Created": prettyDate(itemWide.item.created_timestamp)}) as [fieldName, fieldValue]}
+								"Item Id": data.itemWide.item.id,
+								"Last Update": prettyDate(data.itemWide.item.last_update_timestamp),
+								"Created": prettyDate(data.itemWide.item.created_timestamp)}) as [fieldName, fieldValue]}
 								<h4 class="pl-3 text-blue-900 font-bold">{fieldName}: <span class="text-ingenium-grey-800 font-bold">{fieldValue}</span></h4>
 							{/each}
 					</div>
@@ -570,7 +552,7 @@
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<h1 id="Dashboard">Dashboard</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
+			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken. Aantal transacties per product, per price policy, etc.</p>
 		</div>
 
 		<article class={`my-4 py-2 ${profitStruct !== null ? 'rounded-lg shadow-md hover:shadow-lg transition-shadow': ''}`}>
@@ -656,9 +638,7 @@
 					</tbody>
 				</table>
 
-				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.
-					Voor zo'n dingen best API calls doen naar de dpu? -> Of gwn op core houden .. zonder polars gaat da best nog wel
-				</p>
+				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.</p>
 			</div>
 		</section>
 
@@ -669,7 +649,7 @@
 				Een Checkout is de daadwerkelijke betalingen daarvan.
 				Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
 		</div>
-		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${itemWide.item.id}`, limit: '20'})} baseSelectedTable="transacties"></PaymentTable>
+		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${data.itemWide.item.id}`, limit: '20'})} baseSelectedTable="transacties"></PaymentTable>
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
@@ -742,7 +722,7 @@
 		<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
 
 		<h2 id="changelog">Changelog</h2>
-		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: itemWide.item.id.toString()})}></DBLogTable>
+		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: data.itemWide.item.id.toString()})}></DBLogTable>
 
 		<div class="flex justify-end mt-4 gap-4">
 			<button class="button button-danger button-inline"
@@ -753,7 +733,7 @@
 	{/if}
 </main>
 
-<AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>
+<AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={data.itemWide.item.id}></AddProductBlueprintModal>
 
 <Modal title="Bulk Import" maxWidth="max-w-xl" bind:isOpen={ showBulkImport } closable={ true }>
 	{#snippet children()}

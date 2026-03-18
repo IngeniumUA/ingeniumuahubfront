@@ -1,15 +1,10 @@
 ﻿<script lang="ts">
 	import { AccessPolicyEnum, AccessPolicyEnumList } from '$lib/models/access_policy/AccessPolicyI';
 	import { makePretty } from '$lib/utilities/style-utilities';
+	import WhitelistBlacklist from '$lib/components/staff/availability/WhitelistBlacklist.svelte';
+	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
 
-	export interface FormState {
-		available: boolean;
-		available_from: string | null;
-		available_until: string | null;
-		dynamic_policy_type: AccessPolicyEnum | null
-	}
-
-	let { formState = $bindable() }: { formState: FormState } = $props();
+	let { formState = $bindable() }: { formState: AvailabilityCompositionI } = $props();
 
 	function toggleAvailable() {}
 </script>
@@ -59,8 +54,12 @@
 		</div>
 	</fieldset>
 
-	TODO Access policy Content
-	<!--{#if formState.dynamic_policy_type === AccessPolicyEnum.access_key_in_path}-->
-	<!--	TODO: Access policy config voor Access Key-->
-	<!--{/if}-->
+
+	{#if formState.dynamic_policy_type === AccessPolicyEnum.always_available}
+		<p>Altijd beschikbaar!</p>
+	{:else if formState.dynamic_policy_type === AccessPolicyEnum.member_of_group}
+		<WhitelistBlacklist bind:formState={formState.dynamic_policy_content}></WhitelistBlacklist>
+	{:else if formState.dynamic_policy_type === AccessPolicyEnum.access_key_in_path}
+		TODO: Access policy config voor Access Key
+	{/if}
 </form>
