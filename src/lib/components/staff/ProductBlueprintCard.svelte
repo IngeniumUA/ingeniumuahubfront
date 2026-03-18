@@ -16,6 +16,16 @@
 	/**
 	 * Form as a reactive state
 	 */
+	function parseForForm() {
+		if ("other_meta_data" in productBlueprint.product_blueprint_metadata) {
+			const meta = productBlueprint.product_blueprint_metadata?.other_meta_data;
+			if ("form" in meta) {
+				return JSON.stringify(meta.form);
+			}
+		}
+		return "";
+	}
+
 	let form = $state({
 		name: productBlueprint.name,
 		description: productBlueprint.description,
@@ -37,6 +47,10 @@
 
 			category: productBlueprint.product_blueprint_metadata.categorie,
 			group: productBlueprint.product_blueprint_metadata.group,
+
+			other_meta_data: {
+				form: parseForForm()
+			}
 		}
 	})
 
@@ -71,10 +85,7 @@
 
 		putProductBlueprint.ordering = form.ordering;
 
-		putProductBlueprint.availability = {
-			...form.availability,
-			dynamic_policy_content: null
-		}
+		putProductBlueprint.availability = form.availability;
 
 		putProductBlueprint.product_blueprint_metadata.categorie = form.product_blueprint_metadata.category;
 		putProductBlueprint.product_blueprint_metadata.group = form.product_blueprint_metadata.group;
@@ -94,6 +105,15 @@
 			upon_completion.add_to_group = form.product_blueprint_metadata.add_to_group_value
 		}
 		putProductBlueprint.product_blueprint_metadata.upon_completion = upon_completion
+
+		if (form.product_blueprint_metadata.other_meta_data.form !== null &&
+			form.product_blueprint_metadata.other_meta_data.form !== "" &&
+			form.product_blueprint_metadata.other_meta_data.form !== undefined) {
+			const formString = form.product_blueprint_metadata.other_meta_data.form as string;
+			putProductBlueprint.product_blueprint_metadata.other_meta_data = {
+				form: JSON.parse(formString)
+			}
+		}
 
 		loadingHTTP = true;
 		try {
@@ -131,9 +151,10 @@
 						</svg>
 		</button>
 	</div>
-	<form class="p-4 pt-2 ingenium-form">
-		<h3 class="font-bold">Product Configuration</h3>
+
+	<form class="p-4 pt-2 ingenium-form flex flex:col lg:flex-row lg:gap-8">
 		<fieldset>
+			<h3 class="font-bold">Product Configuration</h3>
 			<div class="flex-1 form-field max-w-72 mb-2">
 				<label for="itemName">Name</label>
 				<input id="itemName" type="text" required bind:value={ form.name }/>
@@ -181,6 +202,12 @@
 					<label for="group">Group</label>
 					<input id="group" type="text" required bind:value={form.product_blueprint_metadata.group}/>
 					<p>Display groep, voor event pagina groepering</p>
+				</div>
+
+				<div class="form-field max-w-72">
+					<label for="group">Meta form</label>
+					<input id="group" type="text" required bind:value={form.product_blueprint_metadata.other_meta_data.form}/>
+					<p>Product meta form value</p>
 				</div>
 
 				<div class="form-field">
