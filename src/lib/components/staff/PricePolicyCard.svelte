@@ -18,12 +18,7 @@
 
 		ordering: pricePolicy.ordering,
 
-		availability: {
-			available: pricePolicy.availability.available,
-			available_from: pricePolicy.availability.available_from,
-			available_until: pricePolicy.availability.available_until,
-			dynamic_policy_type: pricePolicy.availability.dynamic_policy_type,
-		},
+		availability: pricePolicy.availability
 	});
 
 	let putError: Error | null = $state(null);

@@ -27,12 +27,7 @@
 		max_per_checkout: productBlueprint.max_per_checkout,
 		max_individual: productBlueprint.max_individual,
 
-		availability: {
-			available: productBlueprint.availability.available,
-			available_from: productBlueprint.availability.available_from,
-			available_until: productBlueprint.availability.available_until,
-			dynamic_policy_type: productBlueprint.availability.dynamic_policy_type,
-		},
+		availability: productBlueprint.availability,
 
 		product_blueprint_metadata: {
 			track_checkout: (productBlueprint.product_blueprint_metadata.upon_completion?.track_checkout ?? null) !== null,
