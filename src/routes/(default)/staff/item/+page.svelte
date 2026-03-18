@@ -24,5 +24,7 @@
 		defaultViewMode={'table'}
 		startItems={items}
 		startItemCount={itemCount}
+		showDisabledColumns={true}
+		forceItemType={null}
 	></ItemWideTable>
 </main>

@@ -116,7 +116,6 @@
 		<form class="p-4 ingenium-form">
 		<div class="flex flex-row gap-4 min-w-96">
 			<div class="flex-1">
-				<h3>Main Item</h3>
 				<fieldset>
 					<div class="form-field">
 						<label for="name">Name</label>
@@ -139,7 +138,6 @@
 
 			<!-- Specific Item fields-->
 			<div class="flex-1">
-				<h3>{makePretty(itemType === null ? "": itemType)}</h3>
 				{#if itemType === "eventitem"}
 					<fieldset>
 						<div class="form-field">
@@ -174,7 +172,6 @@
 			<!-- Display Composition -->
 			{#if (hasDisplayMixin)}
 			<div class="flex-1">
-				<h3>Display Composition</h3>
 				<fieldset>
 					<div class="form-field">
 						<label for="vacatureColor">Color</label>
