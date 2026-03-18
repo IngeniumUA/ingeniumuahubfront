@@ -669,7 +669,7 @@
 		</div>
 
 		{#if (productBlueprints.length > 0)}
-		<section class="flex flex-wrap gap-6">
+		<section class="flex flex-col gap-6">
 			{#each productBlueprints as productBlueprint (productBlueprint.id)}
 				<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
 			{/each}

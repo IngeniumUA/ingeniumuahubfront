@@ -38,7 +38,7 @@
 	}
 
 	const productTableForItemLimit = 10; // How many items down the list will have their products prefetched
-	const productTableMaxSize = 8;
+	const productTableMaxSize = 6;
 
 	function resizeLength(productTable: ProductTableEntry[]): ProductTableEntry[] {
 		if (productTable.length < productTableMaxSize) return productTable;
