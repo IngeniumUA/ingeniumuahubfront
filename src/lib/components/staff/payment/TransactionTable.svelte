@@ -158,9 +158,7 @@
 
 	let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 	$effect(() => {
-		const { user_email, itemName, validity, productBlueprintId, pricePolicyId, queryOffset, queryLimit } = queryForm;
-		void [user_email, itemName, validity, productBlueprintId, pricePolicyId, queryOffset, queryLimit];
-
+		$state.snapshot(queryForm);
 		if (debounceTimer) clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(refresh, 1000);
 	});
