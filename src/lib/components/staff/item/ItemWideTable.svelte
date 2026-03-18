@@ -17,14 +17,16 @@
 		defaultViewMode = $bindable(null), // list or table
 		startItemCount = 0,
 		startItems = [],
-		forceItemType = null
+		forceItemType = null,
+		showDisabledColumns = false,
 	}: {
 		baseQueryParam: URLSearchParams,
 		httpLoading: boolean,
 		defaultViewMode: ViewMode | null,
 		startItemCount?: number,
 		startItems?: ItemWideI[],
-		forceItemType: string | null
+		forceItemType: string | null,
+		showDisabledColumns: boolean,
 	} = $props();
 
 	let items: ItemWideI[] = $state(startItems);
@@ -67,7 +69,7 @@
 		itemName: null,
 		available: baseQueryParam.get('available') === "none" ? null: parseBool(baseQueryParam.get('available') ?? 'true') ?? true,
 		disabled: baseQueryParam.get('disabled') === "none" ? null: parseBool(baseQueryParam.get('disabled') ?? 'false') ?? false,
-		itemType: baseQueryParam.get('item_type') ?? null,
+		itemType: baseQueryParam.get('item_type') ?? forceItemType,
 		queryOffset: 0,
 		queryLimit: parseInt(baseQueryParam.get('limit') ?? '50')
 	})
@@ -304,7 +306,7 @@
 					</select>
 				</div>
 			</th>
-			{#if isWebmaster}<th>
+			{#if isWebmaster && showDisabledColumns}<th>
 				<h4>Disabled</h4>
 				<div class="form-field min-w-24 max-w-32">
 					<select id="disabled" required bind:value={queryForm.disabled}>
@@ -358,7 +360,7 @@
 					</label>
 				</td>
 
-				{#if isWebmaster}
+				{#if isWebmaster && showDisabledColumns}
 				<td>
 					<button onclick={() => {restore(itemWide.item.id)}} disabled={httpLoading}
 									class="ml-2 button button-primary button-inline">
