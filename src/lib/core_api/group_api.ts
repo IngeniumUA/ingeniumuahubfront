@@ -16,7 +16,6 @@ export class CoreGroupAPI {
 		}
 	}
 
-
 	static async groupTable(params: RouteParams | null = null): Promise<[]> {
 		const res = await fetch(`${PUBLIC_API_URL}/group/table`, {
 			method: 'GET',
@@ -51,6 +50,19 @@ export class CoreGroupAPI {
 			return await res.json();
 		} else {
 			throw `Failed to put group: ${await res.text()}`;
+		}
+	}
+
+	static async postGroup(params: RouteParams | null = null, postGroup: Partial<GroupI>): Promise<GroupI> {
+		const res = await fetch(`${PUBLIC_API_URL}/group`, {
+			method: 'PUT',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(postGroup)
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to post group: ${await res.text()}`;
 		}
 	}
 
