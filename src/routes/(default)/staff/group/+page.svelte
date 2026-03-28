@@ -51,7 +51,7 @@
 </script>
 
 <main class="ingenium-container relative" id="main-content">
-	<div class="flex justify-between items-center mb-6">
+	<div class="flex justify-between items-center mb-6 gap-4">
 		<h1>Groups</h1>
 
 		<button class="ml-auto button button-primary w-24 button-inline" onclick={() => {showAddingNew = true}}>

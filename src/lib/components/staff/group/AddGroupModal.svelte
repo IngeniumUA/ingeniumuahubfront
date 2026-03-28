@@ -19,6 +19,7 @@
 
 		const postGroup = {
 			name: form.name,
+			academic_year: null
 		};
 
 		loadingHTTP = true;
