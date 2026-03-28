@@ -17,6 +17,9 @@
 		return whiteTheme ? 'nav-white' : 'nav-dark';
 	});
 
+	function isEducation() {
+		return isStaff() || hasRole("education")
+	}
 	function isStaff() {
 		return hasRole("staff")
 	}
@@ -122,12 +125,14 @@
 							<a href="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 
-							{#if isStaff()}
+							{#if isEducation()}
 								<hr class="nav-dropdown-divider">
 								<a href="/cloud_verify" class="nav-dropdown-item" role="menuitem">Cloud uploads</a>
+								{#if (isStaff())}
 								<a href="/staff" class="nav-dropdown-item" role="menuitem">Staff</a>
 								<a href="/staff" class="nav-dropdown-item" role="menuitem">Webmaster</a>
-								<hr class="nav-dropdown-divider">
+								{/if}
+									<hr class="nav-dropdown-divider">
 							{/if}
 
 							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
