@@ -55,7 +55,7 @@ export class CoreGroupAPI {
 
 	static async postGroup(params: RouteParams | null = null, postGroup: Partial<GroupI>): Promise<GroupI> {
 		const res = await fetch(`${PUBLIC_API_URL}/group`, {
-			method: 'PUT',
+			method: 'POST',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 			body: JSON.stringify(postGroup)
 		});
