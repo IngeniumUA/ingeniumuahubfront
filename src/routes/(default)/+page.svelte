@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>Ingenium UA - Studentenvereninging FTI</title>
+	<title>Ingenium UA - Studentenvereniging FTI</title>
 </svelte:head>
 
 <div id="homepage-wrapper">
