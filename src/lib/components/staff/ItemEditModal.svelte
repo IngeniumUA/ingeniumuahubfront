@@ -9,6 +9,8 @@
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
+	import { PUBLIC_API_URL } from '$env/static/public';
+	import { getAuthorizationHeaders } from '$lib/auth/auth';
 
 	let { itemWide, isOpen = $bindable(false) }: { itemWide: ItemWideI, isOpen: boolean } = $props();
 
@@ -112,6 +114,44 @@
 			loadingHTTP = false; // Reset loading state
 		}
 	}
+
+	/**
+	 * File upload logic
+	 */
+	let files: FileList | undefined = $state();
+	let singleFile = $derived(files && files.length > 0 ? files[0] : null);
+
+	let isUploading: boolean = $state(false);
+	let uploadError: Error | null = $state(null);
+
+	async function handleFileUpload() {
+		if (!singleFile) return;
+		if (isUploading) return;
+
+		isUploading = true;
+		uploadError = null;
+
+		try {
+			const formData = new FormData();
+			formData.append('blob_data', singleFile);
+			const res = await fetch(`${PUBLIC_API_URL}/file/media`, {
+				method: 'POST',
+				headers: getAuthorizationHeaders(null),
+				body: formData
+			});
+			if (res.ok) {
+				successToast("Uploaded image!")
+				form.image_square = await res.json();
+			} else {
+				const text = await res.text();
+				uploadError = new Error(`Failed to Upload: ${text}`);
+			}
+		} catch (error) {
+			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
+		} finally {
+			isUploading = false;
+		}
+	}
 </script>
 
 
@@ -129,72 +169,58 @@
 						</div>
 					</fieldset>
 
-					<div class="flex flex-row gap-2">
-						<!-- Specific Item fields-->
-						<fieldset class="flex-[1]">
-						<h3>{makePretty(itemType === null ? "": itemType)}</h3>
-						{#if itemType === "eventitem"}
-								<div class="form-field">
-									<label for="event_start">Event Start</label>
-									<input id="event_start" type="date" required bind:value={form.event_start}/>
-									<p>Start datum evenement</p>
-								</div>
-								<div class="form-field">
-									<label for="event_end">Event End</label>
-									<input id="event_end" type="date" required bind:value={form.event_end}/>
-									<p>Eind datum evenement</p>
-								</div>
-						{:else}
-							<p>Itemtype {itemType} heeft geen extra data nodig</p>
-						{/if}
-						</fieldset>
+					<!-- Specific Item fields-->
+					<fieldset class="flex-[1]">
+					<h3>{makePretty(itemType === null ? "": itemType)}</h3>
+					{#if itemType === "eventitem"}
+						<div class="flex flex-row gap-2">
+							<div class="form-field">
+								<label for="event_start">Event Start</label>
+								<input id="event_start" type="date" required bind:value={form.event_start}/>
+								<p>Start datum evenement</p>
+							</div>
+							<div class="form-field">
+								<label for="event_end">Event End</label>
+								<input id="event_end" type="date" required bind:value={form.event_end}/>
+								<p>Eind datum evenement</p>
+							</div>
+						</div>
+					{:else}
+						<p>Itemtype {itemType} heeft geen extra data nodig</p>
+					{/if}
+					</fieldset>
 
 					<!-- Display Composition -->
 					{#if (hasDisplayMixin)}
 						<div class="flex-[1]">
 							<h3>Display Composition</h3>
-							<fieldset>
+
+							<fieldset class="flex flex-row gap-4">
 								<div class="form-field">
 									<label for="vacatureColor">Color</label>
 									<input id="vacatureColor" type="text" required bind:value={form.color}/>
 									<p>Kleur voor de weergave</p>
 								</div>
-							</fieldset>
-							<fieldset>
-								<div class="form-field">
-									<label for="clickThroughLink">Click Through Link</label>
-									{#if (form.externalLink)}
-										<input id="clickThroughLink" type="text" required bind:value={form.clickThroughLink}/>
-									{/if}
-									<p>Waar je naartoe wordt gestuurd als je op het item klikt.</p>
-								</div>
-							</fieldset>
-							<label class="inline-flex items-center cursor-pointer">
-								<input type="checkbox"
-											 bind:checked={form.externalLink} class="hidden peer">
-								<div class="relative w-11 h-6 bg-blue-900 dark:bg-gray-700 rounded-full
-												peer-checked:bg-blue-900 dark:peer-checked:bg-blue-900
-												after:content-['']
-												after:absolute after:top-[2px] after:start-[2px]
-												after:w-5 after:h-5
-												after:bg-white after:rounded-full
-												after:transition-transform
-												peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-												"></div>
-								<span class="ms-3 text-sm font-medium text-gray-600">{#if (form.externalLink)}Extern{:else}Item zelf{/if}</span>
-							</label>
 
-							<fieldset>
-								<div class="form-field">
+								<div class="form-field flex-grow">
 									<label for="preview_description">Preview Description</label>
 									<input id="preview_description" type="text" required bind:value={form.preview_description}/>
 									<p>Extra display beschrijving</p>
 								</div>
 							</fieldset>
+
+							<label for="file">Upload Banner</label>
+							<input
+								accept="image/*"
+								bind:files
+								onchange={handleFileUpload}
+								id="file"
+								type="file"
+								disabled={isUploading}
+							/>
 						</div>
 					{/if}
 				</div>
-			</div>
 
 			<div class="hidden md:block w-px bg-gray-200"></div>
 
@@ -218,6 +244,12 @@
 				<span class="text-white">Naar { makePretty(itemType) }</span>
 			</a>
 		</div>
+
+		{#if uploadError !== null}
+			<div class="error-message p-4">
+				{JSON.stringify(uploadError.message)}
+			</div>
+		{/if}
 
 		{#if (itemUpdateError !== null)}
 			<div class="error-message p-4">

@@ -8,6 +8,7 @@
 	 */
 	let { data } = $props();
 	let managerUsers: UserWideI[] = $state(data.managerUsers)
+	let mediaList: string[] = $state(data.mediaList)
 
 	/**
 	 *
@@ -48,16 +49,20 @@
 </script>
 
 <style lang="scss">
+	section {
+		@apply mb-8;
+	}
+
 	.manager_section {
-		@apply flex flex-col gap-8 md:flex-row;
+    @apply flex flex-col gap-8 md:flex-row;
+  }
 
-		h3 {
-			@apply font-bold;
-		}
+	h3 {
+		@apply font-bold;
+	}
 
-		article {
-      @apply bg-white p-4 rounded-lg min-h-48 w-full shadow-md hover:shadow-lg transition-shadow;
-		}
+	article {
+		@apply bg-white p-4 rounded-lg min-h-48 w-full shadow-md hover:shadow-lg transition-shadow;
 	}
 </style>
 
@@ -102,6 +107,26 @@
 
 					<button class="button button-primary">Add</button>
 				</form>
+			</article>
+		</div>
+	</section>
+
+	<section>
+		<h2>Files</h2>
+		<div class="flex flex-col md:flex-row gap-8">
+			<article>
+				<h3>Public Storage</h3>
+				<p>Total: {mediaList.length}</p>
+				<ul>
+					{#each mediaList as mediaUrl}
+						<li><p>{mediaUrl}</p></li>
+					{/each}
+				</ul>
+			</article>
+
+			<article>
+				<h3>Cloud Storage</h3>
+				<p>Todow</p>
 			</article>
 		</div>
 	</section>
