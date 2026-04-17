@@ -116,7 +116,7 @@
 							<a href="/staff/user/{user.email}">{user.sso_uuid.slice(0, 6)}</a>
 						</td>
 						<th scope="row">
-							<a href="/staff/user/{user.email}">{user.email}</a>
+							<a class="text-blue-900" href="/staff/user/{user.email}">{user.email}</a>
 						</th>
 						<td>
 							{prettyDateTime(user.last_update_timestamp)}
