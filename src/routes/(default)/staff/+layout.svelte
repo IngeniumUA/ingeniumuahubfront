@@ -43,6 +43,7 @@
 					<hr class="h-px bg-blue-900 border-0 dark:bg-blue-950">
 					<a href="/staff/user">Users</a>
 					<a href="/staff/item/event">Events</a>
+					<a href="/orders/manage">Orders</a>
 					<a href="/staff/item/shop">Shop</a>
 					<a href="/staff/item/vacatures">Vacatures</a>
 					<a href="/staff/lidkaarten">Lidkaarten</a>
