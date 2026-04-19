@@ -1,13 +1,12 @@
 ﻿<script lang="ts">
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import { onMount } from 'svelte';
-	import { successToast } from '$lib/components/toast/defined_toast';
+	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { type HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum } from '$lib/models/trackerI';
 	import { PUBLIC_API_URL } from '$env/static/public';
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
 	import type { RouteParams } from '../../../../../.svelte-kit/types/src/routes/$types';
-	import { CoreTransactionAPI } from '$lib/core_api/transaction';
 
 	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })) }: { baseQueryParam: URLSearchParams } = $props();
 
@@ -85,14 +84,22 @@
 	}
 
 	async function resetIndexRequest(params: RouteParams | null = null) {
-		const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/reset`, {
-			method: 'GET',
-			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
-		});
-		if (res.ok) {
-			return await res.json();
-		} else {
-			throw `Failed to reset: ${await res.text()}`;
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+
+		try {
+			const res = await fetch(`${PUBLIC_API_URL}/checkout/tracker/reset`, {
+				method: 'GET',
+				headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			});
+			if (res.ok) {
+				throw `Failed to reset: ${await res.text()}`;
+			}
+			successToast("Reset Tracker!")
+		} catch (error) {
+			failedToast(`Error retrieving trackers ${error}`);
+		} finally {
+			loadingHTTP = false; // Reset loading state
 		}
 	}
 </script>
