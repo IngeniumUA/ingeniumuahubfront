@@ -1,7 +1,7 @@
 ﻿<script lang="ts">
 	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
-	import { toRecsysPreview } from '$lib/models/RecSysI';
+	import { type RecSysPreviewI } from '$lib/models/RecSysI';
 	import type { EventItemI, EventItemWideI, LocationCompositionI } from '$lib/models/item/eventI';
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
@@ -10,7 +10,7 @@
 	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
-	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
+	import { hexToRGB, makePretty, prettyDate } from '$lib/utilities/style-utilities';
 	import { hasRole } from '$lib/states/auth.svelte';
 	import PaymentTable from '$lib/components/staff/payment/PaymentTable.svelte';
 	import Modal from '$lib/components/layout/modal.svelte';
@@ -21,7 +21,7 @@
 	import { PaymentProviderEnum } from '$lib/models/productsI';
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
-	
+
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
@@ -189,7 +189,9 @@
 
 		loadingHTTP = true;
 		try {
-			form = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
+			const resp = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
+			form = resp;
+			data.itemWide = resp;
 			putError = null;
 		} catch (error) {
 			putError = error instanceof Error ? error : Error('Error submitting form');
@@ -202,6 +204,25 @@
 			loadingHTTP = false;
 		}
 	}
+
+	let recsysPreview = $derived.by(() =>{
+		const itemType = data.itemWide.derived_type.derived_type_enum;
+		const hasDisplayMixin = ["eventitem", "shopitem", "promoitem"].includes(itemType);
+		if (!hasDisplayMixin) {return null}
+
+		const recsysItem: RecSysPreviewI = {
+			name: form.item.name,
+			follow_through_link: form.derived_type.display.follow_through_link ? form.derived_type.display.follow_through_link: `/${itemType.slice(0, itemType.length - 4)}/${form.item.name}`,
+			date: null,
+			color: 'rgb(255, 255, 255)',
+			image_square: form.derived_type.display.image_square!,
+			image_landscape: form.derived_type.display.image_landscape!,
+			preview_description: form.derived_type.display.preview_description!
+		};
+		const color = hexToRGB(form.derived_type.display.color!) ?? form.derived_type.display.color;
+		if (color !== null) recsysItem.color = color!;
+		return recsysItem;
+	});
 
 	/**
 	 *
@@ -367,7 +388,7 @@
 				</nav>
 			</aside>
 			{#if hasDisplay}
-				<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={toRecsysPreview(data.itemWide)} /></div>
+				<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={recsysPreview} /></div>
 			{/if}
 		</div>
 
@@ -538,15 +559,15 @@
 			</button>
 		</div>
 	</div>
-	</form>
 
-	<div class="flex justify-end mt-4 gap-4">
-		<button class="button button-primary button-inline"
-						disabled={loadingHTTP}
-						onclick={putItem}>
-			<span class="text-white">Update Item</span>
-		</button>
-	</div>
+		<div class="sticky bottom-4 flex justify-end mt-4 gap-4 z-10">
+			<button type="button" class="button button-primary button-inline"
+							disabled={loadingHTTP}
+							onclick={putItem}>
+				<span class="text-white">{loadingHTTP ? 'Saving...' : 'Update Item'}</span>
+			</button>
+		</div>
+	</form>
 
 	{#if productBlueprintCapable}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
@@ -669,11 +690,18 @@
 		</div>
 
 		{#if (productBlueprints.length > 0)}
-		<section class="flex flex-col gap-6">
-			{#each productBlueprints as productBlueprint (productBlueprint.id)}
-				<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
-			{/each}
-		</section>
+			<section class="flex flex-col gap-6">
+				{#each productBlueprints as productBlueprint (productBlueprint.id)}
+					<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
+				{/each}
+			</section>
+		{:else}
+			<div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg">
+				<p class="text-gray-500 mb-4">Er zijn nog geen Product Blueprints voor dit item.</p>
+				<button onclick="{() => showAddingNew = true}" class="button button-primary button-inline">
+					Maak de eerste aan
+				</button>
+			</div>
 		{/if}
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
@@ -726,7 +754,13 @@
 
 		<div class="flex justify-end mt-4 gap-4">
 			<button class="button button-danger button-inline"
-							disabled={loadingHTTP}>
+							disabled={loadingHTTP}
+							onclick={(e) => {
+								if (!confirm('Are you absolutely sure you want to delete this item? This cannot be undone.')) {
+									e.preventDefault();
+								}
+								// TODO: Execute delete
+							}}>
 				<span class="text-white">Delete (wip)</span>
 			</button>
 		</div>

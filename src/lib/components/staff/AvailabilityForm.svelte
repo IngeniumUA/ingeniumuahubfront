@@ -32,12 +32,12 @@
 	<fieldset class="flex flex-row gap-2">
 		<div class="form-field">
 			<label for="available_from">Available From</label>
-			<input id="available_from" type="date" required bind:value={formState.available_from}/>
+			<input id="available_from" type="datetime-local" required bind:value={formState.available_from}/>
 			<p>Beschikbaar vanaf</p>
 		</div>
 		<div class="form-field">
 			<label for="available_until">Available Until</label>
-			<input id="available_until" type="date" required bind:value={formState.available_until}/>
+			<input id="available_until" type="datetime-local" required bind:value={formState.available_until}/>
 			<p>Beschikbaar tot</p>
 		</div>
 	</fieldset>

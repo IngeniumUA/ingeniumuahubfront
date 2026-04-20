@@ -176,12 +176,12 @@
 						<div class="flex flex-row gap-2">
 							<div class="form-field">
 								<label for="event_start">Event Start</label>
-								<input id="event_start" type="date" required bind:value={form.event_start}/>
+								<input id="event_start" type="datetime-local" required bind:value={form.event_start}/>
 								<p>Start datum evenement</p>
 							</div>
 							<div class="form-field">
 								<label for="event_end">Event End</label>
-								<input id="event_end" type="date" required bind:value={form.event_end}/>
+								<input id="event_end" type="datetime-local" required bind:value={form.event_end}/>
 								<p>Eind datum evenement</p>
 							</div>
 						</div>
