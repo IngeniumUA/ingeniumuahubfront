@@ -10,6 +10,7 @@
 	let { itemType = null, isOpen = $bindable(false) }: { itemType: string | null, isOpen: boolean } = $props();
 
 	let loadingHTTP: boolean = $state(false);
+	let createButtonDisabled: boolean = $derived(loadingHTTP || itemType === null);
 	let itemCreateError: string | null = $state(null);
 
 	let hasDisplayMixin = $derived(["eventitem", "promoitem", "shopitem"].includes(itemType === null ? "": itemType));
@@ -228,7 +229,7 @@
 		<!-- Footer -->
 		<div class="p-2 flex border-t border-gray-200">
 			<button class="button button-primary w-24 button-inline"
-							disabled={loadingHTTP}
+							disabled={createButtonDisabled}
 							onclick={createItem}>
 				<span class="text-white">Create</span>
 			</button>
@@ -237,6 +238,11 @@
 		{#if (itemCreateError !== null)}
 			<div class="error-message p-4">
 				{JSON.stringify(itemCreateError)}
+			</div>
+		{/if}
+		{#if (itemType === null)}
+			<div class="error-message p-4">
+				<p>Item type not specified (TODO, there could be a dropdown added to this modal)</p>
 			</div>
 		{/if}
 
