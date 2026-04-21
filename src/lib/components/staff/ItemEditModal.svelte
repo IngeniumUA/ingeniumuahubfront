@@ -134,7 +134,7 @@
 		try {
 			const formData = new FormData();
 			formData.append('blob_data', singleFile);
-			const res = await fetch(`${PUBLIC_API_URL}/file/media`, {
+			const res = await fetch(`${PUBLIC_API_URL}/file/media?filename=${form.name}`, {
 				method: 'POST',
 				headers: getAuthorizationHeaders(null),
 				body: formData
