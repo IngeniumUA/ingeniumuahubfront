@@ -118,6 +118,13 @@
 		await queryData(queryParam)
 	}
 
+	let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+	$effect(() => {
+		$state.snapshot(queryForm);
+		if (debounceTimer) clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(refresh, 1000);
+	});
+
 	/**
 	 * Display
 	 */
