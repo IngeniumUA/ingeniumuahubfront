@@ -65,7 +65,12 @@
 	/**
 	 * Bulk Operations selection
 	 */
-	// let selectedArray: boolean[] = $state([])
+	let allSelected: boolean = $state(false)
+	function toggleAllSelected(value: boolean) {
+		allSelected = value
+		selectedArray = Array.from({ length: orders.length }, () => value)
+	}
+	let selectedArray: boolean[] = $state([])
 
 	/**
 	 * Downloading
@@ -104,7 +109,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	section {
 			@apply mt-4 p-4 pl-0 rounded-lg shadow-sm;
 
@@ -112,23 +117,18 @@
 					@apply font-bold;
 			}
 	}
-
-	form {
-      @apply flex flex-col md:flex-row gap-4;
-
-			fielset {
-					@apply shadow-sm flex-[1];
-			}
-	}
 </style>
 
 <article>
-	<div class="flex justify-between items-center">
+	<div class="flex justify-between items-center gap-4">
 		<h2 id="checkout-table">Order Trackers</h2>
-		<button onclick={exportTrackers} disabled={loadingHTTP} class="ml-auto button button-primary button-inline">
+		<button disabled={loadingHTTP} onclick={resetIndexRequest} class="ml-auto button button-primary button-inline">
+			<span class="text-white">Reset Order index</span>
+		</button>
+		<button onclick={exportTrackers} disabled={loadingHTTP} class="button button-primary button-inline">
 			<span class="text-white">Export</span>
 		</button>
-		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
+		<button onclick={refresh} class="button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
 	</div>
@@ -181,14 +181,10 @@
 
 	<section class="bulk-operation">
 		<h3>Apply</h3>
-		<p>Om bulk operaties uit te voeren zoals refunds. Hier ook de export knop zetten?
-			Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>
-		<button disabled={loadingHTTP} onclick={resetIndexRequest} class="ml-auto button button-primary button-inline">
-			<span class="text-white">Reset Order index</span>
-		</button>
+		<p>Om bulk operaties uit te voeren.</p>
 
 		<button disabled={true} class="ml-auto button button-primary button-inline">
-			<span class="text-white">Zet alles op 'klaar'</span>
+			<span class="text-white">Zet selected ({selectedArray.filter(Boolean).length}) 'klaar'</span>
 		</button>
 	</section>
 
@@ -203,7 +199,12 @@
 		<table class="ingenium-table">
 			<thead>
 			<tr>
-				<th><h4>Select</h4> <input type="checkbox"/></th>
+				<th>
+					<div class="flex flex-col items-center justify-end h-full">
+						<h4 class="flex-end">Select</h4>
+						<input type="checkbox" class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" checked={allSelected} onclick={() => toggleAllSelected(!allSelected)}/>
+					</div>
+				</th>
 				<th><h4>Order ID</h4></th>
 				<th><h4>Order Counter</h4></th>
 				<th><h4>Checkout</h4></th>
@@ -219,10 +220,10 @@
 			</tr>
 			</thead>
 			<tbody>
-			{#each orders as order (order.id)}
+			{#each orders as order, tableIndex (order.id)}
 				<tr>
-					<th>
-						<input type="checkbox"/>
+					<th class="flex justify-center">
+						<input class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" type="checkbox" checked={selectedArray[tableIndex]}/>
 					</th>
 					<th>{order.id}</th>
 					<th>{order.order_counter}</th>
