@@ -19,9 +19,9 @@
 	let itemUpdateError: string | null = $state(null);
 
 	let hasDisplayMixin = ["eventitem", "promoitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum);
+	const modelTitle = makePretty(itemWide.derived_type.derived_type_enum.slice(0, -4)) // Everything but the last four
 
 	// Extract display object if applicable
-	// Derived display optional
 	// fixme the typecast at the moment is to EventItemI but that could probably be improved
 	let display: DisplayCompositionI | null = hasDisplayMixin ? (itemWide.derived_type as EventItemI).display : null;
 
@@ -155,12 +155,11 @@
 </script>
 
 
-<Modal title="Item Bewerken" maxWidth="max-w-4xl" bind:isOpen={ isOpen } closable={ true }>
+<Modal title={`${modelTitle} Bewerken`} maxWidth="max-w-3xl" bind:isOpen={ isOpen } closable={ true }>
 	{#snippet children()}
 		<!-- Main body -->
 		<form class="p-4 ingenium-form flex lg:flex-row gap-4 min-w-96">
 				<div class="flex-[2]">
-					<h3>Main Item</h3>
 					<fieldset>
 						<div class="form-field">
 							<label for="name">Name</label>
@@ -171,7 +170,6 @@
 
 					<!-- Specific Item fields-->
 					<fieldset class="flex-[1]">
-					<h3>{makePretty(itemType === null ? "": itemType)}</h3>
 					{#if itemType === "eventitem"}
 						<div class="flex flex-row gap-2">
 							<div class="form-field">
@@ -193,8 +191,6 @@
 					<!-- Display Composition -->
 					{#if (hasDisplayMixin)}
 						<div class="flex-[1]">
-							<h3>Display Composition</h3>
-
 							<fieldset class="flex flex-row gap-4">
 								<div class="form-field">
 									<label for="vacatureColor">Color</label>
@@ -259,9 +255,3 @@
 
 	{/snippet}
 </Modal>
-
-<style>
-	h3 {
-			@apply font-bold;
-	}
-</style>
