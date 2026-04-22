@@ -36,6 +36,7 @@
 					<a href="/staff/group">Groups</a>
 					<a href="/staff/item">Items</a>
 					<a href="/staff/payment">Payments</a>
+					<a href="/staff/praesidium">Praesidium</a>
 				</div>
 
 				<div class="mt-16">
