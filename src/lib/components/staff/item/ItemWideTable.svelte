@@ -122,7 +122,7 @@
 	$effect(() => {
 		$state.snapshot(queryForm);
 		if (debounceTimer) clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(refresh, 1000);
+		debounceTimer = setTimeout(refresh, 500);
 	});
 
 	/**
