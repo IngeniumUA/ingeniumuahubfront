@@ -4,7 +4,7 @@
 	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
 	import type { ItemI } from '$lib/models/item/itemI';
 	import { handleRequest } from '$lib/utilities/httpUtilities';
-	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
+	import AddNewItem from '$lib/components/staff/item/AddNewItem.svelte';
 	import { successToast } from '$lib/components/toast/defined_toast';
 	import { slice } from '$lib/utilities/style-utilities';
 

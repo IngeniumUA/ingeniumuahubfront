@@ -5,10 +5,10 @@
 	import type { ItemWideI } from '$lib/models/item/itemwideI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import ItemListEntry from '$lib/components/staff/item/ItemListEntry.svelte';
-	import ItemEditModal from '$lib/components/staff/ItemEditModal.svelte';
+	import ItemEditModal from '$lib/components/staff/item/ItemEditModal.svelte';
 	import { makePretty, parseBool, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { hasRole } from '$lib/states/auth.svelte';
-	import AddNewItem from '$lib/components/staff/AddNewItem.svelte';
+	import AddNewItem from '$lib/components/staff/item/AddNewItem.svelte';
 	import type { ItemI } from '$lib/models/item/itemI';
 
 	let {
