@@ -139,7 +139,7 @@
 
 	let viewMode = $state(getDefaultViewMode());
 	let tableView = $derived(viewMode === 'table')
-	let tableHeaderName: string = $derived(makePretty((forceItemType) ?? "items"))
+	let tableHeaderName: string = $derived(makePretty((forceItemType?.slice(0, -4)) ?? "items"))
 	function toggleViewMode() {
 		if (tableView) {
 			viewMode = 'list'
@@ -417,6 +417,15 @@
 				setEdit={setEdit}>
 			</ItemListEntry>
 		{/each}
+	{/if}
+
+	{#if items.length === 0}
+		<div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg">
+			<p class="text-gray-500 mb-4">Geen {tableHeaderName}s gevonden met deze filters.</p>
+			<button onclick="{() => showAddingNew = true}" class="button button-primary button-inline">
+				Maak er een aan
+			</button>
+		</div>
 	{/if}
 </article>
 
