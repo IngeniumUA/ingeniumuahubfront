@@ -437,6 +437,11 @@
 		{/each}
 		</tbody>
 	</table>
+	{#if transactions.length === 0}
+		<div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg">
+			<p class="text-gray-500 mb-4">Geen transactions gevonden met deze filters.</p>
+		</div>
+	{/if}
 </article>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < transactions.length && editSelected !== null}
@@ -444,10 +449,6 @@
 {/if}
 
 <style lang="scss">
-	h3 {
-			@apply font-bold;
-	}
-
 	th {
 		@apply align-bottom;
 	}

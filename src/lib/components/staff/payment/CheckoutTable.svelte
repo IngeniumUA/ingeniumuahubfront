@@ -310,6 +310,11 @@
 			{/each}
 		</tbody>
 	</table>
+	{#if checkouts.length === 0}
+		<div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg">
+			<p class="text-gray-500 mb-4">Geen betalingen gevonden met deze filters.</p>
+		</div>
+	{/if}
 </article>
 
 <AddCheckoutModal bind:isOpen={ showAddingNew } bind:startingUserEmail={queryForm.user_email} startingItemId={parseInt(baseQueryParam.get('item_id') ?? "") ?? null}></AddCheckoutModal>
@@ -317,10 +322,6 @@
 <AddCheckoutBulk bind:isOpen={ bulkUploadModal } startingItemId={parseInt(baseQueryParam.get('item_id') ?? "") ?? null}></AddCheckoutBulk>
 
 <style lang="scss">
-		h3 {
-				@apply font-bold;
-		}
-
 		section {
 			@apply my-4;
 		}
@@ -351,12 +352,4 @@
     .orange {@apply  border-orange-700 text-orange-700 bg-orange-100;}
     .green {@apply  border-green-700 text-green-700 bg-green-100;}
     .gray {@apply  border-gray-700 text-gray-700 bg-gray-100;}
-
-		.filter-selector {
-
-		}
-
-		.bulk-operation {
-
-		}
 </style>
