@@ -50,6 +50,7 @@
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
+		console.log(trackCheckout);
 		return trackCheckout !== null;
 	}));
 
@@ -711,12 +712,12 @@
 			</div>
 		{/if}
 
+		{#if hasCheckoutTrackers}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<h1 id="Checkout Trackers">Checkout Trackers</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Checkout Trackers zijn de 'ordertracking' van Pop-up Z. Er bestaat steeds één tracker per betaling.</p>
 		</div>
-		{#if hasCheckoutTrackers}
 			<div class="flex flex-row gap-4">
 				<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 					<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>

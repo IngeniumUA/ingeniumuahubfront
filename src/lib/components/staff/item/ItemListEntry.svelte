@@ -192,9 +192,9 @@
 	</div>
 
 	<div class="flex justify-end items-center my-2">
-		<a class="button button-primary w-28 button-inline"
+		<a class="button button-primary button-inline"
 			 href={`/staff/item/${itemWide.item.id}#${itemWide.item.name}`}>
-			<span class="text-white">Naar itemWide</span>
+			<span class="text-white">Naar pagina</span>
 		</a>
 	</div>
 </article>
