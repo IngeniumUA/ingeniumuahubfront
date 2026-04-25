@@ -158,8 +158,8 @@
 <Modal title={`${modelTitle} Bewerken`} maxWidth="max-w-3xl" bind:isOpen={ isOpen } closable={ true }>
 	{#snippet children()}
 		<!-- Main body -->
-		<form class="p-4 ingenium-form flex lg:flex-row gap-4 min-w-96">
-				<div class="flex-[2]">
+		<form class="p-4 ingenium-form flex flex-col lg:flex-row gap-4">
+				<div class="flex-1">
 					<fieldset>
 						<div class="form-field">
 							<label for="name">Name</label>
@@ -171,7 +171,7 @@
 					<!-- Specific Item fields-->
 					<fieldset class="flex-[1]">
 					{#if itemType === "eventitem"}
-						<div class="flex flex-row gap-2">
+						<div class="flex flex-col md:flex-row gap-2">
 							<div class="form-field">
 								<label for="event_start">Event Start</label>
 								<input id="event_start" type="datetime-local" required bind:value={form.event_start}/>
@@ -222,7 +222,7 @@
 
 			<!-- RecSys Preview -->
 			{#if (recsysPreview !== null)}
-				<article class="p-4 flex-1 min-w-96">
+				<article class="flex-1 lg:min-w-72">
 					<RecSysPreviewItem item={recsysPreview} />
 				</article>
 			{/if}
