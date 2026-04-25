@@ -18,7 +18,7 @@
 <div class="p-0 lg:p-2 h-full">
 	<div class="flex flex-col md:flex-row h-full">
 		<aside class={`shrink-0 transition-all duration-300
-        ${sidebar ? 'w-full md:w-1/4 lg:w-1/5' : 'w-full md:w-10'}`}>
+        ${sidebar ? 'w-full md:w-1/5 lg:w-1/6' : 'w-full md:w-10'}`}>
 
 			<!-- Mobile toggle (visible only on mobile) -->
 			<div class="flex items-center justify-end px-4 py-2 md:hidden">
@@ -84,7 +84,7 @@
 			</nav>
 		</aside>
 
-		<main class="flex-1 max-w-full md:mr-4">
+		<main class="flex-1 min-w-0 md:mr-4">
 			{@render children()}
 		</main>
 	</div>
