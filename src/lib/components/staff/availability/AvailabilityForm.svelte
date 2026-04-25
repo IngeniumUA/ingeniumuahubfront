@@ -29,7 +29,7 @@
 							</span>
 	</label>
 
-	<fieldset class="flex flex-row gap-2">
+	<fieldset class="flex flex-col md:flex-row gap-2">
 		<div class="form-field">
 			<label for="available_from">Available From</label>
 			<input id="available_from" type="datetime-local" required bind:value={formState.available_from}/>

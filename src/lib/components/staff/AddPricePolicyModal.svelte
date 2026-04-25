@@ -2,7 +2,7 @@
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import Modal from '$lib/components/layout/modal.svelte';
 	import type { PricePolicyI, PricePolicyInI } from '$lib/models/product_blueprint/PricePolicyI';
-	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
+	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 
 	let {

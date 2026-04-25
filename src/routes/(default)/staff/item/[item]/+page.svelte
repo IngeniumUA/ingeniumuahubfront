@@ -7,7 +7,7 @@
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import AddProductBlueprintModal from '$lib/components/staff/AddProductBlueprintModal.svelte';
 	import ProductBlueprintCard from '$lib/components/staff/ProductBlueprintCard.svelte';
-	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
+	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { hexToRGB, makePretty, prettyDate } from '$lib/utilities/style-utilities';

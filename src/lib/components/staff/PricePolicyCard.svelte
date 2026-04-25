@@ -1,5 +1,5 @@
 ﻿<script lang="ts">
-	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
+	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import type { PricePolicyI } from '$lib/models/product_blueprint/PricePolicyI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';

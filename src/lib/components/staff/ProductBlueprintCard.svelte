@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
 	import type { ProductBlueprintI, UponCompletionMetaData } from '$lib/models/product_blueprint/ProductBlueprintI';
-	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
+	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import AddPricePolicyModal from '$lib/components/staff/AddPricePolicyModal.svelte';
 	import PricePolicyCard from '$lib/components/staff/PricePolicyCard.svelte';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
