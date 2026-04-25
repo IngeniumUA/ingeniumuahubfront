@@ -50,7 +50,6 @@
 
 	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
-		console.log(trackCheckout);
 		return trackCheckout !== null;
 	}));
 
