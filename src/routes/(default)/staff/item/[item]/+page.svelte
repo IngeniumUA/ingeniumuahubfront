@@ -21,6 +21,7 @@
 	import { PaymentProviderEnum } from '$lib/models/productsI';
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
+	import type { ItemWideI } from '$lib/models/item/itemwideI';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -97,6 +98,13 @@
 		}
 	}
 
+	function initializeExternalLink(itemWide: ItemWideI): boolean {
+		let derivedItem = itemWide.derived_type;
+		const itemType = derivedItem.derived_type_enum
+		const internalLink = `/${itemType.slice(0, itemType.length - 4)}/${itemWide.item.name}`
+		return !((itemWide as EventItemWideI).derived_type.display?.follow_through_link === internalLink);
+	}
+
 	let form: FormState = $state({
 		item: {
 			name: data.itemWide.item.name,
@@ -125,8 +133,7 @@
 			},
 		},
 		derived_type: {
-			// TODO this is ugly
-			externalLink: (["eventitem", "shopitem", "promoitem"].includes(data.itemWide.derived_type.derived_type_enum) ? (data.itemWide as EventItemWideI).derived_type.display.follow_through_link.includes('http'): false),
+			externalLink: initializeExternalLink(data.itemWide),
 			display: parseDisplay(),
 			location: parseLocation()
 		}
@@ -443,7 +450,7 @@
 						<div class="form-field">
 							<label for="clickThroughLink">Click Through Link</label>
 							{#if (form.derived_type.externalLink)}
-								<input id="clickThroughLink" type="text" required/>
+								<input id="clickThroughLink" type="text" required bind:value={form.derived_type.display.follow_through_link}/>
 							{/if}
 							<p>Waar je naartoe wordt gestuurd als je op het item klikt.</p>
 						</div>
