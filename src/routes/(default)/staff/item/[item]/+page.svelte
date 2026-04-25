@@ -395,7 +395,7 @@
 				</nav>
 			</aside>
 			{#if hasDisplay}
-				<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={recsysPreview} /></div>
+				<div class="flex-1 p-4 max-w-96"><RecSysPreviewItem item={recsysPreview} /></div>
 			{/if}
 		</div>
 
