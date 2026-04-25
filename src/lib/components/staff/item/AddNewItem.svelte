@@ -115,7 +115,7 @@
 	{#snippet children()}
 		<!-- Main body -->
 		<form class="p-4 ingenium-form">
-		<div class="flex flex-row gap-4 min-w-96">
+		<div class="flex flex-col lg:flex-row gap-4">
 			<div class="flex-1">
 				<fieldset>
 					<div class="form-field">
