@@ -313,7 +313,7 @@
 		</div>
 	{/if}
 
-	<article class="absolute bottom-4 right-4 flex flex-col gap-4">
+	<article class="absolute bottom-8 right-8 flex flex-col gap-4 z-10">
 		{#if hasRole("staff")}
 			<button disabled={cartProducts.length === 0 || httpLoading} onclick={handleCheckoutNow} class="text-white bg-blue-900 hover:bg-blue-950 focus:ring-4
 		focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-center

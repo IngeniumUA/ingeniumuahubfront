@@ -2,7 +2,7 @@
 	import { type HubCheckoutTrackerI, HubCheckoutTrackerStatusEnum } from '$lib/models/trackerI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
-	import type { ProductFormI } from '$lib/models/productsI';
+	import type { ProductFormI, ProductOutI } from '$lib/models/productsI';
 	import { onDestroy, onMount } from 'svelte';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 	import Header from '$lib/components/layout/header.svelte';
@@ -68,27 +68,6 @@
 
 	let loadingHTTP: boolean = $state(false)
 	let stepError: Error | null = $state(null)
-	async function increaseStatus(index: number, order: HubCheckoutTrackerI) {
-		loadingHTTP = true;
-		try {
-			const returnOrder = await CoreCheckoutAPI.stepCheckoutTracker(null, order.id);
-			if (!showOrder(returnOrder)) {
-				orders.splice(index, 1); // splice is *in place*
-			} else {
-				orders[index] = returnOrder
-			}
-			stepError = null;
-		} catch (error) {
-			stepError = error instanceof Error ? error : Error('Error submitting form');
-		} finally {
-			if (stepError === null) {
-				successToast("Updated!")
-			} else {
-				failedToast(`Update Failed`)
-			}
-			loadingHTTP = false;
-		}
-	}
 	async function setStatus(index: number, order: HubCheckoutTrackerI, nextStatus: HubCheckoutTrackerStatusEnum) {
 		loadingHTTP = true;
 		try {
@@ -136,6 +115,18 @@
 		const now = Date.now(); // Current local time in ms
 
 		return Math.floor((now - eventTime) / 60000) - 120;
+	}
+
+	const colorPallete = [
+		"#b23638",
+		"#d54373",
+		"#fd785d",
+		"#ffb853",
+		"#00c899",
+	]
+	function getColorForProduct(purchased_product: ProductOutI): string {
+		const id = purchased_product.blueprint_id ?? 0;
+		return colorPallete[id % colorPallete.length];
 	}
 
 	/**
@@ -268,7 +259,16 @@
 		{#if orders.length === 0}<h1>Geen Trackers</h1>{/if}
 		{#each showOrders as order, index (order.id)}
 			<article class="flex flex-col p-2 rounded-md border border-blue-900">
-				<span class="text-xl font-bold">#{ order.order_counter }</span>
+				<div class="flex flex-row gap-2">
+					<span class="text-xl font-bold mr-auto">#{ order.order_counter }</span>
+					{#each order.checkout.transactions as transaction}
+					 <span
+						 class="mt-2 w-3.5 h-3.5 rounded-full inline-block"
+						 style="background-color: {getColorForProduct(transaction.purchased_product)};"
+						 title={transaction.purchased_product.name}
+					 ></span>
+					{/each}
+				</div>
 					<ul class="list-disc list-inside space-y-1 my-2 flex-1">
 						{#each order.checkout.transactions as transaction}
 							<li>
