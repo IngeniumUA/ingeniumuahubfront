@@ -119,10 +119,12 @@
 
 	const colorPallete = [
 		"#b23638",
-		"#d54373",
-		"#fd785d",
-		"#ffb853",
+		"#f3c5ff",
+		"#ffc75f",
 		"#00c899",
+		"#2c73d2",
+		"#936c00",
+		"#4ffbdf",
 	]
 	function getColorForProduct(purchased_product: ProductOutI): string {
 		const id = purchased_product.blueprint_id ?? 0;
@@ -263,7 +265,7 @@
 					<span class="text-xl font-bold mr-auto">#{ order.order_counter }</span>
 					{#each order.checkout.transactions as transaction}
 					 <span
-						 class="mt-2 w-3.5 h-3.5 rounded-full inline-block"
+						 class="mt-2 w-7 h-7 rounded-full inline-block"
 						 style="background-color: {getColorForProduct(transaction.purchased_product)};"
 						 title={transaction.purchased_product.name}
 					 ></span>
