@@ -21,7 +21,7 @@
         ${sidebar ? 'w-full md:w-1/5 lg:w-1/6' : 'w-full md:w-10'}`}>
 
 			<!-- Mobile toggle (visible only on mobile) -->
-			<div class="flex items-center justify-end px-4 py-2 md:hidden">
+			<div class="flex items-center justify-start px-4 py-2 md:hidden">
 				<button onclick={() => sidebar = !sidebar} aria-label="toggle-menu ml-auto">
 					{#if sidebar}
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
