@@ -270,6 +270,7 @@
 	{/if}
 
 	{#if tableView}
+	<div class="overflow-x-auto w-full">
 	<table class="ingenium-table">
 		<thead>
 		<tr>
@@ -391,6 +392,7 @@
 		{/each}
 		</tbody>
 	</table>
+	</div>
 	{:else}
 	<!-- List view -->
 		<label class="inline-flex items-center cursor-pointer my-4 ml-auto">

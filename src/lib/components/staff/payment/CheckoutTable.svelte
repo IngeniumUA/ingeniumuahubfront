@@ -222,6 +222,7 @@
 		{/each}
 	</section>
 
+	<div class="overflow-x-auto w-full">
 	<table class="ingenium-table">
 		<thead>
 			<tr>
@@ -310,6 +311,7 @@
 			{/each}
 		</tbody>
 	</table>
+	</div>
 	{#if checkouts.length === 0}
 		<div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg">
 			<p class="text-gray-500 mb-4">Geen betalingen gevonden met deze filters.</p>

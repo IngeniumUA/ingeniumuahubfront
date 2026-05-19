@@ -79,6 +79,8 @@
 			</div>
 
 			<h3 class="font-bold">Lijst</h3>
+
+			<div class="overflow-x-auto w-full">
 			<table class="ingenium-table">
 				<thead>
 				<tr>
@@ -115,9 +117,9 @@
 						<td>
 							<a href="/staff/user/{user.email}">{user.sso_uuid.slice(0, 6)}</a>
 						</td>
-						<th scope="row">
-							<a class="text-blue-900" href="/staff/user/{user.email}">{user.email}</a>
-						</th>
+						<td>
+							<a href="/staff/user/{user.email}">{user.email}</a>
+						</td>
 						<td>
 							{prettyDateTime(user.last_update_timestamp)}
 						</td>
@@ -133,6 +135,7 @@
 				{/each}
 				</tbody>
 			</table>
+			</div>
 		</div>
 
 		<!-- Vertical divider -->
