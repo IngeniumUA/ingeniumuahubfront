@@ -6,6 +6,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { CoreFlagAPI } from '$lib/core_api/flag_api';
 	import Header from '$lib/components/layout/header.svelte';
+	import Simhash from 'simhash-js';
 
 	let statusFilter: null | number = $state(null)
 	let categoryFilter: null | string = $state(null)
@@ -126,9 +127,15 @@
 		"#936c00",
 		"#4ffbdf",
 	]
+	const simhash = new Simhash();
 	function getColorForProduct(purchased_product: ProductOutI): string {
-		const id = purchased_product.blueprint_id ?? 0;
-		return colorPallete[id % colorPallete.length];
+		const productName = purchased_product.name || "";
+		const rawHash = simhash.hash(productName);
+
+		// Convert the hash into positive integer.
+		// Stripping non-numeric chars handles potential hex strings or variations in the lib output.
+		const numericHash = Math.abs(parseInt(rawHash.toString(10).replace(/\D/g, ''), 10)) || 0;
+		return colorPallete[numericHash % colorPallete.length];
 	}
 
 	/**
