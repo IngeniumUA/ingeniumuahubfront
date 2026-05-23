@@ -36,7 +36,6 @@
 		clickThroughLink: display?.follow_through_link ?? "",
 		externalLink: display?.follow_through_link.startsWith("http"),
 		preview_description: display?.preview_description ?? "",
-		image_landscape: display?.image_landscape ?? null,
 		image_square: display?.image_square ?? null,
 
 		// Event
@@ -55,7 +54,6 @@
 			date: null,
 			color: 'rgb(255, 255, 255)',
 			image_square: form.image_square,
-			image_landscape: form.image_landscape,
 			preview_description: form.preview_description
 		};
 		recsysItem.color = hexToRGB(form.color) ?? form.color;
@@ -85,7 +83,6 @@
 				preview_description: form.preview_description,
 				follow_through_link: form.externalLink ? form.clickThroughLink: `/${itemType.slice(0, itemType.length - 4)}/${form.name}`,
 				image_square: form.image_square,
-				image_landscape: form.image_landscape,
 			};
 		}
 

@@ -23,7 +23,6 @@
 		clickThroughLink: '',
 		externalLink: false,
 		preview_description: null,
-		image_landscape: null,
 		image_square: null,
 		event_start: null,
 		event_end: null,
@@ -41,7 +40,6 @@
 			date: null,
 			color: 'rgb(255, 255, 255)',
 			image_square: null,
-			image_landscape: null,
 			preview_description: null
 		};
 		recsysItem.color = hexToRGB(form.color) ?? form.color;
@@ -73,7 +71,6 @@
 				color: form.color,
 				follow_through_link: form.externalLink ? form.clickThroughLink : `/${itemType === null ? "item": itemType.slice(0, itemType.length - 4)}/${form.name}`,
 				image_square: form.image_square,
-				image_landscape: form.image_landscape,
 				preview_description: form.preview_description
 			}
 		}

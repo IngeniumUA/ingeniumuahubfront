@@ -9,7 +9,6 @@ export interface RecSysPreviewI {
 	date: string | null | undefined;
 	color: string;
 	image_square: string | null;
-	image_landscape: string | null;
 	preview_description: string | null;
 }
 
@@ -26,7 +25,6 @@ export const toRecsysPreview = (input: EventItemWideI | ShopItemWideI | ItemWide
 		date: null,
 		color: 'rgb(255, 255, 255)',
 		image_square: displayHolding.derived_type.display.image_square,
-		image_landscape: displayHolding.derived_type.display.image_landscape,
 		preview_description: displayHolding.derived_type.display.preview_description
 	};
 	const color = hexToRGB(displayHolding.derived_type.display.color) ?? displayHolding.derived_type.display.color;

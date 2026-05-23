@@ -77,13 +77,7 @@
 
   let pageTitle = $derived.by(() => `${data.event.item.name} | IngeniumUA`);
 
-  let image: string | null = $derived.by(() => {
-      if (data.event.derived_type.display.image_landscape !== null) return data.event.derived_type.display.image_landscape;
-      if (data.event.derived_type.display.image_square !== null) return data.event.derived_type.display.image_square;
-      return null;
-    }
-    );
-  
+
   async function copySharelink() {
     if (!navigator.clipboard) return; // Doesn't work on all browsers
 
@@ -100,7 +94,7 @@
   <title>{ pageTitle }</title>
   <meta property="og:title" content={ pageTitle } />
   <meta property="og:description" content={ data.event.item.description } />
-  <meta property="og:image" content={ image } />
+  <meta property="og:image" content={ data.event.derived_type.display.image_square } />
 </svelte:head>
 
 <header>

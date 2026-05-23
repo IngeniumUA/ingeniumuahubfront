@@ -151,7 +151,6 @@
 
 		if (hasDisplay) {
 			(derivedItem as EventItemI).display.image_square = form.derived_type.display.image_square === "" ? null: form.derived_type.display.image_square ?? null;
-			(derivedItem as EventItemI).display.image_landscape = form.derived_type.display.image_landscape === "" ? null: form.derived_type.display.image_landscape ?? null;
 			(derivedItem as EventItemI).display.color = form.derived_type.display.color === "" ? "#FFF": form.derived_type.display.color ?? "#FFF";
 			(derivedItem as EventItemI).display.preview_description = form.derived_type.display.preview_description === "" ? "": form.derived_type.display.preview_description ?? "";
 			(derivedItem as EventItemI).display.follow_through_link = form.derived_type.externalLink ? form.derived_type.display.follow_through_link ?? internalLink: internalLink
@@ -223,7 +222,6 @@
 			date: null,
 			color: 'rgb(255, 255, 255)',
 			image_square: form.derived_type.display.image_square!,
-			image_landscape: form.derived_type.display.image_landscape!,
 			preview_description: form.derived_type.display.preview_description!
 		};
 		const color = hexToRGB(form.derived_type.display.color!) ?? form.derived_type.display.color;
@@ -479,11 +477,6 @@
 					</fieldset>
 
 					<fieldset>
-						<div class="form-field">
-							<label for="image_landscape">Image Landscape</label>
-							<input id="image_landscape" type="text" required bind:value={form.derived_type.display.image_landscape}/>
-							<p>Landscape Image :)</p>
-						</div>
 						<div class="form-field">
 							<label for="image_square">Image Square</label>
 							<input id="image_square" type="text" required bind:value={form.derived_type.display.image_square}/>
