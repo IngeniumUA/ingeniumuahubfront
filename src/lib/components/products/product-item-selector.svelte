@@ -3,8 +3,11 @@
   import { addProductToCart, getProductCount, reduceProductQuantity } from '$lib/states/cart.svelte';
   import {getLoginUrlWithRedirect} from "$lib/auth/auth";
   import type {ProductOutI} from "$lib/models/productsI";
+  import { track } from '$lib/actions/umami';
+  import type { ItemLimitedI } from '$lib/models/item/itemI';
 
-  let { product }: { product: ProductOutI } = $props();
+  let { product, item }: { product: ProductOutI, item: ItemLimitedI } = $props();
+
   let initialCount = getProductCount(product, true); // Initial count in state
   let count = $state(initialCount)
   let inputCount = $state(initialCount);
@@ -52,7 +55,12 @@
     <p class="product-price">{ productPrice }</p>
 
     <div class="button-quantity-group">
-      <button disabled={ count <= 0 } onclick={ () => setValue(count - 1) }>
+      <button disabled={ count <= 0 } onclick={ () => setValue(count - 1) }
+              use:track={{ name: 'cart:remove_from_cart', data: {
+                product_blueprint_name: product.name, product_blueprint_id: product.blueprint_id,
+                item_name: item.name, item_id: item.id,
+              } }}
+      >
         <span class="sr-only">Aantal verlagen (nu: { count})</span>
         <span aria-hidden="true">&minus;</span>
       </button>
@@ -60,7 +68,11 @@
       <input type="number" min="0" max={ product.max_count }
              bind:value={ inputCount } oninput={ (e) => setValue(Number.parseInt(e.target?.value)) } />
 
-      <button disabled={ count >= product.max_count } onclick={ () => setValue(count + 1) }>
+      <button disabled={ count >= product.max_count } onclick={ () => setValue(count + 1) }
+              use:track={{ name: 'cart:add_to_cart', data: {
+                product_blueprint_name: product.name, product_blueprint_id: product.blueprint_id,
+                item_name: item.name, item_id: item.id,
+              } }}>
         <span class="sr-only">Aantal verhogen (nu: { count})</span>
         <span aria-hidden="true">&plus;</span>
       </button>

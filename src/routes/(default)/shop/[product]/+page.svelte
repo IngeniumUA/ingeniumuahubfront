@@ -7,6 +7,7 @@
   import {calcColorIntensity, transformColorToRGBA} from "$lib/utilities/style-utilities";
   import { cartProducts } from '$lib/states/cart.svelte';
   import { successToast } from '$lib/components/toast/defined_toast';
+  import { track } from '$lib/actions/umami';
 
   let { data }: PageProps = $props();
   let currentCategory = $state(0);
@@ -141,7 +142,7 @@
               <ul class="products" style:border-color={ primaryColor }>
                 {#each group.products as product }
                   <li>
-                    <ProductItemSelector { product } />
+                    <ProductItemSelector product={product} item={data.shop.item} />
                   </li>
                 {/each}
               </ul>
@@ -153,7 +154,11 @@
       {/if}
 
       <div class="cart-button-container">
-        <a href="/shop/cart" class="button button-primary">Winkelwagen bekijken ({ cartProducts.length })</a>
+        <a href="/shop/cart" class="button button-primary"
+           use:track={{ name: 'cart:view_cart', data: {
+                item_name: data.shop.item.name, item_id: data.shop.item.id,
+              } }}
+        >Winkelwagen bekijken ({ cartProducts.length })</a>
       </div>
     </section>
     <aside>

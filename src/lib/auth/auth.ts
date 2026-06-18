@@ -65,6 +65,18 @@ export const getUserFromToken = (token: string): AuthUser => {
     console.warn('Failed to set Sentry user:', e);
   }
 
+  try {
+    if (typeof window !== 'undefined' && window.umami) {
+      window.umami.identify(decoded.sub, {
+        is_staff: decoded.realm_access?.roles?.includes('staff') ?? false
+        // we could add more user specific data like account age here
+        // However, we do not add the user's email
+      });
+    }
+  } catch (e) {
+    console.warn('Failed to identify Umami user:', e);
+  }
+
   return decoded;
 }
 
