@@ -20,9 +20,9 @@ jobs:
       - name: Set image tags and registry
         run: |
           echo "ACR_LOGIN_SERVER=${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io" >> $GITHUB_ENV
-          echo "IMAGE_NAME=ingeniumuahubcore" >> $GITHUB_ENV
-          echo "ACR_IMAGE=${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/ingeniumuahubcore:${{ github.sha }}" >> $GITHUB_ENV
-          echo "ACR_LATEST=${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/ingeniumuahubcore:staging" >> $GITHUB_ENV
+          echo "IMAGE_NAME=ingeniumuahubfrontend" >> $GITHUB_ENV
+          echo "ACR_IMAGE=${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/ingeniumuahubfrontend:${{ github.sha }}" >> $GITHUB_ENV
+          echo "ACR_LATEST=${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io/ingeniumuahubfrontend:staging" >> $GITHUB_ENV
           echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Azure Login
