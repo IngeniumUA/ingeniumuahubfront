@@ -1,7 +1,7 @@
 import type {PageLoad} from './$types';
 import {error} from "@sveltejs/kit";
 
-const BASE_URL = "https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/praesidium";
+const BASE_URL = "https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/praesidium/years";
 const MIN_START_YEAR = 2018; // Base year for 2018-2019
 
 function getAvailableYears(): string[] {
@@ -38,12 +38,12 @@ export const load: PageLoad = async ({ params, fetch, setHeaders }) => {
   } else if (!yearKeys.includes(requestedYear)) {
     throw error(404, 'Praesidium jaar niet gevonden');
   }
-  let dataRes = await fetch(`${BASE_URL}/praesidium/years/praesidium_${requestedYear}.json`);
+  let dataRes = await fetch(`${BASE_URL}/praesidium_${requestedYear}.json`);
 
   // If it's a new academic year but the JSON isn't uploaded yet, fall back to last year
   if (!dataRes.ok && isDefaultRoute && yearKeys.length > 1) {
     const fallbackYear = yearKeys[1];
-    dataRes = await fetch(`${BASE_URL}/praesidium/years/praesidium_${fallbackYear}.json`);
+    dataRes = await fetch(`${BASE_URL}/praesidium_${fallbackYear}.json`);
     requestedYear = fallbackYear;
   }
 
