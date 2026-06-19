@@ -1,37 +1,35 @@
 ﻿<script lang="ts">
 	import type { ProductBlueprintI, UponCompletionMetaData } from '$lib/models/product_blueprint/ProductBlueprintI';
+	import type { PricePolicyI } from '$lib/models/product_blueprint/PricePolicyI';
 	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import AddPricePolicyModal from '$lib/components/staff/AddPricePolicyModal.svelte';
 	import PricePolicyCard from '$lib/components/staff/PricePolicyCard.svelte';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
-	import type { PricePolicyI } from '$lib/models/product_blueprint/PricePolicyI';
+
 	let { productBlueprint = $bindable() }: { productBlueprint: ProductBlueprintI } = $props();
 
-	let editing: boolean = $state(false);
-	function toggleEdit() {
-		editing = !editing;
+	type Section = 'product' | 'limits' | 'meta' | 'availability' | 'completion';
+	let openSection = $state<Section | null>('product');
+
+	function toggle(section: Section) {
+		openSection = openSection === section ? null : section;
 	}
 
-	/**
-	 * Form as a reactive state
-	 */
-	function parseForForm() {
-		if ("other_meta_data" in productBlueprint.product_blueprint_metadata) {
+	function parseForForm(): string {
+		if ('other_meta_data' in productBlueprint.product_blueprint_metadata) {
 			const meta = productBlueprint.product_blueprint_metadata?.other_meta_data;
-			if ("form" in meta) {
-				return JSON.stringify(meta.form);
+			if (meta && 'form' in meta) {
+				return JSON.stringify((meta as { form: unknown }).form);
 			}
 		}
-		return "";
+		return '';
 	}
 
 	let form = $state({
 		name: productBlueprint.name,
 		description: productBlueprint.description,
-
 		ordering: productBlueprint.ordering,
-		allow_individualised: false,
 
 		max_total: productBlueprint.max_total,
 		max_per_checkout: productBlueprint.max_per_checkout,
@@ -41,78 +39,55 @@
 
 		product_blueprint_metadata: {
 			track_checkout: (productBlueprint.product_blueprint_metadata.upon_completion?.track_checkout ?? null) !== null,
-
 			add_to_group: (productBlueprint.product_blueprint_metadata.upon_completion?.add_to_group ?? null) !== null,
-			add_to_group_value: "",
-
+			add_to_group_value: '',
 			category: productBlueprint.product_blueprint_metadata.categorie,
 			group: productBlueprint.product_blueprint_metadata.group,
-
 			other_meta_data: {
 				form: parseForForm()
 			}
 		}
-	})
+	});
 
-	let selectedArray = $state(Array.from({ length: productBlueprint.price_policies.length }, () => false));
 	let addingPricePolicy = $state(false);
+	let loadingHTTP = $state(false);
+	let putError: Error | null = $state(null);
 
-	/**
-	 * Callback passed to CreatePricePolicy component
-	 * @param pricePolicy
-	 */
 	function appendPricePolicy(pricePolicy: PricePolicyI) {
 		productBlueprint.price_policies.push(pricePolicy);
 	}
 
-	let loadingHTTP = $state(false);
-
-	/**
-	 * 
-	 */
-	let putError: Error | null = $state(null);
 	async function update() {
-		if (loadingHTTP) {return}
-		// todo check for form errors
+		if (loadingHTTP) return;
 
 		const putProductBlueprint = productBlueprint;
 		putProductBlueprint.name = form.name;
 		putProductBlueprint.description = form.description;
-
 		putProductBlueprint.max_total = form.max_total;
 		putProductBlueprint.max_individual = form.max_individual;
 		putProductBlueprint.max_per_checkout = form.max_per_checkout;
-
 		putProductBlueprint.ordering = form.ordering;
-
 		putProductBlueprint.availability = form.availability;
-
 		putProductBlueprint.product_blueprint_metadata.categorie = form.product_blueprint_metadata.category;
 		putProductBlueprint.product_blueprint_metadata.group = form.product_blueprint_metadata.group;
 
-		// Upon completion
-		let upon_completion: UponCompletionMetaData = {
+		const upon_completion: UponCompletionMetaData = {
 			track_checkout: null,
 			add_to_group: null
-		}
+		};
 		if (form.product_blueprint_metadata.track_checkout) {
-			upon_completion.track_checkout = {
-				status_queue: [1, 2, 3],
-				disabled_on_status: 3
-			}
+			upon_completion.track_checkout = { status_queue: [1, 2, 3], disabled_on_status: 3 };
 		}
 		if (form.product_blueprint_metadata.add_to_group) {
-			upon_completion.add_to_group = form.product_blueprint_metadata.add_to_group_value
+			upon_completion.add_to_group = form.product_blueprint_metadata.add_to_group_value;
 		}
-		putProductBlueprint.product_blueprint_metadata.upon_completion = upon_completion
+		putProductBlueprint.product_blueprint_metadata.upon_completion = upon_completion;
 
-		if (form.product_blueprint_metadata.other_meta_data.form !== null &&
-			form.product_blueprint_metadata.other_meta_data.form !== "" &&
-			form.product_blueprint_metadata.other_meta_data.form !== undefined) {
-			const formString = form.product_blueprint_metadata.other_meta_data.form as string;
+		const formStr = form.product_blueprint_metadata.other_meta_data.form;
+		if (formStr !== null && formStr !== '' && formStr !== undefined) {
 			putProductBlueprint.product_blueprint_metadata.other_meta_data = {
-				form: JSON.parse(formString)
-			}
+				form: JSON.parse(formStr as string)
+			};
 		}
 
 		loadingHTTP = true;
@@ -123,162 +98,308 @@
 			putError = error instanceof Error ? error : Error('Error submitting form');
 		} finally {
 			if (putError === null) {
-				successToast("Updated!")
+				successToast('Updated!');
 			} else {
-				failedToast(`Update Failed`)
+				failedToast('Update failed');
 			}
 			loadingHTTP = false;
 		}
 	}
 </script>
 
-<article class="my-4 flex-1
-							rounded-lg
-							min-h-48
-							shadow-md hover:shadow-lg transition-shadow">
-	<div class="p-4 bg-ingenium-grey-100 flex flex-row rounded-t-lg">
+<style lang="scss">
+  .accordion-button {
+    @apply w-full flex items-center gap-3 py-3 text-left hover:bg-gray-50 active:bg-gray-100 transition-colors min-h-12;
+
+    // Icon container
+    span:nth-of-type(1) {
+      @apply flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-ingenium-grey-100;
+    }
+
+    // Title
+    span:nth-of-type(2) {
+      @apply text-sm font-bold text-blue-900;
+    }
+
+    // Description
+    span:nth-of-type(3) {
+      @apply text-xs text-gray-400 truncate;
+    }
+  }
+
+	.ingenium-form {
+		label {
+			@apply text-sm;
+		}
+	}
+</style>
+
+<article class="my-4 rounded-lg shadow-md hover:shadow-lg transition-shadow bg-white overflow-hidden">
+
+	<!-- Header -->
+	<div class="flex items-center gap-3 px-4 py-3 bg-ingenium-grey-100 border-b border-gray-200">
 		<h2>{productBlueprint.name}</h2>
-		<button class="ml-auto" aria-label="edit" onclick="{toggleEdit}">
-			<svg fill="#1f2980" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-					 width="20px" height="20px" viewBox="0 0 528.899 528.899"
-					 xml:space="preserve">
-						<g>
-							<path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
-								c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
-								C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069
-								L27.473,390.597L0.3,512.69z"/>
-						</g>
-						</svg>
-		</button>
+		<!-- Active toggle pill -->
+		<span class="ml-auto text-xs px-2 py-1 rounded-full
+			{productBlueprint.availability ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+			{productBlueprint.availability ? 'Active' : 'Inactive'}
+		</span>
 	</div>
 
-	<form class="p-4 pt-2 ingenium-form flex flex:col lg:flex-row lg:gap-8">
-		<fieldset>
-			<h3 class="font-bold">Product Configuration</h3>
-			<div class="flex-1 form-field max-w-72 mb-2">
-				<label for="itemName">Name</label>
-				<input id="itemName" type="text" required bind:value={ form.name }/>
-				<p>Display naam van de product.</p>
-			</div>
-			<div class="flex-1 form-field max-w-72 mb-2">
-				<label for="description">Description</label>
-				<p>Beschrijving van het product.</p>
-				<div class="form-field min-h-32 flex max-w-xl">
-					<textarea class="flex-1" id="description" required bind:value={ form.description }></textarea>
-				</div>
-			</div>
+	<!-- Summary stat cards -->
+	<div class="flex flex-row gap-2 p-4 bg-ingenium-grey-100 border-b border-gray-200">
+		<div class="flex-1 bg-white rounded-lg px-3 py-2 border border-gray-200">
+			<p class="text-xs text-gray-500">Max total</p>
+			<p class="text-xl font-medium text-gray-900">{productBlueprint.max_total}</p>
+		</div>
+		<div class="flex-1 bg-white rounded-lg px-3 py-2 border border-gray-200">
+			<p class="text-xs text-gray-500">Per checkout</p>
+			<p class="text-xl font-medium text-gray-900">{productBlueprint.max_per_checkout}</p>
+		</div>
+		<div class="flex-1 bg-white rounded-lg px-3 py-2 border border-gray-200">
+			<p class="text-xs text-gray-500">Per Account</p>
+			<p class="text-xl font-medium text-gray-900">{productBlueprint.max_individual}</p>
+		</div>
+	</div>
 
-			<div class="form-field max-w-72">
-				<label for="ordering">Ordering</label>
-				<input id="ordering" type="number" required bind:value={form.ordering}/>
-				<p>Weergave volgorde, hoger cijfer -> hoger/eerst op de pagina.</p>
-			</div>
+	<!-- Accordion sections -->
+	<div class="px-4 divide-y divide-gray-200">
+	<!-- Product details -->
+		<button
+			type="button"
+			onclick={() => toggle('product')}
+			class="accordion-button"
+			aria-expanded={openSection === 'product'}
+		>
+			<span>
+				<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/>
+				</svg>
+			</span>
+			<span>Product details</span>
+			<span>Name · description · ordering · {form.product_blueprint_metadata.category || '–'} · {form.product_blueprint_metadata.group || '–'}</span>
+		</button>
+		{#if openSection === 'product'}
+			<form class="ingenium-form">
+				<fieldset>
+					<div class="form-field">
+						<label for="productName">Name</label>
+						<input id="productName" type="text" required bind:value={form.name} />
+					</div>
+					<div class="form-field">
+						<label for="productDescription">Description</label>
+						<textarea id="productDescription" class="w-full min-h-16" required bind:value={form.description}></textarea>
+					</div>
+					<div class="form-field">
+						<label for="ordering">Ordering</label>
+						<input id="ordering" type="number" class="w-20" required bind:value={form.ordering} />
+						<p class="text-xs text-gray-400">Higher number → shown first</p>
+					</div>
+				</fieldset>
+				<fieldset class="grid grid-cols-2 gap-2">
+					<div class="form-field">
+						<label for="category">Category</label>
+						<input id="category" type="text" bind:value={form.product_blueprint_metadata.category} />
+					</div>
+					<div class="form-field">
+						<label for="group">Group</label>
+						<input id="group" type="text" bind:value={form.product_blueprint_metadata.group} />
+					</div>
+				</fieldset>
+			</form>
+		{/if}
+	</div>
 
-			<div class="form-field max-w-72">
-				<label for="max_total">Max Total</label>
-				<input id="max_total" type="number" required bind:value={form.max_total}/>
-				<p>Totaal maximum.</p>
+	<!-- Limits -->
+	<div class="px-4 divide-y divide-gray-200">
+		<button
+			type="button"
+			onclick={() => toggle('limits')}
+			class="accordion-button"
+			aria-expanded={openSection === 'limits'}
+		>
+			<span>
+				<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"/>
+				</svg>
+			</span>
+			<span>Limits</span>
+			<span>Max total · per checkout · per account</span>
+		</button>
+		{#if openSection === 'limits'}
+			<form class="ingenium-form">
+				<fieldset class="grid grid-cols-3 gap-2">
+					<div class="form-field">
+						<label for="max_total">Total</label>
+						<input id="max_total" type="number" required bind:value={form.max_total} />
+					</div>
+					<div class="form-field">
+						<label for="max_per_checkout">Per checkout</label>
+						<input id="max_per_checkout" type="number" required bind:value={form.max_per_checkout} />
+					</div>
+					<div class="form-field">
+						<label for="max_individual">Per account</label>
+						<input id="max_individual" type="number" required bind:value={form.max_individual} />
+					</div>
+				</fieldset>
+			</form>
+		{/if}
+	</div>
 
-				<label for="max_total">Max per betaling</label>
-				<input id="max_total" type="number" required bind:value={form.max_per_checkout}/>
-				<p>Maximum per betaling.</p>
+	<!-- Availability -->
+	<div class="px-4 divide-y divide-gray-200">
+		<button
+			type="button"
+			onclick={() => toggle('availability')}
+			class="accordion-button"
+			aria-expanded={openSection === 'availability'}
+		>
+			<span>
+				<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/>
+				</svg>
+			</span>
+			<span>Availability</span>
+			<span>Dates · dynamic policy</span>
+		</button>
+		{#if openSection === 'availability'}
+			<AvailabilityForm bind:formState={form.availability} />
+		{/if}
+	</div>
 
-				<label for="max_total">Max per account</label>
-				<input id="max_total" type="number" required bind:value={form.max_individual}/>
-				<p>Maximum per account (bij betalen zonder inloggen kan dit overschreden worden, maar dat geeft validity 'rood')</p>
-			</div>
+	<!-- Completion -->
+	<div class="px-4 divide-y divide-gray-200">
+		<button
+			type="button"
+			onclick={() => toggle('completion')}
+			class="accordion-button"
+			aria-expanded={openSection === 'completion'}
+		>
+			<span>
+				<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+				</svg>
+			</span>
+			<span>Completion</span>
+			<span>Order tracking · group assignment</span>
+		</button>
+		{#if openSection === 'completion'}
+			<form class="ingenium-form">
+				<!-- Track checkout toggle -->
+				<label class="flex items-center gap-3 cursor-pointer">
+					<input type="checkbox" class="sr-only peer" bind:checked={form.product_blueprint_metadata.track_checkout} />
+					<span class="
+						relative w-10 h-6 rounded-full flex-shrink-0
+						bg-red-900 peer-checked:bg-green-900
+						after:content-[''] after:absolute after:top-1 after:start-1
+						after:w-4 after:h-4 after:bg-white after:rounded-full
+						after:transition-transform peer-checked:after:translate-x-4
+					"></span>
+					<div>
+						<p class="text-sm text-gray-900">Order tracking</p>
+						<p class="text-xs text-gray-400">Voor Pop-up Z ordertracking</p>
+					</div>
+				</label>
 
-			</fieldset>
-			<fieldset>
-				<h3 class="font-bold">Meta Config</h3>
+				<!-- Add to group toggle -->
+				<label class="flex items-center gap-3 cursor-pointer">
+					<input type="checkbox" class="sr-only peer" bind:checked={form.product_blueprint_metadata.add_to_group} />
+					<span class="
+						relative w-10 h-6 rounded-full flex-shrink-0
+						bg-red-900 peer-checked:bg-green-900
+						after:content-[''] after:absolute after:top-1 after:start-1
+						after:w-4 after:h-4 after:bg-white after:rounded-full
+						after:transition-transform peer-checked:after:translate-x-4
+					"></span>
+					<div>
+						<p class="text-sm text-gray-900">Add to group</p>
+						<p class="text-xs text-gray-400">Keycloak group assignment</p>
+					</div>
+				</label>
 
-				<div class="form-field max-w-72">
-					<label for="category">Category</label>
-					<input id="category" type="text" required bind:value={form.product_blueprint_metadata.category}/>
-					<p>Display category, voor event pagina groepering</p>
-				</div>
-
-				<div class="form-field max-w-72">
-					<label for="group">Group</label>
-					<input id="group" type="text" required bind:value={form.product_blueprint_metadata.group}/>
-					<p>Display groep, voor event pagina groepering</p>
-				</div>
-
-				<div class="form-field max-w-72">
-					<label for="group">Meta form</label>
-					<input id="group" type="text" required bind:value={form.product_blueprint_metadata.other_meta_data.form}/>
-					<p>Product meta form value</p>
-				</div>
-
-				<div class="form-field">
-					<label for="track_checkout">Track Checkout</label><br>
-					<label class="inline-flex items-center cursor-pointer mb-4">
-						<input type="checkbox" class="hidden peer"
-									 bind:checked={form.product_blueprint_metadata.track_checkout}
-						>
-						<span class="
-									relative w-11 h-6
-									bg-red-900 dark:bg-red-900
-									rounded-full
-									peer-checked:bg-green-900 dark:peer-checked:bg-green-900
-									after:content-['']
-									after:absolute after:top-[2px] after:start-[2px]
-									after:w-5 after:h-5
-									after:bg-white after:rounded-full
-									after:transition-transform
-									peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
-									"></span>
-						<span class="ms-3 text-sm font-medium text-gray-600">
-												Ordertracking {#if (form.product_blueprint_metadata.track_checkout)}Aan{:else}Uit{/if}
-											</span>
-					</label>
-					<p>Voor Pop-up Z ordertracking</p>
-				</div>
-
-				{#if form.product_blueprint_metadata.track_checkout}
-					<p>FUTURE: Custom tracker settings hier</p>
+				{#if form.product_blueprint_metadata.add_to_group}
+					<fieldset>
+						<div class="form-field">
+							<label for="add_to_group_value">Keycloak group UUID</label>
+							<input id="add_to_group_value" type="text" bind:value={form.product_blueprint_metadata.add_to_group_value} />
+						</div>
+					</fieldset>
 				{/if}
+			</form>
+		{/if}
+	</div>
 
-<!--				<div class="form-field">-->
-<!--					<label for="track_checkout">Add to Group</label><br>-->
-<!--					<span class="ms-3 text-sm font-medium text-gray-600">-->
-<!--												{#if (form.product_blueprint_metadata.add_to_group)}Aan{:else}Uit{/if}-->
-<!--											</span>-->
-<!--				</div>-->
-<!--				{#if form.product_blueprint_metadata.add_to_group}-->
-<!--					<label for="add_to_group">Keycloak group uuid</label>-->
-<!--					<input id="add_to_group" type="text" required bind:value={form.product_blueprint_metadata.add_to_group_value}/>-->
-<!--					<p>UUID van de groep in keycloak</p>-->
-<!--				{/if}-->
-			</fieldset>
 
-			<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
-	</form>
+	<!-- Meta config -->
+	<div class="px-4 divide-y divide-gray-200">
+		<button
+			type="button"
+			onclick={() => toggle('meta')}
+			class="accordion-button"
+			aria-expanded={openSection === 'meta'}
+		>
+			<span>
+				<svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"/>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z"/>
+				</svg>
+			</span>
+			<span>Meta config</span>
+			<span>{form.product_blueprint_metadata.category || '–'} · {form.product_blueprint_metadata.group || '–'}</span>
+		</button>
+		{#if openSection === 'meta'}
+			<form class="ingenium-form">
+				<fieldset>
+					<div class="form-field">
+						<label for="meta_form">Meta form</label>
+						<input id="meta_form" type="text" bind:value={form.product_blueprint_metadata.other_meta_data.form} />
+					</div>
+				</fieldset>
+			</form>
+		{/if}
+	</div>
 
-	<div class="mt-4 p-4 flex justify-end">
-		<button class="button button-primary button-inline" onclick={update}>
-			<span class="text-white">Update</span>
+	<!-- Save Button -->
+	<div class="flex px-4">
+		<button
+			type="button"
+			onclick={update}
+			disabled={loadingHTTP}
+			class="button button-primary ml-auto"
+		>
+			{loadingHTTP ? 'Saving…' : 'Save changes'}
 		</button>
 	</div>
 
-	<div class="mt-8 p-4">
-		<h3 class="font-bold">Price Policies</h3>
-		<hr class="h-px mt-4 bg-gray-200 border-0 dark:bg-gray-800">
+	<div class="block w-px mx-4 bg-gray-200"></div>
+
+	<!-- Price policies -->
+	<div class="flex items-center justify-between px-4 py-3">
+		<h3 class="font-bold">Price policies</h3>
+		<button
+			type="button"
+			onclick={() => { addingPricePolicy = true; }}
+			class="button button-primary"
+		>
+			Add new
+		</button>
+	</div>
+
+	<div class="px-4 divide-y divide-gray-200">
 		{#each productBlueprint.price_policies as pricePolicy, pricePolicyIndex (pricePolicy.id)}
-			<PricePolicyCard bind:loadingHTTP={loadingHTTP}
-											 isOpen={ selectedArray.at(pricePolicyIndex) ?? false }
-											 bind:pricePolicy={productBlueprint.price_policies[pricePolicyIndex]}
-											 pricePolicyIndex={pricePolicyIndex}></PricePolicyCard>
-			<hr class="h-px bg-gray-200 border-0 dark:bg-gray-800">
+			<PricePolicyCard
+				bind:loadingHTTP={loadingHTTP}
+				isOpen={false}
+				bind:pricePolicy={productBlueprint.price_policies[pricePolicyIndex]}
+				pricePolicyIndex={pricePolicyIndex}
+			/>
 		{/each}
-	</div>
-
-	<div class="mt-4 p-4 flex justify-end bg-ingenium-grey-100 rounded-b-lg">
-		<button class="button button-primary button-inline"
-		onclick="{() => {addingPricePolicy = true}}">
-			<span class="text-white">Add New</span>
-		</button>
 	</div>
 </article>
 
-<AddPricePolicyModal createdCallback={appendPricePolicy} bind:isOpen={addingPricePolicy} product_blueprint_id={productBlueprint.id}></AddPricePolicyModal>
+<AddPricePolicyModal
+	createdCallback={appendPricePolicy}
+	bind:isOpen={addingPricePolicy}
+	product_blueprint_id={productBlueprint.id}
+/>
