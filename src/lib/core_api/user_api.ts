@@ -125,4 +125,17 @@ export class CoreUserAPI {
 			throw `Failed to add user to manager: ${await res.text()}`;
 		}
 	}
+
+	static async removeUserFromManager(params: RouteParams | null = null, userIdentifier: string): Promise<boolean> {
+		const res = await fetch(`${PUBLIC_API_URL}/manager/remove/${userIdentifier}`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify({})
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to remove user from manager: ${await res.text()}`;
+		}
+	}
 }

@@ -7,8 +7,8 @@
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
-	let managerUsers: UserWideI[] = $state(data.managerUsers)
-	let mediaList: string[] = $state(data.mediaList)
+	let managerUsers: UserWideI[] = $derived(data.managerUsers)
+	let mediaList: string[] = $derived(data.mediaList)
 
 	/**
 	 *
@@ -39,6 +39,27 @@
 		} finally {
 			if (patchError === null) {
 				successToast("Added!")
+				userManagerEmail = "";
+			} else {
+				failedToast(`Update Failed`)
+			}
+			loadingHTTP = false;
+		}
+	}
+
+	async function removeFromManager(userIdentifier: string) {
+		if (loadingHTTP) return;
+
+		loadingHTTP = true;
+		try {
+			await CoreUserAPI.removeUserFromManager(null, userIdentifier);
+			await refresh();
+			patchError = null;
+		} catch (error) {
+			patchError = error instanceof Error ? error : Error('Error removing user');
+		} finally {
+			if (patchError === null) {
+				successToast("Removed!")
 				userManagerEmail = "";
 			} else {
 				failedToast(`Update Failed`)
@@ -89,7 +110,7 @@
 
 				<ul>
 					{#each managerUsers as manager}
-						<li><p>{manager.email}</p></li>
+						<li class="flex flex-row"><p>{manager.email}</p> <button class="ml-auto" onclick={() => {removeFromManager(manager.user_uuid)}}>remove</button></li>
 					{/each}
 				</ul>
 			</article>
