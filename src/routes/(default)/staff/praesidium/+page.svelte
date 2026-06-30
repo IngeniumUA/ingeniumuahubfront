@@ -1,4 +1,6 @@
 ﻿<script lang="ts">
+	const BASE_URL = "https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/praesidium/years";
+
 	// Generate a list of years for the dropdown
 	function getAvailableYears() {
 		const now = new Date();
@@ -16,13 +18,54 @@
 
 	const years = getAvailableYears();
 
+	const defaultJson = '[\n  {\n    "group_name": "Voorbeeld",\n    "members": []\n  }\n]';
+
 	// Svelte 5 Runes for reactivity
 	let selectedYear = $state(years[0]);
-	let jsonInput = $state('[\n  {\n    "group_name": "Voorbeeld",\n    "members": []\n  }\n]');
+	let jsonInput = $state(defaultJson);
 
+	let isFetching = $state(false);
 	let isSubmitting = $state(false);
 	let statusMessage = $state('');
 	let isError = $state(false);
+	let fetchMessage = $state('');
+
+	// Svelte 5 effect: runs on mount AND whenever selectedYear changes
+	$effect(() => {
+		async function fetchExistingData() {
+			isFetching = true;
+			fetchMessage = 'Data aan het ophalen...';
+			statusMessage = ''; // Clear any previous upload messages
+
+			// Convert "2023-2024" to "23-24" for the blob URL
+			const [startYear, endYear] = selectedYear.split('-');
+			const shortYear = `${startYear.slice(-2)}-${endYear.slice(-2)}`;
+
+			try {
+				const response = await fetch(`${BASE_URL}/praesidium_${shortYear}.json`);
+
+				if (response.ok) {
+					const data = await response.json();
+					// Pretty-print the fetched JSON with 2 spaces for easy editing
+					jsonInput = JSON.stringify(data, null, 2);
+					fetchMessage = 'Bestaande configuratie ingeladen.';
+				} else if (response.status === 404) {
+					// File doesn't exist, reset to default
+					jsonInput = defaultJson;
+					fetchMessage = 'Nog geen configuratie voor dit jaar. Begin met een schone lei.';
+				} else {
+					throw new Error('Onverwachte fout bij inladen.');
+				}
+			} catch (e) {
+				jsonInput = defaultJson;
+				fetchMessage = 'Fout bij het ophalen van data. Azure onbereikbaar?';
+			} finally {
+				isFetching = false;
+			}
+		}
+
+		fetchExistingData();
+	});
 
 	async function handleUpload(event: Event) {
 		event.preventDefault();
@@ -58,6 +101,7 @@
 			}
 
 			statusMessage = `Data succesvol geüpload naar Azure voor ${selectedYear}!`;
+			isError = false;
 		} catch (e: any) {
 			isError = true;
 			statusMessage = e.message || 'Kan geen verbinding maken met de backend.';
@@ -70,8 +114,8 @@
 <main class="ingenium-container relative max-w-4xl p-6" id="main-content">
 	<h1 class="text-3xl font-bold mb-2">Praesidium Configureren</h1>
 	<p class="mb-8 text-gray-600">
-		Selecteer het academiejaar en plak de JSON array in het tekstvak. Deze data wordt direct geüpload.<br>
-		Belangrijk, <span class="font-bold">er is geen verschil tussen staging en productie</span>, niet zomaar aanpassen dus :)
+		Selecteer het academiejaar en bewerk de JSON array. Deze data wordt direct geüpload.<br>
+		Belangrijk, <span class="font-bold text-red-600">er is geen verschil tussen staging en productie</span>, niet zomaar aanpassen dus :)
 	</p>
 
 	<form onsubmit={handleUpload} class="flex flex-col gap-6">
@@ -81,7 +125,8 @@
 			<select
 				id="year-select"
 				bind:value={selectedYear}
-				class="p-2 border border-gray-300 rounded-md bg-white w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+				disabled={isFetching || isSubmitting}
+				class="p-2 border border-gray-300 rounded-md bg-white w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 			>
 				{#each years as year}
 					<option value={year}>{year}</option>
@@ -90,11 +135,15 @@
 		</div>
 
 		<div class="flex flex-col gap-2">
-			<label for="json-input" class="font-semibold text-gray-800">Praesidium JSON Payload</label>
+			<div class="flex justify-between items-end">
+				<label for="json-input" class="font-semibold text-gray-800">Praesidium JSON Payload</label>
+				<span class="text-sm text-gray-500 italic">{fetchMessage}</span>
+			</div>
 			<textarea
 				id="json-input"
 				bind:value={jsonInput}
-				class="w-full h-96 p-4 font-mono text-sm border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+				disabled={isFetching}
+				class="w-full h-96 p-4 font-mono text-sm border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y disabled:opacity-50"
 				placeholder="Plak hier je JSON array..."
 			></textarea>
 		</div>
@@ -108,7 +157,7 @@
 		<div>
 			<button
 				type="submit"
-				disabled={isSubmitting}
+				disabled={isFetching || isSubmitting}
 				class="button button-primary"
 			>
 				{isSubmitting ? 'Bezig met uploaden...' : 'Uploaden'}
