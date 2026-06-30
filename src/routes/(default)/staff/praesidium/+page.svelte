@@ -1,7 +1,8 @@
 ﻿<script lang="ts">
+	import { PUBLIC_API_URL } from '$env/static/public';
+
 	const BASE_URL = "https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/praesidium/years";
 
-	// Generate a list of years for the dropdown
 	function getAvailableYears() {
 		const now = new Date();
 		const currentYear = now.getFullYear();
@@ -20,7 +21,6 @@
 
 	const defaultJson = '[\n  {\n    "group_name": "Voorbeeld",\n    "members": []\n  }\n]';
 
-	// Svelte 5 Runes for reactivity
 	let selectedYear = $state(years[0]);
 	let jsonInput = $state(defaultJson);
 
@@ -30,7 +30,6 @@
 	let isError = $state(false);
 	let fetchMessage = $state('');
 
-	// Svelte 5 effect: runs on mount AND whenever selectedYear changes
 	$effect(() => {
 		async function fetchExistingData() {
 			isFetching = true;
@@ -46,7 +45,6 @@
 
 				if (response.ok) {
 					const data = await response.json();
-					// Pretty-print the fetched JSON with 2 spaces for easy editing
 					jsonInput = JSON.stringify(data, null, 2);
 					fetchMessage = 'Bestaande configuratie ingeladen.';
 				} else if (response.status === 404) {
@@ -63,7 +61,6 @@
 				isFetching = false;
 			}
 		}
-
 		fetchExistingData();
 	});
 
@@ -73,7 +70,6 @@
 		statusMessage = '';
 		isError = false;
 
-		// 1. Validate JSON format on the frontend before sending
 		let parsedJson;
 		try {
 			parsedJson = JSON.parse(jsonInput);
@@ -84,18 +80,14 @@
 			return;
 		}
 
-		// 2. Send the PUT request to the FastAPI backend
 		try {
-			// NOTE: Update this URL to match your backend's actual address/port
-			const response = await fetch(`http://localhost:8000/praesidium/${selectedYear}`, {
+			const response = await fetch(`${PUBLIC_API_URL}/praesidium/${selectedYear}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				// We stringify the parsed JSON to ensure it's minified and clean
 				body: JSON.stringify(parsedJson)
 			});
-
 			if (!response.ok) {
 				throw new Error(`Upload mislukt met status: ${response.status}`);
 			}
