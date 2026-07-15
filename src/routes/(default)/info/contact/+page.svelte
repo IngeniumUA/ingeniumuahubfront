@@ -30,11 +30,13 @@
           <dt>Alexander Ceuppens</dt>
           <dd>
             Mail: alexander.ceuppens&#64;ingeniumua.be <br>
+            Tel: +32 475 44 39 35
           </dd>
 
           <dt>Lowie Vervecken</dt>
           <dd>
             Mail: lowie.vervecken&#64;ingeniumua.be <br>
+            Tel: +32 467 01 22 77
           </dd>
         </dl>
       </section>
@@ -47,6 +49,7 @@
           <dt>Niels Selleslagh</dt>
           <dd>
             Mail: praeses&#64;ingeniumua.be <br>
+            Tel: +32 489 81 63 44
           </dd>
         </dl>
       </section>
