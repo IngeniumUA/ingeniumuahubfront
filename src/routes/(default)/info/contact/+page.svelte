@@ -22,21 +22,19 @@
         <p>Ons Business Relations team staat voor je klaar!</p>
 
         <dl>
-          <dt>Yorben Joosen</dt>
+          <dt>Ailee Louise Van Hauwaert</dt>
           <dd>
-            Mail: yorben.joosen&#64;ingeniumua.be <br>
+            Mail: ailee.louise.van.hauwaert&#64;ingeniumua.be <br>
           </dd>
 
-          <dt>Renzo Craeymeersch</dt>
+          <dt>Alexander Ceuppens</dt>
           <dd>
-            Mail: renzo.craeymeersch&#64;ingeniumua.be <br>
-            Tel: +32 499 14 90 15
+            Mail: alexander.ceuppens&#64;ingeniumua.be <br>
           </dd>
 
-          <dt>Ward De Voeght</dt>
+          <dt>Lowie Vervecken</dt>
           <dd>
-            Mail: ward.devoeght&#64;ingeniumua.be <br>
-            Tel: +32 474 57 63 27
+            Mail: lowie.vervecken&#64;ingeniumua.be <br>
           </dd>
         </dl>
       </section>
@@ -46,10 +44,9 @@
         <p>Zijn onze Business Relations niet helemaal juist voor je vraag?</p>
 
         <dl>
-          <dt>Nico Verstappen</dt>
+          <dt>Niels Selleslagh</dt>
           <dd>
-            Mail: nico.verstappen&#64;ingeniumua.be <br>
-            Tel: +32 470 69 80 74
+            Mail: praeses&#64;ingeniumua.be <br>
           </dd>
         </dl>
       </section>
@@ -59,7 +56,7 @@
         <p>Voor vragen over onze social media en/of public relations.</p>
 
         <dl>
-          <dt>Alexander Ceuppens & Lore Philips</dt>
+          <dt>Dries Van Clé & Lena Fassaert</dt>
           <dd>
             Mail: public.relations&#64;ingeniumua.be
           </dd>
