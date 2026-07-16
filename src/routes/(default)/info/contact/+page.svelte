@@ -25,6 +25,7 @@
           <dt>Ailee Louise Van Hauwaert</dt>
           <dd>
             Mail: ailee.louise.van.hauwaert&#64;ingeniumua.be <br>
+            Tel: +32 472 26 63 93
           </dd>
 
           <dt>Alexander Ceuppens</dt>
