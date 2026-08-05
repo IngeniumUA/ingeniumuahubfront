@@ -3,6 +3,7 @@
 	import { makePretty } from '$lib/utilities/style-utilities';
 	import WhitelistBlacklist from '$lib/components/staff/availability/WhitelistBlacklist.svelte';
 	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
+	import AccessKeyForm from '$lib/components/staff/availability/AccessKeyForm.svelte';
 
 	let { formState = $bindable() }: { formState: AvailabilityCompositionI } = $props();
 
@@ -60,6 +61,6 @@
 	{:else if formState.dynamic_policy_type === AccessPolicyEnum.member_of_group}
 		<WhitelistBlacklist bind:formState={formState.dynamic_policy_content}></WhitelistBlacklist>
 	{:else if formState.dynamic_policy_type === AccessPolicyEnum.access_key_in_path}
-		TODO: Access policy config voor Access Key
+		<AccessKeyForm bind:formState={formState.dynamic_policy_content}></AccessKeyForm>
 	{/if}
 </form>
