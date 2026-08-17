@@ -28,10 +28,9 @@
 </script>
 
 <form class="ingenium-form" onsubmit={(e) => { e.preventDefault(); }}>
-	<p class="font-bold">Whitelist</p>
 	<fieldset>
 		<div class="form-field">
-			<label for="available_from">Available From</label>
+			<label for="available_from">Access Key</label>
 			<input id="available_from" type="text" required bind:value={accessKey}/>
 			<p>Access Key</p>
 		</div>
