@@ -664,8 +664,6 @@
 					{/each}
 					</tbody>
 				</table>
-
-				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.</p>
 			</div>
 		</section>
 
@@ -754,9 +752,8 @@
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<h1 id="webmaster-info">Webmaster Info</h1>
 		<h2 id="keycloak">Keycloak</h2>
-		<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
+		<p>If we ever add authorization options for items using keycloak, those would go here.</p>
 
-		<h2 id="changelog">Changelog</h2>
 		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: data.itemWide.item.id.toString()})}></DBLogTable>
 
 		<div class="flex justify-end mt-4 gap-4">
