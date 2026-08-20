@@ -692,7 +692,11 @@
 		{#if (productBlueprints.length > 0)}
 			<section class="flex flex-col gap-6">
 				{#each productBlueprints as productBlueprint (productBlueprint.id)}
-					<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
+					<ProductBlueprintCard
+						productBlueprint={productBlueprint}
+						bind:loadingHTTP={loadingHTTP}
+						refreshCallback={() => refreshBlueprints()}
+					></ProductBlueprintCard>
 				{/each}
 			</section>
 		{:else}
