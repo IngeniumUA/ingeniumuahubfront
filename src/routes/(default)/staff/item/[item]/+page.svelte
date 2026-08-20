@@ -224,6 +224,44 @@
 	});
 
 	/**
+	 * File upload logic
+	 */
+	let files: FileList | undefined = $state();
+	let singleFile = $derived(files && files.length > 0 ? files[0] : null);
+
+	let isUploading: boolean = $state(false);
+	let uploadError: Error | null = $state(null);
+
+	async function handleFileUpload() {
+		if (!singleFile) return;
+		if (isUploading) return;
+
+		isUploading = true;
+		uploadError = null;
+
+		try {
+			const formData = new FormData();
+			formData.append('blob_data', singleFile);
+			const res = await fetch(`${PUBLIC_API_URL}/file/media?filename=${form.item.name}`, {
+				method: 'POST',
+				headers: getAuthorizationHeaders(null),
+				body: formData
+			});
+			if (res.ok) {
+				successToast("Uploaded image!")
+				form.derived_type.display.image_square = await res.json();
+			} else {
+				const text = await res.text();
+				uploadError = new Error(`Failed to Upload: ${text}`);
+			}
+		} catch (error) {
+			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
+		} finally {
+			isUploading = false;
+		}
+	}
+
+	/**
 	 *
 	 */
 	interface PricePolicyGroupedMember {
@@ -275,41 +313,6 @@
 		// Setting the prev value to create the latching behavior
 		prevShowAddingNew = showAddingNew;
 	});
-
-	/**
-	 * Bulk importing state and functions
-	 */
-	let showBulkImport: boolean = $state(false);
-	let files: FileList | undefined = $state()
-	let uploadError: Error | null = $state(null);
-
-	async function handleUpload() {
-		if (loadingHTTP) return;
-		loadingHTTP = true;
-		if (files === undefined) return;
-
-		try {
-			const formData = new FormData();
-			formData.append('file', files[0]);
-			const res = await fetch(`${PUBLIC_API_URL}/blueprint/import`, {
-				method: 'POST',
-				headers: getAuthorizationHeaders(null),
-				body: formData
-			});
-			if (res.ok) {
-				showBulkImport = false;
-				successToast("Imported!")
-				return res.json();
-			} else {
-				const text = await res.text();
-				uploadError = new Error(`Failed to Upload: ${text}`);
-			}
-		} catch (error) {
-			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
-		} finally {
-			loadingHTTP = false;
-		}
-	}
 
 	/**
 	 * Special state (showing modal) and query for profit calculation
@@ -471,11 +474,20 @@
 					</fieldset>
 
 					<fieldset>
-						<div class="form-field">
-							<label for="image_square">Image Square</label>
-							<input id="image_square" type="text" required bind:value={form.derived_type.display.image_square}/>
-							<p>Square Image :)</p>
-						</div>
+						<label for="file">Upload Banner</label>
+						<input
+							accept="image/*"
+							bind:files
+							onchange={handleFileUpload}
+							id="file"
+							type="file"
+							disabled={isUploading}
+						/>
+						{#if (uploadError !== null)}
+							<div class="error-message p-4">
+								{JSON.stringify(uploadError)}
+							</div>
+						{/if}
 					</fieldset>
 				</div>
 			{/if}
@@ -669,9 +681,6 @@
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
 			<h1 id="Product Blueprints">Product Blueprints</h1>
-			<button class="ml-auto button button-primary w-24 button-inline" onclick={() => {showBulkImport = true}}>
-				<span class="text-white">Import</span>
-			</button>
 			<button onclick="{() => showAddingNew = true}" class="ml-2 button button-primary w-24 button-inline">
 				<span class="text-white">Add New</span>
 			</button>
@@ -767,31 +776,6 @@
 
 <AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={data.itemWide.item.id}></AddProductBlueprintModal>
 
-<Modal title="Bulk Import" maxWidth="max-w-xl" bind:isOpen={ showBulkImport } closable={ true }>
-	{#snippet children()}
-		<article class="m-4">
-			<label for="file">Upload Product Blueprints</label>
-			<input accept="text/csv" bind:files id="file" name="avatar" type="file" />
-
-			{#each Array.from(files ?? []) as file}
-				<p>{file.name} ({file.size} bytes)</p>
-			{/each}
-
-			<div class="p-2 flex justify-end items-center">
-				<button type="button" class="button button-primary w-24 button-inline"
-								disabled={loadingHTTP || files === undefined}
-								onclick={handleUpload}>
-					<span class="text-white">Upload</span>
-				</button>
-			</div>
-
-			{#if uploadError !== null}
-				{uploadError.message}
-			{/if}
-		</article>
-	{/snippet}
-</Modal>
-
 <Modal title="Profit analysis" maxWidth="max-w-xl" bind:isOpen={ showProfitModal } closable={ true }>
 	{#snippet children()}
 		<article class="m-4">
@@ -814,7 +798,7 @@
 			<div class="p-2 flex justify-end items-center">
 				<button type="button" class="button button-primary w-24 button-inline"
 								disabled={loadingHTTP}
-								onclick={handleUpload}>
+								onclick={refresh}>
 					<span class="text-white">Refresh</span>
 				</button>
 			</div>
