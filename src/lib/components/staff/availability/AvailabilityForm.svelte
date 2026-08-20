@@ -33,12 +33,22 @@
 	<fieldset class="flex flex-col md:flex-row gap-2">
 		<div class="form-field">
 			<label for="available_from">Available From</label>
-			<input id="available_from" type="datetime-local" required bind:value={formState.available_from}/>
+			<input id="available_from" type="datetime-local" required
+						 bind:value={formState.available_from}
+						 onchange={(e) => {
+								const val = e.currentTarget.value;
+								formState.available_from = val === "" ? null : val;
+    	}}/>
 			<p>Beschikbaar vanaf</p>
 		</div>
 		<div class="form-field">
 			<label for="available_until">Available Until</label>
-			<input id="available_until" type="datetime-local" required bind:value={formState.available_until}/>
+			<input id="available_until" type="datetime-local" required
+						 bind:value={formState.available_until}
+						 onchange={(e) => {
+								const val = e.currentTarget.value;
+								formState.available_until = val === "" ? null : val;
+    	}}/>
 			<p>Beschikbaar tot</p>
 		</div>
 	</fieldset>
