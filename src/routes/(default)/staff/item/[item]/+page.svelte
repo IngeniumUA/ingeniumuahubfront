@@ -30,7 +30,13 @@
 	let { data } = $props();
 
 	// Wrapped primitive in (() => ...)() to tell Svelte this is a deliberate one-time read
+	// Otherwise we get an annoying red error
+	let productBlueprints = $state((() => data.productBlueprints)());
+	let itemWide = $state((() => data.itemWide)());
+	let transactionValidityGrouped = $state((() => data.transactionValidityGrouped)());
+	let pricePoliciesTable = $state((() => data.pricePoliciesTable)());
 	let trackerCount: number = $state((() => data.trackerCount)());
+
 	let checkoutTrackerStatusGrouped = $state([]);
 	let showExtraTab: boolean = $state(false);
 
@@ -48,19 +54,19 @@
 	 */
 	async function refreshBlueprints() {
 		const query = new URLSearchParams({
-			item: data.itemWide.item.id.toString(),
+			item: itemWide.item.id.toString(),
 			limit: '100'
 		});
-		data.productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(null, query);
+		productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(null, query);
 	}
 	async function refresh() {
-		data.itemWide = await CoreItemWideAPI.getItem(null, data.itemWide.item.id);
-		form = createInitialFormState(data.itemWide); // Form is not derived from item so we need to do this manually
+		itemWide = await CoreItemWideAPI.getItem(null, itemWide.item.id);
+		form = createInitialFormState(itemWide); // Form is not derived from item so we need to do this manually
 
-		trackerCount = await CoreItemAPI.countCheckoutTracker(null, data.itemWide.item.id);
-		data.transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, data.itemWide.item.id);
+		trackerCount = await CoreItemAPI.countCheckoutTracker(null, itemWide.item.id);
+		transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, itemWide.item.id);
 		await refreshBlueprints()
-		data.pricePoliciesTable = await CoreItemAPI.attachedPricePolicyTable(null, data.itemWide.item.id);
+		pricePoliciesTable = await CoreItemAPI.attachedPricePolicyTable(null, itemWide.item.id);
 	}
 
 	/**
@@ -132,14 +138,14 @@
 		};
 	}
 
-	let form: FormState = $state(createInitialFormState(untrack(() => data.itemWide)));
+	let form: FormState = $state(createInitialFormState(untrack(() => itemWide)));
 	let loadingHTTP: boolean = $state(false);
 
 	/**
 	 *
 	 */
 	function assembleDerivedItem() {
-		let derivedItem = data.itemWide.derived_type;
+		let derivedItem = itemWide.derived_type;
 		const itemType = derivedItem.derived_type_enum
 		const internalLink = `/${itemType.slice(0, itemType.length - 4)}/${form.item.name}`
 
@@ -156,7 +162,7 @@
 	async function putItem() {
 		if (loadingHTTP) {return}
 		// todo check for form errors
-		let putItemWide = structuredClone($state.snapshot(data.itemWide));
+		let putItemWide = structuredClone($state.snapshot(itemWide));
 		putItemWide.derived_type = assembleDerivedItem()
 
 		putItemWide.item.name = form.item.name;
@@ -191,7 +197,7 @@
 		try {
 			const resp = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
 			form = resp;
-			data.itemWide = resp;
+			itemWide = resp;
 			putError = null;
 		} catch (error) {
 			putError = error instanceof Error ? error : Error('Error submitting form');
@@ -206,7 +212,7 @@
 	}
 
 	let recsysPreview = $derived.by(() =>{
-		const itemType = data.itemWide.derived_type.derived_type_enum;
+		const itemType = itemWide.derived_type.derived_type_enum;
 		const hasDisplayMixin = ["eventitem", "shopitem", "promoitem"].includes(itemType);
 		if (!hasDisplayMixin) {return null}
 
@@ -326,9 +332,9 @@
 
 		const queryParam = new URLSearchParams({
 			'payment_provider': PaymentProviderEnum.Stripe.toString(),
-			'from_created_timestamp': data.itemWide.item.created_timestamp,
+			'from_created_timestamp': itemWide.item.created_timestamp,
 			'until_created_timestamp': new Date().toISOString(),
-			'item_id': data.itemWide.item.id.toString()
+			'item_id': itemWide.item.id.toString()
 		});
 
 		loadingHTTP = true;
@@ -345,7 +351,7 @@
 
 <main class="ingenium-container relative" id="main-content">
 	<div class="flex justify-between items-center mb-6">
-		<h1 id="{data.itemWide.item.name}">{data.itemWide.item.name}</h1>
+		<h1 id="{itemWide.item.name}">{itemWide.item.name}</h1>
 		<button onclick={refresh} class="ml-2 button button-primary w-24 button-inline">
 			<span class="text-white">Refresh</span>
 		</button>
@@ -365,7 +371,7 @@
 			<aside class="py-6 px-4 sm:px-2 col-span-1 md:col-span-2 w-full">
 				<nav class="vertical-nav vertical-nav-transparent">
 					<div>
-						<a href="#{data.itemWide.item.name}" class="font-semibold">Item</a>
+						<a href="#{itemWide.item.name}" class="font-semibold">Item</a>
 						{#if hasDisplay}
 							<a href="#item" class="font-semibold">Display</a>
 						{/if}
@@ -409,9 +415,9 @@
 					<div class="flex-1">
 						<h3 class="font-bold pb-2">Info</h3>
 							{#each Object.entries({
-								"Item Id": data.itemWide.item.id,
-								"Last Update": prettyDate(data.itemWide.item.last_update_timestamp),
-								"Created": prettyDate(data.itemWide.item.created_timestamp)}) as [fieldName, fieldValue]}
+								"Item Id": itemWide.item.id,
+								"Last Update": prettyDate(itemWide.item.last_update_timestamp),
+								"Created": prettyDate(itemWide.item.created_timestamp)}) as [fieldName, fieldValue]}
 								<h4 class="pl-3 text-blue-900 font-bold">{fieldName}: <span class="text-ingenium-grey-800 font-bold">{fieldValue}</span></h4>
 							{/each}
 					</div>
@@ -605,7 +611,7 @@
 		<section class="flex flex-col lg:flex-row gap-4">
 			<div class="order-1 lg:flex-[2]">
 				<h2 class="font-bold">Voltooide Transacties</h2>
-				{#each groupPricePolicies(data.pricePoliciesTable) as row (row.product_blueprint_id)}
+				{#each groupPricePolicies(pricePoliciesTable) as row (row.product_blueprint_id)}
 					<div class="flex justify-between items-center">
 						<h3 class="text-blue-900 font-bold">{row.product_blueprint_name}</h3>
 						<h4 class="text-ingenium-grey-800 text-right font-bold mr-4">Subtotaal: {row.transaction_count}</h4>
@@ -628,9 +634,9 @@
 				{/each}
 				<p class="text-right font-bold mr-4">
 					{#if (profitStruct !== null)}Winst: {profitStruct["net"]} &nbsp &nbsp &nbsp {/if}
-					Inkomsten: €{data.pricePoliciesTable.reduce((sum, val) => {
+					Inkomsten: €{pricePoliciesTable.reduce((sum, val) => {
 					return sum + val["transaction_count"] * val["price_eu"]
-				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {data.pricePoliciesTable.reduce((sum, val) => {
+				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {pricePoliciesTable.reduce((sum, val) => {
 					return sum + val["transaction_count"]
 				}, 0)}</p>
 
@@ -652,7 +658,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					{#each Object.entries(data.transactionValidityGrouped) as validityPair}
+					{#each Object.entries(transactionValidityGrouped) as validityPair}
 						<tr>
 							<th scope="row">
 								{makePretty(ValidityEnum[parseInt(validityPair[0])])}
@@ -674,7 +680,7 @@
 				Een Checkout is de daadwerkelijke betalingen daarvan.
 				Er kunnen dus meerdere transacties (voor verschillende gebruikers) in één betaling zitten.</p>
 		</div>
-		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${data.itemWide.item.id}`, limit: '20'})} baseSelectedTable="transacties"></PaymentTable>
+		<PaymentTable baseQueryParam={new URLSearchParams({item_id: `${itemWide.item.id}`, limit: '20'})} baseSelectedTable="transacties"></PaymentTable>
 
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
@@ -690,9 +696,9 @@
 			<span class="font-bold">Price policies</span> laten je configureren hoe dat product kan worden aangekocht.</p>
 		</div>
 
-		{#if (data.productBlueprints.length > 0)}
+		{#if (productBlueprints.length > 0)}
 			<section class="flex flex-col gap-6">
-				{#each data.productBlueprints as productBlueprint (productBlueprint.id)}
+				{#each productBlueprints as productBlueprint (productBlueprint.id)}
 					<ProductBlueprintCard
 						productBlueprint={productBlueprint}
 						bind:loadingHTTP={loadingHTTP}
@@ -754,7 +760,7 @@
 		<h2 id="keycloak">Keycloak</h2>
 		<p>If we ever add authorization options for items using keycloak, those would go here.</p>
 
-		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: data.itemWide.item.id.toString()})}></DBLogTable>
+		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: itemWide.item.id.toString()})}></DBLogTable>
 
 		<div class="flex justify-end mt-4 gap-4">
 			<button class="button button-danger button-inline"
@@ -771,7 +777,7 @@
 	{/if}
 </main>
 
-<AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={data.itemWide.item.id}></AddProductBlueprintModal>
+<AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>
 
 <Modal title="Profit analysis" maxWidth="max-w-xl" bind:isOpen={ showProfitModal } closable={ true }>
 	{#snippet children()}
