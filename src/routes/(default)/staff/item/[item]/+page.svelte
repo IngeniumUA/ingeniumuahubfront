@@ -22,33 +22,23 @@
 	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
 	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
 	import type { ItemWideI } from '$lib/models/item/itemwideI';
+	import { untrack } from 'svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
-	let trackerCount: number = $state(data.trackerCount);
-	let checkoutTrackerStatusGrouped = $state([])
 
+	// Wrapped primitive in (() => ...)() to tell Svelte this is a deliberate one-time read
+	let trackerCount: number = $state((() => data.trackerCount)());
+	let checkoutTrackerStatusGrouped = $state([]);
 	let showExtraTab: boolean = $state(false);
 
 	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(data.itemWide.derived_type.derived_type_enum));
 	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(data.itemWide.derived_type.derived_type_enum));
 	const hasLocation: boolean = $derived(["eventitem"].includes(data.itemWide.derived_type.derived_type_enum));
 
-	let productBlueprints = $state(data.productBlueprints);
-	let pricePolicyTable = $state(data.pricePoliciesTable);
-	let transactionValidityGrouped = $state(data.transactionValidityGrouped)
-
-	// fixme the typecast at the moment is to EventItemI but that could probably be improved
-	function parseDisplay() {
-		return hasDisplay ? (data.itemWide.derived_type as EventItemI).display : {}
-	}
-	function parseLocation() {
-		return hasLocation ? (data.itemWide.derived_type as EventItemI).location : {}
-	}
-
-	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
+	let hasCheckoutTrackers = $derived(trackerCount > 0 || data.productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
 		return trackCheckout !== null;
 	}));
@@ -61,14 +51,16 @@
 			item: data.itemWide.item.id.toString(),
 			limit: '100'
 		});
-		productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(null, query);
+		data.productBlueprints = await CoreProductBlueprintAPI.queryProductBlueprints(null, query);
 	}
 	async function refresh() {
 		data.itemWide = await CoreItemWideAPI.getItem(null, data.itemWide.item.id);
+		form = createInitialFormState(data.itemWide); // Form is not derived from item so we need to do this manually
+
 		trackerCount = await CoreItemAPI.countCheckoutTracker(null, data.itemWide.item.id);
-		transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, data.itemWide.item.id);
+		data.transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, data.itemWide.item.id);
 		await refreshBlueprints()
-		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(null, data.itemWide.item.id);
+		data.pricePoliciesTable = await CoreItemAPI.attachedPricePolicyTable(null, data.itemWide.item.id);
 	}
 
 	/**
@@ -105,40 +97,42 @@
 		return !((itemWide as EventItemWideI).derived_type.display?.follow_through_link === internalLink);
 	}
 
-	let form: FormState = $state({
-		item: {
-			name: data.itemWide.item.name,
-			description: data.itemWide.item.description,
+	function createInitialFormState(itemWide: ItemWideI): FormState {
+		const isDisplay = ["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum);
+		const isLoc = ["eventitem"].includes(itemWide.derived_type.derived_type_enum);
 
-			// Availability
-			availability: {
-				available: data.itemWide.item.availability.available,
-				available_from: data.itemWide.item.availability.available_from,
-				available_until: data.itemWide.item.availability.available_until,
-				dynamic_policy_type: data.itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
-				dynamic_policy_content: data.itemWide.item.availability.dynamic_policy_content
-			},
-
-			// Item metadata
-			item_metadata: {
-				payment_configuration: {
-					connected_account_id: data.itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
-					application_fee_amount: data.itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+		return {
+			item: {
+				name: itemWide.item.name,
+				description: itemWide.item.description,
+				availability: {
+					available: itemWide.item.availability.available,
+					available_from: itemWide.item.availability.available_from,
+					available_until: itemWide.item.availability.available_until,
+					dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
+					dynamic_policy_content: itemWide.item.availability.dynamic_policy_content
 				},
-				social_media_configuration: {
-					facebook_url: data.itemWide.item.item_metadata.social_media_configuration?.facebook_url ?? null,
-					instagram_url: data.itemWide.item.item_metadata.social_media_configuration?.instagram_url ?? null,
-					linkedin_url: data.itemWide.item.item_metadata.social_media_configuration?.linkedin_url ?? null,
-				}
+				item_metadata: {
+					payment_configuration: {
+						connected_account_id: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
+						application_fee_amount: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+					},
+					social_media_configuration: {
+						facebook_url: itemWide.item.item_metadata.social_media_configuration?.facebook_url ?? null,
+						instagram_url: itemWide.item.item_metadata.social_media_configuration?.instagram_url ?? null,
+						linkedin_url: itemWide.item.item_metadata.social_media_configuration?.linkedin_url ?? null,
+					}
+				},
 			},
-		},
-		derived_type: {
-			externalLink: initializeExternalLink(data.itemWide),
-			display: parseDisplay(),
-			location: parseLocation()
-		}
-	});
+			derived_type: {
+				externalLink: initializeExternalLink(itemWide),
+				display: isDisplay ? (itemWide.derived_type as EventItemI).display : {},
+				location: isLoc ? (itemWide.derived_type as EventItemI).location : {}
+			}
+		};
+	}
 
+	let form: FormState = $state(createInitialFormState(untrack(() => data.itemWide)));
 	let loadingHTTP: boolean = $state(false);
 
 	/**
@@ -599,7 +593,7 @@
 		<section class="flex flex-col lg:flex-row gap-4">
 			<div class="order-1 lg:flex-[2]">
 				<h2 class="font-bold">Voltooide Transacties</h2>
-				{#each groupPricePolicies(pricePolicyTable) as row (row.product_blueprint_id)}
+				{#each groupPricePolicies(data.pricePoliciesTable) as row (row.product_blueprint_id)}
 					<div class="flex justify-between items-center">
 						<h3 class="text-blue-900 font-bold">{row.product_blueprint_name}</h3>
 						<h4 class="text-ingenium-grey-800 text-right font-bold mr-4">Subtotaal: {row.transaction_count}</h4>
@@ -622,9 +616,9 @@
 				{/each}
 				<p class="text-right font-bold mr-4">
 					{#if (profitStruct !== null)}Winst: {profitStruct["net"]} &nbsp &nbsp &nbsp {/if}
-					Inkomsten: €{pricePolicyTable.reduce((sum, val) => {
+					Inkomsten: €{data.pricePoliciesTable.reduce((sum, val) => {
 					return sum + val["transaction_count"] * val["price_eu"]
-				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {pricePolicyTable.reduce((sum, val) => {
+				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {data.pricePoliciesTable.reduce((sum, val) => {
 					return sum + val["transaction_count"]
 				}, 0)}</p>
 
@@ -646,7 +640,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					{#each Object.entries(transactionValidityGrouped) as validityPair}
+					{#each Object.entries(data.transactionValidityGrouped) as validityPair}
 						<tr>
 							<th scope="row">
 								{makePretty(ValidityEnum[parseInt(validityPair[0])])}
@@ -689,9 +683,9 @@
 			<span class="font-bold">Price policies</span> laten je configureren hoe dat product kan worden aangekocht.</p>
 		</div>
 
-		{#if (productBlueprints.length > 0)}
+		{#if (data.productBlueprints.length > 0)}
 			<section class="flex flex-col gap-6">
-				{#each productBlueprints as productBlueprint (productBlueprint.id)}
+				{#each data.productBlueprints as productBlueprint (productBlueprint.id)}
 					<ProductBlueprintCard
 						productBlueprint={productBlueprint}
 						bind:loadingHTTP={loadingHTTP}
