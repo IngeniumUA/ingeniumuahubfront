@@ -5,8 +5,8 @@
 	import type { EventItemI, EventItemWideI, LocationCompositionI } from '$lib/models/item/eventI';
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
-	import AddProductBlueprintModal from '$lib/components/staff/AddProductBlueprintModal.svelte';
-	import ProductBlueprintCard from '$lib/components/staff/ProductBlueprintCard.svelte';
+	import AddProductBlueprintModal from '$lib/components/staff/productblueprint/AddProductBlueprintModal.svelte';
+	import ProductBlueprintCard from '$lib/components/staff/productblueprint/ProductBlueprintCard.svelte';
 	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';

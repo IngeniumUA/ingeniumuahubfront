@@ -2,8 +2,8 @@
 	import type { ProductBlueprintI, UponCompletionMetaData } from '$lib/models/product_blueprint/ProductBlueprintI';
 	import type { PricePolicyI } from '$lib/models/product_blueprint/PricePolicyI';
 	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
-	import AddPricePolicyModal from '$lib/components/staff/AddPricePolicyModal.svelte';
-	import PricePolicyCard from '$lib/components/staff/PricePolicyCard.svelte';
+	import AddPricePolicyModal from '$lib/components/staff/productblueprint/AddPricePolicyModal.svelte';
+	import PricePolicyCard from '$lib/components/staff/productblueprint/PricePolicyCard.svelte';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
 	import DeleteButton from '$lib/components/staff/DeleteButton.svelte';
