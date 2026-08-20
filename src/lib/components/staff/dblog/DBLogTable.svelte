@@ -6,11 +6,17 @@
 	import type { DBLogI } from '$lib/models/dblog';
 	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 
-	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'0' })) }: { baseQueryParam: URLSearchParams } = $props();
+	let {
+		baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'0' }))
+	}: {
+		baseQueryParam: URLSearchParams
+	} = $props();
 
 	let dblogCount: number = $state(0);
 	let dblogs: DBLogI[] = $state([])
 	let dblogTableOptions: string[] = $state([])
+
+	const showTableGroupby: boolean = $derived(!baseQueryParam.has("table_name"))
 
 	onMount(() => {
 		queryData(queryParam);
@@ -124,29 +130,31 @@
 			</p>
 	</div>
 
-	<div class="flex flex-col lg:flex-row">
-		<section class="order-1 lg:order-2 lg:flex-[1]">
-			<h3>Table Names</h3>
-			{#each dblogTableOptions as dblogTableOption}
-				<p>{makePretty(dblogTableOption)}</p>
-			{/each}
-			TODO Dit mis omzetten in een group by?
-		</section>
-		<div class="flex-[3]">
-			<section class="filter-selector">
-				<h3>Filter</h3>
-				<form class="ingenium-form">
-					<fieldset>
-					</fieldset>
-				</form>
+	{#if (showTableGroupby)}
+		<div class="flex flex-col lg:flex-row">
+			<section class="order-1 lg:order-2 lg:flex-[1]">
+				<h3>Table Names</h3>
+				{#each dblogTableOptions as dblogTableOption}
+					<p>{makePretty(dblogTableOption)}</p>
+				{/each}
+				TODO Dit mis omzetten in een group by?
 			</section>
+			<div class="flex-[3]">
+				<section class="filter-selector">
+					<h3>Filter</h3>
+					<form class="ingenium-form">
+						<fieldset>
+						</fieldset>
+					</form>
+				</section>
 
-			<section class="bulk-operation">
-				<h3>Apply</h3>
+				<section class="bulk-operation">
+					<h3>Apply</h3>
 
-			</section>
+				</section>
+			</div>
 		</div>
-	</div>
+	{/if}
 
 	{#if (queryError !== null)}
 		<div class="error-message p-4">

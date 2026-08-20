@@ -2,12 +2,21 @@
 	import type { ProductBlueprintI, UponCompletionMetaData } from '$lib/models/product_blueprint/ProductBlueprintI';
 	import type { PricePolicyI } from '$lib/models/product_blueprint/PricePolicyI';
 	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
-	import AddPricePolicyModal from '$lib/components/staff/AddPricePolicyModal.svelte';
-	import PricePolicyCard from '$lib/components/staff/PricePolicyCard.svelte';
+	import AddPricePolicyModal from '$lib/components/staff/productblueprint/AddPricePolicyModal.svelte';
+	import PricePolicyCard from '$lib/components/staff/productblueprint/PricePolicyCard.svelte';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
+	import DeleteButton from '$lib/components/staff/DeleteButton.svelte';
 
-	let { productBlueprint = $bindable() }: { productBlueprint: ProductBlueprintI } = $props();
+	let {
+		loadingHTTP = $bindable(false), // with default
+		refreshCallback,
+		productBlueprint = $bindable()
+	}: {
+		loadingHTTP: boolean,
+		refreshCallback: () => void,
+		productBlueprint: ProductBlueprintI,
+	} = $props();
 
 	type Section = 'product' | 'limits' | 'meta' | 'availability' | 'completion';
 	let openSection = $state<Section | null>('product');
@@ -50,7 +59,6 @@
 	});
 
 	let addingPricePolicy = $state(false);
-	let loadingHTTP = $state(false);
 	let putError: Error | null = $state(null);
 
 	function appendPricePolicy(pricePolicy: PricePolicyI) {
@@ -101,6 +109,40 @@
 				successToast('Updated!');
 			} else {
 				failedToast('Update failed');
+			}
+			loadingHTTP = false;
+		}
+	}
+
+	/**
+	 * Price policy refreshing
+	 * (NO HTTPLOADING CHECK) because I don't think we need it? And most of all I don't want this to block
+	 */
+	async function refreshPricePolicies() {
+		try {
+			productBlueprint.price_policies = await CoreProductBlueprintAPI.queryPricePolicyForBlueprint(null, productBlueprint.id);
+			putError = null;
+		} catch (error) {
+			putError = error instanceof Error ? error : Error('Error submitting form');
+		}
+	}
+
+	/**
+	 * Deleting
+	 */
+	let deleteError: Error | null = $state(null);
+	async function deleteProductBlueprint() {
+		loadingHTTP = true;
+		try {
+			await CoreProductBlueprintAPI.deleteProductBlueprint(productBlueprint.id);
+		} catch (error) {
+			deleteError = error instanceof Error ? error : Error('Error submitting form');
+		} finally {
+			if (deleteError === null) {
+				successToast('Deleted!');
+				refreshCallback();
+			} else {
+				failedToast('Delete failed');
 			}
 			loadingHTTP = false;
 		}
@@ -370,6 +412,11 @@
 		>
 			{loadingHTTP ? 'Saving…' : 'Save changes'}
 		</button>
+		{#if (putError !== null)}
+			<div class="error-message p-4">
+				{JSON.stringify(putError)}
+			</div>
+		{/if}
 	</div>
 
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
@@ -393,8 +440,26 @@
 				isOpen={false}
 				bind:pricePolicy={productBlueprint.price_policies[pricePolicyIndex]}
 				pricePolicyIndex={pricePolicyIndex}
+				refreshCallback={() => refreshPricePolicies()}
 			/>
 		{/each}
+	</div>
+
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+
+	<div class="flex px-4 pb-4">
+		<div class="ml-auto">
+			<DeleteButton
+				bind:loadingHTTP={loadingHTTP}
+				deleteCallback={() => deleteProductBlueprint()}
+				deleteString="Delete Blueprint"
+			></DeleteButton>
+		</div>
+		{#if (deleteError !== null)}
+			<div class="error-message p-4">
+				{JSON.stringify(deleteError)}
+			</div>
+		{/if}
 	</div>
 </article>
 

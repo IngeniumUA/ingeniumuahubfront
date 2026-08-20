@@ -16,6 +16,25 @@ export class CoreProductBlueprintAPI {
 		return await res.json();
 	}
 
+	static async getProductBlueprint(params: RouteParams | null = null, product_blueprint_identifier: number): Promise<ProductBlueprintI> {
+		const res = await fetch(`${PUBLIC_API_URL}/blueprint/${product_blueprint_identifier}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to get blueprint: ${await res.text()}`;
+		}
+	}
+
+	static async queryPricePolicyForBlueprint(params: RouteParams | null = null, productBlueprintId: number): Promise<PricePolicyI[]> {
+		// There is no existing endpoint for querying or getting price policies
+		// So .. query the blueprint and take price policies lol (if it works, it works!)
+		const blueprint = await this.getProductBlueprint(params, productBlueprintId);
+		return blueprint?.price_policies ?? [];
+	}
+
 	static async patchProductBlueprint(product_blueprint_identifier: string | number, patch_object: object): Promise<ProductBlueprintI> {
 		const res = await fetch(`${PUBLIC_API_URL}/blueprint/${product_blueprint_identifier}`, {
 			method: 'PATCH',
@@ -26,6 +45,30 @@ export class CoreProductBlueprintAPI {
 			return await res.json();
 		} else {
 			throw `Failed to patch blueprint: ${await res.text()}`;
+		}
+	}
+
+	static async deleteProductBlueprint(product_blueprint_identifier: string | number): Promise<void> {
+		const res = await fetch(`${PUBLIC_API_URL}/blueprint/${product_blueprint_identifier}`, {
+			method: 'DELETE',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to delete blueprint: ${await res.text()}`;
+		}
+	}
+
+	static async deletePricePolicy(price_policy_identifier: string | number): Promise<void> {
+		const res = await fetch(`${PUBLIC_API_URL}/blueprint/price_policy/${price_policy_identifier}`, {
+			method: 'DELETE',
+			headers: getAuthorizationHeaders(null, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to delete price policy: ${await res.text()}`;
 		}
 	}
 
