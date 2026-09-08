@@ -1,15 +1,11 @@
 ﻿<script lang="ts">
 	import { AccessPolicyEnum, AccessPolicyEnumList } from '$lib/models/access_policy/AccessPolicyI';
 	import { makePretty } from '$lib/utilities/style-utilities';
+	import WhitelistBlacklist from '$lib/components/staff/availability/WhitelistBlacklist.svelte';
+	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
+	import AccessKeyForm from '$lib/components/staff/availability/AccessKeyForm.svelte';
 
-	export interface FormState {
-		available: boolean;
-		available_from: string | null;
-		available_until: string | null;
-		dynamic_policy_type: AccessPolicyEnum | null
-	}
-
-	let { formState = $bindable() }: { formState: FormState } = $props();
+	let { formState = $bindable() }: { formState: AvailabilityCompositionI } = $props();
 
 	function toggleAvailable() {}
 </script>
@@ -34,15 +30,25 @@
 							</span>
 	</label>
 
-	<fieldset class="flex flex-row gap-2">
+	<fieldset class="flex flex-col md:flex-row gap-2">
 		<div class="form-field">
 			<label for="available_from">Available From</label>
-			<input id="available_from" type="date" required bind:value={formState.available_from}/>
+			<input id="available_from" type="datetime-local" required
+						 bind:value={formState.available_from}
+						 onchange={(e) => {
+								const val = e.currentTarget.value;
+								formState.available_from = val === "" ? null : val;
+    	}}/>
 			<p>Beschikbaar vanaf</p>
 		</div>
 		<div class="form-field">
 			<label for="available_until">Available Until</label>
-			<input id="available_until" type="date" required bind:value={formState.available_until}/>
+			<input id="available_until" type="datetime-local" required
+						 bind:value={formState.available_until}
+						 onchange={(e) => {
+								const val = e.currentTarget.value;
+								formState.available_until = val === "" ? null : val;
+    	}}/>
 			<p>Beschikbaar tot</p>
 		</div>
 	</fieldset>
@@ -59,8 +65,12 @@
 		</div>
 	</fieldset>
 
-	TODO Access policy Content
-	<!--{#if formState.dynamic_policy_type === AccessPolicyEnum.access_key_in_path}-->
-	<!--	TODO: Access policy config voor Access Key-->
-	<!--{/if}-->
+
+	{#if formState.dynamic_policy_type === AccessPolicyEnum.always_available}
+		<p>Altijd beschikbaar!</p>
+	{:else if formState.dynamic_policy_type === AccessPolicyEnum.member_of_group}
+		<WhitelistBlacklist bind:formState={formState.dynamic_policy_content}></WhitelistBlacklist>
+	{:else if formState.dynamic_policy_type === AccessPolicyEnum.access_key_in_path}
+		<AccessKeyForm bind:formState={formState.dynamic_policy_content}></AccessKeyForm>
+	{/if}
 </form>

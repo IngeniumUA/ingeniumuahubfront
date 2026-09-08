@@ -132,7 +132,7 @@
 	{/if}
 {/if}
 
-<style>
+<style lang="scss">
 		h4 {
         @apply text-ingenium-grey-800 font-bold;
 		}
@@ -143,16 +143,16 @@
 			}
 
 			.red {
-					@apply border-red-700 text-red-700 bg-red-300;
+					@apply border-red-700 text-red-700 bg-red-100;
 			}
       .orange {
-          @apply  border-orange-700 text-orange-700 bg-orange-300;
+          @apply  border-orange-700 text-orange-700 bg-orange-100;
       }
       .green {
-          @apply  border-green-700 text-green-700 bg-green-300;
+          @apply  border-green-700 text-green-700 bg-green-100;
       }
 			.gray {
-          @apply  border-gray-700 text-gray-700 bg-gray-300;
+          @apply  border-gray-700 text-gray-700 bg-gray-100;
 			}
 
 			@apply ml-auto mr-4 rounded-lg bg-gray-100 flex flex-row;

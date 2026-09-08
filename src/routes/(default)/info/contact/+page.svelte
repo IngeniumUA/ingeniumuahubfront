@@ -31,7 +31,7 @@
           <dt>Alexander Ceuppens</dt>
           <dd>
             Mail: alexander.ceuppens&#64;ingeniumua.be <br>
-            Tel: ++32 475 44 39 35
+            Tel: +32 475 44 39 35
           </dd>
 
           <dt>Lowie Vervecken</dt>

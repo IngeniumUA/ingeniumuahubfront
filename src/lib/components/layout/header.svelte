@@ -17,6 +17,9 @@
 		return whiteTheme ? 'nav-white' : 'nav-dark';
 	});
 
+	function isEducation() {
+		return isStaff() || hasRole("education")
+	}
 	function isStaff() {
 		return hasRole("staff")
 	}
@@ -62,6 +65,7 @@
 					<div class="flex space-x-4">
 						<a href="/" class="nav-item" role="menuitem">Home</a>
 						<a href="/events" class="nav-item" role="menuitem">Events</a>
+						<a href="/calendar" class="nav-item" role="menuitem">Calendar</a>
 
 						<!-- INFO DROPDOWN -->
 						<div class="relative">
@@ -122,12 +126,14 @@
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
 							<a href="/account/notification-options" class="nav-dropdown-item" role="menuitem">Notificatie opties</a>
 
-							{#if isStaff()}
+							{#if isEducation()}
 								<hr class="nav-dropdown-divider">
 								<a href="/cloud_verify" class="nav-dropdown-item" role="menuitem">Cloud uploads</a>
+								{#if (isStaff())}
 								<a href="/staff" class="nav-dropdown-item" role="menuitem">Staff</a>
 								<a href="/staff" class="nav-dropdown-item" role="menuitem">Webmaster</a>
-								<hr class="nav-dropdown-divider">
+								{/if}
+									<hr class="nav-dropdown-divider">
 							{/if}
 
 							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
@@ -157,6 +163,7 @@
 			<div class="space-y-1 px-2 pb-3 pt-2">
 				<a href="/" class="nav-item" role="menuitem">Home</a>
 				<a href="/events" class="nav-item" role="menuitem">Events</a>
+				<a href="/calendar" class="nav-item" role="menuitem">Calendar</a>
 				<a href="/shop" class="nav-item" role="menuitem">Shop</a>
 				<a href="/cloud" class="nav-item" role="menuitem">Cloud</a>
 				<a href="https://wiki.ingeniumua.be" class="nav-item" role="menuitem">Wiki</a>

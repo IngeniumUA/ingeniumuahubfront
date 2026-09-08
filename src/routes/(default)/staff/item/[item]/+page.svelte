@@ -1,17 +1,16 @@
 ﻿<script lang="ts">
-	import type { ItemWideI } from '$lib/models/item/itemwideI';
 	import { CoreItemAPI, CoreItemWideAPI } from '$lib/core_api/core_api';
 	import RecSysPreviewItem from '$lib/components/recsys/rec-sys-preview-item.svelte';
-	import { toRecsysPreview } from '$lib/models/RecSysI';
-	import type { EventItemI, LocationCompositionI } from '$lib/models/item/eventI';
+	import { type RecSysPreviewI } from '$lib/models/RecSysI';
+	import type { EventItemI, EventItemWideI, LocationCompositionI } from '$lib/models/item/eventI';
 	import type { DisplayCompositionI } from '$lib/models/item/displayCompositionI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
-	import AddProductBlueprintModal from '$lib/components/staff/AddProductBlueprintModal.svelte';
-	import ProductBlueprintCard from '$lib/components/staff/ProductBlueprintCard.svelte';
-	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
+	import AddProductBlueprintModal from '$lib/components/staff/productblueprint/AddProductBlueprintModal.svelte';
+	import ProductBlueprintCard from '$lib/components/staff/productblueprint/ProductBlueprintCard.svelte';
+	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import { AccessPolicyEnum } from '$lib/models/access_policy/AccessPolicyI';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
-	import { makePretty, prettyDate } from '$lib/utilities/style-utilities';
+	import { hexToRGB, makePretty, prettyDate } from '$lib/utilities/style-utilities';
 	import { hasRole } from '$lib/states/auth.svelte';
 	import PaymentTable from '$lib/components/staff/payment/PaymentTable.svelte';
 	import Modal from '$lib/components/layout/modal.svelte';
@@ -19,31 +18,35 @@
 	import { getAuthorizationHeaders } from '$lib/auth/auth';
 	import DBLogTable from '$lib/components/staff/dblog/DBLogTable.svelte';
 	import { ValidityEnum } from '$lib/models/enums';
-	
+	import { PaymentProviderEnum } from '$lib/models/productsI';
+	import { CoreCheckoutAPI } from '$lib/core_api/checkout_api';
+	import type { AvailabilityCompositionI } from '$lib/models/item/availabilityCompositionI';
+	import type { ItemWideI } from '$lib/models/item/itemwideI';
+	import { untrack } from 'svelte';
+
 	/**
 	 * Assigning data from load function in +page.svelte
 	 */
 	let { data } = $props();
-	let itemWide: ItemWideI = $state(data.itemWide);
-	let trackerCount: number = $state(data.trackerCount);
-	let checkoutTrackerStatusGrouped = $state([])
 
-	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(itemWide.derived_type.derived_type_enum));
-	const interactionCapable: boolean = $derived(["eventitem", "shopitem", "linkitem"].includes(itemWide.derived_type.derived_type_enum));
-	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum));
-	const hasLocation: boolean = $derived(["eventitem"].includes(itemWide.derived_type.derived_type_enum));
+	// Wrapped primitive in (() => ...)() to tell Svelte this is a deliberate one-time read
+	// Otherwise we get an annoying red error
+	let productBlueprints = $state((() => data.productBlueprints)());
+	let itemWide = $state((() => data.itemWide)());
+	let transactionValidityGrouped = $state((() => data.transactionValidityGrouped)());
+	let pricePoliciesTable = $state((() => data.pricePoliciesTable)());
+	let trackerCount: number = $state((() => data.trackerCount)());
 
-	let productBlueprints = $state(data.productBlueprints);
-	let pricePolicyTable = $state(data.pricePoliciesTable);
-	let transactionValidityGrouped = $state(data.transactionValidityGrouped)
+	let checkoutTrackerStatusGrouped = $state([]);
+	let showExtraTab: boolean = $state(false);
 
-	// fixme the typecast at the moment is to EventItemI but that could probably be improved
-	let display: DisplayCompositionI | null = $derived(hasDisplay ? (itemWide.derived_type as EventItemI).display : null);
-	let location: LocationCompositionI | null = $derived(hasLocation ? (itemWide.derived_type as EventItemI).location : null);
+	const productBlueprintCapable: boolean = $derived(["eventitem", "shopitem"].includes(data.itemWide.derived_type.derived_type_enum));
+	const hasDisplay: boolean = $derived(["eventitem", "shopitem", "promoitem"].includes(data.itemWide.derived_type.derived_type_enum));
+	const hasLocation: boolean = $derived(["eventitem"].includes(data.itemWide.derived_type.derived_type_enum));
 
-	let hasCheckoutTrackers = $derived(trackerCount > 0 || productBlueprints.some(prod => {
+	let hasCheckoutTrackers = $derived(trackerCount > 0 || data.productBlueprints.some(prod => {
 		const trackCheckout = prod.product_blueprint_metadata.upon_completion?.track_checkout ?? null;
-		return trackCheckout !== null && trackCheckout !== undefined;
+		return trackCheckout !== null;
 	}));
 
 	/**
@@ -58,10 +61,12 @@
 	}
 	async function refresh() {
 		itemWide = await CoreItemWideAPI.getItem(null, itemWide.item.id);
+		form = createInitialFormState(itemWide); // Form is not derived from item so we need to do this manually
+
 		trackerCount = await CoreItemAPI.countCheckoutTracker(null, itemWide.item.id);
 		transactionValidityGrouped = await CoreItemAPI.attachedValidityGrouped(null, itemWide.item.id);
 		await refreshBlueprints()
-		pricePolicyTable = await CoreItemAPI.attachedPricePolicyTable(null, itemWide.item.id);
+		pricePoliciesTable = await CoreItemAPI.attachedPricePolicyTable(null, itemWide.item.id);
 	}
 
 	/**
@@ -71,12 +76,7 @@
 		item: {
 			name: string;
 			description: string;
-			availability: {
-				available: boolean;
-				available_from: string | null;
-				available_until: string | null;
-				dynamic_policy_type: AccessPolicyEnum | null
-			};
+			availability: AvailabilityCompositionI
 			item_metadata: {
 				payment_configuration: {
 					connected_account_id: string | number | null,
@@ -96,84 +96,78 @@
 		}
 	}
 
-	let form: FormState = $derived({
-		item: {
-			name: itemWide.item.name,
-			description: itemWide.item.description,
+	function initializeExternalLink(itemWide: ItemWideI): boolean {
+		let derivedItem = itemWide.derived_type;
+		const itemType = derivedItem.derived_type_enum
+		const internalLink = `/${itemType.slice(0, itemType.length - 4)}/${itemWide.item.name}`
+		return !((itemWide as EventItemWideI).derived_type.display?.follow_through_link === internalLink);
+	}
 
-			// Availability
-			availability: {
-				available: itemWide.item.availability.available,
-				available_from: itemWide.item.availability.available_from,
-				available_until: itemWide.item.availability.available_until,
-				dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
-			},
+	function createInitialFormState(itemWide: ItemWideI): FormState {
+		const isDisplay = ["eventitem", "shopitem", "promoitem"].includes(itemWide.derived_type.derived_type_enum);
+		const isLoc = ["eventitem"].includes(itemWide.derived_type.derived_type_enum);
 
-			// Item metadata
-			item_metadata: {
-				payment_configuration: {
-					connected_account_id: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
-					application_fee_amount: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+		return {
+			item: {
+				name: itemWide.item.name,
+				description: itemWide.item.description,
+				availability: {
+					available: itemWide.item.availability.available,
+					available_from: itemWide.item.availability.available_from,
+					available_until: itemWide.item.availability.available_until,
+					dynamic_policy_type: itemWide.item.availability.dynamic_policy_type ?? AccessPolicyEnum.always_available,
+					dynamic_policy_content: itemWide.item.availability.dynamic_policy_content
 				},
-				social_media_configuration: {
-					facebook_url: itemWide.item.item_metadata.social_media_configuration?.facebook_url ?? null,
-					instagram_url: itemWide.item.item_metadata.social_media_configuration?.instagram_url ?? null,
-					linkedin_url: itemWide.item.item_metadata.social_media_configuration?.linkedin_url ?? null,
-				}
+				item_metadata: {
+					payment_configuration: {
+						connected_account_id: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["connected_account_id"] ?? null,
+						application_fee_amount: itemWide.item.item_metadata.payment_configuration?.stripe_payment_configuration?.["application_fee_amount"] ?? null,
+					},
+					social_media_configuration: {
+						facebook_url: itemWide.item.item_metadata.social_media_configuration?.facebook_url ?? null,
+						instagram_url: itemWide.item.item_metadata.social_media_configuration?.instagram_url ?? null,
+						linkedin_url: itemWide.item.item_metadata.social_media_configuration?.linkedin_url ?? null,
+					}
+				},
 			},
-		},
-		derived_type: {
-			externalLink: false,
-			display: {
-				// Display mixin
-				color: display?.color ?? "",
-				clickThroughLink: '',
-				externalLink: false,
-				preview_description: display?.preview_description ?? "",
-				image_landscape: display?.image_landscape ?? null,
-				image_square: display?.image_square ?? null,
-			},
-			// Location mixin
-			location: {
-				location_display_name: location?.location_display_name ?? null,
-				location_search_name: location?.location_search_name ?? null,
-				latitude: location?.latitude ?? null,
-				longitude: location?.longitude ?? null,
+			derived_type: {
+				externalLink: initializeExternalLink(itemWide),
+				display: isDisplay ? (itemWide.derived_type as EventItemI).display : {},
+				location: isLoc ? (itemWide.derived_type as EventItemI).location : {}
 			}
-		}
-	});
+		};
+	}
 
+	let form: FormState = $state(createInitialFormState(untrack(() => itemWide)));
 	let loadingHTTP: boolean = $state(false);
 
 	/**
 	 *
 	 */
-	// async function toggleAvailable() {
-	// 	loadingHTTP = true;
-	// 	try {
-	// 		await CoreItemAPI.patchAvailable(itemWide.item.id, !itemWide.item.availability.available).catch(handleRequest);
-	// 		successToast("Item updated!")
-	// 		await refresh();
-	// 	} catch (error) {
-	// 		failedToast(`Failed ${error}`);
-	// 		await refresh()
-	// 	} finally {
-	// 		loadingHTTP = false; // Reset loading state
-	// 	}
-	// }
-	
+	function assembleDerivedItem() {
+		let derivedItem = itemWide.derived_type;
+		const itemType = derivedItem.derived_type_enum
+		const internalLink = `/${itemType.slice(0, itemType.length - 4)}/${form.item.name}`
+
+		if (hasDisplay) {
+			(derivedItem as EventItemI).display.image_square = form.derived_type.display.image_square === "" ? null: form.derived_type.display.image_square ?? null;
+			(derivedItem as EventItemI).display.color = form.derived_type.display.color === "" ? "#FFF": form.derived_type.display.color ?? "#FFF";
+			(derivedItem as EventItemI).display.preview_description = form.derived_type.display.preview_description === "" ? "": form.derived_type.display.preview_description ?? "";
+			(derivedItem as EventItemI).display.follow_through_link = form.derived_type.externalLink ? form.derived_type.display.follow_through_link ?? internalLink: internalLink
+		}
+		return derivedItem
+	}
+
 	let putError: Error | null = $state(null);
 	async function putItem() {
 		if (loadingHTTP) {return}
 		// todo check for form errors
+		let putItemWide = structuredClone($state.snapshot(itemWide));
+		putItemWide.derived_type = assembleDerivedItem()
 
-		const putItemWide = itemWide;
 		putItemWide.item.name = form.item.name;
 		putItemWide.item.description = form.item.description;
-		putItemWide.item.availability.available = form.item.availability.available
-		putItemWide.item.availability.available_from = form.item.availability.available_from
-		putItemWide.item.availability.available_until = form.item.availability.available_until
-		putItemWide.item.availability.dynamic_policy_type = form.item.availability.dynamic_policy_type
+		putItemWide.item.availability = form.item.availability
 
 		// Payment configuration
 		if (form.item.item_metadata.payment_configuration.connected_account_id !== null && form.item.item_metadata.payment_configuration.connected_account_id !== "") {
@@ -201,7 +195,9 @@
 
 		loadingHTTP = true;
 		try {
-			itemWide = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
+			const resp = await CoreItemWideAPI.putItem(putItemWide.item.id, putItemWide);
+			form = resp;
+			itemWide = resp;
 			putError = null;
 		} catch (error) {
 			putError = error instanceof Error ? error : Error('Error submitting form');
@@ -212,6 +208,62 @@
 				failedToast(`Update Failed`)
 			}
 			loadingHTTP = false;
+		}
+	}
+
+	let recsysPreview = $derived.by(() =>{
+		const itemType = itemWide.derived_type.derived_type_enum;
+		const hasDisplayMixin = ["eventitem", "shopitem", "promoitem"].includes(itemType);
+		if (!hasDisplayMixin) {return null}
+
+		const recsysItem: RecSysPreviewI = {
+			name: form.item.name,
+			follow_through_link: form.derived_type.display.follow_through_link ? form.derived_type.display.follow_through_link: `/${itemType.slice(0, itemType.length - 4)}/${form.item.name}`,
+			date: null,
+			color: 'rgb(255, 255, 255)',
+			image_square: form.derived_type.display.image_square!,
+			preview_description: form.derived_type.display.preview_description!
+		};
+		const color = hexToRGB(form.derived_type.display.color!) ?? form.derived_type.display.color;
+		if (color !== null) recsysItem.color = color!;
+		return recsysItem;
+	});
+
+	/**
+	 * File upload logic
+	 */
+	let files: FileList | undefined = $state();
+	let singleFile = $derived(files && files.length > 0 ? files[0] : null);
+
+	let isUploading: boolean = $state(false);
+	let uploadError: Error | null = $state(null);
+
+	async function handleFileUpload() {
+		if (!singleFile) return;
+		if (isUploading) return;
+
+		isUploading = true;
+		uploadError = null;
+
+		try {
+			const formData = new FormData();
+			formData.append('blob_data', singleFile);
+			const res = await fetch(`${PUBLIC_API_URL}/file/media?filename=${form.item.name}`, {
+				method: 'POST',
+				headers: getAuthorizationHeaders(null),
+				body: formData
+			});
+			if (res.ok) {
+				successToast("Uploaded image!")
+				form.derived_type.display.image_square = await res.json();
+			} else {
+				const text = await res.text();
+				uploadError = new Error(`Failed to Upload: ${text}`);
+			}
+		} catch (error) {
+			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
+		} finally {
+			isUploading = false;
 		}
 	}
 
@@ -269,35 +321,28 @@
 	});
 
 	/**
-	 * Bulk importing state and functions
+	 * Special state (showing modal) and query for profit calculation
 	 */
-	let showBulkImport: boolean = $state(false);
-	let files: FileList | undefined = $state()
-	let uploadError: Error | null = $state(null);
-
-	async function handleUpload() {
+	let profitError: Error | null = $state(null)
+	let profitStruct: { [s: string]: number; } | null = $state(null)
+	let showProfitModal = $state(false)
+	async function calculateProfit() {
 		if (loadingHTTP) return;
-		loadingHTTP = true;
-		if (files === undefined) return;
+		showProfitModal = true;
 
+		const queryParam = new URLSearchParams({
+			'payment_provider': PaymentProviderEnum.Stripe.toString(),
+			'from_created_timestamp': itemWide.item.created_timestamp,
+			'until_created_timestamp': new Date().toISOString(),
+			'item_id': itemWide.item.id.toString()
+		});
+
+		loadingHTTP = true;
 		try {
-			const formData = new FormData();
-			formData.append('file', files[0]);
-			const res = await fetch(`${PUBLIC_API_URL}/blueprint/import`, {
-				method: 'POST',
-				headers: getAuthorizationHeaders(null),
-				body: formData
-			});
-			if (res.ok) {
-				showBulkImport = false;
-				successToast("Imported!")
-				return res.json();
-			} else {
-				const text = await res.text();
-				uploadError = new Error(`Failed to Upload: ${text}`);
-			}
+			profitStruct = await CoreCheckoutAPI.analyseBreakdown(null, queryParam);
+			profitError = null;
 		} catch (error) {
-			uploadError = error instanceof Error ? error : Error(`Error during Upload: ${error}`);
+			profitError = error instanceof Error ? error : Error('Error fetching profit');
 		} finally {
 			loadingHTTP = false;
 		}
@@ -332,16 +377,15 @@
 						{/if}
 
 						{#if productBlueprintCapable}
-							<a href="#Dashboard" class="font-semibold">Transacties Dashboard</a>
+							<a href="#Dashboard" class="font-semibold">Dashboard</a>
 							<a href="#Transacties en Betalingen" class="font-semibold">Betalingen & Transacties</a>
 							<a href="#Product Blueprints" class="font-semibold">Product Blueprints</a>
 						{/if}
 						{#if hasCheckoutTrackers}
 							<a href="#Checkout Trackers" class="font-semibold">Checkout Trackers</a>
 						{/if}
-						{#if interactionCapable}
-							<a href="#Interactions" class="font-semibold">Interactions</a>
-						{/if}
+
+						<a href="#traffic" class="font-semibold">Traffic</a>
 
 						{#if hasRole("webmaster")}
 							<a href="#webmaster-info" class="font-semibold">Webmaster</a>
@@ -352,7 +396,7 @@
 				</nav>
 			</aside>
 			{#if hasDisplay}
-				<div class="flex-1 p-4 min-w-96"><RecSysPreviewItem item={toRecsysPreview(itemWide)} /></div>
+				<div class="flex-1 p-4 max-w-96"><RecSysPreviewItem item={recsysPreview} /></div>
 			{/if}
 		</div>
 
@@ -407,7 +451,7 @@
 						<div class="form-field">
 							<label for="clickThroughLink">Click Through Link</label>
 							{#if (form.derived_type.externalLink)}
-								<input id="clickThroughLink" type="text" required/>
+								<input id="clickThroughLink" type="text" required bind:value={form.derived_type.display.follow_through_link}/>
 							{/if}
 							<p>Waar je naartoe wordt gestuurd als je op het item klikt.</p>
 						</div>
@@ -424,7 +468,7 @@
 											after:transition-transform
 											peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full
 											"></div>
-						<span class="ms-3 text-sm font-medium text-gray-600">{#if (form.derived_type.display.follow_through_link)}Extern{:else}Item zelf{/if}</span>
+						<span class="ms-3 text-sm font-medium text-gray-600">{#if (form.derived_type.externalLink)}Extern{:else}Item zelf{/if}</span>
 					</label>
 
 					<fieldset>
@@ -434,6 +478,23 @@
 							<p>Extra display beschrijving</p>
 						</div>
 					</fieldset>
+
+					<fieldset>
+						<label for="file">Upload Banner</label>
+						<input
+							accept="image/*"
+							bind:files
+							onchange={handleFileUpload}
+							id="file"
+							type="file"
+							disabled={isUploading}
+						/>
+						{#if (uploadError !== null)}
+							<div class="error-message p-4">
+								{JSON.stringify(uploadError)}
+							</div>
+						{/if}
+					</fieldset>
 				</div>
 			{/if}
 			</div>
@@ -441,77 +502,116 @@
 	</section>
 
 	<div class="p-2 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-		<h3 class="font-bold">Item Metadata</h3>
+		{#if showExtraTab}
+			<h3 class="font-bold">Item Metadata</h3>
 
-		<div class="flex flex-col md:flex-row gap-4">
-			{#if hasLocation}
+			<div class="flex flex-col md:flex-row gap-4">
+				{#if hasLocation}
+					<fieldset class="flex-1">
+						<h3 class="font-bold">Location</h3>
+						<p>{form.derived_type.location.location_display_name}</p>
+						<p>{form.derived_type.location.location_search_name}</p>
+						<p>{form.derived_type.location.longitude}</p>
+						<p>{form.derived_type.location.latitude}</p>
+					</fieldset>
+				{/if}
+
 				<fieldset class="flex-1">
-					<h3 class="font-bold">Location</h3>
-					<p>{form.derived_type.location.location_display_name}</p>
-					<p>{form.derived_type.location.location_search_name}</p>
-					<p>{form.derived_type.location.longitude}</p>
-					<p>{form.derived_type.location.latitude}</p>
+					<h3 class="font-bold">Payment Configuration</h3>
+					<div class="form-field">
+						<label for="connected_account_id">Stripe Connected Account ID</label>
+						<input id="connected_account_id" type="text" required bind:value={form.item.item_metadata.payment_configuration.connected_account_id}/>
+						<p>Connected Account ID waar het geld naar moet doorvloeien. Je kan die opzoeken via Stripe.
+							 Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
+					</div>
+
+					<div class="form-field">
+						<label for="application_fee_amount">Fee</label>
+						<input id="application_fee_amount" type="number" required bind:value={form.item.item_metadata.payment_configuration.application_fee_amount}/>
+						<p>Of er een vaste Fee is die moet worden aangerekend.
+							Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
+					</div>
 				</fieldset>
-			{/if}
 
-			<fieldset class="flex-1">
-				<h3 class="font-bold">Payment Configuration</h3>
-				<div class="form-field">
-					<label for="connected_account_id">Stripe Connected Account ID</label>
-					<input id="connected_account_id" type="text" required bind:value={form.item.item_metadata.payment_configuration.connected_account_id}/>
-					<p>Connected Account ID waar het geld naar moet doorvloeien. Je kan die opzoeken via Stripe.
-						 Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
-				</div>
-
-				<div class="form-field">
-					<label for="application_fee_amount">Fee</label>
-					<input id="application_fee_amount" type="number" required bind:value={form.item.item_metadata.payment_configuration.application_fee_amount}/>
-					<p>Of er een vaste Fee is die moet worden aangerekend.
-						Zie ook <a href="https://wiki.ingeniumua.be/nl/staff/webmaster/Stripe#Connected Account ID">wiki.ingeniumua.be/Stripe</a>.</p>
-				</div>
-			</fieldset>
-
-			<fieldset class="flex-1">
-				<h3 class="font-bold">Social Media Configuration</h3>
-				<div class="form-field">
-					<label for="instagram_url">Instagram Link</label>
-					<input id="instagram_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.instagram_url}/>
-					<p>Deze link komt achter een instagram logo te staan op de item page.</p>
-				</div>
-				<div class="form-field">
-					<label for="facebook_url">Facebook Link</label>
-					<input id="facebook_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.facebook_url}/>
-					<p>Deze link komt achter een Facebook logo te staan op de item page.</p>
-				</div>
-				<div class="form-field">
-					<label for="linkedin_url">LinkedIn Link</label>
-					<input id="linkedin_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.linkedin_url}/>
-					<p>Deze link komt achter een LinkedIn logo te staan op de item page.</p>
-				</div>
-			</fieldset>
+				<fieldset class="flex-1">
+					<h3 class="font-bold">Social Media Configuration</h3>
+					<div class="form-field">
+						<label for="instagram_url">Instagram Link</label>
+						<input id="instagram_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.instagram_url}/>
+						<p>Deze link komt achter een instagram logo te staan op de item page.</p>
+					</div>
+					<div class="form-field">
+						<label for="facebook_url">Facebook Link</label>
+						<input id="facebook_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.facebook_url}/>
+						<p>Deze link komt achter een Facebook logo te staan op de item page.</p>
+					</div>
+					<div class="form-field">
+						<label for="linkedin_url">LinkedIn Link</label>
+						<input id="linkedin_url" type="text" required bind:value={form.item.item_metadata.social_media_configuration.linkedin_url}/>
+						<p>Deze link komt achter een LinkedIn logo te staan op de item page.</p>
+					</div>
+				</fieldset>
+			</div>
+		{/if}
+		<div class="flex flex-row">
+			<button type="button" class="ml-auto button button-primary button-icon-only relative inline-flex items-center justify-center"
+							aria-controls="mobile-menu" aria-expanded="{showExtraTab}"
+							onclick={ () => showExtraTab = !showExtraTab }
+			>
+				<span class="sr-only">Open navigatie</span>
+				{#if showExtraTab}
+					<svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				{:else}
+					<svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+					</svg>
+				{/if}
+			</button>
 		</div>
 	</div>
-	</form>
 
-	<div class="flex justify-end mt-4 gap-4">
-		<button class="button button-primary button-inline"
-						disabled={loadingHTTP}
-						onclick={putItem}>
-			<span class="text-white">Update Item</span>
-		</button>
-	</div>
+		<div class="sticky bottom-4 flex justify-end mt-4 gap-4 z-10">
+			<button type="button" class="button button-primary button-inline"
+							disabled={loadingHTTP}
+							onclick={putItem}>
+				<span class="text-white">{loadingHTTP ? 'Saving...' : 'Update Item'}</span>
+			</button>
+		</div>
+	</form>
 
 	{#if productBlueprintCapable}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<h1 id="Dashboard">Dashboard</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken verbonden aan de pagina!</p>
+			<p class="alert-text">Hieronder een overzicht van vanalle lopende statistieken. Aantal transacties per product, per price policy, etc.</p>
 		</div>
+
+		<article class={`my-4 py-2 ${profitStruct !== null ? 'rounded-lg shadow-md hover:shadow-lg transition-shadow': ''}`}>
+			{#if (profitStruct !== null)}
+				<h3>Profit Analysis</h3>
+
+				<p class="font-bold">
+					Inkomsten: {profitStruct?.amount}<br>
+					Transactiekosten: {profitStruct?.fee}<br>
+					Winst: {profitStruct?.net}<br>
+				</p>
+
+				<p class="font-bold">
+					Checkout Count: {profitStruct?.checkout_count}<br>
+					Charge Count: {profitStruct?.charge_count}<br>
+					Als deze twee getallen niet overeen komen is het bedrag waarschijnlijk ook niet juist.
+				</p>
+			{/if}
+
+			<button class="button button-primary" onclick={calculateProfit}>Profit</button>
+		</article>
 
 		<section class="flex flex-col lg:flex-row gap-4">
 			<div class="order-1 lg:flex-[2]">
 				<h2 class="font-bold">Voltooide Transacties</h2>
-				{#each groupPricePolicies(pricePolicyTable) as row (row.product_blueprint_id)}
+				{#each groupPricePolicies(pricePoliciesTable) as row (row.product_blueprint_id)}
 					<div class="flex justify-between items-center">
 						<h3 class="text-blue-900 font-bold">{row.product_blueprint_name}</h3>
 						<h4 class="text-ingenium-grey-800 text-right font-bold mr-4">Subtotaal: {row.transaction_count}</h4>
@@ -532,9 +632,11 @@
 						</tbody>
 					</table>
 				{/each}
-				<p class="text-right font-bold mr-4">Inkomsten: €{pricePolicyTable.reduce((sum, val) => {
+				<p class="text-right font-bold mr-4">
+					{#if (profitStruct !== null)}Winst: {profitStruct["net"]} &nbsp &nbsp &nbsp {/if}
+					Inkomsten: €{pricePoliciesTable.reduce((sum, val) => {
 					return sum + val["transaction_count"] * val["price_eu"]
-				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {pricePolicyTable.reduce((sum, val) => {
+				}, 0)} &nbsp &nbsp &nbsp Eind totaal: {pricePoliciesTable.reduce((sum, val) => {
 					return sum + val["transaction_count"]
 				}, 0)}</p>
 
@@ -568,10 +670,6 @@
 					{/each}
 					</tbody>
 				</table>
-
-				<p>TODO: Vanalle extra beschrijven statistieken. Unique users, totaal €, totaal € na fee's.
-					Voor zo'n dingen best API calls doen naar de dpu? -> Of gwn op core houden .. zonder polars gaat da best nog wel
-				</p>
 			</div>
 		</section>
 
@@ -587,9 +685,6 @@
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<div class="flex justify-between items-center mb-6">
 			<h1 id="Product Blueprints">Product Blueprints</h1>
-			<button class="ml-auto button button-primary w-24 button-inline" onclick={() => {showBulkImport = true}}>
-				<span class="text-white">Import</span>
-			</button>
 			<button onclick="{() => showAddingNew = true}" class="ml-2 button button-primary w-24 button-inline">
 				<span class="text-white">Add New</span>
 			</button>
@@ -602,19 +697,30 @@
 		</div>
 
 		{#if (productBlueprints.length > 0)}
-		<section class="flex flex-wrap gap-6">
-			{#each productBlueprints as productBlueprint (productBlueprint.id)}
-				<ProductBlueprintCard productBlueprint={productBlueprint}></ProductBlueprintCard>
-			{/each}
-		</section>
+			<section class="flex flex-col gap-6">
+				{#each productBlueprints as productBlueprint (productBlueprint.id)}
+					<ProductBlueprintCard
+						productBlueprint={productBlueprint}
+						bind:loadingHTTP={loadingHTTP}
+						refreshCallback={() => refreshBlueprints()}
+					></ProductBlueprintCard>
+				{/each}
+			</section>
+		{:else}
+			<div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg">
+				<p class="text-gray-500 mb-4">Er zijn nog geen Product Blueprints voor dit item.</p>
+				<button onclick="{() => showAddingNew = true}" class="button button-primary button-inline">
+					Maak de eerste aan
+				</button>
+			</div>
 		{/if}
 
+		{#if hasCheckoutTrackers}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<h1 id="Checkout Trackers">Checkout Trackers</h1>
 		<div class="alert alert-info mb-4 max-w-3xl">
 			<p class="alert-text">Checkout Trackers zijn de 'ordertracking' van Pop-up Z. Er bestaat steeds één tracker per betaling.</p>
 		</div>
-		{#if hasCheckoutTrackers}
 			<div class="flex flex-row gap-4">
 				<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 					<h4 class="text-ingenium-grey-800 font-bold">Aantal Actieve:</h4>
@@ -639,30 +745,32 @@
 		{/if}
 	{/if}
 
-	{#if interactionCapable}
-		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-		<h1 id="Interactions">Interactions</h1>
-		<div class="alert alert-info mb-4 max-w-3xl">
-			<p class="alert-text">Interactions worden aangemaakt telkens wanneer een gebruiker 'iets doet' met een Item.
-			Onder de mantel van 'iets doen' zit bijvoorbeeld een transactie.</p>
-		</div>
-
-		<p>TODO: Grafiekje en aantallen hier? Mis gwn dashboard embed?</p>
-	{/if}
-
+	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
+	<h1 id="traffic">Traffic</h1>
+	<div class="alert alert-info mb-4 max-w-3xl">
+		<p class="alert-text">Met Umami houden we analytics bij over wie er onze site bezoekt.
+			Die gegevens kan je rechstreeks <a href="https://traffic.ingeniumua.be">op umami bekijken</a>.
+			Hieronder enkele cijfers opgehaald uit umami.</p>
+	</div>
+	<p>TODO: https://umami.is/docs/api/website-stats#get-apiwebsiteswebsiteidstats</p>
 
 	{#if hasRole("webmaster")}
 		<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
 		<h1 id="webmaster-info">Webmaster Info</h1>
 		<h2 id="keycloak">Keycloak</h2>
-		<p>TODO 1: Keycloak info voor dit item (met authorizatie opties)</p>
+		<p>If we ever add authorization options for items using keycloak, those would go here.</p>
 
-		<h2 id="changelog">Changelog</h2>
 		<DBLogTable baseQueryParam={new URLSearchParams({table_name: 'hubitem', row_primary_key: itemWide.item.id.toString()})}></DBLogTable>
 
 		<div class="flex justify-end mt-4 gap-4">
 			<button class="button button-danger button-inline"
-							disabled={loadingHTTP}>
+							disabled={loadingHTTP}
+							onclick={(e) => {
+								if (!confirm('Are you absolutely sure you want to delete this item? This cannot be undone.')) {
+									e.preventDefault();
+								}
+								// TODO: Execute delete
+							}}>
 				<span class="text-white">Delete (wip)</span>
 			</button>
 		</div>
@@ -671,26 +779,35 @@
 
 <AddProductBlueprintModal bind:isOpen={ showAddingNew } origin_item_id={itemWide.item.id}></AddProductBlueprintModal>
 
-<Modal title="Bulk Import" maxWidth="max-w-xl" bind:isOpen={ showBulkImport } closable={ true }>
+<Modal title="Profit analysis" maxWidth="max-w-xl" bind:isOpen={ showProfitModal } closable={ true }>
 	{#snippet children()}
 		<article class="m-4">
-			<label for="file">Upload Product Blueprints</label>
-			<input accept="text/csv" bind:files id="file" name="avatar" type="file" />
+			<div class="alert alert-info mb-4 max-w-3xl">
+				<p class="alert-text">Berekening van de fee is niet super eenvoudig om efficient te doen. Als je het exacte getal wilt best op stripe zelf kijken.</p>
+			</div>
 
-			{#each Array.from(files ?? []) as file}
-				<p>{file.name} ({file.size} bytes)</p>
-			{/each}
+			<p class="font-bold">
+				Inkomsten: {profitStruct?.amount}<br>
+				Transactiekosten: {profitStruct?.fee}<br>
+				Winst: {profitStruct?.net}<br>
+			</p>
+
+			<p class="font-bold">
+				Checkout Count: {profitStruct?.checkout_count}<br>
+				Charge Count: {profitStruct?.charge_count}<br>
+				Als deze twee getallen niet overeen komen is het bedrag waarschijnlijk ook niet juist.
+			</p>
 
 			<div class="p-2 flex justify-end items-center">
 				<button type="button" class="button button-primary w-24 button-inline"
-								disabled={loadingHTTP || files === undefined}
-								onclick={handleUpload}>
-					<span class="text-white">Upload</span>
+								disabled={loadingHTTP}
+								onclick={refresh}>
+					<span class="text-white">Refresh</span>
 				</button>
 			</div>
 
-			{#if uploadError !== null}
-				{uploadError.message}
+			{#if profitError !== null}
+				{profitError.message}
 			{/if}
 		</article>
 	{/snippet}

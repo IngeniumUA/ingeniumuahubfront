@@ -5,7 +5,7 @@
 	import type { TransactionI } from '$lib/models/transactionI';
 	import { CoreTransactionAPI } from '$lib/core_api/transaction';
 	import { ValidityEnum, ValidityList } from '$lib/models/productsI';
-	import { makePretty, prettyDateTime } from '$lib/utilities/style-utilities';
+	import { makePretty, paymentStatusToColor, prettyDateTime } from '$lib/utilities/style-utilities';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 	import TransactionModal from '$lib/components/staff/payment/TransactionModal.svelte';
@@ -86,6 +86,8 @@
 		user_email: string | null;
 		itemName: string | null;
 		validity: ValidityEnum | null;
+		checkoutUUID: string | null;
+		interactionID: number | null;
 		productBlueprintId: number | null;
 		pricePolicyId: number | null;
 		queryOffset: number;
@@ -95,6 +97,8 @@
 		user_email: null,
 		itemName: null,
 		validity: null,
+		checkoutUUID: null,
+		interactionID: null,
 		productBlueprintId: null,
 		pricePolicyId: null,
 		queryOffset: 0,
@@ -113,6 +117,8 @@
 		if (queryForm.validity !== null) searchParam.set('validity', queryForm.validity.toString());
 		if (queryForm.productBlueprintId !== null) searchParam.set('product_blueprint_id', queryForm.productBlueprintId.toString());
 		if (queryForm.pricePolicyId !== null) searchParam.set('price_policy_id', queryForm.pricePolicyId.toString());
+		if (queryForm.checkoutUUID !== null) searchParam.set('checkout_uuid', queryForm.checkoutUUID);
+		if (queryForm.interactionID !== null) searchParam.set('interaction_id', queryForm.interactionID.toString());
 
 		let queryParam = new URLSearchParams()
 		for (const [key, value] of baseQueryParam) {
@@ -152,13 +158,10 @@
 
 	let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 	$effect(() => {
-		const { user_email, itemName, validity, productBlueprintId, pricePolicyId, queryOffset, queryLimit } = queryForm;
-		void [user_email, itemName, validity, productBlueprintId, pricePolicyId, queryOffset, queryLimit];
-
+		$state.snapshot(queryForm);
 		if (debounceTimer) clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(refresh, 1000);
 	});
-
 
 	/**
 	 * Bulk Operations selection
@@ -202,17 +205,6 @@
 			case ValidityEnum.consumed: return 'gray';
 		}
 	}
-	function transactionToColor(status: PaymentStatusEnum) {
-		switch (status) {
-			case PaymentStatusEnum.successful: return 'green';
-			case PaymentStatusEnum.pending: return 'orange';
-			case PaymentStatusEnum.failed: return 'red';
-			case PaymentStatusEnum.cancelled: return 'gray';
-			case PaymentStatusEnum.refund_pending: return 'orange';
-			case PaymentStatusEnum.partially_refunded: return 'gray';
-			case PaymentStatusEnum.refunded: return 'gray';
-		}
-	}
 
 	/**
 	 * Downloading
@@ -231,7 +223,7 @@
 	}
 
 	/**
-	 * Edit Modal Code
+	 * State management for transaction edit model
 	 */
 	let editSelectedIndex: null | number = $state(null);
 	let editSelected: TransactionI | null = $state(null);
@@ -260,18 +252,18 @@
 		<p class="alert-text">Een transactie is de 'aankoop' van een product door een gebruiker. Het overdragen van geld zit in een checkout (dus er kunnen meerdere transactions in één checkout zitten). Een Transactie heeft ook een validity, die zegt of het product 'geldig' is aangekocht. Bv. Lid prijs wanneer je geen lid bent -> invalid.</p>
 	</div>
 
-	<section class="filter-selector">
-		<h3>Filter</h3>
-		<p>Hier vanalle filters om toe te passen op de table.
-			Mis zoals price policy ook zo knop om een dropdown te openen
-			(met dan al zo, de waarden die via props zijn ingevoerd op disabled? Da like ik wel</p>
-	</section>
+<!--	<section class="filter-selector">-->
+<!--		<h3>Filter</h3>-->
+<!--		<p>Hier vanalle filters om toe te passen op de table.-->
+<!--			Mis zoals price policy ook zo knop om een dropdown te openen-->
+<!--			(met dan al zo, de waarden die via props zijn ingevoerd op disabled? Da like ik wel</p>-->
+<!--	</section>-->
 
-	<section class="bulk-operation">
-		<h3>Apply</h3>
-		<p>Om bulk operaties uit te voeren zoals refunds. Hier ook de export knop zetten?
-			Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>
-	</section>
+<!--	<section class="bulk-operation">-->
+<!--		<h3>Apply</h3>-->
+<!--		<p>Om bulk operaties uit te voeren zoals refunds.-->
+<!--			Zwz voorda de operatie wordt uitgevoerd zo een buffer knop van "are you sure?"</p>-->
+<!--	</section>-->
 
 	{#if (queryError !== null)}
 		<div class="error-message p-4">
@@ -298,12 +290,28 @@
 		{/each}
 	</section>
 
+	<div class="overflow-x-auto w-full">
 	<table class="ingenium-table">
 		<thead>
 		<tr>
-			<th><h4>Select</h4> <input type="checkbox" class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" checked={allSelected} onclick={() => toggleAllSelected(!allSelected)}/></th>
-			<th><h4>ID</h4></th>
-			<th><h4>Checkout</h4></th>
+			<th>
+				<div class="flex flex-col items-center justify-end h-full">
+				<h4 class="flex-end">Select</h4>
+				<input type="checkbox" class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" checked={allSelected} onclick={() => toggleAllSelected(!allSelected)}/>
+				</div>
+			</th>
+			<th>
+				<div class="form-field">
+					<h4>ID</h4>
+					<input class="max-w-32" type="number" placeholder="ID" bind:value={queryForm.interactionID}>
+				</div>
+			</th>
+			<th>
+				<div class="form-field">
+					<h4>Checkout</h4>
+					<input class="max-w-40" type="text" placeholder="Checkout uuid" bind:value={queryForm.checkoutUUID}>
+				</div>
+			</th>
 			<th><h4>Status</h4></th>
 			{#if showItemColumn}
 				<th>
@@ -365,6 +373,7 @@
 				bind:currentOffset={queryForm.queryOffset}
 				bind:currentLimit={queryForm.queryLimit}
 				bind:httpLoading={loadingHTTP}
+				refresh={refresh}
 			>
 			</PaginationComponent></th>
 		</tr>
@@ -372,7 +381,7 @@
 		<tbody>
 		{#each transactions as transaction, tableIndex (transaction.interaction.interaction_id)}
 			<tr>
-				<th>
+				<th class="flex justify-center">
 					<input class="p-0.5 rounded-md border-ingenium-grey-300 placeholder-ingenium-grey-300 font-thin" type="checkbox" checked={selectedArray[tableIndex]}/>
 				</th>
 				<td>
@@ -382,7 +391,7 @@
 					<a href={`/staff/payment/${transaction.checkout_uuid}#overview`}>{transaction.checkout_uuid.slice(0, 6)}</a>
 				</td>
 				<td>
-					<span class="rounded-lg py-1 px-2 {transactionToColor(transaction.transaction_status)}">{makePretty(PaymentStatusEnum[transaction.transaction_status])}</span>
+					<span class="rounded-lg py-1 px-2 {paymentStatusToColor(transaction.transaction_status)}">{makePretty(PaymentStatusEnum[transaction.transaction_status])}</span>
 				</td>
 				{#if showItemColumn}
 					<td>
@@ -393,7 +402,11 @@
 					{transaction.purchased_product['name']}
 				</td>
 				<td>
-					{transaction.purchased_product.price_policy?.name ?? `€${transaction.purchased_product.price_policy?.price}`}
+					{#if transaction.purchased_product.price_policy?.name === null || transaction.purchased_product.price_policy?.name === undefined}
+						{`€${transaction.purchased_product.price_policy?.price}`}
+					{:else}
+						{`€${transaction.purchased_product.price_policy?.price} ${transaction.purchased_product.price_policy?.name}`}
+					{/if}
 				</td>
 				<td>
 					<div class="transaction-validity-selector">
@@ -425,15 +438,21 @@
 		{/each}
 		</tbody>
 	</table>
+	</div>
+	{#if transactions.length === 0}
+		<div class="p-8 text-center border-2 border-dashed border-gray-300 rounded-lg">
+			<p class="text-gray-500 mb-4">Geen transactions gevonden met deze filters.</p>
+		</div>
+	{/if}
 </article>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < transactions.length && editSelected !== null}
-	<TransactionModal transaction={editSelected} isOpen={showEdit}></TransactionModal>
+	<TransactionModal transaction={editSelected} bind:isOpen={showEdit}></TransactionModal>
 {/if}
 
 <style lang="scss">
-	h3 {
-			@apply font-bold;
+	th {
+		@apply align-bottom;
 	}
 
   section {
@@ -454,13 +473,12 @@
       button {
           @apply text-xs text-white py-1 px-2 inline-flex items-center justify-center whitespace-nowrap align-middle font-semibold disabled:cursor-not-allowed  w-full  drop-shadow;
       }
-
 			.red {@apply border-red-700 text-red-700 bg-red-100;}
 			.orange {@apply  border-orange-700 text-orange-700 bg-orange-100;}
 			.green {@apply  border-green-700 text-green-700 bg-green-100;}
 			.gray {@apply  border-gray-700 text-gray-700 bg-gray-100;}
 
-      @apply ml-auto mr-4 rounded-lg bg-gray-100 flex flex-row;
+      @apply ml-auto mr-4 rounded-lg flex flex-row;
   }
 
   .red {@apply border-red-700 text-red-700 bg-red-100;}

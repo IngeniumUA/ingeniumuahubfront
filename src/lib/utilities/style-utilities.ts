@@ -1,3 +1,4 @@
+import { PaymentStatusEnum } from '$lib/models/enums';
 
 export const slice = (input_str: string, max_length: number): string => {
     return `${input_str.slice(0, max_length)}${input_str.length == max_length ? " ...": ""}`;
@@ -70,4 +71,40 @@ export function calcColorIntensity(rgbaIn: string): number {
     const blue = parseInt(split[2].trim())
 
     return red*0.299 + green*0.587 + blue*0.114
+}
+
+/**
+ * Style utility
+ * @param status
+ */
+export function paymentStatusToColor(status: PaymentStatusEnum) {
+    switch (status) {
+        case PaymentStatusEnum.successful: return 'green';
+        case PaymentStatusEnum.pending: return 'orange';
+        case PaymentStatusEnum.failed: return 'red';
+        case PaymentStatusEnum.cancelled: return 'gray';
+        case PaymentStatusEnum.refund_pending: return 'orange';
+        case PaymentStatusEnum.partially_refunded: return 'gray';
+        case PaymentStatusEnum.refunded: return 'gray';
+    }
+}
+
+// Source - https://stackoverflow.com/a
+// Why doesn't typescript have this
+export function parseBool(string: string): boolean | undefined {
+    switch (String(string).toLowerCase()) {
+        case "true":
+        case "1":
+        case "yes":
+        case "y":
+            return true;
+        case "false":
+        case "0":
+        case "no":
+        case "n":
+            return false;
+        default:
+            //you could throw an error, but 'undefined' seems a more logical reply
+            return undefined
+    }
 }

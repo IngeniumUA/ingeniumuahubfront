@@ -3,6 +3,7 @@
 	import type { GroupI } from '$lib/models/user/GroupI';
 	import { CoreGroupAPI } from '$lib/core_api/group_api';
 	import GroupModal from '$lib/components/staff/GroupModal.svelte';
+	import AddGroupModal from '$lib/components/staff/group/AddGroupModal.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -42,11 +43,20 @@
 		}
 		showEditBuffer = showEditModal
 	})
+
+	/**
+	 * Add group state
+	 */
+	let showAddingNew: boolean = $state(false);
 </script>
 
 <main class="ingenium-container relative" id="main-content">
-	<div class="flex justify-between items-center mb-6">
+	<div class="flex justify-between items-center mb-6 gap-4">
 		<h1>Groups</h1>
+
+		<button class="ml-auto button button-primary w-24 button-inline" onclick={() => {showAddingNew = true}}>
+			<span class="text-white">Add New</span>
+		</button>
 		<button class="button button-primary w-24 button-inline" onclick={refresh}>
 			<span class="text-white">Refresh</span>
 		</button>
@@ -127,3 +137,5 @@
 {#if editGroup !== null && showEditModal}
 	<GroupModal bind:isOpen={showEditModal} group={editGroup} ></GroupModal>
 {/if}
+
+<AddGroupModal bind:isOpen={showAddingNew}></AddGroupModal>

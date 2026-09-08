@@ -12,6 +12,12 @@
 	import StripePaymentComponent from "$lib/components/cart/stripe-payment-component.svelte";
 	import InsetSpinner from '$lib/components/spinners/inset-spinner.svelte';
 	import { updateGetNotifications } from '$lib/utilities/notificationUtilities.ts';
+	import { track } from '$lib/actions/umami';
+
+	function trackEvent(name: string, data?: Record<string, unknown>) {
+		if (typeof window === 'undefined' || !window.umami) return;
+		window.umami.track(name, data);
+	}
 
 	let error = $state(false);
 	let errorMsg = $state('');
@@ -63,24 +69,43 @@
 		loading = true;
 		modalOpen = false;
 
+		const cartContext = {
+			total_price: totalPrice,
+			product_count: cartProducts.length,
+			is_authenticated: isAuthenticated(),
+			is_staff_checkout: cartDetails.staffCheckout,
+		};
+		trackEvent('checkout:payment_attempt', cartContext);
+
 		try {
 			await checkoutCart();
+			trackEvent('checkout:payment_success', cartContext);
 		} catch (e) {
 			loading = false;
 			error = true;
 
+			let errorType = 'unknown';
 			if (e instanceof Response && e.status === 406) {
 				// todo -> backend should return more types of errors in hubexception, when we add that we can do custom messages here
 				errorMsg = 'er zijn producten in je winkelwagen die je niet kan bestellen.';
+				errorType = 'invalid_products';
 			} else if (e instanceof Response && e.status === 429) {
 				errorMsg = 'je moet even wachten voor je weer kan bestellen bestellen.';
+				errorType = 'rate_limited';
 			} else if (e instanceof Error) {
 				errorMsg = e.message;
+				errorType = 'client_error';
 			} else if (e instanceof Response) {
 				errorMsg = (await e.json())["error_nl"] ?? "Unkown core error";
+				errorType = `http_${e.status}`;
 			} else {
 				errorMsg = 'Unknown error';
 			}
+			trackEvent('checkout:payment_failed', {
+				...cartContext,
+				error_type: errorType,
+				http_status: e instanceof Response ? e.status : null
+			});
 		}
 	}
 
@@ -190,7 +215,15 @@
 							</div>
 						{/if}
 
-						<button class="mt-4 button button-sm button-primary button-full" onclick={ checkCart } disabled={ loading || modalOpen }>
+						<button class="mt-4 button button-sm button-primary button-full"
+										onclick={ checkCart } disabled={ loading || modalOpen }
+										use:track={{ name: 'cart:betalen', data: {
+														total_price: totalPrice,
+												  	product_count: cartProducts.length,
+												  	is_authenticated: isAuthenticated(),
+											  		is_staff_checkout: cartDetails.staffCheckout,
+             			  } }}
+						>
 							<span class="text-inherit">Naar betalen</span>
 							<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 								<path d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" stroke-linecap="round" stroke-linejoin="round"></path>

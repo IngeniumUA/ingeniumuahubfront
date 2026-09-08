@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>Ingenium UA - Studentenvereninging FTI</title>
+	<title>Ingenium UA - Studentenvereniging FTI</title>
 </svelte:head>
 
 <div id="homepage-wrapper">
@@ -33,7 +33,7 @@
 		<section class="ingenium-container">
 			<div class="intro-card">
 				<div class="intro-card__image">
-					<enhanced:img src="$assets/images/praesidium_thumb.webp" alt="" aria-hidden="true" />
+					<enhanced:img src="$assets/images/praesidium_thumb.png" alt="" aria-hidden="true" />
 				</div>
 				<div class="intro-card__content">
 					<p class="text-white">
