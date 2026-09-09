@@ -11,8 +11,8 @@
 	import CartList from "$lib/components/cart/cart-list.svelte";
 	import StripePaymentComponent from "$lib/components/cart/stripe-payment-component.svelte";
 	import InsetSpinner from '$lib/components/spinners/inset-spinner.svelte';
-	import { updateGetNotifications } from '$lib/utilities/notificationUtilities.ts';
 	import { track } from '$lib/actions/umami';
+	import { appState } from '$lib/states/appState.svelte.ts';
 
 	function trackEvent(name: string, data?: Record<string, unknown>) {
 		if (typeof window === 'undefined' || !window.umami) return;
@@ -117,7 +117,7 @@
 	});
 
 	function getNotificationUpdated() {
-		updateGetNotifications(getInternalNotifications)
+		appState.getNotifications = getInternalNotifications
 	}
 </script>
 

@@ -158,7 +158,7 @@ export const checkoutCart = async () => {
 		: PaymentProviderEnum.Stripe;
 
 	let notification_token_cart: string | null
-	if (appState.notification_token) { // @Kippie Idk if this is correct
+	if (appState.getNotifications) {
 		notification_token_cart = appState.notification_token;
 	} else {
 		notification_token_cart = null;
