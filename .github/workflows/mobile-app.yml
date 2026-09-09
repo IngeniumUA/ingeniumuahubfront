@@ -2,7 +2,7 @@
   push:
     paths:
       - 'Version_Notes.txt'  # if version is updated
-      - './.github/workflows/mobile-app.yml' # or this file
+      - ./.github/workflows/mobile-app.yml # or this file
 
 jobs:
   build_android:
