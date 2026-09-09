@@ -13,6 +13,7 @@ import { getCookie, getUserFromToken, setCookie } from '$lib/auth/auth.ts';
 import { auth } from '$lib/states/auth.svelte.ts';
 import { Capacitor } from '@capacitor/core';
 import { browser } from '$app/environment';
+import { appState } from '$lib/states/appState.svelte.ts';
 
 Sentry.init({
   dsn: PUBLIC_SENTRY_DSN,
@@ -107,7 +108,7 @@ if (Capacitor.getPlatform() !== "web") {PushNotifications.requestPermissions().t
 // On success, we should be able to receive notifications
 if (Capacitor.getPlatform() !== "web") {PushNotifications.addListener('registration', (token: Token) => {
   console.log('Push registration success, token: ' + token.value);
-  notification_token = token.value;
+  appState.notification_token = token.value;
   get_all_possible_notifications()
 });}
 
@@ -121,7 +122,7 @@ async function get_vibrations() {
   let storedVibration = await AppStorage.getWide("vibration")
   if (storedVibration !== undefined && storedVibration !== null) {
     storedVibration = JSON.parse(storedVibration)
-    setVibration(storedVibration)
+    appState.vibration =storedVibration
   }
 }
 get_vibrations()
@@ -138,7 +139,7 @@ if (Capacitor.getPlatform() !== "web") {PushNotifications.addListener('pushNotif
      </div>`
 
   notificationToast(notification_toast);
-  if (vibration) {
+  if (appState.notification_token) {
     Haptics.vibrate({duration: 700})
   }
 });}
@@ -153,10 +154,6 @@ if (Capacitor.getPlatform() !== "web") {PushNotifications.addListener('pushNotif
   }
 });}
 
-export function setVibration(setValue: boolean) {
-  vibration = setValue;
-}
-
 async function get_was_paying() {
   const storedPaying = await AppStorage.getWide("was_paying")
   if (storedPaying !== undefined && storedPaying !== null) {
@@ -166,6 +163,3 @@ async function get_was_paying() {
   }
 }
 get_was_paying()
-
-export let vibration = true
-export let notification_token: string = "";

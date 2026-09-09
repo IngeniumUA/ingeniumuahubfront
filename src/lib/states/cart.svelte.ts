@@ -8,8 +8,7 @@ import {PUBLIC_API_URL} from "$env/static/public";
 import {isAuthenticated} from "$lib/states/auth.svelte";
 import type { CartFailedI, CartSuccessI, CheckoutSmallI } from '$lib/models/cartI';
 import {goto} from "$app/navigation";
-import { getNotifications } from '$lib/utilities/notificationUtilities.ts';
-import { notification_token } from '../../hooks.client.ts';
+import { appState } from '$lib/states/appState.svelte.ts';
 
 export interface CartDetailsState {
 	tracker_ordering: number;
@@ -154,13 +153,15 @@ export const getProductCount = (product: ProductOutI, checkPricePolicy: boolean 
  */
 export const checkoutCart = async () => {
 	Object.assign(failedCart, {});
-	const paymentProvider = cartDetails.staffCheckout ? PaymentProviderEnum.Kassa : PaymentProviderEnum.Stripe;
+	const paymentProvider = cartDetails.staffCheckout
+		? PaymentProviderEnum.Kassa
+		: PaymentProviderEnum.Stripe;
 
 	let notification_token_cart: string | null
-	if (getNotifications) {
-		notification_token_cart = notification_token
+	if (appState.notification_token) { // @Kippie Idk if this is correct
+		notification_token_cart = appState.notification_token;
 	} else {
-		notification_token_cart = null
+		notification_token_cart = null;
 	}
 
 	try {
