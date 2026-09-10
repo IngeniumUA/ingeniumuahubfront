@@ -1,4 +1,4 @@
-package development.com.app.ingeniumua;
+package production.com.app.ingeniumua;
 
 import com.getcapacitor.BridgeActivity;
 
