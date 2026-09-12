@@ -67,15 +67,15 @@ jobs:
           echo "${{ secrets.PLAY_SERVICE_ACCOUNT }}" > ./ingeniumuahub-play-console.json.base64
           base64 -d ./ingeniumuahub-play-console.json.base64 > ./ingeniumuahub-play-console.json
 
-      - name: upload the bundle to the play console
-        run: python upload_android_bundle.py
-
       - name: Upload release bundle
         uses: actions/upload-artifact@v4
         with:
           name: app-android
           path: android/app/build/outputs/bundle/release/app-release-signed.aab
           retention-days: 1
+
+      - name: upload the bundle to the play console
+        run: python upload_android_bundle.py
 
   build_ios:
     runs-on: macos-15
