@@ -8,9 +8,9 @@
   } from '$lib/utilities/notificationUtilities.ts';
   import { AppStorage } from '$lib/scanners/storage.js';
   import InlineSpinner from '$lib/components/spinners/inline-spinner.svelte';
-  import { notification_token, setVibration } from '../../../../hooks.client.ts';
   import { auth } from '$lib/states/auth.svelte.ts';
   import { PUBLIC_API_URL } from '$env/static/public';
+  import { appState } from '$lib/states/appState.svelte.ts';
 
 
   let form_data: any = {}
@@ -69,7 +69,7 @@
     let storedVibration = await AppStorage.getWide("vibration")
     if (storedVibration !== undefined && storedVibration !== null) {
       storedVibration = JSON.parse(storedVibration)
-      setVibration(storedVibration)
+      appState.vibration = storedVibration
       vibrationValue = storedVibration
     }
   })
@@ -143,7 +143,7 @@
 
   function link_user_token(email: string) {
     const payload = {
-      token: notification_token,
+      token: appState.notification_token,
     }
     return fetch(`${PUBLIC_API_URL}/item/notification/link_user/${email}`, {
       method: "POST",
@@ -154,7 +154,7 @@
 
   function vibrationChanged() {
     AppStorage.setWide("vibration", JSON.stringify(vibrationValue))
-    setVibration(vibrationValue)
+    appState.vibration = vibrationValue
   }
 </script>
 

@@ -73,3 +73,16 @@ h1, h2 {
 .button-success {
   @apply bg-green-600 text-white hover:bg-green-700;
 }
+
+.ingenium-description-component {
+  @apply flex-[1] order-1 lg:order-3 px-4 col-span-1;
+  fieldset {
+    @apply mb-2;
+    .ingenium-description-value {
+      @apply ml-0 px-2 py-0 rounded-md border-2 border-ingenium-grey-300 inline-block;
+    }
+  }
+  h4 {
+    @apply font-bold text-blue-900;
+  }
+}

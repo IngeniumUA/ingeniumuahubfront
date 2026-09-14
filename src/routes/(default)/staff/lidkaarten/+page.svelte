@@ -10,6 +10,7 @@
 	import ExplodedLogPreview from '$lib/components/staff/dblog/ExplodedLogPreview.svelte';
 	import type { DBLogExplodedI } from '$lib/models/dblog';
 	import { DBLogAPI } from '$lib/core_api/dblog_api';
+	import CardGenerateModal from '$lib/components/staff/card/CardGenerateModal.svelte';
 
 	/**
 	 * Assigning data from load function in +page.svelte
@@ -47,9 +48,13 @@
 		});
 		if (onlyShowLinked) {
 			queryParam.set("is_linked", "true")
+		} else {
+			queryParam.set("is_linked", "false")
 		}
 		if (onlyShowAvailable) {
 			queryParam.set("available", "true")
+		} else {
+			queryParam.set("available", "false")
 		}
 		if (queryForm.user_email !== null && queryForm.user_email !== "") queryParam.set('user', queryForm.user_email);
 		if (queryForm.card_nr !== null) queryParam.set('card_nr', queryForm.card_nr.toString());
@@ -221,6 +226,29 @@
 			loadingHTTP = false;
 		}
 	}
+
+	/**
+	 * Downloading
+	 */
+	let downloadError: Error | null = $state(null);
+	async function downloadCurrent() {
+		if (loadingHTTP) return;
+		loadingHTTP = true;
+		try {
+			await CoreCardAPI.downloadCurrentCards(null);
+			downloadError = null
+		} catch (error) {
+			downloadError = error instanceof Error ? error : Error('Error download');
+		} finally {
+			loadingHTTP = false; // Reset loading state
+		}
+	}
+
+	/**
+	 * Generating
+	 */
+	let showAddingNew: boolean = $state(false);
+
 </script>
 
 <main class="ingenium-container relative" id="main-content">
@@ -235,8 +263,7 @@
 	</div>
 
 	<div class="alert alert-info mb-4 max-w-2xl">
-		<p class="alert-text">Lidkaarten zijn zelf ook een derived type van HubItem. Als belangrijkste velden hebben ze het type lidkaart, een user veld (indien gelinkt) en een verwijzing naar een HubShopItem.
-			Dat HubShopItem is hoe lidkaarten aangekocht worden, en ook de verbinding met hoe een persoon 'lid' is.</p>
+		<p class="alert-text">Lidkaarten uitleg todo.</p>
 	</div>
 
 	<div class="container flex flex-col md:flex-row">
@@ -383,18 +410,26 @@
 				<p class="text-blue-900 font-bold">Niet Available: {cardCountNotAvailable}</p>
 				<p class="text-blue-900 font-bold">All: {cardCount}</p>
 			</div>
+
+			<h2>Lidkaarten in bulk beheren</h2>
+			<div class="alert alert-info mb-4 max-w-2xl">
+				<p class="alert-text">Voor ingrijpende bulk operaties, vooral rond <a href="https://wiki.ingeniumua.be/staff/start_academiejaar">start academiejaar</a>.</p>
+			</div>
+			<button class="button button-primary button-inline" onclick={bulkPatch}>
+				<span class="text-white">De-activate all current</span>
+			</button>
+
+			<button class="button button-primary button-inline" onclick={downloadCurrent}>
+				<span class="text-white">Export all current</span>
+			</button>
+
+			<button class="button button-primary button-inline" onclick={() => {showAddingNew = true}}>
+				<span class="text-white">Generate new</span>
+			</button>
 		</div>
 	</div>
 
 	<hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-800">
-
-	<h2>Lidkaarten in bulk beheren</h2>
-	<div class="alert alert-info mb-4 max-w-2xl">
-		<p class="alert-text">Voor ingrijpende bulk operaties, vooral rond <a href="https://wiki.ingeniumua.be/staff/start_academiejaar">start academiejaar</a>.</p>
-	</div>
-	<button class="button button-primary button-inline" onclick={bulkPatch}>
-		<span class="text-white">De-activate all current</span>
-	</button>
 </main>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < cards.length && editSelected !== null}
@@ -462,6 +497,8 @@
 		{/snippet}
 	</Modal>
 {/if}
+
+<CardGenerateModal bind:isOpen={showAddingNew}></CardGenerateModal>
 
 <Modal title="Bulk Import" maxWidth="max-w-xl" bind:isOpen={ showBulkImport } closable={ true }>
 	{#snippet children()}

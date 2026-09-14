@@ -177,6 +177,7 @@
 	async function sendEmail() {
 		try {
 			await CoreCheckoutAPI.sendCheckoutEmail(null, checkoutWide.checkout_uuid);
+			successToast("Mail sent!")
 		} catch (error) {
 			if (error instanceof Error) {
 				failedToast(error.message);
@@ -235,7 +236,7 @@
 
 				<div class="flex-[1] p-2">
 					<h3 class="font-bold mb-2">Mail:</h3>
-					<button class="button button-primary button-inline" onclick={sendEmail}>
+					<button class="button button-primary button-inline" onclick={sendEmail} disabled={loadingHTTP}>
 						<span class="text-white">Opnieuw Versturen</span>
 					</button>
 
@@ -287,7 +288,8 @@
 
 			<h2 class="mt-4">Checkout Metadata</h2>
 			{#if checkoutWide.payment_provider === PaymentProviderEnum.Stripe}
-				<div><a href={`https://dashboard.stripe.com/acct_1DHT0yBSXssFMR3b/payments/${checkoutWide.checkout_metadata["payment_provider_metadata"]["payment_intent_id"]}`}>Bekijk betaling op Stripe</a></div>
+				<p>Todo</p>
+<!--				<div><a href={`https://dashboard.stripe.com/acct_1DHT0yBSXssFMR3b/payments/${checkoutWide.checkout_metadata["payment_provider_metadata"]["payment_intent"]["payment_intent_id"]}`}>Bekijk betaling op Stripe</a></div>-->
 			{/if}
 
 			<h3 class="font-bold mt-2">Checkout Flow Info</h3>
@@ -327,7 +329,7 @@
 			</fieldset>
 
 			<fieldset>
-				<h4>User</h4>
+				<a href="/staff/user/{checkoutWide.user_email}"><h4>User</h4></a>
 				<div class="flex justify-between items-center">
 					<p class="flex-1 checkout-detail-value">{checkoutWide.user_email}</p>
 						<button class="ml-2" aria-label="edit" onclick="{() => toggleEditUser = !toggleEditUser}">

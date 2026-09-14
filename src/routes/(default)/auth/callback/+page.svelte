@@ -9,9 +9,9 @@
   import { captureException } from '@sentry/sveltekit';
   import { page } from '$app/state';
   import { PUBLIC_API_URL } from '$env/static/public';
-  import { notification_token } from '../../../../hooks.client.ts';
   import { AppStorage } from '$lib/scanners/storage.ts';
   import { get_all_possible_notifications } from '$lib/utilities/notificationUtilities.ts';
+  import { appState } from '$lib/states/appState.svelte.ts';
 
   let isFailure = $state(false);
   let hasClearMessage = $state(true);
@@ -73,7 +73,7 @@
 
   function link_user_token(email: string) {
     const payload = {
-      token: notification_token,
+      token: appState.notification_token,
     }
     return fetch(`${PUBLIC_API_URL}/item/notification/link_user/${email}`, {
       method: "POST",

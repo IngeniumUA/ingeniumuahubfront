@@ -23,6 +23,7 @@ export interface ProductBlueprintMetaDataI {
 	categorie: string | null
 	group: string | null
 	upon_completion: UponCompletionMetaData | null
+	other_meta_data: object
 }
 
 export interface ProductBlueprintI extends ProductBlueprintInI {

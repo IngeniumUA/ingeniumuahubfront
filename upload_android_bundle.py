@@ -6,7 +6,7 @@ from google.oauth2 import service_account
 SERVICE_ACCOUNT_FILE = './ingeniumuahub-play-console.json'
 
 # Package name of your app
-PACKAGE_NAME = 'development.com.app.ingeniumua'
+PACKAGE_NAME = 'production.com.app.ingeniumua'
 
 # Path to the app bundle file
 APP_BUNDLE_PATH = './android/app/build/outputs/bundle/release/app-release-signed.aab'

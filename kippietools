@@ -5,14 +5,14 @@ def replace_android_url_name(filename: str, app_name: str, app_url: str):
     with open(filename, "r") as buildfile:
         data = buildfile.readlines()
 
-    if app_url == "development.com.app.ingeniumua":
+    if app_url == "production.com.app.ingeniumua":
         for i in range(len(data)):
             data[i] = data[i].replace("test.development.com.app.ingeniumua", app_url)
             data[i] = data[i].replace("Ingenium Test", app_name)
     else:
         for i in range(len(data)):
             if app_url not in data[i]:
-                data[i] = data[i].replace("development.com.app.ingeniumua", app_url)
+                data[i] = data[i].replace("production.com.app.ingeniumua", app_url)
             if app_name not in data[i]:
                 data[i] = data[i].replace("Ingenium", app_name)
     with open(filename, "w") as buildfile:
@@ -121,7 +121,7 @@ def setmode(mode):
         if os.path.isfile("./android/app/google-services (prod).json"):
             os.rename("./android/app/google-services.json", "./android/app/google-services (dev).json")
             os.rename("./android/app/google-services (prod).json", "./android/app/google-services.json")
-        app_url = "development.com.app.ingeniumua"
+        app_url = "production.com.app.ingeniumua"
         app_name = "Ingenium"
 
     elif mode == "notificationtest":

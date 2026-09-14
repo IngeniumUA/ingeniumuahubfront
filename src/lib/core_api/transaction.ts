@@ -63,7 +63,7 @@ export class CoreTransactionAPI {
 		if (res.ok) {
 			return await res.json();
 		} else {
-			throw `Failed to patch transaction: ${await res.text()}`;
+			throw Error(`Failed to patch transaction: ${await res.text()}`);
 		}
 	}
 
@@ -103,9 +103,9 @@ export class CoreTransactionAPI {
 		const contentDisposition = res.headers.get('Content-Disposition');
 		a.download = contentDisposition
 			? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
-			: 'transactions.csv'; // ✅ Tells browser to download instead of navigating
+			: 'transactions.csv'; // download instead of navigating
 		document.body.appendChild(a);
-		a.click(); // ✅ Programmatically trigger the click
+		a.click();
 
 		// Clean up
 		a.remove();

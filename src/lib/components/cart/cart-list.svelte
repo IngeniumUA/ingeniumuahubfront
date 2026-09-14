@@ -7,6 +7,7 @@
     updateProductMeta
   } from '$lib/states/cart.svelte';
   import type { ProductFormI } from '$lib/models/productsI';
+  import { track } from '$lib/actions/umami';
 
   const { loading = false } = $props();
 
@@ -81,7 +82,11 @@
 
         <div class="cart-list-product__actions">
           {#if !cartDetails.isPaying || loading}
-            <button type="button" onclick={ () => removeProductFromCart(idx) }>
+            <button type="button" onclick={ () => removeProductFromCart(idx) }
+                    use:track={{ name: 'cart:remove_from_cart', data: {
+                    product_blueprint_name: product.name, product_blueprint_id: product.blueprint_id,
+                  } }}
+              >
               <span class="sr-only">{ product.name } verwijderen uit je winkelwagen.</span>
               <svg class="h-5 w-5" data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>

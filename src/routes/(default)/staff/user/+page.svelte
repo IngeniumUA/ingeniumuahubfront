@@ -79,29 +79,31 @@
 			</div>
 
 			<h3 class="font-bold">Lijst</h3>
+
+			<div class="overflow-x-auto w-full">
 			<table class="ingenium-table">
 				<thead>
 				<tr>
 					<th scope="col" class="form-field"><div>
 						<h4>User UUID</h4>
-						<input class="max-w-16" type="text" placeholder="uuid" bind:value={queryForm.userUUID}>
+						<input class="max-w-20" type="text" placeholder="uuid" bind:value={queryForm.userUUID}>
 					</div></th>
 					<th scope="col" class="form-field"><div>
 						<h4>sso UUID</h4>
-						<input class="max-w-16" type="text" placeholder="uuid" bind:value={queryForm.ssoUUID}>
+						<input class="max-w-20" type="text" placeholder="uuid" bind:value={queryForm.ssoUUID}>
 					</div></th>
 					<th class="form-field"><div>
 						<h4>Email</h4>
-						<input class="max-w-48" type="email" placeholder="Card nr" bind:value={queryForm.userEmail}>
+						<input class="max-w-48" type="email" placeholder="Email" bind:value={queryForm.userEmail}>
 					</div></th>
-					<th><h4>Last Update Timestamp</h4></th>
-					<th><h4>Created Timestamp</h4></th>
+					<th><h4>Update</h4></th>
 					<th class="p-0"><PaginationComponent
 						bind:maxTotal={userCount}
 						bind:fetchedTotal={users.length}
 						bind:currentOffset={queryForm.queryOffset}
 						bind:currentLimit={queryForm.queryLimit}
 						bind:httpLoading={loadingHTTP}
+						refresh={refresh}
 					>
 					</PaginationComponent></th>
 				</tr>
@@ -115,9 +117,9 @@
 						<td>
 							<a href="/staff/user/{user.email}">{user.sso_uuid.slice(0, 6)}</a>
 						</td>
-						<th scope="row">
+						<td>
 							<a href="/staff/user/{user.email}">{user.email}</a>
-						</th>
+						</td>
 						<td>
 							{prettyDateTime(user.last_update_timestamp)}
 						</td>
@@ -133,6 +135,7 @@
 				{/each}
 				</tbody>
 			</table>
+			</div>
 		</div>
 
 		<!-- Vertical divider -->

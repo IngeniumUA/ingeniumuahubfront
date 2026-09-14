@@ -6,7 +6,7 @@
 <string>app-store-connect</string>
 <key>provisioningProfiles</key>
 <dict>
-    <key>development.com.app.ingeniumua</key>
+    <key>production.com.app.ingeniumua</key>
     <string>Github App creation</string>
 </dict>
 </dict>

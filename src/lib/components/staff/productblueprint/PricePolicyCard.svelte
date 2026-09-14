@@ -1,10 +1,23 @@
 ﻿<script lang="ts">
-	import AvailabilityForm from '$lib/components/staff/AvailabilityForm.svelte';
+	import AvailabilityForm from '$lib/components/staff/availability/AvailabilityForm.svelte';
 	import type { PricePolicyI } from '$lib/models/product_blueprint/PricePolicyI';
 	import { CoreProductBlueprintAPI } from '$lib/core_api/blueprint_api';
 	import { failedToast, successToast } from '$lib/components/toast/defined_toast';
+	import DeleteButton from '$lib/components/staff/DeleteButton.svelte';
 
-	let { isOpen = $bindable(), loadingHTTP = $bindable(), pricePolicy = $bindable(), pricePolicyIndex = null }: { isOpen: boolean, loadingHTTP: boolean, pricePolicy: PricePolicyI, pricePolicyIndex: number | null } = $props();
+	let {
+		isOpen = $bindable(),
+		loadingHTTP = $bindable(),
+		pricePolicy = $bindable(),
+		pricePolicyIndex = null,
+		refreshCallback
+	}: {
+		isOpen: boolean,
+		loadingHTTP: boolean,
+		pricePolicy: PricePolicyI,
+		pricePolicyIndex: number | null,
+		refreshCallback: () => void,
+	} = $props();
 
 	let form = $derived({
 		name: pricePolicy.name,
@@ -18,12 +31,7 @@
 
 		ordering: pricePolicy.ordering,
 
-		availability: {
-			available: pricePolicy.availability.available,
-			available_from: pricePolicy.availability.available_from,
-			available_until: pricePolicy.availability.available_until,
-			dynamic_policy_type: pricePolicy.availability.dynamic_policy_type,
-		},
+		availability: pricePolicy.availability
 	});
 
 	let putError: Error | null = $state(null);
@@ -78,6 +86,27 @@
 			loadingHTTP = false; // Reset loading state
 		}
 	}
+
+	/**
+	 * Deleting
+	 */
+	let deleteError: Error | null = $state(null);
+	async function deletePricePolicy() {
+		loadingHTTP = true;
+		try {
+			await CoreProductBlueprintAPI.deletePricePolicy(pricePolicy.id);
+		} catch (error) {
+			deleteError = error instanceof Error ? error : Error('Error submitting form');
+		} finally {
+			if (deleteError === null) {
+				successToast('Deleted!');
+				refreshCallback()
+			} else {
+				failedToast('Delete failed');
+			}
+			loadingHTTP = false;
+		}
+	}
 </script>
 
 
@@ -124,7 +153,7 @@
 	</button>
 </div>
 {#if isOpen}
-		<form class="ingenium-form flex flex-col lg:flex-row gap-4">
+		<form class="pt-2 ingenium-form flex flex-col lg:flex-row gap-4">
 			<fieldset class="flex-1">
 				<div class="form-field">
 					<label for="name">Name</label>
@@ -223,9 +252,15 @@
 			<AvailabilityForm bind:formState={form.availability}></AvailabilityForm>
 		</form>
 
-	<div class="mt-4 flex justify-end">
-		<button class="button button-primary button-inline" onclick={update}>
-			<span class="text-white">Update</span>
+	<div class="pt-4 flex justify-end">
+		<DeleteButton
+			bind:loadingHTTP={loadingHTTP}
+			deleteCallback={() => deletePricePolicy()}
+			deleteString="Delete Policy"
+		></DeleteButton>
+
+		<button class="button button-primary button-inline ml-4" onclick={update}>
+			<span class="text-white">Update Policy</span>
 		</button>
 	</div>
 

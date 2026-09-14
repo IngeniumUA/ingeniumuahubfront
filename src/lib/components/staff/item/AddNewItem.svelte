@@ -10,6 +10,7 @@
 	let { itemType = null, isOpen = $bindable(false) }: { itemType: string | null, isOpen: boolean } = $props();
 
 	let loadingHTTP: boolean = $state(false);
+	let createButtonDisabled: boolean = $derived(loadingHTTP || itemType === null);
 	let itemCreateError: string | null = $state(null);
 
 	let hasDisplayMixin = $derived(["eventitem", "promoitem", "shopitem"].includes(itemType === null ? "": itemType));
@@ -22,7 +23,6 @@
 		clickThroughLink: '',
 		externalLink: false,
 		preview_description: null,
-		image_landscape: null,
 		image_square: null,
 		event_start: null,
 		event_end: null,
@@ -40,7 +40,6 @@
 			date: null,
 			color: 'rgb(255, 255, 255)',
 			image_square: null,
-			image_landscape: null,
 			preview_description: null
 		};
 		recsysItem.color = hexToRGB(form.color) ?? form.color;
@@ -72,7 +71,6 @@
 				color: form.color,
 				follow_through_link: form.externalLink ? form.clickThroughLink : `/${itemType === null ? "item": itemType.slice(0, itemType.length - 4)}/${form.name}`,
 				image_square: form.image_square,
-				image_landscape: form.image_landscape,
 				preview_description: form.preview_description
 			}
 		}
@@ -114,9 +112,8 @@
 	{#snippet children()}
 		<!-- Main body -->
 		<form class="p-4 ingenium-form">
-		<div class="flex flex-row gap-4 min-w-96">
+		<div class="flex flex-col lg:flex-row gap-4">
 			<div class="flex-1">
-				<h3>Main Item</h3>
 				<fieldset>
 					<div class="form-field">
 						<label for="name">Name</label>
@@ -139,7 +136,6 @@
 
 			<!-- Specific Item fields-->
 			<div class="flex-1">
-				<h3>{makePretty(itemType === null ? "": itemType)}</h3>
 				{#if itemType === "eventitem"}
 					<fieldset>
 						<div class="form-field">
@@ -174,7 +170,6 @@
 			<!-- Display Composition -->
 			{#if (hasDisplayMixin)}
 			<div class="flex-1">
-				<h3>Display Composition</h3>
 				<fieldset>
 					<div class="form-field">
 						<label for="vacatureColor">Color</label>
@@ -231,7 +226,7 @@
 		<!-- Footer -->
 		<div class="p-2 flex border-t border-gray-200">
 			<button class="button button-primary w-24 button-inline"
-							disabled={loadingHTTP}
+							disabled={createButtonDisabled}
 							onclick={createItem}>
 				<span class="text-white">Create</span>
 			</button>
@@ -240,6 +235,11 @@
 		{#if (itemCreateError !== null)}
 			<div class="error-message p-4">
 				{JSON.stringify(itemCreateError)}
+			</div>
+		{/if}
+		{#if (itemType === null)}
+			<div class="error-message p-4">
+				<p>Item type not specified (TODO, there could be a dropdown added to this modal)</p>
 			</div>
 		{/if}
 

@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import { PaymentStatusEnum } from '$lib/models/enums';
 
-	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })), baseSelectedTable = null }
+	let { baseQueryParam = $bindable(new URLSearchParams({ limit: '100', offset:'5' })), baseSelectedTable = 'betalingen' }
 		: { baseQueryParam: URLSearchParams, baseSelectedTable: string | null } = $props();
 
 	/**

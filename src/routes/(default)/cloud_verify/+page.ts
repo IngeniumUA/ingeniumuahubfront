@@ -9,7 +9,7 @@ export const load = async ({ params, url }) => {
 	if (!hasValidToken(params)) {
 		redirect(307, getLoginUrlWithRedirect(url.href));
 	}
-	if (!hasRole("staff")) {
+	if (!(hasRole("staff") || hasRole("education"))) {
 		redirect(308, "/")
 	}
 
