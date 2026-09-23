@@ -4,5 +4,5 @@ Version = 1.7.6
 
 ////update notes in het nederlands////
 VERSION_UPDATES_START
-- Jaarlijkse update
+- Jaarlijkse updates
 VERSION_UPDATES_END

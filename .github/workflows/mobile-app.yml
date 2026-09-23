@@ -84,6 +84,10 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
+      
+      - name: Set package name correctly
+        run: |
+          sed -i '' 's/production.com.app.ingeniumua/development.com.app.ingeniumua/g' ./capacitor.config.ts
 
       - name: Install the Apple certificate and provisioning profile
         env:
