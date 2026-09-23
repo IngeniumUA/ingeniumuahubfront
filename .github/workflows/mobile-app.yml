@@ -88,6 +88,8 @@ jobs:
       - name: Set package name correctly
         run: |
           sed -i '' 's/production.com.app.ingeniumua/development.com.app.ingeniumua/g' ./capacitor.config.ts
+          echo "updated file"
+          cat ./capacitor.config.ts
 
       - name: Install the Apple certificate and provisioning profile
         env:
