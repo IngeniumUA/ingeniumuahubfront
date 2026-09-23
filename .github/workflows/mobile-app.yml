@@ -5,77 +5,77 @@
       - '.github/workflows/mobile-app.yml' # or this file
 
 jobs:
-  build_android:
-    name: Build AAB
-    runs-on: ubuntu-latest
-    environment: Mobile-App
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
+  # build_android:
+  #   name: Build AAB
+  #   runs-on: ubuntu-latest
+  #   environment: Mobile-App
+  #   steps:
+  #     - name: Checkout source
+  #       uses: actions/checkout@v3
 
-      - name: Setup java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '21'
+  #     - name: Setup java
+  #       uses: actions/setup-java@v3
+  #       with:
+  #         distribution: 'zulu'
+  #         java-version: '21'
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 20.x
 
-      - name: Install app dependencies
-        run: npm install
+  #     - name: Install app dependencies
+  #       run: npm install
 
-      - name: setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10.11"
+  #     - name: setup Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.10.11"
 
-      - name: install python dependencies
-        run: pip install rich-click google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+  #     - name: install python dependencies
+  #       run: pip install rich-click google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
 
-      - name: Build app
-        run: npm run build
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.APP_SENTRY_PROJECT }}
+  #     - name: Build app
+  #       run: npm run build
+  #       env:
+  #         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  #         SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+  #         SENTRY_PROJECT: ${{ secrets.APP_SENTRY_PROJECT }}
 
-      - name: Capacitor sync
-        run: npx cap sync
+  #     - name: Capacitor sync
+  #       run: npx cap sync
 
-      - name: set app mode to release
-        run: python kippietools setmode -m release
+  #     - name: set app mode to release
+  #       run: python kippietools setmode -m release
 
-      - name: generate needed release notes and set version
-        run: python kippietools prepare-update
+  #     - name: generate needed release notes and set version
+  #       run: python kippietools prepare-update
 
-      - name: Build app bundle
-        run: cd android && ./gradlew bundle
+  #     - name: Build app bundle
+  #       run: cd android && ./gradlew bundle
 
-      - name: Extract Android signing key from env
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE }}" > android/release.jks.base64
-          base64 -d android/release.jks.base64 > android/release.decrypted.jks
+  #     - name: Extract Android signing key from env
+  #       run: |
+  #         echo "${{ secrets.ANDROID_KEYSTORE }}" > android/release.jks.base64
+  #         base64 -d android/release.jks.base64 > android/release.decrypted.jks
 
-      - name: Sign dev build
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -keypass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
+  #     - name: Sign dev build
+  #       run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -keypass "${{ secrets.KEYSTORE_PASSWORD_ANDROID }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
-      - name: Extract service account credentials from env
-        run: |
-          echo "${{ secrets.PLAY_SERVICE_ACCOUNT }}" > ./ingeniumuahub-play-console.json.base64
-          base64 -d ./ingeniumuahub-play-console.json.base64 > ./ingeniumuahub-play-console.json
+  #     - name: Extract service account credentials from env
+  #       run: |
+  #         echo "${{ secrets.PLAY_SERVICE_ACCOUNT }}" > ./ingeniumuahub-play-console.json.base64
+  #         base64 -d ./ingeniumuahub-play-console.json.base64 > ./ingeniumuahub-play-console.json
 
-      # - name: Upload release bundle
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: app-android
-      #     path: android/app/build/outputs/bundle/release/app-release-signed.aab
-      #     retention-days: 1
+  #     # - name: Upload release bundle
+  #     #   uses: actions/upload-artifact@v4
+  #     #   with:
+  #     #     name: app-android
+  #     #     path: android/app/build/outputs/bundle/release/app-release-signed.aab
+  #     #     retention-days: 1
 
-      - name: upload the bundle to the play console
-        run: python upload_android_bundle.py
+  #     - name: upload the bundle to the play console
+  #       run: python upload_android_bundle.py
 
   build_ios:
     runs-on: macos-15
