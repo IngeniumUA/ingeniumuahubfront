@@ -191,6 +191,20 @@ jobs:
         run: |
           mkdir -p fastlane/metadata/nl-NL
           cp release_notes.txt fastlane/metadata/nl-NL/release_notes.txt
+      
+      - name: Write App Store age rating
+        run: |
+          cat > ./age_rating.json <<'EOF'
+          {
+            "advertising": false,
+            "ageAssurance": false,
+            "healthOrWellnessTopics": false,
+            "messagingAndChat": false,
+            "parentalControls": false,
+            "userGeneratedContent": false,
+            "gunsOrOtherWeapons": "NONE"
+          }
+          EOF
 
       - name: Upload to App Store with Fastlane
         run: |
@@ -198,15 +212,9 @@ jobs:
             --ipa "./output/App.ipa" \
             --skip_screenshots \
             --api_key_path ./auth_key.json \
+            --app_rating_config_path "./age_rating.json" \
             --force \
             --submit_for_review \
             --automatic_release \
             --run_precheck_before_submit false \
-            --precheck_include_in_app_purchases false \
-            --parentalControls false \
-            --healthOrWellnessTopics false \
-            --advertising false \
-            --userGeneratedContent false \
-            --messagingAndChat false \
-            --gunsOrOtherWeapons NONE \
-            --ageAssurance false
+            --precheck_include_in_app_purchases false
