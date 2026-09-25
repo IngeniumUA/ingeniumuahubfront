@@ -160,7 +160,7 @@ def setmode(mode):
         for i in range(len(data)):
             if data[i].startswith('				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";'):
                 data[i] = f'				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";\n'
-            elif data[i].startswith('				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github App creation";'):
+            elif data[i].startswith('				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Github Provisioning Profile";'):
                 data[i] = f'				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "App Developer Profile";\n'
         with open("./ios/App/App.xcodeproj/project.pbxproj", "w") as buildfile:
             for line in data:
@@ -171,7 +171,7 @@ def setmode(mode):
         for i in range(len(data_arch)):
             if data_arch[i].startswith('<string>app-store-connect</string>'):
                 data_arch[i] = f'<string>development</string>\n'
-            elif data_arch[i].startswith('    <string>Github App creation</string>'):
+            elif data_arch[i].startswith('    <string>Github Provisioning Profile</string>'):
                 data_arch[i] = f'    <string>App Developer Profile</string>\n'
         with open("./archive.plist", "w") as archbuildfile:
                     for line in data_arch:
