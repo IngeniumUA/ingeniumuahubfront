@@ -202,4 +202,11 @@ jobs:
             --submit_for_review \
             --automatic_release \
             --run_precheck_before_submit false \
-            --precheck_include_in_app_purchases false
+            --precheck_include_in_app_purchases false \
+            --parentalControls false \
+            --healthOrWellnessTopics false \
+            --advertising false \
+            --userGeneratedContent false \
+            --messagingAndChat false \
+            --gunsOrOtherWeapons NONE \
+            --ageAssurance false
