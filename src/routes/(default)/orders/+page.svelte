@@ -8,7 +8,16 @@
 	 */
 	let { data } = $props();
 
-	let orders: [] = $state(data.orders)
+	let orders = [
+		...Array.from({ length: 100 }, (_, i) => ({
+			order_counter: i + 1,
+			checkout_tracker_status: 1
+		})),
+		...Array.from({ length: 100 }, (_, i) => ({
+			order_counter: i + 101,
+			checkout_tracker_status: 2
+		}))
+	];
 
 	let pendingOrders = $derived(orders.filter(order => {return order["checkout_tracker_status"] == 1}))
 	let finishedOrders = $derived(orders.filter(order => {return order["checkout_tracker_status"] == 2}))
@@ -58,7 +67,7 @@
 		<section>
 				<h2 class="text-white bg-blue-900">Klaar om op te halen!</h2>
 			<ol class="border-blue-900">
-				{#each finishedOrders as order (order["id"])}
+				{#each finishedOrders as order (order["order_counter"])}
 					<li>{order["order_counter"]}</li>
 				{/each}
 			</ol>
@@ -67,23 +76,23 @@
 </main>
 
 <style>
-	.orders-section {
-			@apply flex flex-row mt-4 bg-ingenium-grey-200;
+    .orders-section {
+        @apply flex flex-row mt-4 bg-ingenium-grey-200;
 
-			section {
-					@apply flex-[1];
+        section {
+            @apply flex-1;
 
-					h2 {
-							@apply p-4 pl-8 rounded-tl-3xl font-extrabold;
-					}
+            h2 {
+                @apply p-4 pl-8 rounded-tl-3xl font-extrabold;
+            }
 
-					ol {
-							@apply border-l-8 p-4 flex gap-4 bg-white h-screen;
+            ol {
+                @apply border-l-8 p-4 flex flex-wrap content-start gap-4 bg-white h-screen;
 
-							li {
-									@apply text-blue-900 font-extrabold text-4xl;
-							}
-					}
-			}
-	}
+                li {
+                    @apply text-blue-900 font-extrabold text-4xl;
+                }
+            }
+        }
+    }
 </style>
