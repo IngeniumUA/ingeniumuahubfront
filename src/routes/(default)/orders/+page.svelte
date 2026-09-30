@@ -8,16 +8,7 @@
 	 */
 	let { data } = $props();
 
-	let orders = [
-		...Array.from({ length: 100 }, (_, i) => ({
-			order_counter: i + 1,
-			checkout_tracker_status: 1
-		})),
-		...Array.from({ length: 100 }, (_, i) => ({
-			order_counter: i + 101,
-			checkout_tracker_status: 2
-		}))
-	];
+	let orders: [] = $state(data.orders)
 
 	let pendingOrders = $derived(orders.filter(order => {return order["checkout_tracker_status"] == 1}))
 	let finishedOrders = $derived(orders.filter(order => {return order["checkout_tracker_status"] == 2}))
