@@ -46,6 +46,8 @@
 		});
 		if (onlyShowLinked) {
 			queryParam.set("is_linked", "true")
+		} else {
+			queryParam.delete("is_linked");
 		}
 		if (onlyShowAvailable) {
 			queryParam.set("available", "true")
@@ -463,7 +465,7 @@
 							<div class="flex-1 form-field max-w-72 mb-2">
 								<label for="group">Keycloak Group ID</label>
 								<input id="group" type="text" required bind:value={ editForm.linked_group }/>
-								<p>UUID van de keycloak group</p>
+								<p>UUID van de keycloak group, user zal hier aan worden toegevoegd wanneer gelinkt aan kaart.</p>
 							</div>
 						</fieldset>
 					</form>
