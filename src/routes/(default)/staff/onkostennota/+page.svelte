@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
+	import { PDFDocument, PDFName, PDFArray, PDFDict, StandardFonts, rgb } from 'pdf-lib';
 
 	const TEMPLATE_URL =
 		'https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/onkostennota/IngeniumUA-VZW_Template_2026-2027.pdf';
@@ -212,6 +212,21 @@
 		receipts = receipts.filter((_, i) => i !== index);
 	}
 
+	// Verwijdert alle formulier-widgets (de blauwe vakjes) en het AcroForm-woordenboek,
+	// zonder pdf-lib's form.removeField() (die kan dangling referenties achterlaten).
+	function stripFormFields(pdfDoc) {
+		const widget = PDFName.of('Widget');
+		for (const page of pdfDoc.getPages()) {
+			const annots = page.node.lookupMaybe(PDFName.of('Annots'), PDFArray);
+			if (!annots) continue;
+			for (let i = annots.size() - 1; i >= 0; i--) {
+				const annot = annots.lookupMaybe(i, PDFDict);
+				if (annot && annot.get(PDFName.of('Subtype')) === widget) annots.remove(i);
+			}
+		}
+		pdfDoc.catalog.delete(PDFName.of('AcroForm'));
+	}
+
 	// --- 4. EXACTE ORIGINELE PDF INVULLEN ---
 	async function submitAndDownloadPDF() {
 		if (!templatePdfBytes) {
@@ -277,15 +292,8 @@
 		const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
 		const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-		// Verwijder blauwe vakjes
-		try {
-			const form = pdfDoc.getForm();
-			form.getFields().forEach((field) => {
-				try {
-					form.removeField(field);
-				} catch (e) {}
-			});
-		} catch (e) {}
+		// Verwijder blauwe vakjes (formuliervelden)
+		stripFormFields(pdfDoc);
 
 		const page1 = pdfDoc.getPages()[0];
 		const color = rgb(0, 0, 0);
@@ -337,7 +345,7 @@
 			});
 		}
 
-		const pdfBytes = await pdfDoc.save();
+		const pdfBytes = await pdfDoc.save({ updateFieldAppearances: false });
 		const blob = new Blob([pdfBytes], { type: 'application/pdf' });
 		const url = URL.createObjectURL(blob);
 		const link = document.createElement('a');
@@ -357,42 +365,6 @@
 
 <div class="page">
 	<main class="container">
-		<!-- Template status -->
-		<div
-			class="template-status-bar"
-			class:ok={templateState === 'ok'}
-			class:error={templateState === 'error'}
-		>
-			<span>
-				{#if templateState === 'loading'}
-					Originele PDF-template wordt geladen...
-				{:else if templateState === 'ok'}
-					✅ {templateLabel}
-				{:else}
-					⚠️ {templateLabel}
-				{/if}
-			</span>
-			<div class="status-actions">
-				<button type="button" class="btn btn-outline btn-small" on:click={inspectPdfFields}>
-					Inspecteer PDF-velden
-				</button>
-				<input
-					type="file"
-					id="manualTemplateInput"
-					accept="application/pdf"
-					hidden
-					on:change={handleManualTemplate}
-				/>
-				<button
-					type="button"
-					class="btn btn-outline btn-small"
-					on:click={() => document.getElementById('manualTemplateInput').click()}
-				>
-					Kies PDF
-				</button>
-			</div>
-		</div>
-
 		<!-- 1. PERSOONSGEGEVENS -->
 		<section class="card">
 			<div class="card-title"><span>1. Persoonsgegevens</span></div>
