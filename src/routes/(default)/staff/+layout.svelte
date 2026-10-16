@@ -71,6 +71,7 @@
 					<a href="/staff/item/shop">Shop</a>
 					<a href="/staff/item/vacatures">Vacatures</a>
 					<a href="/staff/lidkaarten">Lidkaarten</a>
+					<a href="/staff/onekostennota">Onkostennota</a>
 				</div>
 
 				<!-- Desktop close button (inside nav, only on desktop) -->
