@@ -2,17 +2,21 @@
 
 
 export async function load({ params }) {
-	const card_table = await CoreCardAPI.queryCardTable(params, new URLSearchParams({}));
-	const cards = await CoreCardAPI.queryCards(params, new URLSearchParams({
-		limit: '300',
-	}));
-
-	const cardCountAvailable = await CoreCardAPI.countCards(params, new URLSearchParams({
+	const card_table = await CoreCardAPI.queryCardTable(
+		params,
+		new URLSearchParams({
+			available: 'true'
+		})
+	);
+	const cards = await CoreCardAPI.queryCards(
+		params,
+		new URLSearchParams({
+			limit: '100',
+			available: 'true'
+		})
+	);
+	const cardCount = await CoreCardAPI.countCards(params, new URLSearchParams({
 		available: 'true',
 	}));
-	const cardCountNotAvailable = await CoreCardAPI.countCards(params, new URLSearchParams({
-		available: 'true',
-	}));
-	const cardCount = cardCountAvailable + cardCountNotAvailable;
-	return { cards, card_table, cardCountAvailable, cardCountNotAvailable, cardCount };
+	return { cards, card_table, cardCount };
 }

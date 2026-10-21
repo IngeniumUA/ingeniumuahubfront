@@ -17,11 +17,9 @@
 	 */
 	let { data } = $props();
 
-	let cardTable = $state(data.card_table)
-	let cards = $state(data.cards)
-	let cardCountAvailable = $state(data.cardCountAvailable)
-	let cardCountNotAvailable = $state(data.cardCountNotAvailable)
-	let cardCount = $state(data.cardCount)
+	let cardTable = $derived(data.card_table)
+	let cards = $derived(data.cards)
+	let cardCount = $derived(data.cardCount)
 
 	let onlyShowLinked: boolean = $state(false);
 	let onlyShowAvailable: boolean = $state(true);
@@ -44,12 +42,12 @@
 	})
 	let baseQueryParam = $derived.by(() => {
 		let queryParam = new URLSearchParams({
-			limit: '300',
+			limit: '100',
 		});
 		if (onlyShowLinked) {
 			queryParam.set("is_linked", "true")
 		} else {
-			queryParam.set("is_linked", "false")
+			queryParam.delete("is_linked");
 		}
 		if (onlyShowAvailable) {
 			queryParam.set("available", "true")
@@ -65,19 +63,9 @@
 	})
 
 	async function refresh() {
-		cardTable = await CoreCardAPI.queryCardTable(null, new URLSearchParams({}));
-
+		cardTable = await CoreCardAPI.queryCardTable(null, baseQueryParam);
 		cards = await CoreCardAPI.queryCards(null, baseQueryParam);
-		let queryParam = baseQueryParam;
-
-		queryParam.set('available', "true")
-		cardCountAvailable = await CoreCardAPI.countCards(null, queryParam);
-
-		queryParam.set('available', "false")
-		cardCountNotAvailable = await CoreCardAPI.countCards(null, queryParam);
-		cardCount = cardCountAvailable + cardCountNotAvailable;
-
-		successToast("Refreshed")
+		cardCount = await CoreCardAPI.countCards(null, baseQueryParam);
 	}
 
 	/**
@@ -142,7 +130,9 @@
 		loadingHTTP = true;
 		// Perform put request
 		try {
-			cards[editSelectedIndex!] = await CoreCardAPI.patchCard(editSelected.card_uuid, patchObj)
+			const updated = await CoreCardAPI.patchCard(editSelected.card_uuid, patchObj);
+			replaceCard(updated);
+			editSelected = updated;
 			successToast("Updated!")
 		} catch (error) {
 			putError = error instanceof Error ? error: Error(`Error during PUT ${error}`);
@@ -188,11 +178,16 @@
 	}
 
 	/**
-	 * Patching availability
+	 * Patching
 	 */
-	async function toggleAvailable(cardIndex: number, card: CardI) {
-		cards[cardIndex] = await CoreCardAPI.setAvailable(card, !card.availability.available);
-		successToast("Updated!")
+	function replaceCard(updated: CardI) {
+		// Required because just reassigning with [] doesn't work with $derived() as state keeping
+		cards = cards.map((c) => (c.card_uuid === updated.card_uuid ? updated : c));
+	}
+
+	async function toggleAvailable(card: CardI) {
+		replaceCard(await CoreCardAPI.setAvailable(card, !card.availability.available));
+		successToast('Updated!');
 	}
 
 	/**
@@ -361,7 +356,7 @@
 						<label class="inline-flex items-center cursor-pointer my-4">
 							<input type="checkbox" class="sr-only peer"
 										 bind:checked={card.availability.available}
-										 onclick="{() => toggleAvailable(index, card)}"
+										 onclick="{() => toggleAvailable(card)}"
 							>
 							<div class="relative w-11 h-6 bg-red-900 dark:bg-red-900 rounded-full peer-checked:bg-green-900 dark:peer-checked:bg-green-900 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:w-5 after:h-5 after:bg-white after:rounded-full after:transition-transform peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full"></div>
 							<span class="ms-3 text-sm font-medium text-gray-600">
@@ -406,8 +401,6 @@
 
 			<div class="p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
 				<h4 class="text-ingenium-grey-800 font-bold">Totaal</h4>
-				<p class="text-blue-900 font-bold">Available: {cardCountAvailable}</p>
-				<p class="text-blue-900 font-bold">Niet Available: {cardCountNotAvailable}</p>
 				<p class="text-blue-900 font-bold">All: {cardCount}</p>
 			</div>
 
@@ -472,7 +465,7 @@
 							<div class="flex-1 form-field max-w-72 mb-2">
 								<label for="group">Keycloak Group ID</label>
 								<input id="group" type="text" required bind:value={ editForm.linked_group }/>
-								<p>UUID van de keycloak group</p>
+								<p>UUID van de keycloak group, user zal hier aan worden toegevoegd wanneer gelinkt aan kaart.</p>
 							</div>
 						</fieldset>
 					</form>

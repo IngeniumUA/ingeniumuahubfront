@@ -39,18 +39,23 @@
 		if (loadingHTTP) {return}
 		// todo check for form errors
 
-		const putPricePolicy = pricePolicy;
-		putPricePolicy.name = form.name === "" ? null: form.name;
-		putPricePolicy.price = form.price_eu;
-		putPricePolicy.always_display = form.always_display;
-		putPricePolicy.allow_invalid_access = form.allow_invalid_access;
-		putPricePolicy.allow_unauthenticated_access = form.allow_unauthenticated_access;
-		putPricePolicy.max_valid_usages = form.max_valid_usages;
-		putPricePolicy.ordering = form.ordering;
-		putPricePolicy.availability.available = form.availability.available
-		putPricePolicy.availability.available_from = form.availability.available_from
-		putPricePolicy.availability.available_until = form.availability.available_until
-		putPricePolicy.availability.dynamic_policy_type = form.availability.dynamic_policy_type
+		const putPricePolicy: PricePolicyI = {
+			...pricePolicy,
+			name: form.name === "" ? null : form.name,
+			price: form.price_eu,
+			always_display: form.always_display,
+			allow_invalid_access: form.allow_invalid_access,
+			allow_unauthenticated_access: form.allow_unauthenticated_access,
+			max_valid_usages: form.max_valid_usages,
+			ordering: form.ordering,
+			availability: {
+				...pricePolicy.availability,
+				available: form.availability.available,
+				available_from: form.availability.available_from,
+				available_until: form.availability.available_until,
+				dynamic_policy_type: form.availability.dynamic_policy_type
+			}
+		};
 
 		loadingHTTP = true;
 		try {

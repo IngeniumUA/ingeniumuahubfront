@@ -158,7 +158,7 @@
 										{card.card_uuid.slice(0, 6)}
 									</td>
 									<th scope="row" class="text-center">
-										{card.card_nr.toString()}
+										{card.card_nr}
 									</th>
 									<td>
 										{makePretty(CardMembershipEnum[card.member_type])}
@@ -235,7 +235,7 @@
 					<table class="ingenium-table">
 						<thead>
 						<tr>
-							<th scope="col"><h4>ID</h4><th scope="col"><h4>Name</h4></th><th scope="col"><h4>Added on</h4></th>
+							<th scope="col"><h4>ID</h4></th><th scope="col"><h4>Name</h4></th><th scope="col"><h4>Added on</h4></th>
 						</tr>
 						</thead>
 						<tbody>
