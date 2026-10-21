@@ -12,6 +12,6 @@ import OnkostenNotaTable from '$lib/components/staff/onkosten/OnkostenNotaTable.
 	</section>
 
 	<section class="ingenium-form-card mt-4">
-		<OnkostenNotaTable></OnkostenNotaTable>
+		<OnkostenNotaTable baseQueryParam={new URLSearchParams({ limit: '20', offset:'0' })}></OnkostenNotaTable>
 	</section>
 </main>
