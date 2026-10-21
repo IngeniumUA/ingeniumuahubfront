@@ -1,10 +1,25 @@
 ﻿import { PUBLIC_API_URL } from '$env/static/public';
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
-import type { OnkostenNotaI } from '$lib/models/onkosten/onkostennota';
+import type { OnkostenNotaI, OnkostenNotaWideI } from '$lib/models/onkosten/onkostennota';
 import type { GroupI } from '$lib/models/user/GroupI';
 
 export class CoreOnkostenNotaAPI {
+	static async getOnkostennota(
+		params: RouteParams | null = null,
+		volgnummer: number
+	): Promise<OnkostenNotaWideI> {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${volgnummer}`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to get onkostennota: ${await res.text()}`;
+		}
+	}
+
 	static async postOnkostennota(
 		params: RouteParams | null = null,
 		postGroup: Partial<GroupI>

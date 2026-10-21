@@ -3,6 +3,7 @@
 	import { PDFDocument, PDFName, PDFArray, PDFDict, StandardFonts, rgb } from 'pdf-lib';
 	import { CoreOnkostenNotaAPI } from '$lib/core_api/onkostennota_api.ts';
 	import Header from '$lib/components/layout/header.svelte';
+	import { nameSlug, onkostenIdentifier } from '$lib/utilities/style-utilities.ts';
 
 
 	const TEMPLATE_URL =
@@ -209,23 +210,6 @@
 		let rem = 0;
 		for (const d of digits) rem = (rem * 10 + Number(d)) % 97;
 		return rem === 1;
-	}
-
-	// De upload-route accepteert enkel ^O\d{4}_Onkostennota_[A-Za-z\-]+_[A-Za-z\-]+$,
-	// dus namen worden naar letters en koppeltekens herleid ("José Van den Berg" -> "Jose-Van-den-Berg").
-	function nameSlug(s) {
-		return s
-			.normalize('NFD')
-			.replace(/[\u0300-\u036f]/g, '')
-			.trim()
-			.replace(/\s+/g, '-')
-			.replace(/[^A-Za-z-]/g, '')
-			.replace(/-+/g, '-')
-			.replace(/^-|-$/g, '');
-	}
-
-	function onkostenIdentifier(volgnummer, voornaam, achternaam) {
-		return `O${String(volgnummer).padStart(4, '0')}_Onkostennota_${nameSlug(voornaam)}_${nameSlug(achternaam)}`;
 	}
 
 	/** @returns {import('$lib/models/onkosten/onkostennota.ts').OnkostenNotaWideInI} */

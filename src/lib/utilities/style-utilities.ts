@@ -92,19 +92,36 @@ export function paymentStatusToColor(status: PaymentStatusEnum) {
 // Source - https://stackoverflow.com/a
 // Why doesn't typescript have this
 export function parseBool(string: string): boolean | undefined {
-    switch (String(string).toLowerCase()) {
-        case "true":
-        case "1":
-        case "yes":
-        case "y":
-            return true;
-        case "false":
-        case "0":
-        case "no":
-        case "n":
-            return false;
-        default:
-            //you could throw an error, but 'undefined' seems a more logical reply
-            return undefined
-    }
+	switch (String(string).toLowerCase()) {
+		case 'true':
+		case '1':
+		case 'yes':
+		case 'y':
+			return true;
+		case 'false':
+		case '0':
+		case 'no':
+		case 'n':
+			return false;
+		default:
+			//you could throw an error, but 'undefined' seems a more logical reply
+			return undefined;
+	}
+}
+
+// De upload-route accepteert enkel ^O\d{4}_Onkostennota_[A-Za-z\-]+_[A-Za-z\-]+$,
+// dus namen worden naar letters en koppeltekens herleid ("José Van den Berg" -> "Jose-Van-den-Berg").
+export function nameSlug(s: string): string {
+	return s
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '')
+		.trim()
+		.replace(/\s+/g, '-')
+		.replace(/[^A-Za-z-]/g, '')
+		.replace(/-+/g, '-')
+		.replace(/^-|-$/g, '');
+}
+
+export function onkostenIdentifier(volgnummer: number, voornaam: string, achternaam: string) {
+	return `O${String(volgnummer).padStart(4, '0')}_Onkostennota_${nameSlug(voornaam)}_${nameSlug(achternaam)}`;
 }

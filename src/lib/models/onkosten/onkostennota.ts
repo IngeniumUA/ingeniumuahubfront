@@ -1,9 +1,9 @@
 ﻿export enum OnkostenNotaEnum {
-	pending = 0,
+	in_afwachting = 0,
+	afgewerkt = 1,
+	afgewezen = 2
 }
-export const OnkostenNotaEnumList = [
-	OnkostenNotaEnum.pending,
-];
+export const OnkostenNotaEnumList = [OnkostenNotaEnum.in_afwachting, OnkostenNotaEnum.afgewezen, OnkostenNotaEnum.afgewerkt,];
 
 export interface KostenInI {
 	description: string;
@@ -27,6 +27,7 @@ export interface OnkostenNotaI {
 	user_email: string
 	datum_gemaakte_kosten: string
 	billing_information: BillingInformation
+	price_eu: number
 
 	onkostennota_status: OnkostenNotaEnum
 	datum_onkosten_voldaan: string | null
@@ -37,6 +38,7 @@ export interface OnkostenNotaI {
 
 export interface OnkostenNotaWideI extends OnkostenNotaI {
 	kosten: KostenI[];
+	media_url_list: [];
 }
 
 export interface OnkostenNotaWideInI {

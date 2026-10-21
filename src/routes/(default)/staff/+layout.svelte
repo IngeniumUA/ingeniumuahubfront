@@ -60,6 +60,7 @@
 					<a href="/staff/item">Items</a>
 					<a href="/staff/payment">Payments</a>
 					<a href="/staff/praesidium">Praesidium</a>
+					<a href="/staff/onkostennota">Quaestor</a>
 				</div>
 
 				<div class="mt-16">
@@ -71,7 +72,6 @@
 					<a href="/staff/item/shop">Shop</a>
 					<a href="/staff/item/vacatures">Vacatures</a>
 					<a href="/staff/lidkaarten">Lidkaarten</a>
-					<a href="/staff/onkostennota">Onkostennota</a>
 				</div>
 
 				<!-- Desktop close button (inside nav, only on desktop) -->
