@@ -6,7 +6,7 @@ import { getAuthorizationHeaders } from '$lib/auth/auth';
 export async function load({ params }) {
 	const managerUsers = await CoreUserAPI.queryManagers(params);
 	const mediaList = await CoreMediaAPI.queryMediaList(params);
-	const resp = await fetch(`${PUBLIC_API_URL}/internal`, {
+	const resp = await fetch(`${PUBLIC_API_URL}/internal/env`, {
 		method: 'GET',
 		headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' })
 	});
