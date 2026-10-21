@@ -10,6 +10,12 @@
 	let managerUsers: UserWideI[] = $derived(data.managerUsers)
 	let mediaList: string[] = $derived(data.mediaList)
 
+	interface InternalStats {
+		name: string
+		value: string
+	}
+	let internals: InternalStats[] = $derived(data.internal)
+
 	/**
 	 *
 	 */
@@ -102,6 +108,12 @@
 			Om dat toe te staan bestaat er een speciale kolom in de gebruikers table op de core waarin staat da ze manager zijn, in plaats van de gewoonlijke groepen die met keycloak synchroniseren.
 			Voor de GUI en wat pretty dingen bestaat er ook wel een rol in keycloak voor de managers.
 			</p>
+		</div>
+
+		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-cols-fr">
+			{#each internals as internal (internal.name)}
+				<p>{internal.name}: {internal.value}</p>
+			{/each}
 		</div>
 
 		<div class="manager_section">
