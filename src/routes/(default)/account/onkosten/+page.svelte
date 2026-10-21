@@ -6,7 +6,7 @@
 	<p>Op deze pagina kan je onkosten die je hebt ingediend bekijken en bewerken.</p>
 
 	<div class="flex flex-row justify-center items-center">
-		<a href="/onkosten" class="button-primary">Nieuwe onkostennota indienen</a>
+		<a href="/onkosten" class="button button-primary">Nieuwe onkostennota indienen</a>
 	</div>
 
 </section>
