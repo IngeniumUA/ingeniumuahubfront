@@ -1,11 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
 	import { PDFDocument, PDFName, PDFArray, PDFDict, StandardFonts, rgb } from 'pdf-lib';
+	import { CoreOnkostenNotaAPI } from '$lib/core_api/onkostennota_api.ts';
+
 
 	const TEMPLATE_URL =
 		'https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/onkostennota/IngeniumUA-VZW_Template_2026-2027.pdf';
 	const PROFILE_STORAGE_KEY = 'ingenium_onkosten_profiles';
-	const SUBMISSIONS_STORAGE_KEY = 'ingenium_submitted_expenses';
 
 	// EXACTE GEKALIBREERDE COÖRDINATEN
 	const PDF_COORDS = {
@@ -40,6 +41,14 @@
 	let templatePdfBytes = null;
 	let templateState = 'loading'; // 'loading' | 'ok' | 'error'
 	let templateLabel = '';
+
+	// Backend-status
+	let busy = false;
+	let busyLabel = '';
+	let createdNota = null; // antwoord van POST /onkostennota (bevat het volgnummer)
+	let createdIdentifier = ''; // bv. O0012_Onkostennota_Jan_Janssens
+	let pendingUploads = []; // indexen van bonnen die nog niet geüpload zijn
+	let done = false;
 
 	$: total = rows.reduce((sum, r) => {
 		const v = parseFloat(r.price);
@@ -111,57 +120,6 @@
 		console.log(fields);
 	}
 
-	// --- 1. PROFIELEN BEHEREN ---
-	function readProfiles() {
-		try {
-			const raw = localStorage.getItem(PROFILE_STORAGE_KEY);
-			return raw ? JSON.parse(raw) : [];
-		} catch {
-			return [];
-		}
-	}
-
-	function writeProfiles(list) {
-		profiles = list;
-		localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(list));
-	}
-
-	function saveProfile() {
-		const v = voornaam.trim();
-		const a = achternaam.trim();
-		if (!v || !a) {
-			alert('Vul minstens je voornaam en naam in.');
-			return;
-		}
-		const id = `${v.toLowerCase()}_${a.toLowerCase()}`;
-		const newProfile = { id, voornaam: v, achternaam: a, email: email.trim(), iban: iban.trim() };
-
-		const list = [...profiles];
-		const idx = list.findIndex((p) => p.id === id);
-		if (idx >= 0) list[idx] = newProfile;
-		else list.push(newProfile);
-
-		writeProfiles(list);
-		selectedProfileId = id;
-		alert(`Profiel voor ${v} ${a} opgeslagen!`);
-	}
-
-	function loadSelectedProfile(id) {
-		selectedProfileId = id;
-		const profile = profiles.find((p) => p.id === id);
-		voornaam = profile?.voornaam ?? '';
-		achternaam = profile?.achternaam ?? '';
-		email = profile?.email ?? '';
-		iban = profile?.iban ?? '';
-	}
-
-	function deleteProfile() {
-		if (!selectedProfileId) return;
-		if (!confirm('Profiel verwijderen?')) return;
-		writeProfiles(profiles.filter((p) => p.id !== selectedProfileId));
-		loadSelectedProfile('');
-	}
-
 	// --- 2. ONKOSTENRIJEN ---
 	function addExpenseRow() {
 		rows = [...rows, { id: nextRowId++, desc: '', price: '' }];
@@ -227,8 +185,103 @@
 		pdfDoc.catalog.delete(PDFName.of('AcroForm'));
 	}
 
-	// --- 4. EXACTE ORIGINELE PDF INVULLEN ---
+	// <backend>
+	// --- 4. BACKEND ---
+	// Authenticatie (bearer token) gebeurt in CoreOnkostenNotaAPI via getAuthorizationHeaders.
+	// De API-klasse gooit strings (bv. "Failed to post onkostennota: <antwoord van de server>").
+	function describeApiError(err) {
+		const text = typeof err === 'string' ? err : (err?.message ?? '');
+		return text || 'Er ging iets mis. Probeer het opnieuw.';
+	}
+
+	// Zelfde controles als de backend (BillingInformationIn); de backend blijft beslissen.
+	const normalizeIban = (s) => s.replace(/\s+/g, '').toUpperCase();
+	const isValidEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+
+	function isValidIban(s) {
+		const iban = normalizeIban(s);
+		if (!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(iban)) return false;
+		const digits = (iban.slice(4) + iban.slice(0, 4))
+			.split('')
+			.map((c) => parseInt(c, 36))
+			.join('');
+		let rem = 0;
+		for (const d of digits) rem = (rem * 10 + Number(d)) % 97;
+		return rem === 1;
+	}
+
+	// De upload-route accepteert enkel ^O\d{4}_Onkostennota_[A-Za-z\-]+_[A-Za-z\-]+$,
+	// dus namen worden naar letters en koppeltekens herleid ("José Van den Berg" -> "Jose-Van-den-Berg").
+	function nameSlug(s) {
+		return s
+			.normalize('NFD')
+			.replace(/[\u0300-\u036f]/g, '')
+			.trim()
+			.replace(/\s+/g, '-')
+			.replace(/[^A-Za-z-]/g, '')
+			.replace(/-+/g, '-')
+			.replace(/^-|-$/g, '');
+	}
+
+	function onkostenIdentifier(volgnummer, voornaam, achternaam) {
+		return `O${String(volgnummer).padStart(4, '0')}_Onkostennota_${nameSlug(voornaam)}_${nameSlug(achternaam)}`;
+	}
+
+	/** @returns {import('$lib/models/onkosten/onkostennota').OnkostenNotaWideInI} */
+	function buildNotaPayload({ mail, datum, v, a, ibanVal, items }) {
+		return {
+			user_email: mail,
+			datum_gemaakte_kosten: `${datum}T00:00:00`,
+			billing_information: { given_name: v, family_name: a, iban: normalizeIban(ibanVal) },
+			kosten: items.map((i) => ({ description: i.beschrijving, price_eu: Number(i.prijs.toFixed(2)) }))
+		};
+	}
+
+	// Stap 1: de gegevens. Het antwoord (OnkostenNotaWideI) bevat het toegekende volgnummer.
+	function postOnkostennota(args) {
+		return CoreOnkostenNotaAPI.postOnkostennota(null, buildNotaPayload(args));
+	}
+
+	function dataUrlToBlob(dataUrl) {
+		const [header, base64] = dataUrl.split(',');
+		const mime = header.match(/:(.*?);/)?.[1] ?? 'application/octet-stream';
+		const binary = atob(base64);
+		const bytes = new Uint8Array(binary.length);
+		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+		return new Blob([bytes], { type: mime });
+	}
+
+	// Stap 2: alle bonnen. Geeft de indexen terug die mislukt zijn, zodat enkel die opnieuw gaan.
+	async function uploadReceipts(identifier, list, indexes) {
+		const results = await Promise.allSettled(
+			indexes.map((i) =>
+				CoreOnkostenNotaAPI.uploadMedia(
+					null,
+					identifier,
+					dataUrlToBlob(list[i].dataUrl),
+					`bon-${String(i + 1).padStart(2, '0')}.jpg`
+				)
+			)
+		);
+		return indexes.filter((_, n) => results[n].status === 'rejected');
+	}
+	// </backend>
+
+	function resetForm() {
+		createdNota = null;
+		createdIdentifier = '';
+		pendingUploads = [];
+		done = false;
+		datum = todayLocalISO();
+		rows = [];
+		nextRowId = 1;
+		for (let i = 0; i < 3; i++) addExpenseRow();
+		receipts = [];
+	}
+
+	// --- 5. INDIENEN: eerst de gegevens, dan de bonnen, dan de PDF ---
 	async function submitAndDownloadPDF() {
+		if (busy) return;
 		if (!templatePdfBytes) {
 			const ok = await loadTemplate();
 			if (!ok) {
@@ -264,29 +317,63 @@
 			alert('Voeg minstens één aankoop toe.');
 			return;
 		}
+		if (items.length > 15) {
+			alert('Er passen maximaal 15 aankopen op de onkostennota.');
+			return;
+		}
+		if (!isValidEmail(mail)) {
+			alert('Dit is geen geldig e-mailadres.');
+			return;
+		}
+		if (!isValidIban(ibanVal)) {
+			alert('Dit is geen geldig IBAN. Controleer het rekeningnummer.');
+			return;
+		}
+		if (!nameSlug(v) || !nameSlug(a)) {
+			alert('Voornaam en naam moeten minstens één letter (a-z) bevatten.');
+			return;
+		}
 
+		busy = true;
+		try {
+			// 1. Eerst de gegevens. Pas hierna bestaat het volgnummer.
+			if (!createdNota) {
+				busyLabel = 'Onkostennota aanmaken…';
+				createdNota = await postOnkostennota({ mail, datum, v, a, ibanVal, items });
+				createdIdentifier = onkostenIdentifier(createdNota.volgnummer, v, a);
+				pendingUploads = receipts.map((_, i) => i);
+			}
+
+			// 2. Dan alle bonnen, onder dat volgnummer.
+			if (pendingUploads.length) {
+				busyLabel = 'Bonnen uploaden…';
+				pendingUploads = await uploadReceipts(createdIdentifier, receipts, pendingUploads);
+			}
+
+			// 3. Ten slotte de PDF (bevat de bonnen zelf ook).
+			busyLabel = 'PDF genereren…';
+			await fillAndDownloadPdf({ v, a, mail, ibanVal, datum, items, filename: `${createdIdentifier}.pdf` });
+			done = true;
+
+			if (pendingUploads.length) {
+				alert(
+					`${pendingUploads.length} bon(nen) konden niet geüpload worden. De PDF bevat ze wel. Klik op de knop om het opnieuw te proberen.`
+				);
+			}
+		} catch (err) {
+			console.error(err);
+			alert(describeApiError(err));
+		} finally {
+			busy = false;
+			busyLabel = '';
+		}
+	}
+
+	// --- EXACTE ORIGINELE PDF INVULLEN (ongewijzigd) ---
+	async function fillAndDownloadPdf({ v, a, mail, ibanVal, datum, items, filename }) {
 		const [yyyy, mm, dd] = datum.split('-');
 		const formattedDate = `${dd}/${mm}/${yyyy}`;
 		const totalAmount = items.reduce((s, i) => s + i.prijs, 0);
-
-		// Opslaan voor Quaestor-dashboard
-		const submissions = JSON.parse(localStorage.getItem(SUBMISSIONS_STORAGE_KEY) || '[]');
-		submissions.push({
-			id: 'EXP_' + Date.now(),
-			ingediendOp: new Date().toISOString(),
-			status: 'In afwachting van Quaestor',
-			volgnummer: '',
-			voornaam: v,
-			achternaam: a,
-			email: mail,
-			iban: ibanVal,
-			datum: formattedDate,
-			datumISO: datum,
-			items,
-			totaal: totalAmount,
-			receipts
-		});
-		localStorage.setItem(SUBMISSIONS_STORAGE_KEY, JSON.stringify(submissions));
 
 		const pdfDoc = await PDFDocument.load(templatePdfBytes);
 		const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -350,7 +437,7 @@
 		const url = URL.createObjectURL(blob);
 		const link = document.createElement('a');
 		link.href = url;
-		link.download = `O0xxx_Onkostennota_${v}_${a}.pdf`;
+		link.download = filename;
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
@@ -365,149 +452,153 @@
 
 <div class="page">
 	<main class="container">
-		<!-- 1. PERSOONSGEGEVENS -->
-		<section class="card">
-			<div class="card-title"><span>1. Persoonsgegevens</span></div>
+		<!-- Na het aanmaken van de nota is het formulier vergrendeld: nota en PDF moeten overeenkomen
+		     en opnieuw proberen mag nooit een tweede nota (volgnummer) aanmaken. -->
+		<fieldset class="lock" disabled={createdNota !== null || busy}>
+			<!-- 1. PERSOONSGEGEVENS -->
+			<section class="card">
+				<div class="card-title"><span>1. Persoonsgegevens</span></div>
 
-			<div class="profile-bar">
-				<div class="form-group">
-					<label for="profileSelect">Selecteer je naam (of maak eenmalig je profiel aan):</label>
-					<select
-						id="profileSelect"
-						value={selectedProfileId}
-						on:change={(e) => loadSelectedProfile(e.currentTarget.value)}
-					>
-						<option value="">-- Nieuw profiel invullen --</option>
-						{#each profiles as p (p.id)}
-							<option value={p.id}>{p.voornaam} {p.achternaam}</option>
-						{/each}
-					</select>
-				</div>
-				<button disabled type="button" class="btn btn-outline" on:click={saveProfile}>
-					Gegevens opslaan onder mijn naam
-				</button>
-				<button
-					disabled
-					type="button"
-					class="btn btn-danger"
-					on:click={deleteProfile}
-					title="Verwijder geselecteerd profiel">✕</button
-				>
-			</div>
-
-			<div class="grid-2">
-				<div class="form-group">
-					<label for="voornaam">Voornaam *</label>
-					<input type="text" id="voornaam" placeholder="Bijv. Jan" required bind:value={voornaam} />
-				</div>
-				<div class="form-group">
-					<label for="achternaam">Naam *</label>
-					<input type="text" id="achternaam" placeholder="Bijv. Janssens" required bind:value={achternaam} />
-				</div>
-				<div class="form-group">
-					<label for="email">E-mailadres *</label>
-					<input
-						type="email"
-						id="email"
-						placeholder="jan.janssens@ingeniumua.be"
-						required
-						bind:value={email}
-					/>
-				</div>
-				<div class="form-group">
-					<label for="iban">Rekeningnummer (IBAN) *</label>
-					<input type="text" id="iban" placeholder="BE00 0000 0000 0000" required bind:value={iban} />
-				</div>
-			</div>
-		</section>
-
-		<!-- 2. GEMAAKTE ONKOSTEN -->
-		<section class="card">
-			<div class="card-title">
-				<span>2. Gemaakte Onkosten</span>
-				<button type="button" class="btn btn-outline" on:click={addExpenseRow}>+ Aankoop toevoegen</button>
-			</div>
-
-			<div class="form-group date-group">
-				<label for="datum">Datum van gemaakte kosten *</label>
-				<input type="date" id="datum" required bind:value={datum} />
-			</div>
-
-			<p class="km-info">Vervoersonkosten worden voor 0,44 euro/km vergoed.</p>
-
-			<div>
-				{#each rows as row (row.id)}
-					<div class="expense-row">
-						<input
-							type="text"
-							placeholder="Beschrijving van aankoop"
-							bind:value={row.desc}
-						/>
-						<input
-							type="number"
-							placeholder="Prijs (€)"
-							step="0.01"
-							min="0"
-							bind:value={row.price}
-						/>
-						<button
-							type="button"
-							class="btn btn-danger"
-							on:click={() => removeExpenseRow(row.id)}
-							title="Verwijder rij">✕</button
-						>
+				<div class="grid-2">
+					<div class="form-group">
+						<label for="voornaam">Voornaam *</label>
+						<input type="text" id="voornaam" placeholder="Bijv. Jan" required bind:value={voornaam} />
 					</div>
-				{/each}
-			</div>
+					<div class="form-group">
+						<label for="achternaam">Naam *</label>
+						<input type="text" id="achternaam" placeholder="Bijv. Janssens" required bind:value={achternaam} />
+					</div>
+					<div class="form-group">
+						<label for="email">E-mailadres *</label>
+						<input
+							type="email"
+							id="email"
+							placeholder="jan.janssens@ingeniumua.be"
+							required
+							bind:value={email}
+						/>
+					</div>
+					<div class="form-group">
+						<label for="iban">Rekeningnummer (IBAN) *</label>
+						<input type="text" id="iban" placeholder="BE00 0000 0000 0000" required bind:value={iban} />
+					</div>
+				</div>
+			</section>
 
-			<div class="total-bar">
-				<span>Totaalbedrag:</span>
-				<span>{formatEuro(total)}</span>
-			</div>
-		</section>
+			<!-- 2. GEMAAKTE ONKOSTEN -->
+			<section class="card">
+				<div class="card-title">
+					<span>2. Gemaakte Onkosten</span>
+					<button type="button" class="btn btn-outline" on:click={addExpenseRow}>+ Aankoop toevoegen</button>
+				</div>
 
-		<!-- 3. BONNEN & FOTO'S UPLOADEN -->
-		<section class="card">
-			<div class="card-title">
-				<span>3. Bonnen &amp; Foto's Uploaden</span>
-				<span class="badge">
+				<div class="form-group date-group">
+					<label for="datum">Datum van gemaakte kosten *</label>
+					<input type="date" id="datum" required bind:value={datum} />
+				</div>
+
+				<p class="km-info">Vervoersonkosten worden voor 0,44 euro/km vergoed.</p>
+
+				<div>
+					{#each rows as row (row.id)}
+						<div class="expense-row">
+							<input
+								type="text"
+								placeholder="Beschrijving van aankoop"
+								bind:value={row.desc}
+							/>
+							<input
+								type="number"
+								placeholder="Prijs (€)"
+								step="0.01"
+								min="0"
+								bind:value={row.price}
+							/>
+							<button
+								type="button"
+								class="btn btn-danger"
+								on:click={() => removeExpenseRow(row.id)}
+								title="Verwijder rij">✕</button
+							>
+						</div>
+					{/each}
+				</div>
+
+				<div class="total-bar">
+					<span>Totaalbedrag:</span>
+					<span>{formatEuro(total)}</span>
+				</div>
+			</section>
+
+			<!-- 3. BONNEN & FOTO'S UPLOADEN -->
+			<section class="card">
+				<div class="card-title">
+					<span>3. Bonnen &amp; Foto's Uploaden</span>
+					<span class="badge">
 					{receipts.length} bon(nen) ({pagesCount} bijlagepagina{pagesCount === 1 ? '' : "'s"})
 				</span>
-			</div>
-			<p class="upload-help">
-				Upload hier de foto's van je kasticketjes of facturen. Ze worden automatisch op de witte
-				bijlagepagina van de onkostennota geplaatst (<strong>maximaal 4 bonnen per pagina</strong>, bij
-				meer bonnen komt er automatisch een pagina bij).
-			</p>
+				</div>
+				<p class="upload-help">
+					Upload hier de foto's van je kasticketjes of facturen. Ze worden automatisch op de witte
+					bijlagepagina van de onkostennota geplaatst (<strong>maximaal 4 bonnen per pagina</strong>, bij
+					meer bonnen komt er automatisch een pagina bij).
+				</p>
 
-			<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-			<div class="upload-zone" on:click={() => document.getElementById('receiptInput').click()}>
-				<input
-					type="file"
-					id="receiptInput"
-					accept="image/*"
-					multiple
-					hidden
-					on:change={handleReceiptsUpload}
-				/>
-				<strong>Klik hier om bonnen of foto's toe te voegen</strong>
-				<p class="upload-sub">Ondersteunt JPG, PNG, WEBP (meerdere foto's tegelijk mogelijk)</p>
-			</div>
+				<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+				<div class="upload-zone" on:click={() => document.getElementById('receiptInput').click()}>
+					<input
+						type="file"
+						id="receiptInput"
+						accept="image/*"
+						multiple
+						hidden
+						on:change={handleReceiptsUpload}
+					/>
+					<strong>Klik hier om bonnen of foto's toe te voegen</strong>
+					<p class="upload-sub">Ondersteunt JPG, PNG, WEBP (meerdere foto's tegelijk mogelijk)</p>
+				</div>
 
-			<div class="receipt-preview-grid">
-				{#each receipts as rec, index (rec.dataUrl)}
-					<div class="receipt-thumb">
-						<img src={rec.dataUrl} alt="Bon {index + 1}" />
-						<button type="button" on:click={() => removeReceipt(index)} title="Verwijder bon">✕</button>
-					</div>
-				{/each}
+				<div class="receipt-preview-grid">
+					{#each receipts as rec, index (rec.dataUrl)}
+						<div class="receipt-thumb">
+							<img src={rec.dataUrl} alt="Bon {index + 1}" />
+							<button type="button" on:click={() => removeReceipt(index)} title="Verwijder bon">✕</button>
+						</div>
+					{/each}
+				</div>
+			</section>
+
+		</fieldset>
+
+		{#if createdNota}
+			<div class="template-status-bar" class:ok={!pendingUploads.length} class:error={pendingUploads.length}>
+				<span>
+					Onkostennota {createdIdentifier} is aangemaakt{pendingUploads.length
+					? `, maar ${pendingUploads.length} bon(nen) zijn nog niet geüpload`
+					: ''}.
+				</span>
 			</div>
-		</section>
+		{/if}
 
 		<!-- ACTIEKNOPPEN -->
 		<div class="actions">
-			<button type="button" class="btn btn-primary btn-large" on:click={submitAndDownloadPDF}>
-				Onkostennota Indienen &amp; Originele PDF Downloaden
+			{#if createdNota}
+				<button type="button" class="btn btn-outline btn-large" disabled={busy} on:click={resetForm}>
+					Nieuwe onkostennota
+				</button>
+			{/if}
+			<button type="button" class="btn btn-primary btn-large" disabled={busy} on:click={submitAndDownloadPDF}>
+				{#if busy}
+					{busyLabel || 'Bezig…'}
+				{:else if pendingUploads.length}
+					Bonnen opnieuw uploaden &amp; PDF downloaden
+				{:else if done}
+					PDF opnieuw downloaden
+				{:else if createdNota}
+					Opnieuw proberen
+				{:else}
+					Onkostennota Indienen &amp; Originele PDF Downloaden
+				{/if}
 			</button>
 		</div>
 	</main>
@@ -843,6 +934,13 @@
     .status-actions {
         display: flex;
         gap: 0.5rem;
+    }
+
+    .lock {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        min-width: 0;
     }
 
     /* --- ACTIEKNOPPEN --- */
