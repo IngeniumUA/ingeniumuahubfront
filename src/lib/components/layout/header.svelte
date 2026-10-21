@@ -23,6 +23,9 @@
 	function isStaff() {
 		return hasRole("staff")
 	}
+	function isOnkosten() {
+		return hasRole("onkosten") || isEducation()
+	}
 </script>
 
 <!-- ACCESSIBILITY BUTTON TO CONTENT -->
@@ -124,15 +127,18 @@
 						<div class="block nav-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="profile-menu-button" tabindex="-1">
 							<a href="/account" class="nav-dropdown-item font-bold text-blue-900" role="menuitem">Jouw profiel</a>
 							<a href="/account/transactions" class="nav-dropdown-item" role="menuitem">Aankopen</a>
+							{#if (isOnkosten())}
+								<a href="/account/onkosten" class="nav-dropdown-item" role="menuitem">Mijn onkosten</a>
+							{/if}
 
 							{#if isEducation()}
 								<hr class="nav-dropdown-divider">
 								<a href="/cloud_verify" class="nav-dropdown-item" role="menuitem">Cloud uploads</a>
 								{#if (isStaff())}
-								<a href="/staff" class="nav-dropdown-item" role="menuitem">Staff</a>
-								<a href="/staff" class="nav-dropdown-item" role="menuitem">Webmaster</a>
+									<a href="/staff" class="nav-dropdown-item" role="menuitem">Staff</a>
+									<a href="/staff" class="nav-dropdown-item" role="menuitem">Webmaster</a>
 								{/if}
-									<hr class="nav-dropdown-divider">
+								<hr class="nav-dropdown-divider">
 							{/if}
 
 							<button type="button" class="nav-dropdown-item" role="menuitem" onclick={ doLogout }>Afmelden</button>
