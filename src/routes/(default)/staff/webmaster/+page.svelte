@@ -112,7 +112,7 @@
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-cols-fr">
 			{#each internals as internal (internal.name)}
-				<p>{internal.name}: {internal.value}</p>
+				<p>{internal.name}: {JSON.stringify(internal.value)}</p>
 			{/each}
 		</div>
 
