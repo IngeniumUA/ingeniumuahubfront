@@ -159,7 +159,7 @@ export class CoreOnkostenNotaAPI {
 		body.append('blob_data', file, 'signature');
 		// No Content-Type here: the browser has to set the multipart boundary itself.
 		const res = await fetch(`${PUBLIC_API_URL}/onkosten/signature/${onkostenIdentifier}`, {
-			method: 'POST',
+			method: 'PUT',
 			headers: getAuthorizationHeaders(params, {}),
 			body
 		});
