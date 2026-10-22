@@ -249,7 +249,7 @@
 </article>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < onkostenNota.length && editSelected !== null}
-	<OnkostenEditModel nota={editSelected} bind:isOpen={showEdit}></OnkostenEditModel>
+	<OnkostenEditModel nota={editSelected} bind:isOpen={showEdit} refresh={refresh}></OnkostenEditModel>
 {/if}
 
 <style>

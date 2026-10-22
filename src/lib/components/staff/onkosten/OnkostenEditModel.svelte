@@ -260,13 +260,11 @@
 	let {
 		isOpen = $bindable(false),
 		nota,
-		onsaved
+		refresh
 	}: {
 		isOpen?: boolean;
-		/** The complete nota (incl. media_url_list), fetched BEFORE the modal is opened. */
 		nota: OnkostenNotaWideI;
-		/** Called after every successful PUT with the saved nota, so the table can refresh. */
-		onsaved?: (nota: OnkostenNotaWideI) => void;
+		refresh: () => void;
 	} = $props();
 
 	type Row = { key: number; description: string; price: number | null; boekhoudpost: number; id: number };
@@ -624,7 +622,7 @@
 		rows = toRows(updated);
 		voldaan = updated.datum_onkosten_voldaan?.slice(0, 10) ?? voldaan;
 		initialSnapshot = snapshot();
-		onsaved?.(updated);
+		refresh();
 	}
 
 	async function run(label: string, task: () => Promise<void>) {
