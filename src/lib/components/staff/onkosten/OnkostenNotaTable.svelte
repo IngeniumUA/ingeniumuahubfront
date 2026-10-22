@@ -137,7 +137,7 @@
 
 <article>
 	<div class="flex justify-between items-center">
-		<h2>Ingediende Onkostennota</h2>
+		<h2 id="onkostennota_table">Ingediende Onkostennota</h2>
 		<button onclick={download} class="ml-auto button button-primary w-24 button-inline">
 			<span class="text-white">Download</span>
 		</button>
