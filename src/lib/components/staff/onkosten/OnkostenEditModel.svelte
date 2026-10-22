@@ -428,7 +428,7 @@
 	async function loadMedia(n: OnkostenNotaWideI) {
 		const token = ++loadToken;
 		const id = identifierOf(n);
-		const names = [...(n.media_url_list ?? [])].sort((a, b) => a.localeCompare(b));
+		const names = [...(n.media_url_list ?? [])];
 		receipts = names.map((filename) => ({ filename, state: 'loading', blob: null, url: null }));
 		await Promise.all([
 			loadSignature(id, token),
