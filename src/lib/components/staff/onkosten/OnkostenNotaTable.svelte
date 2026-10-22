@@ -5,6 +5,7 @@
 	import { makePretty, onkostenIdentifier, prettyDate } from '$lib/utilities/style-utilities';
 	import PaginationComponent from '$lib/components/PaginationComponent.svelte';
 	import OnkostenEditModel from '$lib/components/staff/onkosten/OnkostenEditModel.svelte';
+	import type { OnkostenNotaWideI } from '$lib/models/onkosten/onkostennota.ts';
 
 
 	let {
@@ -111,13 +112,13 @@
 	 * State management for transaction edit model
 	 */
 	let editSelectedIndex: null | number = $state(null);
-	let editSelected: OnkostenNotaI | null = $state(null);
+	let editSelected: OnkostenNotaWideI | null = $state(null);
 	let showEdit: boolean = $state(false);
 
 	async function setEditItemIndex(index: number) {
 		editSelectedIndex = index;
 		if (editSelectedIndex !== null && editSelectedIndex < onkostenNota.length) {
-			editSelected = onkostenNota.at(editSelectedIndex)!;
+			editSelected = await CoreOnkostenNotaAPI.getOnkostennota(null, onkostenNota.at(index)!.volgnummer);
 			showEdit = true;
 		}
 	}
@@ -248,7 +249,7 @@
 </article>
 
 {#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < onkostenNota.length && editSelected !== null}
-	<OnkostenEditModel onkostennota={editSelected} bind:isOpen={showEdit}></OnkostenEditModel>
+	<OnkostenEditModel nota={editSelected} bind:isOpen={showEdit}></OnkostenEditModel>
 {/if}
 
 <style>

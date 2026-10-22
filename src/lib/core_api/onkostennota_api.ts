@@ -11,12 +11,29 @@ export class CoreOnkostenNotaAPI {
 	): Promise<OnkostenNotaWideI> {
 		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${volgnummer}`, {
 			method: 'GET',
-			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' })
 		});
 		if (res.ok) {
 			return await res.json();
 		} else {
 			throw `Failed to get onkostennota: ${await res.text()}`;
+		}
+	}
+
+	static async putOnkostennota(
+		params: RouteParams | null = null,
+		volgnummer: number,
+		putOnkostenNota: OnkostenNotaWideI
+	): Promise<OnkostenNotaWideI> {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${volgnummer}`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
+			body: JSON.stringify(putOnkostenNota)
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to put onkostennota: ${await res.text()}`;
 		}
 	}
 
@@ -129,5 +146,64 @@ export class CoreOnkostenNotaAPI {
 		a.click();
 		a.remove();
 		window.URL.revokeObjectURL(url);
+	}
+
+	/**
+	 */
+	static async uploadSignature(
+		params: RouteParams | null = null,
+		onkostenIdentifier: string,
+		file: Blob
+	): Promise<string> {
+		const body = new FormData();
+		body.append('blob_data', file, 'signature');
+		// No Content-Type here: the browser has to set the multipart boundary itself.
+		const res = await fetch(`${PUBLIC_API_URL}/onkosten/signature/${onkostenIdentifier}`, {
+			method: 'POST',
+			headers: getAuthorizationHeaders(params, {}),
+			body
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to upload media: ${await res.text()}`;
+		}
+	}
+
+	/** The stored signature image, or null when the nota has none yet (404). */
+	static async fetchSignature(
+		params: RouteParams | null = null,
+		onkostenIdentifier: string
+	): Promise<Blob | null> {
+		const res = await fetch(`${PUBLIC_API_URL}/onkosten/${onkostenIdentifier}/signature`, {
+			method: 'GET',
+			headers: getAuthorizationHeaders(params, {})
+		});
+		if (res.status === 404) return null;
+		if (res.ok) {
+			return await res.blob();
+		} else {
+			throw `Failed to fetch signature: ${await res.text()}`;
+		}
+	}
+
+	static async fetchMedia(
+		params: RouteParams | null = null,
+		onkostenIdentifier: string,
+		filename: string
+	): Promise<Blob> {
+		const fileName = filename.split('/').pop() ?? filename;
+		const res = await fetch(
+			`${PUBLIC_API_URL}/file/onkosten/${onkostenIdentifier}/${encodeURIComponent(fileName)}`,
+			{
+				method: 'GET',
+				headers: getAuthorizationHeaders(params, {})
+			}
+		);
+		if (res.ok) {
+			return await res.blob();
+		} else {
+			throw `Failed to fetch media: ${await res.text()}`;
+		}
 	}
 }
