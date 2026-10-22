@@ -11,6 +11,7 @@ export interface KostenInI {
 }
 export interface KostenI extends KostenInI {
 	onkostennota_volgnummer: number;
+	id: number
 	boekhoudpost: number;
 }
 

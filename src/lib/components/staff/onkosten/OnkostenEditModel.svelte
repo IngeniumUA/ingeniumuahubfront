@@ -269,7 +269,7 @@
 		onsaved?: (nota: OnkostenNotaWideI) => void;
 	} = $props();
 
-	type Row = { key: number; description: string; price: number | null; boekhoudpost: number };
+	type Row = { key: number; description: string; price: number | null; boekhoudpost: number; id: number };
 	type MediaItem = { filename: string; state: 'loading' | 'ok' | 'error'; blob: Blob | null; url: string | null };
 
 	const KNOWN_CODES = new Set(BOEKHOUDPOSTEN.map((p) => p.code));
@@ -352,6 +352,7 @@
 	function toRows(n: OnkostenNotaWideI): Row[] {
 		return (n.kosten ?? []).map((k, i) => ({
 			key: i,
+			id: k.id,
 			description: k.description ?? '',
 			price: Number(k.price_eu), // Decimal: may arrive as a string
 			boekhoudpost: k.boekhoudpost ?? GEEN_BOEKHOUDPOST
@@ -609,6 +610,7 @@
 			datum_onkosten_voldaan: voldaan ? `${voldaan}T00:00:00` : null,
 			onkostennota_status: finalize ? OnkostenNotaEnum.afgewerkt : current.onkostennota_status,
 			kosten: rows.map((r) => ({
+				id: r.id,
 				onkostennota_volgnummer: current.volgnummer,
 				description: r.description.trim(),
 				price_eu: Number((r.price ?? 0).toFixed(2)),

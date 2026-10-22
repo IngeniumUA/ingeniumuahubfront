@@ -26,7 +26,7 @@ export class CoreOnkostenNotaAPI {
 		putOnkostenNota: OnkostenNotaWideI
 	): Promise<OnkostenNotaWideI> {
 		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${volgnummer}`, {
-			method: 'POST',
+			method: 'PUT',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 			body: JSON.stringify(putOnkostenNota)
 		});
