@@ -20,6 +20,21 @@ export class CoreOnkostenNotaAPI {
 		}
 	}
 
+	static async deleteOnkostennota(
+		params: RouteParams | null = null,
+		volgnummer: number
+	): Promise<OnkostenNotaWideI> {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${volgnummer}`, {
+			method: 'DELETE',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' })
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to delete onkostennota: ${await res.text()}`;
+		}
+	}
+
 	static async putOnkostennota(
 		params: RouteParams | null = null,
 		volgnummer: number,
