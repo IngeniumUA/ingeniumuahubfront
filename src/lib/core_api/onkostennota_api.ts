@@ -39,9 +39,13 @@ export class CoreOnkostenNotaAPI {
 
 	static async postOnkostennota(
 		params: RouteParams | null = null,
-		postGroup: Partial<GroupI>
+		postGroup: Partial<OnkostenNotaI>,
+		update_account_info: boolean = false
 	): Promise<GroupI> {
-		const res = await fetch(`${PUBLIC_API_URL}/onkostennota`, {
+		const queryParam = new URLSearchParams({
+			update_account_info: update_account_info.toString()
+		});
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota?${queryParam.toString()}`, {
 			method: 'POST',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 			body: JSON.stringify(postGroup)

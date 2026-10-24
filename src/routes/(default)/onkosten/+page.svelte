@@ -26,13 +26,11 @@
 	};
 
 	// --- State ---
-	let profiles = [];
-	let selectedProfileId = '';
-
-	let voornaam = '';
-	let achternaam = '';
-	let email = '';
-	let iban = '';
+	let { data } = $props();
+	let voornaam = data["given_name"] ?? "";
+	let achternaam = data["family_name"] ?? "";
+	let email = data["email"] ?? "";
+	let iban = data["iban"] ?? "";
 	let datum = todayLocalISO();
 
 	let nextRowId = 1;
@@ -59,7 +57,6 @@
 	$: pagesCount = Math.max(1, Math.ceil(receipts.length / 4));
 
 	onMount(async () => {
-		profiles = readProfiles();
 		for (let i = 0; i < 3; i++) addExpenseRow();
 		await loadTemplate();
 	});
@@ -224,7 +221,7 @@
 
 	// Stap 1: de gegevens. Het antwoord (OnkostenNotaWideI) bevat het toegekende volgnummer.
 	function postOnkostennota(args) {
-		return CoreOnkostenNotaAPI.postOnkostennota(null, buildNotaPayload(args));
+		return CoreOnkostenNotaAPI.postOnkostennota(null, buildNotaPayload(args), true);
 	}
 
 	function dataUrlToBlob(dataUrl) {
