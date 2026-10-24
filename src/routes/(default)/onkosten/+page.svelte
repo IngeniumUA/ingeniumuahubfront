@@ -8,7 +8,6 @@
 
 	const TEMPLATE_URL =
 		'https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/onkostennota/IngeniumUA-VZW_Template_2026-2027.pdf';
-	const PROFILE_STORAGE_KEY = 'ingenium_onkosten_profiles';
 
 	// EXACTE GEKALIBREERDE COÖRDINATEN
 	const PDF_COORDS = {
@@ -50,11 +49,13 @@
 	let pendingUploads = []; // indexen van bonnen die nog niet geüpload zijn
 	let done = false;
 
-	$: total = rows.reduce((sum, r) => {
-		const v = parseFloat(r.price);
-		return Number.isFinite(v) ? sum + v : sum;
-	}, 0);
-	$: pagesCount = Math.max(1, Math.ceil(receipts.length / 4));
+	let total = $derived.by(() => {
+		return rows.reduce((sum, r) => {
+			const v = parseFloat(r.price);
+			return Number.isFinite(v) ? sum + v : sum;
+		}, 0);
+	})
+	let pagesCount = $derived.by(() => { return Math.max(1, Math.ceil(receipts.length / 4)); })
 
 	onMount(async () => {
 		for (let i = 0; i < 3; i++) addExpenseRow();
