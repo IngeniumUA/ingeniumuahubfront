@@ -194,7 +194,7 @@ export class CoreOnkostenNotaAPI {
 		params: RouteParams | null = null,
 		onkostenIdentifier: string
 	): Promise<Blob | null> {
-		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${onkostenIdentifier}/signature`, {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/signature/${onkostenIdentifier}`, {
 			method: 'GET',
 			headers: getAuthorizationHeaders(params, {})
 		});
