@@ -1,6 +1,6 @@
 <script lang="ts">
   import InlineSpinner from '$lib/components/spinners/inline-spinner.svelte';
-  import {auth} from "$lib/states/auth.svelte";
+  import { auth, hasRole } from '$lib/states/auth.svelte';
   import {getAuthorizationHeaders} from "$lib/auth/auth";
   import {PUBLIC_API_URL} from "$env/static/public";
 
@@ -47,6 +47,15 @@
           <input id="phoneNumber" type="text" required bind:value={ details.telephone }/>
         </div>
       </fieldset>
+
+      {#if (hasRole("onkosten") || hasRole("education") || hasRole("staff"))}
+        <fieldset>
+          <div class="form-field">
+            <label for="iban">IBAN</label>
+            <input id="iban" type="text" required bind:value={ details.iban }/>
+          </div>
+        </fieldset>
+      {/if}
 
       <div class="form-field text-right">
         <button type="submit" class="button button-danger" disabled={ loading }>Opslaan</button>
