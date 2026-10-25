@@ -725,8 +725,8 @@
 >
 	<header class="modal-head">
 		<div>
-			<h2 id="onkosten-modal-title">Onkostennota {formatVolgnummer(current.volgnummer)}</h2>
-			<p class="sub">
+			<h2 class="text-white">Onkostennota {formatVolgnummer(current.volgnummer)}</h2>
+			<p class="text-white sub">
 				{current.billing_information.given_name}
 				{current.billing_information.family_name}
 			</p>
