@@ -20,6 +20,21 @@ export class CoreOnkostenNotaAPI {
 		}
 	}
 
+	static async deleteOnkostennota(
+		params: RouteParams | null = null,
+		volgnummer: number
+	): Promise<OnkostenNotaWideI> {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${volgnummer}`, {
+			method: 'DELETE',
+			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' })
+		});
+		if (res.ok) {
+			return await res.json();
+		} else {
+			throw `Failed to delete onkostennota: ${await res.text()}`;
+		}
+	}
+
 	static async putOnkostennota(
 		params: RouteParams | null = null,
 		volgnummer: number,
@@ -39,9 +54,13 @@ export class CoreOnkostenNotaAPI {
 
 	static async postOnkostennota(
 		params: RouteParams | null = null,
-		postGroup: Partial<GroupI>
+		postGroup: Partial<OnkostenNotaI>,
+		update_account_info: boolean = false
 	): Promise<GroupI> {
-		const res = await fetch(`${PUBLIC_API_URL}/onkostennota`, {
+		const queryParam = new URLSearchParams({
+			update_account_info: update_account_info.toString()
+		});
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota?${queryParam.toString()}`, {
 			method: 'POST',
 			headers: getAuthorizationHeaders(params, { 'Content-Type': 'application/json' }),
 			body: JSON.stringify(postGroup)
@@ -175,7 +194,7 @@ export class CoreOnkostenNotaAPI {
 		params: RouteParams | null = null,
 		onkostenIdentifier: string
 	): Promise<Blob | null> {
-		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/${onkostenIdentifier}/signature`, {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/signature/${onkostenIdentifier}`, {
 			method: 'GET',
 			headers: getAuthorizationHeaders(params, {})
 		});

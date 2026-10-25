@@ -22,6 +22,7 @@ export interface UserI {
 
 export interface AccountI {
 	telephone: string;
+	iban: string
 }
 
 export interface UserWideI extends UserI {

@@ -6,15 +6,6 @@
 
   let { response } = $props();
   let loading = $state(false);
-  const tracts = {
-    'bouwkunde': 'Bouwkunde',
-    'elektromechanica': 'Elektromechanica',
-    'elektronica_ict': 'Elektronica-ICT',
-    'chemie': 'Chemie',
-    'biochemie': 'Biochemie',
-    'uantwerpen': 'UAntwerpen',
-    'other': 'Andere'
-  };
 
   async function onFormSubmit(e, details) {
     e.preventDefault();
@@ -54,38 +45,6 @@
         <div class="form-field">
           <label for="phoneNumber">Telefoonnummer</label>
           <input id="phoneNumber" type="text" required bind:value={ details.telephone }/>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend class="sr-only">School gegevens</legend>
-
-        <div class="form-field col-span-4">
-          <label for="graduationTracts">Afstudeerrichting</label>
-          <select id="graduationTracts" required bind:value={ details.graduation_tract }>
-            {#each Object.keys(tracts) as tract}
-              <option value={ tract }>{ tracts[tract] }</option>
-            {/each}
-          </select>
-        </div>
-      </fieldset>
-
-      <fieldset class="grid space-y-1.5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-        <legend>Jouw interesses</legend>
-
-        <div class="form-field form-field-checkbox">
-          <input id="recreationInterestCheckbox" type="checkbox" bind:checked={ details.recreation_interest }>
-          <label for="recreationInterestCheckbox">Ik wil graag meer weten over recreatie (TD's, Cantussen, ...)</label>
-        </div>
-
-        <div class="form-field form-field-checkbox">
-          <input id="sportInterestCheckbox" type="checkbox" bind:checked={ details.sport_interest }>
-          <label for="sportInterestCheckbox">Ik wil graag meer weten over sport</label>
-        </div>
-
-        <div class="form-field form-field-checkbox">
-          <input id="relationsInterestCheckbox" type="checkbox" bind:checked={ details.relations_interest }>
-          <label for="relationsInterestCheckbox">Ik wil graag meer weten over bedrijfsevents</label>
         </div>
       </fieldset>
 

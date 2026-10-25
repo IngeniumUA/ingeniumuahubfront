@@ -37,6 +37,7 @@ export interface OnkostenNotaI {
 	completed_timestamp: string | null;
 
 	kosten: KostenI[];
+	note: string | null;
 }
 
 export interface OnkostenNotaWideI extends OnkostenNotaI {
