@@ -1,10 +1,57 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { PDFDocument, PDFName, PDFArray, PDFDict, StandardFonts, rgb } from 'pdf-lib';
 	import { CoreOnkostenNotaAPI } from '$lib/core_api/onkostennota_api.ts';
 	import Header from '$lib/components/layout/header.svelte';
 	import { nameSlug, onkostenIdentifier } from '$lib/utilities/style-utilities.ts';
+	import type { OnkostenNotaWideInI } from '$lib/models/onkosten/onkostennota.ts';
 
+	// --- Types ---
+	interface UserData {
+		given_name?: string;
+		family_name?: string;
+		email?: string;
+		iban?: string;
+	}
+
+	interface ExpenseRow {
+		id: number;
+		desc: string;
+		price: string;
+	}
+
+	interface Receipt {
+		name: string;
+		dataUrl: string;
+	}
+
+	/** Een gevalideerde onkostenregel. */
+	interface ExpenseItem {
+		boekhoudpost: string;
+		beschrijving: string;
+		prijs: number;
+	}
+
+	interface PersonalArgs {
+		v: string;
+		a: string;
+		mail: string;
+		ibanVal: string;
+		datum: string;
+		items: ExpenseItem[];
+	}
+
+	interface PdfArgs extends PersonalArgs {
+		filename: string;
+	}
+
+	type TemplateState = 'loading' | 'ok' | 'error';
+
+	/** Antwoord van POST /onkostennota (bevat het volgnummer). */
+	type CreatedNota = Awaited<ReturnType<typeof CoreOnkostenNotaAPI.postOnkostennota>>;
+
+	/** Input-event waarbij currentTarget correct getypeerd is. */
+	type InputChangeEvent = Event & { currentTarget: EventTarget & HTMLInputElement };
 
 	const TEMPLATE_URL =
 		'https://ingeniumuapublic.blob.core.windows.net/ingeniumuaimages/onkostennota/IngeniumUA-VZW_Template_2026-2027.pdf';
@@ -22,59 +69,64 @@
 		colDescX: 122,
 		colPriceX: 518,
 		totalY: 264
-	};
+	} as const;
 
 	// --- State ---
-	let { data } = $props();
-	let voornaam = data["given_name"] ?? "";
-	let achternaam = data["family_name"] ?? "";
-	let email = data["email"] ?? "";
-	let iban = data["iban"] ?? "";
-	let datum = todayLocalISO();
+	let { data }: { data: UserData } = $props();
+
+	// Enkel de beginwaarden uit `data` zijn nodig, dus de "state_referenced_locally"-waarschuwing is hier ok.
+	// svelte-ignore state_referenced_locally
+	let voornaam = $state(data.given_name ?? '');
+	// svelte-ignore state_referenced_locally
+	let achternaam = $state(data.family_name ?? '');
+	// svelte-ignore state_referenced_locally
+	let email = $state(data.email ?? '');
+	// svelte-ignore state_referenced_locally
+	let iban = $state(data.iban ?? '');
+	let datum = $state(todayLocalISO());
 
 	let nextRowId = 1;
-	let rows = [];
+	let rows = $state<ExpenseRow[]>([]);
+	let receipts = $state<Receipt[]>([]);
 
-	let receipts = [];
-
-	let templatePdfBytes = null;
-	let templateState = 'loading'; // 'loading' | 'ok' | 'error'
+	let templatePdfBytes: ArrayBuffer | null = null;
+	let templateState: TemplateState = 'loading';
 	let templateLabel = '';
 
 	// Backend-status
-	let busy = false;
-	let busyLabel = '';
-	let createdNota = null; // antwoord van POST /onkostennota (bevat het volgnummer)
-	let createdIdentifier = ''; // bv. O0012_Onkostennota_Jan_Janssens
-	let pendingUploads = []; // indexen van bonnen die nog niet geüpload zijn
-	let done = false;
+	let busy = $state(false);
+	let busyLabel = $state('');
+	let createdNota = $state<CreatedNota | null>(null);
+	let createdIdentifier = $state(''); // bv. O0012_Onkostennota_Jan_Janssens
+	let pendingUploads = $state<number[]>([]); // indexen van bonnen die nog niet geüpload zijn
+	let done = $state(false);
 
-	let total = $derived.by(() => {
-		return rows.reduce((sum, r) => {
+	let total = $derived(
+		rows.reduce((sum, r) => {
 			const v = parseFloat(r.price);
 			return Number.isFinite(v) ? sum + v : sum;
-		}, 0);
-	})
-	let pagesCount = $derived.by(() => { return Math.max(1, Math.ceil(receipts.length / 4)); })
+		}, 0)
+	);
+	let pagesCount = $derived(Math.max(1, Math.ceil(receipts.length / 4)));
 
 	onMount(async () => {
 		for (let i = 0; i < 3; i++) addExpenseRow();
 		await loadTemplate();
 	});
 
-	function todayLocalISO() {
+	function todayLocalISO(): string {
 		const d = new Date();
 		const mm = String(d.getMonth() + 1).padStart(2, '0');
 		const dd = String(d.getDate()).padStart(2, '0');
 		return `${d.getFullYear()}-${mm}-${dd}`;
 	}
 
-	function formatEuro(n) {
+	function formatEuro(n: number): string {
 		return `€ ${n.toFixed(2).replace('.', ',')}`;
 	}
 
 	// --- Template laden vanaf Azure Blob Storage ---
-	async function loadTemplate() {
+	async function loadTemplate(): Promise<boolean> {
 		templateState = 'loading';
 		try {
 			const res = await fetch(TEMPLATE_URL);
@@ -91,7 +143,7 @@
 		}
 	}
 
-	async function handleManualTemplate(event) {
+	async function handleManualTemplate(event: InputChangeEvent) {
 		const file = event.currentTarget.files?.[0];
 		if (!file) return;
 		templatePdfBytes = await file.arrayBuffer();
@@ -125,12 +177,12 @@
 		rows = [...rows, { id: nextRowId++, desc: '', price: '' }];
 	}
 
-	function removeExpenseRow(id) {
+	function removeExpenseRow(id: number) {
 		rows = rows.filter((r) => r.id !== id);
 	}
 
 	// --- 3. BONNEN UPLOADEN ---
-	function fileToJpegDataUrl(file) {
+	function fileToJpegDataUrl(file: File): Promise<Receipt> {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onerror = reject;
@@ -142,18 +194,22 @@
 					canvas.width = img.width;
 					canvas.height = img.height;
 					const ctx = canvas.getContext('2d');
+					if (!ctx) {
+						reject(new Error('Canvas wordt niet ondersteund.'));
+						return;
+					}
 					ctx.fillStyle = '#FFFFFF';
 					ctx.fillRect(0, 0, canvas.width, canvas.height);
 					ctx.drawImage(img, 0, 0);
 					resolve({ name: file.name, dataUrl: canvas.toDataURL('image/jpeg', 0.9) });
 				};
-				img.src = e.target.result;
+				img.src = e.target?.result as string;
 			};
 			reader.readAsDataURL(file);
 		});
 	}
 
-	async function handleReceiptsUpload(event) {
+	async function handleReceiptsUpload(event: InputChangeEvent) {
 		const input = event.currentTarget;
 		const files = Array.from(input.files ?? []);
 		input.value = '';
@@ -166,13 +222,13 @@
 		}
 	}
 
-	function removeReceipt(index) {
+	function removeReceipt(index: number) {
 		receipts = receipts.filter((_, i) => i !== index);
 	}
 
 	// Verwijdert alle formulier-widgets (de blauwe vakjes) en het AcroForm-woordenboek,
 	// zonder pdf-lib's form.removeField() (die kan dangling referenties achterlaten).
-	function stripFormFields(pdfDoc) {
+	function stripFormFields(pdfDoc: PDFDocument) {
 		const widget = PDFName.of('Widget');
 		for (const page of pdfDoc.getPages()) {
 			const annots = page.node.lookupMaybe(PDFName.of('Annots'), PDFArray);
@@ -189,19 +245,19 @@
 	// --- 4. BACKEND ---
 	// Authenticatie (bearer token) gebeurt in CoreOnkostenNotaAPI via getAuthorizationHeaders.
 	// De API-klasse gooit strings (bv. "Failed to post onkostennota: <antwoord van de server>").
-	function describeApiError(err) {
-		const text = typeof err === 'string' ? err : (err?.message ?? '');
+	function describeApiError(err: unknown): string {
+		const text = typeof err === 'string' ? err : err instanceof Error ? err.message : '';
 		return text || 'Er ging iets mis. Probeer het opnieuw.';
 	}
 
 	// Zelfde controles als de backend (BillingInformationIn); de backend blijft beslissen.
-	const normalizeIban = (s) => s.replace(/\s+/g, '').toUpperCase();
-	const isValidEmail = (s) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+	const normalizeIban = (s: string): string => s.replace(/\s+/g, '').toUpperCase();
+	const isValidEmail = (s: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
-	function isValidIban(s) {
-		const iban = normalizeIban(s);
-		if (!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(iban)) return false;
-		const digits = (iban.slice(4) + iban.slice(0, 4))
+	function isValidIban(s: string): boolean {
+		const normalized = normalizeIban(s);
+		if (!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(normalized)) return false;
+		const digits = (normalized.slice(4) + normalized.slice(0, 4))
 			.split('')
 			.map((c) => parseInt(c, 36))
 			.join('');
@@ -210,8 +266,7 @@
 		return rem === 1;
 	}
 
-	/** @returns {import('$lib/models/onkosten/onkostennota.ts').OnkostenNotaWideInI} */
-	function buildNotaPayload({ mail, datum, v, a, ibanVal, items }) {
+	function buildNotaPayload({ mail, datum, v, a, ibanVal, items }: PersonalArgs): OnkostenNotaWideInI {
 		return {
 			user_email: mail,
 			datum_gemaakte_kosten: `${datum}T00:00:00`,
@@ -221,11 +276,11 @@
 	}
 
 	// Stap 1: de gegevens. Het antwoord (OnkostenNotaWideI) bevat het toegekende volgnummer.
-	function postOnkostennota(args) {
+	function postOnkostennota(args: PersonalArgs) {
 		return CoreOnkostenNotaAPI.postOnkostennota(null, buildNotaPayload(args), true);
 	}
 
-	function dataUrlToBlob(dataUrl) {
+	function dataUrlToBlob(dataUrl: string): Blob {
 		const [header, base64] = dataUrl.split(',');
 		const mime = header.match(/:(.*?);/)?.[1] ?? 'application/octet-stream';
 		const binary = atob(base64);
@@ -235,7 +290,7 @@
 	}
 
 	// Stap 2: alle bonnen. Geeft de indexen terug die mislukt zijn, zodat enkel die opnieuw gaan.
-	async function uploadReceipts(identifier, list, indexes) {
+	async function uploadReceipts(identifier: string, list: Receipt[], indexes: number[]): Promise<number[]> {
 		const results = await Promise.allSettled(
 			indexes.map((i) =>
 				CoreOnkostenNotaAPI.uploadMedia(
@@ -283,7 +338,7 @@
 			return;
 		}
 
-		const items = [];
+		const items: ExpenseItem[] = [];
 		rows.forEach((r) => {
 			const desc = r.desc.trim();
 			const priceVal = parseFloat(r.price);
@@ -322,8 +377,9 @@
 			// 1. Eerst de gegevens. Pas hierna bestaat het volgnummer.
 			if (!createdNota) {
 				busyLabel = 'Onkostennota aanmaken…';
-				createdNota = await postOnkostennota({ mail, datum, v, a, ibanVal, items });
-				createdIdentifier = onkostenIdentifier(createdNota.volgnummer, v, a);
+				const nota = await postOnkostennota({ mail, datum, v, a, ibanVal, items });
+				createdNota = nota;
+				createdIdentifier = onkostenIdentifier(nota.volgnummer, v, a);
 				pendingUploads = receipts.map((_, i) => i);
 			}
 
@@ -353,7 +409,9 @@
 	}
 
 	// --- EXACTE ORIGINELE PDF INVULLEN (ongewijzigd) ---
-	async function fillAndDownloadPdf({ v, a, mail, ibanVal, datum, items, filename }) {
+	async function fillAndDownloadPdf({ v, a, mail, ibanVal, datum, items, filename }: PdfArgs) {
+		if (!templatePdfBytes) throw new Error('PDF-template is niet geladen.');
+
 		const [yyyy, mm, dd] = datum.split('-');
 		const formattedDate = `${dd}/${mm}/${yyyy}`;
 		const totalAmount = items.reduce((s, i) => s + i.prijs, 0);
@@ -416,7 +474,7 @@
 		}
 
 		const pdfBytes = await pdfDoc.save({ updateFieldAppearances: false });
-		const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+		const blob = new Blob([pdfBytes as BlobPart], { type: 'application/pdf' });
 		const url = URL.createObjectURL(blob);
 		const link = document.createElement('a');
 		link.href = url;
@@ -476,7 +534,7 @@
 			<section class="card">
 				<div class="card-title">
 					<span>2. Gemaakte Onkosten</span>
-					<button type="button" class="btn btn-outline" on:click={addExpenseRow}>+ Aankoop toevoegen</button>
+					<button type="button" class="btn btn-outline" onclick={addExpenseRow}>+ Aankoop toevoegen</button>
 				</div>
 
 				<div class="form-group date-group">
@@ -504,7 +562,7 @@
 							<button
 								type="button"
 								class="btn btn-danger"
-								on:click={() => removeExpenseRow(row.id)}
+								onclick={() => removeExpenseRow(row.id)}
 								title="Verwijder rij">✕</button
 							>
 						</div>
@@ -522,8 +580,8 @@
 				<div class="card-title">
 					<span>3. Bonnen &amp; Foto's Uploaden</span>
 					<span class="badge">
-					{receipts.length} bon(nen) ({pagesCount} bijlagepagina{pagesCount === 1 ? '' : "'s"})
-				</span>
+						{receipts.length} bon(nen) ({pagesCount} bijlagepagina{pagesCount === 1 ? '' : "'s"})
+					</span>
 				</div>
 				<p class="upload-help">
 					Upload hier de foto's van je kasticketjes of facturen. Ze worden automatisch op de witte
@@ -531,25 +589,28 @@
 					meer bonnen komt er automatisch een pagina bij).
 				</p>
 
-				<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-				<div class="upload-zone" on:click={() => document.getElementById('receiptInput').click()}>
-					<input
-						type="file"
-						id="receiptInput"
-						accept="image/*"
-						multiple
-						hidden
-						on:change={handleReceiptsUpload}
-					/>
+				<input
+					type="file"
+					id="receiptInput"
+					accept="image/*"
+					multiple
+					hidden
+					onchange={handleReceiptsUpload}
+				/>
+				<button
+					type="button"
+					class="upload-zone"
+					onclick={() => document.getElementById('receiptInput')?.click()}
+				>
 					<strong>Klik hier om bonnen of foto's toe te voegen</strong>
-					<p class="upload-sub">Ondersteunt JPG, PNG, WEBP (meerdere foto's tegelijk mogelijk)</p>
-				</div>
+					<span class="upload-sub">Ondersteunt JPG, PNG, WEBP (meerdere foto's tegelijk mogelijk)</span>
+				</button>
 
 				<div class="receipt-preview-grid">
 					{#each receipts as rec, index (rec.dataUrl)}
 						<div class="receipt-thumb">
 							<img src={rec.dataUrl} alt="Bon {index + 1}" />
-							<button type="button" on:click={() => removeReceipt(index)} title="Verwijder bon">✕</button>
+							<button type="button" onclick={() => removeReceipt(index)} title="Verwijder bon">✕</button>
 						</div>
 					{/each}
 				</div>
@@ -570,11 +631,11 @@
 		<!-- ACTIEKNOPPEN -->
 		<div class="actions">
 			{#if createdNota}
-				<button type="button" class="btn btn-outline btn-large" disabled={busy} on:click={resetForm}>
+				<button type="button" class="btn btn-outline btn-large" disabled={busy} onclick={resetForm}>
 					Nieuwe onkostennota
 				</button>
 			{/if}
-			<button type="button" class="btn btn-primary btn-large" disabled={busy} on:click={submitAndDownloadPDF}>
+			<button type="button" class="btn btn-primary btn-large" disabled={busy} onclick={submitAndDownloadPDF}>
 				{#if busy}
 					{busyLabel || 'Bezig…'}
 				{:else if pendingUploads.length}
@@ -679,8 +740,7 @@
     input[type='text'],
     input[type='email'],
     input[type='date'],
-    input[type='number'],
-    select {
+    input[type='number'] {
         width: 100%;
         padding: 0.65rem 0.85rem;
         border: 1px solid #cbd5e1;
@@ -692,8 +752,7 @@
                 box-shadow 0.2s;
     }
 
-    input:focus,
-    select:focus {
+    input:focus {
         outline: none;
         border-color: var(--ing-blue);
         box-shadow: 0 0 0 3px rgba(28, 43, 120, 0.15);
@@ -713,11 +772,6 @@
         cursor: pointer;
         border: none;
         transition: all 0.2s;
-    }
-
-    .btn-small {
-        padding: 0.35rem 0.75rem;
-        font-size: 0.8rem;
     }
 
     .btn-large {
@@ -757,24 +811,6 @@
     .btn:disabled {
         opacity: 0.5;
         cursor: not-allowed;
-    }
-
-    /* --- PROFIEL BALK --- */
-    .profile-bar {
-        display: flex;
-        gap: 0.75rem;
-        align-items: flex-end;
-        margin-bottom: 1.25rem;
-        background: #f1f5f9;
-        padding: 1rem;
-        border-radius: 8px;
-        flex-wrap: wrap;
-    }
-
-    .profile-bar .form-group {
-        flex: 1;
-        min-width: 220px;
-        margin-bottom: 0;
     }
 
     /* --- ONKOSTEN RIJEN --- */
@@ -830,12 +866,18 @@
     }
 
     .upload-sub {
+        display: block;
         font-size: 0.85rem;
         color: var(--text-muted);
         margin-top: 0.25rem;
     }
 
     .upload-zone {
+        display: block;
+        width: 100%;
+        background: none;
+        font: inherit;
+        color: inherit;
         border: 2px dashed #94a3b8;
         border-radius: 8px;
         padding: 2rem;
@@ -846,7 +888,8 @@
                 background 0.2s;
     }
 
-    .upload-zone:hover {
+    .upload-zone:hover,
+    .upload-zone:focus-visible {
         border-color: var(--ing-blue);
         background: #f1f5f9;
     }
@@ -890,7 +933,7 @@
         font-weight: bold;
     }
 
-    /* --- TEMPLATE STATUS BALK --- */
+    /* --- STATUS BALK --- */
     .template-status-bar {
         background: #eef2ff;
         border: 1px solid #c7d2fe;
@@ -916,11 +959,6 @@
         background: #fef2f2;
         border-color: #fecaca;
         color: #991b1b;
-    }
-
-    .status-actions {
-        display: flex;
-        gap: 0.5rem;
     }
 
     .lock {
