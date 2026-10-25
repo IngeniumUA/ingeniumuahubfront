@@ -3,11 +3,12 @@
 	let {
 		loadingHTTP = $bindable(false), // with default
 		deleteCallback,
-		deleteString = "Delete"
+		iconOnly,
+		children
 	}: {
 		loadingHTTP: boolean,
 		deleteCallback: () => void,
-		deleteString: string
+		iconOnly: boolean,
 	} = $props();
 
 	let buffer = $state(false)
@@ -32,14 +33,12 @@
 	}
 </script>
 
-<button class="button button-danger button-inline"
+<button class="button button-danger {iconOnly ? "button-icon-only": "button-inline"}"
 				disabled={loadingHTTP}
 				onclick={bufferStep}>
-	<span class="text-white">
-		{#if (buffer)}
-			Are you sure?
-		{:else}
-			{deleteString}
-		{/if}
-	</span>
+	{#if (buffer)}
+		<p class="text-white">Are you sure?</p>
+	{:else}
+		{@render children?.()}
+	{/if}
 </button>
