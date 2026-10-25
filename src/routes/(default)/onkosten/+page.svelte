@@ -5,15 +5,9 @@
 	import Header from '$lib/components/layout/header.svelte';
 	import { nameSlug, onkostenIdentifier } from '$lib/utilities/style-utilities.ts';
 	import type { OnkostenNotaWideInI } from '$lib/models/onkosten/onkostennota.ts';
+	import { auth } from '$lib/states/auth.svelte';
 
 	// --- Types ---
-	interface UserData {
-		given_name?: string;
-		family_name?: string;
-		email?: string;
-		iban?: string;
-	}
-
 	interface ExpenseRow {
 		id: number;
 		desc: string;
@@ -72,17 +66,15 @@
 	} as const;
 
 	// --- State ---
-	let { data }: { data: UserData } = $props();
+	let { data }: { data: any } = $props();
 
 	// Enkel de beginwaarden uit `data` zijn nodig, dus de "state_referenced_locally"-waarschuwing is hier ok.
 	// svelte-ignore state_referenced_locally
-	let voornaam = $state(data.given_name ?? '');
+	let voornaam = $state(data.billing.given_name ?? '');
 	// svelte-ignore state_referenced_locally
-	let achternaam = $state(data.family_name ?? '');
+	let achternaam = $state(data.billing.family_name ?? '');
 	// svelte-ignore state_referenced_locally
-	let email = $state(data.email ?? '');
-	// svelte-ignore state_referenced_locally
-	let iban = $state(data.iban ?? '');
+	let iban = $state(data.billing.iban ?? '');
 	let datum = $state(todayLocalISO());
 
 	let nextRowId = 1;
@@ -330,10 +322,9 @@
 
 		const v = voornaam.trim();
 		const a = achternaam.trim();
-		const mail = email.trim();
 		const ibanVal = iban.trim();
 
-		if (!v || !a || !mail || !ibanVal || !datum) {
+		if (!v || !a || !ibanVal || !datum) {
 			alert('Vul alle persoonsgegevens en de datum in.');
 			return;
 		}
@@ -359,10 +350,6 @@
 			alert('Er passen maximaal 15 aankopen op de onkostennota.');
 			return;
 		}
-		if (!isValidEmail(mail)) {
-			alert('Dit is geen geldig e-mailadres.');
-			return;
-		}
 		if (!isValidIban(ibanVal)) {
 			alert('Dit is geen geldig IBAN. Controleer het rekeningnummer.');
 			return;
@@ -372,6 +359,7 @@
 			return;
 		}
 
+		const mail = auth.user.email;
 		busy = true;
 		try {
 			// 1. Eerst de gegevens. Pas hierna bestaat het volgnummer.
@@ -512,16 +500,6 @@
 					<div class="form-group">
 						<label for="achternaam">Naam *</label>
 						<input type="text" id="achternaam" placeholder="Bijv. Janssens" required bind:value={achternaam} />
-					</div>
-					<div class="form-group">
-						<label for="email">E-mailadres *</label>
-						<input
-							type="email"
-							id="email"
-							placeholder="jan.janssens@ingeniumua.be"
-							required
-							bind:value={email}
-						/>
 					</div>
 					<div class="form-group">
 						<label for="iban">Rekeningnummer (IBAN) *</label>
