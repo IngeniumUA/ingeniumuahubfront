@@ -284,9 +284,10 @@
 
 	let rows = $state<Row[]>([]);
 	let voldaan = $state(todayISO());
+	let note = $state(''); // the admin's remark / reason for rejection
 	let initialSnapshot = $state('');
 	const totalEuro = $derived(rows.reduce((sum, r) => sum + (r.price ?? 0), 0));
-	const dirty = $derived(!readonly && JSON.stringify([rows, voldaan]) !== initialSnapshot);
+	const dirty = $derived(!readonly && snapshot() !== initialSnapshot);
 
 	let receipts = $state.raw<MediaItem[]>([]);
 	let signatureMedia = $state.raw<MediaItem | null>(null);
@@ -358,7 +359,7 @@
 	}
 
 	function snapshot(): string {
-		return JSON.stringify([rows, voldaan]);
+		return JSON.stringify([rows, voldaan, note]);
 	}
 
 	function describeError(err: unknown): string {
@@ -373,6 +374,7 @@
 		saved = null;
 		rows = toRows(n);
 		voldaan = n.datum_onkosten_voldaan?.slice(0, 10) ?? todayISO();
+		note = n.note ?? '';
 		initialSnapshot = snapshot();
 		signatureOnServer = false;
 		signatureError = false;
@@ -602,11 +604,13 @@
 	}
 
 	/** The body of the PUT: the whole nota with the quaestor's changes applied. */
-	function buildNota(finalize: boolean): OnkostenNotaWideI {
+	function buildNota(finalize: boolean, refuse: boolean): OnkostenNotaWideI {
+		const status = finalize ? OnkostenNotaEnum.afgewerkt : refuse ? OnkostenNotaEnum.afgewezen: current.onkostennota_status;
 		return {
 			...current,
 			datum_onkosten_voldaan: voldaan ? `${voldaan}T00:00:00` : null,
-			onkostennota_status: finalize ? OnkostenNotaEnum.afgewerkt : current.onkostennota_status,
+			onkostennota_status: status,
+			note: note.trim() || null,
 			kosten: rows.map((r) => ({
 				id: r.id,
 				onkostennota_volgnummer: current.volgnummer,
@@ -621,6 +625,7 @@
 		saved = updated;
 		rows = toRows(updated);
 		voldaan = updated.datum_onkosten_voldaan?.slice(0, 10) ?? voldaan;
+		note = updated.note ?? '';
 		initialSnapshot = snapshot();
 		refresh();
 	}
@@ -649,7 +654,19 @@
 			return;
 		}
 		await run('Opslaan…', async () => {
-			applyUpdated(await CoreOnkostenNotaAPI.putOnkostennota(null, current.volgnummer, buildNota(false)));
+			applyUpdated(await CoreOnkostenNotaAPI.putOnkostennota(null, current.volgnummer, buildNota(false, false)));
+			info = 'Wijzigingen opgeslagen.';
+		});
+	}
+
+	async function afwijzen() {
+		const found = validate(false);
+		if (found.length) {
+			problems = found;
+			return;
+		}
+		await run('Opslaan…', async () => {
+			applyUpdated(await CoreOnkostenNotaAPI.putOnkostennota(null, current.volgnummer, buildNota(false, true)));
 			info = 'Wijzigingen opgeslagen.';
 		});
 	}
@@ -687,12 +704,11 @@
 
 			// 3. Then the data, with the finished status. Only now is the nota finished.
 			busyLabel = 'Onkostennota afwerken…';
-			applyUpdated(await CoreOnkostenNotaAPI.putOnkostennota(null, current.volgnummer, buildNota(true)));
+			applyUpdated(await CoreOnkostenNotaAPI.putOnkostennota(null, current.volgnummer, buildNota(true, false)));
 
 			// 4. Finally the PDF. If this fails the nota is already finished; the read-only view can download it again.
-			busyLabel = 'PDF genereren…';
-			await makePdf(template, signature);
-			info = 'Onkostennota is afgewerkt en de PDF is gedownload.';
+			busyLabel = "";
+			info = 'Onkostennota is afgewerkt.';
 		});
 	}
 
@@ -725,7 +741,7 @@
 >
 	<header class="modal-head">
 		<div>
-			<h2 class="text-white">Onkostennota {formatVolgnummer(current.volgnummer)}</h2>
+			<h2 class="text-white">Onkostennota_{formatVolgnummer(current.volgnummer)}_{current.billing_information.given_name}_{current.billing_information.family_name}</h2>
 			<p class="text-white sub">
 				{current.billing_information.given_name}
 				{current.billing_information.family_name}
@@ -869,18 +885,30 @@
 	</div>
 
 	<footer class="modal-foot">
-		{#if readonly}
-			<button type="button" class="btn btn-primary" disabled={busy || receiptsLoading} onclick={downloadAgain}>
-				{busy ? busyLabel : 'PDF downloaden'}
+		{#if !readonly || note}
+			<textarea
+				class="note-input"
+				rows="2"
+				placeholder="Opmerking of reden van afwijzing…"
+				aria-label="Opmerking"
+				bind:value={note}
+				disabled={readonly || busy}
+			></textarea>
+		{/if}
+		{#if !readonly}
+			<button type="button" class="button button-danger" disabled={busy} onclick={afwijzen}>
+				{busy && busyLabel === 'Afwijzen…' ? busyLabel : 'Afwijzen'}
 			</button>
-		{:else}
 			<button type="button" class="btn btn-outline" disabled={busy} onclick={save}>
 				{busy && busyLabel === 'Opslaan…' ? busyLabel : 'Opslaan'}
 			</button>
 			<button type="button" class="btn btn-success" disabled={busy || receiptsLoading} onclick={finalize}>
-				{busy && busyLabel !== 'Opslaan…' ? busyLabel : '✅ Finaliseren & PDF downloaden'}
+				{busy && busyLabel !== 'Opslaan…' ? busyLabel : 'Finaliseren'}
 			</button>
 		{/if}
+		<button type="button" class="btn btn-primary" disabled={busy || receiptsLoading} onclick={downloadAgain}>
+			{busy ? busyLabel : 'PDF downloaden'}
+		</button>
 	</footer>
 </dialog>
 
@@ -944,10 +972,18 @@
     .modal-foot {
         display: flex;
         justify-content: flex-end;
+        align-items: flex-end; /* buttons stay at the bottom when the textarea grows */
         gap: 0.75rem;
         padding: 0.9rem 1.5rem;
         border-top: 1px solid var(--ing-light);
         background: #f8fafc;
+    }
+    .note-input {
+        flex: 1;
+        min-width: 0;
+        min-height: 2.6rem;
+        max-height: 8rem;
+        resize: vertical;
     }
 
     section {
@@ -1024,7 +1060,8 @@
     input[type='text'],
     input[type='number'],
     input[type='date'],
-    select {
+    select,
+    textarea {
         box-sizing: border-box;
         width: 100%;
         padding: 0.55rem 0.75rem;
@@ -1035,13 +1072,15 @@
         background: white;
     }
     input:focus,
-    select:focus {
+    select:focus,
+    textarea:focus {
         outline: none;
         border-color: var(--ing-blue);
         box-shadow: 0 0 0 3px rgba(28, 43, 120, 0.15);
     }
     input:disabled,
-    select:disabled {
+    select:disabled,
+    textarea:disabled {
         background: #f1f5f9;
         color: var(--text-muted);
     }
