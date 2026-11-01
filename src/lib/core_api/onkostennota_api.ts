@@ -79,14 +79,14 @@ export class CoreOnkostenNotaAPI {
 	 */
 	static async uploadMedia(
 		params: RouteParams | null = null,
-		onkostenIdentifier: string,
+		volgnummer: number,
 		file: Blob,
 		filename: string
 	): Promise<string> {
 		const body = new FormData();
 		body.append('blob_data', file, filename);
 		// No Content-Type here: the browser has to set the multipart boundary itself.
-		const res = await fetch(`${PUBLIC_API_URL}/file/onkosten/${onkostenIdentifier}`, {
+		const res = await fetch(`${PUBLIC_API_URL}/file/onkosten/${volgnummer}`, {
 			method: 'POST',
 			headers: getAuthorizationHeaders(params, {}),
 			body
@@ -95,6 +95,26 @@ export class CoreOnkostenNotaAPI {
 			return await res.json();
 		} else {
 			throw `Failed to upload media: ${await res.text()}`;
+		}
+	}
+
+	static async deleteMedia(
+		params: RouteParams | null = null,
+		volgnummer: number,
+		filename: string
+	): Promise<void> {
+		const fileName = filename.split('/').pop() ?? filename;
+		const res = await fetch(
+			`${PUBLIC_API_URL}/file/onkosten/${volgnummer}/${encodeURIComponent(fileName)}`,
+			{
+				method: 'DELETE',
+				headers: getAuthorizationHeaders(params, {})
+			}
+		);
+		if (res.ok) {
+			await res.json();
+		} else {
+			throw `Failed to delete media: ${await res.text()}`;
 		}
 	}
 
@@ -171,13 +191,13 @@ export class CoreOnkostenNotaAPI {
 	 */
 	static async uploadSignature(
 		params: RouteParams | null = null,
-		onkostenIdentifier: string,
+		volgnummer: number,
 		file: Blob
 	): Promise<string> {
 		const body = new FormData();
 		body.append('blob_data', file, 'signature');
 		// No Content-Type here: the browser has to set the multipart boundary itself.
-		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/signature/${onkostenIdentifier}`, {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/signature/${volgnummer}`, {
 			method: 'PUT',
 			headers: getAuthorizationHeaders(params, {}),
 			body
@@ -192,9 +212,9 @@ export class CoreOnkostenNotaAPI {
 	/** The stored signature image, or null when the nota has none yet (404). */
 	static async fetchSignature(
 		params: RouteParams | null = null,
-		onkostenIdentifier: string
+		volgnummer: number
 	): Promise<Blob | null> {
-		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/signature/${onkostenIdentifier}`, {
+		const res = await fetch(`${PUBLIC_API_URL}/onkostennota/signature/${volgnummer}`, {
 			method: 'GET',
 			headers: getAuthorizationHeaders(params, {})
 		});
@@ -208,12 +228,12 @@ export class CoreOnkostenNotaAPI {
 
 	static async fetchMedia(
 		params: RouteParams | null = null,
-		onkostenIdentifier: string,
+		volgnummer: number,
 		filename: string
 	): Promise<Blob> {
 		const fileName = filename.split('/').pop() ?? filename;
 		const res = await fetch(
-			`${PUBLIC_API_URL}/file/onkosten/${onkostenIdentifier}/${encodeURIComponent(fileName)}`,
+			`${PUBLIC_API_URL}/file/onkosten/${volgnummer}/${encodeURIComponent(fileName)}`,
 			{
 				method: 'GET',
 				headers: getAuthorizationHeaders(params, {})

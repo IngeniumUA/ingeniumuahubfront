@@ -401,7 +401,7 @@
 
 	async function fetchItem(id: string, filename: string): Promise<MediaItem> {
 		try {
-			const blob = await CoreOnkostenNotaAPI.fetchMedia(null, id, filename["name"]);
+			const blob = await CoreOnkostenNotaAPI.fetchMedia(null, current.volgnummer, filename["name"]);
 			return { filename, state: 'ok', blob, url: URL.createObjectURL(blob) };
 		} catch (err) {
 			console.error(err);
@@ -414,7 +414,7 @@
 	async function loadSignature(id = identifier, token = loadToken) {
 		signatureError = false;
 		try {
-			const blob = await CoreOnkostenNotaAPI.fetchSignature(null, id);
+			const blob = await CoreOnkostenNotaAPI.fetchSignature(null, current.volgnummer);
 			if (token !== loadToken) return;
 			if (blob) {
 				signatureMedia = { filename: 'signature', state: 'ok', blob, url: URL.createObjectURL(blob) };
@@ -686,11 +686,8 @@
 			problems = found;
 			return;
 		}
-		await run('PDF-template laden…', async () => {
-			// 1. Fail fast: without the template there is no PDF, so don't finish the nota yet.
-			const template = await getTemplateBytes();
-
-			// 2. Signature first. It is uploaded once: a retry after a failed save does not upload it again.
+		await run('Afwerken…', async () => {
+			// -- Signature first. It is uploaded once: a retry after a failed save does not upload it again.
 			const signature = await signatureToBlob();
 			if (signature && (!signatureOnServer || signatureChanged)) {
 				busyLabel = 'Handtekening uploaden…';
@@ -702,11 +699,11 @@
 				signatureMedia = { filename: 'signature.png', state: 'ok', blob: signature, url };
 			}
 
-			// 3. Then the data, with the finished status. Only now is the nota finished.
+			// -- Then the data, with the finished status. Only now is the nota finished.
 			busyLabel = 'Onkostennota afwerken…';
 			applyUpdated(await CoreOnkostenNotaAPI.putOnkostennota(null, current.volgnummer, buildNota(true, false)));
 
-			// 4. Finally the PDF. If this fails the nota is already finished; the read-only view can download it again.
+			// -- Finally the PDF. If this fails the nota is already finished; the read-only view can download it again.
 			busyLabel = "";
 			info = 'Onkostennota is afgewerkt.';
 		});
