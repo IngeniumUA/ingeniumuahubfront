@@ -1,5 +1,8 @@
 <script lang="ts">
 	import Header from '$lib/components/layout/header.svelte';
+	import { onMount } from 'svelte';
+	import { CoreOnkostenNotaAPI } from '$lib/core_api/onkostennota_api';
+	import { OnkostenNotaEnum } from '$lib/models/onkosten/onkostennota';
 
 	let { children } = $props();
 
@@ -8,6 +11,14 @@
 	// But, if we then detect we're on a wide screen we can open the sidenav
 	$effect(() => {
 		sidebar = window.innerWidth >= 1024; // 1024 matching to tailwind lg:
+	});
+
+	let onkostenCount: number | null = $state(0);
+	async function fetchOnkostenCount() {
+		onkostenCount = await CoreOnkostenNotaAPI.countOnkostenNota(null, new URLSearchParams({ onkostennota_status: OnkostenNotaEnum.in_afwachting.toString() }));
+	}
+	onMount(() => {
+		fetchOnkostenCount()
 	});
 </script>
 
@@ -60,7 +71,10 @@
 					<a href="/staff/item">Items</a>
 					<a href="/staff/payment">Payments</a>
 					<a href="/staff/praesidium">Praesidium</a>
-					<a href="/staff/onkostennota">Quaestor</a>
+					<a href="/staff/onkostennota">
+						Quaestor
+						{#if (onkostenCount !== null)} ({onkostenCount}){/if}
+					</a>
 				</div>
 
 				<div class="mt-16">
