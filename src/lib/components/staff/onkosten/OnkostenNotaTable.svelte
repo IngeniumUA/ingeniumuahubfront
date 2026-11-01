@@ -138,15 +138,22 @@
 	/**
 	 * State management for transaction edit model
 	 */
-	let editSelectedIndex: null | number = $state(null);
 	let editSelected: OnkostenNotaWideI | null = $state(null);
 	let showEdit: boolean = $state(false);
 
-	async function setEditItemIndex(index: number) {
-		editSelectedIndex = index;
-		if (editSelectedIndex !== null && editSelectedIndex < onkostenNota.length) {
-			editSelected = await CoreOnkostenNotaAPI.getOnkostennota(null, onkostenNota.at(index)!.volgnummer);
-			showEdit = true;
+	async function openEdit(volgnummer: number) {
+		editSelected = await CoreOnkostenNotaAPI.getOnkostennota(null, volgnummer);
+		showEdit = true;
+	}
+	$effect(() => {
+		if (!showEdit) editSelected = null;
+	});
+
+	// Called by the modal after a save: refresh the table AND the open record
+	async function onModalSaved() {
+		await refresh();
+		if (editSelected !== null) {
+			editSelected = await CoreOnkostenNotaAPI.getOnkostennota(null, editSelected.volgnummer);
 		}
 	}
 
@@ -340,7 +347,7 @@
 					</td>
 					<td>
 						<div class="flex items-stretch gap-2">
-							<button class="button button-primary" onclick={() => setEditItemIndex(tableIndex)}>
+							<button class="button button-primary" onclick={() => openEdit(onkosten.volgnummer)}>
 								Openen & Aanvullen
 							</button>
 							<DeleteButton bind:loadingHTTP={loadingHTTP} iconOnly={true} deleteCallback={() => deleteRow(onkosten)}>
@@ -362,8 +369,8 @@
 	{/if}
 </article>
 
-{#if editSelectedIndex !== null && editSelectedIndex >= 0 && editSelectedIndex < onkostenNota.length && editSelected !== null}
-	<OnkostenEditModel nota={editSelected} bind:isOpen={showEdit} refresh={refresh}></OnkostenEditModel>
+{#if showEdit && editSelected !== null}
+	<OnkostenEditModel nota={editSelected} bind:isOpen={showEdit} refresh={onModalSaved}></OnkostenEditModel>
 {/if}
 
 <style>
