@@ -2,7 +2,6 @@
 import { getAuthorizationHeaders } from '$lib/auth/auth';
 import type { RouteParams } from '../../../.svelte-kit/types/src/routes/$types';
 import type { OnkostenNotaI, OnkostenNotaWideI } from '$lib/models/onkosten/onkostennota';
-import type { GroupI } from '$lib/models/user/GroupI';
 
 export class CoreOnkostenNotaAPI {
 	static async getOnkostennota(
@@ -56,7 +55,7 @@ export class CoreOnkostenNotaAPI {
 		params: RouteParams | null = null,
 		postGroup: Partial<OnkostenNotaI>,
 		update_account_info: boolean = false
-	): Promise<GroupI> {
+	): Promise<OnkostenNotaI> {
 		const queryParam = new URLSearchParams({
 			update_account_info: update_account_info.toString()
 		});

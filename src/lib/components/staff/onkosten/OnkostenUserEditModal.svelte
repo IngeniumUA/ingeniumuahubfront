@@ -5,9 +5,11 @@
 	//
 	// The member can:
 	//   - change description + price of every kost row (the boekhoudpost is shown, not editable)
+	//   - add new kost rows and remove existing ones (at least one row must remain)
 	//   - remove existing receipts and upload new ones
 	//   - read the admin's note (not editable)
 	// Saving applies the media changes first, then PUTs the nota with RESUBMIT_STATUS.
+	// The PUT sends the whole kosten list: rows without an id are new, omitted rows are deleted.
 	// ---------------------------------------------------------------------------------------------
 	import { untrack } from 'svelte';
 	import { OnkostenNotaEnum, type OnkostenNotaWideI } from '$lib/models/onkosten/onkostennota';
@@ -33,7 +35,8 @@
 	// A resubmitted nota should leave the rejected state so the admin sees it again.
 	const RESUBMIT_STATUS = OnkostenNotaEnum.in_afwachting;
 
-	type Row = { key: number; id: number; description: string; price: number | null; boekhoudpost: number };
+	// id is null for a row the member added and that has not been saved yet.
+	type Row = { key: number; id: number | null; description: string; price: number | null; boekhoudpost: number };
 	type Receipt = {
 		key: string; // stable id for the keyed {#each}
 		filename: string | null; // server filename; null for a file that has not been uploaded yet
@@ -57,6 +60,7 @@
 	let receipts = $state.raw<Receipt[]>([]);
 	let removed = $state.raw<string[]>([]); // server filenames the member removed (deleted on save)
 	let newKeyCounter = 0;
+	let rowKeyCounter = 0; // unique keys for the kost rows, across add/remove and reloads
 	let loadToken = 0; // bumped on every (re)load so late responses of an older nota are dropped
 
 	const totalEuro = $derived(rows.reduce((sum, r) => sum + (r.price ?? 0), 0));
@@ -98,8 +102,8 @@
 	}
 
 	function toRows(n: OnkostenNotaWideI): Row[] {
-		return (n.kosten ?? []).map((k, i) => ({
-			key: i,
+		return (n.kosten ?? []).map((k) => ({
+			key: rowKeyCounter++,
 			id: k.id,
 			description: k.description ?? '',
 			price: Number(k.price_eu), // Decimal: may arrive as a string
@@ -123,6 +127,23 @@
 		problems = [];
 		info = '';
 		loadMedia(n);
+	}
+
+	// --- Kost rows: add / remove (staged locally, applied on save) ---
+	function addRow() {
+		if (busy) return;
+		rows.push({
+			key: rowKeyCounter++,
+			id: null,
+			description: '',
+			price: null,
+			boekhoudpost: GEEN_BOEKHOUDPOST
+		});
+	}
+
+	function removeRow(key: number) {
+		if (busy || rows.length <= 1) return;
+		rows = rows.filter((r) => r.key !== key);
 	}
 
 	// --- Media: fetched through the API (bearer token), shown as object URLs ---
@@ -238,18 +259,21 @@
 		return out;
 	}
 
-	/** The body of the PUT: the whole nota with the member's changes. Boekhoudpost is passed through untouched. */
+	/**
+	 * The body of the PUT: the whole nota with the member's changes. Boekhoudpost is passed through
+	 * untouched. New rows are sent without an id; rows the member removed are simply left out.
+	 */
 	function buildNota(status: typeof current.onkostennota_status): OnkostenNotaWideI {
 		return {
 			...current,
 			onkostennota_status: status,
 			kosten: rows.map((r) => ({
-				id: r.id,
+				...(r.id !== null ? { id: r.id } : {}),
 				onkostennota_volgnummer: current.volgnummer,
 				description: r.description.trim(),
 				price_eu: Number((r.price ?? 0).toFixed(2)),
 				boekhoudpost: r.boekhoudpost
-			}))
+			})) as OnkostenNotaWideI['kosten']
 		};
 	}
 
@@ -304,6 +328,7 @@
 				buildNota(resubmit ? RESUBMIT_STATUS : current.onkostennota_status)
 			);
 			saved = updated;
+			// New rows now have server-assigned ids; removed rows are gone.
 			rows = toRows(updated);
 			initialRows = JSON.stringify(rows);
 			removed = [];
@@ -386,7 +411,9 @@
 
 		<section>
 			<h3>Aankopen</h3>
-			<div class="rows-head"><span>Boekhoudpost</span><span>Beschrijving</span><span>Prijs (€)</span></div>
+			<div class="rows-head">
+				<span>Boekhoudpost</span><span>Beschrijving</span><span>Prijs (€)</span><span></span>
+			</div>
 			{#each rows as row, i (row.key)}
 				<div class="row">
 					<div class="post" aria-label="Boekhoudpost aankoop {i + 1}">
@@ -410,8 +437,25 @@
 						bind:value={row.price}
 						disabled={!editable || busy}
 					/>
+					{#if editable}
+						<button
+							type="button"
+							class="row-remove"
+							title="Aankoop verwijderen"
+							aria-label="Aankoop {i + 1} verwijderen"
+							disabled={busy || rows.length <= 1}
+							onclick={() => removeRow(row.key)}>×</button
+						>
+					{:else}
+						<span></span>
+					{/if}
 				</div>
 			{/each}
+			{#if editable}
+				<button type="button" class="btn btn-outline small add-row" disabled={busy} onclick={addRow}>
+					+ Aankoop toevoegen
+				</button>
+			{/if}
 			<div class="total"><span>Totaalbedrag:</span><span>{formatEuro(totalEuro)}</span></div>
 		</section>
 
@@ -578,7 +622,7 @@
     .rows-head,
     .row {
         display: grid;
-        grid-template-columns: minmax(0, 2.2fr) minmax(0, 2.4fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 2.2fr) minmax(0, 2.4fr) minmax(0, 1fr) 2rem;
         gap: 0.75rem;
         align-items: center;
     }
@@ -597,6 +641,28 @@
         color: var(--text-muted);
         overflow-wrap: anywhere;
     }
+    .row-remove {
+        width: 1.8rem;
+        height: 1.8rem;
+        border: none;
+        border-radius: 50%;
+        background: #f1f5f9;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .row-remove:hover:not(:disabled) {
+        background: var(--danger);
+        color: white;
+    }
+    .row-remove:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    .add-row {
+        margin-top: 0.25rem;
+    }
     @media (max-width: 720px) {
         .rows-head {
             display: none;
@@ -606,6 +672,9 @@
             padding: 0.6rem;
             border: 1px solid var(--ing-light);
             border-radius: 6px;
+        }
+        .row-remove {
+            justify-self: end;
         }
     }
     .total {
