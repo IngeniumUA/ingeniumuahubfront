@@ -282,12 +282,12 @@
 	}
 
 	// Stap 2: alle bonnen. Geeft de indexen terug die mislukt zijn, zodat enkel die opnieuw gaan.
-	async function uploadReceipts(identifier: string, list: Receipt[], indexes: number[]): Promise<number[]> {
+	async function uploadReceipts(volgnummer: number, list: Receipt[], indexes: number[]): Promise<number[]> {
 		const results = await Promise.allSettled(
 			indexes.map((i) =>
 				CoreOnkostenNotaAPI.uploadMedia(
 					null,
-					identifier,
+					volgnummer,
 					dataUrlToBlob(list[i].dataUrl),
 					`bon-${String(i + 1).padStart(2, '0')}.jpg`
 				)
@@ -374,7 +374,7 @@
 			// 2. Dan alle bonnen, onder dat volgnummer.
 			if (pendingUploads.length) {
 				busyLabel = 'Bonnen uploaden…';
-				pendingUploads = await uploadReceipts(createdIdentifier, receipts, pendingUploads);
+				pendingUploads = await uploadReceipts(createdNota.volgnummer, receipts, pendingUploads);
 			}
 
 			// 3. Ten slotte de PDF (bevat de bonnen zelf ook).
